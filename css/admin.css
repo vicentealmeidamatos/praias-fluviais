@@ -88,6 +88,23 @@
   color: #003A40;
 }
 
+/* Photo drop zone */
+#photo-drop-zone.dragover,
+#photo-drop-zone:hover {
+  border-color: #003A40 !important;
+  background: #EEF5F5 !important;
+}
+
+/* Section cards */
+.admin-section-card {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #F0EBE0;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 4px rgba(0,58,64,0.06);
+}
+
 /* Toast notifications */
 .admin-toast {
   position: fixed;

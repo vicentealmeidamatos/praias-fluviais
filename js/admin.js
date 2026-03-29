@@ -1,16 +1,44 @@
 // ─── Admin Panel — JSON Visual Editor ───
 const SECTIONS = ['beaches', 'articles', 'locations-guia', 'locations-passaporte', 'descontos', 'settings'];
-const state = { currentSection: 'beaches', data: {}, editingId: null };
+
+const state = {
+  currentSection: 'beaches',
+  data: {},
+  editingId: null,
+  editingPhotos: [],        // [{ src: string, name: string }]
+  editingArticleImage: null // { src: string, name: string } | null
+};
+
+// ─── Constants ───
+const DISTRICTS = [
+  'Aveiro', 'Beja', 'Braga', 'Bragança', 'Castelo Branco', 'Coimbra',
+  'Évora', 'Faro', 'Guarda', 'Leiria', 'Lisboa', 'Portalegre',
+  'Porto', 'Santarém', 'Setúbal', 'Viana do Castelo', 'Vila Real', 'Viseu'
+];
+
+const ALL_SERVICES = [
+  { key: 'blueFlag',    label: 'Bandeira Azul' },
+  { key: 'goldQuality', label: 'Qualidade de Ouro' },
+  { key: 'accessible',  label: 'Praia Acessível' },
+  { key: 'lifeguard',   label: 'Nadador-Salvador' },
+  { key: 'bar',         label: 'Bar/Restaurante' },
+  { key: 'picnicArea',  label: 'Parque de Merendas' },
+  { key: 'petFriendly', label: 'Pet-friendly' },
+  { key: 'playground',  label: 'Parque Infantil' },
+  { key: 'boatRental',  label: 'Aluguer de Embarcações' },
+  { key: 'camping',     label: 'Alojamento' },
+  { key: 'grills',      label: 'Grelhadores' },
+  { key: 'parking',     label: 'Estacionamento' },
+  { key: 'wc',          label: 'WC/Balneários' },
+];
+
+const DEFAULT_SERVICES = Object.fromEntries(ALL_SERVICES.map(s => [s.key, false]));
 
 // ─── Auth ───
 function checkAuth() {
   const hash = localStorage.getItem('admin_password_hash');
-  if (!hash) {
-    showSetupPassword();
-    return false;
-  }
-  const session = sessionStorage.getItem('admin_authenticated');
-  if (session === 'true') return true;
+  if (!hash) { showSetupPassword(); return false; }
+  if (sessionStorage.getItem('admin_authenticated') === 'true') return true;
   showLogin();
   return false;
 }
@@ -58,8 +86,7 @@ function showLogin() {
 }
 
 async function simpleHash(str) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(str);
+  const data = new TextEncoder().encode(str);
   const hash = await crypto.subtle.digest('SHA-256', data);
   return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
@@ -87,49 +114,40 @@ async function loginAdmin() {
 
 // ─── Dashboard ───
 async function initDashboard() {
-  // Load all data
   for (const section of SECTIONS) {
     try {
-      const fileName = section === 'settings' ? 'settings' : section;
-      const res = await fetch(`data/${fileName}.json`);
+      const res = await fetch(`data/${section}.json`);
       state.data[section] = await res.json();
     } catch {
       state.data[section] = section === 'settings' ? {} : [];
     }
   }
-
   renderDashboard();
 }
 
 function renderDashboard() {
-  const app = document.getElementById('admin-app');
-  app.innerHTML = `
+  const sectionMeta = {
+    beaches:              { icon: '🏖️', label: 'Praias' },
+    articles:             { icon: '📰', label: 'Artigos' },
+    'locations-guia':     { icon: '📍', label: 'Locais do Guia' },
+    'locations-passaporte': { icon: '🗺️', label: 'Locais Passaporte' },
+    descontos:            { icon: '🏷️', label: 'Descontos' },
+    settings:             { icon: '⚙️', label: 'Configurações' },
+  };
+
+  document.getElementById('admin-app').innerHTML = `
     <div class="flex h-screen">
-      <!-- Sidebar -->
       <aside class="w-64 bg-praia-teal-800 flex flex-col admin-sidebar flex-shrink-0">
         <div class="p-5 border-b border-white/10">
           <img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-8">
           <p class="text-white/40 text-xs mt-2 font-display uppercase tracking-wider">Painel Admin</p>
         </div>
         <nav class="flex-1 py-2">
-          <button onclick="switchSection('beaches')" class="admin-tab ${state.currentSection === 'beaches' ? 'active' : ''} w-full text-left px-5 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5 flex items-center gap-3">
-            <span>🏖️</span> Praias
-          </button>
-          <button onclick="switchSection('articles')" class="admin-tab ${state.currentSection === 'articles' ? 'active' : ''} w-full text-left px-5 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5 flex items-center gap-3">
-            <span>📰</span> Artigos
-          </button>
-          <button onclick="switchSection('locations-guia')" class="admin-tab ${state.currentSection === 'locations-guia' ? 'active' : ''} w-full text-left px-5 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5 flex items-center gap-3">
-            <span>📍</span> Locais do Guia
-          </button>
-          <button onclick="switchSection('locations-passaporte')" class="admin-tab ${state.currentSection === 'locations-passaporte' ? 'active' : ''} w-full text-left px-5 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5 flex items-center gap-3">
-            <span>🗺️</span> Locais Passaporte
-          </button>
-          <button onclick="switchSection('descontos')" class="admin-tab ${state.currentSection === 'descontos' ? 'active' : ''} w-full text-left px-5 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5 flex items-center gap-3">
-            <span>🏷️</span> Descontos
-          </button>
-          <button onclick="switchSection('settings')" class="admin-tab ${state.currentSection === 'settings' ? 'active' : ''} w-full text-left px-5 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5 flex items-center gap-3">
-            <span>⚙️</span> Configurações
-          </button>
+          ${SECTIONS.map(s => `
+            <button onclick="switchSection('${s}')" class="admin-tab ${state.currentSection === s ? 'active' : ''} w-full text-left px-5 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5 flex items-center gap-3">
+              <span>${sectionMeta[s].icon}</span> ${sectionMeta[s].label}
+            </button>
+          `).join('')}
         </nav>
         <div class="p-4 border-t border-white/10 space-y-2">
           <button onclick="exportAll()" class="admin-btn admin-btn-export w-full py-2.5 text-center">Exportar Tudo</button>
@@ -138,10 +156,7 @@ function renderDashboard() {
           <button onclick="sessionStorage.removeItem('admin_authenticated'); location.reload();" class="w-full text-center text-xs text-white/30 hover:text-white/50 py-2">Sair</button>
         </div>
       </aside>
-
-      <!-- Content -->
-      <main class="flex-1 overflow-y-auto bg-praia-sand-50" id="admin-content">
-      </main>
+      <main class="flex-1 overflow-y-auto bg-praia-sand-50" id="admin-content"></main>
     </div>`;
 
   renderSection();
@@ -150,20 +165,129 @@ function renderDashboard() {
 function switchSection(section) {
   state.currentSection = section;
   state.editingId = null;
+  state.editingPhotos = [];
+  state.editingArticleImage = null;
   renderDashboard();
 }
 
-// ─── Section Renderers ───
 function renderSection() {
   const content = document.getElementById('admin-content');
   switch (state.currentSection) {
-    case 'beaches': renderBeaches(content); break;
-    case 'articles': renderArticles(content); break;
-    case 'locations-guia': renderLocations(content, 'locations-guia', 'Locais do Guia'); break;
-    case 'locations-passaporte': renderLocations(content, 'locations-passaporte', 'Locais do Passaporte'); break;
-    case 'descontos': renderDescontos(content); break;
-    case 'settings': renderSettings(content); break;
+    case 'beaches':               renderBeaches(content); break;
+    case 'articles':              renderArticles(content); break;
+    case 'locations-guia':        renderLocations(content, 'locations-guia', 'Locais do Guia'); break;
+    case 'locations-passaporte':  renderLocations(content, 'locations-passaporte', 'Locais do Passaporte'); break;
+    case 'descontos':             renderDescontos(content); break;
+    case 'settings':              renderSettings(content); break;
   }
+}
+
+// ─── Image Upload ───
+async function uploadImageFile(file) {
+  try {
+    const res = await fetch('/api/upload', {
+      method: 'POST',
+      headers: { 'Content-Type': file.type, 'X-Filename': file.name },
+      body: file,
+    });
+    if (!res.ok) throw new Error('Servidor não disponível');
+    const json = await res.json();
+    return { src: json.path, name: json.name };
+  } catch {
+    // Fallback: base64 data URL (works without server endpoint)
+    const src = await new Promise(resolve => {
+      const reader = new FileReader();
+      reader.onload = e => resolve(e.target.result);
+      reader.readAsDataURL(file);
+    });
+    return { src, name: file.name };
+  }
+}
+
+// ─── Beach Photo Gallery ───
+function renderPhotoGallery() {
+  const gallery = document.getElementById('photo-gallery');
+  if (!gallery) return;
+
+  if (state.editingPhotos.length === 0) {
+    gallery.innerHTML = `<p class="text-praia-sand-400 text-sm italic">Nenhuma fotografia adicionada.</p>`;
+    return;
+  }
+
+  gallery.innerHTML = state.editingPhotos.map((p, i) => `
+    <div class="photo-thumb-item" style="position:relative;display:inline-block;margin:0 8px 8px 0;">
+      <img src="${p.src}" alt="Foto ${i+1}" style="width:100px;height:75px;object-fit:cover;border-radius:8px;border:2px solid #E2D9C6;">
+      <button onclick="removeBeachPhoto(${i})" style="position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;background:#D32F2F;color:white;border:none;cursor:pointer;font-size:12px;line-height:1;display:flex;align-items:center;justify-content:center;font-weight:bold;">×</button>
+      <div style="font-size:9px;color:#8A7D60;text-align:center;margin-top:3px;max-width:100px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">${p.name || ''}</div>
+    </div>
+  `).join('');
+}
+
+function removeBeachPhoto(index) {
+  state.editingPhotos.splice(index, 1);
+  renderPhotoGallery();
+}
+
+async function handleBeachPhotoFiles(files) {
+  const uploadBtn = document.getElementById('photo-upload-btn');
+  if (uploadBtn) { uploadBtn.disabled = true; uploadBtn.textContent = 'A carregar...'; }
+
+  for (const file of Array.from(files)) {
+    if (!file.type.startsWith('image/')) continue;
+    const result = await uploadImageFile(file);
+    state.editingPhotos.push(result);
+  }
+
+  if (uploadBtn) { uploadBtn.disabled = false; uploadBtn.textContent = '+ Adicionar Fotos'; }
+  renderPhotoGallery();
+  toast(`${files.length} foto(s) adicionada(s).`, 'success');
+}
+
+function setupPhotoDragDrop(zoneId, inputId) {
+  const zone = document.getElementById(zoneId);
+  const input = document.getElementById(inputId);
+  if (!zone || !input) return;
+
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault();
+    zone.classList.remove('dragover');
+    if (e.dataTransfer.files.length) handleBeachPhotoFiles(e.dataTransfer.files);
+  });
+  input.addEventListener('change', e => { if (e.target.files.length) handleBeachPhotoFiles(e.target.files); e.target.value = ''; });
+}
+
+// ─── Article Image ───
+function renderArticleImagePreview() {
+  const container = document.getElementById('article-img-preview');
+  if (!container) return;
+  if (!state.editingArticleImage) {
+    container.innerHTML = '';
+    return;
+  }
+  container.innerHTML = `
+    <div style="position:relative;display:inline-block;margin-top:8px;">
+      <img src="${state.editingArticleImage.src}" alt="Capa" style="max-width:240px;max-height:150px;object-fit:cover;border-radius:8px;border:2px solid #E2D9C6;">
+      <button onclick="removeArticleImage()" style="position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;background:#D32F2F;color:white;border:none;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;font-weight:bold;">×</button>
+    </div>`;
+}
+
+function removeArticleImage() {
+  state.editingArticleImage = null;
+  renderArticleImagePreview();
+  const urlInput = document.getElementById('a-image');
+  if (urlInput) urlInput.value = '';
+}
+
+async function handleArticleImageFile(file) {
+  if (!file || !file.type.startsWith('image/')) return;
+  const result = await uploadImageFile(file);
+  state.editingArticleImage = result;
+  const urlInput = document.getElementById('a-image');
+  if (urlInput) urlInput.value = result.src;
+  renderArticleImagePreview();
+  toast('Imagem de capa carregada.', 'success');
 }
 
 // ─── Beaches ───
@@ -173,7 +297,7 @@ function renderBeaches(container) {
     <div class="p-6">
       <div class="flex items-center justify-between mb-6">
         <div>
-          <h1 class="font-display text-2xl font-bold text-praia-teal-800">Praias Fluviais</h1>
+          <h1 class="font-display text-2xl font-bold text-praia-teal-800">Praias</h1>
           <p class="text-sm text-praia-sand-500">${beaches.length} praias registadas</p>
         </div>
         <div class="flex gap-2">
@@ -191,24 +315,33 @@ function renderBeaches(container) {
               <tr class="text-left">
                 <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700">Nome</th>
                 <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700">Concelho</th>
-                <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700">Região</th>
+                <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700">Distrito</th>
+                <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700">Tipo</th>
                 <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700">Serviços</th>
                 <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700 text-right">Ações</th>
               </tr>
             </thead>
             <tbody id="beaches-tbody">
-              ${beaches.map((b, i) => `
-                <tr class="border-t border-praia-sand-100 hover:bg-praia-sand-50 admin-table-row" data-search="${(b.name + ' ' + b.municipality + ' ' + b.region).toLowerCase()}">
+              ${beaches.map((b, i) => {
+                const isBalnear = b.type === 'zona_balnear';
+                const activeServices = ALL_SERVICES.filter(s => b.services?.[s.key]).map(s => s.label).join(', ') || '—';
+                return `
+                <tr class="border-t border-praia-sand-100 hover:bg-praia-sand-50 admin-table-row" data-search="${(b.name + ' ' + b.municipality + ' ' + (b.district||'')).toLowerCase()}">
                   <td class="px-4 py-3 font-semibold text-praia-teal-800">${b.name}</td>
                   <td class="px-4 py-3 text-praia-sand-600">${b.municipality}</td>
-                  <td class="px-4 py-3"><span class="badge" style="background:rgba(0,58,64,0.1);color:#003A40;">${b.region}</span></td>
-                  <td class="px-4 py-3 text-praia-sand-500 text-xs">${Object.entries(b.services).filter(([,v])=>v).map(([k])=>k).join(', ')}</td>
+                  <td class="px-4 py-3 text-praia-sand-600">${b.district || '—'}</td>
+                  <td class="px-4 py-3">
+                    <span class="badge" style="background:${isBalnear ? 'rgba(2,136,209,0.1)' : 'rgba(67,160,71,0.1)'};color:${isBalnear ? '#0288D1' : '#43A047'};">
+                      ${isBalnear ? 'Balnear' : 'Fluvial'}
+                    </span>
+                  </td>
+                  <td class="px-4 py-3 text-praia-sand-500 text-xs" style="max-width:200px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">${activeServices}</td>
                   <td class="px-4 py-3 text-right">
                     <button onclick="editBeach(${i})" class="text-praia-teal-600 hover:text-praia-teal-800 text-xs font-semibold mr-2">Editar</button>
                     <button onclick="deleteItem('beaches', ${i})" class="text-red-400 hover:text-red-600 text-xs font-semibold">Eliminar</button>
                   </td>
-                </tr>
-              `).join('')}
+                </tr>`;
+              }).join('')}
             </tbody>
           </table>
         </div>
@@ -218,84 +351,155 @@ function renderBeaches(container) {
 
 function editBeach(index) {
   const b = index !== null ? state.data.beaches[index] : {
-    id: '', name: '', municipality: '', district: '', region: 'centro', river: '',
+    id: '', name: '', municipality: '', district: '', type: 'praia_fluvial', river: '',
     coordinates: { lat: 39.5, lng: -8.0 }, description: '',
-    photos: ['https://placehold.co/800x600/003A40/FFEB3B?text=Foto+1', 'https://placehold.co/800x600/005D56/FFEB3B?text=Foto+2', 'https://placehold.co/800x600/002A2E/FFEB3B?text=Foto+3'],
+    photos: [],
     video360: null,
-    services: { bar: false, grills: false, lifeguard: false, blueFlag: false, goldQuality: false, accessible: false, parking: false, wc: false, picnicArea: false, camping: false },
+    services: { ...DEFAULT_SERVICES },
     waterQuality: 'boa', featured: false, passportStamp: true
   };
+
+  // Merge any missing service keys
+  const services = { ...DEFAULT_SERVICES, ...(b.services || {}) };
+
+  // Load photos into state
+  state.editingPhotos = (b.photos || []).map(src => ({ src, name: '' }));
+
+  const districtOptions = DISTRICTS.map(d =>
+    `<option value="${d}" ${b.district === d ? 'selected' : ''}>${d}</option>`
+  ).join('');
+
+  const mainServices = ALL_SERVICES.slice(0, 10);
+  const extraServices = ALL_SERVICES.slice(10);
 
   const container = document.getElementById('admin-content');
   container.innerHTML = `
     <div class="p-6 max-w-3xl admin-form">
-      <button onclick="renderSection()" class="text-praia-teal-600 text-sm font-semibold mb-4 flex items-center gap-1">&larr; Voltar à lista</button>
+      <button onclick="renderSection()" class="text-praia-teal-600 text-sm font-semibold mb-4 flex items-center gap-1">← Voltar à lista</button>
       <h2 class="font-display text-xl font-bold text-praia-teal-800 mb-6">${index !== null ? 'Editar' : 'Adicionar'} Praia</h2>
 
-      <div class="grid grid-cols-2 gap-4 mb-4">
-        <div><label>Nome</label><input type="text" id="b-name" value="${b.name}"></div>
-        <div><label>ID (slug)</label><input type="text" id="b-id" value="${b.id}" placeholder="auto-gerado se vazio"></div>
-      </div>
-      <div class="grid grid-cols-3 gap-4 mb-4">
-        <div><label>Concelho</label><input type="text" id="b-municipality" value="${b.municipality}"></div>
-        <div><label>Distrito</label><input type="text" id="b-district" value="${b.district}"></div>
-        <div><label>Região</label>
-          <select id="b-region">
-            <option value="norte" ${b.region==='norte'?'selected':''}>Norte</option>
-            <option value="centro" ${b.region==='centro'?'selected':''}>Centro</option>
-            <option value="alentejo" ${b.region==='alentejo'?'selected':''}>Alentejo</option>
-            <option value="algarve" ${b.region==='algarve'?'selected':''}>Algarve</option>
-          </select>
+      <!-- Identificação -->
+      <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100">
+        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4">Identificação</h3>
+        <div class="grid grid-cols-2 gap-4 mb-4">
+          <div><label>Nome</label><input type="text" id="b-name" value="${escHtml(b.name)}"></div>
+          <div><label>ID (slug)</label><input type="text" id="b-id" value="${escHtml(b.id)}" placeholder="auto-gerado se vazio"></div>
         </div>
-      </div>
-      <div class="grid grid-cols-2 gap-4 mb-4">
-        <div><label>Rio</label><input type="text" id="b-river" value="${b.river}"></div>
-        <div><label>Qualidade Água</label>
-          <select id="b-waterQuality">
-            <option value="excelente" ${b.waterQuality==='excelente'?'selected':''}>Excelente</option>
-            <option value="boa" ${b.waterQuality==='boa'?'selected':''}>Boa</option>
-            <option value="aceitavel" ${b.waterQuality==='aceitavel'?'selected':''}>Aceitável</option>
-          </select>
+        <div class="grid grid-cols-3 gap-4 mb-4">
+          <div>
+            <label>Tipo</label>
+            <select id="b-type">
+              <option value="praia_fluvial" ${(b.type||'praia_fluvial')==='praia_fluvial'?'selected':''}>Praia Fluvial</option>
+              <option value="zona_balnear" ${b.type==='zona_balnear'?'selected':''}>Zona Balnear</option>
+            </select>
+          </div>
+          <div><label>Concelho</label><input type="text" id="b-municipality" value="${escHtml(b.municipality)}"></div>
+          <div>
+            <label>Distrito</label>
+            <select id="b-district">
+              <option value="">— selecionar —</option>
+              ${districtOptions}
+            </select>
+          </div>
         </div>
-      </div>
-      <div class="grid grid-cols-2 gap-4 mb-4">
-        <div><label>Latitude</label><input type="number" step="0.0001" id="b-lat" value="${b.coordinates.lat}"></div>
-        <div><label>Longitude</label><input type="number" step="0.0001" id="b-lng" value="${b.coordinates.lng}"></div>
-      </div>
-      <div class="mb-4">
-        <label>Descrição</label>
-        <textarea id="b-description" rows="4">${b.description}</textarea>
-      </div>
-      <div class="mb-4">
-        <label>Fotos (URLs, uma por linha)</label>
-        <textarea id="b-photos" rows="3">${b.photos.join('\n')}</textarea>
+        <div class="grid grid-cols-2 gap-4">
+          <div><label>Rio / Albufeira</label><input type="text" id="b-river" value="${escHtml(b.river)}"></div>
+          <div>
+            <label>Qualidade da Água</label>
+            <select id="b-waterQuality">
+              <option value="excelente" ${b.waterQuality==='excelente'?'selected':''}>Excelente</option>
+              <option value="boa" ${b.waterQuality==='boa'?'selected':''}>Boa</option>
+              <option value="aceitavel" ${b.waterQuality==='aceitavel'?'selected':''}>Aceitável</option>
+            </select>
+          </div>
+        </div>
       </div>
 
-      <div class="mb-4">
-        <label>Serviços</label>
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-1">
-          ${Object.entries(b.services).map(([k, v]) => `
-            <label class="flex items-center gap-2 cursor-pointer text-sm">
-              <input type="checkbox" class="b-service" data-key="${k}" ${v ? 'checked' : ''}> ${k}
+      <!-- Localização -->
+      <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100">
+        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4">Localização GPS</h3>
+        <div class="grid grid-cols-2 gap-4">
+          <div><label>Latitude</label><input type="number" step="0.00001" id="b-lat" value="${b.coordinates?.lat || 39.5}"></div>
+          <div><label>Longitude</label><input type="number" step="0.00001" id="b-lng" value="${b.coordinates?.lng || -8.0}"></div>
+        </div>
+      </div>
+
+      <!-- Descrição -->
+      <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100">
+        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4">Descrição</h3>
+        <textarea id="b-description" rows="4">${escHtml(b.description)}</textarea>
+      </div>
+
+      <!-- Fotografias -->
+      <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100">
+        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-3">Fotografias</h3>
+        <div id="photo-gallery" class="mb-3" style="min-height:24px;"></div>
+        <div id="photo-drop-zone" style="border:2px dashed #C4B898;border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all 0.2s;background:#FAF8F5;" onclick="document.getElementById('photo-file-input').click()">
+          <div style="font-family:'Poppins',sans-serif;font-size:13px;color:#8A7D60;font-weight:600;">Arraste fotos aqui</div>
+          <div style="font-size:12px;color:#C4B898;margin-top:4px;">ou clique para selecionar do disco</div>
+          <div style="font-size:11px;color:#C4B898;margin-top:4px;">JPG, PNG, WEBP · Múltiplos ficheiros aceites</div>
+        </div>
+        <input type="file" id="photo-file-input" accept="image/*" multiple style="display:none;">
+        <div style="margin-top:8px;display:flex;align-items:center;gap:8px;">
+          <button id="photo-upload-btn" onclick="document.getElementById('photo-file-input').click()" class="admin-btn admin-btn-primary" style="font-size:11px;padding:6px 14px;">+ Adicionar Fotos</button>
+          <span style="font-size:11px;color:#C4B898;">As imagens são guardadas em <code>img/uploads/</code></span>
+        </div>
+      </div>
+
+      <!-- Serviços -->
+      <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100">
+        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-3">Serviços Principais</h3>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-4">
+          ${mainServices.map(s => `
+            <label class="flex items-center gap-2 cursor-pointer text-sm py-1.5 px-3 rounded-lg border border-praia-sand-100 hover:bg-praia-sand-50">
+              <input type="checkbox" class="b-service" data-key="${s.key}" ${services[s.key] ? 'checked' : ''} style="accent-color:#003A40;">
+              <span class="font-body">${s.label}</span>
+            </label>
+          `).join('')}
+        </div>
+        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-3">Infraestruturas</h3>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+          ${extraServices.map(s => `
+            <label class="flex items-center gap-2 cursor-pointer text-sm py-1.5 px-3 rounded-lg border border-praia-sand-100 hover:bg-praia-sand-50">
+              <input type="checkbox" class="b-service" data-key="${s.key}" ${services[s.key] ? 'checked' : ''} style="accent-color:#003A40;">
+              <span class="font-body">${s.label}</span>
             </label>
           `).join('')}
         </div>
       </div>
 
-      <div class="flex items-center gap-6 mb-6">
-        <label class="flex items-center gap-2 cursor-pointer text-sm">
-          <input type="checkbox" id="b-featured" ${b.featured ? 'checked' : ''}> Destaque
-        </label>
-        <label class="flex items-center gap-2 cursor-pointer text-sm">
-          <input type="checkbox" id="b-passportStamp" ${b.passportStamp ? 'checked' : ''}> Carimbo Passaporte
-        </label>
+      <!-- Opções -->
+      <div class="bg-white rounded-xl p-5 mb-6 shadow-sm border border-praia-sand-100">
+        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-3">Opções</h3>
+        <div class="flex items-center gap-6">
+          <label class="flex items-center gap-2 cursor-pointer text-sm">
+            <input type="checkbox" id="b-featured" ${b.featured ? 'checked' : ''} style="accent-color:#003A40;">
+            Destaque na Homepage
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer text-sm">
+            <input type="checkbox" id="b-passportStamp" ${b.passportStamp ? 'checked' : ''} style="accent-color:#003A40;">
+            Carimbo no Passaporte
+          </label>
+        </div>
       </div>
 
-      <div class="flex gap-3">
-        <button onclick="saveBeach(${index})" class="admin-btn admin-btn-success">Guardar</button>
+      <div class="flex gap-3 pb-8">
+        <button onclick="saveBeach(${index})" class="admin-btn admin-btn-success">Guardar Praia</button>
         <button onclick="renderSection()" class="admin-btn bg-praia-sand-200 text-praia-sand-700">Cancelar</button>
+        ${index !== null ? `<button onclick="deleteItem('beaches', ${index}); renderSection();" class="admin-btn admin-btn-danger ml-auto">Eliminar</button>` : ''}
       </div>
     </div>`;
+
+  renderPhotoGallery();
+  setupPhotoDragDrop('photo-drop-zone', 'photo-file-input');
+
+  // Drop zone hover style
+  const zone = document.getElementById('photo-drop-zone');
+  if (zone) {
+    zone.addEventListener('dragover', () => { zone.style.borderColor = '#003A40'; zone.style.background = '#EEF5F5'; });
+    zone.addEventListener('dragleave', () => { zone.style.borderColor = '#C4B898'; zone.style.background = '#FAF8F5'; });
+    zone.addEventListener('drop', () => { zone.style.borderColor = '#C4B898'; zone.style.background = '#FAF8F5'; });
+  }
 }
 
 function saveBeach(index) {
@@ -309,12 +513,15 @@ function saveBeach(index) {
     id: document.getElementById('b-id').value.trim() || slugify(name),
     name,
     municipality: document.getElementById('b-municipality').value.trim(),
-    district: document.getElementById('b-district').value.trim(),
-    region: document.getElementById('b-region').value,
+    district: document.getElementById('b-district').value,
+    type: document.getElementById('b-type').value,
     river: document.getElementById('b-river').value.trim(),
-    coordinates: { lat: parseFloat(document.getElementById('b-lat').value) || 0, lng: parseFloat(document.getElementById('b-lng').value) || 0 },
+    coordinates: {
+      lat: parseFloat(document.getElementById('b-lat').value) || 0,
+      lng: parseFloat(document.getElementById('b-lng').value) || 0,
+    },
     description: document.getElementById('b-description').value.trim(),
-    photos: document.getElementById('b-photos').value.trim().split('\n').filter(Boolean),
+    photos: state.editingPhotos.map(p => p.src),
     video360: null,
     services,
     waterQuality: document.getElementById('b-waterQuality').value,
@@ -322,12 +529,10 @@ function saveBeach(index) {
     passportStamp: document.getElementById('b-passportStamp').checked,
   };
 
-  if (index !== null) {
-    state.data.beaches[index] = beach;
-  } else {
-    state.data.beaches.push(beach);
-  }
+  if (index !== null) state.data.beaches[index] = beach;
+  else state.data.beaches.push(beach);
 
+  state.editingPhotos = [];
   toast('Praia guardada com sucesso!', 'success');
   renderSection();
 }
@@ -347,9 +552,9 @@ function renderArticles(container) {
       <div class="grid gap-4">
         ${articles.map((a, i) => `
           <div class="bg-white rounded-xl shadow-layered p-4 flex items-center gap-4">
-            <img src="${a.image}" alt="" class="w-20 h-14 object-cover rounded-lg flex-shrink-0">
+            <img src="${a.image}" alt="" class="w-20 h-14 object-cover rounded-lg flex-shrink-0" onerror="this.style.display='none'">
             <div class="flex-1 min-w-0">
-              <h3 class="font-display text-sm font-bold text-praia-teal-800 truncate">${a.title}</h3>
+              <h3 class="font-display text-sm font-bold text-praia-teal-800 truncate">${escHtml(a.title)}</h3>
               <p class="text-xs text-praia-sand-500">${a.date} · ${a.category} · ${a.status}</p>
             </div>
             <div class="flex gap-2 flex-shrink-0">
@@ -364,45 +569,82 @@ function renderArticles(container) {
 
 function editArticle(index) {
   const a = index !== null ? state.data.articles[index] : {
-    slug: '', title: '', excerpt: '', content: '', image: 'https://placehold.co/1200x600/003A40/FFEB3B?text=Artigo',
-    date: new Date().toISOString().split('T')[0], category: 'roteiros', featured: false, status: 'draft'
+    slug: '', title: '', excerpt: '', content: '',
+    image: '',
+    date: new Date().toISOString().split('T')[0],
+    category: 'roteiros', featured: false, status: 'draft'
   };
+
+  state.editingArticleImage = a.image ? { src: a.image, name: '' } : null;
 
   const container = document.getElementById('admin-content');
   container.innerHTML = `
     <div class="p-6 max-w-3xl admin-form">
-      <button onclick="renderSection()" class="text-praia-teal-600 text-sm font-semibold mb-4">&larr; Voltar</button>
+      <button onclick="renderSection()" class="text-praia-teal-600 text-sm font-semibold mb-4">← Voltar</button>
       <h2 class="font-display text-xl font-bold text-praia-teal-800 mb-6">${index !== null ? 'Editar' : 'Novo'} Artigo</h2>
-      <div class="mb-4"><label>Título</label><input type="text" id="a-title" value="${a.title}"></div>
-      <div class="grid grid-cols-2 gap-4 mb-4">
-        <div><label>Slug</label><input type="text" id="a-slug" value="${a.slug}" placeholder="auto-gerado"></div>
-        <div><label>Data</label><input type="date" id="a-date" value="${a.date}"></div>
-      </div>
-      <div class="grid grid-cols-2 gap-4 mb-4">
-        <div><label>Categoria</label>
-          <select id="a-category">
-            <option value="roteiros" ${a.category==='roteiros'?'selected':''}>Roteiros</option>
-            <option value="natureza" ${a.category==='natureza'?'selected':''}>Natureza</option>
-            <option value="descobertas" ${a.category==='descobertas'?'selected':''}>Descobertas</option>
-            <option value="informacao" ${a.category==='informacao'?'selected':''}>Informação</option>
-          </select>
+
+      <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100">
+        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4">Conteúdo</h3>
+        <div class="mb-4"><label>Título</label><input type="text" id="a-title" value="${escHtml(a.title)}"></div>
+        <div class="grid grid-cols-2 gap-4 mb-4">
+          <div><label>Slug</label><input type="text" id="a-slug" value="${escHtml(a.slug)}" placeholder="auto-gerado"></div>
+          <div><label>Data</label><input type="date" id="a-date" value="${a.date}"></div>
         </div>
-        <div><label>Estado</label>
-          <select id="a-status">
-            <option value="published" ${a.status==='published'?'selected':''}>Publicado</option>
-            <option value="draft" ${a.status==='draft'?'selected':''}>Rascunho</option>
-          </select>
+        <div class="grid grid-cols-2 gap-4 mb-4">
+          <div><label>Categoria</label>
+            <select id="a-category">
+              <option value="roteiros" ${a.category==='roteiros'?'selected':''}>Roteiros</option>
+              <option value="natureza" ${a.category==='natureza'?'selected':''}>Natureza</option>
+              <option value="descobertas" ${a.category==='descobertas'?'selected':''}>Descobertas</option>
+              <option value="informacao" ${a.category==='informacao'?'selected':''}>Informação</option>
+            </select>
+          </div>
+          <div><label>Estado</label>
+            <select id="a-status">
+              <option value="published" ${a.status==='published'?'selected':''}>Publicado</option>
+              <option value="draft" ${a.status==='draft'?'selected':''}>Rascunho</option>
+            </select>
+          </div>
         </div>
+        <div class="mb-4"><label>Excerto</label><textarea id="a-excerpt" rows="2">${escHtml(a.excerpt)}</textarea></div>
+        <div class="mb-2"><label>Conteúdo (HTML)</label><textarea id="a-content" rows="12" style="font-family:monospace;font-size:12px;">${escHtml(a.content)}</textarea></div>
       </div>
-      <div class="mb-4"><label>URL Imagem Capa</label><input type="url" id="a-image" value="${a.image}"></div>
-      <div class="mb-4"><label>Excerto</label><textarea id="a-excerpt" rows="2">${a.excerpt}</textarea></div>
-      <div class="mb-4"><label>Conteúdo (HTML)</label><textarea id="a-content" rows="10">${a.content.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</textarea></div>
-      <label class="flex items-center gap-2 cursor-pointer text-sm mb-6"><input type="checkbox" id="a-featured" ${a.featured ? 'checked' : ''}> Destaque na homepage</label>
-      <div class="flex gap-3">
-        <button onclick="saveArticle(${index})" class="admin-btn admin-btn-success">Guardar</button>
+
+      <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100">
+        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-3">Imagem de Capa</h3>
+        <div id="article-img-preview"></div>
+        <div style="margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          <button onclick="document.getElementById('article-img-file').click()" class="admin-btn admin-btn-primary" style="font-size:11px;padding:6px 14px;">📁 Carregar do Disco</button>
+          <span style="color:#C4B898;font-size:12px;">ou</span>
+          <input type="url" id="a-image" value="${escHtml(a.image)}" placeholder="URL da imagem..." style="flex:1;min-width:200px;" oninput="onArticleImageUrlInput(this.value)">
+        </div>
+        <input type="file" id="article-img-file" accept="image/*" style="display:none;" onchange="handleArticleImageFile(this.files[0]); this.value='';">
+      </div>
+
+      <div class="bg-white rounded-xl p-5 mb-6 shadow-sm border border-praia-sand-100">
+        <label class="flex items-center gap-2 cursor-pointer text-sm">
+          <input type="checkbox" id="a-featured" ${a.featured ? 'checked' : ''} style="accent-color:#003A40;">
+          Destaque na Homepage
+        </label>
+      </div>
+
+      <div class="flex gap-3 pb-8">
+        <button onclick="saveArticle(${index})" class="admin-btn admin-btn-success">Guardar Artigo</button>
         <button onclick="renderSection()" class="admin-btn bg-praia-sand-200 text-praia-sand-700">Cancelar</button>
       </div>
     </div>`;
+
+  renderArticleImagePreview();
+}
+
+function onArticleImageUrlInput(value) {
+  if (value) {
+    state.editingArticleImage = { src: value, name: '' };
+    renderArticleImagePreview();
+  } else {
+    state.editingArticleImage = null;
+    renderArticleImagePreview();
+  }
 }
 
 function saveArticle(index) {
@@ -413,8 +655,8 @@ function saveArticle(index) {
     slug: document.getElementById('a-slug').value.trim() || slugify(title),
     title,
     excerpt: document.getElementById('a-excerpt').value.trim(),
-    content: document.getElementById('a-content').value.replace(/&lt;/g, '<').replace(/&gt;/g, '>'),
-    image: document.getElementById('a-image').value.trim(),
+    content: document.getElementById('a-content').value,
+    image: state.editingArticleImage?.src || document.getElementById('a-image').value.trim() || '',
     date: document.getElementById('a-date').value,
     category: document.getElementById('a-category').value,
     featured: document.getElementById('a-featured').checked,
@@ -424,11 +666,12 @@ function saveArticle(index) {
   if (index !== null) state.data.articles[index] = article;
   else state.data.articles.push(article);
 
+  state.editingArticleImage = null;
   toast('Artigo guardado!', 'success');
   renderSection();
 }
 
-// ─── Locations (shared for guia + passaporte) ───
+// ─── Locations ───
 function renderLocations(container, key, title) {
   const items = state.data[key] || [];
   container.innerHTML = `
@@ -451,9 +694,9 @@ function renderLocations(container, key, title) {
           <tbody>
             ${items.map((l, i) => `
               <tr class="border-t border-praia-sand-100 hover:bg-praia-sand-50">
-                <td class="px-4 py-3 font-semibold text-praia-teal-800">${l.name}</td>
-                <td class="px-4 py-3 text-praia-sand-600">${l.municipality}</td>
-                <td class="px-4 py-3 text-praia-sand-600">${l.district}</td>
+                <td class="px-4 py-3 font-semibold text-praia-teal-800">${escHtml(l.name)}</td>
+                <td class="px-4 py-3 text-praia-sand-600">${escHtml(l.municipality)}</td>
+                <td class="px-4 py-3 text-praia-sand-600">${escHtml(l.district)}</td>
                 <td class="px-4 py-3 text-right">
                   <button onclick="editLocation('${key}', ${i})" class="text-praia-teal-600 text-xs font-semibold mr-2">Editar</button>
                   <button onclick="deleteItem('${key}', ${i})" class="text-red-400 text-xs font-semibold">Eliminar</button>
@@ -467,24 +710,45 @@ function renderLocations(container, key, title) {
 }
 
 function editLocation(key, index) {
-  const l = index !== null ? state.data[key][index] : { name: '', municipality: '', district: '', address: '', phone: '', coordinates: { lat: 39.5, lng: -8.0 } };
+  const l = index !== null ? state.data[key][index] : {
+    name: '', municipality: '', district: '', address: '', phone: '',
+    coordinates: { lat: 39.5, lng: -8.0 }
+  };
+
+  const districtOptions = DISTRICTS.map(d =>
+    `<option value="${d}" ${l.district === d ? 'selected' : ''}>${d}</option>`
+  ).join('');
+
   const container = document.getElementById('admin-content');
   container.innerHTML = `
     <div class="p-6 max-w-2xl admin-form">
-      <button onclick="renderSection()" class="text-praia-teal-600 text-sm font-semibold mb-4">&larr; Voltar</button>
+      <button onclick="renderSection()" class="text-praia-teal-600 text-sm font-semibold mb-4">← Voltar</button>
       <h2 class="font-display text-xl font-bold text-praia-teal-800 mb-6">${index !== null ? 'Editar' : 'Adicionar'} Local</h2>
-      <div class="mb-4"><label>Nome</label><input type="text" id="l-name" value="${l.name}"></div>
-      <div class="grid grid-cols-2 gap-4 mb-4">
-        <div><label>Concelho</label><input type="text" id="l-municipality" value="${l.municipality}"></div>
-        <div><label>Distrito</label><input type="text" id="l-district" value="${l.district}"></div>
+      <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100 admin-form">
+        <div class="mb-4"><label>Nome</label><input type="text" id="l-name" value="${escHtml(l.name)}"></div>
+        <div class="grid grid-cols-2 gap-4 mb-4">
+          <div><label>Concelho</label><input type="text" id="l-municipality" value="${escHtml(l.municipality)}"></div>
+          <div><label>Distrito</label>
+            <select id="l-district">
+              <option value="">— selecionar —</option>
+              ${districtOptions}
+            </select>
+          </div>
+        </div>
+        <div class="mb-4"><label>Morada</label><input type="text" id="l-address" value="${escHtml(l.address || '')}"></div>
+        <div class="mb-4"><label>Telefone</label><input type="text" id="l-phone" value="${escHtml(l.phone || '')}"></div>
+        <div class="grid grid-cols-2 gap-4">
+          <div><label>Latitude</label><input type="number" step="0.00001" id="l-lat" value="${l.coordinates?.lat || 39.5}"></div>
+          <div><label>Longitude</label><input type="number" step="0.00001" id="l-lng" value="${l.coordinates?.lng || -8.0}"></div>
+        </div>
+        ${key === 'locations-passaporte' ? `
+          <div class="mt-4"><label>Tipo</label>
+            <select id="l-type">
+              <option value="carimbo" ${l.type==='carimbo'?'selected':''}>Carimbo</option>
+              <option value="venda_carimbo" ${l.type==='venda_carimbo'?'selected':''}>Venda + Carimbo</option>
+            </select>
+          </div>` : ''}
       </div>
-      <div class="mb-4"><label>Morada</label><input type="text" id="l-address" value="${l.address || ''}"></div>
-      <div class="mb-4"><label>Telefone</label><input type="text" id="l-phone" value="${l.phone || ''}"></div>
-      <div class="grid grid-cols-2 gap-4 mb-6">
-        <div><label>Latitude</label><input type="number" step="0.0001" id="l-lat" value="${l.coordinates.lat}"></div>
-        <div><label>Longitude</label><input type="number" step="0.0001" id="l-lng" value="${l.coordinates.lng}"></div>
-      </div>
-      ${key === 'locations-passaporte' ? `<div class="mb-6"><label>Tipo</label><select id="l-type"><option value="carimbo" ${l.type==='carimbo'?'selected':''}>Carimbo</option><option value="venda_carimbo" ${l.type==='venda_carimbo'?'selected':''}>Venda + Carimbo</option></select></div>` : ''}
       <div class="flex gap-3">
         <button onclick="saveLocation('${key}', ${index})" class="admin-btn admin-btn-success">Guardar</button>
         <button onclick="renderSection()" class="admin-btn bg-praia-sand-200 text-praia-sand-700">Cancelar</button>
@@ -496,10 +760,13 @@ function saveLocation(key, index) {
   const loc = {
     name: document.getElementById('l-name').value.trim(),
     municipality: document.getElementById('l-municipality').value.trim(),
-    district: document.getElementById('l-district').value.trim(),
+    district: document.getElementById('l-district').value,
     address: document.getElementById('l-address').value.trim(),
     phone: document.getElementById('l-phone').value.trim(),
-    coordinates: { lat: parseFloat(document.getElementById('l-lat').value) || 0, lng: parseFloat(document.getElementById('l-lng').value) || 0 },
+    coordinates: {
+      lat: parseFloat(document.getElementById('l-lat').value) || 0,
+      lng: parseFloat(document.getElementById('l-lng').value) || 0,
+    },
   };
   if (key === 'locations-passaporte') loc.type = document.getElementById('l-type')?.value || 'carimbo';
   if (index !== null) state.data[key][index] = loc;
@@ -524,10 +791,10 @@ function renderDescontos(container) {
         ${items.map((d, i) => `
           <div class="bg-white rounded-xl shadow-layered p-4 flex items-center justify-between">
             <div>
-              <h3 class="font-display text-sm font-bold text-praia-teal-800">${d.name}</h3>
-              <p class="text-xs text-praia-sand-500">${d.description}</p>
+              <h3 class="font-display text-sm font-bold text-praia-teal-800">${escHtml(d.name)}</h3>
+              <p class="text-xs text-praia-sand-500">${escHtml(d.description)}</p>
             </div>
-            <div class="flex gap-2">
+            <div class="flex gap-2 flex-shrink-0">
               <button onclick="editDesconto(${i})" class="text-praia-teal-600 text-xs font-semibold">Editar</button>
               <button onclick="deleteItem('descontos', ${i})" class="text-red-400 text-xs font-semibold">Eliminar</button>
             </div>
@@ -538,19 +805,37 @@ function renderDescontos(container) {
 }
 
 function editDesconto(index) {
-  const d = index !== null ? state.data.descontos[index] : { name: '', description: '', conditions: '', region: 'centro', category: 'alojamento', municipality: '' };
+  const d = index !== null ? state.data.descontos[index] : {
+    name: '', description: '', conditions: '', region: 'centro', category: 'alojamento', municipality: ''
+  };
   const container = document.getElementById('admin-content');
   container.innerHTML = `
     <div class="p-6 max-w-2xl admin-form">
-      <button onclick="renderSection()" class="text-praia-teal-600 text-sm font-semibold mb-4">&larr; Voltar</button>
+      <button onclick="renderSection()" class="text-praia-teal-600 text-sm font-semibold mb-4">← Voltar</button>
       <h2 class="font-display text-xl font-bold text-praia-teal-800 mb-6">${index !== null ? 'Editar' : 'Adicionar'} Desconto</h2>
-      <div class="mb-4"><label>Nome do Parceiro</label><input type="text" id="d-name" value="${d.name}"></div>
-      <div class="mb-4"><label>Descrição do Desconto</label><textarea id="d-description" rows="2">${d.description}</textarea></div>
-      <div class="mb-4"><label>Condições</label><textarea id="d-conditions" rows="2">${d.conditions}</textarea></div>
-      <div class="grid grid-cols-3 gap-4 mb-6">
-        <div><label>Região</label><select id="d-region"><option value="norte" ${d.region==='norte'?'selected':''}>Norte</option><option value="centro" ${d.region==='centro'?'selected':''}>Centro</option><option value="alentejo" ${d.region==='alentejo'?'selected':''}>Alentejo</option><option value="algarve" ${d.region==='algarve'?'selected':''}>Algarve</option></select></div>
-        <div><label>Categoria</label><select id="d-category"><option value="alojamento" ${d.category==='alojamento'?'selected':''}>Alojamento</option><option value="restauracao" ${d.category==='restauracao'?'selected':''}>Restauração</option><option value="atividades" ${d.category==='atividades'?'selected':''}>Atividades</option><option value="comercio" ${d.category==='comercio'?'selected':''}>Comércio</option></select></div>
-        <div><label>Concelho</label><input type="text" id="d-municipality" value="${d.municipality}"></div>
+      <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100">
+        <div class="mb-4"><label>Nome do Parceiro</label><input type="text" id="d-name" value="${escHtml(d.name)}"></div>
+        <div class="mb-4"><label>Descrição do Desconto</label><textarea id="d-description" rows="2">${escHtml(d.description)}</textarea></div>
+        <div class="mb-4"><label>Condições</label><textarea id="d-conditions" rows="2">${escHtml(d.conditions)}</textarea></div>
+        <div class="grid grid-cols-3 gap-4">
+          <div><label>Região</label>
+            <select id="d-region">
+              <option value="norte" ${d.region==='norte'?'selected':''}>Norte</option>
+              <option value="centro" ${d.region==='centro'?'selected':''}>Centro</option>
+              <option value="alentejo" ${d.region==='alentejo'?'selected':''}>Alentejo</option>
+              <option value="algarve" ${d.region==='algarve'?'selected':''}>Algarve</option>
+            </select>
+          </div>
+          <div><label>Categoria</label>
+            <select id="d-category">
+              <option value="alojamento" ${d.category==='alojamento'?'selected':''}>Alojamento</option>
+              <option value="restauracao" ${d.category==='restauracao'?'selected':''}>Restauração</option>
+              <option value="atividades" ${d.category==='atividades'?'selected':''}>Atividades</option>
+              <option value="comercio" ${d.category==='comercio'?'selected':''}>Comércio</option>
+            </select>
+          </div>
+          <div><label>Concelho</label><input type="text" id="d-municipality" value="${escHtml(d.municipality)}"></div>
+        </div>
       </div>
       <div class="flex gap-3">
         <button onclick="saveDesconto(${index})" class="admin-btn admin-btn-success">Guardar</button>
@@ -580,25 +865,29 @@ function renderSettings(container) {
   container.innerHTML = `
     <div class="p-6 max-w-2xl admin-form">
       <h1 class="font-display text-2xl font-bold text-praia-teal-800 mb-6">Configurações</h1>
-      <div class="mb-4"><label>Data Limite Votação</label><input type="datetime-local" id="s-deadline" value="${(s.votingDeadline || '').replace('T', 'T').slice(0, 16)}"></div>
-      <div class="mb-4"><label>Ano Corrente</label><input type="number" id="s-year" value="${s.currentYear || 2026}"></div>
-      <div class="mb-6"><label>Praias em Destaque (IDs, uma por linha)</label><textarea id="s-featured" rows="4">${(s.featuredBeaches || []).join('\n')}</textarea></div>
-      <button onclick="saveSettings()" class="admin-btn admin-btn-success">Guardar Configurações</button>
-      <button onclick="exportSection('settings')" class="admin-btn admin-btn-export ml-2">Exportar</button>
+      <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100">
+        <div class="mb-4"><label>Data Limite Votação</label><input type="datetime-local" id="s-deadline" value="${(s.votingDeadline || '').slice(0, 16)}"></div>
+        <div class="mb-4"><label>Ano Corrente</label><input type="number" id="s-year" value="${s.currentYear || 2026}"></div>
+        <div class="mb-4"><label>Praias em Destaque (IDs, um por linha)</label><textarea id="s-featured" rows="4">${(s.featuredBeaches || []).join('\n')}</textarea></div>
+      </div>
+      <div class="flex gap-2">
+        <button onclick="saveSettings()" class="admin-btn admin-btn-success">Guardar Configurações</button>
+        <button onclick="exportSection('settings')" class="admin-btn admin-btn-export">Exportar JSON</button>
+      </div>
     </div>`;
 }
 
 function saveSettings() {
   state.data.settings = {
     ...state.data.settings,
-    votingDeadline: document.getElementById('s-deadline').value + ':00',
-    currentYear: parseInt(document.getElementById('s-year').value),
+    votingDeadline: (document.getElementById('s-deadline').value || '') + ':00',
+    currentYear: parseInt(document.getElementById('s-year').value) || 2026,
     featuredBeaches: document.getElementById('s-featured').value.trim().split('\n').filter(Boolean),
   };
   toast('Configurações guardadas!', 'success');
 }
 
-// ─── Shared Actions ───
+// ─── Shared ───
 function deleteItem(section, index) {
   if (!confirm('Tem a certeza que deseja eliminar?')) return;
   state.data[section].splice(index, 1);
@@ -609,7 +898,7 @@ function deleteItem(section, index) {
 function filterAdminTable(query) {
   const q = query.toLowerCase();
   document.querySelectorAll('.admin-table-row').forEach(row => {
-    row.style.display = row.dataset.search.includes(q) ? '' : 'none';
+    row.style.display = row.dataset.search?.includes(q) ? '' : 'none';
   });
 }
 
@@ -618,34 +907,25 @@ function exportSection(section) {
   const data = state.data[section];
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `${section}.json`;
-  a.click();
+  const a = document.createElement('a'); a.href = url; a.download = `${section}.json`; a.click();
   URL.revokeObjectURL(url);
   toast(`${section}.json exportado!`, 'success');
 }
 
 function exportAll() {
-  SECTIONS.forEach(section => {
-    setTimeout(() => exportSection(section), 200 * SECTIONS.indexOf(section));
-  });
+  SECTIONS.forEach((section, i) => setTimeout(() => exportSection(section), 250 * i));
 }
 
-function importJSON() {
-  document.getElementById('import-file')?.click();
-}
+function importJSON() { document.getElementById('import-file')?.click(); }
 
 function handleImport(event) {
   const file = event.target.files[0];
   if (!file) return;
-
   const reader = new FileReader();
-  reader.onload = (e) => {
+  reader.onload = e => {
     try {
       const data = JSON.parse(e.target.result);
       const name = file.name.replace('.json', '');
-
       if (SECTIONS.includes(name)) {
         state.data[name] = data;
         toast(`${file.name} importado com sucesso!`, 'success');
@@ -653,9 +933,7 @@ function handleImport(event) {
       } else {
         toast('Nome de ficheiro não reconhecido.', 'error');
       }
-    } catch {
-      toast('Erro ao ler o ficheiro JSON.', 'error');
-    }
+    } catch { toast('Erro ao ler o ficheiro JSON.', 'error'); }
   };
   reader.readAsText(file);
   event.target.value = '';
@@ -663,16 +941,25 @@ function handleImport(event) {
 
 // ─── Toast ───
 function toast(message, type = 'success') {
-  const existing = document.querySelector('.admin-toast');
-  if (existing) existing.remove();
-
+  document.querySelector('.admin-toast')?.remove();
   const el = document.createElement('div');
   el.className = `admin-toast ${type}`;
   el.textContent = message;
   document.body.appendChild(el);
-
   requestAnimationFrame(() => el.classList.add('show'));
   setTimeout(() => { el.classList.remove('show'); setTimeout(() => el.remove(), 400); }, 3000);
+}
+
+// ─── Helpers ───
+function slugify(str) {
+  return str.toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim().replace(/\s+/g, '-');
+}
+
+function escHtml(str) {
+  return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
 // ─── Init ───

@@ -45,6 +45,41 @@ body {
   background: #A89A78;
 }
 
+/* ─── Underwater Bubbles ─── */
+.bubble {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.18), rgba(255,255,255,0.04));
+  border: 1px solid rgba(255,255,255,0.08);
+  opacity: 0;
+  animation: bubble-rise var(--dur, 8s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+  pointer-events: none;
+}
+.bubble-sideways {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15), rgba(255,255,255,0.03));
+  border: 1px solid rgba(255,255,255,0.07);
+  opacity: 0;
+  animation: bubble-sideways var(--dur, 9s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+  pointer-events: none;
+}
+@keyframes bubble-rise {
+  0%   { opacity: 0; transform: translateY(15px) scale(0.3); }
+  8%   { opacity: 0.65; }
+  40%  { opacity: 0.5; transform: translateY(-40px) scale(0.85) translateX(var(--drift, 10px)); }
+  70%  { opacity: 0.3; transform: translateY(-90px) scale(0.95) translateX(calc(var(--drift, 10px) * -0.5)); }
+  100% { opacity: 0; transform: translateY(-130px) scale(1) translateX(var(--drift, 10px)); }
+}
+@keyframes bubble-sideways {
+  0%   { opacity: 0; transform: translate(0, 0) scale(0.4); }
+  10%  { opacity: 0.5; }
+  50%  { opacity: 0.4; transform: translate(var(--dx, 45px), var(--dy, -25px)) scale(0.85); }
+  100% { opacity: 0; transform: translate(calc(var(--dx, 45px) * 1.7), calc(var(--dy, -25px) * 0.6)) scale(1); }
+}
+
 /* ─── Layered Shadows ─── */
 .shadow-layered {
   box-shadow:

@@ -6,6 +6,7 @@ Site moderno para a revista anual "Guia das Praias Fluviais" (200+ praias fluvia
 ## Always Do First
 - **Invoke the `frontend-design` skill** before writing any frontend code, every session, no exceptions.
 - **Invoke the `seo-optimizer` skill** whenever optimizing for SEO.
+- **Adapt `admin.html` / `js/admin.js`** whenever data structures change (new fields, renamed fields, new sections, new service keys, etc.) — the admin panel must always reflect the current data model.
 
 ## Brand & Design System
 - **Logo:** `brand_assets/logotipo.png` — usar sem alterações
@@ -20,7 +21,7 @@ Site moderno para a revista anual "Guia das Praias Fluviais" (200+ praias fluvia
 | Componente | Tecnologia |
 |---|---|
 | CSS | Tailwind CSS via CDN |
-| Animações | GSAP 3.12.5 + ScrollTrigger (homepage page-turn 3D) |
+| Animações | GSAP 3.12.5 + ScrollTrigger (parallax, clip-path reveals, stagger) |
 | Mapa | Leaflet.js 1.9.4 + MarkerCluster + OpenStreetMap |
 | Meteo | Open-Meteo API (grátis, sem chave, cache 30min sessionStorage) |
 | Ícones | Lucide Icons via CDN |
@@ -28,7 +29,7 @@ Site moderno para a revista anual "Guia das Praias Fluviais" (200+ praias fluvia
 | Estado local | localStorage (votos, passaporte, reviews — protótipos) |
 
 ## Estrutura de Páginas
-- `index.html` — Homepage com page-turn 3D (5 secções magazine)
+- `index.html` — Homepage com scroll animations dinâmicas (5 secções)
 - `mapa.html` — Mapa interativo Leaflet com filtros e GPS
 - `praia.html?id=xxx` — Página individual (meteo, galeria, reviews, GPS)
 - `votar.html` — Votação Praia do Ano 2026 (deadline 31 Out 2026)
@@ -74,6 +75,14 @@ Site moderno para a revista anual "Guia das Praias Fluviais" (200+ praias fluvia
 - Cada elemento clicável precisa de hover, focus-visible, e active states
 - Imagens com gradient overlay + mix-blend-multiply
 - Grain/textura via `img/noise-texture.svg` (noise overlay)
+
+## Deployment (GitHub + Vercel)
+- **Repo:** `github.com/vicentealmeidamatos/praias-fluviais` — PAT auth embedded in git remote URL
+- **Vercel:** Connected to repo, auto-deploys on push to `main`
+- **Only commit/push when user explicitly asks**
+- **When asked to commit/push:** stage and push all manually edited/added code and images
+- **`.gitignore` excludes:** `CLAUDE.md`, `node_modules/`, `package*.json`, `serve.mjs`, `screenshot.mjs`, `temporary screenshots/`, `.env*`, `.DS_Store`
+- Never commit secrets, tokens, or dev-only files
 
 ## Hard Rules
 - Não adicionar features/secções fora do plano
