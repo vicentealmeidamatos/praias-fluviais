@@ -1,0 +1,17 @@
+# Private / dev-only files
+CLAUDE.md
+.env*
+
+# Dev tools & dependencies
+node_modules/
+package.json
+package-lock.json
+serve.mjs
+screenshot.mjs
+
+# Temporary files
+temporary screenshots/
+
+# OS files
+.DS_Store
+Thumbs.db

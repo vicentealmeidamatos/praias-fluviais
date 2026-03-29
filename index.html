@@ -254,7 +254,6 @@
       <!-- PAGE 1: CAPA / HERO                     -->
       <!-- ═══════════════════════════════════════ -->
       <section class="magazine-page hero-bg relative flex items-center justify-center min-h-screen" id="page-hero">
-        <div class="page-shadow"></div>
         <div class="noise-overlay absolute inset-0"></div>
 
         <!-- Floating particles -->
@@ -263,6 +262,12 @@
         <div class="particle w-1.5 h-1.5 bg-praia-green-400/30" style="left:55%; animation-delay:4s;"></div>
         <div class="particle w-2 h-2 bg-praia-yellow-400/30" style="left:75%; animation-delay:1s;"></div>
         <div class="particle w-2.5 h-2.5 bg-praia-blue-400/20" style="left:90%; animation-delay:3s;"></div>
+
+        <!-- Decorative geometric shapes -->
+        <div class="geo-shape absolute w-64 h-64 border border-praia-yellow-400/10 rounded-full" style="top:10%; right:-5%;"></div>
+        <div class="geo-shape absolute w-40 h-40 border border-praia-blue-400/8 rounded-full" style="bottom:15%; left:-3%;"></div>
+        <div class="geo-shape absolute w-24 h-24 border-2 border-praia-yellow-400/6 rotate-45" style="top:20%; left:8%;"></div>
+        <div class="geo-shape absolute w-16 h-16 bg-praia-yellow-400/5 rounded-full blur-xl" style="bottom:30%; right:12%;"></div>
 
         <!-- Content -->
         <div class="relative z-10 text-center px-6 max-w-4xl mx-auto">
@@ -318,14 +323,14 @@
       <!-- PAGE 2: DESTAQUES / ARTIGOS             -->
       <!-- ═══════════════════════════════════════ -->
       <section class="magazine-page bg-praia-sand-50 relative" id="page-destaques">
-        <div class="page-crease"></div>
         <div class="noise-overlay absolute inset-0 pointer-events-none"></div>
         <div class="relative z-10 py-20 md:py-28 lg:py-32">
           <!-- Section header -->
           <div class="max-w-7xl mx-auto px-6 mb-12 reveal-on-scroll">
+            <div class="section-line mx-0 mb-6"></div>
             <div class="flex items-end justify-between">
               <div>
-                <span class="font-display text-xs uppercase tracking-[0.2em] text-praia-teal-500 font-semibold block mb-2">Destaques</span>
+                <span class="section-label font-display text-xs uppercase tracking-[0.2em] text-praia-teal-500 font-semibold block mb-2">Destaques</span>
                 <h2 class="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-praia-teal-800 tracking-tightest leading-tight">
                   Histórias do<br>
                   <span class="text-praia-yellow-600 italic">Interior de Portugal</span>
@@ -429,6 +434,13 @@
             </a>
           </div>
 
+          <!-- Scroll hint for cards -->
+          <div class="scroll-hint flex items-center justify-center gap-2 mt-6 opacity-0">
+            <div class="w-8 h-0.5 bg-praia-teal-300/30 rounded-full"></div>
+            <span class="font-display text-[10px] uppercase tracking-widest text-praia-teal-400/50">Deslize</span>
+            <i data-lucide="chevrons-right" class="w-4 h-4 text-praia-teal-400/40 scroll-hint-arrow"></i>
+          </div>
+
           <!-- Mobile: Ver todos -->
           <div class="md:hidden text-center mt-6 px-6">
             <a href="artigos.html" class="inline-flex items-center gap-2 text-praia-teal-700 font-display text-sm font-semibold uppercase tracking-wider">
@@ -442,14 +454,18 @@
       <!-- PAGE 3: MAPA PREVIEW                    -->
       <!-- ═══════════════════════════════════════ -->
       <section class="magazine-page relative" id="page-mapa" style="background: linear-gradient(180deg, #003A40 0%, #002A2E 100%);">
-        <div class="page-crease"></div>
         <div class="noise-overlay absolute inset-0 pointer-events-none"></div>
+        <!-- Floating geo shapes -->
+        <div class="geo-shape absolute w-72 h-72 border border-praia-yellow-400/5 rounded-full" style="top:-8%; right:5%;"></div>
+        <div class="geo-shape absolute w-32 h-32 border border-praia-blue-400/8 rounded-full" style="bottom:10%; left:3%;"></div>
+        <div class="geo-shape absolute w-20 h-1 bg-praia-yellow-400/10 rotate-[30deg]" style="top:40%; right:8%;"></div>
         <div class="relative z-10 py-20 md:py-28 lg:py-32">
           <div class="max-w-7xl mx-auto px-6">
             <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
               <!-- Text -->
               <div>
-                <span class="font-display text-xs uppercase tracking-[0.2em] text-praia-yellow-400 font-semibold block mb-3 reveal-on-scroll">Mapa Interativo</span>
+                <div class="section-line mb-4" style="background: linear-gradient(90deg, transparent, #FFEB3B, transparent);"></div>
+                <span class="section-label font-display text-xs uppercase tracking-[0.2em] text-praia-yellow-400 font-semibold block mb-3 reveal-on-scroll">Mapa Interativo</span>
                 <h2 class="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tightest leading-tight mb-6 reveal-on-scroll" data-reveal-delay="100">
                   Descubra praias<br>
                   <span class="text-praia-yellow-400 italic">perto de si</span>
@@ -502,13 +518,13 @@
       <!-- PAGE 4: QUICK LINKS / DESCUBRA          -->
       <!-- ═══════════════════════════════════════ -->
       <section class="magazine-page bg-praia-sand-50 relative" id="page-descubra">
-        <div class="page-crease"></div>
         <div class="noise-overlay absolute inset-0 pointer-events-none"></div>
         <div class="relative z-10 py-20 md:py-28 lg:py-32">
           <div class="max-w-7xl mx-auto px-6">
             <!-- Section header -->
             <div class="text-center mb-16 reveal-on-scroll">
-              <span class="font-display text-xs uppercase tracking-[0.2em] text-praia-teal-500 font-semibold block mb-3">Descubra</span>
+              <div class="section-line mx-auto mb-5"></div>
+              <span class="section-label font-display text-xs uppercase tracking-[0.2em] text-praia-teal-500 font-semibold block mb-3">Descubra</span>
               <h2 class="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-praia-teal-800 tracking-tightest">
                 Tudo num <span class="text-praia-yellow-600 italic">só lugar</span>
               </h2>
@@ -605,8 +621,11 @@
       <!-- PAGE 5: PRAIA DO ANO                    -->
       <!-- ═══════════════════════════════════════ -->
       <section class="magazine-page relative" id="page-praia-ano" style="background: linear-gradient(180deg, #002A2E 0%, #003A40 50%, #005D56 100%);">
-        <div class="page-crease"></div>
         <div class="noise-overlay absolute inset-0 pointer-events-none"></div>
+        <!-- Floating geo shapes -->
+        <div class="geo-shape absolute w-80 h-80 border border-praia-yellow-400/5 rounded-full" style="bottom:-10%; left:-5%;"></div>
+        <div class="geo-shape absolute w-48 h-48 border border-praia-green-400/6 rounded-full" style="top:5%; right:2%;"></div>
+        <div class="geo-shape absolute w-6 h-6 bg-praia-yellow-400/8 rounded-full" style="top:25%; left:15%;"></div>
         <div class="relative z-10 py-20 md:py-28 lg:py-32">
           <div class="max-w-7xl mx-auto px-6">
             <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">

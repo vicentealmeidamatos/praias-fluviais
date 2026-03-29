@@ -1,4 +1,4 @@
-/* ─── Magazine Page-Turn System ─── */
+/* ─── Dynamic Scroll Animation System ─── */
 .magazine-container {
   position: relative;
   width: 100%;
@@ -11,38 +11,156 @@
   min-height: 100vh;
   overflow: hidden;
   will-change: transform, opacity;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+}
+
+/* ─── Section Reveal Clip ─── */
+.section-reveal-clip {
+  clip-path: inset(8% 4% 8% 4% round 24px);
+  transition: clip-path 0.01s linear;
+}
+.section-reveal-clip.revealed {
+  clip-path: inset(0% 0% 0% 0% round 0px);
+}
+
+/* ─── Parallax Depth Layers ─── */
+.parallax-slow { will-change: transform; }
+.parallax-fast { will-change: transform; }
+
+/* ─── Decorative Geometric Shapes ─── */
+.geo-shape {
+  pointer-events: none;
+  z-index: 0;
+  will-change: transform;
+}
+
+/* ─── Section Divider Line ─── */
+.section-line {
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #FFEB3B, transparent);
+  opacity: 0;
+}
+
+/* ─── Section Label ─── */
+.section-label {
+  display: inline-block;
+}
+
+/* ─── Horizontal Slide Reveal ─── */
+.slide-in-left {
+  opacity: 0;
+  transform: translateX(-80px) rotate(-2deg);
+  transition: none;
+}
+.slide-in-left.visible {
+  opacity: 1;
+  transform: translateX(0) rotate(0deg);
+}
+
+.slide-in-right {
+  opacity: 0;
+  transform: translateX(80px) rotate(2deg);
+  transition: none;
+}
+.slide-in-right.visible {
+  opacity: 1;
+  transform: translateX(0) rotate(0deg);
+}
+
+/* ─── Scale Pop ─── */
+.scale-pop {
+  opacity: 0;
+  transform: scale(0.85);
+  transition: none;
+}
+.scale-pop.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ─── Stagger Children ─── */
+.stagger-children > * {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+/* ─── Split Text Reveal ─── */
+.split-word {
+  display: inline-block;
+  overflow: hidden;
+}
+.split-word > span {
+  display: inline-block;
+  transform: translateY(110%);
+}
+
+/* ─── Magnetic Hover on Cards ─── */
+.magnetic-hover {
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ─── Counter Pulse ─── */
+.counter-value {
+  display: inline-block;
+}
+
+/* ─── Card 3D Tilt ─── */
+.card-tilt {
+  transform-style: preserve-3d;
+  perspective: 800px;
+}
+.card-tilt-inner {
+  transition: transform 0.3s ease-out;
   transform-style: preserve-3d;
 }
 
-/* Page shadow during turn — adds realism */
-.page-shadow {
+/* ─── CTA Button Glow Pulse ─── */
+.cta-glow {
+  position: relative;
+}
+.cta-glow::after {
+  content: '';
   position: absolute;
-  top: 0;
-  right: 0;
-  width: 80px;
-  height: 100%;
-  background: linear-gradient(to left, rgba(0, 0, 0, 0.15), transparent);
+  inset: -4px;
+  border-radius: inherit;
+  background: inherit;
   opacity: 0;
-  pointer-events: none;
-  z-index: 10;
+  filter: blur(16px);
+  z-index: -1;
+  animation: none;
+}
+.cta-glow.pulsing::after {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(1.05); }
 }
 
-/* Page fold crease line */
-.page-crease {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 3px;
-  height: 100%;
-  background: linear-gradient(to right, rgba(0, 0, 0, 0.08), transparent);
-  opacity: 0;
-  pointer-events: none;
-  z-index: 10;
+/* ─── Scroll Hint Arrow ─── */
+.scroll-hint-arrow {
+  animation: hint-nudge 1.5s ease-in-out infinite;
+}
+@keyframes hint-nudge {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(6px); }
 }
 
-/* Page number indicator */
+/* ─── Timeline Line Draw ─── */
+.timeline-draw {
+  transform-origin: top;
+  transform: scaleY(0);
+}
+
+/* ─── Horizontal Reveal Wipe ─── */
+.wipe-reveal {
+  clip-path: inset(0 100% 0 0);
+}
+.wipe-reveal.visible {
+  clip-path: inset(0 0% 0 0);
+}
+
+/* ─── Page Indicators ─── */
 .page-indicator {
   position: fixed;
   right: 24px;
@@ -78,7 +196,7 @@
   box-shadow: 0 0 12px rgba(255, 235, 59, 0.4);
 }
 
-/* Scroll progress bar */
+/* ─── Scroll Progress ─── */
 .scroll-progress {
   position: fixed;
   top: 0;
@@ -90,7 +208,13 @@
   will-change: transform;
 }
 
-/* ─── Mobile adjustments ─── */
+/* ─── Velocity Blur Effect ─── */
+.velocity-blur {
+  filter: blur(0px);
+  will-change: filter;
+}
+
+/* ─── Mobile Adjustments ─── */
 @media (max-width: 768px) {
   .page-indicator {
     right: 12px;
@@ -100,10 +224,48 @@
     width: 8px;
     height: 8px;
   }
+  .section-reveal-clip {
+    clip-path: inset(4% 2% 4% 2% round 16px);
+  }
+  .slide-in-left,
+  .slide-in-right {
+    transform: translateX(0) translateY(50px);
+    opacity: 0;
+  }
+  .slide-in-left.visible,
+  .slide-in-right.visible {
+    transform: translateX(0) translateY(0);
+    opacity: 1;
+  }
+  .geo-shape {
+    display: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .magazine-page {
+  .magazine-page,
+  .parallax-slow,
+  .parallax-fast,
+  .velocity-blur {
     will-change: auto;
+  }
+  .section-reveal-clip {
+    clip-path: none !important;
+  }
+  .slide-in-left,
+  .slide-in-right,
+  .scale-pop,
+  .stagger-children > * {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .geo-shape {
+    display: none;
+  }
+  .scroll-hint-arrow {
+    animation: none;
+  }
+  .cta-glow.pulsing::after {
+    animation: none;
   }
 }
