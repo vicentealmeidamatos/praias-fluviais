@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mapa Interativo | Praias Fluviais</title>
+  <meta name="description" content="Explore mais de 200 praias fluviais de Portugal no mapa interativo. Filtre por serviços, bandeira azul, acessibilidade e encontre praias perto de si.">
+  <meta property="og:title" content="Mapa Interativo | Praias Fluviais">
+  <meta property="og:description" content="Explore mais de 200 praias fluviais de Portugal no mapa interativo. Filtre por serviços, bandeira azul, acessibilidade e encontre praias perto de si.">
+  <meta property="og:image" content="brand_assets/praias-fluviais.png">
+  <meta property="og:locale" content="pt_PT">
+  <meta property="og:type" content="website">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/shared.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
+  <link rel="stylesheet" href="css/shared.css">
+
+  <style>
+    #map-main { height: calc(100vh - 70px - 64px); }
+    @media (min-width: 1024px) { #map-main { height: calc(100vh - 70px); } }
+    .leaflet-popup-content-wrapper { border-radius: 12px !important; padding: 0 !important; overflow: hidden; box-shadow: 0 8px 24px rgba(0,58,64,0.15) !important; }
+    .leaflet-popup-content { margin: 0 !important; }
+    .leaflet-popup-tip { box-shadow: 0 4px 12px rgba(0,58,64,0.1) !important; }
+    .filter-panel { scrollbar-width: thin; scrollbar-color: #C4B898 transparent; }
+  </style>
+</head>
+
+<body class="bg-praia-sand-50 font-body text-praia-sand-900 antialiased overflow-hidden">
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:bg-praia-yellow-400 focus:text-praia-teal-800 focus:px-4 focus:py-2 focus:rounded-lg focus:font-display focus:font-semibold">
+    Saltar para o conteúdo
+  </a>
+  <!-- Header -->
+  <header id="main-header" class="fixed top-0 left-0 right-0 z-[1000] bg-praia-teal-800">
+    <div class="max-w-[100vw] mx-auto px-4 sm:px-6">
+      <div class="flex items-center justify-between h-16 md:h-[70px]">
+        <a href="index.html" class="flex-shrink-0">
+          <img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-8 md:h-10 w-auto">
+        </a>
+        <nav class="hidden lg:flex items-center gap-1">
+          <a href="index.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Início</a>
+          <a href="mapa.html" class="nav-link active font-display text-xs font-semibold uppercase tracking-wider text-white px-3 py-2">Mapa</a>
+          <a href="votar.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Votar</a>
+          <a href="rede.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Rede</a>
+          <a href="passaporte.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Passaporte</a>
+          <a href="artigos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Artigos</a>
+        </nav>
+        <button id="nav-hamburger" class="lg:hidden text-white p-2" aria-label="Menu">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content" class="pt-16 md:pt-[70px] flex h-screen">
+    <!-- Desktop Filter Sidebar -->
+    <aside class="hidden lg:flex flex-col w-80 bg-white border-r border-praia-sand-200 overflow-y-auto filter-panel">
+      <div class="p-5 border-b border-praia-sand-200">
+        <h1 class="font-display text-lg font-bold text-praia-teal-800 mb-1">Mapa Interativo</h1>
+        <p id="result-count" class="text-sm text-praia-sand-500">30 praias encontradas</p>
+      </div>
+
+      <!-- Search -->
+      <div class="p-5 border-b border-praia-sand-100">
+        <div class="relative">
+          <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-praia-sand-400"></i>
+          <input id="filter-search" type="text" placeholder="Procurar praia..." class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-praia-sand-50 border border-praia-sand-200 text-sm focus:outline-none focus:border-praia-teal-400 transition-colors duration-300">
+        </div>
+      </div>
+
+      <!-- Near Me -->
+      <div class="p-5 border-b border-praia-sand-100">
+        <button id="btn-near-me" class="btn-primary w-full flex items-center justify-center gap-2 bg-praia-teal-800 text-praia-yellow-400 font-display text-xs font-bold uppercase tracking-wider px-4 py-3 rounded-xl">
+          <i data-lucide="navigation" class="w-4 h-4"></i> Perto de Mim
+        </button>
+      </div>
+
+      <!-- Region -->
+      <div class="p-5 border-b border-praia-sand-100">
+        <label class="font-display text-xs font-semibold uppercase tracking-wider text-praia-teal-700 block mb-2">Região</label>
+        <select id="filter-region" class="w-full px-3 py-2.5 rounded-xl bg-praia-sand-50 border border-praia-sand-200 text-sm focus:outline-none focus:border-praia-teal-400">
+          <option value="">Todas as regiões</option>
+          <option value="norte">Norte</option>
+          <option value="centro">Centro</option>
+          <option value="alentejo">Alentejo</option>
+          <option value="algarve">Algarve</option>
+        </select>
+      </div>
+
+      <!-- Services -->
+      <div class="p-5">
+        <label class="font-display text-xs font-semibold uppercase tracking-wider text-praia-teal-700 block mb-3">Serviços</label>
+        <div class="space-y-2.5">
+          <label class="flex items-center gap-3 cursor-pointer group">
+            <input type="checkbox" value="blueFlag" class="filter-service w-4 h-4 rounded border-praia-sand-300 text-praia-teal-600 focus:ring-praia-yellow-400">
+            <span class="text-sm text-praia-sand-700 group-hover:text-praia-teal-700">Bandeira Azul</span>
+          </label>
+          <label class="flex items-center gap-3 cursor-pointer group">
+            <input type="checkbox" value="goldQuality" class="filter-service w-4 h-4 rounded border-praia-sand-300 text-praia-teal-600 focus:ring-praia-yellow-400">
+            <span class="text-sm text-praia-sand-700 group-hover:text-praia-teal-700">Qualidade Ouro</span>
+          </label>
+          <label class="flex items-center gap-3 cursor-pointer group">
+            <input type="checkbox" value="accessible" class="filter-service w-4 h-4 rounded border-praia-sand-300 text-praia-teal-600 focus:ring-praia-yellow-400">
+            <span class="text-sm text-praia-sand-700 group-hover:text-praia-teal-700">Acessível</span>
+          </label>
+          <label class="flex items-center gap-3 cursor-pointer group">
+            <input type="checkbox" value="lifeguard" class="filter-service w-4 h-4 rounded border-praia-sand-300 text-praia-teal-600 focus:ring-praia-yellow-400">
+            <span class="text-sm text-praia-sand-700 group-hover:text-praia-teal-700">Nadador-salvador</span>
+          </label>
+          <label class="flex items-center gap-3 cursor-pointer group">
+            <input type="checkbox" value="bar" class="filter-service w-4 h-4 rounded border-praia-sand-300 text-praia-teal-600 focus:ring-praia-yellow-400">
+            <span class="text-sm text-praia-sand-700 group-hover:text-praia-teal-700">Bar</span>
+          </label>
+          <label class="flex items-center gap-3 cursor-pointer group">
+            <input type="checkbox" value="grills" class="filter-service w-4 h-4 rounded border-praia-sand-300 text-praia-teal-600 focus:ring-praia-yellow-400">
+            <span class="text-sm text-praia-sand-700 group-hover:text-praia-teal-700">Grelhadores</span>
+          </label>
+          <label class="flex items-center gap-3 cursor-pointer group">
+            <input type="checkbox" value="camping" class="filter-service w-4 h-4 rounded border-praia-sand-300 text-praia-teal-600 focus:ring-praia-yellow-400">
+            <span class="text-sm text-praia-sand-700 group-hover:text-praia-teal-700">Campismo</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Legend -->
+      <div class="p-5 border-t border-praia-sand-100 mt-auto">
+        <label class="font-display text-xs font-semibold uppercase tracking-wider text-praia-teal-700 block mb-3">Legenda</label>
+        <div class="space-y-2">
+          <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-[#0288D1] border border-white shadow"></div><span class="text-xs text-praia-sand-600">Bandeira Azul</span></div>
+          <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-[#F5B800] border border-white shadow"></div><span class="text-xs text-praia-sand-600">Qualidade Ouro</span></div>
+          <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-[#003A40] border border-white shadow"></div><span class="text-xs text-praia-sand-600">Praia Fluvial</span></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Map -->
+    <div class="flex-1 relative">
+      <div id="map-main" class="w-full"></div>
+
+      <!-- Mobile filter toggle -->
+      <button id="filter-toggle" class="lg:hidden fixed bottom-20 right-4 z-[900] bg-praia-teal-800 text-praia-yellow-400 w-14 h-14 rounded-full shadow-layered-lg flex items-center justify-center btn-primary" aria-label="Filtros">
+        <i data-lucide="sliders-horizontal" class="w-6 h-6"></i>
+      </button>
+
+      <!-- Mobile filter drawer -->
+      <div id="filter-drawer" class="lg:hidden fixed top-0 right-0 bottom-0 w-80 max-w-[85vw] bg-white z-[1001] translate-x-full transition-transform duration-300 overflow-y-auto filter-panel shadow-2xl">
+        <div class="p-5 border-b border-praia-sand-200 flex items-center justify-between">
+          <h2 class="font-display text-lg font-bold text-praia-teal-800">Filtros</h2>
+          <button id="filter-toggle" class="text-praia-sand-500 p-1" aria-label="Fechar filtros">
+            <i data-lucide="x" class="w-6 h-6"></i>
+          </button>
+        </div>
+        <!-- Same filter content duplicated for mobile -->
+        <div class="p-5 border-b border-praia-sand-100">
+          <div class="relative">
+            <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-praia-sand-400"></i>
+            <input type="text" placeholder="Procurar praia..." class="filter-search-mobile w-full pl-10 pr-4 py-2.5 rounded-xl bg-praia-sand-50 border border-praia-sand-200 text-sm focus:outline-none focus:border-praia-teal-400"
+              oninput="document.getElementById('filter-search').value=this.value; document.getElementById('filter-search').dispatchEvent(new Event('input'))">
+          </div>
+        </div>
+        <div class="p-5">
+          <label class="font-display text-xs font-semibold uppercase tracking-wider text-praia-teal-700 block mb-2">Região</label>
+          <select class="w-full px-3 py-2.5 rounded-xl bg-praia-sand-50 border border-praia-sand-200 text-sm"
+            onchange="document.getElementById('filter-region').value=this.value; document.getElementById('filter-region').dispatchEvent(new Event('change'))">
+            <option value="">Todas as regiões</option>
+            <option value="norte">Norte</option>
+            <option value="centro">Centro</option>
+            <option value="alentejo">Alentejo</option>
+            <option value="algarve">Algarve</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Bottom Nav -->
+  <nav class="bottom-nav fixed bottom-0 left-0 right-0 bg-praia-teal-800/95 backdrop-blur-md z-[999] lg:hidden border-t border-white/10">
+    <div class="flex items-center justify-around h-16">
+      <a href="index.html" class="flex flex-col items-center gap-1 text-white/60"><i data-lucide="home" class="w-5 h-5"></i><span class="font-display text-[10px] uppercase tracking-wider font-semibold">Início</span></a>
+      <a href="mapa.html" class="flex flex-col items-center gap-1 text-praia-yellow-400"><i data-lucide="map" class="w-5 h-5"></i><span class="font-display text-[10px] uppercase tracking-wider font-semibold">Mapa</span></a>
+      <a href="votar.html" class="flex flex-col items-center gap-1 text-white/60"><i data-lucide="vote" class="w-5 h-5"></i><span class="font-display text-[10px] uppercase tracking-wider font-semibold">Votar</span></a>
+      <a href="passaporte.html" class="flex flex-col items-center gap-1 text-white/60"><i data-lucide="stamp" class="w-5 h-5"></i><span class="font-display text-[10px] uppercase tracking-wider font-semibold">Passaporte</span></a>
+    </div>
+  </nav>
+
+  <script src="js/geolocation.js"></script>
+  <script src="js/map.js"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

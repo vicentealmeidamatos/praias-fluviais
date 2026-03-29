@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Praia Fluvial | Praias Fluviais</title>
+  <meta name="description" content="Descubra esta praia fluvial de Portugal — fotos, serviços, meteorologia, como chegar e avaliações da comunidade.">
+  <meta property="og:title" content="Praia Fluvial | Praias Fluviais">
+  <meta property="og:description" content="Descubra esta praia fluvial de Portugal — fotos, serviços, meteorologia, como chegar e avaliações da comunidade.">
+  <meta property="og:image" content="brand_assets/praias-fluviais.png">
+  <meta property="og:locale" content="pt_PT">
+  <meta property="og:type" content="website">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/shared.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="css/shared.css">
+</head>
+
+<body class="bg-praia-sand-50 font-body text-praia-sand-900 antialiased">
+  <a href="#beach-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:bg-praia-yellow-400 focus:text-praia-teal-800 focus:px-4 focus:py-2 focus:rounded-lg focus:font-display focus:font-semibold">
+    Saltar para o conteúdo
+  </a>
+  <header id="main-header" class="fixed top-0 left-0 right-0 z-[1000] bg-praia-teal-800/90 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 md:h-[70px]">
+        <a href="index.html"><img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-8 md:h-10 w-auto"></a>
+        <nav class="hidden lg:flex items-center gap-1">
+          <a href="index.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Início</a>
+          <a href="mapa.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Mapa</a>
+          <a href="votar.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Votar</a>
+          <a href="rede.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Rede</a>
+          <a href="passaporte.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Passaporte</a>
+          <a href="artigos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Artigos</a>
+        </nav>
+        <button id="nav-hamburger" class="lg:hidden text-white p-2" aria-label="Menu"><i data-lucide="menu" class="w-6 h-6"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <main id="beach-content" class="pt-16 md:pt-[70px] pb-20 lg:pb-10">
+    <div class="max-w-5xl mx-auto px-6 py-20">
+      <div class="skeleton h-72 w-full mb-6"></div>
+      <div class="skeleton h-8 w-2/3 mb-4"></div>
+      <div class="skeleton h-4 w-1/2"></div>
+    </div>
+  </main>
+
+  <!-- Mobile Bottom Nav -->
+  <nav class="bottom-nav fixed bottom-0 left-0 right-0 bg-praia-teal-800/95 backdrop-blur-md z-[999] lg:hidden border-t border-white/10">
+    <div class="flex items-center justify-around h-16">
+      <a href="index.html" class="flex flex-col items-center gap-1 text-white/60"><i data-lucide="home" class="w-5 h-5"></i><span class="font-display text-[10px] uppercase tracking-wider font-semibold">Início</span></a>
+      <a href="mapa.html" class="flex flex-col items-center gap-1 text-white/60"><i data-lucide="map" class="w-5 h-5"></i><span class="font-display text-[10px] uppercase tracking-wider font-semibold">Mapa</span></a>
+      <a href="votar.html" class="flex flex-col items-center gap-1 text-white/60"><i data-lucide="vote" class="w-5 h-5"></i><span class="font-display text-[10px] uppercase tracking-wider font-semibold">Votar</span></a>
+      <a href="passaporte.html" class="flex flex-col items-center gap-1 text-white/60"><i data-lucide="stamp" class="w-5 h-5"></i><span class="font-display text-[10px] uppercase tracking-wider font-semibold">Passaporte</span></a>
+    </div>
+  </nav>
+
+  <script src="js/weather.js"></script>
+  <script src="js/beach-page.js"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

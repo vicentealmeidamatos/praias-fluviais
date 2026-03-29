@@ -1,0 +1,57 @@
+[
+  {
+    "slug": "melhores-praias-centro",
+    "title": "As Melhores Praias Fluviais da Região Centro",
+    "excerpt": "Descubra as praias mais bonitas e bem equipadas do centro de Portugal, de Coimbra a Castelo Branco.",
+    "content": "<p>A região centro de Portugal concentra a maior diversidade de praias fluviais do país. Desde as águas cristalinas do Rio Alva às piscinas naturais da Serra da Estrela, há opções para todos os gostos.</p><h3>Destaques da Região Centro</h3><p>A Praia Fluvial de Avô, vencedora do galardão Praia Fluvial do Ano 2024, é um dos exemplos mais notáveis. Situada nas margens do Rio Alva, a aldeia de Avô combina património histórico com um cenário natural deslumbrante.</p><p>Outra opção imperdível é a Praia de Loriga, conhecida como a 'Suíça Portuguesa', com as suas águas geladas provenientes da Serra da Estrela e os enormes penedos de granito que enquadram as piscinas naturais.</p>",
+    "image": "https://placehold.co/1200x600/003A40/FFEB3B?text=Praias+Centro",
+    "date": "2026-03-15",
+    "category": "roteiros",
+    "featured": true,
+    "status": "published"
+  },
+  {
+    "slug": "cascatas-portugal",
+    "title": "As Mais Bonitas Cascatas de Portugal",
+    "excerpt": "Um roteiro pelas quedas de água mais espetaculares do país, do Gerês ao Algarve.",
+    "content": "<p>Portugal esconde cascatas de beleza surpreendente, muitas delas junto a praias fluviais. Este roteiro leva-o pelas mais espetaculares quedas de água do país.</p><h3>Norte</h3><p>No Gerês, as Cascatas do Arado e do Tahiti são obrigatórias. As águas cristalinas mergulham por entre rochas graníticas, criando poços naturais perfeitos para banhos.</p><h3>Centro</h3><p>Na Serra da Lousã, as cascatas junto às Aldeias do Xisto são tesouros escondidos que merecem ser descobertos.</p>",
+    "image": "https://placehold.co/1200x600/005D56/FFEB3B?text=Cascatas",
+    "date": "2026-03-10",
+    "category": "natureza",
+    "featured": true,
+    "status": "published"
+  },
+  {
+    "slug": "alcoutim-nova-praia",
+    "title": "Alcoutim: A Nova Praia Fluvial do Algarve",
+    "excerpt": "Pego Fundo em Alcoutim é a mais recente adição ao mapa das praias fluviais do Algarve.",
+    "content": "<p>O Algarve não é só praias de mar. No interior algarvio, junto à fronteira com Espanha, Alcoutim surpreende com o Pego Fundo — uma praia fluvial de águas límpidas e ambiente tranquilo.</p><p>A Ribeira de Cadavais criou aqui um poço natural de beleza rara, rodeado pela paisagem mediterrânica do Barrocal algarvio. É um segredo bem guardado que merece ser descoberto.</p>",
+    "image": "https://placehold.co/1200x600/002A2E/FFEB3B?text=Alcoutim",
+    "date": "2026-02-28",
+    "category": "descobertas",
+    "featured": true,
+    "status": "published"
+  },
+  {
+    "slug": "praias-norte",
+    "title": "Praias Fluviais do Gerês e Minho",
+    "excerpt": "As águas cristalinas do norte de Portugal, entre cascatas e paisagens de montanha.",
+    "content": "<p>O Minho e o Gerês oferecem algumas das praias fluviais mais espetaculares de Portugal. As águas frias e cristalinas dos rios Cávado, Gerês e Paiva são um convite irrecusável nos meses de verão.</p>",
+    "image": "https://placehold.co/1200x600/003A40/4FC3F7?text=Norte",
+    "date": "2026-02-15",
+    "category": "roteiros",
+    "featured": false,
+    "status": "published"
+  },
+  {
+    "slug": "praias-acessiveis",
+    "title": "Praias Fluviais Acessíveis a Todos",
+    "excerpt": "Guia completo de praias com acessibilidade para mobilidade reduzida.",
+    "content": "<p>Cada vez mais praias fluviais portuguesas investem na acessibilidade. Este guia lista as praias com melhores condições para pessoas com mobilidade reduzida, incluindo rampas de acesso, cadeiras anfíbias e balneários adaptados.</p>",
+    "image": "https://placehold.co/1200x600/2E7D32/FFEB3B?text=Acess%C3%ADveis",
+    "date": "2026-02-01",
+    "category": "informacao",
+    "featured": false,
+    "status": "published"
+  }
+]

@@ -1,0 +1,19 @@
+{
+  "votingDeadline": "2026-10-31T23:59:59",
+  "currentYear": 2026,
+  "featuredBeaches": ["praia-fluvial-de-loriga", "praia-fluvial-de-avo", "albufeira-do-azibo", "praia-fluvial-de-geres"],
+  "featuredArticles": ["melhores-praias-centro", "cascatas-portugal", "alcoutim-nova-praia"],
+  "socialMedia": {
+    "facebook": "https://www.facebook.com/praiasfluviais",
+    "instagram": "https://www.instagram.com/guiadaspraiasfluviais"
+  },
+  "contact": {
+    "email": "info@praiasfluviais.pt",
+    "website": "https://praiasfluviais.pt"
+  },
+  "previousWinners": [
+    { "year": 2025, "name": "Zona de Fruição Ribeirinha da Carriça", "municipality": "Oliveira de Frades", "votes": null },
+    { "year": 2024, "name": "Praia Fluvial de Avô", "municipality": "Oliveira do Hospital", "votes": 7175 },
+    { "year": 2023, "name": "Praia Fluvial do Vimieiro", "municipality": "Penacova", "votes": 7357 }
+  ]
+}

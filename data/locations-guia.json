@@ -1,0 +1,12 @@
+[
+  { "name": "Posto de Turismo de Braga", "municipality": "Braga", "district": "Braga", "address": "Praça da República, 4710-305 Braga", "phone": "+351 253 262 550", "coordinates": { "lat": 41.5503, "lng": -8.4201 } },
+  { "name": "Posto de Turismo de Coimbra", "municipality": "Coimbra", "district": "Coimbra", "address": "Largo da Portagem, 3000-337 Coimbra", "phone": "+351 239 488 120", "coordinates": { "lat": 40.2088, "lng": -8.4280 } },
+  { "name": "Posto de Turismo de Viseu", "municipality": "Viseu", "district": "Viseu", "address": "Adro da Sé, 3500-195 Viseu", "phone": "+351 232 420 950", "coordinates": { "lat": 40.6566, "lng": -7.9126 } },
+  { "name": "Posto de Turismo de Guarda", "municipality": "Guarda", "district": "Guarda", "address": "Praça Luís de Camões, 6300-725 Guarda", "phone": "+351 271 205 530", "coordinates": { "lat": 40.5373, "lng": -7.2677 } },
+  { "name": "Posto de Turismo de Castelo Branco", "municipality": "Castelo Branco", "district": "Castelo Branco", "address": "Alameda da Liberdade, 6000-767 Castelo Branco", "phone": "+351 272 330 339", "coordinates": { "lat": 39.8225, "lng": -7.4910 } },
+  { "name": "Welcome Center de Abrantes", "municipality": "Abrantes", "district": "Santarém", "address": "Praça Raimundo Soares, 2200-366 Abrantes", "phone": "+351 241 361 101", "coordinates": { "lat": 39.4622, "lng": -8.1977 } },
+  { "name": "Posto de Turismo de Bragança", "municipality": "Bragança", "district": "Bragança", "address": "Av. Cidade de Zamora, 5300-111 Bragança", "phone": "+351 273 381 273", "coordinates": { "lat": 41.8061, "lng": -6.7573 } },
+  { "name": "Posto de Turismo de Vila Real", "municipality": "Vila Real", "district": "Vila Real", "address": "Av. Carvalho Araújo, 5000-657 Vila Real", "phone": "+351 259 322 819", "coordinates": { "lat": 41.2960, "lng": -7.7440 } },
+  { "name": "Posto de Turismo de Portalegre", "municipality": "Portalegre", "district": "Portalegre", "address": "Rossio, 7300-110 Portalegre", "phone": "+351 245 307 445", "coordinates": { "lat": 39.2973, "lng": -7.4315 } },
+  { "name": "Posto de Turismo de Évora", "municipality": "Évora", "district": "Évora", "address": "Praça do Giraldo, 7000-508 Évora", "phone": "+351 266 777 071", "coordinates": { "lat": 38.5710, "lng": -7.9073 } }
+]

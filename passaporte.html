@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Passaporte Digital | Praias Fluviais</title>
+  <meta name="description" content="Colecione carimbos digitais nas praias fluviais de Portugal. Ganhe badges e acompanhe as suas visitas com o Passaporte Digital.">
+  <meta property="og:title" content="Passaporte Digital | Praias Fluviais">
+  <meta property="og:description" content="Colecione carimbos digitais nas praias fluviais de Portugal. Ganhe badges e acompanhe as suas visitas com o Passaporte Digital.">
+  <meta property="og:image" content="brand_assets/praias-fluviais.png">
+  <meta property="og:locale" content="pt_PT">
+  <meta property="og:type" content="website">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/shared.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="css/shared.css">
+
+  <style>
+    .stamp-slot {
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .stamp-slot:hover {
+      transform: scale(1.04) translateY(-2px);
+    }
+    .stamp-slot:active {
+      transform: scale(0.97);
+    }
+    .praia-yellow-50 {
+      background-color: #FFFDE7;
+    }
+    .progress-track {
+      background: linear-gradient(90deg, #E8DFD0 0%, #F5F0E8 100%);
+    }
+    .progress-fill {
+      background: linear-gradient(90deg, #003A40 0%, #005D56 50%, #FFEB3B 100%);
+      transition: width 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .qr-btn {
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .qr-btn:hover {
+      transform: scale(1.05) translateY(-2px);
+    }
+    .qr-btn:active {
+      transform: scale(0.97);
+    }
+    .qr-btn:focus-visible {
+      outline: 3px solid #FFEB3B;
+      outline-offset: 3px;
+    }
+  </style>
+</head>
+
+<body class="bg-praia-sand-50 font-body text-praia-sand-900 antialiased">
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:bg-praia-yellow-400 focus:text-praia-teal-800 focus:px-4 focus:py-2 focus:rounded-lg focus:font-display focus:font-semibold">Saltar para o conteúdo</a>
+
+  <!-- Header -->
+  <header id="main-header" class="fixed top-0 left-0 right-0 z-[1000] bg-praia-teal-800/90 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 md:h-[70px]">
+        <a href="index.html"><img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-8 md:h-10 w-auto"></a>
+        <nav class="hidden lg:flex items-center gap-1">
+          <a href="index.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Início</a>
+          <a href="mapa.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Mapa</a>
+          <a href="votar.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Votar</a>
+          <a href="rede.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Rede</a>
+          <a href="passaporte.html" class="nav-link active font-display text-xs font-semibold uppercase tracking-wider text-white px-3 py-2">Passaporte</a>
+          <a href="artigos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Artigos</a>
+        </nav>
+        <button id="nav-hamburger" class="lg:hidden text-white p-2" aria-label="Menu"><i data-lucide="menu" class="w-6 h-6"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Menu Overlay -->
+  <div id="menu-overlay" class="fixed inset-0 bg-black/50 z-[1001] opacity-0 pointer-events-none transition-opacity duration-300"></div>
+
+  <!-- Mobile Menu -->
+  <nav id="mobile-menu" class="fixed top-0 right-0 bottom-0 w-72 bg-praia-teal-800 z-[1002] translate-x-full transition-transform duration-300 ease-out flex flex-col">
+    <div class="flex items-center justify-between p-5 border-b border-white/10">
+      <img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-7">
+      <button id="nav-hamburger" class="text-white p-1" aria-label="Fechar menu"><i data-lucide="x" class="w-6 h-6"></i></button>
+    </div>
+    <div class="flex-1 overflow-y-auto py-4">
+      <a href="index.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="home" class="w-5 h-5"></i> Início</a>
+      <a href="mapa.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="map" class="w-5 h-5"></i> Mapa Interativo</a>
+      <a href="votar.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="vote" class="w-5 h-5"></i> Votar 2026</a>
+      <a href="rede.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="network" class="w-5 h-5"></i> Rede de Praias</a>
+      <a href="passaporte.html" class="flex items-center gap-3 px-6 py-3.5 text-praia-yellow-400 font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="stamp" class="w-5 h-5"></i> Passaporte</a>
+      <a href="artigos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="newspaper" class="w-5 h-5"></i> Artigos</a>
+      <a href="onde-encontrar-guia.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="book-open" class="w-5 h-5"></i> Onde Encontrar o Guia</a>
+      <a href="onde-encontrar-passaporte.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="map-pin" class="w-5 h-5"></i> Onde Carimbar</a>
+      <a href="descontos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="percent" class="w-5 h-5"></i> Descontos</a>
+    </div>
+    <div class="p-5 border-t border-white/10">
+      <a href="votar.html" class="flex items-center justify-center gap-2 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider px-5 py-3 rounded-full btn-primary w-full">
+        <i data-lucide="vote" class="w-4 h-4"></i> Votar Praia do Ano
+      </a>
+    </div>
+  </nav>
+
+  <main id="main-content" class="pt-16 md:pt-[70px] pb-20 lg:pb-10">
+    <!-- Hero -->
+    <section class="relative py-16 md:py-24" style="background: linear-gradient(135deg, #003A40 0%, #002A2E 50%, #005D56 100%);">
+      <div class="noise-overlay absolute inset-0 pointer-events-none"></div>
+      <div class="absolute inset-0" style="background: radial-gradient(ellipse at 20% 60%, rgba(255,235,59,0.08) 0%, transparent 50%), radial-gradient(ellipse at 80% 30%, rgba(67,160,71,0.05) 0%, transparent 50%);"></div>
+      <div class="relative z-10 max-w-4xl mx-auto px-6 text-center">
+        <div class="inline-flex items-center gap-2 bg-praia-yellow-400/10 border border-praia-yellow-400/20 rounded-full px-4 py-1.5 mb-6 reveal-on-scroll">
+          <i data-lucide="stamp" class="w-4 h-4 text-praia-yellow-400"></i>
+          <span class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-semibold">Passaporte Digital</span>
+        </div>
+        <h1 class="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tightest leading-tight mb-4 reveal-on-scroll" data-reveal-delay="100">
+          Colecione carimbos<br>
+          <span class="text-praia-yellow-400 italic">nas praias de Portugal</span>
+        </h1>
+        <p class="text-white/50 text-lg max-w-2xl mx-auto leading-relaxed-plus mb-8 reveal-on-scroll" data-reveal-delay="200">
+          Visite praias fluviais, digitalize o QR Code em cada local e colecione carimbos digitais. Conquiste badges e torne-se um verdadeiro explorador!
+        </p>
+        <button onclick="alert('Funcionalidade disponível nas praias')" class="qr-btn inline-flex items-center gap-3 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider px-8 py-4 rounded-full shadow-layered-yellow">
+          <i data-lucide="scan-line" class="w-5 h-5"></i>
+          Digitalizar QR Code
+        </button>
+      </div>
+    </section>
+
+    <!-- Statistics -->
+    <section class="max-w-4xl mx-auto px-6 -mt-8 relative z-20">
+      <div class="bg-white rounded-2xl shadow-layered-lg border border-praia-sand-100 p-6 md:p-8">
+        <div class="flex flex-col sm:flex-row items-center gap-6 sm:gap-10 mb-6">
+          <div class="text-center flex-1">
+            <span id="stat-collected" class="block font-display text-3xl md:text-4xl font-bold text-praia-teal-800 tracking-tightest">0</span>
+            <span class="font-display text-xs uppercase tracking-wider text-praia-sand-500 font-semibold">Carimbos</span>
+          </div>
+          <div class="w-px h-10 bg-praia-sand-200 hidden sm:block"></div>
+          <div class="text-center flex-1">
+            <span id="stat-available" class="block font-display text-3xl md:text-4xl font-bold text-praia-sand-400 tracking-tightest">--</span>
+            <span class="font-display text-xs uppercase tracking-wider text-praia-sand-500 font-semibold">Disponíveis</span>
+          </div>
+          <div class="w-px h-10 bg-praia-sand-200 hidden sm:block"></div>
+          <div class="text-center flex-1">
+            <span id="stat-percentage" class="block font-display text-3xl md:text-4xl font-bold text-praia-teal-800 tracking-tightest">0%</span>
+            <span class="font-display text-xs uppercase tracking-wider text-praia-sand-500 font-semibold">Completo</span>
+          </div>
+        </div>
+        <div class="progress-track h-3 rounded-full overflow-hidden">
+          <div id="progress-bar" class="progress-fill h-full rounded-full" style="width: 0%;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stamps Grid -->
+    <section class="max-w-6xl mx-auto px-6 py-12 md:py-16">
+      <div class="text-center mb-10 reveal-on-scroll">
+        <span class="font-display text-xs uppercase tracking-[0.15em] text-praia-teal-500 font-semibold block mb-2">Os Seus Carimbos</span>
+        <h2 class="font-display text-2xl md:text-3xl font-bold text-praia-teal-800 tracking-tightest">Álbum de Carimbos</h2>
+        <p class="text-praia-sand-500 mt-2 text-sm">Clique numa praia para simular um carimbo (demo)</p>
+      </div>
+      <div id="stamps-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        <!-- Skeleton loading -->
+        <div class="skeleton h-28 rounded-xl"></div>
+        <div class="skeleton h-28 rounded-xl"></div>
+        <div class="skeleton h-28 rounded-xl"></div>
+        <div class="skeleton h-28 rounded-xl"></div>
+        <div class="skeleton h-28 rounded-xl"></div>
+        <div class="skeleton h-28 rounded-xl"></div>
+        <div class="skeleton h-28 rounded-xl"></div>
+        <div class="skeleton h-28 rounded-xl"></div>
+      </div>
+    </section>
+
+    <!-- Badges -->
+    <section class="bg-white border-t border-b border-praia-sand-100">
+      <div class="max-w-5xl mx-auto px-6 py-12 md:py-16">
+        <div class="text-center mb-10 reveal-on-scroll">
+          <span class="font-display text-xs uppercase tracking-[0.15em] text-praia-yellow-600 font-semibold block mb-2">Conquistas</span>
+          <h2 class="font-display text-2xl md:text-3xl font-bold text-praia-teal-800 tracking-tightest">Badges & Troféus</h2>
+          <p class="text-praia-sand-500 mt-2 text-sm">Desbloqueie conquistas ao visitar praias de diferentes regiões</p>
+        </div>
+        <div id="badges-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+          <!-- Filled by passport.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Where to stamp -->
+    <section class="max-w-4xl mx-auto px-6 py-12 md:py-16 text-center reveal-on-scroll">
+      <i data-lucide="map-pin" class="w-10 h-10 text-praia-teal-700 mx-auto mb-4"></i>
+      <h2 class="font-display text-xl md:text-2xl font-bold text-praia-teal-800 tracking-tightest mb-3">Onde Carimbar?</h2>
+      <p class="text-praia-sand-600 max-w-xl mx-auto mb-6 leading-relaxed-plus">
+        Os carimbos físicos estão disponíveis em bares de praia e postos de turismo espalhados por todo o país. Consulte a lista completa de pontos de carimbo.
+      </p>
+      <a href="onde-encontrar-passaporte.html" class="btn-primary inline-flex items-center gap-2 bg-praia-teal-800 text-praia-yellow-400 font-display font-bold text-sm uppercase tracking-wider px-6 py-3 rounded-full">
+        <i data-lucide="map-pin" class="w-4 h-4"></i>
+        Ver Pontos de Carimbo
+      </a>
+    </section>
+  </main>
+
+  <!-- Mobile Bottom Nav -->
+  <nav class="bottom-nav fixed bottom-0 left-0 right-0 bg-praia-teal-800/95 backdrop-blur-md z-[999] lg:hidden border-t border-white/10">
+    <div class="flex items-center justify-around h-16">
+      <a href="index.html" class="flex flex-col items-center gap-1 text-white/60"><i data-lucide="home" class="w-5 h-5"></i><span class="font-display text-[10px] uppercase tracking-wider font-semibold">Início</span></a>
+      <a href="mapa.html" class="flex flex-col items-center gap-1 text-white/60"><i data-lucide="map" class="w-5 h-5"></i><span class="font-display text-[10px] uppercase tracking-wider font-semibold">Mapa</span></a>
+      <a href="votar.html" class="flex flex-col items-center gap-1 text-white/60"><i data-lucide="vote" class="w-5 h-5"></i><span class="font-display text-[10px] uppercase tracking-wider font-semibold">Votar</span></a>
+      <a href="passaporte.html" class="flex flex-col items-center gap-1 text-praia-yellow-400"><i data-lucide="stamp" class="w-5 h-5"></i><span class="font-display text-[10px] uppercase tracking-wider font-semibold">Passaporte</span></a>
+    </div>
+  </nav>
+
+  <script src="js/passport.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const res = await fetch('data/beaches.json');
+      const beaches = await res.json();
+
+      const stampsGrid = document.getElementById('stamps-grid');
+      const badgesGrid = document.getElementById('badges-grid');
+
+      renderStampGrid(beaches, stampsGrid);
+      renderStats(beaches);
+      renderBadges(beaches, badgesGrid);
+
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

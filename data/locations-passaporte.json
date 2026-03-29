@@ -1,0 +1,10 @@
+[
+  { "name": "Bar da Praia de Adaúfe", "municipality": "Braga", "district": "Braga", "address": "Praia Fluvial de Adaúfe, Braga", "type": "carimbo", "coordinates": { "lat": 41.5547, "lng": -8.4253 } },
+  { "name": "Posto de Turismo de Penacova", "municipality": "Penacova", "district": "Coimbra", "address": "Largo Alberto Leitão, 3360-341 Penacova", "type": "venda_carimbo", "coordinates": { "lat": 40.2711, "lng": -8.2847 } },
+  { "name": "Bar da Praia de Avô", "municipality": "Oliveira do Hospital", "district": "Coimbra", "address": "Praia Fluvial de Avô", "type": "carimbo", "coordinates": { "lat": 40.2935, "lng": -7.8870 } },
+  { "name": "Quiosque da Praia de Loriga", "municipality": "Seia", "district": "Guarda", "address": "Praia Fluvial de Loriga", "type": "carimbo", "coordinates": { "lat": 40.3339, "lng": -7.6720 } },
+  { "name": "Posto de Turismo de Seia", "municipality": "Seia", "district": "Guarda", "address": "Largo do Mercado, 6270-494 Seia", "type": "venda_carimbo", "coordinates": { "lat": 40.4200, "lng": -7.7000 } },
+  { "name": "Bar da Praia do Azibo", "municipality": "Macedo de Cavaleiros", "district": "Bragança", "address": "Albufeira do Azibo", "type": "carimbo", "coordinates": { "lat": 41.5500, "lng": -6.8700 } },
+  { "name": "Posto de Turismo de Arouca", "municipality": "Arouca", "district": "Aveiro", "address": "Praça Brandão de Vasconcelos, 4540-118 Arouca", "type": "venda_carimbo", "coordinates": { "lat": 40.9300, "lng": -8.2400 } },
+  { "name": "Bar do Pego Fundo", "municipality": "Alcoutim", "district": "Faro", "address": "Pego Fundo, Alcoutim", "type": "carimbo", "coordinates": { "lat": 37.4700, "lng": -7.4700 } }
+]

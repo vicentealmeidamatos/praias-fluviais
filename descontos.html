@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Descontos | Praias Fluviais</title>
+  <meta name="description" content="Aproveite os descontos exclusivos para portadores do Guia das Praias Fluviais. Alojamento, restauração, atividades e comércio com condições especiais.">
+  <meta property="og:title" content="Descontos | Praias Fluviais">
+  <meta property="og:description" content="Aproveite os descontos exclusivos para portadores do Guia das Praias Fluviais. Alojamento, restauração, atividades e comércio com condições especiais.">
+  <meta property="og:image" content="brand_assets/praias-fluviais.png">
+  <meta property="og:locale" content="pt_PT">
+  <meta property="og:type" content="website">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/shared.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="css/shared.css">
+
+  <style>
+    .category-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 10px;
+      border-radius: 9999px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .cat-alojamento { background: rgba(2,136,209,0.12); color: #0288D1; }
+    .cat-restauracao { background: rgba(255,152,0,0.12); color: #E65100; }
+    .cat-atividades { background: rgba(67,160,71,0.12); color: #2E7D32; }
+    .cat-comercio { background: rgba(156,39,176,0.12); color: #7B1FA2; }
+    .region-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: rgba(0,58,64,0.08);
+      color: #003A40;
+    }
+    .filter-select {
+      transition: border-color 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+  </style>
+</head>
+
+<body class="bg-praia-sand-50 font-body text-praia-sand-900 antialiased">
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:bg-praia-yellow-400 focus:text-praia-teal-800 focus:px-4 focus:py-2 focus:rounded-lg focus:font-display focus:font-semibold">Saltar para o conteúdo</a>
+
+  <!-- Header -->
+  <header id="main-header" class="fixed top-0 left-0 right-0 z-[1000] bg-praia-teal-800/90 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 md:h-[70px]">
+        <a href="index.html"><img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-8 md:h-10 w-auto"></a>
+        <nav class="hidden lg:flex items-center gap-1">
+          <a href="index.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Início</a>
+          <a href="mapa.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Mapa</a>
+          <a href="votar.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Votar</a>
+          <a href="rede.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Rede</a>
+          <a href="passaporte.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Passaporte</a>
+          <a href="artigos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Artigos</a>
+          <a href="descontos.html" class="nav-link active font-display text-xs font-semibold uppercase tracking-wider text-white px-3 py-2">Descontos</a>
+        </nav>
+        <button id="nav-hamburger" class="lg:hidden text-white p-2" aria-label="Menu"><i data-lucide="menu" class="w-6 h-6"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Menu Overlay -->
+  <div id="menu-overlay" class="fixed inset-0 bg-black/50 z-[1001] opacity-0 pointer-events-none transition-opacity duration-300"></div>
+
+  <!-- Mobile Menu -->
+  <nav id="mobile-menu" class="fixed top-0 right-0 bottom-0 w-72 bg-praia-teal-800 z-[1002] translate-x-full transition-transform duration-300 ease-out flex flex-col">
+    <div class="flex items-center justify-between p-5 border-b border-white/10">
+      <img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-7">
+      <button id="nav-hamburger" class="text-white p-1" aria-label="Fechar menu"><i data-lucide="x" class="w-6 h-6"></i></button>
+    </div>
+    <div class="flex-1 overflow-y-auto py-4">
+      <a href="index.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="home" class="w-5 h-5"></i> Início</a>
+      <a href="mapa.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="map" class="w-5 h-5"></i> Mapa Interativo</a>
+      <a href="votar.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="vote" class="w-5 h-5"></i> Votar 2026</a>
+      <a href="rede.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="network" class="w-5 h-5"></i> Rede de Praias</a>
+      <a href="passaporte.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="stamp" class="w-5 h-5"></i> Passaporte</a>
+      <a href="artigos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="newspaper" class="w-5 h-5"></i> Artigos</a>
+      <a href="onde-encontrar-guia.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="book-open" class="w-5 h-5"></i> Onde Encontrar o Guia</a>
+      <a href="onde-encontrar-passaporte.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="map-pin" class="w-5 h-5"></i> Onde Carimbar</a>
+      <a href="descontos.html" class="flex items-center gap-3 px-6 py-3.5 text-praia-yellow-400 font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="percent" class="w-5 h-5"></i> Descontos</a>
+    </div>
+    <div class="p-5 border-t border-white/10">
+      <a href="votar.html" class="flex items-center justify-center gap-2 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider px-5 py-3 rounded-full btn-primary w-full">
+        <i data-lucide="vote" class="w-4 h-4"></i> Votar Praia do Ano
+      </a>
+    </div>
+  </nav>
+
+  <main id="main-content" class="pt-16 md:pt-[70px] pb-20 lg:pb-10">
+    <!-- Hero -->
+    <section class="relative py-16 md:py-24" style="background: linear-gradient(135deg, #003A40 0%, #002A2E 50%, #005D56 100%);">
+      <div class="noise-overlay absolute inset-0 pointer-events-none"></div>
+      <div class="absolute inset-0" style="background: radial-gradient(ellipse at 40% 50%, rgba(255,235,59,0.08) 0%, transparent 50%), radial-gradient(ellipse at 70% 80%, rgba(67,160,71,0.05) 0%, transparent 50%);"></div>
+      <div class="relative z-10 max-w-5xl mx-auto px-6 text-center">
+        <div class="inline-flex items-center gap-2 bg-praia-yellow-400/10 border border-praia-yellow-400/20 rounded-full px-4 py-1.5 mb-6 reveal-on-scroll">
+          <i data-lucide="percent" class="w-4 h-4 text-praia-yellow-400"></i>
+          <span class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-semibold">Parcerias Exclusivas</span>
+        </div>
+        <h1 class="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tightest leading-tight mb-4 reveal-on-scroll" data-reveal-delay="100">
+          Aproveite os<br>
+          <span class="text-praia-yellow-400 italic">Descontos</span>
+        </h1>
+        <p class="text-white/50 text-lg max-w-2xl mx-auto leading-relaxed-plus reveal-on-scroll" data-reveal-delay="200">
+          Descontos exclusivos em alojamento, restauração, atividades e comércio para portadores do Guia das Praias Fluviais e do Passaporte.
+        </p>
+      </div>
+    </section>
+
+    <!-- Filters + Grid -->
+    <section class="max-w-6xl mx-auto px-6 py-10 md:py-14">
+      <!-- Filters -->
+      <div class="flex flex-col sm:flex-row gap-3 mb-8">
+        <select id="filter-region" class="filter-select px-4 py-2.5 rounded-xl bg-white border border-praia-sand-200 text-sm focus:outline-none focus:border-praia-teal-400 min-w-[160px]">
+          <option value="">Todas as regiões</option>
+          <option value="norte">Norte</option>
+          <option value="centro">Centro</option>
+          <option value="alentejo">Alentejo</option>
+          <option value="algarve">Algarve</option>
+        </select>
+        <select id="filter-category" class="filter-select px-4 py-2.5 rounded-xl bg-white border border-praia-sand-200 text-sm focus:outline-none focus:border-praia-teal-400 min-w-[160px]">
+          <option value="">Todas as categorias</option>
+          <option value="alojamento">Alojamento</option>
+          <option value="restauracao">Restauração</option>
+          <option value="atividades">Atividades</option>
+          <option value="comercio">Comércio</option>
+        </select>
+        <span id="discount-count" class="flex items-center text-xs text-praia-sand-500 font-display font-semibold whitespace-nowrap ml-auto">-- descontos</span>
+      </div>
+
+      <!-- Grid -->
+      <div id="discounts-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- Skeleton loading -->
+        <div class="skeleton h-52 rounded-xl"></div>
+        <div class="skeleton h-52 rounded-xl"></div>
+        <div class="skeleton h-52 rounded-xl"></div>
+      </div>
+
+      <!-- Empty state -->
+      <div id="empty-state" class="hidden text-center py-16">
+        <i data-lucide="search-x" class="w-12 h-12 text-praia-sand-300 mx-auto mb-4"></i>
+        <p class="font-display text-lg text-praia-sand-500">Nenhum desconto encontrado com estes filtros.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Mobile Bottom Nav -->
+  <nav class="bottom-nav fixed bottom-0 left-0 right-0 bg-praia-teal-800/95 backdrop-blur-md z-[999] lg:hidden border-t border-white/10">
+    <div class="flex items-center justify-around h-16">
+      <a href="index.html" class="flex flex-col items-center gap-1 text-white/60"><i data-lucide="home" class="w-5 h-5"></i><span class="font-display text-[10px] uppercase tracking-wider font-semibold">Início</span></a>
+      <a href="mapa.html" class="flex flex-col items-center gap-1 text-white/60"><i data-lucide="map" class="w-5 h-5"></i><span class="font-display text-[10px] uppercase tracking-wider font-semibold">Mapa</span></a>
+      <a href="votar.html" class="flex flex-col items-center gap-1 text-white/60"><i data-lucide="vote" class="w-5 h-5"></i><span class="font-display text-[10px] uppercase tracking-wider font-semibold">Votar</span></a>
+      <a href="passaporte.html" class="flex flex-col items-center gap-1 text-white/60"><i data-lucide="stamp" class="w-5 h-5"></i><span class="font-display text-[10px] uppercase tracking-wider font-semibold">Passaporte</span></a>
+    </div>
+  </nav>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const res = await fetch('data/descontos.json');
+      const descontos = await res.json();
+
+      const categoryLabels = {
+        alojamento: 'Alojamento',
+        restauracao: 'Restauração',
+        atividades: 'Atividades',
+        comercio: 'Comércio',
+      };
+      const categoryIcons = {
+        alojamento: 'bed-double',
+        restauracao: 'utensils',
+        atividades: 'kayak',
+        comercio: 'shopping-bag',
+      };
+      const regionLabels = {
+        norte: 'Norte',
+        centro: 'Centro',
+        alentejo: 'Alentejo',
+        algarve: 'Algarve',
+      };
+
+      const gridEl = document.getElementById('discounts-grid');
+      const countEl = document.getElementById('discount-count');
+      const emptyEl = document.getElementById('empty-state');
+      const filterRegion = document.getElementById('filter-region');
+      const filterCategory = document.getElementById('filter-category');
+
+      function render() {
+        const region = filterRegion.value;
+        const category = filterCategory.value;
+
+        const filtered = descontos.filter(d => {
+          if (region && d.region !== region) return false;
+          if (category && d.category !== category) return false;
+          return true;
+        });
+
+        countEl.textContent = `${filtered.length} desconto${filtered.length !== 1 ? 's' : ''}`;
+
+        if (filtered.length === 0) {
+          gridEl.innerHTML = '';
+          emptyEl.classList.remove('hidden');
+          return;
+        }
+        emptyEl.classList.add('hidden');
+
+        gridEl.innerHTML = filtered.map(d => `
+          <div class="card-interactive bg-white rounded-xl border border-praia-sand-100 shadow-layered overflow-hidden">
+            <div class="p-5">
+              <div class="flex items-start justify-between gap-3 mb-3">
+                <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-praia-teal-800/5 flex items-center justify-center">
+                  <i data-lucide="${categoryIcons[d.category] || 'tag'}" class="w-5 h-5 text-praia-teal-700"></i>
+                </div>
+                <div class="flex flex-wrap gap-1.5">
+                  <span class="category-badge cat-${d.category}">${categoryLabels[d.category] || d.category}</span>
+                  <span class="region-badge">${regionLabels[d.region] || d.region}</span>
+                </div>
+              </div>
+              <h3 class="font-display text-base font-bold text-praia-teal-800 mb-2">${d.name}</h3>
+              <p class="text-sm text-praia-sand-700 leading-relaxed mb-3">${d.description}</p>
+              <div class="flex items-start gap-2 text-xs text-praia-sand-500 bg-praia-sand-50 rounded-lg p-3">
+                <i data-lucide="info" class="w-3.5 h-3.5 flex-shrink-0 mt-0.5 text-praia-sand-400"></i>
+                <span>${d.conditions}</span>
+              </div>
+              ${d.municipality ? `<div class="mt-3 text-xs text-praia-sand-400 flex items-center gap-1"><i data-lucide="map-pin" class="w-3 h-3"></i> ${d.municipality}</div>` : ''}
+            </div>
+          </div>
+        `).join('');
+
+        lucide.createIcons();
+      }
+
+      filterRegion.addEventListener('change', render);
+      filterCategory.addEventListener('change', render);
+      render();
+    });
+  </script>
+</body>
+</html>

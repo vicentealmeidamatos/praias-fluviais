@@ -1,0 +1,8 @@
+[
+  { "name": "Hotel Rural Serra da Estrela", "description": "10% de desconto na estadia com apresentação do Guia das Praias Fluviais.", "conditions": "Válido de junho a setembro. Reserva direta.", "region": "centro", "category": "alojamento", "municipality": "Seia" },
+  { "name": "Restaurante O Moinho - Penacova", "description": "Oferta de sobremesa na compra de refeição completa.", "conditions": "Válido ao almoço, dias úteis. Apresentar guia.", "region": "centro", "category": "restauracao", "municipality": "Penacova" },
+  { "name": "Paiva Nature Tours", "description": "15% de desconto em atividades de canoagem e kayak.", "conditions": "Reserva com código PRAIAS2026.", "region": "norte", "category": "atividades", "municipality": "Arouca" },
+  { "name": "Camping Gerês", "description": "1 noite grátis em estadias de 3 ou mais noites.", "conditions": "Válido fora de agosto. Apresentar passaporte.", "region": "norte", "category": "alojamento", "municipality": "Terras de Bouro" },
+  { "name": "Loja do Rio - Artesanato", "description": "5€ de desconto em compras acima de 25€.", "conditions": "Válido todo o ano. Apresentar guia.", "region": "centro", "category": "comercio", "municipality": "Oliveira do Hospital" },
+  { "name": "Barcos do Tejo - Passeios Fluviais", "description": "20% de desconto em passeios de barco pelo Tejo.", "conditions": "Reserva antecipada. Código GUIA20.", "region": "alentejo", "category": "atividades", "municipality": "Gavião" }
+]

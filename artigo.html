@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Artigo | Praias Fluviais</title>
+  <meta name="description" content="Leia este artigo sobre praias fluviais de Portugal.">
+  <meta property="og:title" content="Artigo | Praias Fluviais">
+  <meta property="og:description" content="Leia este artigo sobre praias fluviais de Portugal.">
+  <meta property="og:image" content="brand_assets/praias-fluviais.png">
+  <meta property="og:locale" content="pt_PT">
+  <meta property="og:type" content="article">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/shared.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="css/shared.css">
+
+  <style>
+    .article-hero-img {
+      position: relative;
+      overflow: hidden;
+    }
+    .article-hero-img::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,58,64,0.7) 0%, rgba(0,58,64,0.2) 40%, transparent 70%);
+      pointer-events: none;
+    }
+    .article-content h3 {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: #003A40;
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.03em;
+    }
+    .article-content p {
+      color: #4A4332;
+      line-height: 1.8;
+      margin-bottom: 1.25rem;
+    }
+    .article-content a {
+      color: #0288D1;
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .article-content a:hover {
+      color: #003A40;
+    }
+    .cat-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 10px;
+      border-radius: 9999px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .cat-roteiros { background: rgba(2,136,209,0.12); color: #0288D1; }
+    .cat-natureza { background: rgba(67,160,71,0.12); color: #2E7D32; }
+    .cat-descobertas { background: rgba(255,152,0,0.12); color: #E65100; }
+    .cat-informacao { background: rgba(0,58,64,0.1); color: #003A40; }
+  </style>
+</head>
+
+<body class="bg-praia-sand-50 font-body text-praia-sand-900 antialiased">
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:bg-praia-yellow-400 focus:text-praia-teal-800 focus:px-4 focus:py-2 focus:rounded-lg focus:font-display focus:font-semibold">Saltar para o conteúdo</a>
+
+  <!-- Header -->
+  <header id="main-header" class="fixed top-0 left-0 right-0 z-[1000] bg-praia-teal-800/90 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 md:h-[70px]">
+        <a href="index.html"><img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-8 md:h-10 w-auto"></a>
+        <nav class="hidden lg:flex items-center gap-1">
+          <a href="index.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Início</a>
+          <a href="mapa.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Mapa</a>
+          <a href="votar.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Votar</a>
+          <a href="rede.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Rede</a>
+          <a href="passaporte.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Passaporte</a>
+          <a href="artigos.html" class="nav-link active font-display text-xs font-semibold uppercase tracking-wider text-white px-3 py-2">Artigos</a>
+        </nav>
+        <button id="nav-hamburger" class="lg:hidden text-white p-2" aria-label="Menu"><i data-lucide="menu" class="w-6 h-6"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Menu Overlay -->
+  <div id="menu-overlay" class="fixed inset-0 bg-black/50 z-[1001] opacity-0 pointer-events-none transition-opacity duration-300"></div>
+
+  <!-- Mobile Menu -->
+  <nav id="mobile-menu" class="fixed top-0 right-0 bottom-0 w-72 bg-praia-teal-800 z-[1002] translate-x-full transition-transform duration-300 ease-out flex flex-col">
+    <div class="flex items-center justify-between p-5 border-b border-white/10">
+      <img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-7">
+      <button id="nav-hamburger" class="text-white p-1" aria-label="Fechar menu"><i data-lucide="x" class="w-6 h-6"></i></button>
+    </div>
+    <div class="flex-1 overflow-y-auto py-4">
+      <a href="index.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="home" class="w-5 h-5"></i> Início</a>
+      <a href="mapa.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="map" class="w-5 h-5"></i> Mapa Interativo</a>
+      <a href="votar.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="vote" class="w-5 h-5"></i> Votar 2026</a>
+      <a href="rede.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="network" class="w-5 h-5"></i> Rede de Praias</a>
+      <a href="passaporte.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="stamp" class="w-5 h-5"></i> Passaporte</a>
+      <a href="artigos.html" class="flex items-center gap-3 px-6 py-3.5 text-praia-yellow-400 font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="newspaper" class="w-5 h-5"></i> Artigos</a>
+      <a href="onde-encontrar-guia.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="book-open" class="w-5 h-5"></i> Onde Encontrar o Guia</a>
+      <a href="onde-encontrar-passaporte.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="map-pin" class="w-5 h-5"></i> Onde Carimbar</a>
+      <a href="descontos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="percent" class="w-5 h-5"></i> Descontos</a>
+    </div>
+    <div class="p-5 border-t border-white/10">
+      <a href="votar.html" class="flex items-center justify-center gap-2 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider px-5 py-3 rounded-full btn-primary w-full">
+        <i data-lucide="vote" class="w-4 h-4"></i> Votar Praia do Ano
+      </a>
+    </div>
+  </nav>
+
+  <main id="main-content" class="pt-16 md:pt-[70px] pb-20 lg:pb-10">
+    <!-- Article content — filled by JS -->
+    <div id="article-container">
+      <!-- Hero image skeleton -->
+      <div class="skeleton w-full" style="height: 350px;"></div>
+      <div class="max-w-3xl mx-auto px-6 py-10">
+        <div class="skeleton h-8 w-2/3 mb-4"></div>
+        <div class="skeleton h-4 w-1/3 mb-8"></div>
+        <div class="skeleton h-4 w-full mb-3"></div>
+        <div class="skeleton h-4 w-full mb-3"></div>
+        <div class="skeleton h-4 w-3/4 mb-3"></div>
+      </div>
+    </div>
+
+    <!-- Related Articles -->
+    <section id="related-section" class="hidden border-t border-praia-sand-200 bg-white">
+      <div class="max-w-5xl mx-auto px-6 py-12 md:py-16">
+        <span class="font-display text-xs uppercase tracking-[0.15em] text-praia-teal-500 font-semibold block mb-2 reveal-on-scroll">Leia Também</span>
+        <h2 class="font-display text-xl md:text-2xl font-bold text-praia-teal-800 tracking-tightest mb-8 reveal-on-scroll" data-reveal-delay="100">Artigos Relacionados</h2>
+        <div id="related-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Mobile Bottom Nav -->
+  <nav class="bottom-nav fixed bottom-0 left-0 right-0 bg-praia-teal-800/95 backdrop-blur-md z-[999] lg:hidden border-t border-white/10">
+    <div class="flex items-center justify-around h-16">
+      <a href="index.html" class="flex flex-col items-center gap-1 text-white/60"><i data-lucide="home" class="w-5 h-5"></i><span class="font-display text-[10px] uppercase tracking-wider font-semibold">Início</span></a>
+      <a href="mapa.html" class="flex flex-col items-center gap-1 text-white/60"><i data-lucide="map" class="w-5 h-5"></i><span class="font-display text-[10px] uppercase tracking-wider font-semibold">Mapa</span></a>
+      <a href="votar.html" class="flex flex-col items-center gap-1 text-white/60"><i data-lucide="vote" class="w-5 h-5"></i><span class="font-display text-[10px] uppercase tracking-wider font-semibold">Votar</span></a>
+      <a href="passaporte.html" class="flex flex-col items-center gap-1 text-white/60"><i data-lucide="stamp" class="w-5 h-5"></i><span class="font-display text-[10px] uppercase tracking-wider font-semibold">Passaporte</span></a>
+    </div>
+  </nav>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const params = new URLSearchParams(window.location.search);
+      const slug = params.get('slug');
+
+      if (!slug) {
+        window.location.href = 'artigos.html';
+        return;
+      }
+
+      const res = await fetch('data/articles.json');
+      const articles = await res.json();
+      const article = articles.find(a => a.slug === slug);
+
+      if (!article) {
+        document.getElementById('article-container').innerHTML = `
+          <div class="max-w-3xl mx-auto px-6 py-20 text-center">
+            <i data-lucide="file-x" class="w-16 h-16 text-praia-sand-300 mx-auto mb-6"></i>
+            <h1 class="font-display text-2xl font-bold text-praia-teal-800 mb-3">Artigo não encontrado</h1>
+            <p class="text-praia-sand-500 mb-6">O artigo que procura não existe ou foi removido.</p>
+            <a href="artigos.html" class="btn-primary inline-flex items-center gap-2 bg-praia-teal-800 text-praia-yellow-400 font-display font-bold text-sm uppercase tracking-wider px-6 py-3 rounded-full">
+              <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar aos Artigos
+            </a>
+          </div>`;
+        lucide.createIcons();
+        return;
+      }
+
+      const categoryLabels = {
+        roteiros: 'Roteiros',
+        natureza: 'Natureza',
+        descobertas: 'Descobertas',
+        informacao: 'Informação',
+      };
+
+      function formatDate(dateStr) {
+        const d = new Date(dateStr);
+        return d.toLocaleDateString('pt-PT', { day: 'numeric', month: 'long', year: 'numeric' });
+      }
+
+      // Update page title and meta
+      document.title = `${article.title} | Praias Fluviais`;
+      document.querySelector('meta[name="description"]').content = article.excerpt;
+
+      // Render article
+      document.getElementById('article-container').innerHTML = `
+        <!-- Hero Image -->
+        <div class="article-hero-img w-full" style="height: 300px; max-height: 50vh;">
+          <img src="${article.image}" alt="${article.title}" class="w-full h-full object-cover">
+          <div class="absolute bottom-0 left-0 right-0 z-10 p-6 md:p-10">
+            <div class="max-w-3xl mx-auto">
+              <a href="artigos.html" class="inline-flex items-center gap-1 text-white/60 text-xs font-display font-semibold uppercase tracking-wider mb-3 hover:text-white" style="transition: color 0.25s;">
+                <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> Artigos
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="max-w-3xl mx-auto px-6 py-8 md:py-12">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="cat-badge cat-${article.category}">${categoryLabels[article.category] || article.category}</span>
+            <span class="text-sm text-praia-sand-400">${formatDate(article.date)}</span>
+          </div>
+          <h1 class="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-praia-teal-800 tracking-tightest leading-tight mb-8">
+            ${article.title}
+          </h1>
+          <div class="article-content font-body text-base">
+            ${article.content}
+          </div>
+        </div>
+      `;
+
+      // Related articles
+      const related = articles.filter(a => a.slug !== slug && a.category === article.category && a.status === 'published').slice(0, 3);
+      if (related.length > 0) {
+        const relatedSection = document.getElementById('related-section');
+        const relatedGrid = document.getElementById('related-grid');
+        relatedSection.classList.remove('hidden');
+
+        relatedGrid.innerHTML = related.map(a => `
+          <a href="artigo.html?slug=${a.slug}" class="card-interactive bg-praia-sand-50 rounded-xl border border-praia-sand-100 shadow-layered overflow-hidden block">
+            <div class="aspect-[16/10] overflow-hidden">
+              <img src="${a.image}" alt="${a.title}" class="w-full h-full object-cover" style="transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94);">
+            </div>
+            <div class="p-4">
+              <span class="cat-badge cat-${a.category} mb-2">${categoryLabels[a.category] || a.category}</span>
+              <h3 class="font-display text-sm font-bold text-praia-teal-800 leading-snug mt-2">${a.title}</h3>
+              <span class="text-xs text-praia-sand-400 mt-1 block">${formatDate(a.date)}</span>
+            </div>
+          </a>
+        `).join('');
+      }
+
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

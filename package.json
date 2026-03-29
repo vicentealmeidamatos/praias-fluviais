@@ -1,0 +1,13 @@
+{
+  "name": "guia-praias-fluviais",
+  "version": "1.0.0",
+  "description": "Guia das Praias Fluviais - Portal interativo de praias fluviais de Portugal",
+  "type": "module",
+  "scripts": {
+    "start": "node serve.mjs",
+    "screenshot": "node screenshot.mjs"
+  },
+  "dependencies": {
+    "puppeteer": "^24.40.0"
+  }
+}

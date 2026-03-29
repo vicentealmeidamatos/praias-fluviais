@@ -1,0 +1,113 @@
+/* ─── Admin Panel Styles ─── */
+.admin-sidebar {
+  scrollbar-width: thin;
+  scrollbar-color: #C4B898 transparent;
+}
+
+.admin-tab {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.admin-tab.active {
+  background: rgba(255, 235, 59, 0.1);
+  color: #FFEB3B;
+  border-left: 3px solid #FFEB3B;
+}
+
+.admin-table th {
+  position: sticky;
+  top: 0;
+  background: #FAF8F5;
+  z-index: 1;
+}
+
+.admin-form label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #005D56;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.admin-form input[type="text"],
+.admin-form input[type="email"],
+.admin-form input[type="number"],
+.admin-form input[type="url"],
+.admin-form input[type="date"],
+.admin-form input[type="datetime-local"],
+.admin-form select,
+.admin-form textarea {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  border-radius: 0.75rem;
+  background: white;
+  border: 1px solid #E8DFD0;
+  font-size: 0.875rem;
+  font-family: 'Open Sans', sans-serif;
+  transition: border-color 0.2s ease;
+}
+
+.admin-form input:focus,
+.admin-form select:focus,
+.admin-form textarea:focus {
+  outline: none;
+  border-color: #003A40;
+  box-shadow: 0 0 0 3px rgba(0, 58, 64, 0.1);
+}
+
+.admin-btn {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.5rem 1.25rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease;
+}
+.admin-btn:hover { transform: scale(1.02); }
+.admin-btn:active { transform: scale(0.98); }
+
+.admin-btn-primary {
+  background: #003A40;
+  color: #FFEB3B;
+}
+.admin-btn-success {
+  background: #43A047;
+  color: white;
+}
+.admin-btn-danger {
+  background: #D32F2F;
+  color: white;
+}
+.admin-btn-export {
+  background: #FFEB3B;
+  color: #003A40;
+}
+
+/* Toast notifications */
+.admin-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: white;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  transform: translateY(100px);
+  opacity: 0;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+}
+.admin-toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+.admin-toast.success { background: #43A047; }
+.admin-toast.error { background: #D32F2F; }

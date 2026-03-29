@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Praias Fluviais | Guia das Zonas Balneares e de Lazer de Portugal</title>
+  <meta name="description" content="Descubra mais de 200 praias fluviais e zonas balneares de Portugal. Mapa interativo, votação Praia do Ano, passaporte digital e guia completo.">
+  <meta property="og:title" content="Guia das Praias Fluviais de Portugal">
+  <meta property="og:description" content="Descubra mais de 200 praias fluviais e zonas balneares de Portugal.">
+  <meta property="og:image" content="brand_assets/praias-fluviais.png">
+  <meta property="og:locale" content="pt_PT">
+  <meta property="og:type" content="website">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Guia das Praias Fluviais",
+    "alternateName": "Praias Fluviais de Portugal",
+    "url": "https://praiasfluviais.pt",
+    "description": "Descubra mais de 200 praias fluviais e zonas balneares de Portugal. Mapa interativo, votação Praia do Ano, passaporte digital e guia completo.",
+    "inLanguage": "pt-PT",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Guia das Praias Fluviais",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://praiasfluviais.pt/brand_assets/logotipo.png"
+      }
+    },
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://praiasfluviais.pt/mapa.html?search={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/shared.js"></script>
+
+  <!-- GSAP -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Leaflet (for mini-map preview) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/shared.css">
+  <link rel="stylesheet" href="css/page-turn.css">
+
+  <style>
+    /* Hero parallax background */
+    .hero-bg {
+      background: linear-gradient(135deg, #003A40 0%, #002A2E 50%, #005D56 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(255, 235, 59, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(2, 136, 209, 0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 90%, rgba(67, 160, 71, 0.05) 0%, transparent 50%);
+      z-index: 0;
+    }
+
+    /* Floating particles */
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0;
+      animation: float-up 8s ease-in-out infinite;
+    }
+    @keyframes float-up {
+      0% { opacity: 0; transform: translateY(100vh) scale(0); }
+      10% { opacity: 0.6; }
+      90% { opacity: 0.6; }
+      100% { opacity: 0; transform: translateY(-10vh) scale(1); }
+    }
+
+    /* Cards carousel */
+    .cards-scroll {
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .cards-scroll::-webkit-scrollbar { display: none; }
+    .cards-scroll > * {
+      scroll-snap-align: start;
+    }
+
+    /* Mini-map styling */
+    #mini-map {
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    #mini-map .leaflet-tile-pane {
+      filter: saturate(0.5) brightness(0.85);
+    }
+
+    /* Quick link buttons */
+    .quick-link {
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  box-shadow 0.4s ease;
+    }
+    .quick-link:hover {
+      transform: scale(1.05) translateY(-6px);
+    }
+    .quick-link:active {
+      transform: scale(0.97);
+    }
+
+    /* Winner timeline */
+    .timeline-line {
+      background: linear-gradient(to bottom, #FFEB3B 0%, rgba(255, 235, 59, 0.2) 100%);
+    }
+
+    /* Newsletter input glow */
+    .input-glow:focus {
+      box-shadow: 0 0 0 3px rgba(255, 235, 59, 0.25), 0 0 20px rgba(255, 235, 59, 0.1);
+    }
+
+    /* Scroll down indicator */
+    .scroll-indicator {
+      animation: bounce-down 2s ease-in-out infinite;
+    }
+    @keyframes bounce-down {
+      0%, 100% { transform: translateY(0); opacity: 0.7; }
+      50% { transform: translateY(10px); opacity: 1; }
+    }
+  </style>
+</head>
+
+<body class="bg-praia-sand-50 font-body text-praia-sand-900 antialiased overflow-x-hidden">
+  <!-- Skip to content -->
+  <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:bg-praia-yellow-400 focus:text-praia-teal-800 focus:px-4 focus:py-2 focus:rounded-lg focus:font-display focus:font-semibold">
+    Saltar para o conteúdo
+  </a>
+
+  <!-- Scroll Progress -->
+  <div class="scroll-progress" style="transform: scaleX(0);"></div>
+
+  <!-- ─── Header ─── -->
+  <header id="main-header" class="fixed top-0 left-0 right-0 z-[1000] bg-praia-teal-800/90 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 md:h-[70px]">
+        <!-- Logo -->
+        <a href="index.html" class="flex-shrink-0">
+          <img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-8 md:h-10 w-auto">
+        </a>
+
+        <!-- Desktop Nav -->
+        <nav class="hidden lg:flex items-center gap-1">
+          <a href="index.html" class="nav-link active font-display text-xs font-semibold uppercase tracking-wider text-white px-3 py-2">Início</a>
+          <a href="mapa.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Mapa</a>
+          <a href="votar.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Votar</a>
+          <a href="rede.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Rede</a>
+          <a href="passaporte.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Passaporte</a>
+          <a href="artigos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Artigos</a>
+          <a href="descontos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Descontos</a>
+        </nav>
+
+        <!-- CTA Button -->
+        <a href="votar.html" class="hidden md:inline-flex items-center gap-2 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full btn-primary shadow-layered-yellow">
+          <i data-lucide="vote" class="w-4 h-4"></i>
+          Votar 2026
+        </a>
+
+        <!-- Hamburger -->
+        <button id="nav-hamburger" class="lg:hidden text-white p-2 -mr-2" aria-label="Abrir menu">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Menu Overlay -->
+  <div id="menu-overlay" class="fixed inset-0 bg-black/50 z-[1001] opacity-0 pointer-events-none transition-opacity duration-300"></div>
+
+  <!-- Mobile Menu -->
+  <nav id="mobile-menu" class="fixed top-0 right-0 bottom-0 w-72 bg-praia-teal-800 z-[1002] translate-x-full transition-transform duration-300 ease-out flex flex-col">
+    <div class="flex items-center justify-between p-5 border-b border-white/10">
+      <img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-7">
+      <button id="nav-hamburger" class="text-white p-1" aria-label="Fechar menu">
+        <i data-lucide="x" class="w-6 h-6"></i>
+      </button>
+    </div>
+    <div class="flex-1 overflow-y-auto py-4">
+      <a href="index.html" class="flex items-center gap-3 px-6 py-3.5 text-praia-yellow-400 font-display font-semibold text-sm uppercase tracking-wider">
+        <i data-lucide="home" class="w-5 h-5"></i> Início
+      </a>
+      <a href="mapa.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider">
+        <i data-lucide="map" class="w-5 h-5"></i> Mapa Interativo
+      </a>
+      <a href="votar.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider">
+        <i data-lucide="vote" class="w-5 h-5"></i> Votar 2026
+      </a>
+      <a href="rede.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider">
+        <i data-lucide="network" class="w-5 h-5"></i> Rede de Praias
+      </a>
+      <a href="passaporte.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider">
+        <i data-lucide="stamp" class="w-5 h-5"></i> Passaporte
+      </a>
+      <a href="artigos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider">
+        <i data-lucide="newspaper" class="w-5 h-5"></i> Artigos
+      </a>
+      <a href="onde-encontrar-guia.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider">
+        <i data-lucide="book-open" class="w-5 h-5"></i> Onde Encontrar o Guia
+      </a>
+      <a href="onde-encontrar-passaporte.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider">
+        <i data-lucide="map-pin" class="w-5 h-5"></i> Onde Carimbar
+      </a>
+      <a href="descontos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider">
+        <i data-lucide="percent" class="w-5 h-5"></i> Descontos
+      </a>
+    </div>
+    <div class="p-5 border-t border-white/10">
+      <a href="votar.html" class="flex items-center justify-center gap-2 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider px-5 py-3 rounded-full btn-primary w-full">
+        <i data-lucide="vote" class="w-4 h-4"></i>
+        Votar Praia do Ano
+      </a>
+    </div>
+  </nav>
+
+  <!-- ─── Main Content ─── -->
+  <main id="main">
+    <!-- Page Dots Navigation -->
+    <div class="page-indicator hidden md:flex">
+      <button class="page-dot active" aria-label="Capa" title="Capa"></button>
+      <button class="page-dot" aria-label="Destaques" title="Destaques"></button>
+      <button class="page-dot" aria-label="Mapa" title="Explorar Mapa"></button>
+      <button class="page-dot" aria-label="Descubra" title="Descubra"></button>
+      <button class="page-dot" aria-label="Praia do Ano" title="Praia do Ano"></button>
+    </div>
+
+    <div class="magazine-container">
+
+      <!-- ═══════════════════════════════════════ -->
+      <!-- PAGE 1: CAPA / HERO                     -->
+      <!-- ═══════════════════════════════════════ -->
+      <section class="magazine-page hero-bg relative flex items-center justify-center min-h-screen" id="page-hero">
+        <div class="page-shadow"></div>
+        <div class="noise-overlay absolute inset-0"></div>
+
+        <!-- Floating particles -->
+        <div class="particle w-2 h-2 bg-praia-yellow-400/40" style="left:10%; animation-delay:0s;"></div>
+        <div class="particle w-3 h-3 bg-praia-blue-400/30" style="left:30%; animation-delay:2s;"></div>
+        <div class="particle w-1.5 h-1.5 bg-praia-green-400/30" style="left:55%; animation-delay:4s;"></div>
+        <div class="particle w-2 h-2 bg-praia-yellow-400/30" style="left:75%; animation-delay:1s;"></div>
+        <div class="particle w-2.5 h-2.5 bg-praia-blue-400/20" style="left:90%; animation-delay:3s;"></div>
+
+        <!-- Content -->
+        <div class="relative z-10 text-center px-6 max-w-4xl mx-auto">
+          <!-- Logo large -->
+          <div class="mb-8 flex justify-center reveal-on-scroll">
+            <img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="w-64 md:w-96 lg:w-[500px] h-auto drop-shadow-2xl">
+          </div>
+
+          <!-- Tagline -->
+          <p class="reveal-on-scroll font-display text-lg md:text-xl lg:text-2xl text-white/70 font-light tracking-wide mb-2" data-reveal-delay="100">
+            Guia das Zonas Balneares e de Lazer
+          </p>
+          <p class="reveal-on-scroll font-display text-base md:text-lg text-praia-yellow-400/80 font-semibold tracking-wider uppercase mb-12" data-reveal-delay="200">
+            Edição 2026
+          </p>
+
+          <!-- Stats -->
+          <div class="flex flex-wrap justify-center gap-8 md:gap-16 mb-12">
+            <div class="text-center reveal-on-scroll" data-reveal-delay="300">
+              <div class="font-display text-4xl md:text-5xl font-bold text-praia-yellow-400 tracking-tightest">200+</div>
+              <div class="font-display text-xs uppercase tracking-widest text-white/50 mt-1">Praias</div>
+            </div>
+            <div class="text-center reveal-on-scroll" data-reveal-delay="400">
+              <div class="font-display text-4xl md:text-5xl font-bold text-praia-yellow-400 tracking-tightest">120k</div>
+              <div class="font-display text-xs uppercase tracking-widest text-white/50 mt-1">Guias Distribuídos</div>
+            </div>
+            <div class="text-center reveal-on-scroll" data-reveal-delay="500">
+              <div class="font-display text-4xl md:text-5xl font-bold text-praia-yellow-400 tracking-tightest">18</div>
+              <div class="font-display text-xs uppercase tracking-widest text-white/50 mt-1">Distritos</div>
+            </div>
+          </div>
+
+          <!-- CTAs -->
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-4 reveal-on-scroll" data-reveal-delay="600">
+            <a href="mapa.html" class="btn-primary inline-flex items-center gap-3 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider px-8 py-4 rounded-full shadow-layered-yellow">
+              <i data-lucide="map" class="w-5 h-5"></i>
+              Explorar Mapa
+            </a>
+            <a href="votar.html" class="btn-primary inline-flex items-center gap-3 bg-white/10 text-white border border-white/20 font-display font-bold text-sm uppercase tracking-wider px-8 py-4 rounded-full backdrop-blur-sm hover:bg-white/20">
+              <i data-lucide="vote" class="w-5 h-5"></i>
+              Votar Praia do Ano
+            </a>
+          </div>
+        </div>
+
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 scroll-indicator">
+          <i data-lucide="chevrons-down" class="w-6 h-6 text-white/40"></i>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════ -->
+      <!-- PAGE 2: DESTAQUES / ARTIGOS             -->
+      <!-- ═══════════════════════════════════════ -->
+      <section class="magazine-page bg-praia-sand-50 relative" id="page-destaques">
+        <div class="page-crease"></div>
+        <div class="noise-overlay absolute inset-0 pointer-events-none"></div>
+        <div class="relative z-10 py-20 md:py-28 lg:py-32">
+          <!-- Section header -->
+          <div class="max-w-7xl mx-auto px-6 mb-12 reveal-on-scroll">
+            <div class="flex items-end justify-between">
+              <div>
+                <span class="font-display text-xs uppercase tracking-[0.2em] text-praia-teal-500 font-semibold block mb-2">Destaques</span>
+                <h2 class="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-praia-teal-800 tracking-tightest leading-tight">
+                  Histórias do<br>
+                  <span class="text-praia-yellow-600 italic">Interior de Portugal</span>
+                </h2>
+              </div>
+              <a href="artigos.html" class="hidden md:inline-flex items-center gap-2 text-praia-teal-700 font-display text-sm font-semibold uppercase tracking-wider hover:text-praia-yellow-600 transition-colors duration-300">
+                Ver Todos <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Horizontal scrolling cards -->
+          <div class="cards-scroll flex gap-6 overflow-x-auto px-6 pb-6 max-w-[100vw] reveal-on-scroll" data-reveal-delay="150">
+            <!-- Card 1 -->
+            <a href="artigo.html?slug=melhores-praias-centro" class="card-interactive flex-shrink-0 w-72 md:w-80 lg:w-96 rounded-2xl overflow-hidden bg-white shadow-layered group">
+              <div class="relative h-48 md:h-56 overflow-hidden">
+                <img src="https://placehold.co/800x600/003A40/FFEB3B?text=Praias+Centro" alt="Praias do Centro" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" loading="lazy">
+                <div class="absolute inset-0 bg-gradient-to-t from-praia-teal-800/70 via-transparent to-transparent"></div>
+                <span class="badge badge-blue-flag absolute top-4 left-4">
+                  <i data-lucide="flag" class="w-3 h-3"></i> Destaque
+                </span>
+              </div>
+              <div class="p-5 md:p-6">
+                <h3 class="font-display text-lg font-bold text-praia-teal-800 leading-snug mb-2 group-hover:text-praia-teal-600 transition-colors duration-300">
+                  As Melhores Praias Fluviais da Região Centro
+                </h3>
+                <p class="text-sm text-praia-sand-600 line-clamp-2 leading-relaxed-plus">
+                  Descubra as praias mais bonitas e bem equipadas do centro de Portugal, de Coimbra a Castelo Branco.
+                </p>
+              </div>
+            </a>
+
+            <!-- Card 2 -->
+            <a href="artigo.html?slug=cascatas-portugal" class="card-interactive flex-shrink-0 w-72 md:w-80 lg:w-96 rounded-2xl overflow-hidden bg-white shadow-layered group">
+              <div class="relative h-48 md:h-56 overflow-hidden">
+                <img src="https://placehold.co/800x600/005D56/FFEB3B?text=Cascatas" alt="Cascatas de Portugal" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" loading="lazy">
+                <div class="absolute inset-0 bg-gradient-to-t from-praia-teal-800/70 via-transparent to-transparent"></div>
+              </div>
+              <div class="p-5 md:p-6">
+                <h3 class="font-display text-lg font-bold text-praia-teal-800 leading-snug mb-2 group-hover:text-praia-teal-600 transition-colors duration-300">
+                  As Mais Bonitas Cascatas de Portugal
+                </h3>
+                <p class="text-sm text-praia-sand-600 line-clamp-2 leading-relaxed-plus">
+                  Um roteiro pelas quedas de água mais espetaculares do país, do Gerês ao Algarve.
+                </p>
+              </div>
+            </a>
+
+            <!-- Card 3 -->
+            <a href="artigo.html?slug=alcoutim-nova-praia" class="card-interactive flex-shrink-0 w-72 md:w-80 lg:w-96 rounded-2xl overflow-hidden bg-white shadow-layered group">
+              <div class="relative h-48 md:h-56 overflow-hidden">
+                <img src="https://placehold.co/800x600/002A2E/FFEB3B?text=Alcoutim" alt="Alcoutim" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" loading="lazy">
+                <div class="absolute inset-0 bg-gradient-to-t from-praia-teal-800/70 via-transparent to-transparent"></div>
+                <span class="badge badge-gold absolute top-4 left-4">
+                  <i data-lucide="sparkles" class="w-3 h-3"></i> Novo
+                </span>
+              </div>
+              <div class="p-5 md:p-6">
+                <h3 class="font-display text-lg font-bold text-praia-teal-800 leading-snug mb-2 group-hover:text-praia-teal-600 transition-colors duration-300">
+                  Alcoutim: A Nova Praia Fluvial do Algarve
+                </h3>
+                <p class="text-sm text-praia-sand-600 line-clamp-2 leading-relaxed-plus">
+                  Pego Fundo em Alcoutim é a mais recente adição ao mapa das praias fluviais do Algarve.
+                </p>
+              </div>
+            </a>
+
+            <!-- Card 4 -->
+            <a href="artigo.html?slug=praias-norte" class="card-interactive flex-shrink-0 w-72 md:w-80 lg:w-96 rounded-2xl overflow-hidden bg-white shadow-layered group">
+              <div class="relative h-48 md:h-56 overflow-hidden">
+                <img src="https://placehold.co/800x600/003A40/4FC3F7?text=Norte" alt="Praias do Norte" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" loading="lazy">
+                <div class="absolute inset-0 bg-gradient-to-t from-praia-teal-800/70 via-transparent to-transparent"></div>
+              </div>
+              <div class="p-5 md:p-6">
+                <h3 class="font-display text-lg font-bold text-praia-teal-800 leading-snug mb-2 group-hover:text-praia-teal-600 transition-colors duration-300">
+                  Praias Fluviais do Gerês e Minho
+                </h3>
+                <p class="text-sm text-praia-sand-600 line-clamp-2 leading-relaxed-plus">
+                  As águas cristalinas do norte de Portugal, entre cascatas e paisagens de montanha.
+                </p>
+              </div>
+            </a>
+
+            <!-- Card 5 -->
+            <a href="artigo.html?slug=praias-acessiveis" class="card-interactive flex-shrink-0 w-72 md:w-80 lg:w-96 rounded-2xl overflow-hidden bg-white shadow-layered group">
+              <div class="relative h-48 md:h-56 overflow-hidden">
+                <img src="https://placehold.co/800x600/2E7D32/FFEB3B?text=Acess%C3%ADveis" alt="Praias Acessíveis" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" loading="lazy">
+                <div class="absolute inset-0 bg-gradient-to-t from-praia-teal-800/70 via-transparent to-transparent"></div>
+                <span class="badge badge-accessible absolute top-4 left-4">
+                  <i data-lucide="accessibility" class="w-3 h-3"></i> Acessível
+                </span>
+              </div>
+              <div class="p-5 md:p-6">
+                <h3 class="font-display text-lg font-bold text-praia-teal-800 leading-snug mb-2 group-hover:text-praia-teal-600 transition-colors duration-300">
+                  Praias Fluviais Acessíveis a Todos
+                </h3>
+                <p class="text-sm text-praia-sand-600 line-clamp-2 leading-relaxed-plus">
+                  Guia completo de praias com acessibilidade para mobilidade reduzida.
+                </p>
+              </div>
+            </a>
+          </div>
+
+          <!-- Mobile: Ver todos -->
+          <div class="md:hidden text-center mt-6 px-6">
+            <a href="artigos.html" class="inline-flex items-center gap-2 text-praia-teal-700 font-display text-sm font-semibold uppercase tracking-wider">
+              Ver Todos os Artigos <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════ -->
+      <!-- PAGE 3: MAPA PREVIEW                    -->
+      <!-- ═══════════════════════════════════════ -->
+      <section class="magazine-page relative" id="page-mapa" style="background: linear-gradient(180deg, #003A40 0%, #002A2E 100%);">
+        <div class="page-crease"></div>
+        <div class="noise-overlay absolute inset-0 pointer-events-none"></div>
+        <div class="relative z-10 py-20 md:py-28 lg:py-32">
+          <div class="max-w-7xl mx-auto px-6">
+            <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+              <!-- Text -->
+              <div>
+                <span class="font-display text-xs uppercase tracking-[0.2em] text-praia-yellow-400 font-semibold block mb-3 reveal-on-scroll">Mapa Interativo</span>
+                <h2 class="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tightest leading-tight mb-6 reveal-on-scroll" data-reveal-delay="100">
+                  Descubra praias<br>
+                  <span class="text-praia-yellow-400 italic">perto de si</span>
+                </h2>
+                <p class="text-white/60 text-lg leading-relaxed-plus mb-8 max-w-lg reveal-on-scroll" data-reveal-delay="200">
+                  Explore mais de 200 praias fluviais no mapa interativo. Filtre por serviços, bandeira azul, acessibilidade e encontre a praia perfeita com um clique.
+                </p>
+                <!-- Features list -->
+                <div class="space-y-4 mb-10">
+                  <div class="flex items-center gap-4 reveal-on-scroll" data-reveal-delay="300">
+                    <div class="w-10 h-10 rounded-xl bg-praia-yellow-400/10 flex items-center justify-center flex-shrink-0">
+                      <i data-lucide="navigation" class="w-5 h-5 text-praia-yellow-400"></i>
+                    </div>
+                    <span class="text-white/80 font-body">Geolocalização — veja praias perto de si em tempo real</span>
+                  </div>
+                  <div class="flex items-center gap-4 reveal-on-scroll" data-reveal-delay="400">
+                    <div class="w-10 h-10 rounded-xl bg-praia-yellow-400/10 flex items-center justify-center flex-shrink-0">
+                      <i data-lucide="sliders-horizontal" class="w-5 h-5 text-praia-yellow-400"></i>
+                    </div>
+                    <span class="text-white/80 font-body">Filtros avançados — bar, grelhadores, nadador-salvador, e mais</span>
+                  </div>
+                  <div class="flex items-center gap-4 reveal-on-scroll" data-reveal-delay="500">
+                    <div class="w-10 h-10 rounded-xl bg-praia-yellow-400/10 flex items-center justify-center flex-shrink-0">
+                      <i data-lucide="route" class="w-5 h-5 text-praia-yellow-400"></i>
+                    </div>
+                    <span class="text-white/80 font-body">Direções — abra Google Maps ou Waze com um toque</span>
+                  </div>
+                </div>
+
+                <a href="mapa.html" class="btn-primary inline-flex items-center gap-3 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider px-8 py-4 rounded-full shadow-layered-yellow">
+                  <i data-lucide="map" class="w-5 h-5"></i>
+                  Explorar o Mapa
+                </a>
+              </div>
+
+              <!-- Mini Map -->
+              <div class="relative">
+                <div class="absolute -inset-4 bg-praia-yellow-400/5 rounded-3xl blur-xl"></div>
+                <div id="mini-map" class="relative w-full aspect-[4/3] rounded-2xl shadow-layered-lg border border-white/10 overflow-hidden">
+                </div>
+                <!-- Map overlay gradient -->
+                <div class="absolute inset-0 rounded-2xl pointer-events-none" style="box-shadow: inset 0 0 60px rgba(0,58,64,0.3);"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════ -->
+      <!-- PAGE 4: QUICK LINKS / DESCUBRA          -->
+      <!-- ═══════════════════════════════════════ -->
+      <section class="magazine-page bg-praia-sand-50 relative" id="page-descubra">
+        <div class="page-crease"></div>
+        <div class="noise-overlay absolute inset-0 pointer-events-none"></div>
+        <div class="relative z-10 py-20 md:py-28 lg:py-32">
+          <div class="max-w-7xl mx-auto px-6">
+            <!-- Section header -->
+            <div class="text-center mb-16 reveal-on-scroll">
+              <span class="font-display text-xs uppercase tracking-[0.2em] text-praia-teal-500 font-semibold block mb-3">Descubra</span>
+              <h2 class="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-praia-teal-800 tracking-tightest">
+                Tudo num <span class="text-praia-yellow-600 italic">só lugar</span>
+              </h2>
+            </div>
+
+            <!-- Quick Links Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-5 md:gap-8 max-w-4xl mx-auto">
+              <!-- Guia -->
+              <a href="onde-encontrar-guia.html" class="quick-link group relative rounded-2xl overflow-hidden shadow-layered aspect-square flex items-end reveal-on-scroll" data-reveal-delay="0">
+                <img src="brand_assets/botao_guia.png" alt="Guia das Praias Fluviais" class="absolute inset-0 w-full h-full object-cover" loading="lazy">
+                <div class="absolute inset-0 bg-gradient-to-t from-praia-teal-800/80 via-praia-teal-800/30 to-transparent"></div>
+                <div class="relative z-10 p-4 md:p-5 w-full">
+                  <div class="flex items-center gap-2 mb-1">
+                    <i data-lucide="book-open" class="w-4 h-4 text-praia-yellow-400"></i>
+                    <span class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-semibold">Guia</span>
+                  </div>
+                  <p class="font-display text-sm md:text-base font-bold text-white leading-snug">Onde Encontrar o Guia</p>
+                </div>
+              </a>
+
+              <!-- Passaporte -->
+              <a href="onde-encontrar-passaporte.html" class="quick-link group relative rounded-2xl overflow-hidden shadow-layered aspect-square flex items-end reveal-on-scroll" data-reveal-delay="80">
+                <img src="brand_assets/botao_onde_encontrar.png" alt="Onde encontrar o passaporte" class="absolute inset-0 w-full h-full object-cover" loading="lazy">
+                <div class="absolute inset-0 bg-gradient-to-t from-praia-teal-800/80 via-praia-teal-800/30 to-transparent"></div>
+                <div class="relative z-10 p-4 md:p-5 w-full">
+                  <div class="flex items-center gap-2 mb-1">
+                    <i data-lucide="stamp" class="w-4 h-4 text-praia-yellow-400"></i>
+                    <span class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-semibold">Passaporte</span>
+                  </div>
+                  <p class="font-display text-sm md:text-base font-bold text-white leading-snug">Onde Carimbar</p>
+                </div>
+              </a>
+
+              <!-- Praia do Ano -->
+              <a href="votar.html" class="quick-link group relative rounded-2xl overflow-hidden shadow-layered aspect-square flex items-end reveal-on-scroll" data-reveal-delay="160">
+                <img src="brand_assets/botao_praia_ano.png" alt="Praia Fluvial do Ano" class="absolute inset-0 w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-praia-teal-800/80 via-praia-teal-800/30 to-transparent"></div>
+                <div class="relative z-10 p-4 md:p-5 w-full">
+                  <div class="flex items-center gap-2 mb-1">
+                    <i data-lucide="trophy" class="w-4 h-4 text-praia-yellow-400"></i>
+                    <span class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-semibold">Galardão</span>
+                  </div>
+                  <p class="font-display text-sm md:text-base font-bold text-white leading-snug">Praia Fluvial do Ano</p>
+                </div>
+              </a>
+
+              <!-- Rede de Praias -->
+              <a href="rede.html" class="quick-link group relative rounded-2xl overflow-hidden shadow-layered aspect-square flex items-end reveal-on-scroll" data-reveal-delay="240" style="background: linear-gradient(135deg, #003A40, #005D56);">
+                <div class="absolute inset-0 flex items-center justify-center opacity-10">
+                  <i data-lucide="network" class="w-32 h-32 text-white"></i>
+                </div>
+                <div class="relative z-10 p-4 md:p-5 w-full">
+                  <div class="flex items-center gap-2 mb-1">
+                    <i data-lucide="network" class="w-4 h-4 text-praia-yellow-400"></i>
+                    <span class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-semibold">Rede</span>
+                  </div>
+                  <p class="font-display text-sm md:text-base font-bold text-white leading-snug">Rede de Praias Fluviais</p>
+                </div>
+              </a>
+
+              <!-- Votar -->
+              <a href="votar.html" class="quick-link group relative rounded-2xl overflow-hidden shadow-layered aspect-square flex items-end reveal-on-scroll" data-reveal-delay="320" style="background: linear-gradient(135deg, #0288D1, #005D56);">
+                <div class="absolute inset-0 flex items-center justify-center opacity-10">
+                  <i data-lucide="heart" class="w-32 h-32 text-white"></i>
+                </div>
+                <div class="relative z-10 p-4 md:p-5 w-full">
+                  <div class="flex items-center gap-2 mb-1">
+                    <i data-lucide="vote" class="w-4 h-4 text-praia-yellow-400"></i>
+                    <span class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-semibold">Vote</span>
+                  </div>
+                  <p class="font-display text-sm md:text-base font-bold text-white leading-snug">Vote na Sua Praia Favorita</p>
+                </div>
+              </a>
+
+              <!-- Descontos -->
+              <a href="descontos.html" class="quick-link group relative rounded-2xl overflow-hidden shadow-layered aspect-square flex items-end reveal-on-scroll" data-reveal-delay="400" style="background: linear-gradient(135deg, #F5B800, #F9C916);">
+                <div class="absolute inset-0 flex items-center justify-center opacity-10">
+                  <i data-lucide="percent" class="w-32 h-32 text-praia-teal-800"></i>
+                </div>
+                <div class="relative z-10 p-4 md:p-5 w-full">
+                  <div class="flex items-center gap-2 mb-1">
+                    <i data-lucide="tag" class="w-4 h-4 text-praia-teal-800"></i>
+                    <span class="font-display text-xs uppercase tracking-wider text-praia-teal-800 font-semibold">Descontos</span>
+                  </div>
+                  <p class="font-display text-sm md:text-base font-bold text-praia-teal-800 leading-snug">Aproveite os Descontos</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════ -->
+      <!-- PAGE 5: PRAIA DO ANO                    -->
+      <!-- ═══════════════════════════════════════ -->
+      <section class="magazine-page relative" id="page-praia-ano" style="background: linear-gradient(180deg, #002A2E 0%, #003A40 50%, #005D56 100%);">
+        <div class="page-crease"></div>
+        <div class="noise-overlay absolute inset-0 pointer-events-none"></div>
+        <div class="relative z-10 py-20 md:py-28 lg:py-32">
+          <div class="max-w-7xl mx-auto px-6">
+            <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+              <!-- Left: Info -->
+              <div>
+                <div class="inline-flex items-center gap-2 bg-praia-yellow-400/10 border border-praia-yellow-400/20 rounded-full px-4 py-1.5 mb-6 reveal-on-scroll">
+                  <i data-lucide="trophy" class="w-4 h-4 text-praia-yellow-400"></i>
+                  <span class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-semibold">Galardão Anual</span>
+                </div>
+
+                <h2 class="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tightest leading-tight mb-6 reveal-on-scroll" data-reveal-delay="100">
+                  Praia Fluvial<br>
+                  <span class="text-praia-yellow-400 italic">do Ano 2026</span>
+                </h2>
+                <p class="text-white/60 text-lg leading-relaxed-plus mb-8 max-w-lg reveal-on-scroll" data-reveal-delay="200">
+                  Todos os anos, milhares de portugueses elegem a sua praia fluvial favorita. O galardão "Praia Fluvial do Ano" distingue a excelência nas praias fluviais de Portugal.
+                </p>
+
+                <a href="votar.html" class="btn-primary inline-flex items-center gap-3 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider px-8 py-4 rounded-full shadow-layered-yellow mb-12">
+                  <i data-lucide="vote" class="w-5 h-5"></i>
+                  Votar Agora
+                </a>
+              </div>
+
+              <!-- Right: Winners Timeline -->
+              <div class="relative">
+                <div class="absolute left-6 top-0 bottom-0 w-0.5 timeline-line"></div>
+
+                <!-- Winner 2025 -->
+                <div class="relative pl-16 mb-10 reveal-on-scroll" data-reveal-delay="100">
+                  <div class="absolute left-4 top-1 w-5 h-5 rounded-full bg-praia-yellow-400 border-4 border-praia-teal-800 shadow-lg"></div>
+                  <div class="bg-white/5 border border-white/10 rounded-xl p-5 backdrop-blur-sm">
+                    <span class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-bold">2025 — Vencedora</span>
+                    <h3 class="font-display text-xl font-bold text-white mt-1">Zona de Fruição Ribeirinha da Carriça</h3>
+                    <p class="text-white/50 text-sm mt-1">São João da Serra, Oliveira de Frades</p>
+                  </div>
+                </div>
+
+                <!-- Winner 2024 -->
+                <div class="relative pl-16 mb-10 reveal-on-scroll" data-reveal-delay="250">
+                  <div class="absolute left-4 top-1 w-5 h-5 rounded-full bg-praia-yellow-400/60 border-4 border-praia-teal-800"></div>
+                  <div class="bg-white/5 border border-white/10 rounded-xl p-5 backdrop-blur-sm">
+                    <span class="font-display text-xs uppercase tracking-wider text-praia-yellow-400/80 font-bold">2024 — 7.175 votos</span>
+                    <h3 class="font-display text-lg font-bold text-white/90 mt-1">Praia Fluvial de Avô</h3>
+                    <p class="text-white/40 text-sm mt-1">Oliveira do Hospital</p>
+                  </div>
+                </div>
+
+                <!-- Winner 2023 -->
+                <div class="relative pl-16 mb-10 reveal-on-scroll" data-reveal-delay="400">
+                  <div class="absolute left-4 top-1 w-5 h-5 rounded-full bg-praia-yellow-400/40 border-4 border-praia-teal-800"></div>
+                  <div class="bg-white/5 border border-white/10 rounded-xl p-5 backdrop-blur-sm">
+                    <span class="font-display text-xs uppercase tracking-wider text-praia-yellow-400/60 font-bold">2023 — 7.357 votos</span>
+                    <h3 class="font-display text-lg font-bold text-white/80 mt-1">Praia Fluvial do Vimieiro</h3>
+                    <p class="text-white/40 text-sm mt-1">Penacova, Coimbra</p>
+                  </div>
+                </div>
+
+                <!-- Revelation 2024 -->
+                <div class="relative pl-16 reveal-on-scroll" data-reveal-delay="550">
+                  <div class="absolute left-4 top-1 w-5 h-5 rounded-full bg-praia-blue-400/60 border-4 border-praia-teal-800"></div>
+                  <div class="bg-white/5 border border-white/10 rounded-xl p-5 backdrop-blur-sm">
+                    <span class="font-display text-xs uppercase tracking-wider text-praia-blue-400 font-bold">2024 — Revelação Norte</span>
+                    <h3 class="font-display text-lg font-bold text-white/80 mt-1">Praia do Cavadinho</h3>
+                    <p class="text-white/40 text-sm mt-1">Braga</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- end magazine-container -->
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- FOOTER                                  -->
+    <!-- ═══════════════════════════════════════ -->
+    <footer class="bg-praia-teal-900 relative overflow-hidden">
+      <div class="noise-overlay absolute inset-0 pointer-events-none"></div>
+      <div class="relative z-10">
+        <!-- Newsletter -->
+        <div class="border-b border-white/10">
+          <div class="max-w-7xl mx-auto px-6 py-16 md:py-20">
+            <div class="max-w-2xl mx-auto text-center reveal-on-scroll">
+              <h2 class="font-display text-2xl md:text-3xl font-bold text-white tracking-tightest mb-4">
+                Receba o guia <span class="text-praia-yellow-400 italic">na sua caixa</span>
+              </h2>
+              <p class="text-white/50 mb-8">Subscreva para receber novidades sobre praias fluviais, o guia digital e promoções exclusivas.</p>
+              <form class="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Subscrito!'; this.querySelector('button').disabled=true;">
+                <input type="email" placeholder="O seu email" required
+                  class="input-glow flex-1 px-5 py-3.5 rounded-full bg-white/10 border border-white/20 text-white placeholder-white/40 font-body text-sm focus:outline-none focus:border-praia-yellow-400/50 transition-colors duration-300">
+                <button type="submit" class="btn-primary bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider px-8 py-3.5 rounded-full shadow-layered-yellow whitespace-nowrap">
+                  Subscrever
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer links -->
+        <div class="max-w-7xl mx-auto px-6 py-12">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <!-- Col 1 -->
+            <div>
+              <img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-8 mb-6">
+              <p class="text-white/40 text-sm leading-relaxed">Guia das Praias Fluviais — Zonas Balneares e de Lazer de Portugal desde 2007.</p>
+            </div>
+            <!-- Col 2 -->
+            <div>
+              <h4 class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-semibold mb-4">Explorar</h4>
+              <ul class="space-y-2.5">
+                <li><a href="mapa.html" class="text-white/50 hover:text-white text-sm transition-colors duration-300">Mapa Interativo</a></li>
+                <li><a href="rede.html" class="text-white/50 hover:text-white text-sm transition-colors duration-300">Rede de Praias</a></li>
+                <li><a href="artigos.html" class="text-white/50 hover:text-white text-sm transition-colors duration-300">Artigos</a></li>
+                <li><a href="descontos.html" class="text-white/50 hover:text-white text-sm transition-colors duration-300">Descontos</a></li>
+              </ul>
+            </div>
+            <!-- Col 3 -->
+            <div>
+              <h4 class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-semibold mb-4">O Guia</h4>
+              <ul class="space-y-2.5">
+                <li><a href="onde-encontrar-guia.html" class="text-white/50 hover:text-white text-sm transition-colors duration-300">Onde Encontrar</a></li>
+                <li><a href="passaporte.html" class="text-white/50 hover:text-white text-sm transition-colors duration-300">Passaporte Digital</a></li>
+                <li><a href="onde-encontrar-passaporte.html" class="text-white/50 hover:text-white text-sm transition-colors duration-300">Onde Carimbar</a></li>
+                <li><a href="votar.html" class="text-white/50 hover:text-white text-sm transition-colors duration-300">Votar 2026</a></li>
+              </ul>
+            </div>
+            <!-- Col 4 -->
+            <div>
+              <h4 class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-semibold mb-4">Siga-nos</h4>
+              <div class="flex gap-3 mb-6">
+                <a href="https://www.facebook.com/praiasfluviais" target="_blank" rel="noopener" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white/60 hover:bg-praia-yellow-400 hover:text-praia-teal-800 transition-colors duration-300" aria-label="Facebook">
+                  <i data-lucide="facebook" class="w-5 h-5"></i>
+                </a>
+                <a href="https://www.instagram.com/guiadaspraiasfluviais" target="_blank" rel="noopener" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white/60 hover:bg-praia-yellow-400 hover:text-praia-teal-800 transition-colors duration-300" aria-label="Instagram">
+                  <i data-lucide="instagram" class="w-5 h-5"></i>
+                </a>
+              </div>
+              <p class="text-white/30 text-xs">120.000 exemplares distribuídos gratuitamente por todo o país.</p>
+            </div>
+          </div>
+
+          <!-- Bottom bar -->
+          <div class="border-t border-white/10 mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            <p class="text-white/30 text-xs">&copy; 2026 Guia das Praias Fluviais. Todos os direitos reservados.</p>
+            <a href="#" class="text-white/30 hover:text-white/50 text-xs transition-colors duration-300">Política de Privacidade</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Mobile Bottom Nav -->
+    <nav class="bottom-nav fixed bottom-0 left-0 right-0 bg-praia-teal-800/95 backdrop-blur-md z-[999] lg:hidden border-t border-white/10">
+      <div class="flex items-center justify-around h-16">
+        <a href="index.html" class="flex flex-col items-center gap-1 text-praia-yellow-400" aria-label="Início">
+          <i data-lucide="home" class="w-5 h-5"></i>
+          <span class="font-display text-[10px] uppercase tracking-wider font-semibold">Início</span>
+        </a>
+        <a href="mapa.html" class="flex flex-col items-center gap-1 text-white/60" aria-label="Mapa">
+          <i data-lucide="map" class="w-5 h-5"></i>
+          <span class="font-display text-[10px] uppercase tracking-wider font-semibold">Mapa</span>
+        </a>
+        <a href="votar.html" class="flex flex-col items-center gap-1 text-white/60" aria-label="Votar">
+          <i data-lucide="vote" class="w-5 h-5"></i>
+          <span class="font-display text-[10px] uppercase tracking-wider font-semibold">Votar</span>
+        </a>
+        <a href="passaporte.html" class="flex flex-col items-center gap-1 text-white/60" aria-label="Passaporte">
+          <i data-lucide="stamp" class="w-5 h-5"></i>
+          <span class="font-display text-[10px] uppercase tracking-wider font-semibold">Passaporte</span>
+        </a>
+      </div>
+    </nav>
+  </main>
+
+  <!-- Page-turn script -->
+  <script src="js/page-turn.js"></script>
+
+  <!-- Initialize icons & mini-map -->
+  <script>
+    // Lucide icons
+    lucide.createIcons();
+
+    // Mini-map on homepage
+    document.addEventListener('DOMContentLoaded', () => {
+      const mapEl = document.getElementById('mini-map');
+      if (!mapEl) return;
+
+      const map = L.map('mini-map', {
+        center: [39.5, -8.0],
+        zoom: 7,
+        zoomControl: false,
+        dragging: false,
+        scrollWheelZoom: false,
+        doubleClickZoom: false,
+        touchZoom: false,
+        attributionControl: false,
+      });
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+      }).addTo(map);
+
+      // Sample beach markers for preview
+      const sampleBeaches = [
+        [41.55, -8.43], [41.72, -8.16], [40.95, -8.13],
+        [40.28, -7.88], [40.10, -8.00], [39.78, -8.25],
+        [40.37, -7.70], [40.05, -7.95], [39.98, -7.49],
+        [39.52, -8.07], [40.67, -7.92], [41.17, -7.79],
+        [40.55, -8.37], [39.20, -7.42], [37.47, -7.47],
+        [40.80, -7.53], [41.40, -7.32], [40.65, -7.30],
+      ];
+
+      const markerIcon = L.divIcon({
+        className: '',
+        html: '<div style="width:10px;height:10px;border-radius:50%;background:#FFEB3B;border:2px solid #003A40;box-shadow:0 0 8px rgba(255,235,59,0.4);"></div>',
+        iconSize: [10, 10],
+        iconAnchor: [5, 5],
+      });
+
+      sampleBeaches.forEach(coords => {
+        L.marker(coords, { icon: markerIcon }).addTo(map);
+      });
+    });
+  </script>
+</body>
+</html>
