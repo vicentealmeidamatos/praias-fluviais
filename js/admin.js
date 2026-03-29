@@ -27,6 +27,8 @@ const ALL_SERVICES = [
   { key: 'playground',  label: 'Parque Infantil' },
   { key: 'boatRental',  label: 'Aluguer de Embarcações' },
   { key: 'camping',     label: 'Alojamento' },
+  { key: 'wc',          label: 'Instal. Sanitárias' },
+  { key: 'nacional2',   label: 'Estrada Nacional 2' },
   { key: 'grills',      label: 'Grelhadores' },
   { key: 'parking',     label: 'Estacionamento' },
   { key: 'wc',          label: 'WC/Balneários' },
@@ -326,7 +328,7 @@ function renderBeaches(container) {
                 const isBalnear = b.type === 'zona_balnear';
                 const activeServices = ALL_SERVICES.filter(s => b.services?.[s.key]).map(s => s.label).join(', ') || '—';
                 return `
-                <tr class="border-t border-praia-sand-100 hover:bg-praia-sand-50 admin-table-row" data-search="${(b.name + ' ' + b.municipality + ' ' + (b.district||'')).toLowerCase()}">
+                <tr class="border-t border-praia-sand-100 hover:bg-praia-sand-50 admin-table-row" data-search="${(b.name + ' ' + b.municipality + ' ' + (b.freguesia||'') + ' ' + (b.district||'')).toLowerCase()}">
                   <td class="px-4 py-3 font-semibold text-praia-teal-800">${b.name}</td>
                   <td class="px-4 py-3 text-praia-sand-600">${b.municipality}</td>
                   <td class="px-4 py-3 text-praia-sand-600">${b.district || '—'}</td>
@@ -351,7 +353,7 @@ function renderBeaches(container) {
 
 function editBeach(index) {
   const b = index !== null ? state.data.beaches[index] : {
-    id: '', name: '', municipality: '', district: '', type: 'praia_fluvial', river: '',
+    id: '', name: '', municipality: '', freguesia: '', district: '', type: 'praia_fluvial', river: '',
     coordinates: { lat: 39.5, lng: -8.0 }, description: '',
     photos: [],
     video360: null,
@@ -385,7 +387,7 @@ function editBeach(index) {
           <div><label>Nome</label><input type="text" id="b-name" value="${escHtml(b.name)}"></div>
           <div><label>ID (slug)</label><input type="text" id="b-id" value="${escHtml(b.id)}" placeholder="auto-gerado se vazio"></div>
         </div>
-        <div class="grid grid-cols-3 gap-4 mb-4">
+        <div class="grid grid-cols-4 gap-4 mb-4">
           <div>
             <label>Tipo</label>
             <select id="b-type">
@@ -394,6 +396,7 @@ function editBeach(index) {
             </select>
           </div>
           <div><label>Concelho</label><input type="text" id="b-municipality" value="${escHtml(b.municipality)}"></div>
+          <div><label>Freguesia</label><input type="text" id="b-freguesia" value="${escHtml(b.freguesia||'')}"></div>
           <div>
             <label>Distrito</label>
             <select id="b-district">
@@ -513,6 +516,7 @@ function saveBeach(index) {
     id: document.getElementById('b-id').value.trim() || slugify(name),
     name,
     municipality: document.getElementById('b-municipality').value.trim(),
+    freguesia: document.getElementById('b-freguesia').value.trim(),
     district: document.getElementById('b-district').value,
     type: document.getElementById('b-type').value,
     river: document.getElementById('b-river').value.trim(),

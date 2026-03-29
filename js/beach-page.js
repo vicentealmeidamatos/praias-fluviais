@@ -25,28 +25,31 @@ document.addEventListener('DOMContentLoaded', async () => {
   const mapsUrl = `https://www.google.com/maps?q=${beach.coordinates.lat},${beach.coordinates.lng}`;
   const wazeUrl = `https://waze.com/ul?ll=${beach.coordinates.lat},${beach.coordinates.lng}&navigate=yes`;
 
+  // Keys must match exactly the filter options in mapa.html
   const serviceIcons = {
-    bar: { icon: 'coffee', label: 'Bar' },
-    grills: { icon: 'flame', label: 'Grelhadores' },
-    lifeguard: { icon: 'life-buoy', label: 'Nadador-salvador' },
-    blueFlag: { icon: 'flag', label: 'Bandeira Azul' },
-    goldQuality: { icon: 'award', label: 'Qualidade Ouro' },
-    accessible: { icon: 'accessibility', label: 'Acessível' },
-    parking: { icon: 'car', label: 'Estacionamento' },
-    wc: { icon: 'bath', label: 'WC' },
-    picnicArea: { icon: 'trees', label: 'Piquenique' },
-    camping: { icon: 'tent', label: 'Campismo' },
+    blueFlag:    { icon: 'flag',          label: 'Bandeira Azul' },
+    goldQuality: { icon: 'award',         label: 'Qualidade de Ouro' },
+    accessible:  { icon: 'accessibility', label: 'Praia Acessível' },
+    lifeguard:   { icon: 'life-buoy',     label: 'Nadador-Salvador' },
+    bar:         { icon: 'utensils',      label: 'Bar/Restaurante' },
+    picnicArea:  { icon: 'trees',         label: 'Parque Merendas' },
+    petFriendly: { icon: 'paw-print',     label: 'Pet-friendly' },
+    playground:  { icon: 'baby',          label: 'Parque Infantil' },
+    boatRental:  { icon: 'sailboat',      label: 'Embarcações' },
+    camping:     { icon: 'tent',          label: 'Alojamento' },
+    wc:          { icon: 'bath',          label: 'Instal. Sanitárias' },
+    nacional2:   { icon: 'milestone',     label: 'Estrada Nacional 2' },
   };
 
   const servicesHtml = Object.entries(beach.services)
-    .filter(([, v]) => v)
+    .filter(([k, v]) => v && serviceIcons[k])
     .map(([k]) => {
       const s = serviceIcons[k];
       return `<div class="flex flex-col items-center gap-1.5 group" title="${s.label}">
         <div class="w-12 h-12 rounded-xl bg-praia-teal-800/5 flex items-center justify-center group-hover:bg-praia-yellow-400/20 transition-colors duration-300">
           <i data-lucide="${s.icon}" class="w-5 h-5 text-praia-teal-700"></i>
         </div>
-        <span class="text-[10px] font-display font-semibold uppercase tracking-wider text-praia-sand-500">${s.label}</span>
+        <span class="text-[10px] font-display font-semibold uppercase tracking-wider text-praia-sand-500 text-center leading-tight">${s.label}</span>
       </div>`;
     }).join('');
 
@@ -75,21 +78,41 @@ document.addEventListener('DOMContentLoaded', async () => {
     </a>
   `).join('');
 
+  const photoCount = beach.photos.length;
+  const carouselSlides = beach.photos.map((p, i) => `
+    <div class="carousel-slide absolute inset-0 transition-opacity duration-500 ease-in-out ${i === 0 ? 'opacity-100' : 'opacity-0'}">
+      <img src="${p}" alt="${beach.name} - foto ${i + 1}" class="w-full h-full object-cover" loading="${i === 0 ? 'eager' : 'lazy'}">
+    </div>
+  `).join('');
+
+  const carouselControls = photoCount > 1 ? `
+    <button id="carousel-prev" class="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-black/35 hover:bg-black/55 backdrop-blur-sm flex items-center justify-center text-white transition-all duration-200 active:scale-95" aria-label="Foto anterior">
+      <i data-lucide="chevron-left" class="w-5 h-5"></i>
+    </button>
+    <button id="carousel-next" class="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-black/35 hover:bg-black/55 backdrop-blur-sm flex items-center justify-center text-white transition-all duration-200 active:scale-95" aria-label="Próxima foto">
+      <i data-lucide="chevron-right" class="w-5 h-5"></i>
+    </button>
+    <div class="absolute bottom-20 md:bottom-24 left-0 right-0 flex justify-center gap-1.5 z-20 pointer-events-none">
+      ${beach.photos.map((_, i) => `<button class="carousel-dot pointer-events-auto rounded-full transition-all duration-300 ${i === 0 ? 'bg-white h-1.5 w-4' : 'bg-white/40 h-1.5 w-1.5'}" data-index="${i}" aria-label="Foto ${i + 1}"></button>`).join('')}
+    </div>
+  ` : '';
+
+  const locationLine = beach.freguesia
+    ? `${beach.municipality}, ${beach.freguesia} · ${beach.river}`
+    : `${beach.municipality}, ${beach.district} · ${beach.river}`;
+
   mainContent.innerHTML = `
-    <!-- Hero Gallery -->
-    <div class="relative">
-      <div class="flex overflow-x-auto snap-x snap-mandatory" style="scroll-snap-type:x mandatory;scrollbar-width:none;">
-        ${beach.photos.map((p, i) => `
-          <div class="flex-shrink-0 w-full snap-center relative" style="scroll-snap-align:center;">
-            <img src="${p}" alt="${beach.name} - foto ${i + 1}" class="w-full h-72 md:h-96 lg:h-[500px] object-cover" loading="lazy">
-          </div>
-        `).join('')}
+    <!-- Hero Carousel -->
+    <div class="relative" id="hero-carousel">
+      <div class="relative overflow-hidden h-72 md:h-96 lg:h-[500px]">
+        ${carouselSlides}
       </div>
-      <div class="absolute inset-0 bg-gradient-to-t from-praia-teal-800/80 via-transparent to-transparent pointer-events-none"></div>
-      <div class="absolute bottom-0 left-0 right-0 p-6 md:p-10 z-10">
+      ${carouselControls}
+      <div class="absolute inset-0 bg-gradient-to-t from-praia-teal-800/80 via-transparent to-transparent pointer-events-none z-10"></div>
+      <div class="absolute bottom-0 left-0 right-0 p-6 md:p-10 z-20">
         <div class="flex flex-wrap gap-2 mb-3">${badges.join('')}</div>
         <h1 class="font-display text-2xl md:text-4xl lg:text-5xl font-bold text-white tracking-tightest mb-2">${beach.name}</h1>
-        <p class="text-white/60 font-body text-sm md:text-base">${beach.municipality}, ${beach.district} · ${beach.river}</p>
+        <p class="text-white/60 font-body text-sm md:text-base">${locationLine}</p>
       </div>
     </div>
 
@@ -97,7 +120,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       <!-- Services -->
       <section class="mb-12">
         <h2 class="font-display text-xs uppercase tracking-[0.2em] text-praia-teal-500 font-semibold mb-5">Serviços e Infraestruturas</h2>
-        <div class="flex flex-wrap gap-4 md:gap-6">${servicesHtml}</div>
+        <div class="grid gap-4" style="grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));">${servicesHtml}</div>
       </section>
 
       <!-- Description -->
@@ -147,13 +170,16 @@ document.addEventListener('DOMContentLoaded', async () => {
       <!-- Share -->
       <section class="mb-12">
         <h2 class="font-display text-xs uppercase tracking-[0.2em] text-praia-teal-500 font-semibold mb-5">Partilhar</h2>
-        <div class="flex gap-3">
+        <div class="flex flex-wrap gap-3">
           <button onclick="shareBeach()" class="btn-primary inline-flex items-center gap-2 bg-praia-sand-100 text-praia-teal-700 font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full border border-praia-sand-200">
             <i data-lucide="share-2" class="w-4 h-4"></i> Partilhar
           </button>
-          <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}" target="_blank" class="btn-primary w-10 h-10 rounded-full bg-praia-sand-100 border border-praia-sand-200 flex items-center justify-center text-praia-teal-700">
-            <i data-lucide="facebook" class="w-4 h-4"></i>
+          <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}" target="_blank" rel="noopener" class="btn-primary inline-flex items-center gap-2 font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full text-white" style="background:#1877F2;">
+            <i data-lucide="facebook" class="w-4 h-4"></i> Facebook
           </a>
+          <button onclick="shareInstagram()" class="btn-primary inline-flex items-center gap-2 font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full text-white" style="background:linear-gradient(135deg,#f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);">
+            <i data-lucide="instagram" class="w-4 h-4"></i> Instagram
+          </button>
         </div>
       </section>
 
@@ -164,6 +190,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         <div class="bg-praia-sand-50 rounded-xl p-5 border border-praia-sand-200">
           <h3 class="font-display text-sm font-bold text-praia-teal-800 mb-3">Deixe o seu comentário</h3>
           <textarea id="review-text" rows="3" placeholder="Partilhe a sua experiência..." class="w-full p-3 rounded-lg bg-white border border-praia-sand-200 text-sm resize-none focus:outline-none focus:border-praia-teal-400 mb-3"></textarea>
+          <div class="mb-3">
+            <input type="file" id="review-images" accept="image/*" multiple class="hidden">
+            <label for="review-images" class="inline-flex items-center gap-2 cursor-pointer text-xs font-display font-semibold text-praia-teal-600 border border-praia-sand-200 bg-white px-4 py-2 rounded-full hover:border-praia-teal-400 transition-colors">
+              <i data-lucide="image" class="w-3.5 h-3.5"></i> Anexar fotos
+            </label>
+            <div id="review-image-preview" class="flex gap-2 mt-2 flex-wrap"></div>
+          </div>
           <button onclick="submitReview('${beach.id}')" class="btn-primary bg-praia-teal-800 text-praia-yellow-400 font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full">
             Publicar
           </button>
@@ -180,6 +213,26 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Initialize icons
   lucide.createIcons();
+
+  // Initialize carousel
+  initCarousel(photoCount);
+
+  // Image preview handler
+  document.getElementById('review-images')?.addEventListener('change', function () {
+    const preview = document.getElementById('review-image-preview');
+    if (!preview) return;
+    preview.innerHTML = '';
+    Array.from(this.files).forEach(file => {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        img.className = 'w-16 h-16 object-cover rounded-lg border border-praia-sand-200';
+        preview.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    });
+  });
 
   // Load weather
   const weatherWidget = document.getElementById('weather-widget');
@@ -233,10 +286,9 @@ function loadReviews(beachId) {
   if (!container) return;
   const reviews = JSON.parse(localStorage.getItem(`reviews_${beachId}`) || '[]');
 
-  // Add some seed reviews if none exist
   const displayReviews = reviews.length > 0 ? reviews : [
-    { text: 'Água cristalina e ambiente muito tranquilo. Recomendo!', date: '2026-03-15', author: 'Visitante' },
-    { text: 'Fomos lá com a família no verão passado. As crianças adoraram!', date: '2025-08-20', author: 'Maria S.' },
+    { text: 'Água cristalina e ambiente muito tranquilo. Recomendo!', date: '2026-03-15', author: 'Visitante', images: [] },
+    { text: 'Fomos lá com a família no verão passado. As crianças adoraram!', date: '2025-08-20', author: 'Maria S.', images: [] },
   ];
 
   container.innerHTML = displayReviews.map(r => `
@@ -251,25 +303,43 @@ function loadReviews(beachId) {
         </div>
       </div>
       <p class="text-sm text-praia-sand-700 leading-relaxed">${r.text}</p>
+      ${r.images?.length ? `<div class="flex flex-wrap gap-2 mt-3">${r.images.map(img => `<img src="${img}" class="w-20 h-20 object-cover rounded-lg border border-praia-sand-100 cursor-pointer hover:opacity-90 transition-opacity" onclick="this.requestFullscreen&&this.requestFullscreen()">`).join('')}</div>` : ''}
     </div>
   `).join('');
 
   lucide.createIcons();
 }
 
-function submitReview(beachId) {
+async function submitReview(beachId) {
   const textarea = document.getElementById('review-text');
   const text = textarea?.value?.trim();
   if (!text) return;
+
+  const fileInput = document.getElementById('review-images');
+  const images = [];
+  if (fileInput?.files?.length) {
+    for (const file of fileInput.files) {
+      const dataUrl = await new Promise(resolve => {
+        const reader = new FileReader();
+        reader.onload = e => resolve(e.target.result);
+        reader.readAsDataURL(file);
+      });
+      images.push(dataUrl);
+    }
+  }
 
   const reviews = JSON.parse(localStorage.getItem(`reviews_${beachId}`) || '[]');
   reviews.unshift({
     text,
     date: new Date().toISOString().split('T')[0],
     author: 'Visitante',
+    images,
   });
   localStorage.setItem(`reviews_${beachId}`, JSON.stringify(reviews));
   textarea.value = '';
+  if (fileInput) fileInput.value = '';
+  const preview = document.getElementById('review-image-preview');
+  if (preview) preview.innerHTML = '';
   loadReviews(beachId);
 }
 
@@ -282,4 +352,49 @@ async function shareBeach() {
     await navigator.clipboard.writeText(window.location.href);
     alert('Link copiado!');
   }
+}
+
+async function shareInstagram() {
+  try {
+    await navigator.clipboard.writeText(window.location.href);
+    alert('Link copiado! Cole-o numa publicação ou story do Instagram.');
+  } catch {
+    alert('Copie este link e partilhe no Instagram:\n' + window.location.href);
+  }
+}
+
+function initCarousel(count) {
+  if (count <= 1) return;
+
+  const slides = document.querySelectorAll('.carousel-slide');
+  const dots = document.querySelectorAll('.carousel-dot');
+  let current = 0;
+  let timer;
+
+  function goTo(idx) {
+    slides[current].classList.remove('opacity-100');
+    slides[current].classList.add('opacity-0');
+    if (dots[current]) {
+      dots[current].classList.remove('bg-white', 'w-4');
+      dots[current].classList.add('bg-white/40', 'w-1.5');
+    }
+    current = ((idx % count) + count) % count;
+    slides[current].classList.remove('opacity-0');
+    slides[current].classList.add('opacity-100');
+    if (dots[current]) {
+      dots[current].classList.remove('bg-white/40', 'w-1.5');
+      dots[current].classList.add('bg-white', 'w-4');
+    }
+  }
+
+  function startTimer() {
+    clearInterval(timer);
+    timer = setInterval(() => goTo(current + 1), 3000);
+  }
+
+  document.getElementById('carousel-prev')?.addEventListener('click', () => { goTo(current - 1); startTimer(); });
+  document.getElementById('carousel-next')?.addEventListener('click', () => { goTo(current + 1); startTimer(); });
+  dots.forEach(d => d.addEventListener('click', () => { goTo(parseInt(d.dataset.index)); startTimer(); }));
+
+  startTimer();
 }

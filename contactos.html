@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contactos | Guia das Praias Fluviais</title>
+  <meta name="description" content="Entre em contacto com a equipa do Guia das Praias Fluviais. Sugestões, parceiros, imprensa e informações gerais.">
+  <meta property="og:title" content="Contactos | Guia das Praias Fluviais">
+  <meta property="og:description" content="Entre em contacto com a equipa do Guia das Praias Fluviais.">
+  <meta property="og:image" content="brand_assets/praias-fluviais.png">
+  <meta property="og:locale" content="pt_PT">
+  <meta property="og:type" content="website">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/shared.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="css/shared.css">
+
+  <style>
+    .contact-input {
+      background: white;
+      border: 1.5px solid #e5e0d5;
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.9rem;
+      color: #2D2820;
+      width: 100%;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+      outline: none;
+      -webkit-appearance: none;
+    }
+    .contact-input::placeholder {
+      color: #b0a99b;
+    }
+    .contact-input:focus {
+      border-color: #003A40;
+      box-shadow: 0 0 0 3px rgba(0,58,64,0.08), 0 2px 8px rgba(0,58,64,0.06);
+    }
+    .contact-input:focus-visible {
+      outline: 2px solid #FFEB3B;
+      outline-offset: 2px;
+    }
+    textarea.contact-input {
+      resize: vertical;
+      min-height: 140px;
+    }
+    .contact-label {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #003A40;
+      display: block;
+      margin-bottom: 6px;
+    }
+    .info-card {
+      background: linear-gradient(135deg, #003A40 0%, #002A2E 100%);
+      border-radius: 20px;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .info-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("img/noise-texture.svg");
+      opacity: 0.04;
+      pointer-events: none;
+    }
+    .info-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(255,235,59,0.12);
+      border: 1px solid rgba(255,235,59,0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .social-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 20px;
+      border-radius: 50px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1),
+                  box-shadow 0.3s ease,
+                  background 0.2s ease;
+      text-decoration: none;
+    }
+    .social-btn:hover {
+      transform: translateY(-3px) scale(1.03);
+    }
+    .social-btn:active {
+      transform: scale(0.97);
+    }
+    .social-btn-fb {
+      background: #1877F2;
+      color: white;
+      box-shadow: 0 4px 16px rgba(24,119,242,0.35);
+    }
+    .social-btn-fb:hover {
+      background: #1565d8;
+      box-shadow: 0 8px 24px rgba(24,119,242,0.4);
+    }
+    .social-btn-ig {
+      background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+      color: white;
+      box-shadow: 0 4px 16px rgba(220,39,67,0.35);
+    }
+    .social-btn-ig:hover {
+      box-shadow: 0 8px 24px rgba(220,39,67,0.4);
+    }
+    .submit-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #003A40;
+      color: #FFEB3B;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 16px 36px;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      justify-content: center;
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1),
+                  box-shadow 0.3s ease,
+                  background 0.2s ease;
+      box-shadow: 0 4px 20px rgba(0,58,64,0.3), 0 1px 3px rgba(0,58,64,0.2);
+      position: relative;
+      overflow: hidden;
+    }
+    .submit-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,235,59,0.1) 0%, transparent 60%);
+    }
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(0,58,64,0.35), 0 2px 6px rgba(0,58,64,0.2);
+      background: #004e57;
+    }
+    .submit-btn:active {
+      transform: scale(0.98);
+    }
+    .submit-btn:focus-visible {
+      outline: 2px solid #FFEB3B;
+      outline-offset: 3px;
+    }
+    .success-state {
+      display: none;
+      text-align: center;
+      padding: 3rem 2rem;
+      animation: fadeIn 0.5s ease forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .success-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #43A047, #2E7D32);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      box-shadow: 0 8px 24px rgba(67,160,71,0.35);
+    }
+    .subject-option {
+      transition: border-color 0.2s, background 0.2s, color 0.2s;
+    }
+  </style>
+</head>
+
+<body class="bg-praia-sand-50 font-body text-praia-sand-900 antialiased">
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:bg-praia-yellow-400 focus:text-praia-teal-800 focus:px-4 focus:py-2 focus:rounded-lg focus:font-display focus:font-semibold">Saltar para o conteúdo</a>
+
+  <!-- Header -->
+  <header id="main-header" class="fixed top-0 left-0 right-0 z-[1000] bg-praia-teal-800/90 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 md:h-[70px]">
+        <a href="index.html"><img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-14 md:h-[58px] w-auto"></a>
+        <nav class="hidden lg:flex items-center gap-1">
+          <a href="index.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Início</a>
+          <a href="mapa.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Rede</a>
+          <a href="votar.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Votar</a>
+          <a href="passaporte.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Passaporte</a>
+          <a href="artigos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Artigos</a>
+          <a href="descontos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Descontos</a>
+          <a href="contactos.html" class="nav-link active font-display text-xs font-semibold uppercase tracking-wider text-white px-3 py-2">Contactos</a>
+        </nav>
+        <a href="onde-encontrar-guia.html" class="hidden md:inline-flex items-center gap-2 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full btn-primary shadow-layered-yellow">
+          <i data-lucide="book-open" class="w-4 h-4"></i>
+          Onde Encontrar
+        </a>
+        <button id="nav-hamburger" class="lg:hidden text-white p-2" aria-label="Menu"><i data-lucide="menu" class="w-6 h-6"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Menu Overlay -->
+  <div id="menu-overlay" class="fixed inset-0 bg-black/50 z-[1001] opacity-0 pointer-events-none transition-opacity duration-300"></div>
+
+  <!-- Mobile Menu -->
+  <nav id="mobile-menu" class="fixed top-0 right-0 bottom-0 w-72 bg-praia-teal-800 z-[1002] translate-x-full transition-transform duration-300 ease-out flex flex-col">
+    <div class="flex items-center justify-between p-5 border-b border-white/10">
+      <img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-7">
+      <button id="nav-close" class="text-white p-1" aria-label="Fechar menu"><i data-lucide="x" class="w-6 h-6"></i></button>
+    </div>
+    <div class="flex-1 overflow-y-auto py-4">
+      <a href="index.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="home" class="w-5 h-5"></i> Início</a>
+      <a href="mapa.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="network" class="w-5 h-5"></i> Rede de Praias</a>
+      <a href="votar.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="vote" class="w-5 h-5"></i> Votar 2026</a>
+      <a href="passaporte.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="stamp" class="w-5 h-5"></i> Passaporte</a>
+      <a href="artigos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="newspaper" class="w-5 h-5"></i> Artigos</a>
+      <a href="descontos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="percent" class="w-5 h-5"></i> Descontos</a>
+      <a href="contactos.html" class="flex items-center gap-3 px-6 py-3.5 text-praia-yellow-400 font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="mail" class="w-5 h-5"></i> Contactos</a>
+      <div class="border-t border-white/10 my-2"></div>
+      <a href="onde-encontrar-guia.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="book-open" class="w-5 h-5"></i> Onde Encontrar o Guia</a>
+      <a href="onde-encontrar-passaporte.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="map-pin" class="w-5 h-5"></i> Onde Carimbar</a>
+    </div>
+    <div class="p-5 border-t border-white/10">
+      <a href="onde-encontrar-guia.html" class="flex items-center justify-center gap-2 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider px-5 py-3 rounded-full btn-primary w-full">
+        <i data-lucide="book-open" class="w-4 h-4"></i> Onde Encontrar
+      </a>
+    </div>
+  </nav>
+
+  <main id="main-content" class="pt-16 md:pt-[70px] pb-20 lg:pb-10">
+
+    <!-- Hero -->
+    <section class="relative py-16 md:py-24 overflow-hidden" style="background: linear-gradient(135deg, #003A40 0%, #002A2E 50%, #005D56 100%);">
+      <div class="noise-overlay absolute inset-0 pointer-events-none"></div>
+      <div class="absolute inset-0" style="background: radial-gradient(ellipse at 50% 50%, rgba(255,235,59,0.06) 0%, transparent 50%);"></div>
+      <!-- Bubbles -->
+      <div class="bubble w-2 h-2" style="left:5%; --delay:0.5s; --dur:9s; --drift:10px;"></div>
+      <div class="bubble w-3 h-3" style="left:18%; --delay:2s; --dur:8s; --drift:-9px;"></div>
+      <div class="bubble w-1.5 h-1.5" style="left:33%; --delay:0.2s; --dur:7s; --drift:6px;"></div>
+      <div class="bubble w-2.5 h-2.5" style="left:50%; --delay:3s; --dur:10s; --drift:-8px;"></div>
+      <div class="bubble w-2 h-2" style="left:67%; --delay:1.5s; --dur:8s; --drift:12px;"></div>
+      <div class="bubble w-1 h-1" style="left:80%; --delay:4s; --dur:6s; --drift:-5px;"></div>
+      <div class="bubble w-3 h-3" style="left:92%; --delay:2.2s; --dur:9s; --drift:8px;"></div>
+      <div class="bubble w-1.5 h-1.5" style="left:43%; --delay:5s; --dur:7s; --drift:-11px;"></div>
+      <div class="bubble w-2 h-2" style="left:60%; --delay:6s; --dur:8s; --drift:7px;"></div>
+      <div class="bubble w-2.5 h-2.5" style="left:25%; --delay:3.5s; --dur:10s; --drift:-7px;"></div>
+      <div class="relative z-10 max-w-5xl mx-auto px-6 text-center">
+        <div class="inline-flex items-center gap-2 bg-praia-yellow-400/10 border border-praia-yellow-400/20 rounded-full px-4 py-1.5 mb-6 reveal-on-scroll">
+          <i data-lucide="mail" class="w-4 h-4 text-praia-yellow-400"></i>
+          <span class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-semibold">Fale Connosco</span>
+        </div>
+        <h1 class="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tightest leading-tight mb-4 reveal-on-scroll" data-reveal-delay="100">
+          Contactos
+        </h1>
+        <p class="text-white/50 text-lg max-w-2xl mx-auto leading-relaxed-plus reveal-on-scroll" data-reveal-delay="200">
+          Sugestões, parceiros, imprensa ou informações sobre o Guia das Praias Fluviais — estamos à sua disposição.
+        </p>
+      </div>
+    </section>
+
+    <!-- Main content: form + info -->
+    <section class="max-w-6xl mx-auto px-6 py-12 md:py-16">
+      <div class="grid lg:grid-cols-5 gap-10 lg:gap-14 items-start">
+
+        <!-- ── Contact Form ── -->
+        <div class="lg:col-span-3">
+          <div class="bg-white rounded-2xl border border-praia-sand-100 shadow-layered p-8 md:p-10">
+            <h2 class="font-display text-xl font-bold text-praia-teal-800 mb-2">Envie-nos uma mensagem</h2>
+            <p class="text-praia-sand-500 text-sm mb-8">Respondemos em menos de 48 horas nos dias úteis.</p>
+
+            <!-- Form -->
+            <form id="contact-form" novalidate>
+              <!-- Name + Email -->
+              <div class="grid sm:grid-cols-2 gap-5 mb-5">
+                <div>
+                  <label for="name" class="contact-label">Nome</label>
+                  <input type="text" id="name" name="name" class="contact-input" placeholder="O seu nome" required autocomplete="name">
+                </div>
+                <div>
+                  <label for="email" class="contact-label">E-mail</label>
+                  <input type="email" id="email" name="email" class="contact-input" placeholder="O seu e-mail" required autocomplete="email">
+                </div>
+              </div>
+
+              <!-- Subject chips -->
+              <div class="mb-5">
+                <span class="contact-label">Assunto</span>
+                <div class="flex flex-wrap gap-2 mt-1" id="subject-chips">
+                  <button type="button" class="subject-chip font-display text-xs font-semibold uppercase tracking-wider px-4 py-2 rounded-full border border-praia-sand-200 bg-praia-sand-50 text-praia-sand-600 hover:border-praia-teal-700 hover:text-praia-teal-800 transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-praia-yellow-400" data-value="informacao">Informação Geral</button>
+                  <button type="button" class="subject-chip font-display text-xs font-semibold uppercase tracking-wider px-4 py-2 rounded-full border border-praia-sand-200 bg-praia-sand-50 text-praia-sand-600 hover:border-praia-teal-700 hover:text-praia-teal-800 transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-praia-yellow-400" data-value="parceria">Parceria / Publicidade</button>
+                  <button type="button" class="subject-chip font-display text-xs font-semibold uppercase tracking-wider px-4 py-2 rounded-full border border-praia-sand-200 bg-praia-sand-50 text-praia-sand-600 hover:border-praia-teal-700 hover:text-praia-teal-800 transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-praia-yellow-400" data-value="imprensa">Imprensa</button>
+                  <button type="button" class="subject-chip font-display text-xs font-semibold uppercase tracking-wider px-4 py-2 rounded-full border border-praia-sand-200 bg-praia-sand-50 text-praia-sand-600 hover:border-praia-teal-700 hover:text-praia-teal-800 transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-praia-yellow-400" data-value="sugestao">Sugestão de Praia</button>
+                  <button type="button" class="subject-chip font-display text-xs font-semibold uppercase tracking-wider px-4 py-2 rounded-full border border-praia-sand-200 bg-praia-sand-50 text-praia-sand-600 hover:border-praia-teal-700 hover:text-praia-teal-800 transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-praia-yellow-400" data-value="outro">Outro</button>
+                </div>
+                <input type="hidden" id="subject-hidden" name="subject" value="informacao">
+              </div>
+
+              <!-- Message -->
+              <div class="mb-6">
+                <label for="message" class="contact-label">Mensagem</label>
+                <textarea id="message" name="message" class="contact-input" placeholder="Escreva aqui a sua mensagem..." required></textarea>
+              </div>
+
+              <!-- Error -->
+              <div id="form-error" class="hidden mb-4 flex items-center gap-2 bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-red-700 text-sm font-body">
+                <i data-lucide="alert-circle" class="w-4 h-4 flex-shrink-0"></i>
+                <span>Por favor preencha todos os campos obrigatórios.</span>
+              </div>
+
+              <button type="submit" class="submit-btn">
+                <i data-lucide="send" class="w-4 h-4 relative z-10"></i>
+                <span class="relative z-10">Enviar Mensagem</span>
+              </button>
+            </form>
+
+            <!-- Success state -->
+            <div id="success-state" class="success-state">
+              <div class="success-icon">
+                <i data-lucide="check" class="w-8 h-8 text-white"></i>
+              </div>
+              <h3 class="font-display text-xl font-bold text-praia-teal-800 mb-2">Mensagem enviada!</h3>
+              <p class="text-praia-sand-500 text-sm max-w-sm mx-auto">Obrigado pelo seu contacto. Responderemos em breve por e-mail.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Contact Info ── -->
+        <div class="lg:col-span-2 space-y-6">
+
+          <!-- Info card -->
+          <div class="info-card">
+            <h3 class="font-display text-sm font-bold text-praia-yellow-400 uppercase tracking-wider mb-4">Informações de Contacto</h3>
+
+            <div class="info-row">
+              <div class="info-icon">
+                <i data-lucide="mail" class="w-5 h-5 text-praia-yellow-400"></i>
+              </div>
+              <div>
+                <p class="font-display text-xs uppercase tracking-wider text-white/40 font-semibold mb-0.5">E-mail</p>
+                <a href="mailto:geral@praiasfluviais.pt" class="text-white text-sm font-body hover:text-praia-yellow-400 transition-colors duration-200">geral@praiasfluviais.pt</a>
+              </div>
+            </div>
+
+            <div class="info-row">
+              <div class="info-icon">
+                <i data-lucide="globe" class="w-5 h-5 text-praia-yellow-400"></i>
+              </div>
+              <div>
+                <p class="font-display text-xs uppercase tracking-wider text-white/40 font-semibold mb-0.5">Website</p>
+                <a href="https://praiasfluviais.pt" target="_blank" rel="noopener" class="text-white text-sm font-body hover:text-praia-yellow-400 transition-colors duration-200">praiasfluviais.pt</a>
+              </div>
+            </div>
+
+            <div class="info-row">
+              <div class="info-icon">
+                <i data-lucide="calendar" class="w-5 h-5 text-praia-yellow-400"></i>
+              </div>
+              <div>
+                <p class="font-display text-xs uppercase tracking-wider text-white/40 font-semibold mb-0.5">Publicação</p>
+                <p class="text-white text-sm font-body">Anual — Distribuição gratuita<br><span class="text-white/50 text-xs">Desde 2007 · 120.000 exemplares</span></p>
+              </div>
+            </div>
+
+            <div class="info-row">
+              <div class="info-icon">
+                <i data-lucide="clock" class="w-5 h-5 text-praia-yellow-400"></i>
+              </div>
+              <div>
+                <p class="font-display text-xs uppercase tracking-wider text-white/40 font-semibold mb-0.5">Resposta</p>
+                <p class="text-white text-sm font-body">Até 48 horas (dias úteis)</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Social media -->
+          <div class="bg-white rounded-2xl border border-praia-sand-100 shadow-layered p-6">
+            <h3 class="font-display text-xs font-bold text-praia-teal-800 uppercase tracking-wider mb-5">Siga-nos nas Redes Sociais</h3>
+            <div class="flex flex-col gap-3">
+              <a href="https://www.facebook.com/praiasfluviais" target="_blank" rel="noopener" class="social-btn social-btn-fb">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                Facebook
+              </a>
+              <a href="https://www.instagram.com/guiadaspraiasfluviais" target="_blank" rel="noopener" class="social-btn social-btn-ig">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                Instagram
+              </a>
+            </div>
+            <p class="text-praia-sand-400 text-xs font-body mt-4 leading-relaxed">Partilhe as suas fotos e experiências nas praias fluviais de Portugal!</p>
+          </div>
+
+          <!-- Quick links -->
+          <div class="bg-praia-sand-50 rounded-2xl border border-praia-sand-100 p-6">
+            <h3 class="font-display text-xs font-bold text-praia-teal-800 uppercase tracking-wider mb-4">Também pode ser útil</h3>
+            <div class="space-y-2">
+              <a href="onde-encontrar-guia.html" class="flex items-center gap-3 text-sm text-praia-sand-600 hover:text-praia-teal-800 py-2 group transition-colors duration-200">
+                <i data-lucide="book-open" class="w-4 h-4 text-praia-teal-600 group-hover:text-praia-teal-800 transition-colors duration-200"></i>
+                Onde encontrar o guia
+              </a>
+              <a href="votar.html" class="flex items-center gap-3 text-sm text-praia-sand-600 hover:text-praia-teal-800 py-2 group transition-colors duration-200">
+                <i data-lucide="vote" class="w-4 h-4 text-praia-teal-600 group-hover:text-praia-teal-800 transition-colors duration-200"></i>
+                Votar Praia do Ano 2026
+              </a>
+              <a href="descontos.html" class="flex items-center gap-3 text-sm text-praia-sand-600 hover:text-praia-teal-800 py-2 group transition-colors duration-200">
+                <i data-lucide="tag" class="w-4 h-4 text-praia-teal-600 group-hover:text-praia-teal-800 transition-colors duration-200"></i>
+                Descontos para leitores
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- Mobile Bottom Nav -->
+  <nav class="bottom-nav fixed bottom-0 left-0 right-0 bg-praia-teal-800/95 backdrop-blur-md z-[999] lg:hidden border-t border-white/10">
+    <div class="flex items-center justify-around h-16">
+      <a href="index.html" class="flex flex-col items-center gap-1 text-white/60"><i data-lucide="home" class="w-5 h-5"></i><span class="font-display text-[10px] uppercase tracking-wider font-semibold">Início</span></a>
+      <a href="mapa.html" class="flex flex-col items-center gap-1 text-white/60"><i data-lucide="map" class="w-5 h-5"></i><span class="font-display text-[10px] uppercase tracking-wider font-semibold">Rede</span></a>
+      <a href="votar.html" class="flex flex-col items-center gap-1 text-white/60"><i data-lucide="vote" class="w-5 h-5"></i><span class="font-display text-[10px] uppercase tracking-wider font-semibold">Votar</span></a>
+      <a href="passaporte.html" class="flex flex-col items-center gap-1 text-white/60"><i data-lucide="stamp" class="w-5 h-5"></i><span class="font-display text-[10px] uppercase tracking-wider font-semibold">Passaporte</span></a>
+      <a href="contactos.html" class="flex flex-col items-center gap-1 text-praia-yellow-400"><i data-lucide="mail" class="w-5 h-5"></i><span class="font-display text-[10px] uppercase tracking-wider font-semibold">Contactos</span></a>
+    </div>
+  </nav>
+
+  <script>
+    // Mobile menu
+    const hamburger = document.getElementById('nav-hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const menuOverlay = document.getElementById('menu-overlay');
+    const navClose = document.getElementById('nav-close');
+
+    function openMenu() {
+      mobileMenu.classList.remove('translate-x-full');
+      menuOverlay.classList.remove('opacity-0', 'pointer-events-none');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeMenu() {
+      mobileMenu.classList.add('translate-x-full');
+      menuOverlay.classList.add('opacity-0', 'pointer-events-none');
+      document.body.style.overflow = '';
+    }
+
+    hamburger?.addEventListener('click', openMenu);
+    navClose?.addEventListener('click', closeMenu);
+    menuOverlay?.addEventListener('click', closeMenu);
+
+    // Header scroll effect
+    const header = document.getElementById('main-header');
+    window.addEventListener('scroll', () => {
+      header.style.boxShadow = window.scrollY > 20
+        ? '0 4px 24px rgba(0,58,64,0.3)'
+        : 'none';
+    }, { passive: true });
+
+    // Subject chips
+    const chips = document.querySelectorAll('.subject-chip');
+    const hiddenSubject = document.getElementById('subject-hidden');
+
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        chips.forEach(c => {
+          c.classList.remove('bg-praia-teal-800', 'text-praia-yellow-400', 'border-praia-teal-800');
+          c.classList.add('bg-praia-sand-50', 'text-praia-sand-600', 'border-praia-sand-200');
+        });
+        chip.classList.add('bg-praia-teal-800', 'text-praia-yellow-400', 'border-praia-teal-800');
+        chip.classList.remove('bg-praia-sand-50', 'text-praia-sand-600', 'border-praia-sand-200');
+        hiddenSubject.value = chip.dataset.value;
+      });
+    });
+
+    // Select first chip by default
+    if (chips.length) {
+      chips[0].click();
+    }
+
+    // Contact form submission
+    const form = document.getElementById('contact-form');
+    const successState = document.getElementById('success-state');
+    const formError = document.getElementById('form-error');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const message = document.getElementById('message').value.trim();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!name || !email || !message || !emailRegex.test(email)) {
+        formError.classList.remove('hidden');
+        lucide.createIcons();
+        return;
+      }
+
+      formError.classList.add('hidden');
+
+      // Simulate send (static site — no backend)
+      const submitBtn = form.querySelector('.submit-btn');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin relative z-10"></i><span class="relative z-10">A enviar...</span>';
+      lucide.createIcons();
+
+      setTimeout(() => {
+        form.style.display = 'none';
+        successState.style.display = 'block';
+        lucide.createIcons();
+      }, 1200);
+    });
+
+    // Reveal animations
+    const revealEls = document.querySelectorAll('.reveal-on-scroll');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const delay = entry.target.dataset.revealDelay || 0;
+          setTimeout(() => {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+          }, Number(delay));
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    revealEls.forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      el.style.transition = 'opacity 0.6s ease, transform 0.6s cubic-bezier(0.34,1.56,0.64,1)';
+      observer.observe(el);
+    });
+
+    lucide.createIcons();
+  </script>
+</body>
+</html>
