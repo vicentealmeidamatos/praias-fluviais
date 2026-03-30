@@ -157,8 +157,8 @@ body {
 /* ─── Scroll Reveal ─── */
 .reveal-on-scroll {
   opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.7s var(--smooth-ease), transform 0.7s var(--spring-ease);
+  transform: translateY(24px);
+  transition: opacity 0.65s var(--smooth-ease), transform 0.65s var(--smooth-ease);
 }
 .reveal-on-scroll.revealed {
   opacity: 1;

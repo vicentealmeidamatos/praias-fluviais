@@ -13,10 +13,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     return;
   }
 
-  // Initialize map
+  // Initialize map — bounded to continental Portugal
+  const PT_BOUNDS = [[36.8, -9.6], [42.2, -6.1]];
   const map = L.map('map-main', {
     center: [39.5, -8.0],
     zoom: 7,
+    minZoom: 6,
+    maxZoom: 18,
+    maxBounds: PT_BOUNDS,
+    maxBoundsViscosity: 1.0,
     zoomControl: false,
     attributionControl: false,
   });

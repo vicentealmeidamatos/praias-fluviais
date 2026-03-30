@@ -211,15 +211,24 @@
         <a href="index.html"><img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-14 md:h-[58px] w-auto"></a>
         <nav class="hidden lg:flex items-center gap-1">
           <a href="index.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Início</a>
-          <a href="mapa.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Rede</a>
+          <a href="rede.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Rede</a>
           <a href="votar.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Votar</a>
           <a href="passaporte.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Passaporte</a>
           <a href="artigos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Artigos</a>
           <a href="descontos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Descontos</a>
           <a href="contactos.html" class="nav-link active font-display text-xs font-semibold uppercase tracking-wider text-white px-3 py-2">Contactos</a>
         </nav>
-        <a href="onde-encontrar-guia.html" class="hidden md:inline-flex items-center gap-2 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full btn-primary shadow-layered-yellow">
-          <i data-lucide="book-open" class="w-4 h-4"></i>
+        <!-- Social -->
+        <div class="hidden lg:flex items-center gap-1.5 mr-2">
+          <a href="https://www.facebook.com/praiasfluviais" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:bg-praia-yellow-400 hover:text-praia-teal-800 transition-colors duration-300">
+            <i data-lucide="facebook" class="w-4 h-4"></i>
+          </a>
+          <a href="https://www.instagram.com/guiadaspraiasfluviais" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:bg-praia-yellow-400 hover:text-praia-teal-800 transition-colors duration-300">
+            <i data-lucide="instagram" class="w-4 h-4"></i>
+          </a>
+        </div>
+        <a href="onde-encontrar.html" class="hidden md:inline-flex items-center gap-2 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full btn-primary shadow-layered-yellow">
+          <i data-lucide="map-pin" class="w-4 h-4"></i>
           Onde Encontrar
         </a>
         <button id="nav-hamburger" class="lg:hidden text-white p-2" aria-label="Menu"><i data-lucide="menu" class="w-6 h-6"></i></button>
@@ -238,19 +247,26 @@
     </div>
     <div class="flex-1 overflow-y-auto py-4">
       <a href="index.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="home" class="w-5 h-5"></i> Início</a>
-      <a href="mapa.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="network" class="w-5 h-5"></i> Rede de Praias</a>
+      <a href="rede.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="network" class="w-5 h-5"></i> Rede de Praias</a>
       <a href="votar.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="vote" class="w-5 h-5"></i> Votar 2026</a>
       <a href="passaporte.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="stamp" class="w-5 h-5"></i> Passaporte</a>
       <a href="artigos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="newspaper" class="w-5 h-5"></i> Artigos</a>
       <a href="descontos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="percent" class="w-5 h-5"></i> Descontos</a>
       <a href="contactos.html" class="flex items-center gap-3 px-6 py-3.5 text-praia-yellow-400 font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="mail" class="w-5 h-5"></i> Contactos</a>
       <div class="border-t border-white/10 my-2"></div>
-      <a href="onde-encontrar-guia.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="book-open" class="w-5 h-5"></i> Onde Encontrar o Guia</a>
-      <a href="onde-encontrar-passaporte.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="map-pin" class="w-5 h-5"></i> Onde Carimbar</a>
+      <a href="onde-encontrar.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="map-pin" class="w-5 h-5"></i> Onde Encontrar</a>
     </div>
     <div class="p-5 border-t border-white/10">
-      <a href="onde-encontrar-guia.html" class="flex items-center justify-center gap-2 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider px-5 py-3 rounded-full btn-primary w-full">
-        <i data-lucide="book-open" class="w-4 h-4"></i> Onde Encontrar
+      <div class="flex gap-2 mb-3">
+        <a href="https://www.facebook.com/praiasfluviais" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="flex-1 flex items-center justify-center gap-1.5 bg-white/10 text-white/70 hover:text-white font-display font-semibold text-xs uppercase tracking-wider py-2.5 rounded-full transition-colors duration-300">
+          <i data-lucide="facebook" class="w-3.5 h-3.5"></i> Facebook
+        </a>
+        <a href="https://www.instagram.com/guiadaspraiasfluviais" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="flex-1 flex items-center justify-center gap-1.5 bg-white/10 text-white/70 hover:text-white font-display font-semibold text-xs uppercase tracking-wider py-2.5 rounded-full transition-colors duration-300">
+          <i data-lucide="instagram" class="w-3.5 h-3.5"></i> Instagram
+        </a>
+      </div>
+      <a href="onde-encontrar.html" class="flex items-center justify-center gap-2 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider px-5 py-3 rounded-full btn-primary w-full">
+        <i data-lucide="map-pin" class="w-4 h-4"></i> Onde Encontrar
       </a>
     </div>
   </nav>
@@ -463,8 +479,8 @@
           <div class="bg-praia-sand-50 rounded-2xl border border-praia-sand-100 p-6">
             <h3 class="font-display text-xs font-bold text-praia-teal-800 uppercase tracking-wider mb-4">Também pode ser útil</h3>
             <div class="space-y-2">
-              <a href="onde-encontrar-guia.html" class="flex items-center gap-3 text-sm text-praia-sand-600 hover:text-praia-teal-800 py-2 group transition-colors duration-200">
-                <i data-lucide="book-open" class="w-4 h-4 text-praia-teal-600 group-hover:text-praia-teal-800 transition-colors duration-200"></i>
+              <a href="onde-encontrar.html" class="flex items-center gap-3 text-sm text-praia-sand-600 hover:text-praia-teal-800 py-2 group transition-colors duration-200">
+                <i data-lucide="map-pin" class="w-4 h-4 text-praia-teal-600 group-hover:text-praia-teal-800 transition-colors duration-200"></i>
                 Onde encontrar o guia
               </a>
               <a href="votar.html" class="flex items-center gap-3 text-sm text-praia-sand-600 hover:text-praia-teal-800 py-2 group transition-colors duration-200">
@@ -487,7 +503,7 @@
   <nav class="bottom-nav fixed bottom-0 left-0 right-0 bg-praia-teal-800/95 backdrop-blur-md z-[999] lg:hidden border-t border-white/10">
     <div class="flex items-center justify-around h-16">
       <a href="index.html" class="flex flex-col items-center gap-1 text-white/60"><i data-lucide="home" class="w-5 h-5"></i><span class="font-display text-[10px] uppercase tracking-wider font-semibold">Início</span></a>
-      <a href="mapa.html" class="flex flex-col items-center gap-1 text-white/60"><i data-lucide="map" class="w-5 h-5"></i><span class="font-display text-[10px] uppercase tracking-wider font-semibold">Rede</span></a>
+      <a href="rede.html" class="flex flex-col items-center gap-1 text-white/60"><i data-lucide="map" class="w-5 h-5"></i><span class="font-display text-[10px] uppercase tracking-wider font-semibold">Rede</span></a>
       <a href="votar.html" class="flex flex-col items-center gap-1 text-white/60"><i data-lucide="vote" class="w-5 h-5"></i><span class="font-display text-[10px] uppercase tracking-wider font-semibold">Votar</span></a>
       <a href="passaporte.html" class="flex flex-col items-center gap-1 text-white/60"><i data-lucide="stamp" class="w-5 h-5"></i><span class="font-display text-[10px] uppercase tracking-wider font-semibold">Passaporte</span></a>
       <a href="contactos.html" class="flex flex-col items-center gap-1 text-praia-yellow-400"><i data-lucide="mail" class="w-5 h-5"></i><span class="font-display text-[10px] uppercase tracking-wider font-semibold">Contactos</span></a>

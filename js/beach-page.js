@@ -18,14 +18,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const beach = beaches.find(b => b.id === beachId);
   if (!beach) {
-    mainContent.innerHTML = '<div class="text-center py-20"><h2 class="font-display text-2xl font-bold text-praia-teal-800 mb-4">Praia não encontrada</h2><a href="mapa.html" class="btn-primary inline-flex items-center gap-2 bg-praia-teal-800 text-praia-yellow-400 px-6 py-3 rounded-full font-display font-bold text-sm uppercase tracking-wider">Ver Mapa</a></div>';
+    mainContent.innerHTML = '<div class="text-center py-20"><h2 class="font-display text-2xl font-bold text-praia-teal-800 mb-4">Praia não encontrada</h2><a href="rede.html" class="btn-primary inline-flex items-center gap-2 bg-praia-teal-800 text-praia-yellow-400 px-6 py-3 rounded-full font-display font-bold text-sm uppercase tracking-wider">Ver Mapa</a></div>';
     return;
   }
 
   const mapsUrl = `https://www.google.com/maps?q=${beach.coordinates.lat},${beach.coordinates.lng}`;
   const wazeUrl = `https://waze.com/ul?ll=${beach.coordinates.lat},${beach.coordinates.lng}&navigate=yes`;
 
-  // Keys must match exactly the filter options in mapa.html
+  // Keys must match exactly the filter options in rede.html
   const serviceIcons = {
     blueFlag:    { icon: 'flag',          label: 'Bandeira Azul' },
     goldQuality: { icon: 'award',         label: 'Qualidade de Ouro' },

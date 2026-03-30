@@ -6,7 +6,7 @@ Site moderno para a revista anual "Guia das Praias Fluviais" (200+ praias fluvia
 ## Always Do First
 - **Invoke the `frontend-design` skill** before writing any frontend code, every session, no exceptions.
 - **Invoke the `seo-optimizer` skill** whenever optimizing for SEO.
-- **Adapt `admin.html` / `js/admin.js`** whenever data structures change (new fields, renamed fields, new sections, new service keys, etc.) — the admin panel must always reflect the current data model.
+- **Always update `admin.html` / `js/admin.js`** in the same task as any code change that affects: data structures (new/renamed/removed fields, new JSON files, merged files), navigation links, page URLs, or any section the admin manages. The admin must always be in sync — never leave it outdated.
 
 ## Brand & Design System
 - **Logo:** `brand_assets/logotipo.png` — usar sem alterações

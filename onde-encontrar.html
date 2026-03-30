@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Onde Encontrar o Guia e o Passaporte | Praias Fluviais</title>
+  <meta name="description" content="Mapa completo com todos os pontos de distribuição do Guia e do Passaporte das Praias Fluviais — onde comprar, onde encontrar e onde carimbar.">
+  <meta property="og:title" content="Onde Encontrar o Guia e o Passaporte | Praias Fluviais">
+  <meta property="og:description" content="Mapa completo com todos os pontos de distribuição do Guia e do Passaporte das Praias Fluviais.">
+  <meta property="og:image" content="brand_assets/praias-fluviais.png">
+  <meta property="og:locale" content="pt_PT">
+  <meta property="og:type" content="website">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/shared.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+  <link rel="stylesheet" href="css/shared.css">
+
+  <style>
+    #locations-map {
+      height: 420px;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    @media (min-width: 768px) {
+      #locations-map { height: 520px; }
+    }
+    #locations-map .leaflet-tile-pane {
+      filter: saturate(0.6) brightness(0.9);
+    }
+    .location-card {
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .location-card:hover {
+      transform: translateY(-3px);
+    }
+    .location-card:active {
+      transform: translateY(0);
+    }
+    .district-header::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 20px;
+      border-radius: 2px;
+      background: #FFEB3B;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+    .filter-btn {
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+    .filter-btn:hover {
+      transform: translateY(-1px);
+    }
+    .filter-btn.active {
+      border-color: currentColor;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .filter-btn:focus-visible {
+      outline: 2px solid #FFEB3B;
+      outline-offset: 2px;
+    }
+    .nav-btn {
+      transition: all 0.2s ease;
+    }
+    .nav-btn:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+    .nav-btn:active {
+      transform: translateY(0);
+    }
+    .legend-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2.5px solid rgba(255,255,255,0.4);
+      flex-shrink: 0;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+    }
+    /* Popup styling */
+    .leaflet-popup-content-wrapper {
+      border-radius: 12px !important;
+      box-shadow: 0 8px 24px rgba(0,58,64,0.25) !important;
+      border: 1px solid #e5e1d8 !important;
+      padding: 0 !important;
+      overflow: hidden;
+    }
+    .leaflet-popup-content {
+      margin: 0 !important;
+    }
+    .leaflet-popup-tip-container {
+      margin-top: -1px;
+    }
+  </style>
+</head>
+
+<body class="bg-praia-sand-50 font-body text-praia-sand-900 antialiased">
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:bg-praia-yellow-400 focus:text-praia-teal-800 focus:px-4 focus:py-2 focus:rounded-lg focus:font-display focus:font-semibold">Saltar para o conteúdo</a>
+
+  <!-- Header -->
+  <header id="main-header" class="fixed top-0 left-0 right-0 z-[1000] bg-praia-teal-800/90 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 md:h-[70px]">
+        <a href="index.html"><img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-14 md:h-[58px] w-auto"></a>
+        <nav class="hidden lg:flex items-center gap-1">
+          <a href="index.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Início</a>
+          <a href="rede.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Rede</a>
+          <a href="votar.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Votar</a>
+          <a href="passaporte.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Passaporte</a>
+          <a href="artigos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Artigos</a>
+          <a href="descontos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Descontos</a>
+          <a href="contactos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Contactos</a>
+        </nav>
+        <!-- Social -->
+        <div class="hidden lg:flex items-center gap-1.5 mr-2">
+          <a href="https://www.facebook.com/praiasfluviais" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:bg-praia-yellow-400 hover:text-praia-teal-800 transition-colors duration-300">
+            <i data-lucide="facebook" class="w-4 h-4"></i>
+          </a>
+          <a href="https://www.instagram.com/guiadaspraiasfluviais" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:bg-praia-yellow-400 hover:text-praia-teal-800 transition-colors duration-300">
+            <i data-lucide="instagram" class="w-4 h-4"></i>
+          </a>
+        </div>
+        <a href="onde-encontrar.html" class="hidden md:inline-flex items-center gap-2 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full btn-primary shadow-layered-yellow">
+          <i data-lucide="map-pin" class="w-4 h-4"></i>
+          Onde Encontrar
+        </a>
+        <button id="nav-hamburger" class="lg:hidden text-white p-2" aria-label="Menu"><i data-lucide="menu" class="w-6 h-6"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Menu Overlay -->
+  <div id="menu-overlay" class="fixed inset-0 bg-black/50 z-[1001] opacity-0 pointer-events-none transition-opacity duration-300"></div>
+
+  <!-- Mobile Menu -->
+  <nav id="mobile-menu" class="fixed top-0 right-0 bottom-0 w-72 bg-praia-teal-800 z-[1002] translate-x-full transition-transform duration-300 ease-out flex flex-col">
+    <div class="flex items-center justify-between p-5 border-b border-white/10">
+      <img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-7">
+      <button id="nav-close" class="text-white p-1" aria-label="Fechar menu"><i data-lucide="x" class="w-6 h-6"></i></button>
+    </div>
+    <div class="flex-1 overflow-y-auto py-4">
+      <a href="index.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="home" class="w-5 h-5"></i> Início</a>
+      <a href="rede.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="network" class="w-5 h-5"></i> Rede de Praias</a>
+      <a href="votar.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="vote" class="w-5 h-5"></i> Votar 2026</a>
+      <a href="passaporte.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="stamp" class="w-5 h-5"></i> Passaporte</a>
+      <a href="artigos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="newspaper" class="w-5 h-5"></i> Artigos</a>
+      <a href="onde-encontrar.html" class="flex items-center gap-3 px-6 py-3.5 text-praia-yellow-400 font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="map-pin" class="w-5 h-5"></i> Onde Encontrar</a>
+      <a href="descontos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="percent" class="w-5 h-5"></i> Descontos</a>
+      <a href="contactos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="mail" class="w-5 h-5"></i> Contactos</a>
+    </div>
+    <div class="p-5 border-t border-white/10">
+      <div class="flex gap-2 mb-3">
+        <a href="https://www.facebook.com/praiasfluviais" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="flex-1 flex items-center justify-center gap-1.5 bg-white/10 text-white/70 hover:text-white font-display font-semibold text-xs uppercase tracking-wider py-2.5 rounded-full transition-colors duration-300">
+          <i data-lucide="facebook" class="w-3.5 h-3.5"></i> Facebook
+        </a>
+        <a href="https://www.instagram.com/guiadaspraiasfluviais" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="flex-1 flex items-center justify-center gap-1.5 bg-white/10 text-white/70 hover:text-white font-display font-semibold text-xs uppercase tracking-wider py-2.5 rounded-full transition-colors duration-300">
+          <i data-lucide="instagram" class="w-3.5 h-3.5"></i> Instagram
+        </a>
+      </div>
+      <a href="onde-encontrar.html" class="flex items-center justify-center gap-2 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider px-5 py-3 rounded-full btn-primary w-full">
+        <i data-lucide="map-pin" class="w-4 h-4"></i> Onde Encontrar
+      </a>
+    </div>
+  </nav>
+
+  <main id="main-content" class="pt-16 md:pt-[70px] pb-20 lg:pb-10">
+    <!-- Hero -->
+    <section class="relative py-14 md:py-20 overflow-hidden" style="background: linear-gradient(135deg, #003A40 0%, #002A2E 50%, #005D56 100%);">
+      <div class="noise-overlay absolute inset-0 pointer-events-none"></div>
+      <div class="absolute inset-0" style="background: radial-gradient(ellipse at 20% 50%, rgba(255,235,59,0.07) 0%, transparent 50%), radial-gradient(ellipse at 80% 50%, rgba(2,136,209,0.07) 0%, transparent 50%);"></div>
+      <!-- Bubbles -->
+      <div class="bubble w-1 h-1"     style="left:2%;  top:78%; --delay:0s;   --dur:4s;  --drift:10px;"></div>
+      <div class="bubble w-1.5 h-1.5" style="left:5%;  top:22%; --delay:1.2s; --dur:3s;  --drift:-12px;"></div>
+      <div class="bubble w-1 h-1"     style="left:8%;  top:88%; --delay:2.5s; --dur:5s;  --drift:8px;"></div>
+      <div class="bubble w-1.5 h-1.5" style="left:11%; top:40%; --delay:0.4s; --dur:4s;  --drift:-9px;"></div>
+      <div class="bubble w-1 h-1"     style="left:14%; top:65%; --delay:3s;   --dur:3.5s;--drift:11px;"></div>
+      <div class="bubble w-2 h-2"     style="left:17%; top:12%; --delay:1.8s; --dur:5s;  --drift:-14px;"></div>
+      <div class="bubble w-1 h-1"     style="left:20%; top:55%; --delay:0.7s; --dur:3s;  --drift:7px;"></div>
+      <div class="bubble w-1.5 h-1.5" style="left:23%; top:80%; --delay:4s;   --dur:4.5s;--drift:-10px;"></div>
+      <div class="bubble w-1 h-1"     style="left:32%; top:18%; --delay:3.5s; --dur:3s;  --drift:10px;"></div>
+      <div class="bubble w-2 h-2"     style="left:35%; top:90%; --delay:1.5s; --dur:5s;  --drift:-11px;"></div>
+      <div class="bubble w-1 h-1"     style="left:50%; top:10%; --delay:3.2s; --dur:3.5s;--drift:12px;"></div>
+      <div class="bubble w-2 h-2"     style="left:53%; top:85%; --delay:0.6s; --dur:5s;  --drift:-10px;"></div>
+      <div class="bubble w-1 h-1"     style="left:62%; top:22%; --delay:1.4s; --dur:3.5s;--drift:10px;"></div>
+      <div class="bubble w-2 h-2"     style="left:71%; top:15%; --delay:2.1s; --dur:5s;  --drift:-12px;"></div>
+      <div class="bubble w-1 h-1"     style="left:80%; top:65%; --delay:1.6s; --dur:3s;  --drift:11px;"></div>
+      <div class="bubble w-2 h-2"     style="left:89%; top:48%; --delay:2.6s; --dur:5s;  --drift:-11px;"></div>
+      <div class="bubble w-1.5 h-1.5" style="left:95%; top:70%; --delay:1.9s; --dur:4s;  --drift:-13px;"></div>
+      <div class="bubble-sideways w-1 h-1"     style="left:4%;  top:55%; --delay:1.5s; --dur:4s;  --dx:38px;  --dy:-20px;"></div>
+      <div class="bubble-sideways w-1.5 h-1.5" style="left:13%; top:72%; --delay:3.5s; --dur:5s;  --dx:-42px; --dy:-15px;"></div>
+      <div class="bubble-sideways w-1 h-1"     style="left:37%; top:20%; --delay:2.4s; --dur:4s;  --dx:-40px; --dy:12px;"></div>
+      <div class="bubble-sideways w-1.5 h-1.5" style="left:57%; top:48%; --delay:1s;   --dur:3.5s;--dx:-44px; --dy:-16px;"></div>
+      <div class="bubble-sideways w-1 h-1"     style="left:76%; top:62%; --delay:0.4s; --dur:4.5s;--dx:-38px; --dy:-20px;"></div>
+      <div class="bubble-sideways w-1 h-1"     style="left:94%; top:18%; --delay:2s;   --dur:4s;  --dx:-36px; --dy:14px;"></div>
+
+      <div class="relative z-10 max-w-5xl mx-auto px-6">
+        <div class="flex flex-col md:flex-row items-center gap-8 md:gap-14">
+          <div class="flex-1 text-center md:text-left">
+            <div class="inline-flex items-center gap-2 bg-praia-yellow-400/10 border border-praia-yellow-400/20 rounded-full px-4 py-1.5 mb-5 reveal-on-scroll">
+              <i data-lucide="map-pin" class="w-4 h-4 text-praia-yellow-400"></i>
+              <span class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-semibold">Mapa de Distribuição</span>
+            </div>
+            <h1 class="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tightest leading-tight mb-4 reveal-on-scroll" data-reveal-delay="100">
+              Onde Encontrar<br>
+              <span class="text-praia-yellow-400 italic">o Guia e o Passaporte</span>
+            </h1>
+            <p class="text-white/55 text-base md:text-lg max-w-lg leading-relaxed-plus reveal-on-scroll" data-reveal-delay="200">
+              Consulte o mapa completo com todos os locais onde pode encontrar e carimbar o Guia e o Passaporte das Praias Fluviais de Portugal.
+            </p>
+          </div>
+          <!-- Product image -->
+          <div class="flex-shrink-0 reveal-on-scroll" data-reveal-delay="150">
+            <img src="brand_assets/guia_das_praias.jpg" alt="Guia das Praias Fluviais" class="w-48 md:w-64 h-auto drop-shadow-2xl rounded-lg" loading="lazy">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Map + Legend -->
+    <section class="max-w-5xl mx-auto px-6 py-10 md:py-14">
+
+      <!-- Filter bar -->
+      <div class="mb-6 reveal-on-scroll">
+        <span class="font-display text-xs uppercase tracking-[0.15em] text-praia-teal-500 font-semibold block mb-3">Filtrar por tipo</span>
+        <div id="filter-bar" class="flex flex-wrap gap-2">
+          <button class="filter-btn active font-display text-xs font-bold uppercase tracking-wide px-4 py-2 rounded-full text-praia-teal-800 bg-praia-sand-200" data-filter="all">
+            Todos
+          </button>
+          <!-- Type buttons injected by JS -->
+        </div>
+      </div>
+
+      <!-- Map -->
+      <div class="relative mb-8 reveal-on-scroll" data-reveal-delay="100">
+        <div class="absolute -inset-3 bg-praia-teal-800/5 rounded-3xl blur-xl"></div>
+        <div id="locations-map" class="relative shadow-layered-lg border border-praia-sand-200"></div>
+      </div>
+
+      <!-- Legend -->
+      <div id="map-legend" class="bg-white border border-praia-sand-100 rounded-2xl shadow-layered p-5 reveal-on-scroll" data-reveal-delay="150">
+        <span class="font-display text-xs uppercase tracking-[0.15em] text-praia-teal-500 font-semibold block mb-4">Legenda</span>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" id="legend-items">
+          <!-- Injected by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Locations List -->
+    <section class="max-w-5xl mx-auto px-6 pb-12 md:pb-16">
+      <div class="mb-8">
+        <span class="font-display text-xs uppercase tracking-[0.15em] text-praia-teal-500 font-semibold block mb-2">Lista Completa</span>
+        <h2 class="font-display text-xl md:text-2xl font-bold text-praia-teal-800 tracking-tightest">Todos os Pontos</h2>
+      </div>
+      <div id="locations-list" class="space-y-8">
+        <div class="space-y-4">
+          <div class="skeleton h-6 w-32"></div>
+          <div class="skeleton h-24 w-full rounded-xl"></div>
+          <div class="skeleton h-24 w-full rounded-xl"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Mobile Bottom Nav -->
+  <nav class="bottom-nav fixed bottom-0 left-0 right-0 bg-praia-teal-800/95 backdrop-blur-md z-[999] lg:hidden border-t border-white/10">
+    <div class="flex items-center justify-around h-16">
+      <a href="index.html" class="flex flex-col items-center gap-1 text-white/60"><i data-lucide="home" class="w-5 h-5"></i><span class="font-display text-[10px] uppercase tracking-wider font-semibold">Início</span></a>
+      <a href="rede.html" class="flex flex-col items-center gap-1 text-white/60"><i data-lucide="map" class="w-5 h-5"></i><span class="font-display text-[10px] uppercase tracking-wider font-semibold">Rede</span></a>
+      <a href="votar.html" class="flex flex-col items-center gap-1 text-white/60"><i data-lucide="vote" class="w-5 h-5"></i><span class="font-display text-[10px] uppercase tracking-wider font-semibold">Votar</span></a>
+      <a href="passaporte.html" class="flex flex-col items-center gap-1 text-white/60"><i data-lucide="stamp" class="w-5 h-5"></i><span class="font-display text-[10px] uppercase tracking-wider font-semibold">Passaporte</span></a>
+    </div>
+  </nav>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', async () => {
+
+    // ─── Mobile nav ────────────────────────────────────────────────────────
+    const hamburger = document.getElementById('nav-hamburger');
+    const navClose  = document.getElementById('nav-close');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const overlay    = document.getElementById('menu-overlay');
+    function openMenu()  { mobileMenu.classList.remove('translate-x-full'); overlay.classList.remove('opacity-0','pointer-events-none'); }
+    function closeMenu() { mobileMenu.classList.add('translate-x-full');    overlay.classList.add('opacity-0','pointer-events-none'); }
+    if (hamburger) hamburger.addEventListener('click', openMenu);
+    if (navClose)  navClose.addEventListener('click', closeMenu);
+    if (overlay)   overlay.addEventListener('click', closeMenu);
+
+    // ─── Type definitions ──────────────────────────────────────────────────
+    const TYPES = {
+      'G':     { label: 'Guia',                          color: '#F59E0B', icon: 'book-open',   desc: 'Onde encontrar o Guia' },
+      'P':     { label: 'Passaporte',                    color: '#0288D1', icon: 'credit-card',  desc: 'Onde encontrar o Passaporte' },
+      'C':     { label: 'Carimbo',                       color: '#FF7043', icon: 'stamp',        desc: 'Onde carimbar o Passaporte' },
+      'GP':    { label: 'Guia + Passaporte',             color: '#43A047', icon: 'package',      desc: 'Onde encontrar o Guia e o Passaporte' },
+      'GC':    { label: 'Guia + Carimbo',                color: '#AB47BC', icon: 'book-marked',  desc: 'Onde encontrar o Guia e carimbar o Passaporte' },
+      'PC':    { label: 'Passaporte + Carimbo',          color: '#26C6DA', icon: 'award',        desc: 'Onde encontrar e carimbar o Passaporte' },
+      'GPC':   { label: 'Guia + Passaporte + Carimbo',   color: '#E53935', icon: 'star',         desc: 'Onde encontrar e carimbar o Passaporte e encontrar o Guia' },
+    };
+
+    // Map services array → typeKey (G/P/C in fixed order)
+    function servicesToTypeKey(services) {
+      const has = s => services.includes(s);
+      const g = has('guia'), p = has('passaporte'), c = has('carimbo');
+      return (g ? 'G' : '') + (p ? 'P' : '') + (c ? 'C' : '') || 'G';
+    }
+
+    // ─── Load data ─────────────────────────────────────────────────────────
+    const raw = await fetch('data/locations.json').then(r => r.json());
+    const allLocations = raw.map(loc => ({
+      ...loc,
+      typeKey: servicesToTypeKey(loc.services),
+    }));
+
+    // ─── Map ───────────────────────────────────────────────────────────────
+    const PT_BOUNDS = [[36.8, -9.6], [42.2, -6.1]];
+    const map = L.map('locations-map', {
+      center: [39.5, -8.0],
+      zoom: 6,
+      minZoom: 6,
+      maxZoom: 18,
+      maxBounds: PT_BOUNDS,
+      maxBoundsViscosity: 1.0,
+      zoomControl: true,
+      attributionControl: false,
+    });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18 }).addTo(map);
+
+    const markersLayer = L.layerGroup().addTo(map);
+
+    function makeIcon(color) {
+      return L.divIcon({
+        className: '',
+        html: `<div style="width:16px;height:16px;border-radius:50%;background:${color};border:3px solid #003A40;box-shadow:0 2px 10px rgba(0,0,0,0.35);"></div>`,
+        iconSize: [16, 16],
+        iconAnchor: [8, 8],
+      });
+    }
+
+    function makeNavButtons(lat, lng, name) {
+      const encodedName = encodeURIComponent(name);
+      const gmapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+      const wazeUrl  = `https://waze.com/ul?ll=${lat},${lng}&navigate=yes`;
+      return `
+        <div style="display:flex;gap:6px;margin-top:8px;">
+          <a href="${gmapsUrl}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;padding:5px 10px;border-radius:20px;background:#4285F4;color:white;font-size:11px;font-family:'Poppins',sans-serif;font-weight:600;text-decoration:none;letter-spacing:0.03em;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            Google Maps
+          </a>
+          <a href="${wazeUrl}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;padding:5px 10px;border-radius:20px;background:#05C3FF;color:#1a1a2e;font-size:11px;font-family:'Poppins',sans-serif;font-weight:600;text-decoration:none;letter-spacing:0.03em;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            Waze
+          </a>
+        </div>`;
+    }
+
+    const markerObjects = [];
+
+    allLocations.forEach(loc => {
+      const typeInfo = TYPES[loc.typeKey] || TYPES['G'];
+      const SERVICE_LABEL = { guia: 'Guia', passaporte: 'Passaporte', carimbo: 'Carimbo' };
+      const servicesBadges = loc.services.map(s => {
+        const label = SERVICE_LABEL[s] || s;
+        return `<span style="display:inline-block;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;font-family:'Poppins',sans-serif;text-transform:uppercase;letter-spacing:0.04em;background:${typeInfo.color}22;color:${typeInfo.color};border:1px solid ${typeInfo.color}44;">${label}</span>`;
+      }).join(' ');
+
+      const popupHTML = `
+        <div style="padding:14px 16px;min-width:220px;font-family:'Open Sans',sans-serif;">
+          <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:13px;color:#003A40;margin-bottom:4px;">${loc.name}</div>
+          <div style="color:#8A7D60;font-size:11px;margin-bottom:6px;line-height:1.4;">${loc.address}</div>
+          <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:4px;">${servicesBadges}</div>
+          ${loc.phone ? `<div style="font-size:11px;color:#0288D1;font-weight:600;margin-top:4px;">${loc.phone}</div>` : ''}
+          ${makeNavButtons(loc.coordinates.lat, loc.coordinates.lng, loc.name)}
+        </div>`;
+
+      const marker = L.marker([loc.coordinates.lat, loc.coordinates.lng], { icon: makeIcon(typeInfo.color) })
+        .addTo(markersLayer)
+        .bindPopup(popupHTML, { maxWidth: 280 });
+
+      markerObjects.push({ marker, typeKey: loc.typeKey });
+    });
+
+    // ─── Legend ────────────────────────────────────────────────────────────
+    const legendEl = document.getElementById('legend-items');
+    let legendHTML = '';
+    Object.entries(TYPES).forEach(([key, info]) => {
+      const count = allLocations.filter(l => l.typeKey === key).length;
+      if (count === 0) return;
+      legendHTML += `
+        <div class="flex items-start gap-2.5">
+          <span class="legend-dot mt-0.5" style="background:${info.color};"></span>
+          <div>
+            <div class="font-display text-xs font-bold text-praia-teal-800">${info.label}</div>
+            <div class="text-xs text-praia-sand-500 leading-snug">${info.desc}</div>
+          </div>
+        </div>`;
+    });
+    legendEl.innerHTML = legendHTML;
+
+    // ─── Filter bar ────────────────────────────────────────────────────────
+    const filterBar = document.getElementById('filter-bar');
+    let activeFilter = 'all';
+
+    Object.entries(TYPES).forEach(([key, info]) => {
+      const count = allLocations.filter(l => l.typeKey === key).length;
+      if (count === 0) return;
+      const btn = document.createElement('button');
+      btn.className = 'filter-btn font-display text-xs font-bold uppercase tracking-wide px-4 py-2 rounded-full text-white';
+      btn.dataset.filter = key;
+      btn.style.background = info.color;
+      btn.style.color = ['G','P'].includes(key) ? '#003A40' : 'white';
+      btn.textContent = `${info.label} (${count})`;
+      filterBar.appendChild(btn);
+    });
+
+    filterBar.addEventListener('click', e => {
+      const btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+      activeFilter = btn.dataset.filter;
+      filterBar.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      // Update map markers
+      markersLayer.clearLayers();
+      markerObjects.forEach(({ marker, typeKey }) => {
+        if (activeFilter === 'all' || typeKey === activeFilter) {
+          markersLayer.addLayer(marker);
+        }
+      });
+
+      // Update list visibility
+      document.querySelectorAll('.loc-card').forEach(card => {
+        const show = activeFilter === 'all' || card.dataset.typeKey === activeFilter;
+        card.style.display = show ? '' : 'none';
+      });
+
+      // Hide empty district sections
+      document.querySelectorAll('.district-section').forEach(section => {
+        const visibleCards = section.querySelectorAll('.loc-card:not([style*="display: none"]):not([style*="display:none"])');
+        section.style.display = visibleCards.length > 0 ? '' : 'none';
+      });
+    });
+
+    // ─── Location list ─────────────────────────────────────────────────────
+    const grouped = {};
+    allLocations.forEach(loc => {
+      if (!grouped[loc.district]) grouped[loc.district] = [];
+      grouped[loc.district].push(loc);
+    });
+
+    const listEl = document.getElementById('locations-list');
+    let html = '';
+    const districts = Object.keys(grouped).sort();
+
+    districts.forEach(district => {
+      html += `<div class="district-section">
+        <h3 class="district-header font-display text-lg font-bold text-praia-teal-800 mb-4">${district}</h3>
+        <div class="grid gap-4 sm:grid-cols-2">`;
+
+      grouped[district].forEach(loc => {
+        const typeInfo = TYPES[loc.typeKey] || TYPES['G'];
+        const gmapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${loc.coordinates.lat},${loc.coordinates.lng}`;
+        const wazeUrl  = `https://waze.com/ul?ll=${loc.coordinates.lat},${loc.coordinates.lng}&navigate=yes`;
+        const SVC_LABEL = { guia: 'Guia', passaporte: 'Passaporte', carimbo: 'Carimbo' };
+        const serviceBadges = loc.services.map(s =>
+          `<span class="inline-block text-[10px] font-display font-bold uppercase tracking-wide px-2 py-0.5 rounded-full" style="background:${typeInfo.color}22;color:${typeInfo.color};border:1px solid ${typeInfo.color}44;">${SVC_LABEL[s] || s}</span>`
+        ).join('');
+
+        html += `<div class="loc-card location-card bg-white rounded-xl border border-praia-sand-100 shadow-layered p-5" data-type-key="${loc.typeKey}">
+          <div class="flex items-start gap-3">
+            <div class="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style="background:${typeInfo.color}18;">
+              <i data-lucide="${typeInfo.icon}" class="w-5 h-5" style="color:${typeInfo.color};"></i>
+            </div>
+            <div class="min-w-0 flex-1">
+              <div class="font-display text-sm font-bold text-praia-teal-800 mb-1">${loc.name}</div>
+              <div class="text-xs text-praia-sand-600 leading-relaxed mb-2">${loc.address}</div>
+              <div class="flex flex-wrap gap-1 mb-3">${serviceBadges}</div>
+              ${loc.phone ? `<div class="text-xs text-praia-blue-600 font-semibold mb-3"><i data-lucide="phone" class="w-3 h-3 inline mr-1"></i>${loc.phone}</div>` : ''}
+              <!-- Navigation buttons -->
+              <div class="flex flex-wrap gap-2">
+                <a href="${gmapsUrl}" target="_blank" rel="noopener"
+                   class="nav-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-white text-xs font-display font-bold uppercase tracking-wide"
+                   style="background:#4285F4;" aria-label="Abrir no Google Maps">
+                  <svg class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                  Google Maps
+                </a>
+                <a href="${wazeUrl}" target="_blank" rel="noopener"
+                   class="nav-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-display font-bold uppercase tracking-wide"
+                   style="background:#05C3FF;color:#1a1a2e;" aria-label="Abrir no Waze">
+                  <svg class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                  Waze
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>`;
+      });
+
+      html += `</div></div>`;
+    });
+
+    listEl.innerHTML = html;
+    lucide.createIcons();
+  });
+  </script>
+</body>
+</html>

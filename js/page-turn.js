@@ -222,6 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ─── 4. Section Labels Slide-In ───
   const sectionLabels = document.querySelectorAll('.section-label');
   sectionLabels.forEach((label) => {
+    label.classList.remove('reveal-on-scroll');
     gsap.set(label, { opacity: 0, x: -30, letterSpacing: '0.4em' });
     ScrollTrigger.create({
       trigger: label,
@@ -241,14 +242,15 @@ document.addEventListener('DOMContentLoaded', () => {
   sectionHeaders.forEach((h2) => {
     if (h2.closest('#page-hero')) return;
 
-    gsap.set(h2, { opacity: 0, y: 50, skewY: 3 });
+    h2.classList.remove('reveal-on-scroll');
+    gsap.set(h2, { opacity: 0, y: 40 });
     ScrollTrigger.create({
       trigger: h2,
       start: 'top 85%',
       once: true,
       onEnter: () => {
         gsap.to(h2, {
-          opacity: 1, y: 0, skewY: 0,
+          opacity: 1, y: 0,
           duration: 0.9, ease: 'power3.out',
         });
       }
@@ -699,6 +701,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const sectionParagraphs = document.querySelectorAll('.magazine-page p.text-white\\/60, .magazine-page p.text-sm');
   sectionParagraphs.forEach((p) => {
     if (p.closest('#page-hero') || p.closest('.cards-scroll') || p.closest('footer')) return;
+    p.classList.remove('reveal-on-scroll');
     gsap.set(p, { opacity: 0, y: 20 });
     ScrollTrigger.create({
       trigger: p,
