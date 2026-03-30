@@ -2,7 +2,8 @@
 document.addEventListener('DOMContentLoaded', async () => {
   const grid = document.getElementById('voting-grid');
   const searchInput = document.getElementById('vote-search');
-  const regionSelect = document.getElementById('vote-region');
+  const districtSelect = document.getElementById('vote-district');
+  const sortSelect = document.getElementById('vote-sort');
   const nearMeBtn = document.getElementById('vote-near-me');
   const countEl = document.getElementById('vote-count');
   if (!grid) return;
@@ -27,6 +28,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     return;
   }
 
+  // Populate districts dynamically
+  if (districtSelect) {
+    const districts = [...new Set(beaches.map(b => b.district).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'pt'));
+    districts.forEach(d => {
+      const opt = document.createElement('option');
+      opt.value = d;
+      opt.textContent = d;
+      districtSelect.appendChild(opt);
+    });
+  }
+
   // Check if preselected
   const preselect = new URLSearchParams(window.location.search).get('preselect');
 
@@ -35,13 +47,25 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   let currentBeaches = [...beaches];
 
+  function applySort(list) {
+    const sort = sortSelect?.value || 'az-nome';
+    if (sort === 'az-nome') {
+      return [...list].sort((a, b) => a.name.localeCompare(b.name, 'pt'));
+    } else if (sort === 'az-concelho') {
+      return [...list].sort((a, b) => a.municipality.localeCompare(b.municipality, 'pt'));
+    }
+    return list;
+  }
+
   function renderCards(list) {
-    if (list.length === 0) {
+    const sorted = applySort(list);
+
+    if (sorted.length === 0) {
       grid.innerHTML = '<p class="col-span-full text-center text-praia-sand-500 py-10">Nenhuma praia encontrada.</p>';
       return;
     }
 
-    grid.innerHTML = list.map(b => {
+    grid.innerHTML = sorted.map(b => {
       const isVoted = existingVote && existingVote.beachId === b.id;
       const badgesHtml = [];
       if (b.services.blueFlag) badgesHtml.push('<span class="badge badge-blue-flag text-[10px]">Bandeira Azul</span>');
@@ -49,14 +73,21 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       return `
         <div class="card-interactive rounded-2xl overflow-hidden bg-white shadow-layered group ${isVoted ? 'ring-2 ring-praia-yellow-400' : ''}">
-          <div class="relative h-44 overflow-hidden">
+          <a href="praia.html?id=${b.id}" class="block relative h-44 overflow-hidden" aria-label="Ver página de ${b.name}">
             <img src="${b.photos[0]}" alt="${b.name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
             <div class="absolute inset-0 bg-gradient-to-t from-praia-teal-800/60 via-transparent to-transparent"></div>
             ${badgesHtml.length ? `<div class="absolute top-3 left-3 flex gap-1.5">${badgesHtml.join('')}</div>` : ''}
             ${isVoted ? '<div class="absolute top-3 right-3 bg-praia-yellow-400 text-praia-teal-800 rounded-full p-1.5"><i data-lucide="check" class="w-4 h-4"></i></div>' : ''}
-          </div>
+            <div class="absolute bottom-0 left-0 right-0 px-3 pb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <span class="inline-flex items-center gap-1 text-white font-display text-[10px] font-semibold uppercase tracking-wider">
+                <i data-lucide="external-link" class="w-3 h-3"></i> Ver Praia
+              </span>
+            </div>
+          </a>
           <div class="p-4">
-            <h3 class="font-display text-sm font-bold text-praia-teal-800 leading-snug mb-1">${b.name}</h3>
+            <a href="praia.html?id=${b.id}" class="block hover:text-praia-teal-600 transition-colors duration-300">
+              <h3 class="font-display text-sm font-bold text-praia-teal-800 leading-snug mb-1">${b.name}</h3>
+            </a>
             <p class="text-xs text-praia-sand-500 mb-4">${b.municipality} · ${b.river}</p>
             ${isVoted
               ? '<div class="text-center py-2 bg-praia-yellow-400/10 rounded-lg"><span class="font-display text-xs font-bold text-praia-yellow-700 uppercase tracking-wider">O Seu Voto</span></div>'
@@ -69,17 +100,17 @@ document.addEventListener('DOMContentLoaded', async () => {
       `;
     }).join('');
 
-    if (countEl) countEl.textContent = `${list.length} praias`;
+    if (countEl) countEl.textContent = `${sorted.length} praias`;
     lucide.createIcons();
   }
 
   function filterBeaches() {
     const search = (searchInput?.value || '').toLowerCase().trim();
-    const region = regionSelect?.value || '';
+    const district = districtSelect?.value || '';
 
     currentBeaches = beaches.filter(b => {
       if (search && !b.name.toLowerCase().includes(search) && !b.municipality.toLowerCase().includes(search)) return false;
-      if (region && b.region !== region) return false;
+      if (district && b.district !== district) return false;
       return true;
     });
 
@@ -87,7 +118,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   searchInput?.addEventListener('input', filterBeaches);
-  regionSelect?.addEventListener('change', filterBeaches);
+  districtSelect?.addEventListener('change', filterBeaches);
+  sortSelect?.addEventListener('change', () => renderCards(currentBeaches));
 
   nearMeBtn?.addEventListener('click', async () => {
     nearMeBtn.disabled = true;
@@ -105,7 +137,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // Initial render
+  // Initial render (sorted A-Z by name)
   renderCards(beaches);
 
   // If preselected, open modal

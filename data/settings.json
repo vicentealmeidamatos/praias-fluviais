@@ -12,8 +12,11 @@
     "website": "https://praiasfluviais.pt"
   },
   "previousWinners": [
-    { "year": 2025, "name": "Zona de Fruição Ribeirinha da Carriça", "municipality": "Oliveira de Frades", "votes": null },
-    { "year": 2024, "name": "Praia Fluvial de Avô", "municipality": "Oliveira do Hospital", "votes": 7175 },
-    { "year": 2023, "name": "Praia Fluvial do Vimieiro", "municipality": "Penacova", "votes": 7357 }
+    { "year": 2025, "name": "Zona de Fruição Ribeirinha da Carriça", "municipality": "Oliveira de Frades", "district": "Viseu", "votes": null, "beachId": "praia-fluvial-da-carrica" },
+    { "year": 2024, "name": "Praia Fluvial de Avô", "municipality": "Oliveira do Hospital", "district": "Coimbra", "votes": 7175, "beachId": "praia-fluvial-de-avo" },
+    { "year": 2023, "name": "Praia Fluvial do Vimieiro", "municipality": "Penacova", "district": "Coimbra", "votes": 7357, "beachId": "praia-fluvial-do-vimieiro" },
+    { "year": 2022, "name": "Quinta da Taberna – Videmonte", "municipality": "Guarda", "district": "Guarda", "votes": null, "beachId": null },
+    { "year": 2021, "name": "Praia Fluvial Santa Luzia", "municipality": "Pampilhosa da Serra", "district": "Coimbra", "votes": null, "beachId": null },
+    { "year": 2020, "name": "Praia Fluvial Santa Luzia", "municipality": "Pampilhosa da Serra", "district": "Coimbra", "votes": null, "beachId": null }
   ]
 }
