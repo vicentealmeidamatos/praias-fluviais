@@ -72,8 +72,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (b.services.accessible) badgesHtml.push('<span class="badge badge-accessible text-[10px]">Acessível</span>');
 
       return `
-        <div class="card-interactive rounded-2xl overflow-hidden bg-white shadow-layered group ${isVoted ? 'ring-2 ring-praia-yellow-400' : ''}">
-          <a href="praia.html?id=${b.id}" class="block relative h-44 overflow-hidden" aria-label="Ver página de ${b.name}">
+        <div class="card-interactive rounded-2xl overflow-hidden bg-white shadow-layered group flex flex-col h-full ${isVoted ? 'ring-2 ring-praia-yellow-400' : ''}">
+          <a href="praia.html?id=${b.id}" class="block relative h-44 overflow-hidden shrink-0" aria-label="Ver página de ${b.name}">
             <img src="${b.photos[0]}" alt="${b.name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
             <div class="absolute inset-0 bg-gradient-to-t from-praia-teal-800/60 via-transparent to-transparent"></div>
             ${badgesHtml.length ? `<div class="absolute top-3 left-3 flex gap-1.5">${badgesHtml.join('')}</div>` : ''}
@@ -84,14 +84,14 @@ document.addEventListener('DOMContentLoaded', async () => {
               </span>
             </div>
           </a>
-          <div class="p-4">
+          <div class="p-4 flex flex-col flex-1">
             <a href="praia.html?id=${b.id}" class="block hover:text-praia-teal-600 transition-colors duration-300">
-              <h3 class="font-display text-sm font-bold text-praia-teal-800 leading-snug mb-1">${b.name}</h3>
+              <h3 class="font-display text-base font-bold text-praia-teal-800 leading-snug mb-1">${b.name}</h3>
             </a>
-            <p class="text-xs text-praia-sand-500 mb-4">${b.municipality} · ${b.river}</p>
+            <p class="text-xs text-praia-sand-500 mb-4 flex-1">${b.municipality} · ${b.river}</p>
             ${isVoted
-              ? '<div class="text-center py-2 bg-praia-yellow-400/10 rounded-lg"><span class="font-display text-xs font-bold text-praia-yellow-700 uppercase tracking-wider">O Seu Voto</span></div>'
-              : `<button onclick="openVoteModal('${b.id}', '${b.name.replace(/'/g, "\\'")}')" class="btn-primary w-full flex items-center justify-center gap-2 bg-praia-teal-800 text-praia-yellow-400 font-display text-xs font-bold uppercase tracking-wider px-4 py-2.5 rounded-xl">
+              ? '<div class="text-center py-2 bg-praia-yellow-400/10 rounded-lg mt-auto"><span class="font-display text-xs font-bold text-praia-yellow-700 uppercase tracking-wider">O Seu Voto</span></div>'
+              : `<button onclick="openVoteModal('${b.id}', '${b.name.replace(/'/g, "\\'")}')" class="btn-primary w-full flex items-center justify-center gap-2 bg-praia-teal-800 text-praia-yellow-400 font-display text-xs font-bold uppercase tracking-wider px-4 py-2.5 rounded-xl mt-auto">
                   <i data-lucide="heart" class="w-4 h-4"></i> Votar
                 </button>`
             }

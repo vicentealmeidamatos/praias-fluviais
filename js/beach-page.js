@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       <section class="mb-12 bg-praia-teal-800 rounded-2xl p-8 md:p-10 text-center noise-overlay relative overflow-hidden">
         <div class="relative z-10">
           <i data-lucide="trophy" class="w-10 h-10 text-praia-yellow-400 mx-auto mb-4"></i>
-          <h2 class="font-display text-xl md:text-2xl font-bold text-white mb-3">Vote nesta praia para Praia do Ano 2026</h2>
+          <h2 class="font-display text-xl md:text-2xl font-bold text-white mb-3">Vote nesta praia fluvial para Praia do Ano 2026</h2>
           <p class="text-white/50 text-sm mb-6">Ajude ${beach.name} a ganhar o galardão Praia Fluvial do Ano!</p>
           <a href="votar.html?preselect=${beach.id}" class="btn-primary inline-flex items-center gap-2 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider px-8 py-4 rounded-full shadow-layered-yellow">
             <i data-lucide="vote" class="w-5 h-5"></i> Votar Agora

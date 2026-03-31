@@ -37,15 +37,17 @@
     .filter-panel { scrollbar-width: thin; scrollbar-color: #C4B898 transparent; }
 
     .service-chip {
-      display: flex; align-items: center; gap: 5px; padding: 5px 8px;
+      display: flex; align-items: center; justify-content: flex-start; gap: 5px; padding: 5px 8px;
       border-radius: 8px; border: 1.5px solid #E2D9C6; cursor: pointer;
-      font-family: 'Poppins', sans-serif; font-size: 11px; font-weight: 600;
+      font-family: 'Poppins', sans-serif; font-size: 10px; font-weight: 600;
       color: #5A4E3C; transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-      user-select: none; background: #FAF8F5;
+      user-select: none; background: #FAF8F5; width: 100%; text-align: left;
+      min-height: 30px;
     }
     .service-chip:hover { border-color: #003A40; color: #003A40; background: #EEF5F5; }
     .service-chip.active { background: #003A40; color: #FFEB3B; border-color: #003A40; }
     .service-chip svg { width: 11px; height: 11px; flex-shrink: 0; }
+    .service-chip span { white-space: nowrap; }
 
     .type-btn {
       font-family: 'Poppins', sans-serif; font-size: 10px; font-weight: 700;
@@ -103,7 +105,7 @@
           <a href="rede.html" class="nav-link active font-display text-xs font-semibold uppercase tracking-wider text-white px-3 py-2">Rede</a>
           <a href="votar.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Votar</a>
           <a href="passaporte.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Passaporte</a>
-          <a href="artigos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Artigos</a>
+          <a href="artigos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Novidades</a>
           <a href="descontos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Descontos</a>
           <a href="contactos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Contactos</a>
         </nav>
@@ -141,7 +143,7 @@
       <a href="rede.html" class="flex items-center gap-3 px-6 py-3.5 text-praia-yellow-400 font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="network" class="w-5 h-5"></i> Rede de Praias</a>
       <a href="votar.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="vote" class="w-5 h-5"></i> Votar 2026</a>
       <a href="passaporte.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="stamp" class="w-5 h-5"></i> Passaporte</a>
-      <a href="artigos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="newspaper" class="w-5 h-5"></i> Artigos</a>
+      <a href="artigos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="newspaper" class="w-5 h-5"></i> Novidades</a>
       <a href="onde-encontrar.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="map-pin" class="w-5 h-5"></i> Onde Encontrar</a>
       <a href="descontos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="percent" class="w-5 h-5"></i> Descontos</a>
       <a href="contactos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="mail" class="w-5 h-5"></i> Contactos</a>
@@ -186,11 +188,11 @@
 
       <!-- Type Toggle -->
       <div class="p-4 border-b border-praia-sand-100 flex-shrink-0">
-        <p class="font-display text-[10px] font-semibold uppercase tracking-[0.12em] text-praia-teal-700 mb-2">Tipo de Praia</p>
+        <p class="font-display text-[10px] font-semibold uppercase tracking-[0.12em] text-praia-teal-700 mb-2">Tipo</p>
         <div class="flex rounded-xl overflow-hidden border border-praia-sand-200 bg-praia-sand-50">
           <button class="type-btn active" data-type="">Todas</button>
-          <button class="type-btn border-l border-praia-sand-200" data-type="praia_fluvial">Fluviais</button>
-          <button class="type-btn border-l border-praia-sand-200" data-type="zona_balnear">Balneares</button>
+          <button class="type-btn border-l border-praia-sand-200" data-type="praia_fluvial">Praias Fluviais</button>
+          <button class="type-btn border-l border-praia-sand-200" data-type="zona_balnear">Zonas Balneares</button>
         </div>
       </div>
 
@@ -249,7 +251,7 @@
         <div class="space-y-2">
           <div class="flex items-center gap-2.5">
             <div class="w-6 h-6 rounded-full bg-praia-yellow-400 border-2 border-praia-teal-800 flex-shrink-0 flex items-center justify-center font-display font-bold text-[9px] text-praia-teal-800">1</div>
-            <span class="text-xs text-praia-sand-600">Praia Fluvial (reconhecida oficialmente)</span>
+            <span class="text-xs text-praia-sand-600">Praia Fluvial (classificada pela APA)</span>
           </div>
           <div class="flex items-center gap-2.5">
             <div class="w-6 h-6 rounded-full bg-praia-teal-800 border-2 border-praia-yellow-400 flex-shrink-0 flex items-center justify-center font-display font-bold text-[9px] text-praia-yellow-400">2</div>
@@ -294,11 +296,11 @@
         </div>
       </div>
       <div class="p-4 border-b border-praia-sand-100">
-        <p class="font-display text-[10px] font-semibold uppercase tracking-[0.12em] text-praia-teal-700 mb-2">Tipo de Praia</p>
+        <p class="font-display text-[10px] font-semibold uppercase tracking-[0.12em] text-praia-teal-700 mb-2">Tipo</p>
         <div class="flex rounded-xl overflow-hidden border border-praia-sand-200 bg-praia-sand-50">
           <button class="type-btn active" data-type="">Todas</button>
-          <button class="type-btn border-l border-praia-sand-200" data-type="praia_fluvial">Fluviais</button>
-          <button class="type-btn border-l border-praia-sand-200" data-type="zona_balnear">Balneares</button>
+          <button class="type-btn border-l border-praia-sand-200" data-type="praia_fluvial">Praias Fluviais</button>
+          <button class="type-btn border-l border-praia-sand-200" data-type="zona_balnear">Zonas Balneares</button>
         </div>
       </div>
       <div class="p-4 border-b border-praia-sand-100">

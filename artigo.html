@@ -86,7 +86,7 @@
           <a href="rede.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Rede</a>
           <a href="votar.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Votar</a>
           <a href="passaporte.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Passaporte</a>
-          <a href="artigos.html" class="nav-link active font-display text-xs font-semibold uppercase tracking-wider text-white px-3 py-2">Artigos</a>
+          <a href="artigos.html" class="nav-link active font-display text-xs font-semibold uppercase tracking-wider text-white px-3 py-2">Novidades</a>
           <a href="descontos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Descontos</a>
           <a href="contactos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Contactos</a>
         </nav>
@@ -122,7 +122,7 @@
       <a href="rede.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="network" class="w-5 h-5"></i> Rede de Praias</a>
       <a href="votar.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="vote" class="w-5 h-5"></i> Votar 2026</a>
       <a href="passaporte.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="stamp" class="w-5 h-5"></i> Passaporte</a>
-      <a href="artigos.html" class="flex items-center gap-3 px-6 py-3.5 text-praia-yellow-400 font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="newspaper" class="w-5 h-5"></i> Artigos</a>
+      <a href="artigos.html" class="flex items-center gap-3 px-6 py-3.5 text-praia-yellow-400 font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="newspaper" class="w-5 h-5"></i> Novidades</a>
       <a href="onde-encontrar.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="map-pin" class="w-5 h-5"></i> Onde Encontrar</a>
       <a href="descontos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="percent" class="w-5 h-5"></i> Descontos</a>
       <a href="contactos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="mail" class="w-5 h-5"></i> Contactos</a>
@@ -160,7 +160,7 @@
     <section id="related-section" class="hidden border-t border-praia-sand-200 bg-white">
       <div class="max-w-5xl mx-auto px-6 py-12 md:py-16">
         <span class="font-display text-xs uppercase tracking-[0.15em] text-praia-teal-500 font-semibold block mb-2 reveal-on-scroll">Leia Também</span>
-        <h2 class="font-display text-xl md:text-2xl font-bold text-praia-teal-800 tracking-tightest mb-8 reveal-on-scroll" data-reveal-delay="100">Artigos Relacionados</h2>
+        <h2 class="font-display text-xl md:text-2xl font-bold text-praia-teal-800 tracking-tight mb-8 reveal-on-scroll" data-reveal-delay="100">Novidades Relacionadas</h2>
         <div id="related-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
       </div>
     </section>
@@ -197,7 +197,7 @@
             <h1 class="font-display text-2xl font-bold text-praia-teal-800 mb-3">Artigo não encontrado</h1>
             <p class="text-praia-sand-500 mb-6">O artigo que procura não existe ou foi removido.</p>
             <a href="artigos.html" class="btn-primary inline-flex items-center gap-2 bg-praia-teal-800 text-praia-yellow-400 font-display font-bold text-sm uppercase tracking-wider px-6 py-3 rounded-full">
-              <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar aos Artigos
+              <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar às Novidades
             </a>
           </div>`;
         lucide.createIcons();
@@ -228,7 +228,7 @@
           <div class="absolute bottom-0 left-0 right-0 z-10 p-6 md:p-10">
             <div class="max-w-3xl mx-auto">
               <a href="artigos.html" class="inline-flex items-center gap-1 text-white/60 text-xs font-display font-semibold uppercase tracking-wider mb-3 hover:text-white" style="transition: color 0.25s;">
-                <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> Artigos
+                <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> Novidades
               </a>
             </div>
           </div>
@@ -240,7 +240,7 @@
             <span class="cat-badge cat-${article.category}">${categoryLabels[article.category] || article.category}</span>
             <span class="text-sm text-praia-sand-400">${formatDate(article.date)}</span>
           </div>
-          <h1 class="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-praia-teal-800 tracking-tightest leading-tight mb-8">
+          <h1 class="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-praia-teal-800 tracking-tight leading-tight mb-8">
             ${article.title}
           </h1>
           <div class="article-content font-body text-base">
