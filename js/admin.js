@@ -685,6 +685,8 @@ const GUIA_TYPE_LABELS = { guia: 'Só Guia', guia_passaporte: 'Guia + Passaporte
 function renderLocationsGuia(container) {
   const section = 'locations-guia';
   const items = state.data[section] || [];
+  const guiaCount = items.filter(l => l.type === 'guia').length;
+  const gpCount   = items.filter(l => l.type === 'guia_passaporte').length;
 
   container.innerHTML = `
     <div class="p-6">
@@ -696,7 +698,18 @@ function renderLocationsGuia(container) {
           <button onclick="editLocationGuia(null)" class="admin-btn admin-btn-primary">+ Adicionar</button>
         </div>
       </div>
-      <p class="text-xs text-praia-sand-500 mt-1 mb-6">Locais onde se pode encontrar o Guia (com ou sem Passaporte). Página: <a href="../onde-encontrar.html" target="_blank" class="text-praia-teal-600 underline">Onde Encontrar</a>.</p>
+      <p class="text-xs text-praia-sand-500 mt-1 mb-4">Locais onde se pode encontrar o Guia (com ou sem Passaporte). Página: <a href="../onde-encontrar.html" target="_blank" class="text-praia-teal-600 underline">Onde Encontrar</a>.</p>
+      <div class="flex gap-3 mb-4">
+        <input type="text" id="guia-search" placeholder="Pesquisar por nome ou concelho…"
+          class="flex-1 px-4 py-2 text-sm border border-praia-sand-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-praia-teal-300"
+          oninput="filterLocationsGuia()">
+        <select id="guia-type-filter" onchange="filterLocationsGuia()"
+          class="px-3 py-2 text-sm border border-praia-sand-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-praia-teal-300">
+          <option value="">Todos os tipos (${items.length})</option>
+          <option value="guia_passaporte">Guia + Passaporte (${gpCount})</option>
+          <option value="guia">Só Guia (${guiaCount})</option>
+        </select>
+      </div>
       <div class="bg-white rounded-xl shadow-layered overflow-hidden">
         <table class="admin-table w-full text-sm">
           <thead><tr class="text-left">
@@ -705,13 +718,13 @@ function renderLocationsGuia(container) {
             <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700">Tipo</th>
             <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700 text-right">Ações</th>
           </tr></thead>
-          <tbody>
+          <tbody id="guia-tbody">
             ${items.map((l, i) => {
               const color = GUIA_TYPE_COLORS[l.type] || '#F59E0B';
               const label = GUIA_TYPE_LABELS[l.type] || l.type;
               const badge = `<span style="display:inline-block;padding:1px 7px;border-radius:10px;font-size:10px;font-weight:700;font-family:'Poppins',sans-serif;background:${color}22;color:${color};border:1px solid ${color}44;">${label}</span>`;
               return `
-              <tr class="border-t border-praia-sand-100 hover:bg-praia-sand-50">
+              <tr class="border-t border-praia-sand-100 hover:bg-praia-sand-50" data-name="${escHtml(l.name.toLowerCase())}" data-municipality="${escHtml(l.municipality.toLowerCase())}" data-type="${l.type}">
                 <td class="px-4 py-3 font-semibold text-praia-teal-800">${escHtml(l.name)}</td>
                 <td class="px-4 py-3 text-praia-sand-600">${escHtml(l.municipality)}</td>
                 <td class="px-4 py-3">${badge}</td>
@@ -723,8 +736,26 @@ function renderLocationsGuia(container) {
             }).join('')}
           </tbody>
         </table>
+        <div id="guia-empty" class="hidden text-center py-10 text-praia-sand-400 text-sm">Nenhum resultado encontrado.</div>
       </div>
     </div>`;
+}
+
+function filterLocationsGuia() {
+  const q     = (document.getElementById('guia-search')?.value || '').toLowerCase();
+  const type  = document.getElementById('guia-type-filter')?.value || '';
+  const rows  = document.querySelectorAll('#guia-tbody tr');
+  let visible = 0;
+  rows.forEach(row => {
+    const nameMatch  = row.dataset.name?.includes(q);
+    const munMatch   = row.dataset.municipality?.includes(q);
+    const typeMatch  = !type || row.dataset.type === type;
+    const show = (nameMatch || munMatch) && typeMatch;
+    row.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+  const empty = document.getElementById('guia-empty');
+  if (empty) empty.classList.toggle('hidden', visible > 0);
 }
 
 function editLocationGuia(index) {
@@ -798,36 +829,67 @@ function renderLocationsPassaporte(container) {
           <button onclick="editLocationPassaporte(null)" class="admin-btn admin-btn-primary">+ Adicionar</button>
         </div>
       </div>
-      <p class="text-xs text-praia-sand-500 mt-1 mb-6">Locais onde se pode carimbar o Passaporte. Página: <a href="../onde-carimbar-passaporte.html" target="_blank" class="text-praia-teal-600 underline">Onde Carimbar</a>.</p>
+      <p class="text-xs text-praia-sand-500 mt-1 mb-4">Locais onde se pode carimbar o Passaporte. Página: <a href="../onde-carimbar-passaporte.html" target="_blank" class="text-praia-teal-600 underline">Onde Carimbar</a>.</p>
+      <div class="mb-4">
+        <input type="text" id="passaporte-search" placeholder="Pesquisar por nome, concelho ou praia…"
+          class="w-full px-4 py-2 text-sm border border-praia-sand-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-praia-teal-300"
+          oninput="filterLocationsPassaporte()">
+      </div>
       <div class="bg-white rounded-xl shadow-layered overflow-hidden">
         <table class="admin-table w-full text-sm">
           <thead><tr class="text-left">
             <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700">Nome</th>
             <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700">Concelho</th>
+            <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700">Praias</th>
             <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700 text-right">Ações</th>
           </tr></thead>
-          <tbody>
-            ${items.map((l, i) => `
-              <tr class="border-t border-praia-sand-100 hover:bg-praia-sand-50">
+          <tbody id="passaporte-tbody">
+            ${items.map((l, i) => {
+              const beachesStr = (l.beaches || []).join(' ').toLowerCase();
+              return `
+              <tr class="border-t border-praia-sand-100 hover:bg-praia-sand-50"
+                data-name="${escHtml(l.name.toLowerCase())}"
+                data-municipality="${escHtml(l.municipality.toLowerCase())}"
+                data-beaches="${escHtml(beachesStr)}">
                 <td class="px-4 py-3 font-semibold text-praia-teal-800">${escHtml(l.name)}</td>
                 <td class="px-4 py-3 text-praia-sand-600">${escHtml(l.municipality)}</td>
+                <td class="px-4 py-3 text-praia-sand-500 text-xs">${(l.beaches || []).length > 0 ? `${(l.beaches||[]).length} praia${(l.beaches||[]).length > 1 ? 's' : ''}` : '<span class="text-praia-sand-300">—</span>'}</td>
                 <td class="px-4 py-3 text-right">
                   <button onclick="editLocationPassaporte(${i})" class="text-praia-teal-600 text-xs font-semibold mr-2">Editar</button>
                   <button onclick="deleteItem('locations-passaporte', ${i})" class="text-red-400 text-xs font-semibold">Eliminar</button>
                 </td>
-              </tr>`).join('')}
+              </tr>`;
+            }).join('')}
           </tbody>
         </table>
+        <div id="passaporte-empty" class="hidden text-center py-10 text-praia-sand-400 text-sm">Nenhum resultado encontrado.</div>
       </div>
     </div>`;
+}
+
+function filterLocationsPassaporte() {
+  const q    = (document.getElementById('passaporte-search')?.value || '').toLowerCase();
+  const rows = document.querySelectorAll('#passaporte-tbody tr');
+  let visible = 0;
+  rows.forEach(row => {
+    const show = !q
+      || row.dataset.name?.includes(q)
+      || row.dataset.municipality?.includes(q)
+      || row.dataset.beaches?.includes(q);
+    row.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+  const empty = document.getElementById('passaporte-empty');
+  if (empty) empty.classList.toggle('hidden', visible > 0);
 }
 
 function editLocationPassaporte(index) {
   const section = 'locations-passaporte';
   const l = index !== null ? state.data[section][index] : {
-    name: '', municipality: '', address: '', phone: '',
+    name: '', municipality: '', address: '', phone: '', beaches: [],
     coordinates: { lat: 39.5, lng: -8.0 }
   };
+  const beachesStr = (l.beaches || []).join('\n');
 
   const container = document.getElementById('admin-content');
   container.innerHTML = `
@@ -839,6 +901,10 @@ function editLocationPassaporte(index) {
         <div class="mb-4"><label>Concelho</label><input type="text" id="l-municipality" value="${escHtml(l.municipality)}"></div>
         <div class="mb-4"><label>Morada</label><input type="text" id="l-address" value="${escHtml(l.address || '')}"></div>
         <div class="mb-4"><label>Telefone</label><input type="text" id="l-phone" value="${escHtml(l.phone || '')}"></div>
+        <div class="mb-4">
+          <label>Praias que se pode carimbar <span class="font-normal text-praia-sand-400">(uma por linha)</span></label>
+          <textarea id="l-beaches" rows="5" style="resize:vertical;">${escHtml(beachesStr)}</textarea>
+        </div>
         <div class="grid grid-cols-2 gap-4 mb-4">
           <div><label>Latitude</label><input type="number" step="0.00001" id="l-lat" value="${l.coordinates?.lat || 39.5}"></div>
           <div><label>Longitude</label><input type="number" step="0.00001" id="l-lng" value="${l.coordinates?.lng || -8.0}"></div>
@@ -853,11 +919,14 @@ function editLocationPassaporte(index) {
 
 function saveLocationPassaporte(index) {
   const section = 'locations-passaporte';
+  const beachesRaw = document.getElementById('l-beaches').value;
+  const beaches = beachesRaw.split('\n').map(s => s.trim()).filter(Boolean);
   const loc = {
     name: document.getElementById('l-name').value.trim(),
     municipality: document.getElementById('l-municipality').value.trim(),
     address: document.getElementById('l-address').value.trim(),
     phone: document.getElementById('l-phone').value.trim(),
+    beaches,
     coordinates: {
       lat: parseFloat(document.getElementById('l-lat').value) || 0,
       lng: parseFloat(document.getElementById('l-lng').value) || 0,
