@@ -716,6 +716,7 @@ function renderLocationsGuia(container) {
             <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700">Nome</th>
             <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700">Concelho</th>
             <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700">Tipo</th>
+            <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700">Época</th>
             <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700 text-right">Ações</th>
           </tr></thead>
           <tbody id="guia-tbody">
@@ -728,6 +729,7 @@ function renderLocationsGuia(container) {
                 <td class="px-4 py-3 font-semibold text-praia-teal-800">${escHtml(l.name)}</td>
                 <td class="px-4 py-3 text-praia-sand-600">${escHtml(l.municipality)}</td>
                 <td class="px-4 py-3">${badge}</td>
+                <td class="px-4 py-3 text-xs">${l.seasonal ? '<span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-semibold text-[10px] border border-amber-300">Só época</span>' : '<span class="text-praia-sand-300">Todo o ano</span>'}</td>
                 <td class="px-4 py-3 text-right">
                   <button onclick="editLocationGuia(${i})" class="text-praia-teal-600 text-xs font-semibold mr-2">Editar</button>
                   <button onclick="deleteItem('locations-guia', ${i})" class="text-red-400 text-xs font-semibold">Eliminar</button>
@@ -762,7 +764,7 @@ function editLocationGuia(index) {
   const section = 'locations-guia';
   const l = index !== null ? state.data[section][index] : {
     name: '', municipality: '', address: '', phone: '',
-    type: 'guia', coordinates: { lat: 39.5, lng: -8.0 }
+    type: 'guia', seasonal: false, coordinates: { lat: 39.5, lng: -8.0 }
   };
 
   const typeOptions = Object.entries(GUIA_TYPE_LABELS).map(([k, v]) =>
@@ -781,6 +783,10 @@ function editLocationGuia(index) {
         <div class="mb-4"><label>Telefone</label><input type="text" id="l-phone" value="${escHtml(l.phone || '')}"></div>
         <div class="mb-4"><label>Tipo</label>
           <select id="l-type">${typeOptions}</select>
+        </div>
+        <div class="mb-4 flex items-center gap-3">
+          <input type="checkbox" id="l-seasonal" class="w-4 h-4 accent-amber-500" ${l.seasonal ? 'checked' : ''}>
+          <label for="l-seasonal" class="cursor-pointer select-none">Só aberto durante a época balnear <span class="font-normal text-amber-600 text-xs">(mostra aviso no site)</span></label>
         </div>
         <div class="grid grid-cols-2 gap-4 mb-4">
           <div><label>Latitude</label><input type="number" step="0.00001" id="l-lat" value="${l.coordinates?.lat || 39.5}"></div>
@@ -802,6 +808,7 @@ function saveLocationGuia(index) {
     address: document.getElementById('l-address').value.trim(),
     phone: document.getElementById('l-phone').value.trim(),
     type: document.getElementById('l-type').value,
+    seasonal: document.getElementById('l-seasonal')?.checked || false,
     coordinates: {
       lat: parseFloat(document.getElementById('l-lat').value) || 0,
       lng: parseFloat(document.getElementById('l-lng').value) || 0,
@@ -841,6 +848,7 @@ function renderLocationsPassaporte(container) {
             <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700">Nome</th>
             <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700">Concelho</th>
             <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700">Praias</th>
+            <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700">Época</th>
             <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700 text-right">Ações</th>
           </tr></thead>
           <tbody id="passaporte-tbody">
@@ -854,6 +862,7 @@ function renderLocationsPassaporte(container) {
                 <td class="px-4 py-3 font-semibold text-praia-teal-800">${escHtml(l.name)}</td>
                 <td class="px-4 py-3 text-praia-sand-600">${escHtml(l.municipality)}</td>
                 <td class="px-4 py-3 text-praia-sand-500 text-xs">${(l.beaches || []).length > 0 ? `${(l.beaches||[]).length} praia${(l.beaches||[]).length > 1 ? 's' : ''}` : '<span class="text-praia-sand-300">—</span>'}</td>
+                <td class="px-4 py-3 text-xs">${l.seasonal ? '<span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-semibold text-[10px] border border-amber-300">Só época</span>' : '<span class="text-praia-sand-300">Todo o ano</span>'}</td>
                 <td class="px-4 py-3 text-right">
                   <button onclick="editLocationPassaporte(${i})" class="text-praia-teal-600 text-xs font-semibold mr-2">Editar</button>
                   <button onclick="deleteItem('locations-passaporte', ${i})" class="text-red-400 text-xs font-semibold">Eliminar</button>
@@ -886,7 +895,7 @@ function filterLocationsPassaporte() {
 function editLocationPassaporte(index) {
   const section = 'locations-passaporte';
   const l = index !== null ? state.data[section][index] : {
-    name: '', municipality: '', address: '', phone: '', beaches: [],
+    name: '', municipality: '', address: '', phone: '', beaches: [], seasonal: false,
     coordinates: { lat: 39.5, lng: -8.0 }
   };
   const beachesStr = (l.beaches || []).join('\n');
@@ -904,6 +913,10 @@ function editLocationPassaporte(index) {
         <div class="mb-4">
           <label>Praias que se pode carimbar <span class="font-normal text-praia-sand-400">(uma por linha)</span></label>
           <textarea id="l-beaches" rows="5" style="resize:vertical;">${escHtml(beachesStr)}</textarea>
+        </div>
+        <div class="mb-4 flex items-center gap-3">
+          <input type="checkbox" id="l-seasonal" class="w-4 h-4 accent-amber-500" ${l.seasonal ? 'checked' : ''}>
+          <label for="l-seasonal" class="cursor-pointer select-none">Só aberto durante a época balnear <span class="font-normal text-amber-600 text-xs">(mostra aviso no site)</span></label>
         </div>
         <div class="grid grid-cols-2 gap-4 mb-4">
           <div><label>Latitude</label><input type="number" step="0.00001" id="l-lat" value="${l.coordinates?.lat || 39.5}"></div>
@@ -927,6 +940,7 @@ function saveLocationPassaporte(index) {
     address: document.getElementById('l-address').value.trim(),
     phone: document.getElementById('l-phone').value.trim(),
     beaches,
+    seasonal: document.getElementById('l-seasonal')?.checked || false,
     coordinates: {
       lat: parseFloat(document.getElementById('l-lat').value) || 0,
       lng: parseFloat(document.getElementById('l-lng').value) || 0,

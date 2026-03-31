@@ -1,113 +1,2774 @@
 [
-  { "name": "Posto de Turismo de Alandroal", "municipality": "Alandroal", "address": "Rua João de Deus 2, 7250-116 Alandroal", "phone": "", "beaches": ["Praia Fluvial de Azenhas D'el Rei"], "coordinates": { "lat": 38.7070, "lng": -7.3980 } },
-  { "name": "Welcome Center de Abrantes", "municipality": "Abrantes", "address": "Rua Luís de Camões 20A, 2200-201 Abrantes", "phone": "966 822 104", "beaches": ["Praia Fluvial de Aldeia do Mato", "Praia Fluvial de Fontes"], "coordinates": { "lat": 39.4622, "lng": -8.1977 } },
-  { "name": "Parque de Campismo dos Olhos de Água do Alviela", "municipality": "Alcanena", "address": "Praia Fluvial dos Olhos de Água do Alviela, 2380-450 Louriceira", "phone": "", "beaches": ["Praia Fluvial dos Olhos de Água do Alviela"], "coordinates": { "lat": 39.5667, "lng": -8.6167 } },
-  { "name": "Posto de Turismo de Alcoutim", "municipality": "Alcoutim", "address": "Rua 1º de Maio, 8970-066 Alcoutim", "phone": "", "beaches": ["Praia Fluvial do Pego Fundo"], "coordinates": { "lat": 37.4727, "lng": -7.4720 } },
-  { "name": "Posto de Turismo de Arcos de Valdevez", "municipality": "Arcos de Valdevez", "address": "Rua Professor Dr. Júlio Almeida Costa, 4970-606 Arcos de Valdevez", "phone": "", "beaches": ["Praia Fluvial do Pontilhão da Valeta"], "coordinates": { "lat": 41.8489, "lng": -8.4139 } },
-  { "name": "Posto de Turismo do Piódão", "municipality": "Arganil", "address": "Largo Cónego Manuel Fernandes Nogueira, 6285-018 Piódão", "phone": "", "beaches": ["Praia Fluvial do Piódão", "Praia Fluvial de Foz d'Égua"], "coordinates": { "lat": 40.2477, "lng": -7.9372 } },
-  { "name": "Posto de Turismo de Arganil", "municipality": "Arganil", "address": "Av. das Forças Armadas, 3300-011 Arganil", "phone": "235 200 137", "beaches": ["Praia Fluvial de Agroal", "Praia Fluvial de Benfeita", "Praia Fluvial de Côja", "Praia Fluvial da Cascalheira-Secarias", "Praia Fluvial de Pomares", "Zona Balnear de Moinho de Alva", "Zona Balnear de Peneda-Talhada", "Zona Balnear do Urtigal", "Zona Balnear da Fórnea"], "coordinates": { "lat": 40.2216, "lng": -8.0641 } },
-  { "name": "Posto de Turismo de Arouca", "municipality": "Arouca", "address": "Rua Abel Botelho 4, 4540-114 Arouca", "phone": "", "beaches": ["Zona Balnear do Areinho", "Zona Balnear de Albergaria da Serra", "Zona Balnear da Paradinha", "Zona Balnear de Espiunca"], "coordinates": { "lat": 40.9317, "lng": -8.2476 } },
-  { "name": "Posto de Turismo de Avis", "municipality": "Avis", "address": "Praça Serpa Pinto 1, 7480-122 Avis", "phone": "", "beaches": ["Praia Fluvial do Clube Náutico de Avis"], "coordinates": { "lat": 39.0677, "lng": -7.8939 } },
-  { "name": "Posto de Turismo de Beja", "municipality": "Beja", "address": "Largo Dr. Lima Faleiro 1, 7800-266 Beja", "phone": "", "beaches": ["Praia Fluvial de Cinco Reis"], "coordinates": { "lat": 38.0156, "lng": -7.8644 } },
-  { "name": "Posto de Turismo de Braga", "municipality": "Braga", "address": "Av. da Liberdade 1, 4710-250 Braga", "phone": "253 262 550", "beaches": ["Praia Fluvial de Adaúfe", "Praia Fluvial de Merelim-São Paio", "Praia Fluvial de Ponte do Bico", "Zona Balnear de Navarra", "Praia Fluvial do Cavadinho"], "coordinates": { "lat": 41.5454, "lng": -8.4265 } },
-  { "name": "Posto de Turismo de Cabeceiras de Basto", "municipality": "Cabeceiras de Basto", "address": "Praça da República 203, 4860-355 Cabeceiras de Basto", "phone": "", "beaches": ["Praia Fluvial de Cavez"], "coordinates": { "lat": 41.5159, "lng": -7.9908 } },
-  { "name": "Loja Interativa de Turismo de Caminha", "municipality": "Caminha", "address": "Praça Conselheiro Silva Torres, 4910-122 Caminha", "phone": "", "beaches": ["Praia Fluvial de Vilar de Mouros-Azenhas", "Praia Fluvial de Pedras Ruivas"], "coordinates": { "lat": 41.8748, "lng": -8.8348 } },
-  { "name": "Posto de Turismo de Cantanhede", "municipality": "Cantanhede", "address": "Largo Conselheiro Ferreira Freire, 3060-228 Cantanhede", "phone": "", "beaches": ["Praia Fluvial de Ançã", "Praia Fluvial de Olhos da Fervença", "Praia Fluvial de Sete Fontes"], "coordinates": { "lat": 40.3436, "lng": -8.5972 } },
-  { "name": "Casa do Tempo — Castanheira de Pera", "municipality": "Castanheira de Pera", "address": "Rua Dr. José Fernandes de Carvalho, 3280-039 Castanheira de Pera", "phone": "236 432 799", "beaches": ["Praia Fluvial de Poço Corga", "Praia das Rocas"], "coordinates": { "lat": 40.0000, "lng": -8.2070 } },
-  { "name": "Posto de Turismo de Castelo Branco", "municipality": "Castelo Branco", "address": "Av. Nuno Álvares 30, 6000-156 Castelo Branco", "phone": "272 330 339", "beaches": ["Praia Fluvial de Almaceda", "Zona Balnear da Lisga", "Praia Fluvial do Sesmo"], "coordinates": { "lat": 39.8208, "lng": -7.4913 } },
-  { "name": "Câmara Municipal de Castro Daire", "municipality": "Castro Daire", "address": "Rua Dr. Pio de Figueiredo 42, 3600-214 Castro Daire", "phone": "", "beaches": ["Praia Fluvial de Folgosa"], "coordinates": { "lat": 40.9007, "lng": -7.9397 } },
-  { "name": "Posto de Turismo de Castro Marim", "municipality": "Castro Marim", "address": "Rua de São Sebastião 3, 8950-281 Castro Marim", "phone": "", "beaches": ["Praia Fluvial da Albufeira de Odeleite"], "coordinates": { "lat": 37.2163, "lng": -7.4430 } },
-  { "name": "Posto de Turismo de Coimbra", "municipality": "Coimbra", "address": "Rua Ferreira Borges 20, 3000-179 Coimbra", "phone": "", "beaches": ["Praia Fluvial de Palheiros-Zorro", "Praia Fluvial do Rebolim"], "coordinates": { "lat": 40.2088, "lng": -8.4280 } },
-  { "name": "Posto de Turismo de Coimbra — Baixa", "municipality": "Coimbra", "address": "Rua António Granjo 6, 3000-429 Coimbra", "phone": "", "beaches": ["Praia Fluvial de Palheiros-Zorro", "Praia Fluvial do Rebolim"], "coordinates": { "lat": 40.2094, "lng": -8.4275 } },
-  { "name": "Posto de Turismo de Constância", "municipality": "Constância", "address": "Rua Luís de Camões 2, 2250-035 Constância", "phone": "249 730 052", "beaches": ["Praia Fluvial de Constância"], "coordinates": { "lat": 39.4724, "lng": -8.3329 } },
-  { "name": "Loja do Montado — Coruche", "municipality": "Coruche", "address": "Mercado Municipal de Coruche, 2100-228 Coruche", "phone": "243 619 072", "beaches": ["Praia Fluvial do Sorraia"], "coordinates": { "lat": 38.9638, "lng": -8.5236 } },
-  { "name": "Posto de Turismo Municipal da Covilhã", "municipality": "Covilhã", "address": "Praça do Município, 6200-151 Covilhã", "phone": "275 330 630", "beaches": ["Praia Fluvial de Unhais da Serra", "Zona Balnear de Cortes do Meio", "Zona Balnear de Ourondo", "Zona Balnear de Paul", "Zona Balnear de Sobral de São Miguel", "Zona Balnear de Unhais da Serra", "Zona Balnear de Verdelhos", "Zona Balnear de Vila do Carvalho"], "coordinates": { "lat": 40.2801, "lng": -7.5039 } },
-  { "name": "Câmara Municipal de Cuba", "municipality": "Cuba", "address": "Largo Cristóvão Colon, 7490-145 Cuba", "phone": "", "beaches": ["Praia Fluvial de Albergaria dos Fusos"], "coordinates": { "lat": 38.1608, "lng": -7.8955 } },
-  { "name": "Posto de Turismo de Fafe", "municipality": "Fafe", "address": "Praça 25 de Abril, 4820-142 Fafe", "phone": "", "beaches": ["Praia Fluvial da Albufeira da Queimadela"], "coordinates": { "lat": 41.4510, "lng": -8.1714 } },
-  { "name": "Posto de Turismo de Ferreira do Zêzere", "municipality": "Ferreira do Zêzere", "address": "Praça Dias Ferreira, 2240-341 Ferreira do Zêzere", "phone": "249 360 151", "beaches": ["Praia Fluvial do Lago Azul", "Praia Fluvial da Bairrada/Bairradinha"], "coordinates": { "lat": 39.6987, "lng": -8.2907 } },
-  { "name": "Centro de Informação de Dornes", "municipality": "Ferreira do Zêzere", "address": "Rua Guilherme de Pavia 7, 2240-611 Dornes", "phone": "249 366 410", "beaches": ["Praia Fluvial do Lago Azul", "Praia Fluvial da Bairrada/Bairradinha"], "coordinates": { "lat": 39.6831, "lng": -8.3192 } },
-  { "name": "Museu e Centro de Artes de Figueiró dos Vinhos", "municipality": "Figueiró dos Vinhos", "address": "Av. José Malhoa, 3260-402 Figueiró dos Vinhos", "phone": "236 552 178", "beaches": ["Praia Fluvial de Ana de Aviz", "Praia Fluvial das Fragas de São Simão"], "coordinates": { "lat": 39.9064, "lng": -8.2776 } },
-  { "name": "Posto de Turismo de Fornos de Algodres", "municipality": "Fornos de Algodres", "address": "Urbanização Zona Sul - Palácio da Justiça, 6370-147 Fornos de Algodres", "phone": "271 708 334", "beaches": ["Praia Fluvial de Ponte de Juncais"], "coordinates": { "lat": 40.6222, "lng": -7.5337 } },
-  { "name": "Posto de Turismo de Freixo de Espada à Cinta", "municipality": "Freixo de Espada à Cinta", "address": "Praça Jorge Álvares, 5180-125 Freixo de Espada à Cinta", "phone": "279 653 480", "beaches": ["Praia Fluvial da Congida"], "coordinates": { "lat": 41.0979, "lng": -6.8088 } },
-  { "name": "Posto de Turismo do Fundão", "municipality": "Fundão", "address": "Rua 5 de Outubro 11A, 6230-338 Fundão", "phone": "275 779 040", "beaches": ["Zona Balnear da Capinha", "Parque Fluvial de Janeiro de Cima", "Zona Balnear de Souto da Casa", "Zona Balnear de Lavacolhos"], "coordinates": { "lat": 40.1342, "lng": -7.5021 } },
-  { "name": "Posto de Turismo de Castelo Novo", "municipality": "Fundão", "address": "Largo da Bica 1, 6230-160 Castelo Novo", "phone": "275 561 501", "beaches": ["Praia Fluvial de Castelo Novo"], "coordinates": { "lat": 40.1024, "lng": -7.5780 } },
-  { "name": "Casa das Artes de Gavião", "municipality": "Gavião", "address": "Rua Dr. Dias Calazans 34, 6040-115 Gavião", "phone": "241 639 075", "beaches": ["Praia Fluvial do Alamal", "Zona Balnear da Ribeira da Venda"], "coordinates": { "lat": 39.4683, "lng": -7.9358 } },
-  { "name": "Posto de Turismo de Góis", "municipality": "Góis", "address": "Praça da República, 3330-310 Góis", "phone": "235 770 110", "beaches": ["Praia Fluvial de Alvares", "Praia Fluvial de Canaveias", "Praia Fluvial da Cabreira", "Praia Fluvial do Colmeal", "Praia Fluvial de Peneda Pêgo Escuro", "Praia Fluvial de Ponte do Sótão"], "coordinates": { "lat": 40.1594, "lng": -8.1124 } },
-  { "name": "Câmara Municipal de Gondomar", "municipality": "Gondomar", "address": "Tv. Convenção de Gramido 41, 4420-416 Gondomar", "phone": "224 637 036", "beaches": ["Praia Fluvial da Lomba", "Areal de Melres", "Areal de Zebreiros"], "coordinates": { "lat": 41.0369, "lng": -8.5319 } },
-  { "name": "Posto de Turismo de Gouveia", "municipality": "Gouveia", "address": "Jardim da Ribeira, 6290-518 Gouveia", "phone": "", "beaches": ["Praia Fluvial do Vale do Rossim"], "coordinates": { "lat": 40.4963, "lng": -7.5927 } },
-  { "name": "Welcome Center da Guarda", "municipality": "Guarda", "address": "Praça Luís de Camões, 6300-725 Guarda", "phone": "271 205 530", "beaches": ["Praia Fluvial de Aldeia Viçosa", "Praia Fluvial da Barragem do Caldeirão", "Praia Fluvial da Quinta da Taberna-Videmonte", "Praia Fluvial de Vale do Mondego", "Praia Fluvial de Valhelhas"], "coordinates": { "lat": 40.5375, "lng": -7.2680 } },
-  { "name": "Aldeia de Xisto de Benfeita", "municipality": "Arganil", "address": "Estrada Nacional 354-1 Km 8", "phone": "", "beaches": [], "coordinates": { "lat": 40.2333, "lng": -8.1000 } },
-  { "name": "Parque de Campismo de Idanha-a-Nova", "municipality": "Idanha-a-Nova", "address": "Estrada Nacional 354-1 Km 8, 6060-192 Idanha-a-Nova", "phone": "277 201 029", "beaches": ["Zona Balnear da Barragem de Idanha-a-Nova"], "coordinates": { "lat": 39.9167, "lng": -7.1500 } },
-  { "name": "Posto de Turismo de Penha Garcia", "municipality": "Idanha-a-Nova", "address": "Rua do Espírito Santo, 6060-308 Penha Garcia", "phone": "", "beaches": ["Zona Balnear do Pego"], "coordinates": { "lat": 40.0396, "lng": -7.0671 } },
-  { "name": "Posto de Turismo de Leiria", "municipality": "Leiria", "address": "Jardim Luís de Camões, 2400-172 Leiria", "phone": "", "beaches": ["Praia Fluvial da Lagoa da Ervedeira"], "coordinates": { "lat": 39.7490, "lng": -8.8075 } },
-  { "name": "Posto de Turismo de Monte Real", "municipality": "Leiria", "address": "Rua 28 de Maio, 2425-039 Monte Real", "phone": "", "beaches": ["Praia Fluvial da Lagoa da Ervedeira"], "coordinates": { "lat": 39.8333, "lng": -8.8883 } },
-  { "name": "EPAL - Atendimento ao público", "municipality": "Lisboa", "address": "Av. da Liberdade 24, 1250-144 Lisboa", "phone": "", "beaches": ["Carimbo especial EPAL/ADVT"], "coordinates": { "lat": 38.7199, "lng": -9.1431 } },
-  { "name": "Museu da Água - EPAL", "municipality": "Lisboa", "address": "Rua do Alviela 12, 1170-012 Lisboa", "phone": "", "beaches": ["Carimbo especial EPAL/ADVT"], "coordinates": { "lat": 38.7200, "lng": -9.1200 } },
-  { "name": "Reservatório da Mãe d'Água das Amoreiras", "municipality": "Lisboa", "address": "Praça das Amoreiras 10, 1250-020 Lisboa", "phone": "", "beaches": ["Carimbo especial EPAL/ADVT"], "coordinates": { "lat": 38.7193, "lng": -9.1500 } },
-  { "name": "Museu Etnográfico Dr. Louzã Henriques — Lousã", "municipality": "Lousã", "address": "Rua Dr. João Luso, 3200-114 Lousã", "phone": "", "beaches": ["Praia Fluvial da Senhora da Graça", "Praia Fluvial da Senhora da Piedade", "Praia Fluvial da Bogueira"], "coordinates": { "lat": 40.1030, "lng": -8.2468 } },
-  { "name": "Posto de Turismo de Mação", "municipality": "Mação", "address": "Largo dos Bombeiros Voluntários, 6120-750 Mação", "phone": "", "beaches": ["Praia Fluvial de Cardigos", "Praia Fluvial do Carvoeiro", "Praia Fluvial de Ortiga"], "coordinates": { "lat": 39.5564, "lng": -7.9924 } },
-  { "name": "Posto de Turismo de Marvão", "municipality": "Marvão", "address": "Largo da Silveirinha, 7330-101 Marvão", "phone": "", "beaches": ["Zona Balnear da Portagem"], "coordinates": { "lat": 39.3981, "lng": -7.3712 } },
-  { "name": "Posto de Turismo de Macedo de Cavaleiros", "municipality": "Macedo de Cavaleiros", "address": "Rua das Rosas, 5340-208 Macedo de Cavaleiros", "phone": "", "beaches": ["Praia Fluvial de Fraga da Pegada", "Praia Fluvial da Ribeira"], "coordinates": { "lat": 41.5370, "lng": -6.9555 } },
-  { "name": "Posto de Turismo de Manteigas", "municipality": "Manteigas", "address": "Rua Dr. Esteves de Carvalho 2, 6260-130 Manteigas", "phone": "", "beaches": ["Praia Fluvial da Relva da Reboleira", "Zona Balnear do Covão da Ponte"], "coordinates": { "lat": 40.4031, "lng": -7.5320 } },
-  { "name": "Posto de Turismo de Marco de Canaveses", "municipality": "Marco de Canaveses", "address": "Alameda Dr. Miranda da Rocha, 4630-200 Marco de Canaveses", "phone": "", "beaches": ["Praia Fluvial de Bitetos"], "coordinates": { "lat": 41.1850, "lng": -8.1499 } },
-  { "name": "Posto de Turismo de Mértola", "municipality": "Mértola", "address": "Rua da Igreja 31, 7750-354 Mértola", "phone": "", "beaches": ["Praia Fluvial da Albufeira da Tapada Grande"], "coordinates": { "lat": 37.6419, "lng": -7.6601 } },
-  { "name": "Posto de Turismo de Mira", "municipality": "Mira", "address": "Av. da Barrinha 55, 3070-792 Praia de Mira", "phone": "", "beaches": ["Praia Fluvial da Barrinha de Mira"], "coordinates": { "lat": 40.4280, "lng": -8.7380 } },
-  { "name": "Posto de Turismo de Mirandela", "municipality": "Mirandela", "address": "Travessa da Ponte Romana, 5370-489 Mirandela", "phone": "", "beaches": ["Praia Fluvial Albino Mendo", "Zona Balnear de Maravilha", "Praia Fluvial de Quintas", "Praia Fluvial de Vale Juncal", "Zona Balnear de Ponte da Pedra", "Zona Balnear de Frechas"], "coordinates": { "lat": 41.4848, "lng": -7.1836 } },
-  { "name": "Câmara Municipal de Moimenta da Beira", "municipality": "Moimenta da Beira", "address": "Terreiro Freiras 7, 3620-304 Moimenta da Beira", "phone": "", "beaches": ["Praia Fluvial de Albufeira do Vilar", "Praia Fluvial de Segões", "Zona Balnear de Leomil"], "coordinates": { "lat": 40.9801, "lng": -7.6160 } },
-  { "name": "Posto de Turismo de Montemor-o-Velho", "municipality": "Montemor-o-Velho", "address": "Paço das Infantas - Castelo de Montemor-o-Velho, 3140-262 Montemor-o-Velho", "phone": "", "beaches": ["Praia Fluvial de Ereira"], "coordinates": { "lat": 40.1740, "lng": -8.6850 } },
-  { "name": "Posto de Turismo de Moura", "municipality": "Moura", "address": "Interior do Castelo de Moura, 7860-159 Moura", "phone": "", "beaches": ["Praia Fluvial de Moura"], "coordinates": { "lat": 38.1380, "lng": -7.4520 } },
-  { "name": "Posto de Turismo de Mourão", "municipality": "Mourão", "address": "Largo das Portas de S. Bento, 7240-263 Mourão", "phone": "", "beaches": ["Praia Fluvial de Mourão"], "coordinates": { "lat": 38.3680, "lng": -7.3680 } },
-  { "name": "Posto de Turismo de Santa Clara-a-Velha", "municipality": "Odemira", "address": "Alameda da Índia, 7665-880 Santa Clara-a-Velha", "phone": "", "beaches": ["Praia Fluvial de Santa Clara-a-Velha"], "coordinates": { "lat": 37.7167, "lng": -8.2667 } },
-  { "name": "Posto de Turismo de Odemira", "municipality": "Odemira", "address": "Travessa da Quinta da Estrela 3, 7630-130 Odemira", "phone": "", "beaches": ["Zona Balnear de Odemira"], "coordinates": { "lat": 37.5983, "lng": -8.6310 } },
-  { "name": "Câmara Municipal de Oleiros", "municipality": "Oleiros", "address": "Largo do Município 8, 6160-409 Oleiros", "phone": "", "beaches": ["Praia Fluvial de Açude Pinto", "Praia Fluvial de Álvaro", "Praia Fluvial de Cambas"], "coordinates": { "lat": 39.9137, "lng": -7.9151 } },
-  { "name": "Câmara Municipal de Oliveira de Frades", "municipality": "Oliveira de Frades", "address": "Largo Dr. Joaquim de Almeida 111, 3680-116 Oliveira de Frades", "phone": "", "beaches": ["Praia Fluvial da Carriça", "Zona Balnear de Destriz"], "coordinates": { "lat": 40.7334, "lng": -8.1763 } },
-  { "name": "Posto de Turismo de Oliveira do Hospital", "municipality": "Oliveira do Hospital", "address": "Rua do Colégio, 3400-105 Oliveira do Hospital", "phone": "", "beaches": ["Praia Fluvial de Avô", "Praia Fluvial de Alvoco das Várzeas", "Praia Fluvial de São Sebastião da Feira", "Praia Fluvial de São Gião"], "coordinates": { "lat": 40.3598, "lng": -7.8633 } },
-  { "name": "Welcome Center de Fátima", "municipality": "Ourém", "address": "Av. Dom José Alves Correia da Silva 213, 2495-402 Fátima", "phone": "", "beaches": ["Praia Fluvial do Agroal"], "coordinates": { "lat": 39.6260, "lng": -8.6740 } },
-  { "name": "Posto de Turismo de Ourém", "municipality": "Ourém", "address": "Largo do Pelourinho - Castelo, 2490-472 Ourém", "phone": "", "beaches": ["Praia Fluvial do Agroal"], "coordinates": { "lat": 39.6518, "lng": -8.5799 } },
-  { "name": "Parque Natureza do Agroal", "municipality": "Ourém", "address": "EM525 Rua Principal do Agroal, 2435-201 Ourém", "phone": "", "beaches": ["Praia Fluvial do Agroal"], "coordinates": { "lat": 39.6050, "lng": -8.5200 } },
-  { "name": "Câmara Municipal de Pampilhosa da Serra", "municipality": "Pampilhosa da Serra", "address": "Rua Rangel de Lima, 3320-229 Pampilhosa da Serra", "phone": "", "beaches": ["Praia Fluvial de Janeiro de Baixo", "Praia Fluvial de Pampilhosa da Serra", "Praia Fluvial de Pessegueiro", "Praia Fluvial de Santa Luzia"], "coordinates": { "lat": 40.0523, "lng": -7.9560 } },
-  { "name": "Centro de Interpretação Turística de Pedrógão Grande", "municipality": "Pedrógão Grande", "address": "Valbom, 3274-909 Pedrógão Grande", "phone": "", "beaches": ["Praia Fluvial do Cabril", "Praia Fluvial de Mega", "Praia Fluvial de Mosteiro"], "coordinates": { "lat": 39.9185, "lng": -8.1494 } },
-  { "name": "Posto de Turismo de Pedrógão Grande (EN2)", "municipality": "Pedrógão Grande", "address": "Jardim da Devesa, 3270-101 Pedrógão Grande", "phone": "", "beaches": ["Praia Fluvial do Cabril", "Praia Fluvial de Mega", "Praia Fluvial de Mosteiro"], "coordinates": { "lat": 39.9178, "lng": -8.1487 } },
-  { "name": "Posto de Turismo de Penacova", "municipality": "Penacova", "address": "Largo Alberto Leitão, 3360-341 Penacova", "phone": "", "beaches": ["Praia Fluvial do Reconquinho", "Praia Fluvial do Vimieiro", "Praia Fluvial do Cornicovo"], "coordinates": { "lat": 40.2714, "lng": -8.2847 } },
-  { "name": "Posto de Turismo de Penacova (EN2)", "municipality": "Penacova", "address": "EN2 Km238 junto à ponte do Mondego, 3360 Penacova", "phone": "", "beaches": ["Praia Fluvial do Reconquinho", "Praia Fluvial do Vimieiro", "Praia Fluvial do Cornicovo"], "coordinates": { "lat": 40.2720, "lng": -8.2853 } },
-  { "name": "Câmara Municipal de Penalva do Castelo", "municipality": "Penalva do Castelo", "address": "Avenida Castendo, 3550-185 Penalva do Castelo", "phone": "", "beaches": ["Praia Fluvial do Açude de Vais"], "coordinates": { "lat": 40.6674, "lng": -7.6992 } },
-  { "name": "Museu Municipal de Penamacor", "municipality": "Penamacor", "address": "Largo Tenente Coronel Júlio Rodrigues da Silva, 6090-545 Penamacor", "phone": "", "beaches": ["Praia Fluvial do Meimão", "Zona Balnear da Meimoa", "Zona Balnear O Moinho"], "coordinates": { "lat": 40.1664, "lng": -7.1759 } },
-  { "name": "Posto de Turismo de Penela", "municipality": "Penela", "address": "Praça Município 13, 3230-267 Penela", "phone": "", "beaches": ["Praia Fluvial da Louçainha"], "coordinates": { "lat": 40.0281, "lng": -8.3836 } },
-  { "name": "Posto de Turismo de Ponte da Barca", "municipality": "Ponte da Barca", "address": "Rua Conselheiro Rocha Peixoto 9, 4980-626 Ponte da Barca", "phone": "", "beaches": ["Praia Fluvial de Ponte da Barca"], "coordinates": { "lat": 41.8043, "lng": -8.4185 } },
-  { "name": "Centro de Artes e Cultura de Ponte de Sor", "municipality": "Ponte de Sor", "address": "Av. da Liberdade 64F, 7400-218 Ponte de Sor", "phone": "", "beaches": ["Praia Fluvial de Montalvo/Tesos"], "coordinates": { "lat": 39.2481, "lng": -8.0133 } },
-  { "name": "Centro Cultural de Montargil", "municipality": "Ponte de Sor", "address": "Rua Luís de Camões 16, 7425-128 Montargil", "phone": "", "beaches": ["Praia Fluvial de Montalvo/Tesos"], "coordinates": { "lat": 39.0800, "lng": -8.1600 } },
-  { "name": "Posto de Turismo de Portel", "municipality": "Portel", "address": "Rua de Santiago 32, 7220-405 Portel", "phone": "", "beaches": ["Praia Fluvial de Alqueva", "Praia Fluvial da Amieira", "Praia Fluvial de Oriola"], "coordinates": { "lat": 38.3092, "lng": -7.7025 } },
-  { "name": "Câmara Municipal da Póvoa de Lanhoso", "municipality": "Póvoa de Lanhoso", "address": "Avenida da República, 4830-513 Póvoa de Lanhoso", "phone": "", "beaches": ["Praia Fluvial de Verim"], "coordinates": { "lat": 41.5799, "lng": -8.2674 } },
-  { "name": "Posto de Turismo de Proença-a-Nova", "municipality": "Proença-a-Nova", "address": "Rua do Rossio 1, 6150-909 Proença-a-Nova", "phone": "", "beaches": ["Praia Fluvial do Malhadal", "Praia Fluvial de Aldeia Ruiva", "Praia Fluvial da Fróia", "Zona Balnear de Alvito da Beira", "Zona Balnear da Cerejeira"], "coordinates": { "lat": 39.7527, "lng": -7.9216 } },
-  { "name": "Posto de Turismo de Monsaraz", "municipality": "Reguengos de Monsaraz", "address": "Rua Direita 24, 7200-175 Monsaraz", "phone": "", "beaches": ["Praia Fluvial de Monsaraz"], "coordinates": { "lat": 38.4440, "lng": -7.3833 } },
-  { "name": "Posto de Turismo de Reguengos de Monsaraz", "municipality": "Reguengos de Monsaraz", "address": "Av. António José de Almeida, 7200-372 Reguengos de Monsaraz", "phone": "", "beaches": ["Praia Fluvial de Monsaraz"], "coordinates": { "lat": 38.4284, "lng": -7.5354 } },
-  { "name": "Bar/Restaurante Sem Fim - Praia Fluvial de Monsaraz", "municipality": "Reguengos de Monsaraz", "address": "Praia Fluvial de Monsaraz", "phone": "", "beaches": ["Praia Fluvial de Monsaraz"], "coordinates": { "lat": 38.4350, "lng": -7.3700 } },
-  { "name": "Museu do Sabugal", "municipality": "Sabugal", "address": "Rua de São Tiago, 6320-409 Sabugal", "phone": "", "beaches": ["Praia Fluvial de Alfaiates", "Praia Fluvial de Badamalos", "Zona Balnear de Malcata", "Zona Balnear de Penalobo", "Praia Fluvial de Quadrazais", "Praia Fluvial de Rapoula do Côa", "Zona Balnear de Seixo do Côa", "Praia Fluvial de Vale das Éguas", "Zona Balnear de Vale de Espinho", "Praia Fluvial do Sabugal"], "coordinates": { "lat": 40.3531, "lng": -7.0897 } },
-  { "name": "Posto de Turismo de Santa Comba Dão", "municipality": "Santa Comba Dão", "address": "Rua Miguel Neves, 3440-386 Santa Comba Dão", "phone": "", "beaches": ["Praia Fluvial de Senhora da Ribeira"], "coordinates": { "lat": 40.3967, "lng": -8.1351 } },
-  { "name": "Loja Interativa de Turismo de Santa Maria da Feira", "municipality": "Santa Maria da Feira", "address": "Rua Dr. Roberto Alves 52, 4524-909 Santa Maria da Feira", "phone": "", "beaches": ["Praia Fluvial da Mamôa"], "coordinates": { "lat": 40.9268, "lng": -8.5469 } },
-  { "name": "Posto de Turismo de São Pedro do Sul", "municipality": "São Pedro do Sul", "address": "Avenida da Ponte, 3660-484 São Pedro do Sul", "phone": "", "beaches": ["Praia Fluvial da Ucha"], "coordinates": { "lat": 40.7620, "lng": -8.0658 } },
-  { "name": "Casa da Cultura de Sátão", "municipality": "Sátão", "address": "Rua da Travessa do Clube, 3560 Sátão", "phone": "", "beaches": ["Praia Fluvial do Trabulo"], "coordinates": { "lat": 40.7459, "lng": -7.7312 } },
-  { "name": "Posto de Turismo de Seia", "municipality": "Seia", "address": "Rua Pintor Lucas Marrão, 6270-513 Seia", "phone": "", "beaches": ["Praia Fluvial de Lapa dos Dinheiros", "Praia Fluvial do Sabugueiro", "Praia Fluvial de Sandomil", "Praia Fluvial da Senhora do Desterro", "Praia Fluvial de Vila Cova à Coelheira"], "coordinates": { "lat": 40.4180, "lng": -7.7010 } },
-  { "name": "Centro de Informação de Loriga", "municipality": "Seia", "address": "Estrada Nacional 231, 6270-090 Loriga", "phone": "", "beaches": ["Praia Fluvial de Loriga", "Praia Fluvial de Poço do Lagar"], "coordinates": { "lat": 40.3338, "lng": -7.6720 } },
-  { "name": "Posto de Turismo do Sabugueiro", "municipality": "Seia", "address": "Rua Nossa Senhora de Fátima, 6270-151 Sabugueiro", "phone": "", "beaches": ["Praia Fluvial do Sabugueiro"], "coordinates": { "lat": 40.3800, "lng": -7.6500 } },
-  { "name": "Museu Natural da Eletricidade de Seia", "municipality": "Seia", "address": "Senhora do Desterro, 6270 São Romão", "phone": "", "beaches": ["Praia Fluvial da Senhora do Desterro"], "coordinates": { "lat": 40.3900, "lng": -7.6500 } },
-  { "name": "Centro das Artes de Sernancelhe", "municipality": "Sernancelhe", "address": "Av. Dr. Oliveira Serrão, 3640-420 Sernancelhe", "phone": "", "beaches": ["Praia Fluvial de Vila da Ponte"], "coordinates": { "lat": 40.9174, "lng": -7.4913 } },
-  { "name": "Espaço da Castanha e do Castanheiro", "municipality": "Sernancelhe", "address": "Rua do Colégio - Bairro da Lage Nova, 3640-233 Sernancelhe", "phone": "", "beaches": ["Praia Fluvial de Vila da Ponte"], "coordinates": { "lat": 40.9100, "lng": -7.4900 } },
-  { "name": "Posto de Turismo da Sertã (EN2)", "municipality": "Sertã", "address": "Av. Padre Manuel Antunes, 6100-781 Sertã", "phone": "", "beaches": ["Praia Fluvial da Ribeira Grande", "Praia Fluvial do Troviscal", "Zona de Lazer do Trízio", "Zona de Lazer do Boiçô", "Zona de Lazer do Marmeleiro"], "coordinates": { "lat": 39.8051, "lng": -8.0970 } },
-  { "name": "Casa do Artesão de Sever do Vouga", "municipality": "Sever do Vouga", "address": "Rua do Jardim 92, 3740-273 Sever do Vouga", "phone": "", "beaches": ["Praia Fluvial da Quinta do Barco", "Zona Balnear da Cascata da Cabreia"], "coordinates": { "lat": 40.7340, "lng": -8.3640 } },
-  { "name": "Câmara Municipal de Tábua", "municipality": "Tábua", "address": "Praça República, 3420-308 Tábua", "phone": "", "beaches": ["Praia Fluvial da Ronqueira"], "coordinates": { "lat": 40.3633, "lng": -8.0268 } },
-  { "name": "Posto de Turismo de Rio Caldo", "municipality": "Terras de Bouro", "address": "Av. das Pontes 30, 4845-024 Rio Caldo", "phone": "", "beaches": ["Praia Fluvial do Alqueirão"], "coordinates": { "lat": 41.7126, "lng": -8.2011 } },
-  { "name": "Posto de Turismo de Tomar", "municipality": "Tomar", "address": "Av. Dr. Cândido Madureira, 2300-531 Tomar", "phone": "", "beaches": ["Praia Fluvial de Alqueidão", "Praia Fluvial de Montes", "Praia Fluvial de Vila Nova-Serra", "Zona Balnear de Alverangel"], "coordinates": { "lat": 39.6036, "lng": -8.4117 } },
-  { "name": "Museu Terras de Besteiros — Tondela", "municipality": "Tondela", "address": "Rua Dr. Simões Ferraz de Carvalho, 3460-588 Tondela", "phone": "", "beaches": ["Zona Balnear de São João do Monte"], "coordinates": { "lat": 40.5173, "lng": -8.0797 } },
-  { "name": "Posto de Turismo de Torre de Moncorvo", "municipality": "Torre de Moncorvo", "address": "Rua dos Sapateiros 15, 5160-278 Torre de Moncorvo", "phone": "", "beaches": ["Zona Balnear da Foz do Sabor"], "coordinates": { "lat": 41.1773, "lng": -7.0524 } },
-  { "name": "Posto de Turismo de Vale de Cambra", "municipality": "Vale de Cambra", "address": "Av. Camilo Tavares de Matos 458, 3730-259 Vale de Cambra", "phone": "", "beaches": ["Praia Fluvial de Burgães-Rio Caima", "Praia Fluvial de Pontemieiro", "Praia Fluvial de Paçô do Mato"], "coordinates": { "lat": 40.8433, "lng": -8.3943 } },
-  { "name": "Posto de Turismo de Valpaços", "municipality": "Valpaços", "address": "Av. Eng. Luís de Castro Saraiva, 5430-472 Valpaços", "phone": "", "beaches": ["Praia Fluvial do Rabaçal", "Zona Balnear de Rio Torto"], "coordinates": { "lat": 41.6053, "lng": -7.2999 } },
-  { "name": "Centro Interpretativo da Ecovia do Rabaçal", "municipality": "Valpaços", "address": "Praia Fluvial do Rabaçal, 5430 Valpaços", "phone": "", "beaches": ["Praia Fluvial do Rabaçal", "Zona Balnear de Rio Torto"], "coordinates": { "lat": 41.6060, "lng": -7.3005 } },
-  { "name": "Posto de Turismo de Vieira do Minho", "municipality": "Vieira do Minho", "address": "Largo Prof. Brás da Mota, 4850-529 Vieira do Minho", "phone": "", "beaches": ["Praia Fluvial da Albufeira do Ermal"], "coordinates": { "lat": 41.6380, "lng": -8.1330 } },
-  { "name": "Posto de Informação Turística de Vila de Rei", "municipality": "Vila de Rei", "address": "Terminal Rodoviário, 6110-225 Vila de Rei", "phone": "", "beaches": ["Praia Fluvial do Bostelim", "Praia Fluvial de Fernandaires", "Praia Fluvial do Pego das Cancelas", "Praia Fluvial do Penedo Furado", "Praia Fluvial da Zaboeira"], "coordinates": { "lat": 39.6801, "lng": -8.1466 } },
-  { "name": "Junta de Freguesia de Vila de Rei", "municipality": "Vila de Rei", "address": "Rua Dr. João Germano Neves da Silva 5, 6110-219 Vila de Rei", "phone": "", "beaches": ["Praia Fluvial do Bostelim", "Praia Fluvial de Fernandaires", "Praia Fluvial do Pego das Cancelas", "Praia Fluvial do Penedo Furado", "Praia Fluvial da Zaboeira"], "coordinates": { "lat": 39.6810, "lng": -8.1470 } },
-  { "name": "Posto de Turismo de Vila Nova de Cerveira", "municipality": "Vila Nova de Cerveira", "address": "Praça do Município, 4920-278 Vila Nova de Cerveira", "phone": "", "beaches": ["Praia Fluvial da Lenta", "Praia Fluvial da Mota"], "coordinates": { "lat": 41.9380, "lng": -8.7420 } },
-  { "name": "Câmara Municipal de Vila Verde", "municipality": "Vila Verde", "address": "Praça da República, 4730-732 Vila Verde", "phone": "", "beaches": ["Praia Fluvial do Prado-Faial"], "coordinates": { "lat": 41.6490, "lng": -8.3143 } },
-  { "name": "Posto de Turismo de Vila Velha de Ródão", "municipality": "Vila Velha de Ródão", "address": "Rua do Porto do Tejo, 6030-238 Vila Velha de Ródão", "phone": "", "beaches": ["Praia Fluvial da Foz do Cobrão"], "coordinates": { "lat": 39.6609, "lng": -7.6785 } },
-  { "name": "Posto de Turismo de Vinhais", "municipality": "Vinhais", "address": "Praça do Município, 5320-314 Vinhais", "phone": "", "beaches": ["Praia Fluvial da Ponte de Frades", "Praia Fluvial da Ponte da Ranca", "Praia Fluvial da Ponte Soeira", "Zona Balnear de Armoniz", "Zona Balnear de Fresulfe", "Zona Balnear de Nuzedo de Baixo"], "coordinates": { "lat": 41.8360, "lng": -7.0083 } }
+  {
+    "name": "Posto de Turismo de Alandroal",
+    "municipality": "Alandroal",
+    "address": "Rua João de Deus 2, 7250-116 Alandroal",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Azenhas D'el Rei"
+    ],
+    "coordinates": {
+      "lat": 38.707,
+      "lng": -7.398
+    }
+  },
+  {
+    "name": "Welcome Center de Abrantes",
+    "municipality": "Abrantes",
+    "address": "Rua Luís de Camões 20A, 2200-201 Abrantes",
+    "phone": "966 822 104",
+    "beaches": [
+      "Praia Fluvial de Aldeia do Mato",
+      "Praia Fluvial de Fontes"
+    ],
+    "coordinates": {
+      "lat": 39.4622,
+      "lng": -8.1977
+    }
+  },
+  {
+    "name": "Parque de Campismo dos Olhos de Água do Alviela",
+    "municipality": "Alcanena",
+    "address": "Praia Fluvial dos Olhos de Água do Alviela, 2380-450 Louriceira",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial dos Olhos de Água do Alviela"
+    ],
+    "coordinates": {
+      "lat": 39.5667,
+      "lng": -8.6167
+    }
+  },
+  {
+    "name": "Posto de Turismo de Alcoutim",
+    "municipality": "Alcoutim",
+    "address": "Rua 1º de Maio, 8970-066 Alcoutim",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Pego Fundo"
+    ],
+    "coordinates": {
+      "lat": 37.4727,
+      "lng": -7.472
+    }
+  },
+  {
+    "name": "Posto de Turismo de Arcos de Valdevez",
+    "municipality": "Arcos de Valdevez",
+    "address": "Rua Professor Dr. Júlio Almeida Costa, 4970-606 Arcos de Valdevez",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Pontilhão da Valeta"
+    ],
+    "coordinates": {
+      "lat": 41.8489,
+      "lng": -8.4139
+    }
+  },
+  {
+    "name": "Posto de Turismo do Piódão",
+    "municipality": "Arganil",
+    "address": "Largo Cónego Manuel Fernandes Nogueira, 6285-018 Piódão",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Piódão",
+      "Praia Fluvial de Foz d'Égua"
+    ],
+    "coordinates": {
+      "lat": 40.2477,
+      "lng": -7.9372
+    }
+  },
+  {
+    "name": "Posto de Turismo de Arganil",
+    "municipality": "Arganil",
+    "address": "Av. das Forças Armadas, 3300-011 Arganil",
+    "phone": "235 200 137",
+    "beaches": [
+      "Praia Fluvial de Agroal",
+      "Praia Fluvial de Benfeita",
+      "Praia Fluvial de Côja",
+      "Praia Fluvial da Cascalheira-Secarias",
+      "Praia Fluvial de Pomares",
+      "Zona Balnear de Moinho de Alva",
+      "Zona Balnear de Peneda-Talhada",
+      "Zona Balnear do Urtigal",
+      "Zona Balnear da Fórnea"
+    ],
+    "coordinates": {
+      "lat": 40.2216,
+      "lng": -8.0641
+    }
+  },
+  {
+    "name": "Posto de Turismo de Arouca",
+    "municipality": "Arouca",
+    "address": "Rua Abel Botelho 4, 4540-114 Arouca",
+    "phone": "",
+    "beaches": [
+      "Zona Balnear do Areinho",
+      "Zona Balnear de Albergaria da Serra",
+      "Zona Balnear da Paradinha",
+      "Zona Balnear de Espiunca"
+    ],
+    "coordinates": {
+      "lat": 40.9317,
+      "lng": -8.2476
+    }
+  },
+  {
+    "name": "Posto de Turismo de Avis",
+    "municipality": "Avis",
+    "address": "Praça Serpa Pinto 1, 7480-122 Avis",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Clube Náutico de Avis"
+    ],
+    "coordinates": {
+      "lat": 39.0677,
+      "lng": -7.8939
+    }
+  },
+  {
+    "name": "Posto de Turismo de Beja",
+    "municipality": "Beja",
+    "address": "Largo Dr. Lima Faleiro 1, 7800-266 Beja",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Cinco Reis"
+    ],
+    "coordinates": {
+      "lat": 38.0156,
+      "lng": -7.8644
+    }
+  },
+  {
+    "name": "Posto de Turismo de Braga",
+    "municipality": "Braga",
+    "address": "Av. da Liberdade 1, 4710-250 Braga",
+    "phone": "253 262 550",
+    "beaches": [
+      "Praia Fluvial de Adaúfe",
+      "Praia Fluvial de Merelim-São Paio",
+      "Praia Fluvial de Ponte do Bico",
+      "Zona Balnear de Navarra",
+      "Praia Fluvial do Cavadinho"
+    ],
+    "coordinates": {
+      "lat": 41.5454,
+      "lng": -8.4265
+    }
+  },
+  {
+    "name": "Posto de Turismo de Cabeceiras de Basto",
+    "municipality": "Cabeceiras de Basto",
+    "address": "Praça da República 203, 4860-355 Cabeceiras de Basto",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Cavez"
+    ],
+    "coordinates": {
+      "lat": 41.5159,
+      "lng": -7.9908
+    }
+  },
+  {
+    "name": "Loja Interativa de Turismo de Caminha",
+    "municipality": "Caminha",
+    "address": "Praça Conselheiro Silva Torres, 4910-122 Caminha",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Vilar de Mouros-Azenhas",
+      "Praia Fluvial de Pedras Ruivas"
+    ],
+    "coordinates": {
+      "lat": 41.8748,
+      "lng": -8.8348
+    }
+  },
+  {
+    "name": "Posto de Turismo de Cantanhede",
+    "municipality": "Cantanhede",
+    "address": "Largo Conselheiro Ferreira Freire, 3060-228 Cantanhede",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Ançã",
+      "Praia Fluvial de Olhos da Fervença",
+      "Praia Fluvial de Sete Fontes"
+    ],
+    "coordinates": {
+      "lat": 40.3436,
+      "lng": -8.5972
+    }
+  },
+  {
+    "name": "Casa do Tempo — Castanheira de Pera",
+    "municipality": "Castanheira de Pera",
+    "address": "Rua Dr. José Fernandes de Carvalho, 3280-039 Castanheira de Pera",
+    "phone": "236 432 799",
+    "beaches": [
+      "Praia Fluvial de Poço Corga",
+      "Praia das Rocas"
+    ],
+    "coordinates": {
+      "lat": 40.0,
+      "lng": -8.207
+    }
+  },
+  {
+    "name": "Posto de Turismo de Castelo Branco",
+    "municipality": "Castelo Branco",
+    "address": "Av. Nuno Álvares 30, 6000-156 Castelo Branco",
+    "phone": "272 330 339",
+    "beaches": [
+      "Praia Fluvial de Almaceda",
+      "Zona Balnear da Lisga",
+      "Praia Fluvial do Sesmo"
+    ],
+    "coordinates": {
+      "lat": 39.8208,
+      "lng": -7.4913
+    }
+  },
+  {
+    "name": "Câmara Municipal de Castro Daire",
+    "municipality": "Castro Daire",
+    "address": "Rua Dr. Pio de Figueiredo 42, 3600-214 Castro Daire",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Folgosa"
+    ],
+    "coordinates": {
+      "lat": 40.9007,
+      "lng": -7.9397
+    }
+  },
+  {
+    "name": "Posto de Turismo de Castro Marim",
+    "municipality": "Castro Marim",
+    "address": "Rua de São Sebastião 3, 8950-281 Castro Marim",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial da Albufeira de Odeleite"
+    ],
+    "coordinates": {
+      "lat": 37.2163,
+      "lng": -7.443
+    }
+  },
+  {
+    "name": "Posto de Turismo de Coimbra",
+    "municipality": "Coimbra",
+    "address": "Rua Ferreira Borges 20, 3000-179 Coimbra",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Palheiros-Zorro",
+      "Praia Fluvial do Rebolim"
+    ],
+    "coordinates": {
+      "lat": 40.2088,
+      "lng": -8.428
+    }
+  },
+  {
+    "name": "Posto de Turismo de Coimbra — Baixa",
+    "municipality": "Coimbra",
+    "address": "Rua António Granjo 6, 3000-429 Coimbra",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Palheiros-Zorro",
+      "Praia Fluvial do Rebolim"
+    ],
+    "coordinates": {
+      "lat": 40.2094,
+      "lng": -8.4275
+    }
+  },
+  {
+    "name": "Posto de Turismo de Constância",
+    "municipality": "Constância",
+    "address": "Rua Luís de Camões 2, 2250-035 Constância",
+    "phone": "249 730 052",
+    "beaches": [
+      "Praia Fluvial de Constância"
+    ],
+    "coordinates": {
+      "lat": 39.4724,
+      "lng": -8.3329
+    }
+  },
+  {
+    "name": "Loja do Montado — Coruche",
+    "municipality": "Coruche",
+    "address": "Mercado Municipal de Coruche, 2100-228 Coruche",
+    "phone": "243 619 072",
+    "beaches": [
+      "Praia Fluvial do Sorraia"
+    ],
+    "coordinates": {
+      "lat": 38.9638,
+      "lng": -8.5236
+    }
+  },
+  {
+    "name": "Posto de Turismo Municipal da Covilhã",
+    "municipality": "Covilhã",
+    "address": "Praça do Município, 6200-151 Covilhã",
+    "phone": "275 330 630",
+    "beaches": [
+      "Praia Fluvial de Unhais da Serra",
+      "Zona Balnear de Cortes do Meio",
+      "Zona Balnear de Ourondo",
+      "Zona Balnear de Paul",
+      "Zona Balnear de Sobral de São Miguel",
+      "Zona Balnear de Unhais da Serra",
+      "Zona Balnear de Verdelhos",
+      "Zona Balnear de Vila do Carvalho"
+    ],
+    "coordinates": {
+      "lat": 40.2801,
+      "lng": -7.5039
+    }
+  },
+  {
+    "name": "Câmara Municipal de Cuba",
+    "municipality": "Cuba",
+    "address": "Largo Cristóvão Colon, 7490-145 Cuba",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Albergaria dos Fusos"
+    ],
+    "coordinates": {
+      "lat": 38.1608,
+      "lng": -7.8955
+    }
+  },
+  {
+    "name": "Posto de Turismo de Fafe",
+    "municipality": "Fafe",
+    "address": "Praça 25 de Abril, 4820-142 Fafe",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial da Albufeira da Queimadela"
+    ],
+    "coordinates": {
+      "lat": 41.451,
+      "lng": -8.1714
+    }
+  },
+  {
+    "name": "Posto de Turismo de Ferreira do Zêzere",
+    "municipality": "Ferreira do Zêzere",
+    "address": "Praça Dias Ferreira, 2240-341 Ferreira do Zêzere",
+    "phone": "249 360 151",
+    "beaches": [
+      "Praia Fluvial do Lago Azul",
+      "Praia Fluvial da Bairrada/Bairradinha"
+    ],
+    "coordinates": {
+      "lat": 39.6987,
+      "lng": -8.2907
+    }
+  },
+  {
+    "name": "Centro de Informação de Dornes",
+    "municipality": "Ferreira do Zêzere",
+    "address": "Rua Guilherme de Pavia 7, 2240-611 Dornes",
+    "phone": "249 366 410",
+    "beaches": [
+      "Praia Fluvial do Lago Azul",
+      "Praia Fluvial da Bairrada/Bairradinha"
+    ],
+    "coordinates": {
+      "lat": 39.6831,
+      "lng": -8.3192
+    }
+  },
+  {
+    "name": "Museu e Centro de Artes de Figueiró dos Vinhos",
+    "municipality": "Figueiró dos Vinhos",
+    "address": "Av. José Malhoa, 3260-402 Figueiró dos Vinhos",
+    "phone": "236 552 178",
+    "beaches": [
+      "Praia Fluvial de Ana de Aviz",
+      "Praia Fluvial das Fragas de São Simão"
+    ],
+    "coordinates": {
+      "lat": 39.9064,
+      "lng": -8.2776
+    }
+  },
+  {
+    "name": "Posto de Turismo de Fornos de Algodres",
+    "municipality": "Fornos de Algodres",
+    "address": "Urbanização Zona Sul - Palácio da Justiça, 6370-147 Fornos de Algodres",
+    "phone": "271 708 334",
+    "beaches": [
+      "Praia Fluvial de Ponte de Juncais"
+    ],
+    "coordinates": {
+      "lat": 40.6222,
+      "lng": -7.5337
+    }
+  },
+  {
+    "name": "Posto de Turismo de Freixo de Espada à Cinta",
+    "municipality": "Freixo de Espada à Cinta",
+    "address": "Praça Jorge Álvares, 5180-125 Freixo de Espada à Cinta",
+    "phone": "279 653 480",
+    "beaches": [
+      "Praia Fluvial da Congida"
+    ],
+    "coordinates": {
+      "lat": 41.0979,
+      "lng": -6.8088
+    }
+  },
+  {
+    "name": "Posto de Turismo do Fundão",
+    "municipality": "Fundão",
+    "address": "Rua 5 de Outubro 11A, 6230-338 Fundão",
+    "phone": "275 779 040",
+    "beaches": [
+      "Zona Balnear da Capinha",
+      "Parque Fluvial de Janeiro de Cima",
+      "Zona Balnear de Souto da Casa",
+      "Zona Balnear de Lavacolhos"
+    ],
+    "coordinates": {
+      "lat": 40.1342,
+      "lng": -7.5021
+    }
+  },
+  {
+    "name": "Posto de Turismo de Castelo Novo",
+    "municipality": "Fundão",
+    "address": "Largo da Bica 1, 6230-160 Castelo Novo",
+    "phone": "275 561 501",
+    "beaches": [
+      "Praia Fluvial de Castelo Novo"
+    ],
+    "coordinates": {
+      "lat": 40.1024,
+      "lng": -7.578
+    }
+  },
+  {
+    "name": "Casa das Artes de Gavião",
+    "municipality": "Gavião",
+    "address": "Rua Dr. Dias Calazans 34, 6040-115 Gavião",
+    "phone": "241 639 075",
+    "beaches": [
+      "Praia Fluvial do Alamal",
+      "Zona Balnear da Ribeira da Venda"
+    ],
+    "coordinates": {
+      "lat": 39.4683,
+      "lng": -7.9358
+    }
+  },
+  {
+    "name": "Posto de Turismo de Góis",
+    "municipality": "Góis",
+    "address": "Praça da República, 3330-310 Góis",
+    "phone": "235 770 110",
+    "beaches": [
+      "Praia Fluvial de Alvares",
+      "Praia Fluvial de Canaveias",
+      "Praia Fluvial da Cabreira",
+      "Praia Fluvial do Colmeal",
+      "Praia Fluvial de Peneda Pêgo Escuro",
+      "Praia Fluvial de Ponte do Sótão"
+    ],
+    "coordinates": {
+      "lat": 40.1594,
+      "lng": -8.1124
+    }
+  },
+  {
+    "name": "Câmara Municipal de Gondomar",
+    "municipality": "Gondomar",
+    "address": "Tv. Convenção de Gramido 41, 4420-416 Gondomar",
+    "phone": "224 637 036",
+    "beaches": [
+      "Praia Fluvial da Lomba",
+      "Areal de Melres",
+      "Areal de Zebreiros"
+    ],
+    "coordinates": {
+      "lat": 41.0369,
+      "lng": -8.5319
+    }
+  },
+  {
+    "name": "Posto de Turismo de Gouveia",
+    "municipality": "Gouveia",
+    "address": "Jardim da Ribeira, 6290-518 Gouveia",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Vale do Rossim"
+    ],
+    "coordinates": {
+      "lat": 40.4963,
+      "lng": -7.5927
+    }
+  },
+  {
+    "name": "Welcome Center da Guarda",
+    "municipality": "Guarda",
+    "address": "Praça Luís de Camões, 6300-725 Guarda",
+    "phone": "271 205 530",
+    "beaches": [
+      "Praia Fluvial de Aldeia Viçosa",
+      "Praia Fluvial da Barragem do Caldeirão",
+      "Praia Fluvial da Quinta da Taberna-Videmonte",
+      "Praia Fluvial de Vale do Mondego",
+      "Praia Fluvial de Valhelhas"
+    ],
+    "coordinates": {
+      "lat": 40.5375,
+      "lng": -7.268
+    }
+  },
+  {
+    "name": "Aldeia de Xisto de Benfeita",
+    "municipality": "Arganil",
+    "address": "Estrada Nacional 354-1 Km 8",
+    "phone": "",
+    "beaches": [],
+    "coordinates": {
+      "lat": 40.2333,
+      "lng": -8.1
+    }
+  },
+  {
+    "name": "Parque de Campismo de Idanha-a-Nova",
+    "municipality": "Idanha-a-Nova",
+    "address": "Estrada Nacional 354-1 Km 8, 6060-192 Idanha-a-Nova",
+    "phone": "277 201 029",
+    "beaches": [
+      "Zona Balnear da Barragem de Idanha-a-Nova"
+    ],
+    "coordinates": {
+      "lat": 39.9167,
+      "lng": -7.15
+    }
+  },
+  {
+    "name": "Posto de Turismo de Penha Garcia",
+    "municipality": "Idanha-a-Nova",
+    "address": "Rua do Espírito Santo, 6060-308 Penha Garcia",
+    "phone": "",
+    "beaches": [
+      "Zona Balnear do Pego"
+    ],
+    "coordinates": {
+      "lat": 40.0396,
+      "lng": -7.0671
+    }
+  },
+  {
+    "name": "Posto de Turismo de Leiria",
+    "municipality": "Leiria",
+    "address": "Jardim Luís de Camões, 2400-172 Leiria",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial da Lagoa da Ervedeira"
+    ],
+    "coordinates": {
+      "lat": 39.749,
+      "lng": -8.8075
+    }
+  },
+  {
+    "name": "Posto de Turismo de Monte Real",
+    "municipality": "Leiria",
+    "address": "Rua 28 de Maio, 2425-039 Monte Real",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial da Lagoa da Ervedeira"
+    ],
+    "coordinates": {
+      "lat": 39.8333,
+      "lng": -8.8883
+    }
+  },
+  {
+    "name": "EPAL - Atendimento ao público",
+    "municipality": "Lisboa",
+    "address": "Av. da Liberdade 24, 1250-144 Lisboa",
+    "phone": "",
+    "beaches": [
+      "Carimbo especial EPAL/ADVT"
+    ],
+    "coordinates": {
+      "lat": 38.7199,
+      "lng": -9.1431
+    }
+  },
+  {
+    "name": "Museu da Água - EPAL",
+    "municipality": "Lisboa",
+    "address": "Rua do Alviela 12, 1170-012 Lisboa",
+    "phone": "",
+    "beaches": [
+      "Carimbo especial EPAL/ADVT"
+    ],
+    "coordinates": {
+      "lat": 38.72,
+      "lng": -9.12
+    }
+  },
+  {
+    "name": "Reservatório da Mãe d'Água das Amoreiras",
+    "municipality": "Lisboa",
+    "address": "Praça das Amoreiras 10, 1250-020 Lisboa",
+    "phone": "",
+    "beaches": [
+      "Carimbo especial EPAL/ADVT"
+    ],
+    "coordinates": {
+      "lat": 38.7193,
+      "lng": -9.15
+    }
+  },
+  {
+    "name": "Museu Etnográfico Dr. Louzã Henriques — Lousã",
+    "municipality": "Lousã",
+    "address": "Rua Dr. João Luso, 3200-114 Lousã",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial da Senhora da Graça",
+      "Praia Fluvial da Senhora da Piedade",
+      "Praia Fluvial da Bogueira"
+    ],
+    "coordinates": {
+      "lat": 40.103,
+      "lng": -8.2468
+    }
+  },
+  {
+    "name": "Posto de Turismo de Mação",
+    "municipality": "Mação",
+    "address": "Largo dos Bombeiros Voluntários, 6120-750 Mação",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Cardigos",
+      "Praia Fluvial do Carvoeiro",
+      "Praia Fluvial de Ortiga"
+    ],
+    "coordinates": {
+      "lat": 39.5564,
+      "lng": -7.9924
+    }
+  },
+  {
+    "name": "Posto de Turismo de Marvão",
+    "municipality": "Marvão",
+    "address": "Largo da Silveirinha, 7330-101 Marvão",
+    "phone": "",
+    "beaches": [
+      "Zona Balnear da Portagem"
+    ],
+    "coordinates": {
+      "lat": 39.3981,
+      "lng": -7.3712
+    }
+  },
+  {
+    "name": "Posto de Turismo de Macedo de Cavaleiros",
+    "municipality": "Macedo de Cavaleiros",
+    "address": "Rua das Rosas, 5340-208 Macedo de Cavaleiros",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Fraga da Pegada",
+      "Praia Fluvial da Ribeira"
+    ],
+    "coordinates": {
+      "lat": 41.537,
+      "lng": -6.9555
+    }
+  },
+  {
+    "name": "Posto de Turismo de Manteigas",
+    "municipality": "Manteigas",
+    "address": "Rua Dr. Esteves de Carvalho 2, 6260-130 Manteigas",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial da Relva da Reboleira",
+      "Zona Balnear do Covão da Ponte"
+    ],
+    "coordinates": {
+      "lat": 40.4031,
+      "lng": -7.532
+    }
+  },
+  {
+    "name": "Posto de Turismo de Marco de Canaveses",
+    "municipality": "Marco de Canaveses",
+    "address": "Alameda Dr. Miranda da Rocha, 4630-200 Marco de Canaveses",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Bitetos"
+    ],
+    "coordinates": {
+      "lat": 41.185,
+      "lng": -8.1499
+    }
+  },
+  {
+    "name": "Posto de Turismo de Mértola",
+    "municipality": "Mértola",
+    "address": "Rua da Igreja 31, 7750-354 Mértola",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial da Albufeira da Tapada Grande"
+    ],
+    "coordinates": {
+      "lat": 37.6419,
+      "lng": -7.6601
+    }
+  },
+  {
+    "name": "Posto de Turismo de Mira",
+    "municipality": "Mira",
+    "address": "Av. da Barrinha 55, 3070-792 Praia de Mira",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial da Barrinha de Mira"
+    ],
+    "coordinates": {
+      "lat": 40.428,
+      "lng": -8.738
+    }
+  },
+  {
+    "name": "Posto de Turismo de Mirandela",
+    "municipality": "Mirandela",
+    "address": "Travessa da Ponte Romana, 5370-489 Mirandela",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial Albino Mendo",
+      "Zona Balnear de Maravilha",
+      "Praia Fluvial de Quintas",
+      "Praia Fluvial de Vale Juncal",
+      "Zona Balnear de Ponte da Pedra",
+      "Zona Balnear de Frechas"
+    ],
+    "coordinates": {
+      "lat": 41.4848,
+      "lng": -7.1836
+    }
+  },
+  {
+    "name": "Câmara Municipal de Moimenta da Beira",
+    "municipality": "Moimenta da Beira",
+    "address": "Terreiro Freiras 7, 3620-304 Moimenta da Beira",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Albufeira do Vilar",
+      "Praia Fluvial de Segões",
+      "Zona Balnear de Leomil"
+    ],
+    "coordinates": {
+      "lat": 40.9801,
+      "lng": -7.616
+    }
+  },
+  {
+    "name": "Posto de Turismo de Montemor-o-Velho",
+    "municipality": "Montemor-o-Velho",
+    "address": "Paço das Infantas - Castelo de Montemor-o-Velho, 3140-262 Montemor-o-Velho",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Ereira"
+    ],
+    "coordinates": {
+      "lat": 40.174,
+      "lng": -8.685
+    }
+  },
+  {
+    "name": "Posto de Turismo de Moura",
+    "municipality": "Moura",
+    "address": "Interior do Castelo de Moura, 7860-159 Moura",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Moura"
+    ],
+    "coordinates": {
+      "lat": 38.138,
+      "lng": -7.452
+    }
+  },
+  {
+    "name": "Posto de Turismo de Mourão",
+    "municipality": "Mourão",
+    "address": "Largo das Portas de S. Bento, 7240-263 Mourão",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Mourão"
+    ],
+    "coordinates": {
+      "lat": 38.368,
+      "lng": -7.368
+    }
+  },
+  {
+    "name": "Posto de Turismo de Santa Clara-a-Velha",
+    "municipality": "Odemira",
+    "address": "Alameda da Índia, 7665-880 Santa Clara-a-Velha",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Santa Clara-a-Velha"
+    ],
+    "coordinates": {
+      "lat": 37.7167,
+      "lng": -8.2667
+    }
+  },
+  {
+    "name": "Posto de Turismo de Odemira",
+    "municipality": "Odemira",
+    "address": "Travessa da Quinta da Estrela 3, 7630-130 Odemira",
+    "phone": "",
+    "beaches": [
+      "Zona Balnear de Odemira"
+    ],
+    "coordinates": {
+      "lat": 37.5983,
+      "lng": -8.631
+    }
+  },
+  {
+    "name": "Câmara Municipal de Oleiros",
+    "municipality": "Oleiros",
+    "address": "Largo do Município 8, 6160-409 Oleiros",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Açude Pinto",
+      "Praia Fluvial de Álvaro",
+      "Praia Fluvial de Cambas"
+    ],
+    "coordinates": {
+      "lat": 39.9137,
+      "lng": -7.9151
+    }
+  },
+  {
+    "name": "Câmara Municipal de Oliveira de Frades",
+    "municipality": "Oliveira de Frades",
+    "address": "Largo Dr. Joaquim de Almeida 111, 3680-116 Oliveira de Frades",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial da Carriça",
+      "Zona Balnear de Destriz"
+    ],
+    "coordinates": {
+      "lat": 40.7334,
+      "lng": -8.1763
+    }
+  },
+  {
+    "name": "Posto de Turismo de Oliveira do Hospital",
+    "municipality": "Oliveira do Hospital",
+    "address": "Rua do Colégio, 3400-105 Oliveira do Hospital",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Avô",
+      "Praia Fluvial de Alvoco das Várzeas",
+      "Praia Fluvial de São Sebastião da Feira",
+      "Praia Fluvial de São Gião"
+    ],
+    "coordinates": {
+      "lat": 40.3598,
+      "lng": -7.8633
+    }
+  },
+  {
+    "name": "Welcome Center de Fátima",
+    "municipality": "Ourém",
+    "address": "Av. Dom José Alves Correia da Silva 213, 2495-402 Fátima",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Agroal"
+    ],
+    "coordinates": {
+      "lat": 39.626,
+      "lng": -8.674
+    }
+  },
+  {
+    "name": "Posto de Turismo de Ourém",
+    "municipality": "Ourém",
+    "address": "Largo do Pelourinho - Castelo, 2490-472 Ourém",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Agroal"
+    ],
+    "coordinates": {
+      "lat": 39.6518,
+      "lng": -8.5799
+    }
+  },
+  {
+    "name": "Parque Natureza do Agroal",
+    "municipality": "Ourém",
+    "address": "EM525 Rua Principal do Agroal, 2435-201 Ourém",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Agroal"
+    ],
+    "coordinates": {
+      "lat": 39.605,
+      "lng": -8.52
+    }
+  },
+  {
+    "name": "Câmara Municipal de Pampilhosa da Serra",
+    "municipality": "Pampilhosa da Serra",
+    "address": "Rua Rangel de Lima, 3320-229 Pampilhosa da Serra",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Janeiro de Baixo",
+      "Praia Fluvial de Pampilhosa da Serra",
+      "Praia Fluvial de Pessegueiro",
+      "Praia Fluvial de Santa Luzia"
+    ],
+    "coordinates": {
+      "lat": 40.0523,
+      "lng": -7.956
+    }
+  },
+  {
+    "name": "Centro de Interpretação Turística de Pedrógão Grande",
+    "municipality": "Pedrógão Grande",
+    "address": "Valbom, 3274-909 Pedrógão Grande",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Cabril",
+      "Praia Fluvial de Mega",
+      "Praia Fluvial de Mosteiro"
+    ],
+    "coordinates": {
+      "lat": 39.9185,
+      "lng": -8.1494
+    }
+  },
+  {
+    "name": "Posto de Turismo de Pedrógão Grande (EN2)",
+    "municipality": "Pedrógão Grande",
+    "address": "Jardim da Devesa, 3270-101 Pedrógão Grande",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Cabril",
+      "Praia Fluvial de Mega",
+      "Praia Fluvial de Mosteiro"
+    ],
+    "coordinates": {
+      "lat": 39.9178,
+      "lng": -8.1487
+    }
+  },
+  {
+    "name": "Posto de Turismo de Penacova",
+    "municipality": "Penacova",
+    "address": "Largo Alberto Leitão, 3360-341 Penacova",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Reconquinho",
+      "Praia Fluvial do Vimieiro",
+      "Praia Fluvial do Cornicovo"
+    ],
+    "coordinates": {
+      "lat": 40.2714,
+      "lng": -8.2847
+    }
+  },
+  {
+    "name": "Posto de Turismo de Penacova (EN2)",
+    "municipality": "Penacova",
+    "address": "EN2 Km238 junto à ponte do Mondego, 3360 Penacova",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Reconquinho",
+      "Praia Fluvial do Vimieiro",
+      "Praia Fluvial do Cornicovo"
+    ],
+    "coordinates": {
+      "lat": 40.272,
+      "lng": -8.2853
+    }
+  },
+  {
+    "name": "Câmara Municipal de Penalva do Castelo",
+    "municipality": "Penalva do Castelo",
+    "address": "Avenida Castendo, 3550-185 Penalva do Castelo",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Açude de Vais"
+    ],
+    "coordinates": {
+      "lat": 40.6674,
+      "lng": -7.6992
+    }
+  },
+  {
+    "name": "Museu Municipal de Penamacor",
+    "municipality": "Penamacor",
+    "address": "Largo Tenente Coronel Júlio Rodrigues da Silva, 6090-545 Penamacor",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Meimão",
+      "Zona Balnear da Meimoa",
+      "Zona Balnear O Moinho"
+    ],
+    "coordinates": {
+      "lat": 40.1664,
+      "lng": -7.1759
+    }
+  },
+  {
+    "name": "Posto de Turismo de Penela",
+    "municipality": "Penela",
+    "address": "Praça Município 13, 3230-267 Penela",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial da Louçainha"
+    ],
+    "coordinates": {
+      "lat": 40.0281,
+      "lng": -8.3836
+    }
+  },
+  {
+    "name": "Posto de Turismo de Ponte da Barca",
+    "municipality": "Ponte da Barca",
+    "address": "Rua Conselheiro Rocha Peixoto 9, 4980-626 Ponte da Barca",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Ponte da Barca"
+    ],
+    "coordinates": {
+      "lat": 41.8043,
+      "lng": -8.4185
+    }
+  },
+  {
+    "name": "Centro de Artes e Cultura de Ponte de Sor",
+    "municipality": "Ponte de Sor",
+    "address": "Av. da Liberdade 64F, 7400-218 Ponte de Sor",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Montalvo/Tesos"
+    ],
+    "coordinates": {
+      "lat": 39.2481,
+      "lng": -8.0133
+    }
+  },
+  {
+    "name": "Centro Cultural de Montargil",
+    "municipality": "Ponte de Sor",
+    "address": "Rua Luís de Camões 16, 7425-128 Montargil",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Montalvo/Tesos"
+    ],
+    "coordinates": {
+      "lat": 39.08,
+      "lng": -8.16
+    }
+  },
+  {
+    "name": "Posto de Turismo de Portel",
+    "municipality": "Portel",
+    "address": "Rua de Santiago 32, 7220-405 Portel",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Alqueva",
+      "Praia Fluvial da Amieira",
+      "Praia Fluvial de Oriola"
+    ],
+    "coordinates": {
+      "lat": 38.3092,
+      "lng": -7.7025
+    }
+  },
+  {
+    "name": "Câmara Municipal da Póvoa de Lanhoso",
+    "municipality": "Póvoa de Lanhoso",
+    "address": "Avenida da República, 4830-513 Póvoa de Lanhoso",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Verim"
+    ],
+    "coordinates": {
+      "lat": 41.5799,
+      "lng": -8.2674
+    }
+  },
+  {
+    "name": "Posto de Turismo de Proença-a-Nova",
+    "municipality": "Proença-a-Nova",
+    "address": "Rua do Rossio 1, 6150-909 Proença-a-Nova",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Malhadal",
+      "Praia Fluvial de Aldeia Ruiva",
+      "Praia Fluvial da Fróia",
+      "Zona Balnear de Alvito da Beira",
+      "Zona Balnear da Cerejeira"
+    ],
+    "coordinates": {
+      "lat": 39.7527,
+      "lng": -7.9216
+    }
+  },
+  {
+    "name": "Posto de Turismo de Monsaraz",
+    "municipality": "Reguengos de Monsaraz",
+    "address": "Rua Direita 24, 7200-175 Monsaraz",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Monsaraz"
+    ],
+    "coordinates": {
+      "lat": 38.444,
+      "lng": -7.3833
+    }
+  },
+  {
+    "name": "Posto de Turismo de Reguengos de Monsaraz",
+    "municipality": "Reguengos de Monsaraz",
+    "address": "Av. António José de Almeida, 7200-372 Reguengos de Monsaraz",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Monsaraz"
+    ],
+    "coordinates": {
+      "lat": 38.4284,
+      "lng": -7.5354
+    }
+  },
+  {
+    "name": "Bar/Restaurante Sem Fim - Praia Fluvial de Monsaraz",
+    "municipality": "Reguengos de Monsaraz",
+    "address": "Praia Fluvial de Monsaraz",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Monsaraz"
+    ],
+    "coordinates": {
+      "lat": 38.435,
+      "lng": -7.37
+    }
+  },
+  {
+    "name": "Museu do Sabugal",
+    "municipality": "Sabugal",
+    "address": "Rua de São Tiago, 6320-409 Sabugal",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Alfaiates",
+      "Praia Fluvial de Badamalos",
+      "Zona Balnear de Malcata",
+      "Zona Balnear de Penalobo",
+      "Praia Fluvial de Quadrazais",
+      "Praia Fluvial de Rapoula do Côa",
+      "Zona Balnear de Seixo do Côa",
+      "Praia Fluvial de Vale das Éguas",
+      "Zona Balnear de Vale de Espinho",
+      "Praia Fluvial do Sabugal"
+    ],
+    "coordinates": {
+      "lat": 40.3531,
+      "lng": -7.0897
+    }
+  },
+  {
+    "name": "Posto de Turismo de Santa Comba Dão",
+    "municipality": "Santa Comba Dão",
+    "address": "Rua Miguel Neves, 3440-386 Santa Comba Dão",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Senhora da Ribeira"
+    ],
+    "coordinates": {
+      "lat": 40.3967,
+      "lng": -8.1351
+    }
+  },
+  {
+    "name": "Loja Interativa de Turismo de Santa Maria da Feira",
+    "municipality": "Santa Maria da Feira",
+    "address": "Rua Dr. Roberto Alves 52, 4524-909 Santa Maria da Feira",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial da Mamôa"
+    ],
+    "coordinates": {
+      "lat": 40.9268,
+      "lng": -8.5469
+    }
+  },
+  {
+    "name": "Posto de Turismo de São Pedro do Sul",
+    "municipality": "São Pedro do Sul",
+    "address": "Avenida da Ponte, 3660-484 São Pedro do Sul",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial da Ucha"
+    ],
+    "coordinates": {
+      "lat": 40.762,
+      "lng": -8.0658
+    }
+  },
+  {
+    "name": "Casa da Cultura de Sátão",
+    "municipality": "Sátão",
+    "address": "Rua da Travessa do Clube, 3560 Sátão",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Trabulo"
+    ],
+    "coordinates": {
+      "lat": 40.7459,
+      "lng": -7.7312
+    }
+  },
+  {
+    "name": "Posto de Turismo de Seia",
+    "municipality": "Seia",
+    "address": "Rua Pintor Lucas Marrão, 6270-513 Seia",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Lapa dos Dinheiros",
+      "Praia Fluvial do Sabugueiro",
+      "Praia Fluvial de Sandomil",
+      "Praia Fluvial da Senhora do Desterro",
+      "Praia Fluvial de Vila Cova à Coelheira"
+    ],
+    "coordinates": {
+      "lat": 40.418,
+      "lng": -7.701
+    }
+  },
+  {
+    "name": "Centro de Informação de Loriga",
+    "municipality": "Seia",
+    "address": "Estrada Nacional 231, 6270-090 Loriga",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Loriga",
+      "Praia Fluvial de Poço do Lagar"
+    ],
+    "coordinates": {
+      "lat": 40.3338,
+      "lng": -7.672
+    }
+  },
+  {
+    "name": "Posto de Turismo do Sabugueiro",
+    "municipality": "Seia",
+    "address": "Rua Nossa Senhora de Fátima, 6270-151 Sabugueiro",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Sabugueiro"
+    ],
+    "coordinates": {
+      "lat": 40.38,
+      "lng": -7.65
+    }
+  },
+  {
+    "name": "Museu Natural da Eletricidade de Seia",
+    "municipality": "Seia",
+    "address": "Senhora do Desterro, 6270 São Romão",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial da Senhora do Desterro"
+    ],
+    "coordinates": {
+      "lat": 40.39,
+      "lng": -7.65
+    }
+  },
+  {
+    "name": "Centro das Artes de Sernancelhe",
+    "municipality": "Sernancelhe",
+    "address": "Av. Dr. Oliveira Serrão, 3640-420 Sernancelhe",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Vila da Ponte"
+    ],
+    "coordinates": {
+      "lat": 40.9174,
+      "lng": -7.4913
+    }
+  },
+  {
+    "name": "Espaço da Castanha e do Castanheiro",
+    "municipality": "Sernancelhe",
+    "address": "Rua do Colégio - Bairro da Lage Nova, 3640-233 Sernancelhe",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Vila da Ponte"
+    ],
+    "coordinates": {
+      "lat": 40.91,
+      "lng": -7.49
+    }
+  },
+  {
+    "name": "Posto de Turismo da Sertã (EN2)",
+    "municipality": "Sertã",
+    "address": "Av. Padre Manuel Antunes, 6100-781 Sertã",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial da Ribeira Grande",
+      "Praia Fluvial do Troviscal",
+      "Zona de Lazer do Trízio",
+      "Zona de Lazer do Boiçô",
+      "Zona de Lazer do Marmeleiro"
+    ],
+    "coordinates": {
+      "lat": 39.8051,
+      "lng": -8.097
+    }
+  },
+  {
+    "name": "Casa do Artesão de Sever do Vouga",
+    "municipality": "Sever do Vouga",
+    "address": "Rua do Jardim 92, 3740-273 Sever do Vouga",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial da Quinta do Barco",
+      "Zona Balnear da Cascata da Cabreia"
+    ],
+    "coordinates": {
+      "lat": 40.734,
+      "lng": -8.364
+    }
+  },
+  {
+    "name": "Câmara Municipal de Tábua",
+    "municipality": "Tábua",
+    "address": "Praça República, 3420-308 Tábua",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial da Ronqueira"
+    ],
+    "coordinates": {
+      "lat": 40.3633,
+      "lng": -8.0268
+    }
+  },
+  {
+    "name": "Posto de Turismo de Rio Caldo",
+    "municipality": "Terras de Bouro",
+    "address": "Av. das Pontes 30, 4845-024 Rio Caldo",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Alqueirão"
+    ],
+    "coordinates": {
+      "lat": 41.7126,
+      "lng": -8.2011
+    }
+  },
+  {
+    "name": "Posto de Turismo de Tomar",
+    "municipality": "Tomar",
+    "address": "Av. Dr. Cândido Madureira, 2300-531 Tomar",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Alqueidão",
+      "Praia Fluvial de Montes",
+      "Praia Fluvial de Vila Nova-Serra",
+      "Zona Balnear de Alverangel"
+    ],
+    "coordinates": {
+      "lat": 39.6036,
+      "lng": -8.4117
+    }
+  },
+  {
+    "name": "Museu Terras de Besteiros — Tondela",
+    "municipality": "Tondela",
+    "address": "Rua Dr. Simões Ferraz de Carvalho, 3460-588 Tondela",
+    "phone": "",
+    "beaches": [
+      "Zona Balnear de São João do Monte"
+    ],
+    "coordinates": {
+      "lat": 40.5173,
+      "lng": -8.0797
+    }
+  },
+  {
+    "name": "Posto de Turismo de Torre de Moncorvo",
+    "municipality": "Torre de Moncorvo",
+    "address": "Rua dos Sapateiros 15, 5160-278 Torre de Moncorvo",
+    "phone": "",
+    "beaches": [
+      "Zona Balnear da Foz do Sabor"
+    ],
+    "coordinates": {
+      "lat": 41.1773,
+      "lng": -7.0524
+    }
+  },
+  {
+    "name": "Posto de Turismo de Vale de Cambra",
+    "municipality": "Vale de Cambra",
+    "address": "Av. Camilo Tavares de Matos 458, 3730-259 Vale de Cambra",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Burgães-Rio Caima",
+      "Praia Fluvial de Pontemieiro",
+      "Praia Fluvial de Paçô do Mato"
+    ],
+    "coordinates": {
+      "lat": 40.8433,
+      "lng": -8.3943
+    }
+  },
+  {
+    "name": "Posto de Turismo de Valpaços",
+    "municipality": "Valpaços",
+    "address": "Av. Eng. Luís de Castro Saraiva, 5430-472 Valpaços",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Rabaçal",
+      "Zona Balnear de Rio Torto"
+    ],
+    "coordinates": {
+      "lat": 41.6053,
+      "lng": -7.2999
+    }
+  },
+  {
+    "name": "Centro Interpretativo da Ecovia do Rabaçal",
+    "municipality": "Valpaços",
+    "address": "Praia Fluvial do Rabaçal, 5430 Valpaços",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Rabaçal",
+      "Zona Balnear de Rio Torto"
+    ],
+    "coordinates": {
+      "lat": 41.606,
+      "lng": -7.3005
+    }
+  },
+  {
+    "name": "Posto de Turismo de Vieira do Minho",
+    "municipality": "Vieira do Minho",
+    "address": "Largo Prof. Brás da Mota, 4850-529 Vieira do Minho",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial da Albufeira do Ermal"
+    ],
+    "coordinates": {
+      "lat": 41.638,
+      "lng": -8.133
+    }
+  },
+  {
+    "name": "Posto de Informação Turística de Vila de Rei",
+    "municipality": "Vila de Rei",
+    "address": "Terminal Rodoviário, 6110-225 Vila de Rei",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Bostelim",
+      "Praia Fluvial de Fernandaires",
+      "Praia Fluvial do Pego das Cancelas",
+      "Praia Fluvial do Penedo Furado",
+      "Praia Fluvial da Zaboeira"
+    ],
+    "coordinates": {
+      "lat": 39.6801,
+      "lng": -8.1466
+    }
+  },
+  {
+    "name": "Junta de Freguesia de Vila de Rei",
+    "municipality": "Vila de Rei",
+    "address": "Rua Dr. João Germano Neves da Silva 5, 6110-219 Vila de Rei",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Bostelim",
+      "Praia Fluvial de Fernandaires",
+      "Praia Fluvial do Pego das Cancelas",
+      "Praia Fluvial do Penedo Furado",
+      "Praia Fluvial da Zaboeira"
+    ],
+    "coordinates": {
+      "lat": 39.681,
+      "lng": -8.147
+    }
+  },
+  {
+    "name": "Posto de Turismo de Vila Nova de Cerveira",
+    "municipality": "Vila Nova de Cerveira",
+    "address": "Praça do Município, 4920-278 Vila Nova de Cerveira",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial da Lenta",
+      "Praia Fluvial da Mota"
+    ],
+    "coordinates": {
+      "lat": 41.938,
+      "lng": -8.742
+    }
+  },
+  {
+    "name": "Câmara Municipal de Vila Verde",
+    "municipality": "Vila Verde",
+    "address": "Praça da República, 4730-732 Vila Verde",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Prado-Faial"
+    ],
+    "coordinates": {
+      "lat": 41.649,
+      "lng": -8.3143
+    }
+  },
+  {
+    "name": "Posto de Turismo de Vila Velha de Ródão",
+    "municipality": "Vila Velha de Ródão",
+    "address": "Rua do Porto do Tejo, 6030-238 Vila Velha de Ródão",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial da Foz do Cobrão"
+    ],
+    "coordinates": {
+      "lat": 39.6609,
+      "lng": -7.6785
+    }
+  },
+  {
+    "name": "Posto de Turismo de Vinhais",
+    "municipality": "Vinhais",
+    "address": "Praça do Município, 5320-314 Vinhais",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial da Ponte de Frades",
+      "Praia Fluvial da Ponte da Ranca",
+      "Praia Fluvial da Ponte Soeira",
+      "Zona Balnear de Armoniz",
+      "Zona Balnear de Fresulfe",
+      "Zona Balnear de Nuzedo de Baixo"
+    ],
+    "coordinates": {
+      "lat": 41.836,
+      "lng": -7.0083
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial da Aldeia do Mato",
+    "municipality": "Abrantes",
+    "address": "Praia Fluvial da Aldeia do Mato, Aldeia do Mato, 2200-601 Abrantes",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Aldeia do Mato"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 39.4985,
+      "lng": -8.0714
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial de Fontes",
+    "municipality": "Abrantes",
+    "address": "Praia Fluvial de Fontes, Abrantes",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Fontes"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 39.483,
+      "lng": -8.056
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial de Cinco Reis",
+    "municipality": "Beja",
+    "address": "Praia Fluvial de Cinco Reis, Beja",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Cinco Reis"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 37.97,
+      "lng": -7.92
+    }
+  },
+  {
+    "name": "Receção da Praia das Rocas",
+    "municipality": "Castanheira de Pera",
+    "address": "Praia das Rocas, 3280-039 Castanheira de Pera",
+    "phone": "",
+    "beaches": [
+      "Praia das Rocas"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.0053,
+      "lng": -8.2103
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial de Almaceda",
+    "municipality": "Castelo Branco",
+    "address": "Praia Fluvial de Almaceda, 6000-001 Almaceda",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Almaceda"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 39.855,
+      "lng": -7.52
+    }
+  },
+  {
+    "name": "Bar da Zona Balnear da Lisga",
+    "municipality": "Castelo Branco",
+    "address": "Zona Balnear da Lisga, Castelo Branco",
+    "phone": "",
+    "beaches": [
+      "Zona Balnear da Lisga"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 39.91,
+      "lng": -7.46
+    }
+  },
+  {
+    "name": "Dokas do Sesmo — Bar da Praia Fluvial do Sesmo",
+    "municipality": "Castelo Branco",
+    "address": "Tv. da Rua da Aldeia n.º 8, 6000-711 Sesmo (Sarzedas)",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Sesmo"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 39.78,
+      "lng": -7.56
+    }
+  },
+  {
+    "name": "Sunset Beach Bar — Praia Fluvial do Sorraia",
+    "municipality": "Coruche",
+    "address": "Praia Fluvial do Sorraia, 2100-101 Coruche",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Sorraia"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 38.96,
+      "lng": -8.525
+    }
+  },
+  {
+    "name": "Nadadores Salvadores — Praia Fluvial do Lago Azul",
+    "municipality": "Ferreira do Zêzere",
+    "address": "Praia Fluvial do Lago Azul, Ferreira do Zêzere",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Lago Azul"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 39.69,
+      "lng": -8.27
+    }
+  },
+  {
+    "name": "Nadadores Salvadores — Praia Fluvial da Bairrada/Bairradinha",
+    "municipality": "Ferreira do Zêzere",
+    "address": "Praia Fluvial da Bairrada/Bairradinha, Ferreira do Zêzere",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial da Bairrada/Bairradinha"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 39.71,
+      "lng": -8.3
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial de Ana de Aviz",
+    "municipality": "Figueiró dos Vinhos",
+    "address": "Praia Fluvial de Ana de Aviz, Figueiró dos Vinhos",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Ana de Aviz"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 39.91,
+      "lng": -8.27
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial das Fragas de São Simão",
+    "municipality": "Figueiró dos Vinhos",
+    "address": "Praia Fluvial das Fragas de São Simão, Figueiró dos Vinhos",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial das Fragas de São Simão"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 39.89,
+      "lng": -8.25
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial de Ponte de Juncais",
+    "municipality": "Fornos de Algodres",
+    "address": "Praia Fluvial de Ponte de Juncais, 6370-000 Fornos de Algodres",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Ponte de Juncais"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.6222,
+      "lng": -7.5337
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial da Congida",
+    "municipality": "Freixo de Espada à Cinta",
+    "address": "Praia Fluvial da Congida, Freixo de Espada à Cinta",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial da Congida"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 41.0979,
+      "lng": -6.8088
+    }
+  },
+  {
+    "name": "Bar/Restaurante da Praia Fluvial do Alamal",
+    "municipality": "Gavião",
+    "address": "Praia Fluvial do Alamal — Quinta do Alamal, Gavião",
+    "phone": "241 631 221",
+    "beaches": [
+      "Praia Fluvial do Alamal"
+    ],
+    "seasonal": false,
+    "coordinates": {
+      "lat": 39.46,
+      "lng": -7.94
+    }
+  },
+  {
+    "name": "Restaurante da Zona Balnear da Ribeira da Venda",
+    "municipality": "Gavião",
+    "address": "Ribeira Venda — Comenda, Gavião",
+    "phone": "245 776 064",
+    "beaches": [
+      "Zona Balnear da Ribeira da Venda"
+    ],
+    "seasonal": false,
+    "coordinates": {
+      "lat": 39.47,
+      "lng": -7.95
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial da Lomba",
+    "municipality": "Gondomar",
+    "address": "Praia Fluvial da Lomba, Gondomar",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial da Lomba"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 41.03,
+      "lng": -8.55
+    }
+  },
+  {
+    "name": "Bar do Areal de Melres",
+    "municipality": "Gondomar",
+    "address": "Areal de Melres, Gondomar",
+    "phone": "",
+    "beaches": [
+      "Areal de Melres"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 41.04,
+      "lng": -8.52
+    }
+  },
+  {
+    "name": "Bar do Areal de Zebreiros",
+    "municipality": "Gondomar",
+    "address": "Areal de Zebreiros, Gondomar",
+    "phone": "",
+    "beaches": [
+      "Areal de Zebreiros"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 41.05,
+      "lng": -8.5
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial de Aldeia Viçosa",
+    "municipality": "Guarda",
+    "address": "Praia Fluvial de Aldeia Viçosa, 6300-025 Aldeia Viçosa",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Aldeia Viçosa"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.56,
+      "lng": -7.22
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial da Barragem do Caldeirão",
+    "municipality": "Guarda",
+    "address": "Praia Fluvial da Barragem do Caldeirão, Guarda",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial da Barragem do Caldeirão"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.52,
+      "lng": -7.3
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial da Quinta da Taberna — Videmonte",
+    "municipality": "Guarda",
+    "address": "Praia Fluvial da Quinta da Taberna — Videmonte, Guarda",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial da Quinta da Taberna — Videmonte"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.49,
+      "lng": -7.27
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial de Vale do Mondego",
+    "municipality": "Guarda",
+    "address": "Praia Fluvial de Vale do Mondego, Guarda",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Vale do Mondego"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.51,
+      "lng": -7.32
+    }
+  },
+  {
+    "name": "Nadadores Salvadores da Praia Fluvial de Valhelhas",
+    "municipality": "Guarda",
+    "address": "Praia Fluvial de Valhelhas, EN 232, 6300-235 Valhelhas",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Valhelhas"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.39,
+      "lng": -7.29
+    }
+  },
+  {
+    "name": "Pátio da Água — EPAL",
+    "municipality": "Lisboa",
+    "address": "Av. da Liberdade n.º 14, 1250-096 Lisboa",
+    "phone": "",
+    "beaches": [],
+    "seasonal": true,
+    "seasonal_note": "5 de junho a 12 de setembro, das 11h30 às 18h30",
+    "coordinates": {
+      "lat": 38.7196,
+      "lng": -9.1447
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial de Cardigos",
+    "municipality": "Mação",
+    "address": "Praia Fluvial de Cardigos, Mação",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Cardigos"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 39.56,
+      "lng": -8.09
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial do Carvoeiro",
+    "municipality": "Mação",
+    "address": "Praia Fluvial do Carvoeiro, 6120-313 Carvoeiro (Mação)",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Carvoeiro"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 39.54,
+      "lng": -8.12
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial de Ortiga",
+    "municipality": "Mação",
+    "address": "Praia Fluvial de Ortiga — Barragem de Belver, 6120 Ortiga",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Ortiga"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 39.59,
+      "lng": -8.05
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial de Açude Pinto",
+    "municipality": "Oleiros",
+    "address": "Praia Fluvial de Açude Pinto, Oleiros",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Açude Pinto"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 39.91,
+      "lng": -7.92
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial de Álvaro",
+    "municipality": "Oleiros",
+    "address": "Praia Fluvial de Álvaro, Oleiros",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Álvaro"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 39.89,
+      "lng": -7.95
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial de Cambas",
+    "municipality": "Oleiros",
+    "address": "Praia Fluvial de Cambas, 6160 Cambas (Oleiros)",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Cambas"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 39.93,
+      "lng": -7.88
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial da Carriça",
+    "municipality": "Oliveira de Frades",
+    "address": "Praia Fluvial da Carriça, Oliveira de Frades",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial da Carriça"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.73,
+      "lng": -8.17
+    }
+  },
+  {
+    "name": "Bar da Zona Balnear de Destriz",
+    "municipality": "Oliveira de Frades",
+    "address": "Zona Balnear de Destriz, Oliveira de Frades",
+    "phone": "",
+    "beaches": [
+      "Zona Balnear de Destriz"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.72,
+      "lng": -8.19
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial de Avô",
+    "municipality": "Oliveira do Hospital",
+    "address": "Praia Fluvial de Avô, 3400 Avô",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Avô"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.28,
+      "lng": -7.89
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial de Alvoco das Várzeas",
+    "municipality": "Oliveira do Hospital",
+    "address": "Praia Fluvial de Alvoco das Várzeas, 3400 Alvoco das Várzeas",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Alvoco das Várzeas"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.25,
+      "lng": -7.9
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial de São Sebastião da Feira",
+    "municipality": "Oliveira do Hospital",
+    "address": "Praia Fluvial de São Sebastião da Feira, Oliveira do Hospital",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de São Sebastião da Feira"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.36,
+      "lng": -7.92
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial de São Gião",
+    "municipality": "Oliveira do Hospital",
+    "address": "Praia Fluvial de São Gião, Oliveira do Hospital",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de São Gião"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.33,
+      "lng": -7.95
+    }
+  },
+  {
+    "name": "Cafetaria do Agroal",
+    "municipality": "Ourém",
+    "address": "Praia Fluvial do Agroal, Ourém",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Agroal"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 39.62,
+      "lng": -8.55
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial de Janeiro de Baixo",
+    "municipality": "Pampilhosa da Serra",
+    "address": "Praia Fluvial de Janeiro de Baixo, Pampilhosa da Serra",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Janeiro de Baixo"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.03,
+      "lng": -7.96
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial de Pampilhosa da Serra",
+    "municipality": "Pampilhosa da Serra",
+    "address": "Praia Fluvial de Pampilhosa da Serra, 3320 Pampilhosa da Serra",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Pampilhosa da Serra"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.05,
+      "lng": -7.94
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial de Pessegueiro",
+    "municipality": "Pampilhosa da Serra",
+    "address": "Praia Fluvial de Pessegueiro, 3320-996 Pessegueiro",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Pessegueiro"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.01,
+      "lng": -7.98
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial de Santa Luzia",
+    "municipality": "Pampilhosa da Serra",
+    "address": "Praia Fluvial de Santa Luzia, Pampilhosa da Serra",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Santa Luzia"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.02,
+      "lng": -7.97
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial do Cabril (Stop N2)",
+    "municipality": "Pedrógão Grande",
+    "address": "Praia Fluvial do Cabril — Albufeira do Cabril, 3270-159 Pedrógão Grande",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Cabril"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 39.99,
+      "lng": -8.15
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial de Mega",
+    "municipality": "Pedrógão Grande",
+    "address": "Praia Fluvial de Mega Fundeira, 3270 Pedrógão Grande",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Mega"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.0,
+      "lng": -8.16
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial de Mosteiro",
+    "municipality": "Pedrógão Grande",
+    "address": "Praia Fluvial de Mosteiro, Pedrógão Grande",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Mosteiro"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.01,
+      "lng": -8.17
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial do Reconquinho",
+    "municipality": "Penacova",
+    "address": "Praia Fluvial do Reconquinho — Carvoeira, 3360-179 Penacova",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Reconquinho"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.27,
+      "lng": -8.28
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial do Vimieiro",
+    "municipality": "Penacova",
+    "address": "Praia Fluvial do Vimieiro, Penacova",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Vimieiro"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.26,
+      "lng": -8.29
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial de Meimão",
+    "municipality": "Penamacor",
+    "address": "Praia Fluvial de Meimão, Penamacor",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Meimão"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.15,
+      "lng": -7.02
+    }
+  },
+  {
+    "name": "Bar da Zona Balnear da Meimoa",
+    "municipality": "Penamacor",
+    "address": "EN 233, 6090-385 Meimoa",
+    "phone": "",
+    "beaches": [
+      "Zona Balnear da Meimoa"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.18,
+      "lng": -7.05
+    }
+  },
+  {
+    "name": "Bar da Zona Balnear O Moinho — Benquerença",
+    "municipality": "Penamacor",
+    "address": "Praia Fluvial O Moinho, 6090 Benquerença",
+    "phone": "",
+    "beaches": [
+      "Zona Balnear O Moinho"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.13,
+      "lng": -7.08
+    }
+  },
+  {
+    "name": "Restaurante da Praia Fluvial de Alqueva",
+    "municipality": "Portel",
+    "address": "Praia Fluvial de Alqueva, Portel",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Alqueva"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 38.39,
+      "lng": -7.5
+    }
+  },
+  {
+    "name": "Restaurante da Praia Fluvial da Amieira",
+    "municipality": "Portel",
+    "address": "Praia Fluvial da Amieira, Portel",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial da Amieira"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 38.35,
+      "lng": -7.52
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial de Oriola",
+    "municipality": "Portel",
+    "address": "Praia Fluvial de Oriola, Portel",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Oriola"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 38.42,
+      "lng": -7.48
+    }
+  },
+  {
+    "name": "Bar/Restaurante da Praia Fluvial de Aldeia Ruiva",
+    "municipality": "Proença-a-Nova",
+    "address": "Praia Fluvial de Aldeia Ruiva, 6150-311 Proença-a-Nova",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Aldeia Ruiva"
+    ],
+    "seasonal": false,
+    "coordinates": {
+      "lat": 39.75,
+      "lng": -7.92
+    }
+  },
+  {
+    "name": "Restaurante/Bar da Zona Balnear de Alvito da Beira",
+    "municipality": "Proença-a-Nova",
+    "address": "Praia Fluvial de Alvito da Beira, Proença-a-Nova",
+    "phone": "",
+    "beaches": [
+      "Zona Balnear de Alvito da Beira"
+    ],
+    "seasonal": false,
+    "coordinates": {
+      "lat": 39.77,
+      "lng": -7.95
+    }
+  },
+  {
+    "name": "Restaurante/Bar da Praia Fluvial da Fróia",
+    "municipality": "Proença-a-Nova",
+    "address": "Praia Fluvial da Fróia, Proença-a-Nova",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial da Fróia"
+    ],
+    "seasonal": false,
+    "coordinates": {
+      "lat": 39.76,
+      "lng": -7.93
+    }
+  },
+  {
+    "name": "Bar da Zona Balnear de Cerejeira",
+    "municipality": "Proença-a-Nova",
+    "address": "Praia Fluvial da Cerejeira — Sobreira Formosa, 6150 Proença-a-Nova",
+    "phone": "",
+    "beaches": [
+      "Zona Balnear de Cerejeira"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 39.73,
+      "lng": -7.91
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial do Malhadal",
+    "municipality": "Proença-a-Nova",
+    "address": "Praia Fluvial do Malhadal, CM 1330, 6150-909 Proença-a-Nova",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Malhadal"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 39.78,
+      "lng": -7.94
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial de Alfaiates",
+    "municipality": "Sabugal",
+    "address": "Praia Fluvial de Alfaiates, Sabugal",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Alfaiates"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.32,
+      "lng": -7.09
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial de Badamalos",
+    "municipality": "Sabugal",
+    "address": "Praia Fluvial de Badamalos, Sabugal",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Badamalos"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.28,
+      "lng": -7.1
+    }
+  },
+  {
+    "name": "Bar da Zona Balnear de Malcata",
+    "municipality": "Sabugal",
+    "address": "Zona Balnear de Malcata, Sabugal",
+    "phone": "",
+    "beaches": [
+      "Zona Balnear de Malcata"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.2,
+      "lng": -6.98
+    }
+  },
+  {
+    "name": "Bar da Zona Balnear de Penalobo",
+    "municipality": "Sabugal",
+    "address": "Zona Balnear de Penalobo, Sabugal",
+    "phone": "",
+    "beaches": [
+      "Zona Balnear de Penalobo"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.35,
+      "lng": -7.05
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial de Quadrazais",
+    "municipality": "Sabugal",
+    "address": "Praia Fluvial de Quadrazais, Sabugal",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Quadrazais"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.34,
+      "lng": -7.07
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial de Rapoula do Côa",
+    "municipality": "Sabugal",
+    "address": "Praia Fluvial de Rapoula do Côa, EN 537, 6320-000 Rapoula do Côa",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Rapoula do Côa"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.4,
+      "lng": -7.12
+    }
+  },
+  {
+    "name": "Bar da Zona Balnear de Seixo do Côa",
+    "municipality": "Sabugal",
+    "address": "Zona Balnear de Seixo do Côa, Sabugal",
+    "phone": "",
+    "beaches": [
+      "Zona Balnear de Seixo do Côa"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.37,
+      "lng": -7.08
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial de Vale das Éguas",
+    "municipality": "Sabugal",
+    "address": "Praia Fluvial de Vale das Éguas — Praia Fluvial da Ínsua, Rua da Oliveira, Sabugal",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Vale das Éguas"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.25,
+      "lng": -7.06
+    }
+  },
+  {
+    "name": "Bar da Zona Balnear de Vale de Espinho",
+    "municipality": "Sabugal",
+    "address": "Zona Balnear de Vale de Espinho, Sabugal",
+    "phone": "",
+    "beaches": [
+      "Zona Balnear de Vale de Espinho"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.31,
+      "lng": -7.12
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial do Sabugal",
+    "municipality": "Sabugal",
+    "address": "Praia Fluvial do Sabugal — Devesa, 6320 Sabugal",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Sabugal"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.348,
+      "lng": -7.0947
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial da Ucha",
+    "municipality": "São Pedro do Sul",
+    "address": "Praia Fluvial da Ucha, São Pedro do Sul",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial da Ucha"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.75,
+      "lng": -8.06
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial do Trabulo",
+    "municipality": "Sátão",
+    "address": "Praia Fluvial do Trabulo, 3560-030 Decermilo (Sátão)",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Trabulo"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.7374,
+      "lng": -7.7205
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial de Vila da Ponte",
+    "municipality": "Sernancelhe",
+    "address": "Praia Fluvial de Vila da Ponte, Sernancelhe",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Vila da Ponte"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 40.9,
+      "lng": -7.47
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial da Ribeira Grande",
+    "municipality": "Sertã",
+    "address": "Praia Fluvial da Ribeira Grande, Sertã",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial da Ribeira Grande"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 39.81,
+      "lng": -8.07
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial do Troviscal",
+    "municipality": "Sertã",
+    "address": "Praia Fluvial do Troviscal, 6100 Troviscal",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Troviscal"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 39.83,
+      "lng": -8.09
+    }
+  },
+  {
+    "name": "Bar/Restaurante da Zona de Lazer do Trízio",
+    "municipality": "Sertã",
+    "address": "Trízio, 6100-494 Palhais (Sertã)",
+    "phone": "",
+    "beaches": [
+      "Zona de Lazer do Trízio"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 39.82,
+      "lng": -8.06
+    }
+  },
+  {
+    "name": "Bar da Zona de Lazer do Boiçô",
+    "municipality": "Sertã",
+    "address": "Zona de Lazer do Boiçô, Sertã",
+    "phone": "",
+    "beaches": [
+      "Zona de Lazer do Boiçô"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 39.84,
+      "lng": -8.1
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial da Ronqueira",
+    "municipality": "Tábua",
+    "address": "Praia Fluvial da Ronqueira, Tábua",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial da Ronqueira"
+    ],
+    "seasonal": false,
+    "coordinates": {
+      "lat": 40.36,
+      "lng": -8.02
+    }
+  },
+  {
+    "name": "Bar da Zona Balnear da Foz do Sabor",
+    "municipality": "Torre de Moncorvo",
+    "address": "Zona Balnear da Foz do Sabor, Torre de Moncorvo",
+    "phone": "",
+    "beaches": [
+      "Zona Balnear da Foz do Sabor"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 41.19,
+      "lng": -7.05
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial do Bostelim",
+    "municipality": "Vila de Rei",
+    "address": "Praia Fluvial do Bostelim, Vila de Rei",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Bostelim"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 39.69,
+      "lng": -8.14
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial de Fernandaires",
+    "municipality": "Vila de Rei",
+    "address": "Praia Fluvial de Fernandaires, 6110 Vila de Rei",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Fernandaires"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 39.68,
+      "lng": -8.15
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial do Pego das Cancelas",
+    "municipality": "Vila de Rei",
+    "address": "Praia Fluvial do Pego das Cancelas, Vila de Rei",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Pego das Cancelas"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 39.7,
+      "lng": -8.12
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial do Penedo Furado",
+    "municipality": "Vila de Rei",
+    "address": "Praia Fluvial do Penedo Furado, 6110 Vila de Rei",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial do Penedo Furado"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 39.71,
+      "lng": -8.11
+    }
+  },
+  {
+    "name": "ZAB LIVING — Praia Fluvial da Zaboeira",
+    "municipality": "Vila de Rei",
+    "address": "Largo da Capela N1, 6110-169 Zaboeira",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial da Zaboeira"
+    ],
+    "seasonal": false,
+    "coordinates": {
+      "lat": 39.67,
+      "lng": -8.16
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial da Foz do Cobrão",
+    "municipality": "Vila Velha de Ródão",
+    "address": "Praia Fluvial da Foz do Cobrão, Vila Velha de Ródão",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial da Foz do Cobrão"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 39.67,
+      "lng": -7.77
+    }
+  },
+  {
+    "name": "Restaurante Pelgo — Praia Fluvial de Ponte Soeira",
+    "municipality": "Vinhais",
+    "address": "Praia Fluvial de Ponte Soeira, N103, 5320-170 Soeira (Vinhais)",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial da Ponte Soeira"
+    ],
+    "seasonal": false,
+    "coordinates": {
+      "lat": 41.86,
+      "lng": -7.02
+    }
+  },
+  {
+    "name": "Bar Beira Rio — Praia Fluvial de Ponte Soeira",
+    "municipality": "Vinhais",
+    "address": "Praia Fluvial de Ponte Soeira, Vinhais",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial da Ponte Soeira"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 41.8605,
+      "lng": -7.0205
+    }
+  },
+  {
+    "name": "Bar da Praia Fluvial de Fresulfe",
+    "municipality": "Vinhais",
+    "address": "Praia Fluvial de Fresulfe — Casa do Moleiro e Moinho, 5320-051 Fresulfe",
+    "phone": "",
+    "beaches": [
+      "Praia Fluvial de Fresulfe"
+    ],
+    "seasonal": true,
+    "coordinates": {
+      "lat": 41.84,
+      "lng": -7.1
+    }
+  }
 ]
