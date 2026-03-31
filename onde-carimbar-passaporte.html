@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Onde Encontrar o Guia e o Passaporte | Praias Fluviais</title>
-  <meta name="description" content="Mapa completo com todos os pontos de distribuição do Guia e do Passaporte das Praias Fluviais de Portugal.">
-  <meta property="og:title" content="Onde Encontrar o Guia e o Passaporte | Praias Fluviais">
-  <meta property="og:description" content="Mapa completo com todos os pontos de distribuição do Guia e do Passaporte das Praias Fluviais de Portugal.">
+  <title>Onde Carimbar o Passaporte | Praias Fluviais</title>
+  <meta name="description" content="Mapa completo com todos os locais onde pode carimbar o seu Passaporte das Praias Fluviais de Portugal.">
+  <meta property="og:title" content="Onde Carimbar o Passaporte | Praias Fluviais">
+  <meta property="og:description" content="Mapa completo com todos os locais onde pode carimbar o seu Passaporte das Praias Fluviais de Portugal.">
   <meta property="og:image" content="brand_assets/praias-fluviais.png">
   <meta property="og:locale" content="pt_PT">
   <meta property="og:type" content="website">
@@ -48,26 +48,9 @@
       margin-right: 10px;
       vertical-align: middle;
     }
-    .filter-btn {
-      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-      cursor: pointer;
-      border: 2px solid transparent;
-    }
-    .filter-btn:hover { transform: translateY(-1px); }
-    .filter-btn.active {
-      border-color: currentColor;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
-    .filter-btn:focus-visible { outline: 2px solid #FFEB3B; outline-offset: 2px; }
     .nav-btn { transition: all 0.2s ease; }
     .nav-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
     .nav-btn:active { transform: translateY(0); }
-    .legend-dot {
-      width: 14px; height: 14px; border-radius: 50%;
-      border: 2.5px solid rgba(255,255,255,0.4);
-      flex-shrink: 0;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.25);
-    }
     .leaflet-popup-content-wrapper {
       border-radius: 12px !important;
       box-shadow: 0 8px 24px rgba(0,58,64,0.25) !important;
@@ -106,11 +89,11 @@
           </a>
         </div>
         <div class="hidden md:flex items-center gap-2 ml-5">
-          <a href="onde-encontrar.html" class="inline-flex items-center gap-2 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full btn-primary shadow-layered-yellow whitespace-nowrap">
+          <a href="onde-encontrar.html" class="inline-flex items-center gap-2 bg-white/10 border border-white/30 text-white hover:bg-white/20 font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full transition-all duration-200 whitespace-nowrap">
             <i data-lucide="book-open" class="w-4 h-4"></i>
             Onde Encontrar
           </a>
-          <a href="onde-carimbar-passaporte.html" class="inline-flex items-center gap-2 bg-white/10 border border-white/30 text-white hover:bg-white/20 font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full transition-all duration-200 whitespace-nowrap">
+          <a href="onde-carimbar-passaporte.html" class="inline-flex items-center gap-2 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full btn-primary shadow-layered-yellow whitespace-nowrap">
             <i data-lucide="stamp" class="w-4 h-4"></i>
             Onde Carimbar
           </a>
@@ -135,8 +118,8 @@
       <a href="votar.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="vote" class="w-5 h-5"></i> Votar 2026</a>
       <a href="passaporte.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="stamp" class="w-5 h-5"></i> Passaporte</a>
       <a href="artigos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="newspaper" class="w-5 h-5"></i> Novidades</a>
-      <a href="onde-encontrar.html" class="flex items-center gap-3 px-6 py-3.5 text-praia-yellow-400 font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="book-open" class="w-5 h-5"></i> Onde Encontrar</a>
-      <a href="onde-carimbar-passaporte.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="stamp" class="w-5 h-5"></i> Onde Carimbar</a>
+      <a href="onde-encontrar.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="book-open" class="w-5 h-5"></i> Onde Encontrar</a>
+      <a href="onde-carimbar-passaporte.html" class="flex items-center gap-3 px-6 py-3.5 text-praia-yellow-400 font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="stamp" class="w-5 h-5"></i> Onde Carimbar</a>
       <a href="descontos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="percent" class="w-5 h-5"></i> Descontos</a>
       <a href="contactos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="mail" class="w-5 h-5"></i> Contactos</a>
     </div>
@@ -149,91 +132,73 @@
           <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg> Instagram
         </a>
       </div>
-      <a href="onde-encontrar.html" class="flex items-center justify-center gap-2 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider px-5 py-3 rounded-full btn-primary w-full">
-        <i data-lucide="map-pin" class="w-4 h-4"></i> Onde Encontrar
+      <a href="onde-carimbar-passaporte.html" class="flex items-center justify-center gap-2 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider px-5 py-3 rounded-full btn-primary w-full">
+        <i data-lucide="stamp" class="w-4 h-4"></i> Onde Carimbar
       </a>
     </div>
   </nav>
 
   <main id="main-content" class="pt-16 md:pt-[70px] pb-20 lg:pb-10">
     <!-- Hero -->
-    <section class="relative py-14 md:py-20 overflow-hidden" style="background: linear-gradient(135deg, #003A40 0%, #002A2E 50%, #005D56 100%);">
+    <section class="relative py-14 md:py-20 overflow-hidden" style="background: linear-gradient(135deg, #003A40 0%, #002A2E 50%, #004D45 100%);">
       <div class="noise-overlay absolute inset-0 pointer-events-none"></div>
-      <div class="absolute inset-0" style="background: radial-gradient(ellipse at 20% 50%, rgba(255,235,59,0.07) 0%, transparent 50%), radial-gradient(ellipse at 80% 50%, rgba(2,136,209,0.07) 0%, transparent 50%);"></div>
+      <div class="absolute inset-0" style="background: radial-gradient(ellipse at 20% 50%, rgba(255,112,67,0.08) 0%, transparent 50%), radial-gradient(ellipse at 80% 50%, rgba(255,235,59,0.06) 0%, transparent 50%);"></div>
       <div class="bubble w-1 h-1"     style="left:2%;  top:78%; --delay:0s;   --dur:4s;  --drift:10px;"></div>
       <div class="bubble w-1.5 h-1.5" style="left:5%;  top:22%; --delay:1.2s; --dur:3s;  --drift:-12px;"></div>
-      <div class="bubble w-1 h-1"     style="left:8%;  top:88%; --delay:2.5s; --dur:5s;  --drift:8px;"></div>
-      <div class="bubble w-1.5 h-1.5" style="left:11%; top:40%; --delay:0.4s; --dur:4s;  --drift:-9px;"></div>
       <div class="bubble w-2 h-2"     style="left:17%; top:12%; --delay:1.8s; --dur:5s;  --drift:-14px;"></div>
       <div class="bubble w-1 h-1"     style="left:35%; top:90%; --delay:1.5s; --dur:5s;  --drift:-11px;"></div>
       <div class="bubble w-2 h-2"     style="left:53%; top:85%; --delay:0.6s; --dur:5s;  --drift:-10px;"></div>
-      <div class="bubble w-1 h-1"     style="left:71%; top:15%; --delay:2.1s; --dur:5s;  --drift:-12px;"></div>
       <div class="bubble w-2 h-2"     style="left:89%; top:48%; --delay:2.6s; --dur:5s;  --drift:-11px;"></div>
 
       <div class="relative z-10 max-w-5xl mx-auto px-6">
         <div class="flex flex-col md:flex-row items-center gap-8 md:gap-14">
           <div class="flex-1 text-center md:text-left">
             <div class="inline-flex items-center gap-2 bg-praia-yellow-400/10 border border-praia-yellow-400/20 rounded-full px-4 py-1.5 mb-5 reveal-on-scroll">
-              <i data-lucide="book-open" class="w-4 h-4 text-praia-yellow-400"></i>
-              <span class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-semibold">Distribuição</span>
+              <i data-lucide="stamp" class="w-4 h-4 text-praia-yellow-400"></i>
+              <span class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-semibold">Passaporte</span>
             </div>
             <h1 class="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight mb-4 reveal-on-scroll" data-reveal-delay="100">
-              Onde Encontrar<br>
-              <span class="text-praia-yellow-400">o Guia e o Passaporte</span>
+              Onde Carimbar<br>
+              <span class="text-praia-yellow-400">o Passaporte</span>
             </h1>
             <p class="text-white/55 text-base md:text-lg max-w-lg leading-relaxed-plus reveal-on-scroll" data-reveal-delay="200">
-              Mapa com todos os pontos de distribuição do Guia das Praias Fluviais e do Passaporte em Portugal.
+              Mapa com todos os postos de carimbo do Passaporte das Praias Fluviais em Portugal. Visite, carimbe e colecione!
             </p>
             <div class="mt-6 reveal-on-scroll" data-reveal-delay="300">
-              <a href="onde-carimbar-passaporte.html" class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-display font-semibold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full transition-all duration-300">
-                <i data-lucide="stamp" class="w-4 h-4"></i>
-                Ver onde carimbar o passaporte →
+              <a href="onde-encontrar.html" class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-display font-semibold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full transition-all duration-300">
+                <i data-lucide="book-open" class="w-4 h-4"></i>
+                Ver onde encontrar o guia e passaporte →
               </a>
             </div>
           </div>
           <div class="flex-shrink-0 reveal-on-scroll" data-reveal-delay="150">
-            <img src="brand_assets/guia_das_praias.jpg" alt="Guia das Praias Fluviais" class="w-48 md:w-64 h-auto drop-shadow-2xl rounded-lg" loading="lazy">
+            <div class="relative">
+              <div class="w-44 h-44 md:w-56 md:h-56 rounded-full flex items-center justify-center" style="background: rgba(255,112,67,0.12); border: 2px solid rgba(255,112,67,0.25);">
+                <i data-lucide="stamp" class="w-20 h-20 md:w-24 md:h-24 text-praia-yellow-400" style="opacity:0.85;"></i>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Map + Legend -->
+    <!-- Map -->
     <section class="max-w-5xl mx-auto px-6 py-10 md:py-14">
 
-      <!-- Filter bar -->
-      <div class="mb-6 reveal-on-scroll">
-        <span class="font-display text-xs uppercase tracking-[0.15em] text-praia-teal-500 font-semibold block mb-3">Filtrar por tipo</span>
-        <div id="filter-bar" class="flex flex-wrap gap-2">
-          <button class="filter-btn active font-display text-xs font-bold uppercase tracking-wide px-4 py-2 rounded-full text-praia-teal-800 bg-praia-sand-200" data-filter="all">Todos</button>
-          <button class="filter-btn font-display text-xs font-bold uppercase tracking-wide px-4 py-2 rounded-full text-praia-teal-800" data-filter="guia" style="background:#F59E0B;">Só Guia</button>
-          <button class="filter-btn font-display text-xs font-bold uppercase tracking-wide px-4 py-2 rounded-full text-white" data-filter="guia_passaporte" style="background:#43A047;">Guia + Passaporte</button>
-        </div>
-      </div>
-
       <!-- Map -->
-      <div class="relative mb-8 reveal-on-scroll" data-reveal-delay="100">
+      <div class="relative mb-8 reveal-on-scroll">
         <div class="absolute -inset-3 bg-praia-teal-800/5 rounded-3xl blur-xl"></div>
         <div id="locations-map" class="relative shadow-layered-lg border border-praia-sand-200"></div>
       </div>
 
       <!-- Legend -->
-      <div class="bg-white border border-praia-sand-100 rounded-2xl shadow-layered p-5 reveal-on-scroll" data-reveal-delay="150">
+      <div class="bg-white border border-praia-sand-100 rounded-2xl shadow-layered p-5 reveal-on-scroll" data-reveal-delay="100">
         <span class="font-display text-xs uppercase tracking-[0.15em] text-praia-teal-500 font-semibold block mb-4">Legenda</span>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div class="flex items-start gap-3">
-            <span class="legend-dot mt-0.5 flex-shrink-0" style="background:#F59E0B; width:16px; height:16px;"></span>
-            <div>
-              <div class="font-display text-sm font-bold text-praia-teal-800">Só Guia</div>
-              <div class="text-xs text-praia-sand-500 leading-snug">Locais onde pode encontrar o Guia das Praias Fluviais</div>
-            </div>
-          </div>
-          <div class="flex items-start gap-3">
-            <span class="legend-dot mt-0.5 flex-shrink-0" style="background:#43A047; width:16px; height:16px;"></span>
-            <div>
-              <div class="font-display text-sm font-bold text-praia-teal-800">Guia + Passaporte</div>
-              <div class="text-xs text-praia-sand-500 leading-snug">Locais onde encontra o Guia e também o Passaporte</div>
-            </div>
+        <div class="flex items-start gap-3">
+          <span class="mt-0.5 flex-shrink-0 rounded-full" style="background:#FF7043; width:16px; height:16px; border: 2.5px solid rgba(255,255,255,0.4); box-shadow: 0 1px 4px rgba(0,0,0,0.25);"></span>
+          <div>
+            <div class="font-display text-sm font-bold text-praia-teal-800">Posto de Carimbo</div>
+            <div class="text-xs text-praia-sand-500 leading-snug">Local onde pode carimbar o seu Passaporte das Praias Fluviais</div>
           </div>
         </div>
       </div>
@@ -243,7 +208,7 @@
     <section class="max-w-5xl mx-auto px-6 pb-12 md:pb-16">
       <div class="mb-8">
         <span class="font-display text-xs uppercase tracking-[0.15em] text-praia-teal-500 font-semibold block mb-2">Lista Completa</span>
-        <h2 class="font-display text-xl md:text-2xl font-bold text-praia-teal-800 tracking-tight">Todos os Pontos</h2>
+        <h2 class="font-display text-xl md:text-2xl font-bold text-praia-teal-800 tracking-tight">Todos os Postos de Carimbo</h2>
       </div>
       <div id="locations-list" class="space-y-8">
         <div class="space-y-4">
@@ -279,14 +244,10 @@
     if (navClose)  navClose.addEventListener('click', closeMenu);
     if (overlay)   overlay.addEventListener('click', closeMenu);
 
-    // ─── Type definitions ───
-    const TYPES = {
-      guia:            { label: 'Só Guia',           color: '#F59E0B', icon: 'book-open',  desc: 'Onde encontrar o Guia' },
-      guia_passaporte: { label: 'Guia + Passaporte', color: '#43A047', icon: 'package',    desc: 'Onde encontrar o Guia e o Passaporte' },
-    };
+    const STAMP_COLOR = '#FF7043';
 
     // ─── Load data ───
-    const allLocations = await fetch('data/locations-guia.json').then(r => r.json());
+    const allLocations = await fetch('data/locations-passaporte.json').then(r => r.json());
 
     // ─── Map ───
     const PT_BOUNDS = [[36.8, -9.6], [42.2, -6.1]];
@@ -302,12 +263,10 @@
     });
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18 }).addTo(map);
 
-    const markersLayer = L.layerGroup().addTo(map);
-
-    function makeIcon(color) {
+    function makeIcon() {
       return L.divIcon({
         className: '',
-        html: `<div style="width:16px;height:16px;border-radius:50%;background:${color};border:3px solid #003A40;box-shadow:0 2px 10px rgba(0,0,0,0.35);"></div>`,
+        html: `<div style="width:16px;height:16px;border-radius:50%;background:${STAMP_COLOR};border:3px solid #003A40;box-shadow:0 2px 10px rgba(0,0,0,0.35);"></div>`,
         iconSize: [16, 16],
         iconAnchor: [8, 8],
       });
@@ -329,53 +288,19 @@
         </div>`;
     }
 
-    const markerObjects = [];
-
     allLocations.forEach(loc => {
-      const typeInfo = TYPES[loc.type] || TYPES['guia'];
-      const typeBadge = `<span style="display:inline-block;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;font-family:'Poppins',sans-serif;text-transform:uppercase;letter-spacing:0.04em;background:${typeInfo.color}22;color:${typeInfo.color};border:1px solid ${typeInfo.color}44;">${typeInfo.label}</span>`;
-
       const popupHTML = `
         <div style="padding:14px 16px;min-width:220px;font-family:'Open Sans',sans-serif;">
           <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:13px;color:#003A40;margin-bottom:4px;">${loc.name}</div>
           <div style="color:#8A7D60;font-size:11px;margin-bottom:6px;line-height:1.4;">${loc.address}</div>
-          <div style="margin-bottom:4px;">${typeBadge}</div>
-          ${loc.phone ? `<div style="font-size:11px;color:#0288D1;font-weight:600;margin-top:4px;">${loc.phone}</div>` : ''}
+          <span style="display:inline-block;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;font-family:'Poppins',sans-serif;text-transform:uppercase;letter-spacing:0.04em;background:${STAMP_COLOR}22;color:${STAMP_COLOR};border:1px solid ${STAMP_COLOR}44;">Carimbo</span>
+          ${loc.phone ? `<div style="font-size:11px;color:#0288D1;font-weight:600;margin-top:6px;">${loc.phone}</div>` : ''}
           ${makeNavButtons(loc.coordinates.lat, loc.coordinates.lng)}
         </div>`;
 
-      const marker = L.marker([loc.coordinates.lat, loc.coordinates.lng], { icon: makeIcon(typeInfo.color) })
-        .addTo(markersLayer)
+      L.marker([loc.coordinates.lat, loc.coordinates.lng], { icon: makeIcon() })
+        .addTo(map)
         .bindPopup(popupHTML, { maxWidth: 280 });
-
-      markerObjects.push({ marker, type: loc.type });
-    });
-
-    // ─── Filter bar ───
-    const filterBar = document.getElementById('filter-bar');
-    let activeFilter = 'all';
-
-    filterBar.addEventListener('click', e => {
-      const btn = e.target.closest('.filter-btn');
-      if (!btn) return;
-      activeFilter = btn.dataset.filter;
-      filterBar.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      markersLayer.clearLayers();
-      markerObjects.forEach(({ marker, type }) => {
-        if (activeFilter === 'all' || type === activeFilter) markersLayer.addLayer(marker);
-      });
-
-      document.querySelectorAll('.loc-card').forEach(card => {
-        const show = activeFilter === 'all' || card.dataset.type === activeFilter;
-        card.style.display = show ? '' : 'none';
-      });
-
-      document.querySelectorAll('.concelho-section').forEach(section => {
-        const visible = section.querySelectorAll('.loc-card:not([style*="display: none"]):not([style*="display:none"])');
-        section.style.display = visible.length > 0 ? '' : 'none';
-      });
     });
 
     // ─── Location list grouped by município ───
@@ -396,20 +321,19 @@
         <div class="grid gap-4 sm:grid-cols-2">`;
 
       grouped[concelho].forEach(loc => {
-        const typeInfo = TYPES[loc.type] || TYPES['guia'];
         const gmapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${loc.coordinates.lat},${loc.coordinates.lng}`;
         const wazeUrl  = `https://waze.com/ul?ll=${loc.coordinates.lat},${loc.coordinates.lng}&navigate=yes`;
 
-        html += `<div class="loc-card location-card bg-white rounded-xl border border-praia-sand-100 shadow-layered p-5" data-type="${loc.type}">
+        html += `<div class="location-card bg-white rounded-xl border border-praia-sand-100 shadow-layered p-5">
           <div class="flex items-start gap-3">
-            <div class="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style="background:${typeInfo.color}18;">
-              <i data-lucide="${typeInfo.icon}" class="w-5 h-5" style="color:${typeInfo.color};"></i>
+            <div class="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style="background:${STAMP_COLOR}18;">
+              <i data-lucide="stamp" class="w-5 h-5" style="color:${STAMP_COLOR};"></i>
             </div>
             <div class="min-w-0 flex-1">
               <div class="font-display text-sm font-bold text-praia-teal-800 mb-1">${loc.name}</div>
               <div class="text-xs text-praia-sand-600 leading-relaxed mb-2">${loc.address}</div>
               <div class="mb-3">
-                <span class="inline-block text-[10px] font-display font-bold uppercase tracking-wide px-2 py-0.5 rounded-full" style="background:${typeInfo.color}22;color:${typeInfo.color};border:1px solid ${typeInfo.color}44;">${typeInfo.label}</span>
+                <span class="inline-block text-[10px] font-display font-bold uppercase tracking-wide px-2 py-0.5 rounded-full" style="background:${STAMP_COLOR}22;color:${STAMP_COLOR};border:1px solid ${STAMP_COLOR}44;">Carimbo</span>
               </div>
               ${loc.phone ? `<div class="text-xs text-praia-blue-600 font-semibold mb-3"><i data-lucide="phone" class="w-3 h-3 inline mr-1"></i>${loc.phone}</div>` : ''}
               <div class="flex flex-wrap gap-2">
@@ -437,7 +361,6 @@
     listEl.innerHTML = html;
     lucide.createIcons();
 
-    // Scroll reveal
     if (typeof initScrollReveal === 'function') initScrollReveal();
   });
   </script>

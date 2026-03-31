@@ -1,5 +1,5 @@
 // ─── Admin Panel — JSON Visual Editor ───
-const SECTIONS = ['beaches', 'articles', 'locations', 'descontos', 'settings'];
+const SECTIONS = ['beaches', 'articles', 'locations-guia', 'locations-passaporte', 'descontos', 'settings'];
 
 const state = {
   currentSection: 'beaches',
@@ -127,13 +127,17 @@ async function initDashboard() {
   renderDashboard();
 }
 
+// Keep backward compat: old 'locations' key maps to 'locations-guia'
+function getLocationsKey(section) { return section; }
+
 function renderDashboard() {
   const sectionMeta = {
-    beaches:    { icon: '🏖️', label: 'Praias' },
-    articles:   { icon: '📰', label: 'Artigos' },
-    locations:  { icon: '📍', label: 'Locais' },
-    descontos:  { icon: '🏷️', label: 'Descontos' },
-    settings:   { icon: '⚙️', label: 'Configurações' },
+    beaches:               { icon: '🏖️', label: 'Praias' },
+    articles:              { icon: '📰', label: 'Artigos' },
+    'locations-guia':      { icon: '📗', label: 'Guia & Passaporte' },
+    'locations-passaporte':{ icon: '🔖', label: 'Carimbo Passaporte' },
+    descontos:             { icon: '🏷️', label: 'Descontos' },
+    settings:              { icon: '⚙️', label: 'Configurações' },
   };
 
   document.getElementById('admin-app').innerHTML = `
@@ -174,11 +178,12 @@ function switchSection(section) {
 function renderSection() {
   const content = document.getElementById('admin-content');
   switch (state.currentSection) {
-    case 'beaches':    renderBeaches(content); break;
-    case 'articles':   renderArticles(content); break;
-    case 'locations':  renderLocations(content); break;
-    case 'descontos':  renderDescontos(content); break;
-    case 'settings':   renderSettings(content); break;
+    case 'beaches':                renderBeaches(content); break;
+    case 'articles':               renderArticles(content); break;
+    case 'locations-guia':         renderLocationsGuia(content); break;
+    case 'locations-passaporte':   renderLocationsPassaporte(content); break;
+    case 'descontos':              renderDescontos(content); break;
+    case 'settings':               renderSettings(content); break;
   }
 }
 
@@ -673,45 +678,46 @@ function saveArticle(index) {
   renderSection();
 }
 
-// ─── Locations ───
-const SERVICE_COLORS = { guia: '#F59E0B', passaporte: '#0288D1', carimbo: '#FF7043' };
-const SERVICE_LABELS = { guia: 'Guia', passaporte: 'Passaporte', carimbo: 'Carimbo' };
+// ─── Locations — Guia & Passaporte ───
+const GUIA_TYPE_COLORS = { guia: '#F59E0B', guia_passaporte: '#43A047' };
+const GUIA_TYPE_LABELS = { guia: 'Só Guia', guia_passaporte: 'Guia + Passaporte' };
 
-function renderLocations(container) {
-  const items = state.data.locations || [];
+function renderLocationsGuia(container) {
+  const section = 'locations-guia';
+  const items = state.data[section] || [];
 
   container.innerHTML = `
     <div class="p-6">
       <div class="flex items-center justify-between mb-2">
-        <h1 class="font-display text-2xl font-bold text-praia-teal-800">Locais (${items.length})</h1>
+        <h1 class="font-display text-2xl font-bold text-praia-teal-800">Pontos — Guia &amp; Passaporte (${items.length})</h1>
         <div class="flex gap-2">
           <a href="../onde-encontrar.html" target="_blank" class="admin-btn bg-praia-sand-200 text-praia-teal-700 text-xs">Ver no site ↗</a>
-          <button onclick="exportSection('locations')" class="admin-btn admin-btn-export">Exportar</button>
-          <button onclick="editLocation(null)" class="admin-btn admin-btn-primary">+ Adicionar</button>
+          <button onclick="exportSection('locations-guia')" class="admin-btn admin-btn-export">Exportar</button>
+          <button onclick="editLocationGuia(null)" class="admin-btn admin-btn-primary">+ Adicionar</button>
         </div>
       </div>
-      <p class="text-xs text-praia-sand-500 mt-1 mb-6">Os serviços de cada local determinam a cor do marcador no mapa <a href="../onde-encontrar.html" target="_blank" class="text-praia-teal-600 underline">Onde Encontrar</a>.</p>
+      <p class="text-xs text-praia-sand-500 mt-1 mb-6">Locais onde se pode encontrar o Guia (com ou sem Passaporte). Página: <a href="../onde-encontrar.html" target="_blank" class="text-praia-teal-600 underline">Onde Encontrar</a>.</p>
       <div class="bg-white rounded-xl shadow-layered overflow-hidden">
         <table class="admin-table w-full text-sm">
           <thead><tr class="text-left">
             <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700">Nome</th>
-            <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700">Distrito</th>
-            <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700">Serviços</th>
+            <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700">Concelho</th>
+            <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700">Tipo</th>
             <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700 text-right">Ações</th>
           </tr></thead>
           <tbody>
             ${items.map((l, i) => {
-              const svcs = (l.services || []).map(s =>
-                `<span style="display:inline-block;padding:1px 7px;border-radius:10px;font-size:10px;font-weight:700;font-family:'Poppins',sans-serif;background:${SERVICE_COLORS[s]}22;color:${SERVICE_COLORS[s]};border:1px solid ${SERVICE_COLORS[s]}44;">${SERVICE_LABELS[s] || s}</span>`
-              ).join(' ');
+              const color = GUIA_TYPE_COLORS[l.type] || '#F59E0B';
+              const label = GUIA_TYPE_LABELS[l.type] || l.type;
+              const badge = `<span style="display:inline-block;padding:1px 7px;border-radius:10px;font-size:10px;font-weight:700;font-family:'Poppins',sans-serif;background:${color}22;color:${color};border:1px solid ${color}44;">${label}</span>`;
               return `
               <tr class="border-t border-praia-sand-100 hover:bg-praia-sand-50">
                 <td class="px-4 py-3 font-semibold text-praia-teal-800">${escHtml(l.name)}</td>
-                <td class="px-4 py-3 text-praia-sand-600">${escHtml(l.district)}</td>
-                <td class="px-4 py-3">${svcs || '—'}</td>
+                <td class="px-4 py-3 text-praia-sand-600">${escHtml(l.municipality)}</td>
+                <td class="px-4 py-3">${badge}</td>
                 <td class="px-4 py-3 text-right">
-                  <button onclick="editLocation(${i})" class="text-praia-teal-600 text-xs font-semibold mr-2">Editar</button>
-                  <button onclick="deleteItem('locations', ${i})" class="text-red-400 text-xs font-semibold">Eliminar</button>
+                  <button onclick="editLocationGuia(${i})" class="text-praia-teal-600 text-xs font-semibold mr-2">Editar</button>
+                  <button onclick="deleteItem('locations-guia', ${i})" class="text-red-400 text-xs font-semibold">Eliminar</button>
                 </td>
               </tr>`;
             }).join('')}
@@ -721,78 +727,146 @@ function renderLocations(container) {
     </div>`;
 }
 
-function editLocation(index) {
-  const l = index !== null ? state.data.locations[index] : {
-    name: '', municipality: '', district: '', address: '', phone: '',
-    services: [], coordinates: { lat: 39.5, lng: -8.0 }
+function editLocationGuia(index) {
+  const section = 'locations-guia';
+  const l = index !== null ? state.data[section][index] : {
+    name: '', municipality: '', address: '', phone: '',
+    type: 'guia', coordinates: { lat: 39.5, lng: -8.0 }
   };
 
-  const districtOptions = DISTRICTS.map(d =>
-    `<option value="${d}" ${l.district === d ? 'selected' : ''}>${d}</option>`
+  const typeOptions = Object.entries(GUIA_TYPE_LABELS).map(([k, v]) =>
+    `<option value="${k}" ${l.type === k ? 'selected' : ''}>${v}</option>`
   ).join('');
-
-  const svcs = l.services || [];
-  const serviceCheckboxes = ['guia', 'passaporte', 'carimbo'].map(s => `
-    <label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;padding:6px 12px;border-radius:20px;border:2px solid ${svcs.includes(s) ? SERVICE_COLORS[s] : '#e5e1d8'};background:${svcs.includes(s) ? SERVICE_COLORS[s]+'18' : 'transparent'};transition:all 0.2s;">
-      <input type="checkbox" id="svc-${s}" ${svcs.includes(s) ? 'checked' : ''} style="accent-color:${SERVICE_COLORS[s]};">
-      <span style="font-size:12px;font-weight:700;font-family:'Poppins',sans-serif;color:${SERVICE_COLORS[s]};">${SERVICE_LABELS[s]}</span>
-    </label>`).join('');
 
   const container = document.getElementById('admin-content');
   container.innerHTML = `
     <div class="p-6 max-w-2xl admin-form">
       <button onclick="renderSection()" class="text-praia-teal-600 text-sm font-semibold mb-4">← Voltar</button>
-      <h2 class="font-display text-xl font-bold text-praia-teal-800 mb-6">${index !== null ? 'Editar' : 'Adicionar'} Local</h2>
+      <h2 class="font-display text-xl font-bold text-praia-teal-800 mb-6">${index !== null ? 'Editar' : 'Adicionar'} Ponto — Guia &amp; Passaporte</h2>
       <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100 admin-form">
         <div class="mb-4"><label>Nome</label><input type="text" id="l-name" value="${escHtml(l.name)}"></div>
-        <div class="grid grid-cols-2 gap-4 mb-4">
-          <div><label>Concelho</label><input type="text" id="l-municipality" value="${escHtml(l.municipality)}"></div>
-          <div><label>Distrito</label>
-            <select id="l-district">
-              <option value="">— selecionar —</option>
-              ${districtOptions}
-            </select>
-          </div>
+        <div class="mb-4"><label>Concelho</label><input type="text" id="l-municipality" value="${escHtml(l.municipality)}"></div>
+        <div class="mb-4"><label>Morada</label><input type="text" id="l-address" value="${escHtml(l.address || '')}"></div>
+        <div class="mb-4"><label>Telefone</label><input type="text" id="l-phone" value="${escHtml(l.phone || '')}"></div>
+        <div class="mb-4"><label>Tipo</label>
+          <select id="l-type">${typeOptions}</select>
         </div>
+        <div class="grid grid-cols-2 gap-4 mb-4">
+          <div><label>Latitude</label><input type="number" step="0.00001" id="l-lat" value="${l.coordinates?.lat || 39.5}"></div>
+          <div><label>Longitude</label><input type="number" step="0.00001" id="l-lng" value="${l.coordinates?.lng || -8.0}"></div>
+        </div>
+      </div>
+      <div class="flex gap-3">
+        <button onclick="saveLocationGuia(${index})" class="admin-btn admin-btn-success">Guardar</button>
+        <button onclick="renderSection()" class="admin-btn bg-praia-sand-200 text-praia-sand-700">Cancelar</button>
+      </div>
+    </div>`;
+}
+
+function saveLocationGuia(index) {
+  const section = 'locations-guia';
+  const loc = {
+    name: document.getElementById('l-name').value.trim(),
+    municipality: document.getElementById('l-municipality').value.trim(),
+    address: document.getElementById('l-address').value.trim(),
+    phone: document.getElementById('l-phone').value.trim(),
+    type: document.getElementById('l-type').value,
+    coordinates: {
+      lat: parseFloat(document.getElementById('l-lat').value) || 0,
+      lng: parseFloat(document.getElementById('l-lng').value) || 0,
+    },
+  };
+  if (!state.data[section]) state.data[section] = [];
+  if (index !== null) state.data[section][index] = loc;
+  else state.data[section].push(loc);
+  toast('Local guardado!', 'success');
+  renderSection();
+}
+
+// ─── Locations — Carimbo Passaporte ───
+function renderLocationsPassaporte(container) {
+  const section = 'locations-passaporte';
+  const items = state.data[section] || [];
+
+  container.innerHTML = `
+    <div class="p-6">
+      <div class="flex items-center justify-between mb-2">
+        <h1 class="font-display text-2xl font-bold text-praia-teal-800">Postos de Carimbo (${items.length})</h1>
+        <div class="flex gap-2">
+          <a href="../onde-carimbar-passaporte.html" target="_blank" class="admin-btn bg-praia-sand-200 text-praia-teal-700 text-xs">Ver no site ↗</a>
+          <button onclick="exportSection('locations-passaporte')" class="admin-btn admin-btn-export">Exportar</button>
+          <button onclick="editLocationPassaporte(null)" class="admin-btn admin-btn-primary">+ Adicionar</button>
+        </div>
+      </div>
+      <p class="text-xs text-praia-sand-500 mt-1 mb-6">Locais onde se pode carimbar o Passaporte. Página: <a href="../onde-carimbar-passaporte.html" target="_blank" class="text-praia-teal-600 underline">Onde Carimbar</a>.</p>
+      <div class="bg-white rounded-xl shadow-layered overflow-hidden">
+        <table class="admin-table w-full text-sm">
+          <thead><tr class="text-left">
+            <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700">Nome</th>
+            <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700">Concelho</th>
+            <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700 text-right">Ações</th>
+          </tr></thead>
+          <tbody>
+            ${items.map((l, i) => `
+              <tr class="border-t border-praia-sand-100 hover:bg-praia-sand-50">
+                <td class="px-4 py-3 font-semibold text-praia-teal-800">${escHtml(l.name)}</td>
+                <td class="px-4 py-3 text-praia-sand-600">${escHtml(l.municipality)}</td>
+                <td class="px-4 py-3 text-right">
+                  <button onclick="editLocationPassaporte(${i})" class="text-praia-teal-600 text-xs font-semibold mr-2">Editar</button>
+                  <button onclick="deleteItem('locations-passaporte', ${i})" class="text-red-400 text-xs font-semibold">Eliminar</button>
+                </td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+}
+
+function editLocationPassaporte(index) {
+  const section = 'locations-passaporte';
+  const l = index !== null ? state.data[section][index] : {
+    name: '', municipality: '', address: '', phone: '',
+    coordinates: { lat: 39.5, lng: -8.0 }
+  };
+
+  const container = document.getElementById('admin-content');
+  container.innerHTML = `
+    <div class="p-6 max-w-2xl admin-form">
+      <button onclick="renderSection()" class="text-praia-teal-600 text-sm font-semibold mb-4">← Voltar</button>
+      <h2 class="font-display text-xl font-bold text-praia-teal-800 mb-6">${index !== null ? 'Editar' : 'Adicionar'} Posto de Carimbo</h2>
+      <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100 admin-form">
+        <div class="mb-4"><label>Nome</label><input type="text" id="l-name" value="${escHtml(l.name)}"></div>
+        <div class="mb-4"><label>Concelho</label><input type="text" id="l-municipality" value="${escHtml(l.municipality)}"></div>
         <div class="mb-4"><label>Morada</label><input type="text" id="l-address" value="${escHtml(l.address || '')}"></div>
         <div class="mb-4"><label>Telefone</label><input type="text" id="l-phone" value="${escHtml(l.phone || '')}"></div>
         <div class="grid grid-cols-2 gap-4 mb-4">
           <div><label>Latitude</label><input type="number" step="0.00001" id="l-lat" value="${l.coordinates?.lat || 39.5}"></div>
           <div><label>Longitude</label><input type="number" step="0.00001" id="l-lng" value="${l.coordinates?.lng || -8.0}"></div>
         </div>
-        <div>
-          <label>Serviços disponíveis</label>
-          <p style="font-size:11px;color:#8A7D60;margin-bottom:8px;">Define o que o local oferece e a cor do marcador no mapa.</p>
-          <div style="display:flex;flex-wrap:wrap;gap:8px;">${serviceCheckboxes}</div>
-        </div>
       </div>
       <div class="flex gap-3">
-        <button onclick="saveLocation(${index})" class="admin-btn admin-btn-success">Guardar</button>
+        <button onclick="saveLocationPassaporte(${index})" class="admin-btn admin-btn-success">Guardar</button>
         <button onclick="renderSection()" class="admin-btn bg-praia-sand-200 text-praia-sand-700">Cancelar</button>
       </div>
     </div>`;
 }
 
-function saveLocation(index) {
-  const services = ['guia', 'passaporte', 'carimbo'].filter(s =>
-    document.getElementById(`svc-${s}`)?.checked
-  );
+function saveLocationPassaporte(index) {
+  const section = 'locations-passaporte';
   const loc = {
     name: document.getElementById('l-name').value.trim(),
     municipality: document.getElementById('l-municipality').value.trim(),
-    district: document.getElementById('l-district').value,
     address: document.getElementById('l-address').value.trim(),
     phone: document.getElementById('l-phone').value.trim(),
-    services,
     coordinates: {
       lat: parseFloat(document.getElementById('l-lat').value) || 0,
       lng: parseFloat(document.getElementById('l-lng').value) || 0,
     },
   };
-  if (!state.data.locations) state.data.locations = [];
-  if (index !== null) state.data.locations[index] = loc;
-  else state.data.locations.push(loc);
-  toast('Local guardado!', 'success');
+  if (!state.data[section]) state.data[section] = [];
+  if (index !== null) state.data[section][index] = loc;
+  else state.data[section].push(loc);
+  toast('Posto de carimbo guardado!', 'success');
   renderSection();
 }
 
