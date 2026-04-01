@@ -17,6 +17,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="js/shared.js"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <link rel="stylesheet" href="css/shared.css">
 
   <style>
@@ -81,15 +83,16 @@
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
           </a>
         </div>
-        <div class="hidden md:flex items-center gap-2 ml-5">
-          <a href="onde-encontrar.html" class="inline-flex items-center gap-2 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full btn-primary shadow-layered-yellow whitespace-nowrap">
-            <i data-lucide="book-open" class="w-4 h-4"></i>
+        <div class="hidden md:flex items-center gap-2 ml-3">
+          <a href="onde-encontrar.html" class="inline-flex items-center gap-1.5 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-[11px] uppercase tracking-wider px-3 py-1.5 rounded-full btn-primary shadow-layered-yellow whitespace-nowrap">
+            <i data-lucide="book-open" class="w-3.5 h-3.5"></i>
             Onde Encontrar
           </a>
-          <a href="onde-carimbar-passaporte.html" class="inline-flex items-center gap-2 bg-white/10 border border-white/30 text-white hover:bg-white/20 font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full transition-all duration-200 whitespace-nowrap">
-            <i data-lucide="stamp" class="w-4 h-4"></i>
+          <a href="onde-carimbar-passaporte.html" class="inline-flex items-center gap-1.5 bg-white/10 border border-white/30 text-white hover:bg-white/20 font-display font-bold text-[11px] uppercase tracking-wider px-3 py-1.5 rounded-full transition-all duration-200 whitespace-nowrap">
+            <i data-lucide="stamp" class="w-3.5 h-3.5"></i>
             Onde Carimbar
           </a>
+          <div id="header-auth-slot" class="flex items-center ml-1"></div>
         </div>
         <button id="nav-hamburger" class="lg:hidden text-white p-2" aria-label="Menu"><i data-lucide="menu" class="w-6 h-6"></i></button>
       </div>
@@ -128,8 +131,22 @@
       <a href="onde-encontrar.html" class="flex items-center justify-center gap-2 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider px-5 py-3 rounded-full btn-primary w-full">
         <i data-lucide="map-pin" class="w-4 h-4"></i> Onde Encontrar
       </a>
+      <div id="mobile-auth-slot" class="mt-2"></div>
     </div>
   </nav>
+
+  <!-- Guest Banner -->
+  <div id="guest-banner" class="hidden fixed bottom-0 left-0 right-0 z-[998] lg:bottom-auto lg:top-[70px] safe-area-bottom">
+    <div class="bg-praia-teal-800 border-t border-white/10 lg:border-t-0 lg:border-b px-4 py-3 flex items-center justify-between gap-4 max-w-full">
+      <div class="flex items-center gap-3 min-w-0">
+        <i data-lucide="info" class="w-4 h-4 text-praia-yellow-400 flex-shrink-0"></i>
+        <p class="text-white/70 text-xs font-display font-semibold truncate">Crie conta gratuita para guardar os seus carimbos e badges.</p>
+      </div>
+      <a href="auth.html?redirect=passaporte.html" class="flex-shrink-0 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-xs uppercase tracking-wider px-3 py-1.5 rounded-full whitespace-nowrap">
+        Criar Conta
+      </a>
+    </div>
+  </div>
 
   <main id="main-content" class="pt-16 md:pt-[70px] pb-20 lg:pb-10">
     <!-- Hero -->
@@ -263,7 +280,7 @@
       <div class="text-center mb-10 reveal-on-scroll">
         <span class="font-display text-xs uppercase tracking-[0.15em] text-praia-teal-500 font-semibold block mb-2">Os Seus Carimbos</span>
         <h2 class="font-display text-2xl md:text-3xl font-bold text-praia-teal-800 tracking-tight">Álbum de Carimbos</h2>
-        <p class="text-praia-sand-500 mt-2 text-sm">Clique numa praia para simular um carimbo (demo)</p>
+        <p class="text-praia-sand-500 mt-2 text-sm">Clique numa praia para registar ou remover o seu carimbo digital</p>
       </div>
       <div id="stamps-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
         <!-- Skeleton loading -->
@@ -281,13 +298,21 @@
     <!-- Badges -->
     <section class="bg-white border-t border-b border-praia-sand-100">
       <div class="max-w-5xl mx-auto px-6 py-12 md:py-16">
-        <div class="text-center mb-10 reveal-on-scroll">
+        <div class="text-center mb-8 reveal-on-scroll">
           <span class="font-display text-xs uppercase tracking-[0.15em] text-praia-yellow-600 font-semibold block mb-2">Conquistas</span>
           <h2 class="font-display text-2xl md:text-3xl font-bold text-praia-teal-800 tracking-tight">Badges & Troféus</h2>
-          <p class="text-praia-sand-500 mt-2 text-sm">Desbloqueie conquistas ao visitar praias de diferentes regiões</p>
+          <p class="text-praia-sand-500 mt-2 text-sm">20 conquistas desbloqueáveis em 5 níveis de raridade</p>
         </div>
-        <div id="badges-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-          <!-- Filled by passport.js -->
+        <!-- Tier Legend -->
+        <div class="flex flex-wrap justify-center gap-2 mb-8">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-display font-bold" style="background:#CD7F3222;color:#CD7F32;border:1px solid #CD7F3244;">● Bronze</span>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-display font-bold" style="background:#A8B8C822;color:#A8B8C8;border:1px solid #A8B8C844;">● Prata</span>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-display font-bold" style="background:#FFD70022;color:#FFD700;border:1px solid #FFD70044;">● Ouro</span>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-display font-bold" style="background:#B0C4DE22;color:#B0C4DE;border:1px solid #B0C4DE44;">● Platina</span>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-display font-bold" style="background:#B9F2FF22;color:#B9F2FF;border:1px solid #B9F2FF44;">● Diamante</span>
+        </div>
+        <div id="badges-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          <!-- Filled by js/passport.js -->
         </div>
       </div>
     </section>
@@ -302,20 +327,16 @@
     </div>
   </nav>
 
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <script src="js/auth.js"></script>
   <script src="js/passport.js"></script>
+
   <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-      const res = await fetch('data/beaches.json');
-      const beaches = await res.json();
-
-      const stampsGrid = document.getElementById('stamps-grid');
-      const badgesGrid = document.getElementById('badges-grid');
-
-      renderStampGrid(beaches, stampsGrid);
-      renderStats(beaches);
-      renderBadges(beaches, badgesGrid);
-
-      lucide.createIcons();
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.AuthUtils) {
+        AuthUtils.initHeaderAuth();
+        AuthUtils.initMobileMenuAuth();
+      }
     });
   </script>
 </body>

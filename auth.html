@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entrar / Registar — Praias Fluviais</title>
+  <meta name="description" content="Crie a sua conta no Guia das Praias Fluviais e comece a colecionar carimbos, votar e comentar.">
+  <meta name="robots" content="noindex">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/shared.js"></script>
+
+  <!-- Lucide -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/shared.css">
+
+  <style>
+    .auth-bg {
+      background: linear-gradient(145deg, #002A2E 0%, #003A40 45%, #004D40 100%);
+      min-height: 100dvh;
+      position: relative;
+      overflow: hidden;
+    }
+    .auth-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 15% 25%, rgba(255,235,59,0.07) 0%, transparent 45%),
+        radial-gradient(ellipse at 85% 70%, rgba(2,136,209,0.06) 0%, transparent 45%),
+        radial-gradient(ellipse at 50% 95%, rgba(67,160,71,0.05) 0%, transparent 40%);
+      pointer-events: none;
+    }
+    .auth-card {
+      backdrop-filter: blur(20px);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .auth-input {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: white;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .auth-input::placeholder { color: rgba(255,255,255,0.35); }
+    .auth-input:focus {
+      outline: none;
+      border-color: #FFEB3B;
+      box-shadow: 0 0 0 3px rgba(255,235,59,0.15);
+    }
+    .tab-btn.active {
+      background: #FFEB3B;
+      color: #003A40;
+    }
+    .tab-btn {
+      transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .google-btn {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.2);
+      transition: all 0.2s ease;
+    }
+    .google-btn:hover {
+      background: rgba(255,255,255,0.14);
+      border-color: rgba(255,255,255,0.35);
+      transform: translateY(-1px);
+    }
+    .google-btn:active { transform: scale(0.98); }
+    .divider-line {
+      flex: 1; height: 1px; background: rgba(255,255,255,0.1);
+    }
+    .avatar-preview {
+      width: 96px; height: 96px;
+      border-radius: 50%;
+      border: 3px solid rgba(255,235,59,0.4);
+      object-fit: cover;
+    }
+    .avatar-preview-placeholder {
+      width: 96px; height: 96px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+      border: 3px dashed rgba(255,235,59,0.4);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .avatar-preview-placeholder:hover { background: rgba(255,255,255,0.12); }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .auth-card { animation: slideIn 0.45s cubic-bezier(0.34,1.56,0.64,1) both; }
+
+    /* Floating bubbles */
+    .bubble-auth {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,235,59,0.04);
+      animation: riseAuth linear infinite;
+      pointer-events: none;
+    }
+    @keyframes riseAuth {
+      0%   { transform: translateY(100vh) scale(1); opacity: 0; }
+      10%  { opacity: 1; }
+      90%  { opacity: 0.5; }
+      100% { transform: translateY(-20vh) scale(1.1); opacity: 0; }
+    }
+    .error-msg { animation: shake 0.4s ease; }
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      25%      { transform: translateX(-6px); }
+      75%      { transform: translateX(6px); }
+    }
+  </style>
+</head>
+
+<body class="font-body antialiased">
+<div class="auth-bg flex flex-col items-center justify-center px-4 py-12 relative">
+
+  <!-- Bubbles -->
+  <div class="bubble-auth" style="width:180px;height:180px;left:5%;animation-duration:18s;animation-delay:0s;"></div>
+  <div class="bubble-auth" style="width:80px;height:80px;left:20%;animation-duration:12s;animation-delay:3s;background:rgba(2,136,209,0.04);"></div>
+  <div class="bubble-auth" style="width:120px;height:120px;right:10%;animation-duration:15s;animation-delay:6s;"></div>
+  <div class="bubble-auth" style="width:60px;height:60px;right:25%;animation-duration:9s;animation-delay:1s;background:rgba(67,160,71,0.04);"></div>
+
+  <!-- Logo -->
+  <a href="index.html" class="mb-8 flex-shrink-0">
+    <img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-14 w-auto">
+  </a>
+
+  <!-- Card -->
+  <div class="auth-card rounded-3xl p-8 w-full max-w-md">
+
+    <!-- Tabs -->
+    <div class="flex gap-1 p-1 rounded-2xl mb-8" style="background:rgba(0,0,0,0.2);">
+      <button id="tab-register" class="tab-btn active flex-1 font-display font-bold text-xs uppercase tracking-wider py-2.5 rounded-xl" onclick="switchTab('register')">
+        Registar
+      </button>
+      <button id="tab-login" class="tab-btn flex-1 font-display font-bold text-xs uppercase tracking-wider py-2.5 rounded-xl text-white/60" onclick="switchTab('login')">
+        Iniciar Sessão
+      </button>
+    </div>
+
+    <!-- ══ REGISTER PANEL ══ -->
+    <div id="panel-register">
+      <h1 class="font-display text-2xl font-bold text-white mb-1">Crie a sua conta</h1>
+      <p class="text-white/50 text-sm mb-6">Colete carimbos, vote e muito mais.</p>
+
+      <!-- Google -->
+      <button onclick="signInWithGoogle()" class="google-btn w-full flex items-center justify-center gap-3 py-3 rounded-2xl font-display font-semibold text-sm text-white mb-4">
+        <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Continuar com Google
+      </button>
+
+      <div class="flex items-center gap-3 mb-4">
+        <div class="divider-line"></div>
+        <span class="text-white/30 text-xs font-display font-semibold uppercase tracking-wider">ou</span>
+        <div class="divider-line"></div>
+      </div>
+
+      <form id="register-form" onsubmit="handleRegister(event)" novalidate>
+        <div class="flex flex-col gap-3">
+          <div>
+            <label class="text-[11px] font-display font-semibold uppercase tracking-wider text-white/50 block mb-1.5">Nome de utilizador</label>
+            <input type="text" id="reg-username" required minlength="3" maxlength="24"
+                   placeholder="ex: explorador_do_norte"
+                   class="auth-input w-full px-4 py-3 rounded-xl text-sm font-body">
+          </div>
+          <div>
+            <label class="text-[11px] font-display font-semibold uppercase tracking-wider text-white/50 block mb-1.5">Email</label>
+            <input type="email" id="reg-email" required placeholder="o_seu@email.com"
+                   class="auth-input w-full px-4 py-3 rounded-xl text-sm font-body">
+          </div>
+          <div>
+            <label class="text-[11px] font-display font-semibold uppercase tracking-wider text-white/50 block mb-1.5">Palavra-passe</label>
+            <input type="password" id="reg-password" required minlength="6"
+                   placeholder="Mínimo 6 caracteres"
+                   class="auth-input w-full px-4 py-3 rounded-xl text-sm font-body">
+          </div>
+          <div>
+            <label class="text-[11px] font-display font-semibold uppercase tracking-wider text-white/50 block mb-1.5">Confirmar palavra-passe</label>
+            <input type="password" id="reg-password-confirm" required
+                   placeholder="Repita a palavra-passe"
+                   class="auth-input w-full px-4 py-3 rounded-xl text-sm font-body">
+          </div>
+        </div>
+
+        <div id="reg-error" class="hidden mt-3 px-4 py-2.5 rounded-xl text-sm text-red-300 font-display font-semibold" style="background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.25);"></div>
+
+        <button type="submit" id="reg-submit"
+                class="mt-5 w-full btn-primary bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider py-3.5 rounded-2xl shadow-layered-yellow">
+          Criar Conta
+        </button>
+      </form>
+
+      <p class="text-center text-white/30 text-xs mt-5">
+        Já tem conta?
+        <button onclick="switchTab('login')" class="text-praia-yellow-400 hover:text-praia-yellow-300 font-display font-semibold transition-colors">Iniciar Sessão</button>
+      </p>
+    </div>
+
+    <!-- ══ LOGIN PANEL ══ -->
+    <div id="panel-login" class="hidden">
+      <h1 class="font-display text-2xl font-bold text-white mb-1">Bem-vindo de volta</h1>
+      <p class="text-white/50 text-sm mb-6">Continue a sua aventura fluvial.</p>
+
+      <!-- Google -->
+      <button onclick="signInWithGoogle()" class="google-btn w-full flex items-center justify-center gap-3 py-3 rounded-2xl font-display font-semibold text-sm text-white mb-4">
+        <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Continuar com Google
+      </button>
+
+      <div class="flex items-center gap-3 mb-4">
+        <div class="divider-line"></div>
+        <span class="text-white/30 text-xs font-display font-semibold uppercase tracking-wider">ou</span>
+        <div class="divider-line"></div>
+      </div>
+
+      <form id="login-form" onsubmit="handleLogin(event)" novalidate>
+        <div class="flex flex-col gap-3">
+          <div>
+            <label class="text-[11px] font-display font-semibold uppercase tracking-wider text-white/50 block mb-1.5">Email</label>
+            <input type="email" id="login-email" required placeholder="o_seu@email.com"
+                   class="auth-input w-full px-4 py-3 rounded-xl text-sm font-body">
+          </div>
+          <div>
+            <label class="text-[11px] font-display font-semibold uppercase tracking-wider text-white/50 block mb-1.5">Palavra-passe</label>
+            <input type="password" id="login-password" required placeholder="••••••••"
+                   class="auth-input w-full px-4 py-3 rounded-xl text-sm font-body">
+          </div>
+        </div>
+
+        <div id="login-error" class="hidden mt-3 px-4 py-2.5 rounded-xl text-sm text-red-300 font-display font-semibold" style="background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.25);"></div>
+
+        <button type="submit" id="login-submit"
+                class="mt-5 w-full btn-primary bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider py-3.5 rounded-2xl shadow-layered-yellow">
+          Entrar
+        </button>
+      </form>
+
+      <p class="text-center text-white/30 text-xs mt-5">
+        Não tem conta?
+        <button onclick="switchTab('register')" class="text-praia-yellow-400 hover:text-praia-yellow-300 font-display font-semibold transition-colors">Criar Conta</button>
+      </p>
+    </div>
+
+  </div><!-- /auth-card -->
+
+  <p class="mt-6 text-white/25 text-xs text-center max-w-sm">
+    Ao criar conta aceita a utilização dos seus dados para personalizar a sua experiência no Guia das Praias Fluviais.
+  </p>
+</div>
+
+<!-- ══ AVATAR UPLOAD MODAL (shown after register) ══ -->
+<div id="avatar-modal" class="hidden fixed inset-0 z-[2000] flex items-center justify-center p-4" style="background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);">
+  <div id="avatar-modal-inner" class="relative rounded-3xl p-8 max-w-sm w-full text-center"
+       style="background:linear-gradient(145deg,#003A40,#004D40);border:1px solid rgba(255,255,255,0.12);box-shadow:0 30px 80px rgba(0,0,0,0.5);">
+    <div class="w-12 h-12 bg-praia-yellow-400/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+      <i data-lucide="camera" class="w-6 h-6 text-praia-yellow-400"></i>
+    </div>
+    <h2 class="font-display text-xl font-bold text-white mb-2">Adicionar foto de perfil</h2>
+    <p class="text-white/50 text-sm mb-6">Personalize o seu perfil com uma foto. Pode fazê-lo agora ou mais tarde.</p>
+
+    <div class="flex flex-col items-center gap-4 mb-6">
+      <div id="avatar-preview-wrap">
+        <div class="avatar-preview-placeholder" onclick="document.getElementById('avatar-file').click()">
+          <i data-lucide="user" class="w-10 h-10 text-white/30"></i>
+        </div>
+      </div>
+      <input type="file" id="avatar-file" accept="image/jpeg,image/png,image/webp" class="hidden" onchange="previewAvatar(event)">
+      <button onclick="document.getElementById('avatar-file').click()"
+              class="inline-flex items-center gap-2 border border-white/20 text-white/70 hover:text-white hover:border-white/40 font-display font-semibold text-xs uppercase tracking-wider px-4 py-2 rounded-full transition-colors">
+        <i data-lucide="upload" class="w-3.5 h-3.5"></i> Escolher foto
+      </button>
+    </div>
+
+    <div id="avatar-error" class="hidden mb-4 px-4 py-2.5 rounded-xl text-sm text-red-300 font-display font-semibold" style="background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.25);"></div>
+
+    <div class="flex flex-col gap-2">
+      <button id="avatar-save-btn" onclick="saveAvatar()"
+              class="btn-primary w-full bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider py-3 rounded-2xl shadow-layered-yellow opacity-50 pointer-events-none">
+        Guardar Foto
+      </button>
+      <button onclick="skipAvatar()"
+              class="text-white/35 hover:text-white/60 text-sm font-display font-semibold transition-colors py-2">
+        Mais tarde
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Supabase auth.js -->
+<script src="js/auth.js"></script>
+
+<script>
+  lucide.createIcons();
+
+  // Redirect param
+  const redirectTo = new URLSearchParams(location.search).get('redirect') || 'index.html';
+
+  // Check if already logged in
+  (async () => {
+    const user = await AuthUtils.authGetUser();
+    if (user) window.location.href = redirectTo;
+  })();
+
+  // ── Tabs ────────────────────────────────────────────────────────────────────
+  function switchTab(tab) {
+    const isRegister = tab === 'register';
+    document.getElementById('panel-register').classList.toggle('hidden', !isRegister);
+    document.getElementById('panel-login').classList.toggle('hidden',    isRegister);
+    document.getElementById('tab-register').classList.toggle('active', isRegister);
+    document.getElementById('tab-login').classList.toggle('active', !isRegister);
+    document.getElementById('tab-register').classList.toggle('text-white/60', !isRegister);
+    document.getElementById('tab-login').classList.toggle('text-white/60', isRegister);
+  }
+
+  // ── Google OAuth ─────────────────────────────────────────────────────────────
+  async function signInWithGoogle() {
+    const { error } = await AuthUtils.supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: `${location.origin}/${redirectTo}` },
+    });
+    if (error) showError('reg-error', error.message);
+  }
+
+  // ── Register ─────────────────────────────────────────────────────────────────
+  async function handleRegister(e) {
+    e.preventDefault();
+    hideError('reg-error');
+
+    const username  = document.getElementById('reg-username').value.trim();
+    const email     = document.getElementById('reg-email').value.trim();
+    const pass      = document.getElementById('reg-password').value;
+    const passConf  = document.getElementById('reg-password-confirm').value;
+
+    if (username.length < 3) return showError('reg-error', 'O nome de utilizador deve ter pelo menos 3 caracteres.');
+    if (!/^[a-z0-9_.-]+$/i.test(username)) return showError('reg-error', 'O nome de utilizador só pode conter letras, números, pontos, hifens e underscores.');
+    if (pass !== passConf) return showError('reg-error', 'As palavras-passe não coincidem.');
+    if (pass.length < 6)   return showError('reg-error', 'A palavra-passe deve ter pelo menos 6 caracteres.');
+
+    setLoading('reg-submit', true);
+
+    const { data, error } = await AuthUtils.supabase.auth.signUp({ email, password: pass });
+    if (error) { setLoading('reg-submit', false); return showError('reg-error', translateError(error.message)); }
+
+    const user = data.user;
+    if (user) {
+      await AuthUtils.profileUpsert(user.id, { username });
+    }
+    window._pendingUserId   = user?.id;
+    window._pendingUsername = username;
+    window._pendingRedirect = redirectTo;
+
+    setLoading('reg-submit', false);
+    showAvatarModal();
+  }
+
+  // ── Login ────────────────────────────────────────────────────────────────────
+  async function handleLogin(e) {
+    e.preventDefault();
+    hideError('login-error');
+
+    const email = document.getElementById('login-email').value.trim();
+    const pass  = document.getElementById('login-password').value;
+
+    setLoading('login-submit', true);
+
+    const { error } = await AuthUtils.supabase.auth.signInWithPassword({ email, password: pass });
+    if (error) { setLoading('login-submit', false); return showError('login-error', translateError(error.message)); }
+
+    window.location.href = redirectTo;
+  }
+
+  // ── Avatar Modal ─────────────────────────────────────────────────────────────
+  function showAvatarModal() {
+    const modal = document.getElementById('avatar-modal');
+    modal.classList.remove('hidden');
+    const inner = document.getElementById('avatar-modal-inner');
+    inner.style.opacity = '0';
+    inner.style.transform = 'scale(0.85) translateY(30px)';
+    inner.style.transition = 'transform 0.4s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease';
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      inner.style.opacity = '1';
+      inner.style.transform = 'scale(1) translateY(0)';
+    }));
+    lucide.createIcons();
+  }
+
+  let _selectedFile = null;
+
+  function previewAvatar(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { showError('avatar-error', 'A imagem deve ter menos de 5MB.'); return; }
+    _selectedFile = file;
+    const url = URL.createObjectURL(file);
+    document.getElementById('avatar-preview-wrap').innerHTML =
+      `<img src="${url}" alt="Preview" class="avatar-preview">`;
+    const btn = document.getElementById('avatar-save-btn');
+    btn.classList.remove('opacity-50', 'pointer-events-none');
+  }
+
+  async function saveAvatar() {
+    if (!_selectedFile || !window._pendingUserId) return;
+    hideError('avatar-error');
+    const btn = document.getElementById('avatar-save-btn');
+    btn.textContent = 'A guardar...';
+    btn.disabled = true;
+
+    const url = await AuthUtils.profileUploadAvatar(window._pendingUserId, _selectedFile);
+    if (url) {
+      await AuthUtils.profileUpsert(window._pendingUserId, { avatar_url: url });
+    }
+    window.location.href = window._pendingRedirect || 'index.html';
+  }
+
+  function skipAvatar() {
+    window.location.href = window._pendingRedirect || 'index.html';
+  }
+
+  // ── Helpers ───────────────────────────────────────────────────────────────────
+  function showError(id, msg) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.classList.remove('hidden');
+    el.classList.remove('error-msg');
+    void el.offsetWidth;
+    el.classList.add('error-msg');
+  }
+  function hideError(id) { document.getElementById(id).classList.add('hidden'); }
+
+  function setLoading(btnId, loading) {
+    const btn = document.getElementById(btnId);
+    btn.disabled = loading;
+    btn.textContent = loading ? 'Um momento...' : btn.dataset.label || btn.textContent;
+    if (!loading && !btn.dataset.label) return;
+    if (!btn.dataset.label) btn.dataset.label = btn.textContent;
+  }
+
+  function translateError(msg) {
+    if (!msg) return 'Ocorreu um erro. Tente novamente.';
+    if (msg.includes('User already registered')) return 'Este email já está registado. Inicie sessão.';
+    if (msg.includes('Invalid login credentials'))  return 'Email ou palavra-passe incorretos.';
+    if (msg.includes('Email not confirmed'))  return 'Por favor confirme o seu email antes de iniciar sessão.';
+    if (msg.includes('Password should be'))   return 'A palavra-passe deve ter pelo menos 6 caracteres.';
+    return msg;
+  }
+
+  // Check URL for tab param
+  if (new URLSearchParams(location.search).get('tab') === 'login') switchTab('login');
+</script>
+</body>
+</html>

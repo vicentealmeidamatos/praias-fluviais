@@ -186,21 +186,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       <!-- Community Reviews -->
       <section class="mb-12">
         <h2 class="font-display text-xs uppercase tracking-[0.2em] text-praia-teal-500 font-semibold mb-5">Comunidade</h2>
-        <div id="reviews-container" class="space-y-4 mb-6"></div>
-        <div class="bg-praia-sand-50 rounded-xl p-5 border border-praia-sand-200">
-          <h3 class="font-display text-sm font-bold text-praia-teal-800 mb-3">Deixe o seu comentário</h3>
-          <textarea id="review-text" rows="3" placeholder="Partilhe a sua experiência..." class="w-full p-3 rounded-lg bg-white border border-praia-sand-200 text-sm resize-none focus:outline-none focus:border-praia-teal-400 mb-3"></textarea>
-          <div class="mb-3">
-            <input type="file" id="review-images" accept="image/*" multiple class="hidden">
-            <label for="review-images" class="inline-flex items-center gap-2 cursor-pointer text-xs font-display font-semibold text-praia-teal-600 border border-praia-sand-200 bg-white px-4 py-2 rounded-full hover:border-praia-teal-400 transition-colors">
-              <i data-lucide="image" class="w-3.5 h-3.5"></i> Anexar fotos
-            </label>
-            <div id="review-image-preview" class="flex gap-2 mt-2 flex-wrap"></div>
-          </div>
-          <button onclick="submitReview('${beach.id}')" class="btn-primary bg-praia-teal-800 text-praia-yellow-400 font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full">
-            Publicar
-          </button>
+        <div id="reviews-container" class="space-y-4 mb-6">
+          <div class="skeleton h-24 rounded-xl"></div>
+          <div class="skeleton h-24 rounded-xl"></div>
         </div>
+        <div id="review-form-area"></div>
       </section>
 
       <!-- Nearby Beaches -->
@@ -241,8 +231,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderWeatherWidget(weatherWidget, weather);
   }
 
-  // Load reviews from localStorage
-  loadReviews(beach.id);
+  // Auth state + reviews
+  const currentUser   = await AuthUtils.authGetUser();
+  const currentProfile = currentUser ? await AuthUtils.profileGet(currentUser.id) : null;
+  await loadReviews(beach.id, currentUser, beaches);
+  renderReviewForm(beach.id, currentUser, currentProfile, beaches);
 
   // Update page title
   document.title = `${beach.name} | Praias Fluviais`;
@@ -281,66 +274,216 @@ document.addEventListener('DOMContentLoaded', async () => {
   setMeta('og:description', beach.description);
 });
 
-function loadReviews(beachId) {
+async function loadReviews(beachId, currentUser, beaches) {
   const container = document.getElementById('reviews-container');
   if (!container) return;
-  const reviews = JSON.parse(localStorage.getItem(`reviews_${beachId}`) || '[]');
 
-  const displayReviews = reviews.length > 0 ? reviews : [
-    { text: 'Água cristalina e ambiente muito tranquilo. Recomendo!', date: '2026-03-15', author: 'Visitante', images: [] },
-    { text: 'Fomos lá com a família no verão passado. As crianças adoraram!', date: '2025-08-20', author: 'Maria S.', images: [] },
-  ];
+  const reviews = await AuthUtils.reviewsGetForBeach(beachId);
 
-  container.innerHTML = displayReviews.map(r => `
-    <div class="bg-white rounded-xl p-4 shadow-layered">
-      <div class="flex items-center gap-2 mb-2">
-        <div class="w-8 h-8 rounded-full bg-praia-teal-800/10 flex items-center justify-center">
-          <i data-lucide="user" class="w-4 h-4 text-praia-teal-600"></i>
+  if (reviews.length === 0) {
+    container.innerHTML = `
+      <div class="text-center py-8 text-praia-sand-400">
+        <i data-lucide="message-circle" class="w-10 h-10 mx-auto mb-2 opacity-40"></i>
+        <p class="text-sm font-display font-semibold">Ainda sem comentários</p>
+        <p class="text-xs mt-1">Seja o primeiro a partilhar a sua experiência!</p>
+      </div>`;
+    lucide.createIcons();
+    return;
+  }
+
+  // Fetch badges for all unique reviewers in parallel
+  const uniqueUserIds = [...new Set(reviews.map(r => r.user_id).filter(Boolean))];
+  const badgeMap = {};
+  await Promise.all(uniqueUserIds.map(async uid => {
+    try { badgeMap[uid] = await AuthUtils.badgesGetForUser(uid, beaches); } catch { badgeMap[uid] = []; }
+  }));
+
+  const TIER_COLORS = { bronze: '#CD7F32', prata: '#A8B8C8', ouro: '#FFD700', platina: '#B0C4DE', diamante: '#B9F2FF' };
+
+  container.innerHTML = reviews.map(r => {
+    const profile  = r.profiles;
+    const name     = profile?.username || 'Visitante';
+    const date     = new Date(r.created_at).toLocaleDateString('pt-PT');
+    const isOwn    = currentUser && r.user_id === currentUser.id;
+    const topBadges = badgeMap[r.user_id] || [];
+
+    const badgeIconsHtml = topBadges.length
+      ? `<span class="flex items-center gap-1 ml-1">${topBadges.map(b => {
+          const color = TIER_COLORS[b.tier] || '#888';
+          return `<span title="${b.name}" style="color:${color};display:inline-flex;align-items:center;" class="cursor-default"><i data-lucide="${b.icon}" style="width:12px;height:12px;"></i></span>`;
+        }).join('')}</span>`
+      : '';
+
+    const avatarSrc  = profile?.avatar_url;
+    const avatarHtml = avatarSrc
+      ? `<img src="${avatarSrc}" alt="${name}" class="w-9 h-9 rounded-full object-cover border-2 border-praia-sand-100 flex-shrink-0">`
+      : `<div class="w-9 h-9 rounded-full bg-praia-teal-800 flex items-center justify-center flex-shrink-0 border-2 border-praia-sand-100">
+           <span class="font-display font-bold text-sm text-praia-yellow-400">${name.charAt(0).toUpperCase()}</span>
+         </div>`;
+
+    return `
+      <div class="bg-white rounded-xl p-4 shadow-layered" data-review-id="${r.id}">
+        <div class="flex items-start gap-3 mb-3">
+          ${avatarHtml}
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center flex-wrap gap-1.5">
+              <span class="font-display text-xs font-bold text-praia-teal-800">${name}</span>
+              ${badgeIconsHtml}
+              <span class="text-[10px] text-praia-sand-400 ml-1">${date}</span>
+            </div>
+          </div>
+          ${isOwn ? `<button onclick="deleteReview('${r.id}', '${beachId}')" class="flex-shrink-0 text-praia-sand-300 hover:text-red-400 transition-colors p-1" title="Apagar comentário">
+            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+          </button>` : ''}
         </div>
-        <div>
-          <span class="font-display text-xs font-semibold text-praia-teal-800">${r.author || 'Visitante'}</span>
-          <span class="text-xs text-praia-sand-400 ml-2">${r.date}</span>
+        <p class="text-sm text-praia-sand-700 leading-relaxed">${r.text}</p>
+        ${r.images?.length ? `<div class="flex flex-wrap gap-2 mt-3">${r.images.map(img => `<img src="${img}" class="w-20 h-20 object-cover rounded-lg border border-praia-sand-100 cursor-pointer hover:opacity-90 transition-opacity" onclick="this.requestFullscreen&&this.requestFullscreen()">`).join('')}</div>` : ''}
+      </div>`;
+  }).join('');
+
+  lucide.createIcons();
+}
+
+function renderReviewForm(beachId, user, profile, beaches) {
+  const area = document.getElementById('review-form-area');
+  if (!area) return;
+
+  if (!user) {
+    area.innerHTML = `
+      <div class="rounded-2xl p-6 text-center" style="background:linear-gradient(135deg,#003A40,#005D56);border:1px solid rgba(255,255,255,0.1);">
+        <i data-lucide="message-circle" class="w-8 h-8 mx-auto text-praia-yellow-400 mb-3"></i>
+        <p class="font-display text-sm font-bold text-white mb-1">Partilhe a sua experiência</p>
+        <p class="text-white/50 text-xs mb-4">Precisa de conta para comentar nesta praia.</p>
+        <div class="flex flex-col sm:flex-row gap-2 justify-center">
+          <a href="auth.html?redirect=${encodeURIComponent('praia.html?id=' + beachId)}"
+             class="btn-primary bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full shadow-layered-yellow">
+            Criar Conta
+          </a>
+          <a href="auth.html?tab=login&redirect=${encodeURIComponent('praia.html?id=' + beachId)}"
+             class="border border-white/25 text-white/70 hover:text-white font-display font-semibold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full transition-colors">
+            Iniciar Sessão
+          </a>
         </div>
+      </div>`;
+    lucide.createIcons();
+    return;
+  }
+
+  const name    = profile?.username || user.email?.split('@')[0] || 'U';
+  const avatarHtml = profile?.avatar_url
+    ? `<img src="${profile.avatar_url}" alt="${name}" class="w-9 h-9 rounded-full object-cover border-2 border-praia-sand-200 flex-shrink-0">`
+    : `<div class="w-9 h-9 rounded-full bg-praia-teal-800 flex items-center justify-center flex-shrink-0"><span class="font-display font-bold text-sm text-praia-yellow-400">${name.charAt(0).toUpperCase()}</span></div>`;
+
+  area.innerHTML = `
+    <div class="bg-praia-sand-50 rounded-xl p-5 border border-praia-sand-200">
+      <div class="flex items-center gap-3 mb-3">
+        ${avatarHtml}
+        <h3 class="font-display text-sm font-bold text-praia-teal-800">O seu comentário</h3>
       </div>
-      <p class="text-sm text-praia-sand-700 leading-relaxed">${r.text}</p>
-      ${r.images?.length ? `<div class="flex flex-wrap gap-2 mt-3">${r.images.map(img => `<img src="${img}" class="w-20 h-20 object-cover rounded-lg border border-praia-sand-100 cursor-pointer hover:opacity-90 transition-opacity" onclick="this.requestFullscreen&&this.requestFullscreen()">`).join('')}</div>` : ''}
-    </div>
-  `).join('');
+      <textarea id="review-text" rows="3" placeholder="Partilhe a sua experiência nesta praia…"
+                class="w-full p-3 rounded-lg bg-white border border-praia-sand-200 text-sm resize-none focus:outline-none focus:border-praia-teal-400 mb-3"></textarea>
+      <div class="flex items-center justify-between gap-3">
+        <div>
+          <input type="file" id="review-images" accept="image/*" multiple class="hidden">
+          <label for="review-images" class="inline-flex items-center gap-2 cursor-pointer text-xs font-display font-semibold text-praia-teal-600 border border-praia-sand-200 bg-white px-4 py-2 rounded-full hover:border-praia-teal-400 transition-colors">
+            <i data-lucide="image" class="w-3.5 h-3.5"></i> Fotos
+          </label>
+        </div>
+        <button id="review-submit-btn" onclick="submitReview('${beachId}')"
+                class="btn-primary bg-praia-teal-800 text-praia-yellow-400 font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full">
+          Publicar
+        </button>
+      </div>
+      <div id="review-image-preview" class="flex gap-2 mt-2 flex-wrap"></div>
+    </div>`;
+
+  document.getElementById('review-images')?.addEventListener('change', function () {
+    const preview = document.getElementById('review-image-preview');
+    if (!preview) return;
+    preview.innerHTML = '';
+    Array.from(this.files).forEach(file => {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        img.className = 'w-16 h-16 object-cover rounded-lg border border-praia-sand-200';
+        preview.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    });
+  });
 
   lucide.createIcons();
 }
 
 async function submitReview(beachId) {
+  const user = await AuthUtils.authGetUser();
+  if (!user) return;
+
   const textarea = document.getElementById('review-text');
   const text = textarea?.value?.trim();
-  if (!text) return;
+  if (!text) { textarea?.focus(); return; }
 
+  const btn = document.getElementById('review-submit-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'A publicar…'; }
+
+  // Upload images to Supabase Storage if any
   const fileInput = document.getElementById('review-images');
-  const images = [];
+  const imageUrls = [];
   if (fileInput?.files?.length) {
     for (const file of fileInput.files) {
+      // Convert to data URL for storage (simple approach; production would use Storage)
       const dataUrl = await new Promise(resolve => {
         const reader = new FileReader();
         reader.onload = e => resolve(e.target.result);
         reader.readAsDataURL(file);
       });
-      images.push(dataUrl);
+      imageUrls.push(dataUrl);
     }
   }
 
-  const reviews = JSON.parse(localStorage.getItem(`reviews_${beachId}`) || '[]');
-  reviews.unshift({
-    text,
-    date: new Date().toISOString().split('T')[0],
-    author: 'Visitante',
-    images,
-  });
-  localStorage.setItem(`reviews_${beachId}`, JSON.stringify(reviews));
-  textarea.value = '';
+  const ok = await AuthUtils.reviewSubmit(user.id, beachId, text, imageUrls);
+
+  if (btn) { btn.disabled = false; btn.textContent = 'Publicar'; }
+
+  if (!ok) { alert('Erro ao publicar comentário. Tente novamente.'); return; }
+
+  if (textarea) textarea.value = '';
   if (fileInput) fileInput.value = '';
   const preview = document.getElementById('review-image-preview');
   if (preview) preview.innerHTML = '';
-  loadReviews(beachId);
+
+  // Reload reviews + check for badge unlocks
+  const profile = await AuthUtils.profileGet(user.id);
+  let beaches = [];
+  try { beaches = await (await fetch('data/beaches.json')).json(); } catch {}
+  await loadReviews(beachId, user, beaches);
+
+  // Badge check
+  try {
+    const stamps  = await AuthUtils.stampsGetAll(user.id);
+    const reviews = await AuthUtils.reviewsGetForUser(user.id);
+    const voted   = !!(await AuthUtils.voteGet(user.id, new Date().getFullYear()));
+    const badges  = AuthUtils.badgesCompute({ stamps, reviews, voted, beaches });
+    const storageKey = `badges_${user.id}`;
+    const prevEarned = new Set(JSON.parse(sessionStorage.getItem(storageKey) || '[]'));
+    badges.filter(b => b.earned && !prevEarned.has(b.id))
+      .slice(0, 2)
+      .forEach((badge, i) => setTimeout(() => AuthUtils.celebrateBadge(badge), i * 1800 + 500));
+    sessionStorage.setItem(storageKey, JSON.stringify(badges.filter(b => b.earned).map(b => b.id)));
+  } catch {}
+}
+
+async function deleteReview(reviewId, beachId) {
+  if (!confirm('Tem a certeza que quer apagar este comentário?')) return;
+  const user = await AuthUtils.authGetUser();
+  if (!user) return;
+  const ok = await AuthUtils.reviewDelete(reviewId, user.id);
+  if (ok) {
+    let beaches = [];
+    try { beaches = await (await fetch('data/beaches.json')).json(); } catch {}
+    await loadReviews(beachId, user, beaches);
+  }
 }
 
 async function shareBeach() {

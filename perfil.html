@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>O meu Perfil — Praias Fluviais</title>
+  <meta name="description" content="Perfil de utilizador no Guia das Praias Fluviais. Veja os seus badges, carimbos e comentários.">
+  <meta name="robots" content="noindex">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/shared.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <link rel="stylesheet" href="css/shared.css">
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+
+  <style>
+    .profile-hero {
+      background: linear-gradient(160deg, #002A2E 0%, #003A40 60%, #005D56 100%);
+      position: relative; overflow: hidden;
+    }
+    .profile-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 60%, rgba(255,235,59,0.07) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(2,136,209,0.05) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .avatar-ring {
+      padding: 3px;
+      background: conic-gradient(#FFEB3B, #F9C916, #003A40, #FFEB3B);
+      border-radius: 50%;
+    }
+    .stat-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+    }
+    .tab-active {
+      background: #FFEB3B;
+      color: #003A40;
+      font-weight: 700;
+    }
+    .tab-inactive {
+      color: rgba(255,255,255,0.55);
+    }
+    .tab-inactive:hover { color: rgba(255,255,255,0.85); }
+    .tab-btn {
+      font-family: 'Poppins', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 8px 16px;
+      border-radius: 12px;
+      transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+      white-space: nowrap;
+    }
+    .badges-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 16px;
+    }
+    .stamps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
+    }
+    .edit-input {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: white;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .edit-input::placeholder { color: rgba(255,255,255,0.35); }
+    .edit-input:focus { outline: none; border-color: #FFEB3B; box-shadow: 0 0 0 3px rgba(255,235,59,0.15); }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .profile-content { animation: fadeUp 0.4s ease both; }
+  </style>
+</head>
+
+<body class="bg-praia-sand-50 font-body text-praia-sand-900 antialiased overflow-x-hidden">
+  <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:bg-praia-yellow-400 focus:text-praia-teal-800 focus:px-4 focus:py-2 focus:rounded-lg focus:font-display focus:font-semibold">Saltar para o conteúdo</a>
+
+  <!-- ─── Header ─── -->
+  <header id="main-header" class="fixed top-0 left-0 right-0 z-[1000] bg-praia-teal-800/90 backdrop-blur-md">
+    <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-10">
+      <div class="flex items-center justify-between h-16 md:h-[70px]">
+        <a href="index.html" class="flex-shrink-0 mr-4">
+          <img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-14 md:h-[58px] w-auto">
+        </a>
+        <nav class="hidden lg:flex items-center gap-0.5">
+          <a href="index.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Início</a>
+          <a href="rede.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Rede</a>
+          <a href="votar.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Votar</a>
+          <a href="passaporte.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Passaporte</a>
+          <a href="artigos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Novidades</a>
+          <a href="descontos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Descontos</a>
+          <a href="contactos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Contactos</a>
+        </nav>
+        <div class="hidden lg:flex items-center gap-1.5 ml-auto">
+          <a href="https://www.facebook.com/praiasfluviais" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:bg-praia-yellow-400 hover:text-praia-teal-800 transition-colors duration-300">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+          <a href="https://www.instagram.com/guiadaspraiasfluviais" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:bg-praia-yellow-400 hover:text-praia-teal-800 transition-colors duration-300">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+        </div>
+        <div class="hidden md:flex items-center gap-2 ml-3">
+          <a href="onde-encontrar-guia.html" class="inline-flex items-center gap-1.5 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-[11px] uppercase tracking-wider px-3 py-1.5 rounded-full btn-primary shadow-layered-yellow whitespace-nowrap">
+            <i data-lucide="book-open" class="w-3.5 h-3.5"></i> Onde Encontrar
+          </a>
+          <a href="onde-encontrar-passaporte.html" class="inline-flex items-center gap-1.5 bg-white/10 border border-white/30 text-white hover:bg-white/20 font-display font-bold text-[11px] uppercase tracking-wider px-3 py-1.5 rounded-full transition-all duration-200 whitespace-nowrap">
+            <i data-lucide="stamp" class="w-3.5 h-3.5"></i> Onde Carimbar
+          </a>
+          <div id="header-auth-slot" class="flex items-center"></div>
+        </div>
+        <button id="nav-hamburger" class="lg:hidden text-white p-2 -mr-2" aria-label="Abrir menu">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Menu Overlay -->
+  <div id="menu-overlay" class="fixed inset-0 bg-black/50 z-[1001] opacity-0 pointer-events-none transition-opacity duration-300"></div>
+  <!-- Mobile Menu -->
+  <nav id="mobile-menu" class="fixed top-0 right-0 bottom-0 w-72 bg-praia-teal-800 z-[1002] translate-x-full transition-transform duration-300 ease-out flex flex-col">
+    <div class="flex items-center justify-between p-5 border-b border-white/10">
+      <img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-7">
+      <button id="nav-close" class="text-white p-1"><i data-lucide="x" class="w-6 h-6"></i></button>
+    </div>
+    <div class="flex-1 overflow-y-auto py-4">
+      <a href="index.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="home" class="w-5 h-5"></i> Início</a>
+      <a href="rede.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="network" class="w-5 h-5"></i> Rede de Praias</a>
+      <a href="votar.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="vote" class="w-5 h-5"></i> Votar 2026</a>
+      <a href="passaporte.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="stamp" class="w-5 h-5"></i> Passaporte</a>
+      <a href="artigos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="newspaper" class="w-5 h-5"></i> Novidades</a>
+      <a href="descontos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="percent" class="w-5 h-5"></i> Descontos</a>
+      <a href="contactos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="mail" class="w-5 h-5"></i> Contactos</a>
+    </div>
+    <div class="p-5 border-t border-white/10">
+      <div id="mobile-auth-slot"></div>
+    </div>
+  </nav>
+
+  <!-- Loading state -->
+  <div id="profile-loading" class="flex items-center justify-center min-h-screen">
+    <div class="text-center">
+      <div class="w-12 h-12 border-3 border-praia-teal-400 border-t-transparent rounded-full animate-spin mx-auto mb-3" style="border-width:3px;"></div>
+      <p class="font-display text-sm text-praia-sand-400">A carregar perfil…</p>
+    </div>
+  </div>
+
+  <!-- Main content (hidden until loaded) -->
+  <div id="profile-content" class="hidden profile-content">
+    <main id="main">
+
+      <!-- ─── Profile Hero ─── -->
+      <section class="profile-hero pt-16 md:pt-[70px] pb-8">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-6">
+          <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+            <!-- Avatar -->
+            <div class="flex-shrink-0">
+              <div class="avatar-ring inline-block">
+                <div class="bg-praia-teal-800 rounded-full p-0.5">
+                  <div id="profile-avatar-wrap" class="w-24 h-24 rounded-full overflow-hidden"></div>
+                </div>
+              </div>
+            </div>
+            <!-- Info -->
+            <div class="flex-1 text-center sm:text-left">
+              <h1 id="profile-name" class="font-display text-2xl md:text-3xl font-bold text-white mb-1">—</h1>
+              <p id="profile-email" class="text-white/40 text-sm mb-1"></p>
+              <p id="profile-since" class="text-white/30 text-xs mb-4"></p>
+              <!-- Tier badges -->
+              <div id="tier-bar" class="flex flex-wrap gap-2 justify-center sm:justify-start mb-4"></div>
+              <button id="edit-profile-btn"
+                      class="inline-flex items-center gap-2 border border-white/25 text-white/70 hover:text-white hover:border-white/50 font-display font-semibold text-xs uppercase tracking-wider px-4 py-2 rounded-full transition-all duration-200">
+                <i data-lucide="pencil" class="w-3.5 h-3.5"></i> Editar Perfil
+              </button>
+            </div>
+          </div>
+
+          <!-- Stats -->
+          <div class="grid grid-cols-4 gap-3 mt-8">
+            <div class="stat-card text-center py-4 px-2">
+              <div id="stat-stamps" class="font-display text-2xl font-bold text-praia-yellow-400">0</div>
+              <div class="text-[10px] font-display font-semibold uppercase tracking-wider text-white/40 mt-1">Carimbos</div>
+            </div>
+            <div class="stat-card text-center py-4 px-2">
+              <div id="stat-badges" class="font-display text-2xl font-bold text-praia-yellow-400">0</div>
+              <div class="text-[10px] font-display font-semibold uppercase tracking-wider text-white/40 mt-1">Badges</div>
+            </div>
+            <div class="stat-card text-center py-4 px-2">
+              <div id="stat-reviews" class="font-display text-2xl font-bold text-praia-yellow-400">0</div>
+              <div class="text-[10px] font-display font-semibold uppercase tracking-wider text-white/40 mt-1">Comentários</div>
+            </div>
+            <div class="stat-card text-center py-4 px-2">
+              <div id="stat-voted" class="font-display text-2xl font-bold text-praia-yellow-400">—</div>
+              <div class="text-[10px] font-display font-semibold uppercase tracking-wider text-white/40 mt-1">Voto</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab bar -->
+        <div class="border-t border-white/10 mt-2">
+          <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center gap-1 py-2 overflow-x-auto scrollbar-hide">
+              <button class="profile-tab tab-btn tab-active" data-tab="badges">Badges</button>
+              <button class="profile-tab tab-btn tab-inactive" data-tab="stamps">Passaporte</button>
+              <button class="profile-tab tab-btn tab-inactive" data-tab="reviews">Comentários</button>
+              <button class="profile-tab tab-btn tab-inactive" data-tab="vote">Voto</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── Content Panels ─── -->
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- BADGES PANEL -->
+        <div id="panel-badges" class="profile-panel">
+          <!-- Legend -->
+          <div class="flex flex-wrap gap-2 mb-6">
+            <span class="text-[11px] font-display font-semibold text-praia-sand-400 uppercase tracking-wider mr-1 self-center">Tiers:</span>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-display font-bold" style="background:#CD7F3222;color:#CD7F32;border:1px solid #CD7F3244;">Bronze</span>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-display font-bold" style="background:#A8B8C822;color:#A8B8C8;border:1px solid #A8B8C844;">Prata</span>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-display font-bold" style="background:#FFD70022;color:#FFD700;border:1px solid #FFD70044;">Ouro</span>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-display font-bold" style="background:#B0C4DE22;color:#B0C4DE;border:1px solid #B0C4DE44;">Platina</span>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-display font-bold" style="background:#B9F2FF22;color:#B9F2FF;border:1px solid #B9F2FF44;">Diamante</span>
+          </div>
+          <div id="badges-grid" class="badges-grid"></div>
+        </div>
+
+        <!-- STAMPS PANEL -->
+        <div id="panel-stamps" class="profile-panel hidden">
+          <p class="text-sm text-praia-sand-500 mb-5">Praias que visitou e carimbou no passaporte digital.</p>
+          <div id="stamps-list" class="stamps-grid"></div>
+        </div>
+
+        <!-- REVIEWS PANEL -->
+        <div id="panel-reviews" class="profile-panel hidden">
+          <p class="text-sm text-praia-sand-500 mb-5">Os seus comentários em praias fluviais.</p>
+          <div id="reviews-list" class="flex flex-col gap-4"></div>
+        </div>
+
+        <!-- VOTE PANEL -->
+        <div id="panel-vote" class="profile-panel hidden">
+          <div id="vote-panel"></div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- ─── Footer ─── -->
+    <footer class="bg-praia-teal-800 text-white/50 py-8 mt-8">
+      <div class="max-w-4xl mx-auto px-4 text-center text-xs font-display">
+        <a href="index.html">
+          <img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-8 mx-auto mb-4 opacity-70">
+        </a>
+        <p>© 2026 Guia das Praias Fluviais. Todos os direitos reservados.</p>
+      </div>
+    </footer>
+  </div><!-- /profile-content -->
+
+  <!-- ─── Edit Profile Modal ─── -->
+  <div id="edit-modal" class="hidden fixed inset-0 z-[2000] flex items-center justify-center p-4" style="background:rgba(0,0,0,0.7);backdrop-filter:blur(6px);">
+    <div id="edit-modal-inner" class="relative rounded-3xl p-8 max-w-sm w-full"
+         style="background:linear-gradient(145deg,#003A40,#005D56);border:1px solid rgba(255,255,255,0.12);box-shadow:0 30px 80px rgba(0,0,0,0.5);transform:scale(0.9) translateY(20px);opacity:0;transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1);">
+      <button onclick="closeEditModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-colors">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+      <h2 class="font-display text-lg font-bold text-white mb-5">Editar Perfil</h2>
+
+      <div class="flex flex-col items-center mb-5">
+        <div id="edit-avatar-preview" class="mb-3">
+          <div class="w-20 h-20 rounded-full bg-white/10 flex items-center justify-center">
+            <i data-lucide="user" class="w-10 h-10 text-white/30"></i>
+          </div>
+        </div>
+        <input type="file" id="edit-avatar" accept="image/jpeg,image/png,image/webp" class="hidden">
+        <button onclick="document.getElementById('edit-avatar').click()"
+                class="inline-flex items-center gap-1.5 border border-white/20 text-white/60 hover:text-white font-display font-semibold text-xs uppercase tracking-wider px-3 py-1.5 rounded-full transition-colors">
+          <i data-lucide="camera" class="w-3.5 h-3.5"></i> Mudar foto
+        </button>
+      </div>
+
+      <div class="mb-5">
+        <label class="text-[11px] font-display font-semibold uppercase tracking-wider text-white/50 block mb-2">Nome de utilizador</label>
+        <input type="text" id="edit-username" minlength="3" maxlength="24"
+               class="edit-input w-full px-4 py-3 rounded-xl text-sm font-body" placeholder="nome_utilizador">
+      </div>
+
+      <button id="edit-save-btn" onclick="saveEditProfile()"
+              class="w-full btn-primary bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider py-3 rounded-2xl shadow-layered-yellow">
+        Guardar
+      </button>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/auth.js"></script>
+  <script src="js/perfil.js"></script>
+  <script>
+    lucide.createIcons();
+    document.addEventListener('DOMContentLoaded', () => {
+      AuthUtils.initHeaderAuth();
+      AuthUtils.initMobileMenuAuth();
+      // Mobile nav close button
+      document.getElementById('nav-close')?.addEventListener('click', () => {
+        document.getElementById('mobile-menu').classList.add('translate-x-full');
+        document.getElementById('mobile-menu').classList.remove('translate-x-0');
+        document.getElementById('menu-overlay').classList.add('opacity-0', 'pointer-events-none');
+        document.body.style.overflow = '';
+      });
+    });
+  </script>
+</body>
+</html>

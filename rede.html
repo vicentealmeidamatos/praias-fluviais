@@ -16,6 +16,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="js/shared.js"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
   <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
@@ -118,15 +120,16 @@
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
           </a>
         </div>
-        <div class="hidden md:flex items-center gap-2 ml-5">
-          <a href="onde-encontrar.html" class="inline-flex items-center gap-2 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full btn-primary shadow-layered-yellow whitespace-nowrap">
-            <i data-lucide="book-open" class="w-4 h-4"></i>
+        <div class="hidden md:flex items-center gap-2 ml-3">
+          <a href="onde-encontrar.html" class="inline-flex items-center gap-1.5 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-[11px] uppercase tracking-wider px-3 py-1.5 rounded-full btn-primary shadow-layered-yellow whitespace-nowrap">
+            <i data-lucide="book-open" class="w-3.5 h-3.5"></i>
             Onde Encontrar
           </a>
-          <a href="onde-carimbar-passaporte.html" class="inline-flex items-center gap-2 bg-white/10 border border-white/30 text-white hover:bg-white/20 font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full transition-all duration-200 whitespace-nowrap">
-            <i data-lucide="stamp" class="w-4 h-4"></i>
+          <a href="onde-carimbar-passaporte.html" class="inline-flex items-center gap-1.5 bg-white/10 border border-white/30 text-white hover:bg-white/20 font-display font-bold text-[11px] uppercase tracking-wider px-3 py-1.5 rounded-full transition-all duration-200 whitespace-nowrap">
+            <i data-lucide="stamp" class="w-3.5 h-3.5"></i>
             Onde Carimbar
           </a>
+          <div id="header-auth-slot" class="flex items-center ml-1"></div>
         </div>
         <button id="nav-hamburger" class="lg:hidden text-white p-2" aria-label="Abrir menu">
           <i data-lucide="menu" class="w-6 h-6"></i>
@@ -646,6 +649,12 @@
     if (typeof lucide !== 'undefined') lucide.createIcons();
   });
   </script>
-  <script>lucide.createIcons();</script>
+  <script>
+    lucide.createIcons();
+    document.addEventListener("DOMContentLoaded", () => {
+      if (window.AuthUtils) { AuthUtils.initHeaderAuth(); AuthUtils.initMobileMenuAuth(); }
+    });
+  </script>
+  <script src="js/auth.js"></script>
 </body>
 </html>

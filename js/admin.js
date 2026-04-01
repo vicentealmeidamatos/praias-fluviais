@@ -1,5 +1,16 @@
 // ─── Admin Panel — JSON Visual Editor ───
-const SECTIONS = ['beaches', 'articles', 'locations-guia', 'locations-passaporte', 'descontos', 'settings'];
+const SECTIONS = ['beaches', 'articles', 'locations-guia', 'locations-passaporte', 'descontos', 'settings', 'utilizadores'];
+
+// ─── Supabase (read-only, for Utilizadores tab) ───
+const ADMIN_SUPABASE_URL      = 'https://tjvhnbukzfyxtpkrhpsw.supabase.co';
+const ADMIN_SUPABASE_ANON_KEY = 'sb_publishable_ke--Q7xNRNCxTjgxFCNFIQ_6zPD3zM3';
+let _adminSb = null;
+function getAdminSb() {
+  if (!_adminSb && window.supabase && ADMIN_SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
+    _adminSb = window.supabase.createClient(ADMIN_SUPABASE_URL, ADMIN_SUPABASE_ANON_KEY);
+  }
+  return _adminSb;
+}
 
 const state = {
   currentSection: 'beaches',
@@ -138,6 +149,7 @@ function renderDashboard() {
     'locations-passaporte':{ icon: '🔖', label: 'Carimbo Passaporte' },
     descontos:             { icon: '🏷️', label: 'Descontos' },
     settings:              { icon: '⚙️', label: 'Configurações' },
+    utilizadores:          { icon: '👥', label: 'Utilizadores' },
   };
 
   document.getElementById('admin-app').innerHTML = `
@@ -184,6 +196,7 @@ function renderSection() {
     case 'locations-passaporte':   renderLocationsPassaporte(content); break;
     case 'descontos':              renderDescontos(content); break;
     case 'settings':               renderSettings(content); break;
+    case 'utilizadores':           renderUtilizadores(content); break;
   }
 }
 
@@ -1138,6 +1151,139 @@ function slugify(str) {
 
 function escHtml(str) {
   return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+// ─── Utilizadores (Supabase) ───
+async function renderUtilizadores(content) {
+  const sb = getAdminSb();
+  if (!sb) {
+    content.innerHTML = `
+      <div class="p-8 max-w-xl">
+        <h2 class="font-display text-xl font-bold text-praia-teal-800 mb-2">Utilizadores</h2>
+        <div class="bg-praia-yellow-100 border border-praia-yellow-300 rounded-xl p-4 text-sm text-praia-teal-800">
+          <strong>Configuração necessária:</strong> Substitua <code>ADMIN_SUPABASE_URL</code> e <code>ADMIN_SUPABASE_ANON_KEY</code>
+          no topo de <code>js/admin.js</code> com as credenciais do projeto Supabase.
+        </div>
+      </div>`;
+    return;
+  }
+
+  content.innerHTML = `
+    <div class="p-8">
+      <h2 class="font-display text-xl font-bold text-praia-teal-800 mb-6">Utilizadores</h2>
+      <div id="util-loading" class="flex items-center gap-3 text-praia-sand-400">
+        <div class="w-5 h-5 border-2 border-praia-teal-400 border-t-transparent rounded-full animate-spin"></div>
+        A carregar dados do Supabase…
+      </div>
+      <div id="util-content" class="hidden space-y-8"></div>
+    </div>`;
+
+  try {
+    const year = new Date().getFullYear();
+    const beaches = state.data['beaches'] || [];
+
+    const [
+      { count: totalUsers },
+      { count: totalVotes },
+      { count: totalReviews },
+      { count: totalStamps },
+      { data: votesData },
+      { data: recentReviews },
+    ] = await Promise.all([
+      sb.from('profiles').select('*', { count: 'exact', head: true }),
+      sb.from('votes').select('*', { count: 'exact', head: true }),
+      sb.from('reviews').select('*', { count: 'exact', head: true }),
+      sb.from('stamps').select('*', { count: 'exact', head: true }),
+      sb.from('votes').select('beach_id').eq('year', year),
+      sb.from('reviews').select('text, beach_id, created_at, profiles(username, avatar_url)').order('created_at', { ascending: false }).limit(10),
+    ]);
+
+    // Votes per beach this year
+    const voteCounts = {};
+    (votesData || []).forEach(v => { voteCounts[v.beach_id] = (voteCounts[v.beach_id] || 0) + 1; });
+    const voteRanking = Object.entries(voteCounts).sort((a, b) => b[1] - a[1]).slice(0, 10);
+
+    const utilContent = document.getElementById('util-content');
+    utilContent.innerHTML = `
+      <!-- Stats Grid -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        ${[
+          { label: 'Utilizadores', value: totalUsers ?? '—', icon: '👤' },
+          { label: `Votos ${year}`, value: totalVotes ?? '—', icon: '🗳️' },
+          { label: 'Comentários', value: totalReviews ?? '—', icon: '💬' },
+          { label: 'Carimbos', value: totalStamps ?? '—', icon: '🔖' },
+        ].map(s => `
+          <div class="bg-white rounded-xl p-5 shadow-sm border border-praia-sand-200">
+            <div class="text-2xl mb-2">${s.icon}</div>
+            <div class="font-display text-3xl font-bold text-praia-teal-800">${s.value}</div>
+            <div class="text-xs text-praia-sand-400 font-display uppercase tracking-wider mt-1">${s.label}</div>
+          </div>
+        `).join('')}
+      </div>
+
+      <!-- Vote ranking -->
+      <div>
+        <h3 class="font-display font-semibold text-praia-teal-800 mb-3">Ranking de Votos ${year}</h3>
+        ${voteRanking.length === 0
+          ? `<p class="text-sm text-praia-sand-400">Sem votos registados este ano.</p>`
+          : `<div class="bg-white rounded-xl overflow-hidden border border-praia-sand-200">
+              <table class="w-full text-sm">
+                <thead class="bg-praia-sand-100 text-praia-sand-500 text-xs uppercase tracking-wider font-display">
+                  <tr>
+                    <th class="text-left px-4 py-2.5">#</th>
+                    <th class="text-left px-4 py-2.5">Praia</th>
+                    <th class="text-right px-4 py-2.5">Votos</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${voteRanking.map(([beachId, count], i) => {
+                    const beach = beaches.find(b => b.id === beachId);
+                    return `<tr class="border-t border-praia-sand-100 hover:bg-praia-sand-50">
+                      <td class="px-4 py-2.5 text-praia-sand-400 font-display font-semibold">${i + 1}</td>
+                      <td class="px-4 py-2.5 font-medium text-praia-teal-800">${escHtml(beach?.nome || beachId)}</td>
+                      <td class="px-4 py-2.5 text-right font-display font-bold text-praia-teal-600">${count}</td>
+                    </tr>`;
+                  }).join('')}
+                </tbody>
+              </table>
+            </div>`
+        }
+      </div>
+
+      <!-- Recent reviews -->
+      <div>
+        <h3 class="font-display font-semibold text-praia-teal-800 mb-3">Comentários Recentes</h3>
+        ${(recentReviews || []).length === 0
+          ? `<p class="text-sm text-praia-sand-400">Sem comentários ainda.</p>`
+          : `<div class="space-y-3">
+              ${(recentReviews || []).map(r => {
+                const beach = beaches.find(b => b.id === r.beach_id);
+                const username = r.profiles?.username || 'utilizador';
+                const avatar = r.profiles?.avatar_url;
+                const date = r.created_at ? new Date(r.created_at).toLocaleDateString('pt-PT') : '';
+                return `<div class="bg-white rounded-xl p-4 border border-praia-sand-200 flex gap-3 items-start">
+                  <div class="w-9 h-9 rounded-full bg-praia-teal-800 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                    ${avatar ? `<img src="${escHtml(avatar)}" alt="" class="w-full h-full object-cover">` : `<span class="text-white font-display font-bold text-sm">${escHtml(username[0]?.toUpperCase() || '?')}</span>`}
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-2 mb-1">
+                      <span class="font-display font-semibold text-sm text-praia-teal-800">${escHtml(username)}</span>
+                      <span class="text-xs text-praia-sand-400">${escHtml(beach?.nome || r.beach_id)}</span>
+                      <span class="text-xs text-praia-sand-300 ml-auto">${date}</span>
+                    </div>
+                    <p class="text-sm text-praia-sand-600 line-clamp-2">${escHtml(r.text)}</p>
+                  </div>
+                </div>`;
+              }).join('')}
+            </div>`
+        }
+      </div>`;
+
+    document.getElementById('util-loading').classList.add('hidden');
+    utilContent.classList.remove('hidden');
+  } catch (err) {
+    document.getElementById('util-loading').innerHTML = `<span class="text-red-500 text-sm">Erro ao carregar dados: ${escHtml(err.message)}</span>`;
+  }
 }
 
 // ─── Init ───
