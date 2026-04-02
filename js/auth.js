@@ -172,8 +172,8 @@ const BADGE_TIERS = {
   bronze:   { label: 'Bronze',   hex: '#CD7F32', glow: 'rgba(205,127,50,0.45)',  shimmer: false, rainbow: false },
   prata:    { label: 'Prata',    hex: '#A8B8C8', glow: 'rgba(168,184,200,0.4)',  shimmer: false, rainbow: false },
   ouro:     { label: 'Ouro',     hex: '#FFD700', glow: 'rgba(255,215,0,0.55)',   shimmer: false, rainbow: false },
-  platina:  { label: 'Platina',  hex: '#B0C4DE', glow: 'rgba(176,196,222,0.6)',  shimmer: true,  rainbow: false },
-  diamante: { label: 'Diamante', hex: '#B9F2FF', glow: 'rgba(185,242,255,0.7)',  shimmer: true,  rainbow: true  },
+  diamante: { label: 'Diamante', hex: '#B9F2FF', glow: 'rgba(185,242,255,0.7)',  shimmer: true,  rainbow: false },
+  mitico:   { label: 'Mítico',   hex: '#90E2F0', glow: 'rgba(144,226,240,0.75)', shimmer: true,  rainbow: true  },
 };
 
 const ALL_BADGES = [
@@ -195,13 +195,13 @@ const ALL_BADGES = [
   { id: 'mestre-centro',     name: 'Mestre do Centro',      desc: '5 praias na região Centro',                      icon: 'star',           tier: 'ouro',     type: 'region',  region: 'centro', threshold: 5  },
   { id: 'rio-acima',         name: 'Rio Acima',             desc: '3 praias fluviais no mesmo rio',                 icon: 'waves',          tier: 'ouro',     type: 'river'                             },
   { id: 'cacador-praias',    name: 'Caçador de Praias',     desc: 'Votou e tem 10 ou mais carimbos',                icon: 'target',         tier: 'ouro',     type: 'combo_vote_stamps',  threshold: 10 },
-  // ── Platina ──────────────────────────────────────────────────────────────
-  { id: 'mestre-praias',     name: 'Mestre das Praias',     desc: 'Visitou 20 praias fluviais',                     icon: 'shield',         tier: 'platina',  type: 'stamps',             threshold: 20 },
-  { id: 'elite-fluvial',     name: 'Elite Fluvial',         desc: 'Visitou 25 praias fluviais',                     icon: 'award',          tier: 'platina',  type: 'stamps',             threshold: 25 },
-  { id: 'passaportista',     name: 'Passaportista Supremo', desc: '20 carimbos + 5 comentários + voto',             icon: 'bookmark',       tier: 'platina',  type: 'combo_all',          stampsMin: 20, reviewsMin: 5 },
   // ── Diamante ─────────────────────────────────────────────────────────────
-  { id: 'lenda-aguas',       name: 'Lenda das Águas',       desc: 'Carimbou todas as praias disponíveis',           icon: 'trophy',         tier: 'diamante', type: 'all_stamps'                        },
-  { id: 'lenda-fluvial',     name: 'Lenda Fluvial',         desc: 'Todas as praias + 10 comentários + voto',        icon: 'gem',            tier: 'diamante', type: 'combo_legend',       reviewsMin: 10 },
+  { id: 'mestre-praias',     name: 'Mestre das Praias',     desc: 'Visitou 20 praias fluviais',                     icon: 'shield',         tier: 'diamante', type: 'stamps',             threshold: 20 },
+  { id: 'elite-fluvial',     name: 'Elite Fluvial',         desc: 'Visitou 25 praias fluviais',                     icon: 'award',          tier: 'diamante', type: 'stamps',             threshold: 25 },
+  { id: 'passaportista',     name: 'Passaportista Supremo', desc: '20 carimbos + 5 comentários + voto',             icon: 'bookmark',       tier: 'diamante', type: 'combo_all',          stampsMin: 20, reviewsMin: 5 },
+  // ── Mítico ───────────────────────────────────────────────────────────────
+  { id: 'lenda-aguas',       name: 'Lenda das Águas',       desc: 'Carimbou todas as praias disponíveis',           icon: 'trophy',         tier: 'mitico',   type: 'all_stamps'                        },
+  { id: 'lenda-fluvial',     name: 'Lenda Fluvial',         desc: 'Todas as praias + 10 comentários + voto',        icon: 'gem',            tier: 'mitico',   type: 'combo_legend',       reviewsMin: 10 },
 ];
 
 function badgesCompute({ stamps, reviews, voted, beaches }) {
@@ -283,7 +283,7 @@ function badgesCompute({ stamps, reviews, voted, beaches }) {
 
 // Returns the top N rarest earned badges (for showing in comments)
 function badgesTopEarned(computedBadges, n = 3) {
-  const tierOrder = ['diamante', 'platina', 'ouro', 'prata', 'bronze'];
+  const tierOrder = ['mitico', 'diamante', 'ouro', 'prata', 'bronze'];
   return computedBadges
     .filter(b => b.earned)
     .sort((a, b) => tierOrder.indexOf(a.tier) - tierOrder.indexOf(b.tier))
@@ -331,7 +331,7 @@ function avatarHTML(profile, sizePx = 32) {
 
 function badgePillHTML(badge) {
   const tier = BADGE_TIERS[badge.tier];
-  const isRare = badge.tier === 'diamante' || badge.tier === 'platina';
+  const isRare = badge.tier === 'mitico' || badge.tier === 'diamante';
   const shimmerStyle = isRare
     ? `animation: shimmerMove 2s linear infinite; background-image: linear-gradient(105deg, ${tier.hex}22 40%, ${tier.hex}55 50%, ${tier.hex}22 60%); background-size: 200% 100%;`
     : '';
@@ -349,7 +349,7 @@ function badgePillHTML(badge) {
 function badgeCardHTML(badge) {
   const tier    = BADGE_TIERS[badge.tier];
   const pct     = badge.max > 0 ? Math.round((badge.progress / badge.max) * 100) : 0;
-  const tierMap = { bronze: 1, prata: 2, ouro: 3, platina: 4, diamante: 5 };
+  const tierMap = { bronze: 1, prata: 2, ouro: 3, diamante: 4, mitico: 5 };
   const tierNum = tierMap[badge.tier];
 
   const glowStyle = badge.earned
@@ -412,8 +412,8 @@ function celebrateBadge(badge) {
 
   // Vibration (mobile)
   if (navigator.vibrate) {
-    const pattern = badge.tier === 'diamante' ? [100, 50, 100, 50, 200, 50, 200]
-                  : badge.tier === 'platina'  ? [80, 40, 80, 40, 160]
+    const pattern = badge.tier === 'mitico'   ? [100, 50, 100, 50, 200, 50, 200]
+                  : badge.tier === 'diamante' ? [80, 40, 80, 40, 160]
                   : [60, 30, 120];
     navigator.vibrate(pattern);
   }
@@ -422,13 +422,13 @@ function celebrateBadge(badge) {
   if (window.confetti) {
     const colors = [tier.hex, '#FFEB3B', '#ffffff', '#003A40'];
     window.confetti({
-      particleCount: badge.tier === 'diamante' ? 200 : badge.tier === 'platina' ? 140 : 80,
+      particleCount: badge.tier === 'mitico' ? 200 : badge.tier === 'diamante' ? 140 : 80,
       spread: 80,
       startVelocity: 45,
       colors,
       origin: { x: 0.5, y: 0.5 },
     });
-    if (badge.tier === 'diamante' || badge.tier === 'platina') {
+    if (badge.tier === 'mitico' || badge.tier === 'diamante') {
       setTimeout(() => window.confetti({ particleCount: 60, angle: 60, spread: 55, origin: { x: 0 }, colors }), 250);
       setTimeout(() => window.confetti({ particleCount: 60, angle: 120, spread: 55, origin: { x: 1 }, colors }), 400);
     }
@@ -436,9 +436,9 @@ function celebrateBadge(badge) {
 
   // Overlay toast
   const toast = document.createElement('div');
-  toast.className = 'fixed inset-0 z-[9999] flex items-center justify-center pointer-events-none';
+  toast.className = 'fixed inset-0 z-[9999] flex items-center justify-center';
   toast.innerHTML = `
-    <div class="badge-toast pointer-events-auto relative rounded-3xl p-8 text-center max-w-xs mx-4 shadow-2xl"
+    <div class="badge-toast relative rounded-3xl p-8 text-center max-w-xs mx-4 shadow-2xl"
          style="background: linear-gradient(135deg, #003A40, #005D56); border: 2px solid ${tier.hex}; box-shadow: 0 0 40px ${tier.glow}, 0 20px 60px rgba(0,0,0,0.4);">
       <div class="text-xs font-display font-bold uppercase tracking-widest mb-3 opacity-70" style="color:${tier.hex};">✦ Medalha Desbloqueada!</div>
       <div class="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4" style="background:${tier.hex};">
@@ -456,6 +456,9 @@ function celebrateBadge(badge) {
   `;
   document.body.appendChild(toast);
   lucide.createIcons();
+
+  // Click outside badge card to dismiss
+  toast.addEventListener('click', e => { if (e.target === toast) toast.remove(); });
 
   // Animate in
   const inner = toast.querySelector('.badge-toast');
@@ -477,37 +480,19 @@ function celebrateBadge(badge) {
 
 // ─── Header Auth Injection ────────────────────────────────────────────────────
 
-async function initHeaderAuth() {
-  const slot = document.getElementById('header-auth-slot');
-  if (!slot) return;
+const _NAV_CACHE_KEY = 'gpf_nav_v1';
 
-  const user = await authGetUser();
-
-  if (!user) {
-    slot.innerHTML = `
-      <a href="auth.html" id="header-register-btn"
-         class="inline-flex items-center gap-1.5 border border-white/40 text-white hover:bg-white/10 active:scale-95
-                font-display font-bold text-[11px] uppercase tracking-wider px-3.5 py-1.5 rounded-full transition-all duration-200 whitespace-nowrap">
-        <i data-lucide="user-plus" class="w-3.5 h-3.5"></i>
-        Registar-se
-      </a>`;
-    lucide.createIcons();
-    return;
-  }
-
-  const profile = await profileGet(user.id);
-  const name    = profile?.username || user.email?.split('@')[0] || 'U';
+function _buildHeaderUserHTML(name, email, avatarUrl) {
   const initial = name.charAt(0).toUpperCase();
-
-  slot.innerHTML = `
+  return `
     <div class="relative flex-shrink-0" id="header-user-wrap">
       <button id="header-avatar-btn"
               class="w-9 h-9 rounded-full overflow-hidden border-2 border-white/25 hover:border-praia-yellow-400
                      transition-all duration-200 focus:outline-none focus:border-praia-yellow-400 flex items-center
                      justify-center bg-praia-teal-700 flex-shrink-0"
               aria-label="Menu de perfil" aria-haspopup="true">
-        ${profile?.avatar_url
-          ? `<img src="${profile.avatar_url}" alt="${name}" class="w-full h-full object-cover">`
+        ${avatarUrl
+          ? `<img src="${avatarUrl}" alt="${name}" class="w-full h-full object-cover">`
           : `<span class="font-display font-bold text-sm text-praia-yellow-400">${initial}</span>`}
       </button>
       <div id="header-dropdown"
@@ -515,7 +500,7 @@ async function initHeaderAuth() {
            style="box-shadow: 0 20px 60px rgba(0,0,0,0.4);">
         <div class="px-4 py-3 border-b border-white/10">
           <div class="font-display text-xs font-bold text-white truncate">${name}</div>
-          <div class="text-[10px] text-white/40 truncate mt-0.5">${user.email || ''}</div>
+          <div class="text-[10px] text-white/40 truncate mt-0.5">${email || ''}</div>
         </div>
         <a href="perfil.html" class="flex items-center gap-2.5 px-4 py-2.5 text-xs text-white/75 hover:bg-white/8 hover:text-white transition-colors">
           <i data-lucide="user-circle" class="w-3.5 h-3.5 flex-shrink-0"></i> O meu Perfil
@@ -532,12 +517,12 @@ async function initHeaderAuth() {
         </button>
       </div>
     </div>`;
+}
 
-  lucide.createIcons();
-
+function _bindHeaderDropdown() {
   const btn      = document.getElementById('header-avatar-btn');
   const dropdown = document.getElementById('header-dropdown');
-
+  if (!btn || !dropdown) return;
   btn.addEventListener('click', e => {
     e.stopPropagation();
     const isHidden = dropdown.classList.contains('hidden');
@@ -545,6 +530,62 @@ async function initHeaderAuth() {
     dropdown.style.animation = isHidden ? 'dropdownIn 0.2s cubic-bezier(0.34,1.56,0.64,1) forwards' : '';
   });
   document.addEventListener('click', () => dropdown.classList.add('hidden'));
+}
+
+async function initHeaderAuth() {
+  const slot = document.getElementById('header-auth-slot');
+  if (!slot) return;
+
+  // Avatar already rendered from cache synchronously in the IIFE above.
+  // Here we only verify the session and refresh profile data in background.
+
+  const { data: { session } } = await _sb.auth.getSession();
+
+  if (!session) {
+    localStorage.removeItem(_NAV_CACHE_KEY);
+    slot.innerHTML = `
+      <a href="auth.html" id="header-register-btn"
+         class="inline-flex items-center gap-1.5 border border-white/40 text-white hover:bg-white/10 active:scale-95
+                font-display font-bold text-[11px] uppercase tracking-wider px-3.5 py-1.5 rounded-full transition-all duration-200 whitespace-nowrap">
+        <i data-lucide="user-plus" class="w-3.5 h-3.5"></i>
+        Registar-se
+      </a>`;
+    lucide.createIcons();
+    return;
+  }
+
+  // Bind dropdown now that we confirmed session (IIFE deferred this)
+  _bindHeaderDropdown();
+
+  // Verify token + refresh profile
+  const [user, profile] = await Promise.all([authGetUser(), profileGet(session.user.id)]);
+
+  if (!user) {
+    localStorage.removeItem(_NAV_CACHE_KEY);
+    slot.innerHTML = `
+      <a href="auth.html" id="header-register-btn"
+         class="inline-flex items-center gap-1.5 border border-white/40 text-white hover:bg-white/10 active:scale-95
+                font-display font-bold text-[11px] uppercase tracking-wider px-3.5 py-1.5 rounded-full transition-all duration-200 whitespace-nowrap">
+        <i data-lucide="user-plus" class="w-3.5 h-3.5"></i>
+        Registar-se
+      </a>`;
+    lucide.createIcons();
+    return;
+  }
+
+  const name = profile?.username || user.email?.split('@')[0] || 'U';
+  localStorage.setItem(_NAV_CACHE_KEY, JSON.stringify({
+    username: name, email: user.email || '', avatar_url: profile?.avatar_url || null,
+  }));
+
+  // Re-render only if data changed (e.g. avatar updated)
+  const cache = (() => { try { return JSON.parse(localStorage.getItem(_NAV_CACHE_KEY)); } catch { return null; } })();
+  const avatarChanged = cache?.avatar_url !== profile?.avatar_url;
+  if (avatarChanged) {
+    slot.innerHTML = _buildHeaderUserHTML(name, user.email, profile?.avatar_url);
+    lucide.createIcons();
+    _bindHeaderDropdown();
+  }
 }
 
 // ─── Mobile Menu Auth (injected into mobile menu footer) ─────────────────────
@@ -579,6 +620,23 @@ async function initMobileMenuAuth() {
   lucide.createIcons();
 }
 
+// ─── Render static icons + instant avatar from cache (zero network, zero await) ─
+(function renderStaticIcons() {
+  if (window.lucide) lucide.createIcons();
+
+  // Inject avatar from localStorage cache synchronously — appears with the header,
+  // same moment as all other static icons. No await, no network.
+  try {
+    const cache = JSON.parse(localStorage.getItem('gpf_nav_v1') || 'null');
+    const slot  = document.getElementById('header-auth-slot');
+    if (slot && cache?.username) {
+      slot.innerHTML = _buildHeaderUserHTML(cache.username, cache.email, cache.avatar_url);
+      lucide.createIcons();
+      // Dropdown binding deferred to initHeaderAuth() to avoid duplicate listeners
+    }
+  } catch {}
+})();
+
 // ─── CSS animations (injected once) ──────────────────────────────────────────
 (function injectAuthStyles() {
   if (document.getElementById('auth-styles')) return;
@@ -598,7 +656,8 @@ async function initMobileMenuAuth() {
       100% { background-position:  200% center; }
     }
     @keyframes rainbowSpin {
-      to { filter: hue-rotate(360deg) brightness(1.1); }
+      from { filter: hue-rotate(0deg) brightness(1.1); }
+      to   { filter: hue-rotate(360deg) brightness(1.1); }
     }
     .badge-shimmer:not([data-earned="false"]) {
       animation: shimmerMove 2.5s linear infinite;

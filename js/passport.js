@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!grid) return;
 
     const computed  = getComputedBadges();
-    const tierOrder = ['bronze', 'prata', 'ouro', 'platina', 'diamante'];
+    const tierOrder = ['bronze', 'prata', 'ouro', 'diamante', 'mitico'];
     const sorted    = [...computed].sort((a, b) => {
       if (a.earned !== b.earned) return a.earned ? -1 : 1;
       return tierOrder.indexOf(b.tier) - tierOrder.indexOf(a.tier);

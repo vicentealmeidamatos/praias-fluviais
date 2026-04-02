@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const grid = document.getElementById('badges-grid');
     if (!grid) return;
 
-    const tierOrder = ['bronze', 'prata', 'ouro', 'platina', 'diamante'];
+    const tierOrder = ['bronze', 'prata', 'ouro', 'diamante', 'mitico'];
     const sorted = [...computedBadges].sort((a, b) => {
       if (a.earned !== b.earned) return a.earned ? -1 : 1;
       return tierOrder.indexOf(b.tier) - tierOrder.indexOf(a.tier);

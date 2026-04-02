@@ -247,16 +247,41 @@ function medalDisplayHTML(topBadges) {
   if (!topBadges || topBadges.length === 0) return '';
   const TIER_META = AuthUtils.BADGE_TIERS;
 
-  return `<div class="flex items-center gap-1 flex-wrap mt-1">
-    ${topBadges.map(b => {
+  // Sort highest tier first
+  const tierRank = { mitico: 5, diamante: 4, ouro: 3, prata: 2, bronze: 1 };
+  const sorted = [...topBadges].sort((a, b) => (tierRank[b.tier] || 0) - (tierRank[a.tier] || 0));
+
+  return `<div class="flex items-center gap-1.5 flex-wrap mt-1.5">
+    ${sorted.map(b => {
       const tier = TIER_META[b.tier] || {};
-      const isRare = b.tier === 'diamante' || b.tier === 'platina';
-      const glowStyle = isRare ? `box-shadow:0 0 8px ${tier.glow};` : '';
-      const animClass = isRare ? 'medal-shimmer-anim' : '';
-      return `<span class="medal-chip-comment ${animClass} inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-display font-bold cursor-default"
+      const isMitico  = b.tier === 'mitico';
+      const isDiamond = b.tier === 'diamante';
+
+      if (isMitico) {
+        // Mítico — bg pastel claro + hue-rotate cicla em tons pastéis (nunca escuro)
+        return `<span class="medal-badge-legendary inline-flex items-center gap-1.5 rounded-full font-display font-bold cursor-default whitespace-nowrap"
+          title="${b.name} — ${b.desc}"
+          style="font-size:10px;padding:3px 9px 3px 7px;background:${tier.hex}70;color:#003A40;border:2px solid ${tier.hex};">
+          <i data-lucide="${b.icon}" style="width:13px;height:13px;flex-shrink:0;color:#003A40;"></i>
+          ${b.name}
+        </span>`;
+      }
+
+      if (isDiamond) {
+        // Diamante — ice blue claro com texto escuro, glow sutil
+        return `<span class="inline-flex items-center gap-1.5 rounded-full font-display font-bold cursor-default whitespace-nowrap"
+          title="${b.name} — ${b.desc}"
+          style="font-size:10px;padding:3px 9px 3px 7px;background:${tier.hex}70;color:#003A40;border:2px solid ${tier.hex};box-shadow:0 0 8px ${tier.glow};">
+          <i data-lucide="${b.icon}" style="width:13px;height:13px;flex-shrink:0;color:#003A40;"></i>
+          ${b.name}
+        </span>`;
+      }
+
+      // Bronze / Prata / Ouro — dark teal base, tier color accent (brand rule: light colors on dark bg)
+      return `<span class="inline-flex items-center gap-1.5 rounded-full font-display font-bold cursor-default whitespace-nowrap"
         title="${b.name} — ${b.desc}"
-        style="font-size:10px;background:${tier.hex}20;color:${tier.hex};border:1.5px solid ${tier.hex}55;${glowStyle}">
-        <i data-lucide="${b.icon}" style="width:10px;height:10px;flex-shrink:0;"></i>
+        style="font-size:10px;padding:3px 9px 3px 7px;background:#003A40;color:${tier.hex};border:1.5px solid ${tier.hex}70;">
+        <i data-lucide="${b.icon}" style="width:13px;height:13px;flex-shrink:0;color:${tier.hex};"></i>
         ${b.name}
       </span>`;
     }).join('')}
@@ -311,17 +336,16 @@ async function loadReviews(beachId, currentUser, beaches) {
            </div>
          </a>`;
 
-    const rareMedals  = topMedals.filter(b => b.tier === 'diamante' || b.tier === 'platina');
     const hasMedals   = topMedals.length > 0;
-    const hasRare     = rareMedals.length > 0;
+    const hasMitico   = topMedals.some(b => b.tier === 'mitico');
+    const hasDiamante = !hasMitico && topMedals.some(b => b.tier === 'diamante');
 
     // Build medal display
     const medalHtml = hasMedals ? medalDisplayHTML(topMedals) : '';
 
-    // Rare user indicator (border glow for high-tier users)
-    const rareBorderStyle = hasRare
-      ? `border:1.5px solid ${AuthUtils.BADGE_TIERS[rareMedals[0].tier]?.hex || 'transparent'}44;box-shadow:0 0 12px ${AuthUtils.BADGE_TIERS[rareMedals[0].tier]?.glow || 'transparent'};`
-      : '';
+    // Card border: animated rainbow for Mítico, static diamond glow for Diamante
+    const miticoCardClass   = hasMitico   && !isReply ? 'mitico-card'   : '';
+    const diamanteCardClass = hasDiamante && !isReply ? 'diamante-card' : '';
 
     const replyButtonHtml = currentUser && !isReply
       ? `<button onclick="toggleReplyForm('${r.id}', '${beachId}')"
@@ -339,7 +363,7 @@ async function loadReviews(beachId, currentUser, beaches) {
       : '';
 
     return `
-      <div class="bg-white rounded-xl p-4 shadow-layered ${isReply ? 'shadow-none border border-praia-sand-100 rounded-lg' : ''}" data-review-id="${r.id}" style="${rareBorderStyle}">
+      <div class="bg-white rounded-xl p-4 shadow-layered ${miticoCardClass} ${diamanteCardClass} ${isReply ? 'shadow-none border border-praia-sand-100 rounded-lg' : ''}" data-review-id="${r.id}">
         <div class="flex items-start gap-3">
           ${avatarHtml}
           <div class="flex-1 min-w-0">
@@ -366,19 +390,37 @@ async function loadReviews(beachId, currentUser, beaches) {
   container.innerHTML = topLevel.map(r => reviewCardHTML(r, false)).join('');
   lucide.createIcons();
 
-  // Inject medal shimmer CSS once
+  // Inject medal CSS animations once
   if (!document.getElementById('medal-anim-style')) {
     const style = document.createElement('style');
     style.id = 'medal-anim-style';
     style.textContent = `
-      @keyframes medalShimmer {
-        0%   { background-position: -200% center; }
-        100% { background-position:  200% center; }
+      /* ── Mítico badge chip — hue-rotate idêntico ao passaporte ── */
+      @keyframes badgeCommentRainbow {
+        from { filter: hue-rotate(0deg) brightness(1.1); }
+        to   { filter: hue-rotate(360deg) brightness(1.1); }
       }
-      .medal-shimmer-anim {
-        animation: medalShimmer 2.5s linear infinite;
-        background-image: linear-gradient(105deg, currentColor 40%, rgba(255,255,255,0.5) 50%, currentColor 60%) !important;
-        background-size: 200% 100%;
+      .medal-badge-legendary {
+        animation: badgeCommentRainbow 4s linear infinite;
+      }
+
+      /* ── Mítico card border — cicla pelas mesmas cores hue-rotated ── */
+      @keyframes miticoBorder {
+        0%   { border-color: #90E2F0; box-shadow: 0 4px 16px rgba(0,0,0,0.07), 0 0 18px rgba(144,226,240,0.5); }
+        17%  { border-color: #9090F0; box-shadow: 0 4px 16px rgba(0,0,0,0.07), 0 0 18px rgba(144,144,240,0.5); }
+        33%  { border-color: #F090E0; box-shadow: 0 4px 16px rgba(0,0,0,0.07), 0 0 18px rgba(240,144,224,0.5); }
+        50%  { border-color: #F0A890; box-shadow: 0 4px 16px rgba(0,0,0,0.07), 0 0 18px rgba(240,168,144,0.5); }
+        67%  { border-color: #E0F090; box-shadow: 0 4px 16px rgba(0,0,0,0.07), 0 0 18px rgba(224,240,144,0.5); }
+        83%  { border-color: #90F0B4; box-shadow: 0 4px 16px rgba(0,0,0,0.07), 0 0 18px rgba(144,240,180,0.5); }
+        100% { border-color: #90E2F0; box-shadow: 0 4px 16px rgba(0,0,0,0.07), 0 0 18px rgba(144,226,240,0.5); }
+      }
+      .mitico-card {
+        border: 1.5px solid #90E2F0;
+        animation: miticoBorder 4s linear infinite;
+      }
+      .diamante-card {
+        border: 1.5px solid #B9F2FF80;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.07), 0 0 18px rgba(185,242,255,0.45);
       }
     `;
     document.head.appendChild(style);
