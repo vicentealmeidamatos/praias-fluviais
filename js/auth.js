@@ -94,10 +94,30 @@ async function voteGet(userId, year) {
   return data?.beach_id || null;
 }
 
-async function voteSubmit(userId, beachId, year) {
+// Returns full vote row: { beach_id, is_public } or null
+async function voteGetFull(userId, year) {
+  const { data } = await _sb
+    .from('votes')
+    .select('beach_id, is_public')
+    .eq('user_id', userId)
+    .eq('year', year)
+    .maybeSingle();
+  return data || null;
+}
+
+async function voteSubmit(userId, beachId, year, isPublic = true) {
   const { error } = await _sb
     .from('votes')
-    .insert({ user_id: userId, beach_id: beachId, year });
+    .insert({ user_id: userId, beach_id: beachId, year, is_public: isPublic });
+  return !error;
+}
+
+async function voteUpdatePublic(userId, year, isPublic) {
+  const { error } = await _sb
+    .from('votes')
+    .update({ is_public: isPublic })
+    .eq('user_id', userId)
+    .eq('year', year);
   return !error;
 }
 
@@ -106,10 +126,17 @@ async function voteSubmit(userId, beachId, year) {
 async function reviewsGetForBeach(beachId) {
   const { data } = await _sb
     .from('reviews')
-    .select('*, profiles(id, username, avatar_url)')
+    .select('*, profiles(id, username, avatar_url), parent_id')
     .eq('beach_id', beachId)
-    .order('created_at', { ascending: false });
+    .order('created_at', { ascending: true });
   return data || [];
+}
+
+async function reviewSubmitReply(userId, beachId, text, parentId, images = []) {
+  const { error } = await _sb
+    .from('reviews')
+    .insert({ user_id: userId, beach_id: beachId, text, images, parent_id: parentId });
+  return !error;
 }
 
 async function reviewsGetForUser(userId) {
@@ -273,6 +300,17 @@ async function badgesGetForUser(userId, beaches) {
   return badgesTopEarned(computed, 3);
 }
 
+// ─── Username → Email Lookup (requires email column in profiles table) ────────
+
+async function getEmailByUsername(username) {
+  const { data } = await _sb
+    .from('profiles')
+    .select('email')
+    .eq('username', username)
+    .single();
+  return data?.email || null;
+}
+
 // ─── Avatar Helper ────────────────────────────────────────────────────────────
 
 function avatarHTML(profile, sizePx = 32) {
@@ -291,8 +329,15 @@ function avatarHTML(profile, sizePx = 32) {
 
 function badgePillHTML(badge) {
   const tier = BADGE_TIERS[badge.tier];
-  return `<span class="badge-pill inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-display font-bold whitespace-nowrap" style="background:${tier.hex}22;color:${tier.hex};border:1px solid ${tier.hex}55;">
-    <i data-lucide="${badge.icon}" style="width:10px;height:10px;"></i>
+  const isRare = badge.tier === 'diamante' || badge.tier === 'platina';
+  const shimmerStyle = isRare
+    ? `animation: shimmerMove 2s linear infinite; background-image: linear-gradient(105deg, ${tier.hex}22 40%, ${tier.hex}55 50%, ${tier.hex}22 60%); background-size: 200% 100%;`
+    : '';
+  const glowStyle = isRare ? `box-shadow: 0 0 8px ${tier.glow};` : '';
+  return `<span class="medal-chip inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-display font-bold whitespace-nowrap"
+    title="${badge.name} — ${badge.desc}"
+    style="background:${tier.hex}22;color:${tier.hex};border:1.5px solid ${tier.hex}55;${glowStyle}${shimmerStyle}">
+    <i data-lucide="${badge.icon}" style="width:11px;height:11px;flex-shrink:0;"></i>
     ${badge.name}
   </span>`;
 }
@@ -341,7 +386,7 @@ function badgeCardHTML(badge) {
       <!-- Progress / Earned -->
       ${badge.earned
         ? `<div class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-display font-bold" style="background:${tier.hex};color:#003A40;">
-            <i data-lucide="check" style="width:10px;height:10px;"></i> Conquistado
+            <i data-lucide="check" style="width:10px;height:10px;"></i> Conquistada
            </div>`
         : badge.max > 1
           ? `<div class="w-full">
@@ -362,6 +407,14 @@ function badgeCardHTML(badge) {
 
 function celebrateBadge(badge) {
   const tier = BADGE_TIERS[badge.tier];
+
+  // Vibration (mobile)
+  if (navigator.vibrate) {
+    const pattern = badge.tier === 'diamante' ? [100, 50, 100, 50, 200, 50, 200]
+                  : badge.tier === 'platina'  ? [80, 40, 80, 40, 160]
+                  : [60, 30, 120];
+    navigator.vibrate(pattern);
+  }
 
   // Confetti burst
   if (window.confetti) {
@@ -385,7 +438,7 @@ function celebrateBadge(badge) {
   toast.innerHTML = `
     <div class="badge-toast pointer-events-auto relative rounded-3xl p-8 text-center max-w-xs mx-4 shadow-2xl"
          style="background: linear-gradient(135deg, #003A40, #005D56); border: 2px solid ${tier.hex}; box-shadow: 0 0 40px ${tier.glow}, 0 20px 60px rgba(0,0,0,0.4);">
-      <div class="text-xs font-display font-bold uppercase tracking-widest mb-3 opacity-70" style="color:${tier.hex};">Badge Desbloqueado!</div>
+      <div class="text-xs font-display font-bold uppercase tracking-widest mb-3 opacity-70" style="color:${tier.hex};">✦ Medalha Desbloqueada!</div>
       <div class="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4" style="background:${tier.hex};">
         <i data-lucide="${badge.icon}" class="w-10 h-10" style="color:#003A40;"></i>
       </div>
@@ -570,14 +623,18 @@ window.AuthUtils = {
   profileGet,
   profileUpsert,
   profileUploadAvatar,
+  getEmailByUsername,
   stampsGetAll,
   stampAdd,
   stampRemove,
   voteGet,
+  voteGetFull,
   voteSubmit,
+  voteUpdatePublic,
   reviewsGetForBeach,
   reviewsGetForUser,
   reviewSubmit,
+  reviewSubmitReply,
   reviewDelete,
   badgesCompute,
   badgesTopEarned,

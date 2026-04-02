@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>O meu Perfil — Praias Fluviais</title>
-  <meta name="description" content="Perfil de utilizador no Guia das Praias Fluviais. Veja os seus badges, carimbos e comentários.">
+  <meta name="description" content="Perfil de utilizador no Guia das Praias Fluviais. Veja as suas medalhas, carimbos e comentários.">
   <meta name="robots" content="noindex">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -198,8 +198,8 @@
               <div class="text-[10px] font-display font-semibold uppercase tracking-wider text-white/40 mt-1">Carimbos</div>
             </div>
             <div class="stat-card text-center py-4 px-2">
-              <div id="stat-badges" class="font-display text-2xl font-bold text-praia-yellow-400">0</div>
-              <div class="text-[10px] font-display font-semibold uppercase tracking-wider text-white/40 mt-1">Badges</div>
+              <div id="stat-medals" class="font-display text-2xl font-bold text-praia-yellow-400">0</div>
+              <div class="text-[10px] font-display font-semibold uppercase tracking-wider text-white/40 mt-1">Medalhas</div>
             </div>
             <div class="stat-card text-center py-4 px-2">
               <div id="stat-reviews" class="font-display text-2xl font-bold text-praia-yellow-400">0</div>
@@ -216,7 +216,7 @@
         <div class="border-t border-white/10 mt-2">
           <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center gap-1 py-2 overflow-x-auto scrollbar-hide">
-              <button class="profile-tab tab-btn tab-active" data-tab="badges">Badges</button>
+              <button class="profile-tab tab-btn tab-active" data-tab="badges">Medalhas</button>
               <button class="profile-tab tab-btn tab-inactive" data-tab="stamps">Passaporte</button>
               <button class="profile-tab tab-btn tab-inactive" data-tab="reviews">Comentários</button>
               <button class="profile-tab tab-btn tab-inactive" data-tab="vote">Voto</button>
@@ -232,7 +232,7 @@
         <div id="panel-badges" class="profile-panel">
           <!-- Legend -->
           <div class="flex flex-wrap gap-2 mb-6">
-            <span class="text-[11px] font-display font-semibold text-praia-sand-400 uppercase tracking-wider mr-1 self-center">Tiers:</span>
+            <span class="text-[11px] font-display font-semibold text-praia-sand-400 uppercase tracking-wider mr-1 self-center">Categorias:</span>
             <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-display font-bold" style="background:#CD7F3222;color:#CD7F32;border:1px solid #CD7F3244;">Bronze</span>
             <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-display font-bold" style="background:#A8B8C822;color:#A8B8C8;border:1px solid #A8B8C844;">Prata</span>
             <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-display font-bold" style="background:#FFD70022;color:#FFD700;border:1px solid #FFD70044;">Ouro</span>
@@ -280,31 +280,39 @@
       <button onclick="closeEditModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-colors">
         <i data-lucide="x" class="w-4 h-4"></i>
       </button>
-      <h2 class="font-display text-lg font-bold text-white mb-5">Editar Perfil</h2>
+      <h2 class="font-display text-lg font-bold text-white mb-6">Editar Perfil</h2>
 
-      <div class="flex flex-col items-center mb-5">
-        <div id="edit-avatar-preview" class="mb-3">
-          <div class="w-20 h-20 rounded-full bg-white/10 flex items-center justify-center">
-            <i data-lucide="user" class="w-10 h-10 text-white/30"></i>
+      <!-- Section 1: Photo -->
+      <div class="mb-6 pb-6 border-b border-white/10">
+        <p class="text-[11px] font-display font-semibold uppercase tracking-wider text-white/40 mb-4">Foto de Perfil</p>
+        <div class="flex flex-col items-center gap-3">
+          <div id="edit-avatar-preview">
+            <div class="w-20 h-20 rounded-full bg-white/10 flex items-center justify-center">
+              <i data-lucide="user" class="w-10 h-10 text-white/30"></i>
+            </div>
           </div>
+          <input type="file" id="edit-avatar" accept="image/jpeg,image/jpg,image/png,image/webp,image/gif,image/heic,image/heif" class="hidden">
+          <button onclick="document.getElementById('edit-avatar').click()"
+                  class="inline-flex items-center gap-1.5 border border-white/20 text-white/60 hover:text-white font-display font-semibold text-xs uppercase tracking-wider px-3 py-1.5 rounded-full transition-colors">
+            <i data-lucide="camera" class="w-3.5 h-3.5"></i> Escolher foto
+          </button>
+          <button id="edit-photo-btn" onclick="saveProfilePhoto()"
+                  class="w-full btn-primary bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-xs uppercase tracking-wider py-2.5 rounded-xl shadow-layered-yellow">
+            Guardar Foto
+          </button>
         </div>
-        <input type="file" id="edit-avatar" accept="image/jpeg,image/png,image/webp" class="hidden">
-        <button onclick="document.getElementById('edit-avatar').click()"
-                class="inline-flex items-center gap-1.5 border border-white/20 text-white/60 hover:text-white font-display font-semibold text-xs uppercase tracking-wider px-3 py-1.5 rounded-full transition-colors">
-          <i data-lucide="camera" class="w-3.5 h-3.5"></i> Mudar foto
+      </div>
+
+      <!-- Section 2: Username -->
+      <div>
+        <p class="text-[11px] font-display font-semibold uppercase tracking-wider text-white/40 mb-4">Nome de Utilizador</p>
+        <input type="text" id="edit-username" minlength="3" maxlength="24"
+               class="edit-input w-full px-4 py-3 rounded-xl text-sm font-body mb-3" placeholder="nome_utilizador">
+        <button id="edit-username-btn" onclick="saveProfileUsername()"
+                class="w-full btn-primary bg-white/10 hover:bg-white/20 text-white font-display font-bold text-xs uppercase tracking-wider py-2.5 rounded-xl border border-white/20 transition-colors">
+          Guardar Nome
         </button>
       </div>
-
-      <div class="mb-5">
-        <label class="text-[11px] font-display font-semibold uppercase tracking-wider text-white/50 block mb-2">Nome de utilizador</label>
-        <input type="text" id="edit-username" minlength="3" maxlength="24"
-               class="edit-input w-full px-4 py-3 rounded-xl text-sm font-body" placeholder="nome_utilizador">
-      </div>
-
-      <button id="edit-save-btn" onclick="saveEditProfile()"
-              class="w-full btn-primary bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider py-3 rounded-2xl shadow-layered-yellow">
-        Guardar
-      </button>
     </div>
   </div>
 
