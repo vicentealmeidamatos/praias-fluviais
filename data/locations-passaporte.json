@@ -42,19 +42,6 @@
     }
   },
   {
-    "name": "Welcome Center de Abrantes – Posto de Turismo de Abrantes",
-    "municipality": "Abrantes",
-    "address": "Rua Luís de Camões 20A, 2200-201 Abrantes",
-    "phone": "",
-    "beaches": [
-      "Praia Fluvial de Aldeia do Mato e Praia Fluvial de Fontes"
-    ],
-    "coordinates": {
-      "lat": 39.4622,
-      "lng": -8.1977
-    }
-  },
-  {
     "name": "Posto de Turismo de Alandroal",
     "municipality": "Alandroal",
     "address": "Rua João de Deus 2, 7250-116 Alandroal",
@@ -242,19 +229,6 @@
     }
   },
   {
-    "name": "Posto de Turismo de Caminha – Loja Interativa de Turismo de Caminha",
-    "municipality": "Caminha",
-    "address": "Praça Conselheiro Silva Torres, 4910-122 Caminha",
-    "phone": "",
-    "beaches": [
-      "Praia Fluvial de Vilar de Mouros – Azenhas e Praia Fluvial de Pedras Ruivas"
-    ],
-    "coordinates": {
-      "lat": 41.8748,
-      "lng": -8.8348
-    }
-  },
-  {
     "name": "Posto de Turismo de Cantanhede",
     "municipality": "Cantanhede",
     "address": "Largo Conselheiro Ferreira Freire, 3060-228 Cantanhede",
@@ -270,26 +244,13 @@
     }
   },
   {
-    "name": "Casa do Tempo — Castanheira de Pera",
+    "name": "Posto de Turismo de Castanheira de Pera – Casa do Tempo",
     "municipality": "Castanheira de Pera",
     "address": "Rua Dr. José Fernandes de Carvalho, 3280-039 Castanheira de Pera",
     "phone": "236 432 799",
     "beaches": [
       "Praia Fluvial de Poço Corga",
       "Praia das Rocas"
-    ],
-    "coordinates": {
-      "lat": 40.0,
-      "lng": -8.207
-    }
-  },
-  {
-    "name": "Posto de Turismo de Castanheira de Pera – Casa do Tempo",
-    "municipality": "Castanheira de Pera",
-    "address": "Rua Dr. José Fernandes de Carvalho, 3280-039 Castanheira de Pêra",
-    "phone": "",
-    "beaches": [
-      "Praia Fluvial de Poço Corga"
     ],
     "coordinates": {
       "lat": 40.0,
@@ -322,19 +283,6 @@
     "coordinates": {
       "lat": 39.855,
       "lng": -7.52
-    }
-  },
-  {
-    "name": "Bar da Praia Fluvial do Sesmo",
-    "municipality": "Castelo Branco",
-    "address": "",
-    "phone": "",
-    "beaches": [
-      "Praia Fluvial do Sesmo"
-    ],
-    "coordinates": {
-      "lat": 39.8208,
-      "lng": -7.4913
     }
   },
   {
@@ -381,19 +329,6 @@
     }
   },
   {
-    "name": "Câmara Municipal de Castro Daire",
-    "municipality": "Castro Daire",
-    "address": "Rua Dr. Pio de Figueiredo 42, 3600-214 Castro Daire",
-    "phone": "",
-    "beaches": [
-      "Praia Fluvial de Folgosa"
-    ],
-    "coordinates": {
-      "lat": 40.9007,
-      "lng": -7.9397
-    }
-  },
-  {
     "name": "Posto de Turismo de Castro Daire",
     "municipality": "Castro Daire",
     "address": "Welcome Center de Castro Daire, Rua Dr. Pio de Figueiredo, nº 42, 3600-214 Castro Daire",
@@ -425,7 +360,8 @@
     "address": "Antiga Estação Coimbra A, Rua António Granjo Nº6, 3000-429 Coimbra",
     "phone": "",
     "beaches": [
-      "Praia Fluvial de Palheiros – Zorro e Praia Fluvial do Rebolim"
+      "Praia Fluvial de Palheiros – Zorro",
+      "Praia Fluvial do Rebolim"
     ],
     "coordinates": {
       "lat": 40.2088,
@@ -444,20 +380,6 @@
     "coordinates": {
       "lat": 40.2088,
       "lng": -8.428
-    }
-  },
-  {
-    "name": "Posto de Turismo de Coimbra — Baixa",
-    "municipality": "Coimbra",
-    "address": "Rua António Granjo 6, 3000-429 Coimbra",
-    "phone": "",
-    "beaches": [
-      "Praia Fluvial de Palheiros-Zorro",
-      "Praia Fluvial do Rebolim"
-    ],
-    "coordinates": {
-      "lat": 40.2094,
-      "lng": -8.4275
     }
   },
   {
@@ -487,24 +409,13 @@
     }
   },
   {
-    "name": "Loja do Montado — Coruche",
+    "name": "Posto de Turismo de Coruche / Loja do Montado",
     "municipality": "Coruche",
     "address": "Mercado Municipal de Coruche, 2100-228 Coruche",
     "phone": "243 619 072",
     "beaches": [
       "Praia Fluvial do Sorraia"
     ],
-    "coordinates": {
-      "lat": 38.9638,
-      "lng": -8.5236
-    }
-  },
-  {
-    "name": "Posto de Turismo de Coruche e Loja do Montado",
-    "municipality": "Coruche",
-    "address": "Mercado Municipal de Coruche, 2100-228 Coruche",
-    "phone": "",
-    "beaches": [],
     "coordinates": {
       "lat": 38.9638,
       "lng": -8.5236
@@ -545,19 +456,6 @@
     }
   },
   {
-    "name": "Câmara Municipal de Cuba",
-    "municipality": "Cuba",
-    "address": "Largo Cristóvão Colon, 7490-145 Cuba",
-    "phone": "",
-    "beaches": [
-      "Praia Fluvial de Albergaria dos Fusos"
-    ],
-    "coordinates": {
-      "lat": 38.1608,
-      "lng": -7.8955
-    }
-  },
-  {
     "name": "Posto de Turismo de Cuba",
     "municipality": "Cuba",
     "address": "Largo Cristóvão Colon, 7490-145 Cuba",
@@ -584,7 +482,7 @@
     }
   },
   {
-    "name": "Centro de Informação de Dornes",
+    "name": "Posto de Turismo de Dornes",
     "municipality": "Ferreira do Zêzere",
     "address": "Rua Guilherme de Pavia 7, 2240-611 Dornes",
     "phone": "249 366 410",
@@ -598,20 +496,7 @@
     }
   },
   {
-    "name": "Nadadores Salvadores na Praia Fluvial do Lago Azul",
-    "municipality": "Ferreira do Zêzere",
-    "address": "Carimbo da Praia Fluvial da Bairrada/Bairradinha, Nadadores Salvadores na Praia Fluvial da Bairrada/Bairradinha",
-    "phone": "",
-    "beaches": [
-      "Praia Fluvial do Lago Azul"
-    ],
-    "coordinates": {
-      "lat": 39.6987,
-      "lng": -8.2907
-    }
-  },
-  {
-    "name": "Nadadores Salvadores — Praia Fluvial da Bairrada/Bairradinha",
+    "name": "Nadadores Salvadores na Praia Fluvial da Bairrada/Bairradinha",
     "municipality": "Ferreira do Zêzere",
     "address": "Praia Fluvial da Bairrada/Bairradinha, Ferreira do Zêzere",
     "phone": "",
@@ -625,7 +510,7 @@
     }
   },
   {
-    "name": "Nadadores Salvadores — Praia Fluvial do Lago Azul",
+    "name": "Nadadores Salvadores na Praia Fluvial do Lago Azul",
     "municipality": "Ferreira do Zêzere",
     "address": "Praia Fluvial do Lago Azul, Ferreira do Zêzere",
     "phone": "",
@@ -636,17 +521,6 @@
     "coordinates": {
       "lat": 39.69,
       "lng": -8.27
-    }
-  },
-  {
-    "name": "Posto de Turismo de Dornes",
-    "municipality": "Ferreira do Zêzere",
-    "address": "Rua Guilherme de Pavia 7, 2240-611 Dornes",
-    "phone": "",
-    "beaches": [],
-    "coordinates": {
-      "lat": 39.6987,
-      "lng": -8.2907
     }
   },
   {
@@ -692,26 +566,13 @@
     }
   },
   {
-    "name": "Museu e Centro de Artes de Figueiró dos Vinhos",
+    "name": "Museu e Centro de Artes/ Posto de Turismo de Figueiró dos Vinhos",
     "municipality": "Figueiró dos Vinhos",
     "address": "Av. José Malhoa, 3260-402 Figueiró dos Vinhos",
     "phone": "236 552 178",
     "beaches": [
       "Praia Fluvial de Ana de Aviz",
       "Praia Fluvial das Fragas de São Simão"
-    ],
-    "coordinates": {
-      "lat": 39.9064,
-      "lng": -8.2776
-    }
-  },
-  {
-    "name": "Posto de Turismo de Figueiró dos Vinhos",
-    "municipality": "Figueiró dos Vinhos",
-    "address": "Museu e Centro de Artes, Avenida José Malhoa, 3260-402 Figueiró dos Vinhos",
-    "phone": "",
-    "beaches": [
-      "Praia Fluvial de Ana de Aviz e Praia Fluvial das Fragas de São Simão"
     ],
     "coordinates": {
       "lat": 39.9064,
@@ -832,19 +693,6 @@
   {
     "name": "Restaurante da Zona Balnear da Ribeira Venda (Comenda)",
     "municipality": "Gavião",
-    "address": "",
-    "phone": "",
-    "beaches": [
-      "Zona Balnear da Ribeira da Venda"
-    ],
-    "coordinates": {
-      "lat": 39.4683,
-      "lng": -7.9358
-    }
-  },
-  {
-    "name": "Restaurante da Zona Balnear da Ribeira da Venda",
-    "municipality": "Gavião",
     "address": "Ribeira Venda — Comenda, Gavião",
     "phone": "245 776 064",
     "beaches": [
@@ -899,7 +747,7 @@
     }
   },
   {
-    "name": "Câmara Municipal de Gondomar",
+    "name": "Posto de Turismo de Gondomar",
     "municipality": "Gondomar",
     "address": "Tv. Convenção de Gramido 41, 4420-416 Gondomar",
     "phone": "224 637 036",
@@ -907,19 +755,6 @@
       "Praia Fluvial da Lomba",
       "Areal de Melres",
       "Areal de Zebreiros"
-    ],
-    "coordinates": {
-      "lat": 41.0369,
-      "lng": -8.5319
-    }
-  },
-  {
-    "name": "Posto de Turismo de Gondomar",
-    "municipality": "Gondomar",
-    "address": "Tv. Convenção de Gramido 41, 4420-416 Gondomar",
-    "phone": "",
-    "beaches": [
-      "Praia Fluvial da Lomba, Areal de Melres e Areal de Zebreiros"
     ],
     "coordinates": {
       "lat": 41.0369,
@@ -1027,19 +862,6 @@
     }
   },
   {
-    "name": "Welcome Center da Guarda – Posto de Turismo da Guarda",
-    "municipality": "Guarda",
-    "address": "Praça Luís de Camões, 6300-725 Guarda",
-    "phone": "",
-    "beaches": [
-      "Praia Fluvial de Aldeia Viçosa, Praia Fluvial da Barragem do Caldeirão, Praia Fluvial da Quinta da Taberna – Videmonte, Praia Fluvial de Vale do Mondego e Praia Fluvial de Valhelhas"
-    ],
-    "coordinates": {
-      "lat": 40.5375,
-      "lng": -7.268
-    }
-  },
-  {
     "name": "Posto de Turismo de Góis",
     "municipality": "Góis",
     "address": "Praça da República, 3330-310 Góis",
@@ -1110,20 +932,9 @@
     }
   },
   {
-    "name": "De 5 de Junho a 12 de Setembro, das 11h30 ás 18h30:",
+    "name": "EPAL e ADTV",
     "municipality": "Lisboa",
-    "address": "Carimbo da EPAL/ADVT, Pátio da Água, Av. da Liberdade, n.º14, 1250-096 Lisboa",
-    "phone": "",
-    "beaches": [],
-    "coordinates": {
-      "lat": 38.7199,
-      "lng": -9.1431
-    }
-  },
-  {
-    "name": "EPAL - Atendimento ao público",
-    "municipality": "Lisboa",
-    "address": "Av. da Liberdade 24, 1250-144 Lisboa",
+    "address": "Atendimento ao público da EPAL, Av. da Liberdade, n.º24, 1250-144 Lisboa",
     "phone": "",
     "beaches": [
       "Carimbo especial EPAL/ADVT"
@@ -1134,31 +945,7 @@
     }
   },
   {
-    "name": "EPAL e ADTV",
-    "municipality": "Lisboa",
-    "address": "Atendimento ao público da EPAL, Av. da Liberdade, n.º24, 1250-144 Lisboa",
-    "phone": "",
-    "beaches": [
-      "EPAL/ADVT"
-    ],
-    "coordinates": {
-      "lat": 38.7199,
-      "lng": -9.1431
-    }
-  },
-  {
     "name": "Museu da Água",
-    "municipality": "Lisboa",
-    "address": "Rua do Alviela 12, 1170-012 Lisboa",
-    "phone": "",
-    "beaches": [],
-    "coordinates": {
-      "lat": 38.7199,
-      "lng": -9.1431
-    }
-  },
-  {
-    "name": "Museu da Água - EPAL",
     "municipality": "Lisboa",
     "address": "Rua do Alviela 12, 1170-012 Lisboa",
     "phone": "",
@@ -1175,7 +962,9 @@
     "municipality": "Lisboa",
     "address": "Av. da Liberdade n.º 14, 1250-096 Lisboa",
     "phone": "",
-    "beaches": [],
+    "beaches": [
+      "Carimbo especial EPAL/ADVT"
+    ],
     "seasonal": true,
     "seasonal_note": "5 de junho a 12 de setembro, das 11h30 às 18h30",
     "coordinates": {
@@ -1197,7 +986,7 @@
     }
   },
   {
-    "name": "Museu Etnográfico Dr. Louzã Henriques — Lousã",
+    "name": "Posto de Turismo da Lousã – Museu Etnográfico Dr. Louzã Henriques",
     "municipality": "Lousã",
     "address": "Rua Dr. João Luso, 3200-114 Lousã",
     "phone": "",
@@ -1205,19 +994,6 @@
       "Praia Fluvial da Senhora da Graça",
       "Praia Fluvial da Senhora da Piedade",
       "Praia Fluvial da Bogueira"
-    ],
-    "coordinates": {
-      "lat": 40.103,
-      "lng": -8.2468
-    }
-  },
-  {
-    "name": "Posto de Turismo da Lousã – Museu Etnográfico Dr. Louzã Henriques",
-    "municipality": "Lousã",
-    "address": "Rua Dr. João Luso, 3200-114 Lousã",
-    "phone": "",
-    "beaches": [
-      "Praia Fluvial da Senhora da Graça, Praia Fluvial da Senhora da Piedade e Praia Fluvial da Bogueira"
     ],
     "coordinates": {
       "lat": 40.103,
@@ -1380,27 +1156,14 @@
     }
   },
   {
-    "name": "Câmara Municipal de Moimenta da Beira",
-    "municipality": "Moimenta da Beira",
-    "address": "Terreiro Freiras 7, 3620-304 Moimenta da Beira",
-    "phone": "",
-    "beaches": [
-      "Praia Fluvial de Albufeira do Vilar",
-      "Praia Fluvial de Segões",
-      "Zona Balnear de Leomil"
-    ],
-    "coordinates": {
-      "lat": 40.9801,
-      "lng": -7.616
-    }
-  },
-  {
     "name": "Loja Interativa de Turismo de Moimenta da Beira",
     "municipality": "Moimenta da Beira",
     "address": "Posto de Turismo de Moimenta da Beira, Terreiro Freiras 7, 3620-304 Moimenta da Beira",
     "phone": "",
     "beaches": [
-      "Praia Fluvial de Albufeira do VIlar, Praia Fluvial de Segões e Zona Balnear de Leomil"
+      "Praia Fluvial de Albufeira do Vilar",
+      "Praia Fluvial de Segões",
+      "Zona Balnear de Leomil"
     ],
     "coordinates": {
       "lat": 40.9801,
@@ -1805,7 +1568,7 @@
     }
   },
   {
-    "name": "Câmara Municipal de Pampilhosa da Serra",
+    "name": "Posto de Turismo de Pampilhosa da Serra",
     "municipality": "Pampilhosa da Serra",
     "address": "Rua Rangel de Lima, 3320-229 Pampilhosa da Serra",
     "phone": "",
@@ -1814,19 +1577,6 @@
       "Praia Fluvial de Pampilhosa da Serra",
       "Praia Fluvial de Pessegueiro",
       "Praia Fluvial de Santa Luzia"
-    ],
-    "coordinates": {
-      "lat": 40.0523,
-      "lng": -7.956
-    }
-  },
-  {
-    "name": "Posto de Turismo de Pampilhosa da Serra",
-    "municipality": "Pampilhosa da Serra",
-    "address": "Rua Rangel de Lima, 3320-229 Pampilhosa da Serra",
-    "phone": "",
-    "beaches": [
-      "Praia Fluvial de Praia Fluvial de Janeiro de Baixo, Praia Fluvial de Pampilhosa da Serra, Praia Fluvial de Pessegueiro e Praia Fluvial de Santa Luzia"
     ],
     "coordinates": {
       "lat": 40.0523,
@@ -1919,17 +1669,6 @@
     }
   },
   {
-    "name": "Posto de Turismo de Pedrógão Grande EN2",
-    "municipality": "Pedrógão Grande",
-    "address": "Jardim da Devesa, 3270-101 Pedrógão Grande",
-    "phone": "",
-    "beaches": [],
-    "coordinates": {
-      "lat": 39.9185,
-      "lng": -8.1494
-    }
-  },
-  {
     "name": "Bar da Praia Fluvial do Reconquinho",
     "municipality": "Penacova",
     "address": "Praia Fluvial do Reconquinho — Carvoeira, 3360-179 Penacova",
@@ -1985,30 +1724,6 @@
     "coordinates": {
       "lat": 40.272,
       "lng": -8.2853
-    }
-  },
-  {
-    "name": "Posto de Turismo de Penacova EN2",
-    "municipality": "Penacova",
-    "address": "EN2, Km238 (junto à ponte do Mondego), 3360 Penacova",
-    "phone": "",
-    "beaches": [],
-    "coordinates": {
-      "lat": 40.2714,
-      "lng": -8.2847
-    }
-  },
-  {
-    "name": "Câmara Municipal de Penalva do Castelo",
-    "municipality": "Penalva do Castelo",
-    "address": "Avenida Castendo, 3550-185 Penalva do Castelo",
-    "phone": "",
-    "beaches": [
-      "Praia Fluvial do Açude de Vais"
-    ],
-    "coordinates": {
-      "lat": 40.6674,
-      "lng": -7.6992
     }
   },
   {
@@ -2317,19 +2032,6 @@
     }
   },
   {
-    "name": "Câmara Municipal da Póvoa de Lanhoso",
-    "municipality": "Póvoa de Lanhoso",
-    "address": "Avenida da República, 4830-513 Póvoa de Lanhoso",
-    "phone": "",
-    "beaches": [
-      "Praia Fluvial de Verim"
-    ],
-    "coordinates": {
-      "lat": 41.5799,
-      "lng": -8.2674
-    }
-  },
-  {
     "name": "Posto de Turismo de Póvoa de Lanhoso",
     "municipality": "Póvoa de Lanhoso",
     "address": "Avenida da República, 4830-513 Póvoa de Lanhoso",
@@ -2535,7 +2237,7 @@
     }
   },
   {
-    "name": "Museu do Sabugal",
+    "name": "Posto de Turismo do Sabugal – Museu do Sabugal",
     "municipality": "Sabugal",
     "address": "Rua de São Tiago, 6320-409 Sabugal",
     "phone": "",
@@ -2551,17 +2253,6 @@
       "Zona Balnear de Vale de Espinho",
       "Praia Fluvial do Sabugal"
     ],
-    "coordinates": {
-      "lat": 40.3531,
-      "lng": -7.0897
-    }
-  },
-  {
-    "name": "Todos os carimbos durante todo o ano:",
-    "municipality": "Sabugal",
-    "address": "Posto de Turismo do Sabugal – Museu do Sabugal, Rua de São Tiago, 6320-409 Sabugal",
-    "phone": "",
-    "beaches": [],
     "coordinates": {
       "lat": 40.3531,
       "lng": -7.0897
@@ -2607,7 +2298,7 @@
     }
   },
   {
-    "name": "Centro de Informação de Loriga",
+    "name": "Posto de Turismo de Loriga",
     "municipality": "Seia",
     "address": "Estrada Nacional 231, 6270-090 Loriga",
     "phone": "",
@@ -2631,32 +2322,6 @@
     "coordinates": {
       "lat": 40.39,
       "lng": -7.65
-    }
-  },
-  {
-    "name": "Posto de Turismo Seia",
-    "municipality": "Seia",
-    "address": "Rua Pintor Lucas Marrão, 6270-513 Seia",
-    "phone": "",
-    "beaches": [
-      "Praia Fluvial de Lapa dos Dinheiros, Praia Fluvial do Sabugueiro, Praia Fluvial de Sandomil, Praia Fluvial da Senhora do Desterro e Praia Fluvial de Vila Cova à Coelheira"
-    ],
-    "coordinates": {
-      "lat": 40.418,
-      "lng": -7.701
-    }
-  },
-  {
-    "name": "Posto de Turismo de Loriga",
-    "municipality": "Seia",
-    "address": "Estrada Nacional 231, 6270-090 Loriga",
-    "phone": "",
-    "beaches": [
-      "Praia Fluvial de Loriga e Praia Fluvial de Poço do Lagar"
-    ],
-    "coordinates": {
-      "lat": 40.418,
-      "lng": -7.701
     }
   },
   {
@@ -2704,7 +2369,7 @@
     }
   },
   {
-    "name": "Centro das Artes de Sernancelhe",
+    "name": "Posto de Turismo de Sernancelhe/Centro das Artes",
     "municipality": "Sernancelhe",
     "address": "Av. Dr. Oliveira Serrão, 3640-420 Sernancelhe",
     "phone": "",
@@ -2727,19 +2392,6 @@
     "coordinates": {
       "lat": 40.91,
       "lng": -7.49
-    }
-  },
-  {
-    "name": "Posto de Turismo de Sernancelhe/Centro das Artes",
-    "municipality": "Sernancelhe",
-    "address": "Av. Dr. Oliveira Serrão, 3640-420 Sernancelhe",
-    "phone": "",
-    "beaches": [
-      "Praia Fluvial de Vila da Ponte"
-    ],
-    "coordinates": {
-      "lat": 40.9174,
-      "lng": -7.4913
     }
   },
   {
@@ -2854,19 +2506,6 @@
     "coordinates": {
       "lat": 40.7374,
       "lng": -7.7205
-    }
-  },
-  {
-    "name": "Casa da Cultura de Sátão",
-    "municipality": "Sátão",
-    "address": "Rua da Travessa do Clube, 3560 Sátão",
-    "phone": "",
-    "beaches": [
-      "Praia Fluvial do Trabulo"
-    ],
-    "coordinates": {
-      "lat": 40.7459,
-      "lng": -7.7312
     }
   },
   {
@@ -3116,25 +2755,12 @@
     }
   },
   {
-    "name": "Câmara Municipal de Vila Verde",
-    "municipality": "Vila Verde",
-    "address": "Praça da República, 4730-732 Vila Verde",
-    "phone": "",
-    "beaches": [
-      "Praia Fluvial do Prado-Faial"
-    ],
-    "coordinates": {
-      "lat": 41.649,
-      "lng": -8.3143
-    }
-  },
-  {
     "name": "Posto de Turismo de Vila Verde",
     "municipality": "Vila Verde",
     "address": "Praça da República, 4730-732 Vila Verde",
     "phone": "",
     "beaches": [
-      "Praia Fluvial do Prado – Faial"
+      "Praia Fluvial do Prado-Faial"
     ],
     "coordinates": {
       "lat": 41.649,
