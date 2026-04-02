@@ -70,6 +70,7 @@ async function stampAdd(userId, beachId) {
     { user_id: userId, beach_id: beachId, stamped_at: new Date().toISOString().split('T')[0] },
     { onConflict: 'user_id,beach_id' }
   );
+  if (error) console.error('[stampAdd] Supabase error:', error);
   return !error;
 }
 
@@ -79,6 +80,7 @@ async function stampRemove(userId, beachId) {
     .delete()
     .eq('user_id', userId)
     .eq('beach_id', beachId);
+  if (error) console.error('[stampRemove] Supabase error:', error);
   return !error;
 }
 

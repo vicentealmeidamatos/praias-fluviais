@@ -168,12 +168,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // ── Toggle Stamp ─────────────────────────────────────────────────────────────
 
+  let stampBusy = false;
+
   async function toggleStamp(beachId) {
+    if (stampBusy) return;
     if (!user) {
       showAuthPrompt();
       return;
     }
 
+    stampBusy = true;
     const wasStamped = !!stampMap[beachId];
 
     // Optimistic update
@@ -184,16 +188,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     renderAll();
 
-    // Sync to Supabase
-    const ok = wasStamped
-      ? await stampRemove(user.id, beachId)
-      : await stampAdd(user.id, beachId);
+    try {
+      // Sync to Supabase
+      const ok = wasStamped
+        ? await stampRemove(user.id, beachId)
+        : await stampAdd(user.id, beachId);
 
-    if (!ok) {
-      // Rollback
-      if (wasStamped) stampMap[beachId] = new Date().toISOString().split('T')[0];
-      else delete stampMap[beachId];
-      renderAll();
+      if (!ok) {
+        // Rollback
+        if (wasStamped) stampMap[beachId] = new Date().toISOString().split('T')[0];
+        else delete stampMap[beachId];
+        renderAll();
+      }
+    } finally {
+      stampBusy = false;
     }
   }
 
