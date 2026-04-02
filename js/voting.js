@@ -197,7 +197,7 @@ async function openVoteModal(beachId, beachName) {
       <button onclick="closeVoteModal()" class="absolute top-4 right-4 text-praia-sand-400 hover:text-praia-sand-600 p-1">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
-      <div class="text-center mb-6">
+      <div class="text-center mb-5">
         <div class="w-14 h-14 bg-praia-yellow-400/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
           <i data-lucide="heart" class="w-7 h-7 text-praia-yellow-600"></i>
         </div>
@@ -205,6 +205,23 @@ async function openVoteModal(beachId, beachName) {
         <p class="text-praia-sand-500 text-sm">${beachName}</p>
         <p class="text-praia-sand-400 text-xs mt-2">O voto é permanente e não pode ser alterado.</p>
       </div>
+
+      <!-- Privacy choice -->
+      <div class="mb-5 p-4 rounded-xl bg-praia-sand-50 border border-praia-sand-200">
+        <p class="text-[11px] font-display font-semibold uppercase tracking-wider text-praia-sand-500 mb-3">Privacidade do voto</p>
+        <div class="flex gap-2">
+          <button id="privacy-public" onclick="setVotePrivacy(true)"
+                  class="flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-display font-bold uppercase tracking-wider border-2 transition-all duration-200 bg-praia-teal-800 border-praia-teal-800 text-praia-yellow-400">
+            <i data-lucide="globe" class="w-3.5 h-3.5"></i> Público
+          </button>
+          <button id="privacy-private" onclick="setVotePrivacy(false)"
+                  class="flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-display font-bold uppercase tracking-wider border-2 transition-all duration-200 bg-white border-praia-sand-200 text-praia-sand-500 hover:border-praia-sand-400">
+            <i data-lucide="lock" class="w-3.5 h-3.5"></i> Privado
+          </button>
+        </div>
+        <p id="privacy-desc" class="text-[10px] text-praia-sand-400 mt-2">O seu voto será visível no seu perfil público.</p>
+      </div>
+
       <button onclick="confirmVote('${beachId}', '${beachName.replace(/'/g, "\\'")}')"
               id="vote-confirm-btn"
               class="btn-primary w-full bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider py-3.5 rounded-xl shadow-layered-yellow">
@@ -225,6 +242,30 @@ function closeVoteModal() {
   document.getElementById('vote-modal')?.remove();
 }
 
+// Track privacy preference for vote modal
+let _voteIsPublic = true;
+
+function setVotePrivacy(isPublic) {
+  _voteIsPublic = isPublic;
+  const pubBtn  = document.getElementById('privacy-public');
+  const privBtn = document.getElementById('privacy-private');
+  const desc    = document.getElementById('privacy-desc');
+  if (!pubBtn || !privBtn) return;
+
+  const onStyle  = 'bg-praia-teal-800 border-praia-teal-800 text-praia-yellow-400';
+  const offStyle = 'bg-white border-praia-sand-200 text-praia-sand-500 hover:border-praia-sand-400';
+
+  if (isPublic) {
+    pubBtn.className  = pubBtn.className.replace(offStyle, onStyle);
+    privBtn.className = privBtn.className.replace(onStyle, offStyle);
+    if (desc) desc.textContent = 'O seu voto será visível no seu perfil público.';
+  } else {
+    pubBtn.className  = pubBtn.className.replace(onStyle, offStyle);
+    privBtn.className = privBtn.className.replace(offStyle, onStyle);
+    if (desc) desc.textContent = 'O seu voto ficará oculto para outros utilizadores.';
+  }
+}
+
 async function confirmVote(beachId, beachName) {
   const btn = document.getElementById('vote-confirm-btn');
   if (btn) { btn.disabled = true; btn.textContent = 'A registar…'; }
@@ -233,7 +274,7 @@ async function confirmVote(beachId, beachName) {
   if (!user) { closeVoteModal(); showVoteAuthPrompt(beachId, beachName); return; }
 
   const year = new Date().getFullYear();
-  const ok   = await AuthUtils.voteSubmit(user.id, beachId, year);
+  const ok   = await AuthUtils.voteSubmit(user.id, beachId, year, _voteIsPublic);
 
   if (!ok) {
     if (btn) { btn.disabled = false; btn.textContent = 'Confirmar Voto Definitivo'; }

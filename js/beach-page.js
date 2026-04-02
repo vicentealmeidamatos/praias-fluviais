@@ -25,7 +25,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   const mapsUrl = `https://www.google.com/maps?q=${beach.coordinates.lat},${beach.coordinates.lng}`;
   const wazeUrl = `https://waze.com/ul?ll=${beach.coordinates.lat},${beach.coordinates.lng}&navigate=yes`;
 
-  // Keys must match exactly the filter options in rede.html
   const serviceIcons = {
     blueFlag:    { icon: 'flag',          label: 'Bandeira Azul' },
     goldQuality: { icon: 'award',         label: 'Qualidade de Ouro' },
@@ -58,7 +57,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (beach.services.goldQuality) badges.push('<span class="badge badge-gold"><i data-lucide="sparkles" class="w-3 h-3"></i> Qualidade Ouro</span>');
   if (beach.services.accessible) badges.push('<span class="badge badge-accessible"><i data-lucide="accessibility" class="w-3 h-3"></i> Acessível</span>');
 
-  // Find nearby beaches
   const nearby = beaches
     .filter(b => b.id !== beach.id)
     .map(b => ({ ...b, _dist: haversineDistance(beach.coordinates.lat, beach.coordinates.lng, b.coordinates.lat, b.coordinates.lng) }))
@@ -201,28 +199,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     </div>
   `;
 
-  // Initialize icons
   lucide.createIcons();
-
-  // Initialize carousel
   initCarousel(photoCount);
-
-  // Image preview handler
-  document.getElementById('review-images')?.addEventListener('change', function () {
-    const preview = document.getElementById('review-image-preview');
-    if (!preview) return;
-    preview.innerHTML = '';
-    Array.from(this.files).forEach(file => {
-      const reader = new FileReader();
-      reader.onload = e => {
-        const img = document.createElement('img');
-        img.src = e.target.result;
-        img.className = 'w-16 h-16 object-cover rounded-lg border border-praia-sand-200';
-        preview.appendChild(img);
-      };
-      reader.readAsDataURL(file);
-    });
-  });
 
   // Load weather
   const weatherWidget = document.getElementById('weather-widget');
@@ -232,12 +210,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   // Auth state + reviews
-  const currentUser   = await AuthUtils.authGetUser();
+  const currentUser    = await AuthUtils.authGetUser();
   const currentProfile = currentUser ? await AuthUtils.profileGet(currentUser.id) : null;
   await loadReviews(beach.id, currentUser, beaches);
   renderReviewForm(beach.id, currentUser, currentProfile, beaches);
 
-  // Update page title
   document.title = `${beach.name} | Praias Fluviais`;
 
   // Inject JSON-LD structured data
@@ -248,24 +225,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     "@type": "Beach",
     "name": beach.name,
     "description": beach.description,
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": beach.municipality,
-      "addressRegion": beach.district,
-      "addressCountry": "PT"
-    },
-    "geo": {
-      "@type": "GeoCoordinates",
-      "latitude": beach.coordinates.lat,
-      "longitude": beach.coordinates.lng
-    },
+    "address": { "@type": "PostalAddress", "addressLocality": beach.municipality, "addressRegion": beach.district, "addressCountry": "PT" },
+    "geo": { "@type": "GeoCoordinates", "latitude": beach.coordinates.lat, "longitude": beach.coordinates.lng },
     "image": beach.photos[0],
     "isAccessibleForFree": true,
     "publicAccess": true
   });
   document.head.appendChild(jsonLd);
 
-  // Update OG meta dynamically
   const setMeta = (prop, content) => {
     let el = document.querySelector(`meta[property="${prop}"]`);
     if (el) el.setAttribute('content', content);
@@ -274,13 +241,37 @@ document.addEventListener('DOMContentLoaded', async () => {
   setMeta('og:description', beach.description);
 });
 
+// ─── Medal display HTML for comments ─────────────────────────────────────────
+
+function medalDisplayHTML(topBadges) {
+  if (!topBadges || topBadges.length === 0) return '';
+  const TIER_META = AuthUtils.BADGE_TIERS;
+
+  return `<div class="flex items-center gap-1 flex-wrap mt-1">
+    ${topBadges.map(b => {
+      const tier = TIER_META[b.tier] || {};
+      const isRare = b.tier === 'diamante' || b.tier === 'platina';
+      const glowStyle = isRare ? `box-shadow:0 0 8px ${tier.glow};` : '';
+      const animClass = isRare ? 'medal-shimmer-anim' : '';
+      return `<span class="medal-chip-comment ${animClass} inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-display font-bold cursor-default"
+        title="${b.name} — ${b.desc}"
+        style="font-size:10px;background:${tier.hex}20;color:${tier.hex};border:1.5px solid ${tier.hex}55;${glowStyle}">
+        <i data-lucide="${b.icon}" style="width:10px;height:10px;flex-shrink:0;"></i>
+        ${b.name}
+      </span>`;
+    }).join('')}
+  </div>`;
+}
+
+// ─── Load Reviews ─────────────────────────────────────────────────────────────
+
 async function loadReviews(beachId, currentUser, beaches) {
   const container = document.getElementById('reviews-container');
   if (!container) return;
 
-  const reviews = await AuthUtils.reviewsGetForBeach(beachId);
+  const allReviews = await AuthUtils.reviewsGetForBeach(beachId);
 
-  if (reviews.length === 0) {
+  if (allReviews.length === 0) {
     container.innerHTML = `
       <div class="text-center py-8 text-praia-sand-400">
         <i data-lucide="message-circle" class="w-10 h-10 mx-auto mb-2 opacity-40"></i>
@@ -291,58 +282,210 @@ async function loadReviews(beachId, currentUser, beaches) {
     return;
   }
 
-  // Fetch badges for all unique reviewers in parallel
-  const uniqueUserIds = [...new Set(reviews.map(r => r.user_id).filter(Boolean))];
-  const badgeMap = {};
+  // Separate top-level and replies
+  const topLevel = allReviews.filter(r => !r.parent_id);
+  const replies  = allReviews.filter(r => !!r.parent_id);
+
+  // Fetch medals for all unique reviewers in parallel
+  const uniqueUserIds = [...new Set(allReviews.map(r => r.user_id).filter(Boolean))];
+  const medalMap = {};
   await Promise.all(uniqueUserIds.map(async uid => {
-    try { badgeMap[uid] = await AuthUtils.badgesGetForUser(uid, beaches); } catch { badgeMap[uid] = []; }
+    try { medalMap[uid] = await AuthUtils.badgesGetForUser(uid, beaches); } catch { medalMap[uid] = []; }
   }));
 
-  const TIER_COLORS = { bronze: '#CD7F32', prata: '#A8B8C8', ouro: '#FFD700', platina: '#B0C4DE', diamante: '#B9F2FF' };
-
-  container.innerHTML = reviews.map(r => {
-    const profile  = r.profiles;
-    const name     = profile?.username || 'Visitante';
-    const date     = new Date(r.created_at).toLocaleDateString('pt-PT');
-    const isOwn    = currentUser && r.user_id === currentUser.id;
-    const topBadges = badgeMap[r.user_id] || [];
-
-    const badgeIconsHtml = topBadges.length
-      ? `<span class="flex items-center gap-1 ml-1">${topBadges.map(b => {
-          const color = TIER_COLORS[b.tier] || '#888';
-          return `<span title="${b.name}" style="color:${color};display:inline-flex;align-items:center;" class="cursor-default"><i data-lucide="${b.icon}" style="width:12px;height:12px;"></i></span>`;
-        }).join('')}</span>`
-      : '';
+  function reviewCardHTML(r, isReply = false) {
+    const profile    = r.profiles;
+    const name       = profile?.username || 'Visitante';
+    const userId     = r.user_id;
+    const date       = new Date(r.created_at).toLocaleDateString('pt-PT');
+    const isOwn      = currentUser && userId === currentUser.id;
+    const topMedals  = medalMap[userId] || [];
+    const profileUrl = `perfil.html?user=${userId}`;
 
     const avatarSrc  = profile?.avatar_url;
     const avatarHtml = avatarSrc
-      ? `<img src="${avatarSrc}" alt="${name}" class="w-9 h-9 rounded-full object-cover border-2 border-praia-sand-100 flex-shrink-0">`
-      : `<div class="w-9 h-9 rounded-full bg-praia-teal-800 flex items-center justify-center flex-shrink-0 border-2 border-praia-sand-100">
-           <span class="font-display font-bold text-sm text-praia-yellow-400">${name.charAt(0).toUpperCase()}</span>
-         </div>`;
+      ? `<a href="${profileUrl}" class="flex-shrink-0"><img src="${avatarSrc}" alt="${name}" class="w-9 h-9 rounded-full object-cover border-2 border-praia-sand-100 hover:opacity-80 transition-opacity"></a>`
+      : `<a href="${profileUrl}" class="flex-shrink-0">
+           <div class="w-9 h-9 rounded-full bg-praia-teal-800 flex items-center justify-center border-2 border-praia-sand-100 hover:opacity-80 transition-opacity">
+             <span class="font-display font-bold text-sm text-praia-yellow-400">${name.charAt(0).toUpperCase()}</span>
+           </div>
+         </a>`;
+
+    const rareMedals  = topMedals.filter(b => b.tier === 'diamante' || b.tier === 'platina');
+    const hasMedals   = topMedals.length > 0;
+    const hasRare     = rareMedals.length > 0;
+
+    // Build medal display
+    const medalHtml = hasMedals ? medalDisplayHTML(topMedals) : '';
+
+    // Rare user indicator (border glow for high-tier users)
+    const rareBorderStyle = hasRare
+      ? `border:1.5px solid ${AuthUtils.BADGE_TIERS[rareMedals[0].tier]?.hex || 'transparent'}44;box-shadow:0 0 12px ${AuthUtils.BADGE_TIERS[rareMedals[0].tier]?.glow || 'transparent'};`
+      : '';
+
+    const replyButtonHtml = currentUser && !isReply
+      ? `<button onclick="toggleReplyForm('${r.id}', '${beachId}')"
+                 class="inline-flex items-center gap-1 text-[10px] font-display font-semibold text-praia-teal-500 hover:text-praia-teal-700 transition-colors mt-2">
+           <i data-lucide="corner-down-right" style="width:11px;height:11px;"></i> Responder
+         </button>`
+      : '';
+
+    // Replies for this comment
+    const commentReplies = replies.filter(reply => reply.parent_id === r.id);
+    const repliesHtml = commentReplies.length > 0
+      ? `<div class="mt-3 space-y-2 border-l-2 border-praia-sand-200 pl-4">
+           ${commentReplies.map(reply => reviewCardHTML(reply, true)).join('')}
+         </div>`
+      : '';
 
     return `
-      <div class="bg-white rounded-xl p-4 shadow-layered" data-review-id="${r.id}">
-        <div class="flex items-start gap-3 mb-3">
+      <div class="bg-white rounded-xl p-4 shadow-layered ${isReply ? 'shadow-none border border-praia-sand-100 rounded-lg' : ''}" data-review-id="${r.id}" style="${rareBorderStyle}">
+        <div class="flex items-start gap-3">
           ${avatarHtml}
           <div class="flex-1 min-w-0">
             <div class="flex items-center flex-wrap gap-1.5">
-              <span class="font-display text-xs font-bold text-praia-teal-800">${name}</span>
-              ${badgeIconsHtml}
-              <span class="text-[10px] text-praia-sand-400 ml-1">${date}</span>
+              <a href="${profileUrl}" class="font-display text-xs font-bold text-praia-teal-800 hover:text-praia-teal-600 transition-colors">${name}</a>
+              <span class="text-[10px] text-praia-sand-400">${date}</span>
             </div>
+            ${medalHtml}
+            <p class="text-sm text-praia-sand-700 leading-relaxed mt-2">${r.text}</p>
+            ${r.images?.length ? `<div class="flex flex-wrap gap-2 mt-3">${r.images.map(img => `<img src="${img}" alt="Anexo" class="max-h-32 max-w-[160px] object-contain rounded-lg border border-praia-sand-100 cursor-pointer hover:opacity-90 transition-opacity" onclick="openImageViewer(this.src)">`).join('')}</div>` : ''}
+            <div class="flex items-center gap-3 mt-1">
+              ${replyButtonHtml}
+            </div>
+            <div id="reply-form-${r.id}" class="hidden mt-3"></div>
           </div>
           ${isOwn ? `<button onclick="deleteReview('${r.id}', '${beachId}')" class="flex-shrink-0 text-praia-sand-300 hover:text-red-400 transition-colors p-1" title="Apagar comentário">
             <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
           </button>` : ''}
         </div>
-        <p class="text-sm text-praia-sand-700 leading-relaxed">${r.text}</p>
-        ${r.images?.length ? `<div class="flex flex-wrap gap-2 mt-3">${r.images.map(img => `<img src="${img}" class="w-20 h-20 object-cover rounded-lg border border-praia-sand-100 cursor-pointer hover:opacity-90 transition-opacity" onclick="this.requestFullscreen&&this.requestFullscreen()">`).join('')}</div>` : ''}
+        ${repliesHtml}
       </div>`;
-  }).join('');
+  }
 
+  container.innerHTML = topLevel.map(r => reviewCardHTML(r, false)).join('');
   lucide.createIcons();
+
+  // Inject medal shimmer CSS once
+  if (!document.getElementById('medal-anim-style')) {
+    const style = document.createElement('style');
+    style.id = 'medal-anim-style';
+    style.textContent = `
+      @keyframes medalShimmer {
+        0%   { background-position: -200% center; }
+        100% { background-position:  200% center; }
+      }
+      .medal-shimmer-anim {
+        animation: medalShimmer 2.5s linear infinite;
+        background-image: linear-gradient(105deg, currentColor 40%, rgba(255,255,255,0.5) 50%, currentColor 60%) !important;
+        background-size: 200% 100%;
+      }
+    `;
+    document.head.appendChild(style);
+  }
 }
+
+// ─── Toggle Reply Form ────────────────────────────────────────────────────────
+
+async function toggleReplyForm(parentId, beachId) {
+  const container = document.getElementById(`reply-form-${parentId}`);
+  if (!container) return;
+
+  if (!container.classList.contains('hidden')) {
+    container.classList.add('hidden');
+    container.innerHTML = '';
+    return;
+  }
+
+  const user    = await AuthUtils.authGetUser();
+  const profile = user ? await AuthUtils.profileGet(user.id) : null;
+  const name    = profile?.username || user?.email?.split('@')[0] || 'U';
+  const avatarHtml = profile?.avatar_url
+    ? `<img src="${profile.avatar_url}" alt="${name}" class="w-7 h-7 rounded-full object-cover border border-praia-sand-200 flex-shrink-0">`
+    : `<div class="w-7 h-7 rounded-full bg-praia-teal-800 flex items-center justify-center flex-shrink-0"><span class="font-display font-bold text-xs text-praia-yellow-400">${name.charAt(0).toUpperCase()}</span></div>`;
+
+  container.classList.remove('hidden');
+  container.innerHTML = `
+    <div class="flex items-start gap-2">
+      ${avatarHtml}
+      <div class="flex-1">
+        <textarea id="reply-text-${parentId}" rows="2" placeholder="Responder a este comentário…"
+                  class="w-full p-2.5 rounded-lg bg-praia-sand-50 border border-praia-sand-200 text-sm resize-none focus:outline-none focus:border-praia-teal-400"></textarea>
+        <div class="flex items-center justify-between mt-2 gap-2">
+          <div>
+            <input type="file" id="reply-images-${parentId}" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,image/heic,image/heif" multiple class="hidden"
+                   onchange="previewReplyImages('${parentId}')">
+            <label for="reply-images-${parentId}" class="inline-flex items-center gap-1.5 cursor-pointer text-xs font-display font-semibold text-praia-teal-600 border border-praia-sand-200 bg-white px-3 py-1.5 rounded-full hover:border-praia-teal-400 transition-colors">
+              <i data-lucide="image" class="w-3 h-3"></i> Foto
+            </label>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="toggleReplyForm('${parentId}', '${beachId}')"
+                    class="text-xs font-display font-semibold text-praia-sand-400 hover:text-praia-sand-600 transition-colors px-3 py-1.5 rounded-lg">
+              Cancelar
+            </button>
+            <button onclick="submitReply('${parentId}', '${beachId}')"
+                    class="btn-primary bg-praia-teal-800 text-praia-yellow-400 font-display font-bold text-xs uppercase tracking-wider px-4 py-1.5 rounded-lg">
+              Publicar
+            </button>
+          </div>
+        </div>
+        <div id="reply-preview-${parentId}" class="flex gap-2 mt-2 flex-wrap"></div>
+      </div>
+    </div>`;
+  lucide.createIcons();
+  document.getElementById(`reply-text-${parentId}`)?.focus();
+}
+
+function previewReplyImages(parentId) {
+  const input   = document.getElementById(`reply-images-${parentId}`);
+  const preview = document.getElementById(`reply-preview-${parentId}`);
+  if (!input || !preview) return;
+  preview.innerHTML = '';
+  Array.from(input.files).forEach(file => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = document.createElement('img');
+      img.src = e.target.result;
+      img.className = 'w-14 h-14 object-cover rounded-lg border border-praia-sand-200 cursor-pointer';
+      img.onclick = () => openImageViewer(img.src);
+      preview.appendChild(img);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function submitReply(parentId, beachId) {
+  const user = await AuthUtils.authGetUser();
+  if (!user) return;
+
+  const textarea = document.getElementById(`reply-text-${parentId}`);
+  const text = textarea?.value?.trim();
+  if (!text) { textarea?.focus(); return; }
+
+  const fileInput = document.getElementById(`reply-images-${parentId}`);
+  const imageUrls = [];
+  if (fileInput?.files?.length) {
+    for (const file of fileInput.files) {
+      const dataUrl = await new Promise(resolve => {
+        const reader = new FileReader();
+        reader.onload = e => resolve(e.target.result);
+        reader.readAsDataURL(file);
+      });
+      imageUrls.push(dataUrl);
+    }
+  }
+
+  const ok = await AuthUtils.reviewSubmitReply(user.id, beachId, text, parentId, imageUrls);
+  if (!ok) { alert('Erro ao publicar resposta. Tente novamente.'); return; }
+
+  let beaches = [];
+  try { beaches = await (await fetch('data/beaches.json')).json(); } catch {}
+  await loadReviews(beachId, user, beaches);
+  renderReviewForm(beachId, user, await AuthUtils.profileGet(user.id), beaches);
+}
+
+// ─── Render Review Form ────────────────────────────────────────────────────────
 
 function renderReviewForm(beachId, user, profile, beaches) {
   const area = document.getElementById('review-form-area');
@@ -369,7 +512,7 @@ function renderReviewForm(beachId, user, profile, beaches) {
     return;
   }
 
-  const name    = profile?.username || user.email?.split('@')[0] || 'U';
+  const name       = profile?.username || user.email?.split('@')[0] || 'U';
   const avatarHtml = profile?.avatar_url
     ? `<img src="${profile.avatar_url}" alt="${name}" class="w-9 h-9 rounded-full object-cover border-2 border-praia-sand-200 flex-shrink-0">`
     : `<div class="w-9 h-9 rounded-full bg-praia-teal-800 flex items-center justify-center flex-shrink-0"><span class="font-display font-bold text-sm text-praia-yellow-400">${name.charAt(0).toUpperCase()}</span></div>`;
@@ -384,9 +527,9 @@ function renderReviewForm(beachId, user, profile, beaches) {
                 class="w-full p-3 rounded-lg bg-white border border-praia-sand-200 text-sm resize-none focus:outline-none focus:border-praia-teal-400 mb-3"></textarea>
       <div class="flex items-center justify-between gap-3">
         <div>
-          <input type="file" id="review-images" accept="image/*" multiple class="hidden">
+          <input type="file" id="review-images" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,image/heic,image/heif" multiple class="hidden">
           <label for="review-images" class="inline-flex items-center gap-2 cursor-pointer text-xs font-display font-semibold text-praia-teal-600 border border-praia-sand-200 bg-white px-4 py-2 rounded-full hover:border-praia-teal-400 transition-colors">
-            <i data-lucide="image" class="w-3.5 h-3.5"></i> Fotos
+            <i data-lucide="image" class="w-3.5 h-3.5"></i> Fotos/Vídeos
           </label>
         </div>
         <button id="review-submit-btn" onclick="submitReview('${beachId}')"
@@ -406,7 +549,8 @@ function renderReviewForm(beachId, user, profile, beaches) {
       reader.onload = e => {
         const img = document.createElement('img');
         img.src = e.target.result;
-        img.className = 'w-16 h-16 object-cover rounded-lg border border-praia-sand-200';
+        img.className = 'w-16 h-16 object-cover rounded-lg border border-praia-sand-200 cursor-pointer';
+        img.onclick = () => openImageViewer(img.src);
         preview.appendChild(img);
       };
       reader.readAsDataURL(file);
@@ -415,6 +559,8 @@ function renderReviewForm(beachId, user, profile, beaches) {
 
   lucide.createIcons();
 }
+
+// ─── Submit Review ────────────────────────────────────────────────────────────
 
 async function submitReview(beachId) {
   const user = await AuthUtils.authGetUser();
@@ -427,12 +573,10 @@ async function submitReview(beachId) {
   const btn = document.getElementById('review-submit-btn');
   if (btn) { btn.disabled = true; btn.textContent = 'A publicar…'; }
 
-  // Upload images to Supabase Storage if any
   const fileInput = document.getElementById('review-images');
   const imageUrls = [];
   if (fileInput?.files?.length) {
     for (const file of fileInput.files) {
-      // Convert to data URL for storage (simple approach; production would use Storage)
       const dataUrl = await new Promise(resolve => {
         const reader = new FileReader();
         reader.onload = e => resolve(e.target.result);
@@ -453,26 +597,26 @@ async function submitReview(beachId) {
   const preview = document.getElementById('review-image-preview');
   if (preview) preview.innerHTML = '';
 
-  // Reload reviews + check for badge unlocks
   const profile = await AuthUtils.profileGet(user.id);
   let beaches = [];
   try { beaches = await (await fetch('data/beaches.json')).json(); } catch {}
   await loadReviews(beachId, user, beaches);
 
-  // Badge check
+  // Badge check with localStorage fix
   try {
     const stamps  = await AuthUtils.stampsGetAll(user.id);
     const reviews = await AuthUtils.reviewsGetForUser(user.id);
     const voted   = !!(await AuthUtils.voteGet(user.id, new Date().getFullYear()));
     const badges  = AuthUtils.badgesCompute({ stamps, reviews, voted, beaches });
     const storageKey = `badges_${user.id}`;
-    const prevEarned = new Set(JSON.parse(sessionStorage.getItem(storageKey) || '[]'));
-    badges.filter(b => b.earned && !prevEarned.has(b.id))
-      .slice(0, 2)
-      .forEach((badge, i) => setTimeout(() => AuthUtils.celebrateBadge(badge), i * 1800 + 500));
-    sessionStorage.setItem(storageKey, JSON.stringify(badges.filter(b => b.earned).map(b => b.id)));
+    const prevEarned = new Set(JSON.parse(localStorage.getItem(storageKey) || '[]'));
+    const newBadges  = badges.filter(b => b.earned && !prevEarned.has(b.id));
+    newBadges.slice(0, 2).forEach((badge, i) => setTimeout(() => AuthUtils.celebrateBadge(badge), i * 1800 + 500));
+    localStorage.setItem(storageKey, JSON.stringify(badges.filter(b => b.earned).map(b => b.id)));
   } catch {}
 }
+
+// ─── Delete Review ────────────────────────────────────────────────────────────
 
 async function deleteReview(reviewId, beachId) {
   if (!confirm('Tem a certeza que quer apagar este comentário?')) return;
@@ -486,11 +630,44 @@ async function deleteReview(reviewId, beachId) {
   }
 }
 
+// ─── Image Viewer ─────────────────────────────────────────────────────────────
+
+function openImageViewer(src) {
+  const existing = document.getElementById('image-viewer-overlay');
+  if (existing) existing.remove();
+
+  const overlay = document.createElement('div');
+  overlay.id = 'image-viewer-overlay';
+  overlay.style.cssText = `
+    position: fixed; inset: 0; z-index: 9999;
+    background: rgba(0,0,0,0.92); backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center; padding: 16px;
+  `;
+  overlay.innerHTML = `
+    <button id="img-viewer-close"
+            style="position:absolute;top:16px;right:16px;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);cursor:pointer;display:flex;align-items:center;justify-content:center;color:white;z-index:10;font-size:18px;line-height:1;"
+            aria-label="Fechar">
+      ✕
+    </button>
+    <img src="${src}" alt="Imagem em tamanho real"
+         style="max-width:min(100%,900px);max-height:90vh;object-fit:contain;border-radius:8px;"
+         onclick="event.stopPropagation()">
+  `;
+
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+  overlay.querySelector('#img-viewer-close').addEventListener('click', () => overlay.remove());
+  document.body.appendChild(overlay);
+
+  document.addEventListener('keydown', function handler(e) {
+    if (e.key === 'Escape') { overlay.remove(); document.removeEventListener('keydown', handler); }
+  });
+}
+
+// ─── Share ────────────────────────────────────────────────────────────────────
+
 async function shareBeach() {
   if (navigator.share) {
-    try {
-      await navigator.share({ title: document.title, url: window.location.href });
-    } catch {}
+    try { await navigator.share({ title: document.title, url: window.location.href }); } catch {}
   } else {
     await navigator.clipboard.writeText(window.location.href);
     alert('Link copiado!');
@@ -506,28 +683,24 @@ async function shareInstagram() {
   }
 }
 
+// ─── Carousel ─────────────────────────────────────────────────────────────────
+
 function initCarousel(count) {
   if (count <= 1) return;
 
   const slides = document.querySelectorAll('.carousel-slide');
-  const dots = document.querySelectorAll('.carousel-dot');
-  let current = 0;
+  const dots   = document.querySelectorAll('.carousel-dot');
+  let current  = 0;
   let timer;
 
   function goTo(idx) {
     slides[current].classList.remove('opacity-100');
     slides[current].classList.add('opacity-0');
-    if (dots[current]) {
-      dots[current].classList.remove('bg-white', 'w-4');
-      dots[current].classList.add('bg-white/40', 'w-1.5');
-    }
+    if (dots[current]) { dots[current].classList.remove('bg-white', 'w-4'); dots[current].classList.add('bg-white/40', 'w-1.5'); }
     current = ((idx % count) + count) % count;
     slides[current].classList.remove('opacity-0');
     slides[current].classList.add('opacity-100');
-    if (dots[current]) {
-      dots[current].classList.remove('bg-white/40', 'w-1.5');
-      dots[current].classList.add('bg-white', 'w-4');
-    }
+    if (dots[current]) { dots[current].classList.remove('bg-white/40', 'w-1.5'); dots[current].classList.add('bg-white', 'w-4'); }
   }
 
   function startTimer() {

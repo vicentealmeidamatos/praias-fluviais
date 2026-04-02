@@ -47,35 +47,11 @@ const ALL_SERVICES = [
 
 const DEFAULT_SERVICES = Object.fromEntries(ALL_SERVICES.map(s => [s.key, false]));
 
-// ─── Auth ───
+// ─── Auth ─── Password is fixed: "Johnny Bravo" ───────────────────────────────
 function checkAuth() {
-  const hash = localStorage.getItem('admin_password_hash');
-  if (!hash) { showSetupPassword(); return false; }
   if (sessionStorage.getItem('admin_authenticated') === 'true') return true;
   showLogin();
   return false;
-}
-
-function showSetupPassword() {
-  document.getElementById('admin-app').innerHTML = `
-    <div class="flex items-center justify-center min-h-screen bg-praia-sand-50">
-      <div class="bg-white rounded-2xl shadow-layered-lg p-8 max-w-md w-full mx-4 admin-form">
-        <div class="text-center mb-6">
-          <img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-10 mx-auto mb-4" style="filter: brightness(0) saturate(100%) invert(14%) sepia(59%) saturate(2000%) hue-rotate(160deg);">
-          <h1 class="font-display text-xl font-bold text-praia-teal-800">Configurar Painel Admin</h1>
-          <p class="text-sm text-praia-sand-500 mt-2">Defina uma password para aceder ao painel.</p>
-        </div>
-        <form onsubmit="event.preventDefault(); setupPassword();">
-          <label>Password</label>
-          <input type="password" id="setup-pass" required minlength="4" placeholder="Mínimo 4 caracteres">
-          <div class="h-3"></div>
-          <label>Confirmar Password</label>
-          <input type="password" id="setup-pass-confirm" required placeholder="Repita a password">
-          <div class="h-6"></div>
-          <button type="submit" class="admin-btn admin-btn-primary w-full py-3">Criar Password</button>
-        </form>
-      </div>
-    </div>`;
 }
 
 function showLogin() {
@@ -85,12 +61,13 @@ function showLogin() {
         <div class="text-center mb-6">
           <img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-10 mx-auto mb-4" style="filter: brightness(0) saturate(100%) invert(14%) sepia(59%) saturate(2000%) hue-rotate(160deg);">
           <h1 class="font-display text-xl font-bold text-praia-teal-800">Painel de Administração</h1>
+          <p class="text-sm text-praia-sand-500 mt-2">Acesso restrito.</p>
         </div>
         <form onsubmit="event.preventDefault(); loginAdmin();">
           <label>Password</label>
           <input type="password" id="login-pass" required placeholder="Introduza a password">
           <div class="h-1"></div>
-          <p id="login-error" class="text-sm text-red-500 hidden">Password incorreta.</p>
+          <p id="login-error" class="text-sm text-red-500 hidden font-semibold">Password incorreta. Tente novamente.</p>
           <div class="h-4"></div>
           <button type="submit" class="admin-btn admin-btn-primary w-full py-3">Entrar</button>
         </form>
@@ -104,24 +81,21 @@ async function simpleHash(str) {
   return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-async function setupPassword() {
-  const pass = document.getElementById('setup-pass').value;
-  const confirm = document.getElementById('setup-pass-confirm').value;
-  if (pass !== confirm) { toast('As passwords não coincidem.', 'error'); return; }
-  const hash = await simpleHash(pass);
-  localStorage.setItem('admin_password_hash', hash);
-  sessionStorage.setItem('admin_authenticated', 'true');
-  initDashboard();
-}
-
 async function loginAdmin() {
   const pass = document.getElementById('login-pass').value;
-  const hash = await simpleHash(pass);
-  if (hash === localStorage.getItem('admin_password_hash')) {
+  const inputHash   = await simpleHash(pass);
+  const correctHash = await simpleHash('Johnny Bravo');
+  if (inputHash === correctHash) {
     sessionStorage.setItem('admin_authenticated', 'true');
     initDashboard();
   } else {
-    document.getElementById('login-error')?.classList.remove('hidden');
+    const errEl = document.getElementById('login-error');
+    if (errEl) {
+      errEl.classList.remove('hidden');
+      errEl.style.animation = 'none';
+      void errEl.offsetWidth;
+      errEl.style.animation = 'shake 0.4s ease';
+    }
   }
 }
 

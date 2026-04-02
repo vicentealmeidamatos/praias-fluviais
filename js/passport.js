@@ -59,9 +59,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch {}
   }
 
-  // ── Previous badge state ────────────────────────────────────────────────────
-  const storageKey = user ? `badges_${user.id}` : 'badges_guest';
-  const prevEarned = new Set(JSON.parse(sessionStorage.getItem(storageKey) || '[]'));
+  // ── Previous badge state (localStorage persists across sessions) ─────────────
+  const storageKey  = user ? `badges_${user.id}` : 'badges_guest';
+  const _storedRaw  = localStorage.getItem(storageKey);
+  // isFirstPageLoad: if no localStorage entry exists yet, don't auto-celebrate on load
+  let   isFirstPageLoad = _storedRaw === null;
+  let   prevEarned = new Set(JSON.parse(_storedRaw || '[]'));
 
   function getComputedBadges() {
     const stamps = Object.keys(stampMap).map(beach_id => ({
@@ -155,15 +158,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     grid.innerHTML = sorted.map(b => badgeCardHTML(b)).join('');
     lucide.createIcons();
 
-    // Badge unlock celebrations
+    // Badge unlock celebrations — only for genuinely new badges, never on first page load
     const earnedNow = new Set(computed.filter(b => b.earned).map(b => b.id));
-    const newBadges = computed.filter(b => b.earned && !prevEarned.has(b.id));
+    const newBadges = isFirstPageLoad
+      ? [] // Suppress celebrations on very first load to avoid showing all at once
+      : computed.filter(b => b.earned && !prevEarned.has(b.id));
+
     if (newBadges.length > 0) {
       newBadges.slice(0, 3).forEach((badge, i) => {
         setTimeout(() => celebrateBadge(badge), i * 1800 + 600);
       });
     }
-    sessionStorage.setItem(storageKey, JSON.stringify([...earnedNow]));
+
+    // Persist to localStorage and update in-memory state for next call
+    localStorage.setItem(storageKey, JSON.stringify([...earnedNow]));
+    prevEarned = earnedNow;
+    isFirstPageLoad = false;
   }
 
   // ── Toggle Stamp ─────────────────────────────────────────────────────────────
