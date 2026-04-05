@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const voteData    = await (voteGetFull ? voteGetFull(targetUserId, currentYear) : voteGet(targetUserId, currentYear).then(v => v ? { beach_id: v, is_public: true } : null));
   const votedBeachId = voteData?.beach_id || null;
   const voteIsPublic = voteData?.is_public !== false; // default true
+  let _currentVotePublic = voteIsPublic;
 
   // ── Compute badges ──────────────────────────────────────────────────────────
   const computedBadges = badgesCompute({
@@ -68,6 +69,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     tierBar.innerHTML = Object.entries(BADGE_TIERS).map(([key, t]) => {
       const c = tierCounts[key] || 0;
       if (!c) return '';
+      if (key === 'mitico') {
+        return `<span class="badge-rainbow inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-display font-bold" style="background:#003A40;color:${t.hex};border:1px solid ${t.hex}80;">
+          ${c}× ${t.label}
+        </span>`;
+      }
       return `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-display font-bold" style="background:${t.hex}22;color:${t.hex};border:1px solid ${t.hex}44;">
         ${c}× ${t.label}
       </span>`;
@@ -253,12 +259,43 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   renderVote();
 
+  // ── Hero vote privacy indicator ────────────────────────────────────────────
+  function renderHeroVotePrivacy(isPublic) {
+    const el = document.getElementById('stat-vote-privacy');
+    if (!el || !isOwnProfile || !votedBeachId) return;
+    el.innerHTML = `
+      <button id="hero-vote-privacy-btn"
+              class="inline-flex items-center justify-center gap-0.5 text-[9px] font-display font-semibold uppercase tracking-wider transition-all duration-200 ${isPublic ? 'text-white/25 hover:text-white/50' : 'text-praia-yellow-400/60 hover:text-praia-yellow-400'}"
+              title="${isPublic ? 'Voto público — clique para tornar privado' : 'Voto privado — clique para tornar público'}">
+        <i data-lucide="${isPublic ? 'globe' : 'lock'}" class="w-2.5 h-2.5"></i>
+        <span>${isPublic ? 'Público' : 'Privado'}</span>
+      </button>`;
+    document.getElementById('hero-vote-privacy-btn')?.addEventListener('click', async () => {
+      _currentVotePublic = !_currentVotePublic;
+      await AuthUtils.voteUpdatePublic(currentUser.id, currentYear, _currentVotePublic);
+      renderHeroVotePrivacy(_currentVotePublic);
+      // Sync vote panel buttons if visible
+      const pubBtn  = document.getElementById('vote-public-btn');
+      const privBtn = document.getElementById('vote-private-btn');
+      if (pubBtn && privBtn) {
+        const onCls  = 'bg-praia-teal-800 text-praia-yellow-400';
+        const offCls = 'bg-white border border-praia-sand-200 text-praia-sand-500 hover:border-praia-teal-400';
+        pubBtn.className  = pubBtn.className.replace(_currentVotePublic ? offCls : onCls, _currentVotePublic ? onCls : offCls);
+        privBtn.className = privBtn.className.replace(!_currentVotePublic ? offCls : onCls, !_currentVotePublic ? onCls : offCls);
+      }
+      lucide.createIcons();
+    });
+    lucide.createIcons();
+  }
+  renderHeroVotePrivacy(_currentVotePublic);
+
   // ── Set vote public/private ───────────────────────────────────────────────
   window.setVotePublic = async function(isPublic) {
     if (!currentUser) return;
+    _currentVotePublic = isPublic;
     const ok = await AuthUtils.voteUpdatePublic(currentUser.id, currentYear, isPublic);
     if (ok) {
-      // Update button states
+      // Update vote panel buttons
       const pubBtn  = document.getElementById('vote-public-btn');
       const privBtn = document.getElementById('vote-private-btn');
       if (pubBtn && privBtn) {
@@ -267,6 +304,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         pubBtn.className  = pubBtn.className.replace(isPublic ? offCls : onCls, isPublic ? onCls : offCls);
         privBtn.className = privBtn.className.replace(!isPublic ? offCls : onCls, !isPublic ? onCls : offCls);
       }
+      // Sync hero indicator
+      renderHeroVotePrivacy(isPublic);
     }
   };
 
@@ -285,6 +324,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (avatarWrap && profile?.avatar_url) {
       avatarWrap.innerHTML = `<img src="${profile.avatar_url}" alt="Avatar" class="w-20 h-20 rounded-full object-cover border-2 border-praia-yellow-400">`;
     }
+    // Clear password fields
+    document.getElementById('edit-current-password').value = '';
+    document.getElementById('edit-new-password').value = '';
+    document.getElementById('edit-confirm-password').value = '';
+    document.getElementById('edit-password-msg')?.classList.add('hidden');
+    // Hide password section for OAuth-only users (Google login)
+    const provider = currentUser?.app_metadata?.provider;
+    const isOAuthOnly = provider === 'google' || provider === 'github';
+    const pwWrap = document.getElementById('edit-password-wrap');
+    if (pwWrap) pwWrap.classList.toggle('hidden', isOAuthOnly);
+
     lucide.createIcons();
     requestAnimationFrame(() => {
       const inner = document.getElementById('edit-modal-inner');
@@ -334,8 +384,169 @@ document.addEventListener('DOMContentLoaded', async () => {
     btn.textContent = 'A guardar…';
     btn.disabled = true;
 
-    await profileUpsert(currentUser.id, { username: newUsername });
-    window.location.reload();
+    try {
+      await profileUpsert(currentUser.id, { username: newUsername });
+      // Invalidate nav cache so header shows new username immediately
+      try {
+        const cache = JSON.parse(localStorage.getItem('gpf_nav_v1') || 'null');
+        if (cache) {
+          cache.username = newUsername;
+          localStorage.setItem('gpf_nav_v1', JSON.stringify(cache));
+        }
+      } catch {}
+      window.location.reload();
+    } catch (err) {
+      btn.textContent = 'Guardar Nome';
+      btn.disabled = false;
+      const msg = err?.message || '';
+      if (msg.includes('unique') || msg.includes('duplicate') || msg.includes('profiles_username_key')) {
+        alert('Este nome de utilizador já está em uso. Escolha outro.');
+      } else {
+        alert('Erro ao guardar o nome. Tente novamente.');
+      }
+    }
+  };
+
+  // Email change countdown
+  let _emailResendInterval = null;
+  let _pendingNewEmail = '';
+
+  function startEmailResendCountdown(seconds = 60) {
+    const btn   = document.getElementById('edit-email-resend-btn');
+    const label = document.getElementById('edit-email-resend-label');
+    if (!btn || !label) return;
+    btn.disabled = true;
+    let remaining = seconds;
+    label.textContent = `Reenviar em ${remaining}s`;
+    clearInterval(_emailResendInterval);
+    _emailResendInterval = setInterval(() => {
+      remaining--;
+      if (remaining <= 0) {
+        clearInterval(_emailResendInterval);
+        btn.disabled = false;
+        label.textContent = 'Reenviar email';
+      } else {
+        label.textContent = `Reenviar em ${remaining}s`;
+      }
+    }, 1000);
+  }
+
+  window.resendEmailChange = async function () {
+    if (!_pendingNewEmail) return;
+    const btn   = document.getElementById('edit-email-resend-btn');
+    const label = document.getElementById('edit-email-resend-label');
+    if (btn) btn.disabled = true;
+    if (label) label.textContent = 'A enviar…';
+    await _sb.auth.updateUser({ email: _pendingNewEmail });
+    startEmailResendCountdown(60);
+    lucide.createIcons();
+  };
+
+  window.cancelEmailChange = function () {
+    clearInterval(_emailResendInterval);
+    _pendingNewEmail = '';
+    document.getElementById('edit-email-success').classList.add('hidden');
+    document.getElementById('edit-email-form').classList.remove('hidden');
+    document.getElementById('edit-new-email').value = '';
+  };
+
+  // Save email
+  window.saveProfileEmail = async function () {
+    const newEmail = document.getElementById('edit-new-email').value.trim();
+    const errEl = document.getElementById('edit-email-error');
+    const btn = document.getElementById('edit-email-btn');
+    if (!newEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) {
+      errEl.textContent = 'Introduza um email válido.';
+      errEl.classList.remove('hidden');
+      return;
+    }
+    if (newEmail.toLowerCase() === (currentUser?.email || '').toLowerCase()) {
+      errEl.textContent = 'O novo email não pode ser igual ao email atual.';
+      errEl.classList.remove('hidden');
+      return;
+    }
+    errEl.classList.add('hidden');
+    btn.textContent = 'A enviar…';
+    btn.disabled = true;
+    const { error } = await _sb.auth.updateUser({
+      email: newEmail,
+      options: { emailRedirectTo: `${location.origin}/auth.html` },
+    });
+    btn.textContent = 'Alterar Email';
+    btn.disabled = false;
+    if (error) {
+      errEl.textContent = 'Erro: ' + (error.message || 'Tente novamente.');
+      errEl.classList.remove('hidden');
+    } else {
+      _pendingNewEmail = newEmail;
+      document.getElementById('edit-email-form').classList.add('hidden');
+      document.getElementById('edit-email-sent-to').textContent = newEmail;
+      document.getElementById('edit-email-success').classList.remove('hidden');
+      startEmailResendCountdown(60);
+      lucide.createIcons();
+    }
+  };
+
+  // Save password
+  window.saveProfilePassword = async function () {
+    const currentPw = document.getElementById('edit-current-password').value;
+    const newPw     = document.getElementById('edit-new-password').value;
+    const confPw    = document.getElementById('edit-confirm-password').value;
+    const msg = document.getElementById('edit-password-msg');
+    const btn = document.getElementById('edit-password-btn');
+    if (!currentPw) {
+      msg.textContent = 'Introduza a sua palavra-passe atual.';
+      msg.className = 'text-[11px] text-red-400 mt-2';
+      msg.classList.remove('hidden');
+      return;
+    }
+    if (newPw.length < 6) {
+      msg.textContent = 'A nova palavra-passe deve ter pelo menos 6 caracteres.';
+      msg.className = 'text-[11px] text-red-400 mt-2';
+      msg.classList.remove('hidden');
+      return;
+    }
+    if (currentPw === newPw) {
+      msg.textContent = 'A nova palavra-passe não pode ser igual à atual.';
+      msg.className = 'text-[11px] text-red-400 mt-2';
+      msg.classList.remove('hidden');
+      return;
+    }
+    if (newPw !== confPw) {
+      msg.textContent = 'As palavras-passe não coincidem.';
+      msg.className = 'text-[11px] text-red-400 mt-2';
+      msg.classList.remove('hidden');
+      return;
+    }
+    btn.textContent = 'A guardar…';
+    btn.disabled = true;
+    // Verify current password by re-authenticating
+    const { error: signInErr } = await _sb.auth.signInWithPassword({
+      email: currentUser.email,
+      password: currentPw,
+    });
+    if (signInErr) {
+      btn.textContent = 'Alterar Palavra-passe';
+      btn.disabled = false;
+      msg.textContent = 'Palavra-passe atual incorreta.';
+      msg.className = 'text-[11px] text-red-400 mt-2';
+      msg.classList.remove('hidden');
+      return;
+    }
+    const { error } = await _sb.auth.updateUser({ password: newPw });
+    btn.textContent = 'Alterar Palavra-passe';
+    btn.disabled = false;
+    if (error) {
+      msg.textContent = 'Erro: ' + (error.message || 'Tente novamente.');
+      msg.className = 'text-[11px] text-red-400 mt-2';
+    } else {
+      msg.textContent = 'Palavra-passe alterada com sucesso.';
+      msg.className = 'text-[11px] text-green-400 mt-2';
+      document.getElementById('edit-current-password').value = '';
+      document.getElementById('edit-new-password').value = '';
+      document.getElementById('edit-confirm-password').value = '';
+    }
+    msg.classList.remove('hidden');
   };
 
   let _editPreviewFile = null;

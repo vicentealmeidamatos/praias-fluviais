@@ -40,7 +40,8 @@ async function profileUpsert(userId, fields) {
   const { error } = await _sb
     .from('profiles')
     .upsert({ id: userId, ...fields }, { onConflict: 'id' });
-  return !error;
+  if (error) throw error;
+  return true;
 }
 
 async function profileUploadAvatar(userId, file) {
@@ -313,6 +314,24 @@ async function getEmailByUsername(username) {
   return data?.email || null;
 }
 
+async function checkEmailExists(email) {
+  const { data } = await _sb
+    .from('profiles')
+    .select('id')
+    .eq('email', email)
+    .maybeSingle();
+  return !!data;
+}
+
+async function checkUsernameExists(username) {
+  const { data } = await _sb
+    .from('profiles')
+    .select('id')
+    .eq('username', username)
+    .maybeSingle();
+  return !!data;
+}
+
 // ─── Avatar Helper ────────────────────────────────────────────────────────────
 
 function avatarHTML(profile, sizePx = 32) {
@@ -536,8 +555,9 @@ async function initHeaderAuth() {
   const slot = document.getElementById('header-auth-slot');
   if (!slot) return;
 
-  // Avatar already rendered from cache synchronously in the IIFE above.
-  // Here we only verify the session and refresh profile data in background.
+  // Capture pre-existing cache BEFORE any async calls or writes
+  const oldCache = (() => { try { return JSON.parse(localStorage.getItem(_NAV_CACHE_KEY)); } catch { return null; } })();
+  const hadCache = !!oldCache;
 
   const { data: { session } } = await _sb.auth.getSession();
 
@@ -554,8 +574,8 @@ async function initHeaderAuth() {
     return;
   }
 
-  // Bind dropdown now that we confirmed session (IIFE deferred this)
-  _bindHeaderDropdown();
+  // If IIFE already rendered from cache, bind the dropdown now
+  if (hadCache) _bindHeaderDropdown();
 
   // Verify token + refresh profile
   const [user, profile] = await Promise.all([authGetUser(), profileGet(session.user.id)]);
@@ -578,10 +598,11 @@ async function initHeaderAuth() {
     username: name, email: user.email || '', avatar_url: profile?.avatar_url || null,
   }));
 
-  // Re-render only if data changed (e.g. avatar updated)
-  const cache = (() => { try { return JSON.parse(localStorage.getItem(_NAV_CACHE_KEY)); } catch { return null; } })();
-  const avatarChanged = cache?.avatar_url !== profile?.avatar_url;
-  if (avatarChanged) {
+  // Render if: no prior cache (new session/registration), or data changed
+  const dataChanged = !hadCache
+    || oldCache.avatar_url !== (profile?.avatar_url || null)
+    || oldCache.username   !== name;
+  if (dataChanged) {
     slot.innerHTML = _buildHeaderUserHTML(name, user.email, profile?.avatar_url);
     lucide.createIcons();
     _bindHeaderDropdown();
@@ -685,6 +706,8 @@ window.AuthUtils = {
   profileUpsert,
   profileUploadAvatar,
   getEmailByUsername,
+  checkEmailExists,
+  checkUsernameExists,
   stampsGetAll,
   stampAdd,
   stampRemove,

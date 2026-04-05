@@ -308,8 +308,15 @@
           <i data-lucide="mail-check" class="w-8 h-8 text-praia-green-400"></i>
         </div>
         <p class="font-display text-base font-bold text-white mb-2">Email enviado!</p>
-        <p class="text-white/50 text-sm mb-4">Verifique a sua caixa de entrada e clique no link para redefinir a palavra-passe.</p>
-        <button onclick="switchTab('login')" class="text-praia-yellow-400 hover:text-praia-yellow-300 font-display font-semibold text-sm transition-colors">
+        <p class="text-white/50 text-sm mb-5">Verifique a sua caixa de entrada e clique no link para redefinir a palavra-passe.</p>
+        <div class="mb-5">
+          <p class="text-white/30 text-xs mb-2">Não recebeu?</p>
+          <button id="forgot-resend-btn"
+                  class="text-white/40 hover:text-white/70 font-display font-semibold text-xs transition-colors disabled:opacity-30 disabled:cursor-not-allowed disabled:pointer-events-none">
+            <span id="forgot-resend-label">Reenviar email</span>
+          </button>
+        </div>
+        <button onclick="switchTab('login')" class="text-white/40 hover:text-white/70 font-display font-semibold text-xs uppercase tracking-wider transition-colors">
           Voltar ao início de sessão
         </button>
       </div>
@@ -388,10 +395,13 @@
           Assim que clicar no link do email, a sua sessão será iniciada automaticamente e poderá definir a sua foto de perfil.
         </p>
       </div>
-      <p class="text-white/30 text-xs">
-        Não recebeu?
-        <button id="resend-btn" class="text-praia-yellow-400 hover:text-praia-yellow-300 transition-colors font-display font-semibold">Reenviar email</button>
-      </p>
+      <div class="mt-2">
+        <p class="text-white/30 text-xs mb-2">Não recebeu?</p>
+        <button id="resend-btn"
+                class="text-white/40 hover:text-white/70 font-display font-semibold text-xs transition-colors disabled:opacity-30 disabled:cursor-not-allowed disabled:pointer-events-none">
+          <span id="resend-btn-label">Reenviar email</span>
+        </button>
+      </div>
     </div>
 
   </div><!-- /auth-card -->
@@ -455,10 +465,16 @@
 
   // ── Auth callback & initial check ──────────────────────────────────────────
   (async () => {
-    // Handle auth callbacks (email verification, password reset, OAuth)
-    const hash = window.location.hash;
-    const params = new URLSearchParams(hash.substring(1));
+    const hash         = window.location.hash;
+    const params       = new URLSearchParams(hash.substring(1));
     const searchParams = new URLSearchParams(window.location.search);
+
+    // Restore recovery panel across refreshes (sessionStorage flag)
+    if (sessionStorage.getItem('gpf_recovery') === '1') {
+      document.getElementById('auth-tabs')?.classList.add('hidden');
+      showPanel('reset');
+      return;
+    }
 
     // Check for OAuth after_oauth param (Google redirect back to auth.html)
     if (searchParams.get('after_oauth') === '1') {
@@ -478,32 +494,57 @@
       }
     }
 
-    // Check for password recovery hash
+    // Check for password recovery (URL param — legacy implicit flow)
     if (params.get('type') === 'recovery' || searchParams.get('type') === 'recovery') {
+      sessionStorage.setItem('gpf_recovery', '1');
       document.getElementById('auth-tabs')?.classList.add('hidden');
       showPanel('reset');
       history.replaceState(null, '', location.pathname + '?redirect=' + encodeURIComponent(redirectTo));
       return;
     }
 
+    // Handle email change confirmation (PKCE: ?code=xxx, implicit: #type=email_change)
+    const code = searchParams.get('code');
+    const flowType = params.get('type') || searchParams.get('type');
+    if (code || flowType === 'email_change') {
+      try {
+        if (code) await AuthUtils.supabase.auth.exchangeCodeForSession(code);
+        const changedUser = await AuthUtils.authGetUser();
+        if (changedUser) { window.location.href = 'perfil.html?email_changed=1'; return; }
+      } catch (e) {}
+    }
+
     // Check for email signup verification
     if (params.get('type') === 'signup' || hash.includes('access_token')) {
-      // Supabase automatically processes hash tokens on init
       await new Promise(r => setTimeout(r, 300));
       const verifiedUser = await AuthUtils.authGetUser();
       if (verifiedUser) {
+        // Retry profile upsert with username saved before the confirmation redirect
+        const pendingUsername = sessionStorage.getItem('gpf_pending_username');
+        const pendingEmail    = sessionStorage.getItem('gpf_pending_email');
+        if (pendingUsername) {
+          try {
+            await AuthUtils.profileUpsert(verifiedUser.id, {
+              username: pendingUsername,
+              ...(pendingEmail ? { email: pendingEmail } : {}),
+            });
+          } catch (e) {
+            console.warn('[signup confirm] profile upsert failed:', e?.message);
+          }
+          sessionStorage.removeItem('gpf_pending_username');
+          sessionStorage.removeItem('gpf_pending_email');
+        }
         window._pendingUserId   = verifiedUser.id;
         window._pendingRedirect = redirectTo;
-        // Hide tabs — show avatar modal directly
         document.getElementById('auth-tabs')?.classList.add('hidden');
-        showPanel('register'); // Keep register panel hidden behind modal
+        showPanel('register');
         history.replaceState(null, '', location.pathname + '?redirect=' + encodeURIComponent(redirectTo));
         showAvatarModal();
         return;
       }
     }
 
-    // If user is already authenticated, redirect
+    // If user is already authenticated, redirect (but not during recovery)
     const user = await AuthUtils.authGetUser();
     if (user) {
       window.location.href = redirectTo;
@@ -526,6 +567,7 @@
   function switchTab(tab) {
     const isRegister = tab === 'register';
     showPanel(tab);
+    document.getElementById('auth-tabs')?.classList.remove('hidden');
     document.getElementById('tab-register').classList.toggle('active', isRegister);
     document.getElementById('tab-login').classList.toggle('active', !isRegister);
     document.getElementById('tab-register').classList.toggle('text-white/60', !isRegister);
@@ -536,6 +578,22 @@
     document.getElementById('auth-tabs')?.classList.add('hidden');
     showPanel('forgot');
   }
+
+  // ── Auth state changes (password recovery + email change) ─────────────────
+  AuthUtils.supabase.auth.onAuthStateChange(async (event) => {
+    if (event === 'PASSWORD_RECOVERY') {
+      sessionStorage.setItem('gpf_recovery', '1');
+      document.getElementById('auth-tabs')?.classList.add('hidden');
+      showPanel('reset');
+      history.replaceState(null, '', location.pathname + '?redirect=' + encodeURIComponent(redirectTo));
+    }
+    if (event === 'USER_UPDATED') {
+      const u = await AuthUtils.authGetUser();
+      if (u && !sessionStorage.getItem('gpf_recovery')) {
+        window.location.href = 'perfil.html?email_changed=1';
+      }
+    }
+  });
 
   // ── Google OAuth ─────────────────────────────────────────────────────────────
   async function signInWithGoogle(context) {
@@ -572,6 +630,25 @@
 
     setLoading('reg-submit', true);
 
+    // Pre-check username and email availability in parallel
+    const [usernameTaken, emailTaken] = await Promise.all([
+      AuthUtils.checkUsernameExists(username),
+      AuthUtils.checkEmailExists(email),
+    ]);
+    if (usernameTaken || emailTaken) {
+      setLoading('reg-submit', false);
+      if (usernameTaken && emailTaken) {
+        // Highlight both fields, show combined message
+        const uInp = document.getElementById('reg-username');
+        const eInp = document.getElementById('reg-email');
+        if (uInp) { uInp.classList.add('input-error'); uInp.addEventListener('input', () => uInp.classList.remove('input-error'), { once: true }); }
+        if (eInp) { eInp.classList.add('input-error'); eInp.addEventListener('input', () => eInp.classList.remove('input-error'), { once: true }); }
+        return showError('reg', 'Este email e este nome de utilizador já estão em uso. Escolha outros.');
+      }
+      if (emailTaken)    return showError('reg', 'Este email já está registado. Inicie sessão ou recupere a sua palavra-passe.', 'reg-email');
+      if (usernameTaken) return showError('reg', 'Este nome de utilizador já está em uso. Escolha outro.', 'reg-username');
+    }
+
     const { data, error } = await AuthUtils.supabase.auth.signUp({
       email,
       password: pass,
@@ -585,10 +662,23 @@
       return showError('reg', translateError(error.message));
     }
 
+    // Detect email already registered but unconfirmed (Supabase returns success silently)
+    if (data.user && data.user.identities && data.user.identities.length === 0) {
+      setLoading('reg-submit', false);
+      return showError('reg', 'Este email já está registado mas ainda não foi confirmado. Verifique a sua caixa de entrada ou recupere a palavra-passe.', 'reg-email');
+    }
+
     const user = data.user;
     if (user) {
-      // Save profile with username and email (email column required in profiles table)
-      await AuthUtils.profileUpsert(user.id, { username, email });
+      // Save profile with username and email — wrapped in try/catch because
+      // when email confirmation is required the user isn't authenticated yet
+      // and Supabase RLS may reject the upsert; the profile will be saved on
+      // first confirmed login via onAuthStateChange.
+      try {
+        await AuthUtils.profileUpsert(user.id, { username, email });
+      } catch (_profileErr) {
+        console.warn('[register] profile upsert deferred (will retry on login):', _profileErr?.message);
+      }
     }
 
     _pendingEmail    = email;
@@ -602,20 +692,58 @@
       window._pendingRedirect = redirectTo;
       showAvatarModal();
     } else {
+      // Persist username so we can retry profile upsert after email confirmation redirect
+      sessionStorage.setItem('gpf_pending_username', username);
+      sessionStorage.setItem('gpf_pending_email', email);
       // Email confirmation required — show check-email screen
       document.getElementById('auth-tabs')?.classList.add('hidden');
       document.getElementById('email-sent-desc').textContent =
         `Enviámos um link de confirmação para ${email}. Clique no link para ativar a sua conta.`;
       document.getElementById('resend-btn').onclick = () => resendEmail(email);
       showPanel('email-sent');
+      startResendCountdown('resend-btn', 'resend-btn-label', 60);
     }
   }
 
+  function startResendCountdown(btnId, labelId, seconds = 60) {
+    const btn   = document.getElementById(btnId);
+    const label = document.getElementById(labelId);
+    if (!btn || !label) return;
+    btn.disabled = true;
+    let remaining = seconds;
+    label.textContent = `Reenviar em ${remaining}s`;
+    const interval = setInterval(() => {
+      remaining--;
+      if (remaining <= 0) {
+        clearInterval(interval);
+        btn.disabled = false;
+        label.textContent = 'Reenviar email';
+      } else {
+        label.textContent = `Reenviar em ${remaining}s`;
+      }
+    }, 1000);
+  }
+
   async function resendEmail(email) {
-    const btn = document.getElementById('resend-btn');
-    if (btn) { btn.disabled = true; btn.textContent = 'A enviar…'; }
+    const btn   = document.getElementById('resend-btn');
+    const label = document.getElementById('resend-btn-label');
+    if (!btn || btn.disabled) return;
+    btn.disabled = true;
+    if (label) label.textContent = 'A enviar…';
     await AuthUtils.supabase.auth.resend({ type: 'signup', email });
-    if (btn) { btn.disabled = false; btn.textContent = 'Reenviado ✓'; }
+    startResendCountdown('resend-btn', 'resend-btn-label', 60);
+  }
+
+  async function resendForgotEmail(email) {
+    const btn   = document.getElementById('forgot-resend-btn');
+    const label = document.getElementById('forgot-resend-label');
+    if (!btn || btn.disabled) return;
+    btn.disabled = true;
+    if (label) label.textContent = 'A enviar…';
+    await AuthUtils.supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${location.origin}/auth.html?type=recovery&redirect=${encodeURIComponent(redirectTo)}`,
+    });
+    startResendCountdown('forgot-resend-btn', 'forgot-resend-label', 60);
   }
 
   // ── Login ────────────────────────────────────────────────────────────────────
@@ -645,7 +773,14 @@
     const { error } = await AuthUtils.supabase.auth.signInWithPassword({ email, password: pass });
     setLoading('login-submit', false);
 
-    if (error) return showError('login', translateError(error.message));
+    if (error) {
+      // Distinguish between unregistered email and wrong password
+      if (error.message.includes('Invalid login credentials') && identifier.includes('@')) {
+        const exists = await AuthUtils.checkEmailExists(email);
+        if (!exists) return showError('login', 'Este email não está registado. Crie uma conta primeiro.', 'login-identifier');
+      }
+      return showError('login', translateError(error.message));
+    }
 
     window.location.href = redirectTo;
   }
@@ -660,6 +795,12 @@
 
     setLoading('forgot-submit', true);
 
+    const emailExists = await AuthUtils.checkEmailExists(email);
+    if (!emailExists) {
+      setLoading('forgot-submit', false);
+      return showError('forgot', 'Este email não está registado. Verifique o endereço ou crie uma conta.', 'forgot-email');
+    }
+
     const { error } = await AuthUtils.supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${location.origin}/auth.html?type=recovery&redirect=${encodeURIComponent(redirectTo)}`,
     });
@@ -670,6 +811,9 @@
 
     document.getElementById('forgot-form').classList.add('hidden');
     document.getElementById('forgot-success').classList.remove('hidden');
+    const forgotResendBtn = document.getElementById('forgot-resend-btn');
+    if (forgotResendBtn) forgotResendBtn.onclick = () => resendForgotEmail(email);
+    startResendCountdown('forgot-resend-btn', 'forgot-resend-label', 60);
   }
 
   // ── Reset Password ───────────────────────────────────────────────────────────
@@ -693,6 +837,7 @@
     if (error) return showError('reset', translateError(error.message));
 
     // Password updated successfully, redirect to login
+    sessionStorage.removeItem('gpf_recovery');
     await AuthUtils.supabase.auth.signOut();
     document.getElementById('auth-tabs')?.classList.remove('hidden');
     switchTab('login');
@@ -833,6 +978,7 @@
     if (msg.includes('Password should be'))           return 'A palavra-passe deve ter pelo menos 6 caracteres.';
     if (msg.includes('Email rate limit exceeded'))    return 'Demasiadas tentativas. Aguarde alguns minutos antes de tentar novamente.';
     if (msg.includes('For security purposes'))        return 'Por segurança, aguarde alguns segundos antes de tentar novamente.';
+    if (msg.includes('Error sending recovery email')) return 'Não foi possível enviar o email de recuperação. Tente novamente mais tarde ou contacte o suporte.';
     if (msg.includes('Unable to validate'))           return 'Sessão inválida. Por favor inicie sessão novamente.';
     return msg;
   }
