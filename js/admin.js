@@ -1672,54 +1672,64 @@ function renderProdutos(container) {
 function productFormHTML(p) {
   const variants = p.variants || [];
   return `
-    <div class="space-y-4">
+    <div class="admin-form space-y-5">
+
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <label class="admin-label">ID (slug único)</label>
-          <input id="p-id" class="admin-input" value="${p.id || ''}" placeholder="ex: tshirt-2026">
+          <label>ID (slug único)</label>
+          <input id="p-id" type="text" value="${p.id || ''}" placeholder="ex: tshirt-2026">
         </div>
         <div>
-          <label class="admin-label">Categoria</label>
-          <select id="p-category" class="admin-input">
-            <option value="vestuario" ${p.category === 'vestuario' ? 'selected' : ''}>Vestuário</option>
+          <label>Categoria</label>
+          <select id="p-category">
+            <option value="vestuario"  ${p.category === 'vestuario'  ? 'selected' : ''}>Vestuário</option>
             <option value="publicacao" ${p.category === 'publicacao' ? 'selected' : ''}>Publicação</option>
-            <option value="acessorio" ${p.category === 'acessorio' ? 'selected' : ''}>Acessório</option>
+            <option value="acessorio"  ${p.category === 'acessorio'  ? 'selected' : ''}>Acessório</option>
           </select>
         </div>
       </div>
+
       <div>
-        <label class="admin-label">Nome</label>
-        <input id="p-name" class="admin-input" value="${p.name || ''}" placeholder="Nome do produto">
+        <label>Nome</label>
+        <input id="p-name" type="text" value="${p.name || ''}" placeholder="Nome do produto">
       </div>
+
       <div>
-        <label class="admin-label">Descrição</label>
-        <textarea id="p-description" class="admin-input" rows="3">${p.description || ''}</textarea>
+        <label>Descrição</label>
+        <textarea id="p-description" rows="3">${p.description || ''}</textarea>
       </div>
+
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <label class="admin-label">Preço (cêntimos — 0 = Grátis)</label>
-          <input id="p-price" type="number" min="0" class="admin-input" value="${p.price ?? 0}" placeholder="2500">
+          <label>Preço (cêntimos — 0 = Grátis)</label>
+          <input id="p-price" type="number" min="0" value="${p.price ?? 0}" placeholder="2500">
         </div>
-        <div class="flex flex-col gap-2 pt-5">
-          <label class="flex items-center gap-2 cursor-pointer">
-            <input id="p-available" type="checkbox" class="w-4 h-4" ${p.available ? 'checked' : ''}> <span class="text-sm font-display text-praia-sand-700">Disponível</span>
+        <div class="flex flex-col justify-center gap-2.5 pt-1">
+          <label class="flex items-center gap-2 cursor-pointer normal-case tracking-normal text-sm font-semibold text-praia-sand-700" style="text-transform:none;letter-spacing:0;">
+            <input id="p-available" type="checkbox" class="w-4 h-4 accent-praia-teal-700" ${p.available ? 'checked' : ''}> Disponível
           </label>
-          <label class="flex items-center gap-2 cursor-pointer">
-            <input id="p-featured" type="checkbox" class="w-4 h-4" ${p.featured ? 'checked' : ''}> <span class="text-sm font-display text-praia-sand-700">Destaque</span>
+          <label class="flex items-center gap-2 cursor-pointer" style="text-transform:none;letter-spacing:0;">
+            <input id="p-featured" type="checkbox" class="w-4 h-4 accent-praia-teal-700" ${p.featured ? 'checked' : ''}> Destaque
           </label>
-          <label class="flex items-center gap-2 cursor-pointer">
-            <input id="p-shipping" type="checkbox" class="w-4 h-4" ${p.shippingRequired ? 'checked' : ''}> <span class="text-sm font-display text-praia-sand-700">Requer envio</span>
+          <label class="flex items-center gap-2 cursor-pointer" style="text-transform:none;letter-spacing:0;">
+            <input id="p-shipping" type="checkbox" class="w-4 h-4 accent-praia-teal-700" ${p.shippingRequired ? 'checked' : ''}> Requer envio
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer" style="text-transform:none;letter-spacing:0;">
+            <input id="p-customizable" type="checkbox" class="w-4 h-4 accent-praia-teal-700" ${p.customizable ? 'checked' : ''}> Praia personalizável
           </label>
         </div>
       </div>
+
       <div>
-        <label class="admin-label">Imagens (uma por linha)</label>
-        <textarea id="p-images" class="admin-input font-mono text-xs" rows="4" placeholder="brand_assets/itens_loja/imagem.jpg">${(p.images || []).join('\n')}</textarea>
+        <label>Imagens (uma por linha)</label>
+        <textarea id="p-images" rows="3" style="font-family:monospace;font-size:0.78rem;" placeholder="brand_assets/itens_loja/imagem.jpg">${(p.images || []).join('\n')}</textarea>
       </div>
+
       <div>
-        <label class="admin-label">Variantes (tamanhos) — formato: XS,S,M,L,XL,XXL (separados por vírgula, vazio = sem variantes)</label>
-        <input id="p-variants" class="admin-input" value="${variants.map(v => v.id).join(',')}" placeholder="XS,S,M,L,XL,XXL">
+        <label>Tamanhos — separados por vírgula (vazio = sem variantes)</label>
+        <input id="p-variants" type="text" value="${variants.map(v => v.id).join(',')}" placeholder="XS,S,M,L,XL,XXL">
       </div>
+
     </div>`;
 }
 
@@ -1748,18 +1758,19 @@ function saveProduct() {
   const description = document.getElementById('p-description').value.trim();
   const category    = document.getElementById('p-category').value;
   const price       = parseInt(document.getElementById('p-price').value || '0', 10);
-  const available   = document.getElementById('p-available').checked;
-  const featured    = document.getElementById('p-featured').checked;
+  const available      = document.getElementById('p-available').checked;
+  const featured       = document.getElementById('p-featured').checked;
   const shippingRequired = document.getElementById('p-shipping').checked;
-  const images      = document.getElementById('p-images').value.split('\n').map(s => s.trim()).filter(Boolean);
-  const variantStr  = document.getElementById('p-variants').value.trim();
-  const variants    = variantStr
+  const customizable   = document.getElementById('p-customizable').checked;
+  const images         = document.getElementById('p-images').value.split('\n').map(s => s.trim()).filter(Boolean);
+  const variantStr     = document.getElementById('p-variants').value.trim();
+  const variants       = variantStr
     ? variantStr.split(',').map(s => s.trim()).filter(Boolean).map(v => ({ id: v, label: v, available: true }))
     : [];
 
   if (!id || !name) { toast('ID e Nome são obrigatórios.', 'error'); return; }
 
-  const product = { id, name, description, category, price, images, variants, shippingRequired, available, featured };
+  const product = { id, name, description, category, price, images, variants, shippingRequired, available, featured, ...(customizable ? { customizable: true } : {}) };
 
   if (editId) {
     const idx = products.findIndex(p => p.id === editId);

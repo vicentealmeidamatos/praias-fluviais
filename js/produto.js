@@ -2,6 +2,7 @@
 
 let _product = null;
 let _products = [];
+let _beaches = [];
 let _activeImage = 0;
 let _settings = null;
 
@@ -10,12 +11,11 @@ async function initProduto() {
   const id = params.get('id');
   if (!id) { window.location.href = 'loja.html'; return; }
 
-  await Promise.all([loadProducts(), loadSettings()]);
+  await Promise.all([loadProducts(), loadSettings(), loadBeachesProduto()]);
 
   _product = _products.find(p => p.id === id);
   if (!_product) { window.location.href = 'loja.html'; return; }
 
-  // Update page title and meta
   document.title = `${_product.name} — Guia das Praias Fluviais`;
 
   renderProduct();
@@ -35,6 +35,14 @@ async function loadSettings() {
     const res = await fetch('data/settings.json');
     _settings = await res.json();
   } catch { _settings = null; }
+}
+
+async function loadBeachesProduto() {
+  try {
+    const res = await fetch('data/beaches.json');
+    const data = await res.json();
+    _beaches = data.map(b => ({ id: b.id, name: b.name })).sort((a, b) => a.name.localeCompare(b.name, 'pt'));
+  } catch { _beaches = []; }
 }
 
 // ─── Render ───────────────────────────────────────────────────────────────────
@@ -61,6 +69,18 @@ function renderProduct() {
   if (catEl) {
     const labels = { vestuario: 'Vestuário', publicacao: 'Publicação', acessorio: 'Acessório' };
     catEl.textContent = labels[p.category] || p.category;
+  }
+
+  // Beach dropdown (customizable products)
+  const beachSection = document.getElementById('beach-section');
+  const beachSelect = document.getElementById('beach-select');
+  if (p.customizable && beachSection && beachSelect) {
+    // Populate options from the already-loaded _beaches array (from beaches.json)
+    beachSelect.innerHTML = `<option value="">Escolhe a tua praia…</option>` +
+      _beaches.map(b => `<option value="${b.id}">${b.name}</option>`).join('');
+    beachSection.classList.remove('hidden');
+  } else if (beachSection) {
+    beachSection.classList.add('hidden');
   }
 
   // Variants
@@ -177,6 +197,11 @@ function getSelectedVariantProduto() {
   return selected ? selected.dataset.variant : null;
 }
 
+function getSelectedBeachProduto() {
+  const select = document.getElementById('beach-select');
+  return select ? select.value : null;
+}
+
 function renderRelated() {
   const container = document.getElementById('related-products');
   if (!container) return;
@@ -231,6 +256,12 @@ async function handleAddToCartProduto() {
     return;
   }
 
+  const beach = getSelectedBeachProduto();
+  if (_product.customizable && !beach) {
+    showToastProduto('Seleciona a praia que queres na t-shirt.', 'warning');
+    return;
+  }
+
   const btn = document.getElementById('add-to-cart-btn');
   if (btn) {
     btn.disabled = true;
@@ -239,6 +270,7 @@ async function handleAddToCartProduto() {
 
   try {
     const variantKey = variant || 'sem-variante';
+    const beachKey = beach || null;
     const { data: existing } = await _sb
       .from('cart_items')
       .select('id, quantity')
@@ -254,6 +286,7 @@ async function handleAddToCartProduto() {
         user_id: user.id,
         product_id: _product.id,
         variant: variantKey,
+        beach: beachKey,
         quantity: 1
       });
     }
@@ -289,6 +322,12 @@ async function handleBuyNowProduto() {
     return;
   }
 
+  const beach = getSelectedBeachProduto();
+  if (_product.customizable && !beach) {
+    showToastProduto('Seleciona a praia que queres na t-shirt.', 'warning');
+    return;
+  }
+
   const btn = document.getElementById('buy-now-btn');
   if (btn) {
     btn.disabled = true;
@@ -300,6 +339,7 @@ async function handleBuyNowProduto() {
       items: [{
         product_id: _product.id,
         variant: variant || 'sem-variante',
+        beach: beach || null,
         quantity: 1,
       }],
       user_id: user?.id ?? null,

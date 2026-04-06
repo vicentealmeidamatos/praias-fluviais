@@ -1,13 +1,14 @@
 // ─── Loja das Praias Fluviais ─────────────────────────────────────────────────
 
 let _products = [];
+let _beaches = [];
 let _activeCategory = 'todos';
 let _cartCount = 0;
 
 // ─── Inicialização ────────────────────────────────────────────────────────────
 
 async function initLoja() {
-  await loadProducts();
+  await Promise.all([loadProducts(), loadBeaches()]);
   renderCategories();
   renderProducts();
   await syncCartBadge();
@@ -22,6 +23,16 @@ async function loadProducts() {
     _products = await res.json();
   } catch (e) {
     _products = [];
+  }
+}
+
+async function loadBeaches() {
+  try {
+    const res = await fetch('data/beaches.json');
+    const data = await res.json();
+    _beaches = data.map(b => ({ id: b.id, name: b.name })).sort((a, b) => a.name.localeCompare(b.name, 'pt'));
+  } catch (e) {
+    _beaches = [];
   }
 }
 
@@ -133,6 +144,23 @@ function renderProductCard(product) {
           }
         </div>
 
+        ${product.customizable ? `
+          <div class="mb-3">
+            <p class="font-display text-[10px] font-semibold uppercase tracking-wider text-praia-sand-400 mb-2">Praia</p>
+            <div class="relative">
+              <select id="beach-${product.id}"
+                class="w-full font-body text-sm text-praia-teal-800 bg-white border border-praia-sand-200 rounded-xl px-3 py-2 pr-8 appearance-none focus:outline-none focus:border-praia-teal-500 transition-colors cursor-pointer"
+              >
+                <option value="">Escolhe a tua praia…</option>
+                ${_beaches.map(b => `<option value="${b.id}">${b.name}</option>`).join('')}
+              </select>
+              <div class="pointer-events-none absolute inset-y-0 right-2.5 flex items-center">
+                <svg class="w-4 h-4 text-praia-sand-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+              </div>
+            </div>
+          </div>
+        ` : ''}
+
         ${hasVariants ? `
           <div class="mb-4">
             <p class="font-display text-[10px] font-semibold uppercase tracking-wider text-praia-sand-400 mb-2">Tamanho</p>
@@ -217,6 +245,11 @@ function getSelectedVariant(productId) {
   return selected ? selected.dataset.variant : null;
 }
 
+function getSelectedBeach(productId) {
+  const select = document.getElementById(`beach-${productId}`);
+  return select ? select.value : null;
+}
+
 // ─── Comprar Já ───────────────────────────────────────────────────────────────
 
 async function handleBuyNow(productId) {
@@ -229,6 +262,12 @@ async function handleBuyNow(productId) {
     return;
   }
 
+  const beach = getSelectedBeach(productId);
+  if (product.customizable && !beach) {
+    showToast('Seleciona a praia que queres na t-shirt.', 'warning');
+    return;
+  }
+
   const btn = document.querySelector(`[data-buynow-id="${productId}"]`);
   if (btn) {
     btn.disabled = true;
@@ -238,7 +277,7 @@ async function handleBuyNow(productId) {
   try {
     const user = await authGetUser();
     const payload = {
-      items: [{ product_id: productId, variant: variant || 'sem-variante', quantity: 1 }],
+      items: [{ product_id: productId, variant: variant || 'sem-variante', beach: beach || null, quantity: 1 }],
       user_id: user?.id ?? null,
     };
 
@@ -284,15 +323,22 @@ async function handleAddToCart(productId) {
     return;
   }
 
+  const beach = getSelectedBeach(productId);
+  if (product.customizable && !beach) {
+    showToast('Seleciona a praia que queres na t-shirt.', 'warning');
+    return;
+  }
+
   const btn = document.querySelector(`[data-product-id="${productId}"]`);
   if (btn) {
     btn.disabled = true;
-    btn.innerHTML = `<div class="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin"></div> A adicionar…`;
+    btn.innerHTML = `<div class="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin"></div>`;
   }
 
   try {
     // Check if item already in cart
     const variantKey = variant || 'sem-variante';
+    const beachKey = beach || null;
     const { data: existing } = await _sb
       .from('cart_items')
       .select('id, quantity')
@@ -308,6 +354,7 @@ async function handleAddToCart(productId) {
         user_id: user.id,
         product_id: productId,
         variant: variantKey,
+        beach: beachKey,
         quantity: 1
       });
     }
@@ -320,8 +367,7 @@ async function handleAddToCart(productId) {
   } finally {
     if (btn) {
       btn.disabled = false;
-      if (window.lucide) lucide.createIcons();
-      btn.innerHTML = `<i data-lucide="shopping-cart" class="w-4 h-4"></i> Adicionar ao carrinho`;
+      btn.innerHTML = `<i data-lucide="shopping-cart" class="w-4 h-4"></i>`;
       if (window.lucide) lucide.createIcons();
     }
   }

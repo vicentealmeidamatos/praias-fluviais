@@ -1,8 +1,9 @@
 [
   {
     "id": "tshirt-pampilhosa",
-    "name": "T-Shirt Pampilhosa da Serra",
-    "description": "T-shirt oficial das Praias Fluviais com o design exclusivo de Pampilhosa da Serra. 100% algodão orgânico, corte descontraído. Lavagem a 30°C.",
+    "name": "T-Shirt Personalizada — Design A",
+    "description": "T-shirt oficial das Praias Fluviais com o design exclusivo da praia que escolheres. 100% algodão orgânico, corte descontraído. Lavagem a 30°C.",
+    "customizable": true,
     "price": 2500,
     "images": [
       "brand_assets/itens_loja/t-shirt-A.jpg"
@@ -41,8 +42,9 @@
   },
   {
     "id": "tshirt-figueiro",
-    "name": "T-Shirt Figueiró dos Vinhos",
-    "description": "T-shirt oficial das Praias Fluviais com o design exclusivo de Figueiró dos Vinhos. 100% algodão orgânico, corte descontraído. Lavagem a 30°C.",
+    "name": "T-Shirt Personalizada — Design B",
+    "description": "T-shirt oficial das Praias Fluviais com o design exclusivo da praia que escolheres. 100% algodão orgânico, corte descontraído. Lavagem a 30°C.",
+    "customizable": true,
     "price": 2500,
     "images": [
       "brand_assets/itens_loja/t-shirt-C.jpg"

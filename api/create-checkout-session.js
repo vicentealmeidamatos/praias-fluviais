@@ -4,12 +4,6 @@ import Stripe from 'stripe';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-// Stripe Shipping Rate IDs (criados no Dashboard)
-const SHIPPING_RATES = {
-  mainland: 'shr_1TJJ8KFnlHn9HhlC5NJ5EqDY', // Portugal Continental — 3,90€
-  ilhas:    'shr_1TJJ5oFnlHn9HhlCDKm1Wpwh', // Arquipélagos — 4,90€
-};
-
 // Acima deste valor (cêntimos) o envio é grátis
 const FREE_SHIPPING_THRESHOLD = 3000; // 30,00€
 
@@ -107,8 +101,28 @@ export default async function handler(req, res) {
           },
         ]
       : [
-          { shipping_rate: SHIPPING_RATES.mainland },
-          { shipping_rate: SHIPPING_RATES.ilhas },
+          {
+            shipping_rate_data: {
+              type: 'fixed_amount',
+              fixed_amount: { amount: 390, currency: 'eur' },
+              display_name: 'Portugal Continental',
+              delivery_estimate: {
+                minimum: { unit: 'business_day', value: 2 },
+                maximum: { unit: 'business_day', value: 5 },
+              },
+            },
+          },
+          {
+            shipping_rate_data: {
+              type: 'fixed_amount',
+              fixed_amount: { amount: 490, currency: 'eur' },
+              display_name: 'Açores e Madeira',
+              delivery_estimate: {
+                minimum: { unit: 'business_day', value: 3 },
+                maximum: { unit: 'business_day', value: 7 },
+              },
+            },
+          },
         ];
 
     // Criar Checkout Session — Stripe gere o envio e códigos promocionais
