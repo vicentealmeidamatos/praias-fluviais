@@ -9,8 +9,19 @@ package-lock.json
 serve.mjs
 screenshot.mjs
 
-# Temporary files
+# Scripts de migração / uso único
+fix-beach-bar-coords.mjs
+supabase-migration.sql
+
+# Temporários
 temporary screenshots/
+listas_temporarias/
+img/uploads/
+
+# Editor / IDE
+.vscode/
+.claude/
+.mcp.json
 
 # OS files
 .DS_Store
