@@ -282,10 +282,27 @@
       });
     }
 
-    function makeNavButtons(lat, lng, address) {
-      const addrQuery = encodeURIComponent((address || '') + ', Portugal');
-      const gmapsUrl = `https://www.google.com/maps/search/?api=1&query=${addrQuery}`;
-      const wazeUrl  = `https://waze.com/ul?q=${encodeURIComponent(address || '')}&navigate=yes`;
+    // Patterns that indicate the address IS the beach name (unreliable for nav)
+    const BEACH_ADDR_RE = /^(Praia Fluvial|Zona Balnear|Zona de Lazer|Zona de Fruição|Albufeira)/i;
+    const BEACH_NAME_RE = /(?:Bar|Restaurante|Cafetaria|Stop)(?:[/\w-]+)?\s+(?:[dD][ao]\s+)?(Praia Fluvial\b.*|Zona Balnear\b.*|Zona de Lazer\b.*|Albufeira\b.*)/i;
+
+    /** Returns the best search query for Google Maps / Waze for a given location */
+    function getNavQuery(loc) {
+      if (loc.address && BEACH_ADDR_RE.test(loc.address.trim())) {
+        // Beach bar: search by beach name (bar isn't on Google Maps, the beach is)
+        if (loc.beaches && loc.beaches.length > 0) return loc.beaches[0] + ', Portugal';
+        const m = loc.name.match(BEACH_NAME_RE);
+        if (m) return m[1].trim() + ', Portugal';
+        return loc.address.split(',')[0].trim() + ', Portugal';
+      }
+      // Named establishment: search by name + municipality
+      return `${loc.name}, ${loc.municipality}, Portugal`;
+    }
+
+    function makeNavButtons(loc) {
+      const query = encodeURIComponent(getNavQuery(loc));
+      const gmapsUrl = `https://www.google.com/maps/search/?api=1&query=${query}`;
+      const wazeUrl  = `https://waze.com/ul?q=${query}&navigate=yes`;
       return `
         <div style="display:flex;gap:6px;margin-top:8px;">
           <a href="${gmapsUrl}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;padding:5px 10px;border-radius:20px;background:#4285F4;color:white;font-size:11px;font-family:'Poppins',sans-serif;font-weight:600;text-decoration:none;letter-spacing:0.03em;">
@@ -316,7 +333,7 @@
           <span style="display:inline-block;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;font-family:'Poppins',sans-serif;text-transform:uppercase;letter-spacing:0.04em;background:${STAMP_COLOR}22;color:${STAMP_COLOR};border:1px solid ${STAMP_COLOR}44;">Carimbo</span>
           ${loc.phone ? `<div style="font-size:11px;color:#0288D1;font-weight:600;margin-top:6px;">${loc.phone}</div>` : ''}
           ${beachesHTML}
-          ${makeNavButtons(loc.coordinates.lat, loc.coordinates.lng, loc.address)}
+          ${makeNavButtons(loc)}
         </div>`;
 
       L.marker([loc.coordinates.lat, loc.coordinates.lng], { icon: makeIcon() })
@@ -342,9 +359,9 @@
         <div class="grid gap-4 sm:grid-cols-2">`;
 
       grouped[concelho].forEach(loc => {
-        const addrQ   = encodeURIComponent(loc.address + ', Portugal');
-        const gmapsUrl = `https://www.google.com/maps/search/?api=1&query=${addrQ}`;
-        const wazeUrl  = `https://waze.com/ul?q=${encodeURIComponent(loc.address)}&navigate=yes`;
+        const navQuery = encodeURIComponent(getNavQuery(loc));
+        const gmapsUrl = `https://www.google.com/maps/search/?api=1&query=${navQuery}`;
+        const wazeUrl  = `https://waze.com/ul?q=${navQuery}&navigate=yes`;
 
         const seasonalBadge = loc.seasonal
           ? `<span class="inline-flex items-center gap-1 text-[10px] font-display font-bold uppercase tracking-wide px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 border border-amber-300 ml-1.5">

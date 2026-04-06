@@ -325,8 +325,27 @@
       });
     }
 
-    function makeNavButtons(address) {
-      const query = encodeURIComponent(address + ', Portugal');
+    // Patterns that indicate the address IS the beach name (unreliable for nav)
+    const BEACH_ADDR_RE = /^(Praia Fluvial|Zona Balnear|Zona de Lazer|Zona de Fruição|Albufeira)/i;
+    // Extracts beach name from entries like "Bar da Praia Fluvial de X"
+    const BEACH_NAME_RE = /(?:Bar|Restaurante|Cafetaria|Stop)(?:[/\w-]+)?\s+(?:[dD][ao]\s+)?(Praia Fluvial\b.*|Zona Balnear\b.*|Zona de Lazer\b.*|Albufeira\b.*)/i;
+
+    /** Returns the best search query for Google Maps / Waze for a given location */
+    function getNavQuery(loc) {
+      if (loc.address && BEACH_ADDR_RE.test(loc.address.trim())) {
+        // Beach bar: the bar itself isn't on Google Maps — search the beach instead
+        // Try to extract beach name from the location name
+        const m = loc.name.match(BEACH_NAME_RE);
+        if (m) return m[1].trim() + ', Portugal';
+        // Fallback: first segment of address (the beach name)
+        return loc.address.split(',')[0].trim() + ', Portugal';
+      }
+      // Named establishment: search by name + municipality
+      return `${loc.name}, ${loc.municipality}, Portugal`;
+    }
+
+    function makeNavButtons(loc) {
+      const query = encodeURIComponent(getNavQuery(loc));
       const gmapsUrl = `https://www.google.com/maps/search/?api=1&query=${query}`;
       const wazeUrl  = `https://waze.com/ul?q=${query}&navigate=yes`;
       return `
@@ -354,7 +373,7 @@
           <div style="color:#8A7D60;font-size:11px;margin-bottom:6px;line-height:1.4;">${loc.address}</div>
           <div style="margin-bottom:4px;">${typeBadge}</div>
           ${loc.phone ? `<div style="font-size:11px;color:#0288D1;font-weight:600;margin-top:4px;">${loc.phone}</div>` : ''}
-          ${makeNavButtons(loc.address)}
+          ${makeNavButtons(loc)}
         </div>`;
 
       // Only add map marker if coordinates are available
@@ -412,7 +431,7 @@
 
       grouped[concelho].forEach(loc => {
         const typeInfo = TYPES[loc.type] || TYPES['guia'];
-        const navQuery = encodeURIComponent(loc.address + ', Portugal');
+        const navQuery = encodeURIComponent(getNavQuery(loc));
         const gmapsUrl = `https://www.google.com/maps/search/?api=1&query=${navQuery}`;
         const wazeUrl  = `https://waze.com/ul?q=${navQuery}&navigate=yes`;
 

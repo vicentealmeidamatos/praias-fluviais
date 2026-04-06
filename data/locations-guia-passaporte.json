@@ -195,8 +195,8 @@
     "address": "Praia Fluvial dos Olhos d’Água do Alviela – Louriceira, 2380-450 Alcanena",
     "type": "guia",
     "coordinates": {
-      "lat": 39.4448372,
-      "lng": -8.7107723
+      "lat": 39.4448706,
+      "lng": -8.7108396
     }
   },
   {
@@ -1105,8 +1105,8 @@
     "address": "Praia Fluvial de Almaceda, 6000-001 Almaceda",
     "type": "guia",
     "coordinates": {
-      "lat": 40.0071616,
-      "lng": -7.6616735
+      "lat": 40.007468,
+      "lng": -7.6611457
     },
     "seasonal": true
   },
@@ -1486,8 +1486,8 @@
     "address": "Praia Fluvial do Sorraia, 2100-116 Coruche",
     "type": "guia_passaporte",
     "coordinates": {
-      "lat": 38.9577054,
-      "lng": -8.5249528
+      "lat": 38.9575493,
+      "lng": -8.5217007
     },
     "seasonal": true
   },
@@ -1538,8 +1538,8 @@
     "address": "Praia Fluvial de Unhais da Serra, 6215-000  Unhais da Serra",
     "type": "guia",
     "coordinates": {
-      "lat": 40.2602096,
-      "lng": -7.6238043
+      "lat": 40.2569733,
+      "lng": -7.6230918
     },
     "seasonal": true
   },
@@ -2341,8 +2341,8 @@
     "address": "Praia Fluvial do Alamal, 6040-101 Gavião",
     "type": "guia",
     "coordinates": {
-      "lat": 39.464458,
-      "lng": -7.9398878
+      "lat": 39.4883261,
+      "lng": -7.9676045
     }
   },
   {
@@ -2351,8 +2351,8 @@
     "address": "Praia Fluvial do Alamal, Quinta do Alamal, 6040-101 Gavião",
     "type": "guia",
     "coordinates": {
-      "lat": 39.464458,
-      "lng": -7.9398878
+      "lat": 39.4883261,
+      "lng": -7.9676045
     },
     "seasonal": true
   },
@@ -2533,8 +2533,8 @@
     "address": "Praia Fluvial da Peneda, 3330-000 Góis",
     "type": "guia",
     "coordinates": {
-      "lat": 40.1546195,
-      "lng": -8.1099454
+      "lat": 40.153853,
+      "lng": -8.1122976
     },
     "seasonal": true
   },
@@ -2544,8 +2544,8 @@
     "address": "Praia Fluvial de Alvares, 3330 Góis",
     "type": "guia",
     "coordinates": {
-      "lat": 40.0196141,
-      "lng": -8.0479395
+      "lat": 40.0170013,
+      "lng": -8.1009729
     },
     "seasonal": true
   },
@@ -2555,8 +2555,8 @@
     "address": "Praia Fluvial do Pego Escuro, 3330 Góis",
     "type": "guia",
     "coordinates": {
-      "lat": 40.0196141,
-      "lng": -8.0479395
+      "lat": 40.1504899,
+      "lng": -8.1119744
     },
     "seasonal": true
   },
@@ -2677,8 +2677,8 @@
     "address": "Praia Fluvial de Valhelhas, EN 232, 6300-235 Valhelhas",
     "type": "guia",
     "coordinates": {
-      "lat": 40.4068382,
-      "lng": -7.4020711
+      "lat": 40.402788,
+      "lng": -7.4032652
     },
     "seasonal": true
   },
@@ -3169,8 +3169,8 @@
     "address": "Praia Fluvial da Bogueira – Casal de Ermio, 3200-029 Foz de Arouce",
     "type": "guia",
     "coordinates": {
-      "lat": 40.158653,
-      "lng": -8.278448
+      "lat": 40.1539841,
+      "lng": -8.2414562
     },
     "seasonal": true
   },
@@ -3282,8 +3282,8 @@
     "address": "Praia Fluvial de Cardigos ou Praia Fluvial do Vergancinho, 6120-214 Cardigos (Mação)",
     "type": "guia",
     "coordinates": {
-      "lat": 39.6949692,
-      "lng": -8.01308
+      "lat": 39.7087372,
+      "lng": -8.0139251
     },
     "seasonal": true
   },
@@ -3293,8 +3293,8 @@
     "address": "Praia Fluvial de Ortiga – Barragem de Belver, 6120 Ortiga",
     "type": "guia",
     "coordinates": {
-      "lat": 39.4860085,
-      "lng": -8.0153276
+      "lat": 39.4830676,
+      "lng": -8.0020775
     },
     "seasonal": true
   },
@@ -3304,8 +3304,8 @@
     "address": "Praia Fluvial do Carvoeiro, 6120-313 Carvoeiro (Mação)",
     "type": "guia",
     "coordinates": {
-      "lat": 39.6241283,
-      "lng": -7.92092
+      "lat": 39.6301379,
+      "lng": -7.9233
     },
     "seasonal": true
   },
@@ -3606,8 +3606,8 @@
     "address": "Praia Fluvial da Relva da Reboleira – Sameiro, 6260-311 Manteigas",
     "type": "guia",
     "coordinates": {
-      "lat": 40.4005617,
-      "lng": -7.5408682
+      "lat": 40.4118284,
+      "lng": -7.4673336
     },
     "seasonal": true
   },
@@ -4448,8 +4448,8 @@
     "address": "Albufeira de Santa Clara-a-Velha, 7665-879 Santa Clara-a-Velha",
     "type": "guia",
     "coordinates": {
-      "lat": 37.5117149,
-      "lng": -8.4392151
+      "lat": 37.5232928,
+      "lng": -8.4404797
     }
   },
   {
@@ -4488,8 +4488,8 @@
     "address": "Praia Fluvial de Cambas, 6160 Cambas (Oleiros)",
     "type": "guia",
     "coordinates": {
-      "lat": 40.0082654,
-      "lng": -7.8463699
+      "lat": 40.0131281,
+      "lng": -7.8469228
     },
     "seasonal": true
   },
@@ -4599,8 +4599,8 @@
     "address": "Praia Fluvial de Alvoco das Várzeas, 3400 Alvoco das Várzeas",
     "type": "guia",
     "coordinates": {
-      "lat": 40.3391085,
-      "lng": -7.8664423
+      "lat": 40.3010192,
+      "lng": -7.8364764
     },
     "seasonal": true
   },
@@ -4610,8 +4610,8 @@
     "address": "Praia Fluvial de Avô, 3400 Avô",
     "type": "guia",
     "coordinates": {
-      "lat": 40.3391085,
-      "lng": -7.8664423
+      "lat": 40.2939849,
+      "lng": -7.9057221
     },
     "seasonal": true
   },
@@ -4621,8 +4621,8 @@
     "address": "Praia Fluvial de São Sebastião da Feira, 3400 São Sebastião da Feira",
     "type": "guia",
     "coordinates": {
-      "lat": 40.3391085,
-      "lng": -7.8664423
+      "lat": 40.315218,
+      "lng": -7.8656471
     },
     "seasonal": true
   },
@@ -4822,8 +4822,8 @@
     "address": "Praia Fluvial de Janeiro de Baixo, Rua do Parque de Campismo, 3320-105 Janeiro de Baixo",
     "type": "guia",
     "coordinates": {
-      "lat": 40.0472917,
-      "lng": -7.8016859
+      "lat": 40.0468616,
+      "lng": -7.8013378
     },
     "seasonal": true
   },
@@ -4833,8 +4833,8 @@
     "address": "Praia Fluvial de Pampilhosa da Serra, Av. dos Bombeiros Voluntários, 3320-200 Pampilhosa da Serra",
     "type": "guia",
     "coordinates": {
-      "lat": 40.0462933,
-      "lng": -7.9506309
+      "lat": 40.0468616,
+      "lng": -7.8013378
     },
     "seasonal": true
   },
@@ -4844,8 +4844,8 @@
     "address": "Praia Fluvial de Pessegueiro, 3320-996 Pessegueiro",
     "type": "guia",
     "coordinates": {
-      "lat": 40.0526283,
-      "lng": -8.0194589
+      "lat": 40.0519489,
+      "lng": -8.0241831
     },
     "seasonal": true
   },
@@ -4966,8 +4966,8 @@
     "address": "Praia Fluvial do Cabril, Albufeira do Cabril – Vale de Góis, 3270-159 Pedrógão Grande",
     "type": "guia",
     "coordinates": {
-      "lat": 39.9169584,
-      "lng": -8.145564
+      "lat": 39.9211545,
+      "lng": -8.1326666
     },
     "seasonal": true
   },
@@ -4977,8 +4977,8 @@
     "address": "Praia Fluvial de Mega Fundeira, 3270 Pedrógão Grande",
     "type": "guia",
     "coordinates": {
-      "lat": null,
-      "lng": null
+      "lat": 39.9855432,
+      "lng": -8.121726
     },
     "seasonal": true
   },
@@ -5018,8 +5018,8 @@
     "address": "Praia Fluvial do Mosteiro, Aldeia do Xisto de Mosteiro, 3270 Pedrógão Grande",
     "type": "guia",
     "coordinates": {
-      "lat": null,
-      "lng": null
+      "lat": 39.9359369,
+      "lng": -8.1863067
     }
   },
   {
@@ -5069,8 +5069,8 @@
     "address": "Praia Fluvial do Reconquinho – Carvoeira, 3360-179 Penacova",
     "type": "guia",
     "coordinates": {
-      "lat": 40.265723,
-      "lng": -8.278666
+      "lat": 40.2668875,
+      "lng": -8.2794658
     },
     "seasonal": true
   },
@@ -5130,8 +5130,8 @@
     "address": "Praia Fluvial do Vimieiro, 3360-000 São Pedro de Alva (Penacova)",
     "type": "guia",
     "coordinates": {
-      "lat": 40.2718001,
-      "lng": -8.2877914
+      "lat": 40.2766106,
+      "lng": -8.197938
     }
   },
   {
@@ -5160,8 +5160,8 @@
     "address": "Praia Fluvial do Meimão, Barragem do Meimão, 6320-000  Meimão",
     "type": "guia",
     "coordinates": {
-      "lat": 40.3567591,
-      "lng": -6.9538488
+      "lat": 40.2693127,
+      "lng": -7.1445378
     },
     "seasonal": true
   },
@@ -5171,8 +5171,8 @@
     "address": "Praia Fluvial O Moinho, 6090 Benquerença",
     "type": "guia",
     "coordinates": {
-      "lat": null,
-      "lng": null
+      "lat": 40.2285273,
+      "lng": -7.2207175
     },
     "seasonal": true
   },
@@ -5534,8 +5534,8 @@
     "address": "Praia Fluvial da Fróia, 6150-737 Sobreira Formosa",
     "type": "guia",
     "coordinates": {
-      "lat": 39.7731567,
-      "lng": -7.8488007
+      "lat": 39.7894907,
+      "lng": -7.8382059
     },
     "seasonal": true
   },
@@ -5556,8 +5556,8 @@
     "address": "Praia Fluvial de Alvito da Beira – Sobreira Formosa, 6150-011 Proença-a-Nova",
     "type": "guia",
     "coordinates": {
-      "lat": 39.74995,
-      "lng": -7.92494
+      "lat": 39.8237961,
+      "lng": -7.7974679
     },
     "seasonal": true
   },
@@ -5567,8 +5567,8 @@
     "address": "Praia Fluvial do Malhadal, CM 1330 – Malhadal, 6150-909 Proença-a-Nova",
     "type": "guia",
     "coordinates": {
-      "lat": 39.74995,
-      "lng": -7.92494
+      "lat": 39.7971778,
+      "lng": -7.9513478
     },
     "seasonal": true
   },
@@ -5678,8 +5678,8 @@
     "address": "Praia Fluvial de Reguengos de Monsaraz, EM 1127, antigo Moinho do Gato, 7200 Monsaraz",
     "type": "guia",
     "coordinates": {
-      "lat": null,
-      "lng": null
+      "lat": 38.4346534,
+      "lng": -7.3501157
     },
     "seasonal": true
   },
@@ -5759,8 +5759,8 @@
     "address": "Praia Fluvial de Quadrazais, 6320-242 Quadrazais",
     "type": "guia",
     "coordinates": {
-      "lat": 40.324856,
-      "lng": -6.9974893
+      "lat": 40.3129983,
+      "lng": -6.9875167
     },
     "seasonal": true
   },
@@ -5770,8 +5770,8 @@
     "address": "Praia Fluvial de Rapoula do Côa, EN 537, 6320-000 Rapoula do Côa",
     "type": "guia",
     "coordinates": {
-      "lat": 40.3567591,
-      "lng": -6.9538488
+      "lat": 40.4182358,
+      "lng": -7.0440932
     },
     "seasonal": true
   },
@@ -5781,8 +5781,8 @@
     "address": "Praia Fluvial de Vale das Éguas – Praia Fluvial da Ínsua, Rua da Oliveira n.º 23, 6320-650 Vale das Éguas",
     "type": "guia",
     "coordinates": {
-      "lat": 40.3577021,
-      "lng": -6.9601242
+      "lat": 40.4355046,
+      "lng": -7.0245034
     },
     "seasonal": true
   },
@@ -5792,8 +5792,8 @@
     "address": "Praia Fluvial do Sabugal – Devesa, 6320 Sabugal",
     "type": "guia",
     "coordinates": {
-      "lat": null,
-      "lng": null
+      "lat": 40.3482797,
+      "lng": -7.0920858
     },
     "seasonal": true
   },
@@ -6124,8 +6124,8 @@
     "address": "Praia Fluvial da Lapa Dos Dinheiros, 6270-651 Seia",
     "type": "guia",
     "coordinates": {
-      "lat": 40.3691896,
-      "lng": -7.6721707
+      "lat": 40.3851988,
+      "lng": -7.6971411
     },
     "seasonal": true
   },
@@ -6135,8 +6135,8 @@
     "address": "Praia Fluvial de Loriga, EN 231, 6270-080 Loriga",
     "type": "guia",
     "coordinates": {
-      "lat": 40.327745,
-      "lng": -7.6883405
+      "lat": 40.3273033,
+      "lng": -7.6784268
     },
     "seasonal": true
   },
@@ -6146,8 +6146,8 @@
     "address": "Praia Fluvial de Vila Cova à Coelheira, 6270-644 Vila Cova à Coelheira",
     "type": "guia",
     "coordinates": {
-      "lat": 40.3835658,
-      "lng": -7.7332854
+      "lat": 40.8793822,
+      "lng": -7.7940441
     },
     "seasonal": true
   },
@@ -6391,8 +6391,8 @@
     "address": "Praia Fluvial da Ribeira Grande, 6100 Sertã",
     "type": "guia",
     "coordinates": {
-      "lat": null,
-      "lng": null
+      "lat": 39.9855432,
+      "lng": -8.121726
     },
     "seasonal": true
   },
@@ -6402,8 +6402,8 @@
     "address": "Praia Fluvial do Troviscal, 6100 Troviscal",
     "type": "guia",
     "coordinates": {
-      "lat": null,
-      "lng": null
+      "lat": 39.8600602,
+      "lng": -8.0080433
     },
     "seasonal": true
   },
@@ -6953,8 +6953,8 @@
     "address": "Praia Fluvial de Fernandaires, 6110 Vila de Rei",
     "type": "guia",
     "coordinates": {
-      "lat": null,
-      "lng": null
+      "lat": 39.7348183,
+      "lng": -8.2098318
     },
     "seasonal": true
   },
@@ -6964,8 +6964,8 @@
     "address": "Praia Fluvial do Penedo Furado, 6110 Vila de Rei",
     "type": "guia",
     "coordinates": {
-      "lat": null,
-      "lng": null
+      "lat": 39.6254885,
+      "lng": -8.1624252
     },
     "seasonal": true
   },
@@ -7015,8 +7015,8 @@
     "address": "Praia Fluvial do Bostelim, 6110-016 Fundada (Vila de Rei)",
     "type": "guia",
     "coordinates": {
-      "lat": 39.7216877,
-      "lng": -8.1445497
+      "lat": 39.7236235,
+      "lng": -8.1081454
     }
   },
   {
