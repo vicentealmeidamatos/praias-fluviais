@@ -566,7 +566,7 @@ async function initHeaderAuth() {
     slot.innerHTML = `
       <a href="auth.html" id="header-register-btn"
          class="inline-flex items-center gap-1.5 border border-white/40 text-white hover:bg-white/10 active:scale-95
-                font-display font-bold text-[11px] uppercase tracking-wider px-3.5 py-1.5 rounded-full transition-all duration-200 whitespace-nowrap">
+                font-display font-bold text-[11px] uppercase tracking-wider px-2.5 py-1.5 rounded-full transition-all duration-200 whitespace-nowrap">
         <i data-lucide="user-plus" class="w-3.5 h-3.5"></i>
         Registar-se
       </a>`;
@@ -585,7 +585,7 @@ async function initHeaderAuth() {
     slot.innerHTML = `
       <a href="auth.html" id="header-register-btn"
          class="inline-flex items-center gap-1.5 border border-white/40 text-white hover:bg-white/10 active:scale-95
-                font-display font-bold text-[11px] uppercase tracking-wider px-3.5 py-1.5 rounded-full transition-all duration-200 whitespace-nowrap">
+                font-display font-bold text-[11px] uppercase tracking-wider px-2.5 py-1.5 rounded-full transition-all duration-200 whitespace-nowrap">
         <i data-lucide="user-plus" class="w-3.5 h-3.5"></i>
         Registar-se
       </a>`;

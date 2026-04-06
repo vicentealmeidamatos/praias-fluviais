@@ -1,18 +1,12 @@
 // api/webhook.js — Vercel Serverless Function
 // Processa eventos do Stripe Checkout e guarda encomendas no Supabase.
 
-// Desativar o bodyParser do Vercel para receber o body raw (necessário para verificar assinatura Stripe)
-module.exports.config = {
+import Stripe from 'stripe';
+import { createClient } from '@supabase/supabase-js';
+
+export const config = {
   api: { bodyParser: false },
 };
-
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const { createClient } = require('@supabase/supabase-js');
-
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
 
 const WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
 
@@ -26,10 +20,16 @@ function getRawBody(req) {
   });
 }
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Método não permitido' });
   }
+
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+  const supabase = createClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+  );
 
   let event;
 
@@ -46,13 +46,13 @@ module.exports = async function handler(req, res) {
   // Processar evento
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
-    await handleCheckoutComplete(session);
+    await handleCheckoutComplete(session, supabase);
   }
 
   return res.status(200).json({ received: true });
-};
+}
 
-async function handleCheckoutComplete(session) {
+async function handleCheckoutComplete(session, supabase) {
   try {
     const metadata = session.metadata || {};
     const userId = metadata.user_id || null;

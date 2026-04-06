@@ -82,11 +82,10 @@ function renderProduct() {
 
   // Available state
   const addBtn = document.getElementById('add-to-cart-btn');
-  if (addBtn && !p.available) {
-    addBtn.disabled = true;
-    addBtn.textContent = 'Esgotado';
-    addBtn.style.opacity = '0.5';
-    addBtn.style.cursor = 'not-allowed';
+  const buyBtn = document.getElementById('buy-now-btn');
+  if (!p.available) {
+    if (addBtn) { addBtn.disabled = true; addBtn.textContent = 'Esgotado'; addBtn.style.opacity = '0.5'; addBtn.style.cursor = 'not-allowed'; }
+    if (buyBtn) { buyBtn.disabled = true; buyBtn.style.opacity = '0.5'; buyBtn.style.cursor = 'not-allowed'; }
   }
 
   // Shipping info
@@ -268,6 +267,63 @@ async function handleAddToCartProduto() {
     if (btn) {
       btn.disabled = false;
       btn.innerHTML = `<i data-lucide="shopping-cart" class="w-5 h-5"></i> Adicionar ao carrinho`;
+      if (window.lucide) lucide.createIcons();
+    }
+  }
+}
+
+// ─── Comprar agora ────────────────────────────────────────────────────────────
+
+async function handleBuyNowProduto() {
+  if (!_product || !_product.available) return;
+
+  const user = await authGetUser();
+  if (!user) {
+    showLoginModalProduto();
+    return;
+  }
+
+  const variant = getSelectedVariantProduto();
+  if (_product.variants && _product.variants.length > 0 && !variant) {
+    showToastProduto('Seleciona um tamanho primeiro.', 'warning');
+    return;
+  }
+
+  const btn = document.getElementById('buy-now-btn');
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = `<div class="w-5 h-5 border-2 border-praia-teal-800/30 border-t-praia-teal-800 rounded-full animate-spin"></div> A processar…`;
+  }
+
+  try {
+    const payload = {
+      items: [{
+        product_id: _product.id,
+        variant: variant || 'sem-variante',
+        quantity: 1,
+      }],
+      user_id: user?.id ?? null,
+    };
+
+    const res = await fetch('/api/create-checkout-session', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'Erro ao criar sessão de pagamento.');
+    }
+
+    const { url } = await res.json();
+    if (url) window.location.href = url;
+  } catch (err) {
+    console.error('Buy now error:', err);
+    showToastProduto(err.message || 'Erro ao iniciar o pagamento. Tenta novamente.', 'error');
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = `<i data-lucide="zap" class="w-5 h-5"></i> Comprar agora`;
       if (window.lucide) lucide.createIcons();
     }
   }

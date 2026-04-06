@@ -8,6 +8,8 @@
     "screenshot": "node screenshot.mjs"
   },
   "dependencies": {
-    "puppeteer": "^24.40.0"
+    "@supabase/supabase-js": "^2.101.1",
+    "puppeteer": "^24.40.0",
+    "stripe": "^22.0.0"
   }
 }

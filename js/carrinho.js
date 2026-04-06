@@ -49,6 +49,15 @@ function renderEmptyCart(notLoggedIn = false) {
   const container = document.getElementById('cart-content');
   if (!container) return;
 
+  // When not logged in, expand to full grid width so the message is truly centred
+  if (notLoggedIn) {
+    container.classList.remove('lg:col-span-2');
+    container.classList.add('lg:col-span-3');
+  } else {
+    container.classList.remove('lg:col-span-3');
+    container.classList.add('lg:col-span-2');
+  }
+
   if (notLoggedIn) {
     container.innerHTML = `
       <div class="flex flex-col items-center justify-center py-24 text-center">

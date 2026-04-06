@@ -76,6 +76,59 @@ const server = createServer(async (req, res) => {
     return;
   }
 
+  // ─── Checkout Session (desenvolvimento local) ───
+  // Requer: npm install stripe @supabase/supabase-js  +  ficheiro .env com as chaves
+  // Execute separadamente: stripe listen --forward-to localhost:3000/api/webhook
+  if (req.method === 'POST' && url === '/api/create-checkout-session') {
+    try {
+      // Carregar variáveis de ambiente de .env (se existir)
+      let STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
+      if (!STRIPE_SECRET_KEY) {
+        try {
+          const envFile = await readFile(join(__dirname, '.env'), 'utf8');
+          envFile.split('\n').forEach(line => {
+            const [k, ...v] = line.split('=');
+            if (k && v.length) process.env[k.trim()] = v.join('=').trim().replace(/^["']|["']$/g, '');
+          });
+          STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
+        } catch { /* .env não existe */ }
+      }
+
+      if (!STRIPE_SECRET_KEY) {
+        res.writeHead(500, { 'Content-Type': 'application/json', ...CORS });
+        res.end(JSON.stringify({ error: 'STRIPE_SECRET_KEY não configurada. Adiciona ao ficheiro .env' }));
+        return;
+      }
+
+      // Leitura do body
+      const chunks = [];
+      for await (const chunk of req) chunks.push(chunk);
+      const body = JSON.parse(Buffer.concat(chunks).toString());
+
+      // Delegar à função da Vercel (importar dinamicamente)
+      const handler = (await import('./api/create-checkout-session.js')).default;
+
+      // Simular req/res compatível com Vercel
+      const fakeReq = { method: 'POST', body, headers: req.headers };
+      const fakeRes = {
+        _status: 200, _headers: {}, _body: null,
+        status(s) { this._status = s; return this; },
+        setHeader(k, v) { this._headers[k] = v; return this; },
+        json(data) { this._body = JSON.stringify(data); },
+        end() {},
+      };
+
+      await handler(fakeReq, fakeRes);
+      res.writeHead(fakeRes._status, { 'Content-Type': 'application/json', ...CORS });
+      res.end(fakeRes._body || '{}');
+    } catch (err) {
+      console.error('[/api/create-checkout-session] Erro:', err.message);
+      res.writeHead(500, { 'Content-Type': 'application/json', ...CORS });
+      res.end(JSON.stringify({ error: err.message }));
+    }
+    return;
+  }
+
   // ─── Static File Server ───
   if (url === '/') url = '/index.html';
   const filePath = join(__dirname, url);
