@@ -11,6 +11,13 @@
     "email": "info@praiasfluviais.pt",
     "website": "https://praiasfluviais.pt"
   },
+  "shop": {
+    "shipping": {
+      "mainland": 350,
+      "ilhas": 550
+    },
+    "freeShippingThreshold": 3000
+  },
   "previousWinners": [
     { "year": 2025, "name": "Zona de Fruição Ribeirinha da Carriça", "municipality": "Oliveira de Frades", "district": "Viseu", "votes": null, "beachId": "praia-fluvial-da-carrica" },
     { "year": 2024, "name": "Praia Fluvial de Avô", "municipality": "Oliveira do Hospital", "district": "Coimbra", "votes": 7175, "beachId": "praia-fluvial-de-avo" },

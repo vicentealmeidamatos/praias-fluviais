@@ -106,20 +106,6 @@
     }
     .auth-card { animation: slideIn 0.45s cubic-bezier(0.34,1.56,0.64,1) both; }
 
-    /* Floating bubbles */
-    .bubble-auth {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(255,235,59,0.04);
-      animation: riseAuth linear infinite;
-      pointer-events: none;
-    }
-    @keyframes riseAuth {
-      0%   { transform: translateY(100vh) scale(1); opacity: 0; }
-      10%  { opacity: 1; }
-      90%  { opacity: 0.5; }
-      100% { transform: translateY(-20vh) scale(1.1); opacity: 0; }
-    }
 
     /* Imposing error messages */
     .error-banner {
@@ -144,10 +130,56 @@
 <div class="auth-bg flex flex-col items-center justify-center px-4 py-12 relative">
 
   <!-- Bubbles -->
-  <div class="bubble-auth" style="width:180px;height:180px;left:5%;animation-duration:18s;animation-delay:0s;"></div>
-  <div class="bubble-auth" style="width:80px;height:80px;left:20%;animation-duration:12s;animation-delay:3s;background:rgba(2,136,209,0.04);"></div>
-  <div class="bubble-auth" style="width:120px;height:120px;right:10%;animation-duration:15s;animation-delay:6s;"></div>
-  <div class="bubble-auth" style="width:60px;height:60px;right:25%;animation-duration:9s;animation-delay:1s;background:rgba(67,160,71,0.04);"></div>
+  <div class="bubble w-1 h-1"     style="left:2%;  top:78%; --delay:0s;   --dur:4s;  --drift:10px;"></div>
+  <div class="bubble w-1.5 h-1.5" style="left:5%;  top:22%; --delay:1.2s; --dur:3s;  --drift:-12px;"></div>
+  <div class="bubble w-1 h-1"     style="left:8%;  top:88%; --delay:2.5s; --dur:5s;  --drift:8px;"></div>
+  <div class="bubble w-1.5 h-1.5" style="left:11%; top:40%; --delay:0.4s; --dur:4s;  --drift:-9px;"></div>
+  <div class="bubble w-1 h-1"     style="left:14%; top:65%; --delay:3s;   --dur:3.5s;--drift:11px;"></div>
+  <div class="bubble w-2 h-2"     style="left:17%; top:12%; --delay:1.8s; --dur:5s;  --drift:-14px;"></div>
+  <div class="bubble w-1 h-1"     style="left:20%; top:55%; --delay:0.7s; --dur:3s;  --drift:7px;"></div>
+  <div class="bubble w-1.5 h-1.5" style="left:23%; top:80%; --delay:4s;   --dur:4.5s;--drift:-10px;"></div>
+  <div class="bubble w-1 h-1"     style="left:26%; top:32%; --delay:2s;   --dur:3.5s;--drift:13px;"></div>
+  <div class="bubble w-1.5 h-1.5" style="left:29%; top:70%; --delay:0.2s; --dur:4s;  --drift:-8px;"></div>
+  <div class="bubble w-1 h-1"     style="left:32%; top:18%; --delay:3.5s; --dur:3s;  --drift:10px;"></div>
+  <div class="bubble w-2 h-2"     style="left:35%; top:90%; --delay:1.5s; --dur:5s;  --drift:-11px;"></div>
+  <div class="bubble w-1 h-1"     style="left:38%; top:45%; --delay:2.8s; --dur:3.5s;--drift:9px;"></div>
+  <div class="bubble w-1.5 h-1.5" style="left:41%; top:75%; --delay:0.9s; --dur:4s;  --drift:-13px;"></div>
+  <div class="bubble w-1 h-1"     style="left:44%; top:28%; --delay:4.5s; --dur:3s;  --drift:11px;"></div>
+  <div class="bubble w-1.5 h-1.5" style="left:47%; top:60%; --delay:1.1s; --dur:4.5s;--drift:-8px;"></div>
+  <div class="bubble w-1 h-1"     style="left:50%; top:10%; --delay:3.2s; --dur:3.5s;--drift:12px;"></div>
+  <div class="bubble w-2 h-2"     style="left:53%; top:85%; --delay:0.6s; --dur:5s;  --drift:-10px;"></div>
+  <div class="bubble w-1 h-1"     style="left:56%; top:38%; --delay:2.3s; --dur:3s;  --drift:8px;"></div>
+  <div class="bubble w-1.5 h-1.5" style="left:59%; top:68%; --delay:4.8s; --dur:4s;  --drift:-14px;"></div>
+  <div class="bubble w-1 h-1"     style="left:62%; top:22%; --delay:1.4s; --dur:3.5s;--drift:10px;"></div>
+  <div class="bubble w-1.5 h-1.5" style="left:65%; top:92%; --delay:0.3s; --dur:4.5s;--drift:-9px;"></div>
+  <div class="bubble w-1 h-1"     style="left:68%; top:50%; --delay:3.7s; --dur:3s;  --drift:13px;"></div>
+  <div class="bubble w-2 h-2"     style="left:71%; top:15%; --delay:2.1s; --dur:5s;  --drift:-12px;"></div>
+  <div class="bubble w-1 h-1"     style="left:74%; top:78%; --delay:0.8s; --dur:3.5s;--drift:9px;"></div>
+  <div class="bubble w-1.5 h-1.5" style="left:77%; top:42%; --delay:5s;   --dur:4s;  --drift:-10px;"></div>
+  <div class="bubble w-1 h-1"     style="left:80%; top:65%; --delay:1.6s; --dur:3s;  --drift:11px;"></div>
+  <div class="bubble w-1.5 h-1.5" style="left:83%; top:25%; --delay:3.9s; --dur:4.5s;--drift:-8px;"></div>
+  <div class="bubble w-1 h-1"     style="left:86%; top:82%; --delay:0.5s; --dur:3.5s;--drift:14px;"></div>
+  <div class="bubble w-2 h-2"     style="left:89%; top:48%; --delay:2.6s; --dur:5s;  --drift:-11px;"></div>
+  <div class="bubble w-1 h-1"     style="left:92%; top:30%; --delay:4.3s; --dur:3s;  --drift:9px;"></div>
+  <div class="bubble w-1.5 h-1.5" style="left:95%; top:70%; --delay:1.9s; --dur:4s;  --drift:-13px;"></div>
+  <div class="bubble w-1 h-1"     style="left:98%; top:55%; --delay:3.4s; --dur:3.5s;--drift:10px;"></div>
+  <div class="bubble w-1 h-1"     style="left:7%;  top:95%; --delay:5.5s; --dur:3s;  --drift:-7px;"></div>
+  <div class="bubble w-1 h-1"     style="left:16%; top:5%;  --delay:0.1s; --dur:4s;  --drift:8px;"></div>
+  <div class="bubble w-1.5 h-1.5" style="left:31%; top:50%; --delay:6s;   --dur:4.5s;--drift:-12px;"></div>
+  <div class="bubble w-1 h-1"     style="left:46%; top:95%; --delay:2.7s; --dur:3s;  --drift:10px;"></div>
+  <div class="bubble w-1 h-1"     style="left:58%; top:5%;  --delay:5.2s; --dur:3.5s;--drift:-9px;"></div>
+  <div class="bubble w-1.5 h-1.5" style="left:70%; top:35%; --delay:1.3s; --dur:4s;  --drift:11px;"></div>
+  <div class="bubble w-1 h-1"     style="left:84%; top:8%;  --delay:4.1s; --dur:3s;  --drift:-10px;"></div>
+  <div class="bubble-sideways w-1 h-1"     style="left:4%;  top:55%; --delay:1.5s; --dur:4s;  --dx:38px;  --dy:-20px;"></div>
+  <div class="bubble-sideways w-1.5 h-1.5" style="left:13%; top:72%; --delay:3.5s; --dur:5s;  --dx:-42px; --dy:-15px;"></div>
+  <div class="bubble-sideways w-1 h-1"     style="left:24%; top:38%; --delay:0.6s; --dur:3.5s;--dx:45px;  --dy:-18px;"></div>
+  <div class="bubble-sideways w-1 h-1"     style="left:37%; top:20%; --delay:2.4s; --dur:4s;  --dx:-40px; --dy:12px;"></div>
+  <div class="bubble-sideways w-1.5 h-1.5" style="left:48%; top:82%; --delay:4.6s; --dur:5s;  --dx:36px;  --dy:-24px;"></div>
+  <div class="bubble-sideways w-1 h-1"     style="left:57%; top:48%; --delay:1s;   --dur:3.5s;--dx:-44px; --dy:-16px;"></div>
+  <div class="bubble-sideways w-1 h-1"     style="left:67%; top:25%; --delay:3.8s; --dur:4s;  --dx:40px;  --dy:-10px;"></div>
+  <div class="bubble-sideways w-1.5 h-1.5" style="left:76%; top:62%; --delay:0.4s; --dur:4.5s;--dx:-38px; --dy:-20px;"></div>
+  <div class="bubble-sideways w-1 h-1"     style="left:87%; top:85%; --delay:5.3s; --dur:3.5s;--dx:42px;  --dy:-22px;"></div>
+  <div class="bubble-sideways w-1 h-1"     style="left:94%; top:18%; --delay:2s;   --dur:4s;  --dx:-36px; --dy:14px;"></div>
 
   <!-- Logo -->
   <a href="index.html" class="mb-8 flex-shrink-0">
@@ -506,12 +538,19 @@
     // Handle email change confirmation (PKCE: ?code=xxx, implicit: #type=email_change)
     const code = searchParams.get('code');
     const flowType = params.get('type') || searchParams.get('type');
-    if (code || flowType === 'email_change') {
+    const isEmailChange = flowType === 'email_change' || flowType === 'email_change_new' || flowType === 'email_change_old';
+    if (isEmailChange || (code && !searchParams.get('type'))) {
       try {
         if (code) await AuthUtils.supabase.auth.exchangeCodeForSession(code);
-        const changedUser = await AuthUtils.authGetUser();
-        if (changedUser) { window.location.href = 'perfil.html?email_changed=1'; return; }
       } catch (e) {}
+      const changedUser = await AuthUtils.authGetUser();
+      const emailParam = changedUser?.email ? '&email=' + encodeURIComponent(changedUser.email) : '';
+      window.location.href = 'perfil.html?email_changed=1' + emailParam;
+      return;
+    }
+    // Handle PKCE code with explicit type (signup, recovery handled separately below)
+    if (code && flowType && !isEmailChange) {
+      try { await AuthUtils.supabase.auth.exchangeCodeForSession(code); } catch (e) {}
     }
 
     // Check for email signup verification
@@ -587,10 +626,17 @@
       showPanel('reset');
       history.replaceState(null, '', location.pathname + '?redirect=' + encodeURIComponent(redirectTo));
     }
-    if (event === 'USER_UPDATED') {
-      const u = await AuthUtils.authGetUser();
-      if (u && !sessionStorage.getItem('gpf_recovery')) {
+    if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
+      if (sessionStorage.getItem('gpf_email_change_pending')) {
+        sessionStorage.removeItem('gpf_email_change_pending');
         window.location.href = 'perfil.html?email_changed=1';
+        return;
+      }
+      if (event === 'USER_UPDATED') {
+        const u = await AuthUtils.authGetUser();
+        if (u && !sessionStorage.getItem('gpf_recovery')) {
+          window.location.href = 'perfil.html?email_changed=1';
+        }
       }
     }
   });

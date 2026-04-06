@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Encomenda Confirmada — Guia das Praias Fluviais</title>
+  <meta name="description" content="Obrigado pela tua encomenda no Guia das Praias Fluviais.">
+  <meta name="robots" content="noindex">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/shared.js"></script>
+
+  <!-- Lucide -->
+  <script src="js/lucide.min.js"></script>
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/shared.css">
+
+  <style>
+    @keyframes checkPop {
+      0% { transform: scale(0) rotate(-10deg); opacity: 0; }
+      60% { transform: scale(1.15) rotate(3deg); opacity: 1; }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .check-anim { animation: checkPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both; }
+    .fade-up-1 { animation: fadeUp 0.4s ease 0.5s both; }
+    .fade-up-2 { animation: fadeUp 0.4s ease 0.65s both; }
+    .fade-up-3 { animation: fadeUp 0.4s ease 0.8s both; }
+    .fade-up-4 { animation: fadeUp 0.4s ease 0.95s both; }
+  </style>
+</head>
+
+<body class="bg-praia-sand-50 font-body text-praia-sand-900 antialiased">
+
+  <!-- Header minimal -->
+  <header class="fixed top-0 left-0 right-0 z-[1000] bg-praia-teal-800/90 backdrop-blur-md">
+    <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-10">
+      <div class="flex items-center h-16 md:h-[70px]">
+        <a href="index.html">
+          <img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-14 md:h-[58px] w-auto">
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="pt-16 md:pt-[70px] min-h-screen flex items-center justify-center px-4 py-16">
+    <div class="max-w-lg w-full">
+
+      <!-- Loading state -->
+      <div id="loading-state" class="text-center py-20">
+        <div class="w-12 h-12 border-2 border-praia-teal-200 border-t-praia-teal-600 rounded-full animate-spin mx-auto mb-4"></div>
+        <p class="font-display text-sm text-praia-sand-400">A confirmar encomenda…</p>
+      </div>
+
+      <!-- Success state -->
+      <div id="success-state" class="hidden text-center">
+        <!-- Check icon -->
+        <div class="check-anim w-24 h-24 bg-praia-green-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+          <i data-lucide="check" class="w-12 h-12 text-white stroke-[3]"></i>
+        </div>
+
+        <h1 class="fade-up-1 font-display font-extrabold text-3xl md:text-4xl text-praia-teal-800 mb-3">
+          Encomenda confirmada!
+        </h1>
+        <p class="fade-up-2 text-praia-sand-500 text-base leading-relaxed mb-8">
+          Obrigado pela tua encomenda. Receberás um email de confirmação em breve com os detalhes do envio.
+        </p>
+
+        <!-- Order summary card -->
+        <div id="order-card" class="fade-up-3 bg-white rounded-2xl border border-praia-sand-100 shadow-sm p-6 text-left mb-8">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Actions -->
+        <div class="fade-up-4 flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="loja.html" class="inline-flex items-center justify-center gap-2 bg-praia-teal-800 text-white font-display font-bold text-sm uppercase tracking-wider px-6 py-3 rounded-xl hover:bg-praia-teal-700 transition-colors shadow-sm">
+            <i data-lucide="shopping-bag" class="w-4 h-4"></i> Continuar a comprar
+          </a>
+          <a href="perfil.html" id="profile-link" class="hidden inline-flex items-center justify-center gap-2 bg-white border border-praia-sand-200 text-praia-teal-700 font-display font-bold text-sm uppercase tracking-wider px-6 py-3 rounded-xl hover:border-praia-teal-400 transition-colors">
+            <i data-lucide="package" class="w-4 h-4"></i> As minhas encomendas
+          </a>
+        </div>
+      </div>
+
+      <!-- Error state -->
+      <div id="error-state" class="hidden text-center py-20">
+        <div class="w-20 h-20 bg-praia-sand-100 rounded-full flex items-center justify-center mx-auto mb-6">
+          <i data-lucide="alert-circle" class="w-10 h-10 text-praia-sand-400"></i>
+        </div>
+        <h1 class="font-display font-bold text-2xl text-praia-teal-800 mb-3">Não foi possível confirmar</h1>
+        <p class="text-praia-sand-500 mb-8">Se o pagamento foi realizado, receberás um email de confirmação. Caso contrário, tenta novamente.</p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="carrinho.html" class="inline-flex items-center justify-center gap-2 bg-praia-teal-800 text-white font-display font-bold text-sm uppercase tracking-wider px-6 py-3 rounded-xl hover:bg-praia-teal-700 transition-colors">
+            <i data-lucide="shopping-cart" class="w-4 h-4"></i> Voltar ao carrinho
+          </a>
+          <a href="contactos.html" class="inline-flex items-center justify-center gap-2 bg-white border border-praia-sand-200 text-praia-teal-700 font-display font-bold text-sm uppercase tracking-wider px-6 py-3 rounded-xl hover:border-praia-teal-400 transition-colors">
+            <i data-lucide="mail" class="w-4 h-4"></i> Contactar suporte
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-praia-teal-900 text-white/60 py-8">
+    <div class="max-w-[1440px] mx-auto px-4 text-center">
+      <div class="flex items-center justify-center gap-2 mt-1">
+        <p class="font-display text-xs">© 2026 Guia das Praias Fluviais · Todos os direitos reservados</p>
+        <img src="brand_assets/logo_blanche.png" alt="Blanche" class="h-4 opacity-25 grayscale brightness-200">
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/auth.js"></script>
+  <script>
+    async function initConfirmacao() {
+      lucide.createIcons();
+
+      const params = new URLSearchParams(window.location.search);
+      const sessionId = params.get('session_id');
+
+      if (!sessionId) {
+        showError();
+        return;
+      }
+
+      try {
+        // Fetch order from Supabase by stripe_session_id
+        const { data: order, error } = await _sb
+          .from('orders')
+          .select('*')
+          .eq('stripe_session_id', sessionId)
+          .single();
+
+        if (error || !order) {
+          // Order might not be saved yet (webhook delay) — show generic success
+          showSuccess(null);
+          return;
+        }
+
+        showSuccess(order);
+      } catch (e) {
+        console.error(e);
+        showSuccess(null);
+      }
+    }
+
+    function showSuccess(order) {
+      document.getElementById('loading-state').classList.add('hidden');
+      document.getElementById('success-state').classList.remove('hidden');
+
+      // Show profile link if user is logged in
+      authGetUser().then(user => {
+        if (user) document.getElementById('profile-link').classList.remove('hidden');
+      });
+
+      renderOrderCard(order);
+      lucide.createIcons();
+    }
+
+    function showError() {
+      document.getElementById('loading-state').classList.add('hidden');
+      document.getElementById('error-state').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function formatPrice(cents) {
+      return (cents / 100).toFixed(2).replace('.', ',') + '€';
+    }
+
+    function statusLabel(status) {
+      const map = {
+        pendente: 'Pendente',
+        processado: 'Em processamento',
+        enviado: 'Enviado',
+        entregue: 'Entregue'
+      };
+      return map[status] || status;
+    }
+
+    function renderOrderCard(order) {
+      const card = document.getElementById('order-card');
+      if (!card) return;
+
+      if (!order) {
+        card.innerHTML = `
+          <div class="flex items-center gap-3 text-praia-sand-500">
+            <i data-lucide="info" class="w-4 h-4 flex-shrink-0"></i>
+            <p class="text-sm font-display">Os detalhes da encomenda serão enviados para o teu email.</p>
+          </div>
+        `;
+        return;
+      }
+
+      const items = Array.isArray(order.items) ? order.items : [];
+      const shippingLabel = order.shipping_zone === 'ilhas' ? 'Açores / Madeira' : 'Portugal Continental';
+
+      card.innerHTML = `
+        <div class="flex items-center justify-between mb-4 pb-4 border-b border-praia-sand-100">
+          <div>
+            <p class="font-display text-[10px] font-semibold uppercase tracking-wider text-praia-sand-400 mb-0.5">Encomenda</p>
+            <p class="font-display font-bold text-praia-teal-800 text-sm">#${order.id.slice(0, 8).toUpperCase()}</p>
+          </div>
+          <span class="inline-flex items-center gap-1.5 bg-praia-teal-50 text-praia-teal-700 font-display font-semibold text-xs px-3 py-1 rounded-full">
+            <i data-lucide="clock" class="w-3 h-3"></i> ${statusLabel(order.status)}
+          </span>
+        </div>
+
+        ${items.length ? `
+          <div class="space-y-2 mb-4">
+            ${items.map(item => `
+              <div class="flex justify-between text-sm">
+                <span class="text-praia-sand-600 font-display">${item.name}${item.variant && item.variant !== 'sem-variante' ? ` <span class="text-praia-sand-400">(${item.variant})</span>` : ''} × ${item.quantity}</span>
+                <span class="font-display font-semibold text-praia-teal-800">${item.price === 0 ? 'Grátis' : formatPrice(item.price * item.quantity)}</span>
+              </div>
+            `).join('')}
+          </div>
+        ` : ''}
+
+        <div class="border-t border-praia-sand-100 pt-3 space-y-1.5">
+          <div class="flex justify-between text-sm">
+            <span class="text-praia-sand-400 font-display">Envio (${shippingLabel})</span>
+            <span class="font-display font-semibold text-praia-teal-800">${order.shipping_price === 0 ? 'Grátis' : formatPrice(order.shipping_price)}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-display font-bold text-praia-teal-800">Total pago</span>
+            <span class="font-display font-bold text-lg text-praia-teal-800">${formatPrice(order.total)}</span>
+          </div>
+        </div>
+      `;
+    }
+
+    document.addEventListener('DOMContentLoaded', initConfirmacao);
+  </script>
+</body>
+</html>

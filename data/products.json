@@ -1,0 +1,54 @@
+[
+  {
+    "id": "tshirt-premio-2026",
+    "name": "T-Shirt Prémio Passaporte 2026",
+    "description": "A t-shirt oficial do Programa Passaporte das Praias Fluviais 2026. Exclusiva para participantes do passaporte — disponível em três modelos distintos. 100% algodão orgânico, corte descontraído. Lavagem a 30°C.",
+    "price": 2500,
+    "images": [
+      "brand_assets/itens_loja/t-shirt-A.jpg",
+      "brand_assets/itens_loja/t-shirt-B.jpg",
+      "brand_assets/itens_loja/t-shirt-C.jpg"
+    ],
+    "category": "vestuario",
+    "variants": [
+      { "id": "XS", "label": "XS", "available": true },
+      { "id": "S",  "label": "S",  "available": true },
+      { "id": "M",  "label": "M",  "available": true },
+      { "id": "L",  "label": "L",  "available": true },
+      { "id": "XL", "label": "XL", "available": true },
+      { "id": "XXL","label": "XXL","available": true }
+    ],
+    "shippingRequired": true,
+    "available": true,
+    "featured": true
+  },
+  {
+    "id": "guia-2026",
+    "name": "Guia das Praias Fluviais 2026",
+    "description": "A edição completa do Guia das Praias Fluviais 2026 — mais de 200 praias fluviais portuguesas com mapas, serviços, qualidade da água e muito mais. Paga apenas os portes de envio.",
+    "price": 0,
+    "images": [
+      "brand_assets/itens_loja/guia/guia.png"
+    ],
+    "category": "publicacao",
+    "variants": [],
+    "shippingRequired": true,
+    "available": true,
+    "featured": true
+  },
+  {
+    "id": "passaporte-2026",
+    "name": "Passaporte das Praias Fluviais 2026",
+    "description": "O passaporte físico oficial para coleccionar os carimbos das praias fluviais em Portugal. Reúne todas as praias da rede e tem espaço para os teus registos de visita. Paga apenas os portes de envio.",
+    "price": 0,
+    "images": [
+      "brand_assets/itens_loja/passaporte/passaporte_capa.png",
+      "brand_assets/itens_loja/passaporte/passaporte_dentro.png"
+    ],
+    "category": "publicacao",
+    "variants": [],
+    "shippingRequired": true,
+    "available": true,
+    "featured": false
+  }
+]

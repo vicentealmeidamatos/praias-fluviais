@@ -39,13 +39,17 @@
       <div class="flex items-center justify-between h-16 md:h-[70px]">
         <a href="index.html" class="flex-shrink-0 mr-4"><img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-14 md:h-[58px] w-auto"></a>
         <nav class="hidden lg:flex items-center gap-0.5">
-          <a href="index.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Início</a>
           <a href="rede.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Rede</a>
           <a href="votar.html" class="nav-link active font-display text-xs font-semibold uppercase tracking-wider text-white px-3 py-2">Votar</a>
           <a href="passaporte.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Passaporte</a>
           <a href="artigos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Novidades</a>
           <a href="descontos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Descontos</a>
+          <a href="loja.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Loja</a>
           <a href="contactos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Contactos</a>
+          <a href="carrinho.html" class="relative nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-2.5 py-2 flex items-center" aria-label="Carrinho de compras">
+            <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+            <span id="cart-badge" class="absolute -top-0.5 -right-0.5 bg-praia-yellow-400 text-praia-teal-800 text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center hidden">0</span>
+          </a>
         </nav>
         <!-- Social -->
         <div class="hidden lg:flex items-center gap-1.5 ml-auto">
@@ -79,7 +83,6 @@
       <button id="nav-hamburger" class="text-white p-1" aria-label="Fechar menu"><i data-lucide="x" class="w-6 h-6"></i></button>
     </div>
     <div class="flex-1 overflow-y-auto py-4">
-      <a href="index.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="home" class="w-5 h-5"></i> Início</a>
       <a href="rede.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="network" class="w-5 h-5"></i> Rede de Praias</a>
       <a href="votar.html" class="flex items-center gap-3 px-6 py-3.5 text-praia-yellow-400 font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="vote" class="w-5 h-5"></i> Votar 2026</a>
       <a href="passaporte.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="stamp" class="w-5 h-5"></i> Passaporte</a>
@@ -87,6 +90,7 @@
       <a href="onde-encontrar.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="book-open" class="w-5 h-5"></i> Onde Encontrar</a>
       <a href="onde-carimbar-passaporte.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="stamp" class="w-5 h-5"></i> Onde Carimbar</a>
       <a href="descontos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="percent" class="w-5 h-5"></i> Descontos</a>
+      <a href="loja.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="shopping-bag" class="w-5 h-5"></i> Loja</a>
       <a href="contactos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="mail" class="w-5 h-5"></i> Contactos</a>
     </div>
     <div class="p-5 border-t border-white/10">
@@ -100,6 +104,10 @@
       </div>
       <a href="onde-encontrar.html" class="flex items-center justify-center gap-2 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider px-5 py-3 rounded-full btn-primary w-full">
         <i data-lucide="map-pin" class="w-4 h-4"></i> Onde Encontrar
+      </a>
+      <a href="carrinho.html" class="flex items-center justify-center gap-2 bg-white/10 border border-white/20 text-white hover:bg-white/20 font-display font-bold text-sm uppercase tracking-wider px-5 py-2.5 rounded-full transition-all duration-200 w-full mt-2 relative">
+        <i data-lucide="shopping-cart" class="w-4 h-4"></i> Carrinho
+        <span id="mobile-cart-badge" class="absolute -top-1.5 right-3 bg-praia-yellow-400 text-praia-teal-800 text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center hidden">0</span>
       </a>
       <div id="mobile-auth-slot" class="mt-2"></div>
     </div>
@@ -185,8 +193,6 @@
           <span class="text-praia-yellow-400">Favorita em 2026?</span>
         </h1>
 
-        <p class="text-white/50 text-lg mb-10 max-w-2xl mx-auto reveal-on-scroll" data-reveal-delay="200">Vote na sua praia fluvial favorita e ajude-a a conquistar o galardão Praia Fluvial do Ano.</p>
-
         <!-- Countdown Title -->
         <p class="font-display text-lg md:text-xl font-semibold text-white/60 tracking-widest mb-3 reveal-on-scroll" data-reveal-delay="250" style="letter-spacing: 0.15em;">Tic-Tac, Tic-Tac…</p>
 
@@ -210,138 +216,45 @@
           </div>
         </div>
 
-        <a href="#voting-section" class="btn-primary inline-flex items-center gap-2 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider px-8 py-4 rounded-full shadow-layered-yellow">
-          <i data-lucide="chevrons-down" class="w-5 h-5"></i> Votar Agora
-        </a>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="#voting-section" class="btn-primary inline-flex items-center gap-2 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider px-8 py-4 rounded-full shadow-layered-yellow">
+            <i data-lucide="chevrons-down" class="w-5 h-5"></i> Votar Agora
+          </a>
+          <a href="#vencedores" class="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white hover:bg-white/20 font-display font-bold text-sm uppercase tracking-wider px-8 py-4 rounded-full transition-all duration-200">
+            <i data-lucide="award" class="w-5 h-5"></i> Vencedores Anteriores
+          </a>
+        </div>
       </div>
     </section>
 
-    <!-- Previous Winners -->
-    <section id="vencedores" class="relative py-16 md:py-24 overflow-hidden" style="background: linear-gradient(160deg, #002A2E 0%, #003A40 60%, #001E22 100%);">
-      <div class="noise-overlay absolute inset-0 pointer-events-none"></div>
-      <div class="relative z-10 max-w-6xl mx-auto px-6">
+    <!-- Intro section -->
+    <section class="py-14 md:py-20 bg-praia-sand-50 border-b border-praia-sand-200">
+      <div class="max-w-5xl mx-auto px-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-        <div class="text-center mb-14">
-          <div class="inline-flex items-center gap-2 bg-praia-yellow-400/10 border border-praia-yellow-400/20 rounded-full px-4 py-1.5 mb-5">
-            <i data-lucide="award" class="w-4 h-4 text-praia-yellow-400"></i>
-            <span class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-semibold">Hall da Fama</span>
+          <!-- Praia do Ano card -->
+          <div class="rounded-2xl p-7 md:p-8 flex flex-col gap-4" style="background: linear-gradient(135deg, #003A40 0%, #002A2E 100%); border: 1px solid rgba(255,235,59,0.15);">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background: rgba(255,235,59,0.12);">
+                <i data-lucide="trophy" class="w-5 h-5 text-praia-yellow-400"></i>
+              </div>
+              <h2 class="font-display text-base font-bold text-praia-yellow-400 uppercase tracking-wider">Praia Fluvial do Ano</h2>
+            </div>
+            <p class="text-white/65 text-sm leading-relaxed">Todos os anos, os leitores do Guia das Praias Fluviais escolhem a sua praia fluvial favorita de todo o território nacional. São elegíveis para votação todas as praias fluviais classificadas pela APA e uma selecção das melhores zonas balneares não classificadas de Portugal. Vence o prémio de <strong class="text-white/90">Praia Fluvial do Ano</strong> a praia mais votada pelo público.</p>
           </div>
-          <h2 class="font-display text-3xl md:text-4xl font-bold text-white mb-4">Vencedoras dos Anos Anteriores</h2>
-          <p class="text-white/50 max-w-xl mx-auto text-base">Todos os anos, os leitores do Guia das Praias Fluviais escolhem a sua praia favorita em todo o território nacional. Vence a praia mais votada pelo público.</p>
+
+          <!-- Praia Revelação card -->
+          <div class="rounded-2xl p-7 md:p-8 flex flex-col gap-4" style="background: linear-gradient(135deg, #003A40 0%, #002A2E 100%); border: 1px solid rgba(2,136,209,0.2);">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background: rgba(2,136,209,0.12);">
+                <i data-lucide="sparkles" class="w-5 h-5" style="color: #0288D1;"></i>
+              </div>
+              <h2 class="font-display text-base font-bold uppercase tracking-wider" style="color: #0288D1;">Praia Fluvial Revelação</h2>
+            </div>
+            <p class="text-white/65 text-sm leading-relaxed">Paralelamente, o Guia das Praias Fluviais atribui anualmente o galardão <strong class="text-white/90">Praia Fluvial Revelação</strong> às novas zonas balneares interiores que mais se destacam na sua estreia pela qualidade das infraestruturas apresentadas, oferta de serviços disponibilizados e especialmente pelo cuidado e atenção na preservação ambiental do projeto.</p>
+          </div>
+
         </div>
-
-        <!-- Podium: top 3 -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10">
-
-          <!-- 2025 — centre/gold -->
-          <div class="md:order-2 relative rounded-2xl overflow-hidden group" style="background: linear-gradient(160deg, rgba(255,235,59,0.12) 0%, rgba(255,235,59,0.04) 100%); border: 1px solid rgba(255,235,59,0.3);">
-            <div class="absolute top-0 left-0 right-0 h-1" style="background: linear-gradient(90deg, #FFEB3B, #FFD600);"></div>
-            <div class="p-7">
-              <div class="flex items-center gap-3 mb-5">
-                <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: rgba(255,235,59,0.15);">
-                  <i data-lucide="trophy" class="w-5 h-5 text-praia-yellow-400"></i>
-                </div>
-                <div>
-                  <span class="font-display text-[10px] uppercase tracking-widest text-praia-yellow-400/70 font-semibold block">Praia do Ano</span>
-                  <span class="font-display text-2xl font-bold text-praia-yellow-400">2025</span>
-                </div>
-              </div>
-              <h3 class="font-display text-lg font-bold text-white leading-tight mb-1">Zona de Fruição Ribeirinha da Carriça</h3>
-              <p class="text-white/40 text-sm mb-5">Oliveira de Frades · Viseu</p>
-              <p class="text-white/60 text-sm leading-relaxed mb-6">Vencedora do galardão Praia Fluvial do Ano 2025, a Carriça é um espaço de fruição ribeirinha junto ao Rio Vouga, enquadrada numa paisagem de rara beleza.</p>
-              <a href="praia.html?id=praia-fluvial-da-carrica" class="inline-flex items-center gap-2 text-praia-yellow-400 font-display text-xs font-bold uppercase tracking-wider hover:gap-3 transition-all duration-300">
-                Ver Praia <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-              </a>
-            </div>
-          </div>
-
-          <!-- 2024 -->
-          <div class="md:order-1 relative rounded-2xl overflow-hidden" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);">
-            <div class="absolute top-0 left-0 right-0 h-0.5" style="background: rgba(255,255,255,0.2);"></div>
-            <div class="p-7">
-              <div class="flex items-center gap-3 mb-5">
-                <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: rgba(255,255,255,0.07);">
-                  <i data-lucide="medal" class="w-5 h-5 text-white/60"></i>
-                </div>
-                <div>
-                  <span class="font-display text-[10px] uppercase tracking-widest text-white/40 font-semibold block">Praia do Ano</span>
-                  <span class="font-display text-2xl font-bold text-white">2024</span>
-                </div>
-              </div>
-              <h3 class="font-display text-lg font-bold text-white leading-tight mb-1">Praia Fluvial de Avô</h3>
-              <p class="text-white/40 text-sm mb-5">Oliveira do Hospital · Coimbra · <strong class="text-white/60">7.175 votos</strong></p>
-              <p class="text-white/60 text-sm leading-relaxed mb-6">Nas águas cristalinas do Rio Alva, a Praia de Avô conquistou o galardão em 2024. A aldeia de Avô, com casas de xisto e pontes medievais, é uma das mais pitorescas da Serra do Açor.</p>
-              <a href="praia.html?id=praia-fluvial-de-avo" class="inline-flex items-center gap-2 text-white/50 font-display text-xs font-bold uppercase tracking-wider hover:text-white hover:gap-3 transition-all duration-300">
-                Ver Praia <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-              </a>
-            </div>
-          </div>
-
-          <!-- 2023 -->
-          <div class="md:order-3 relative rounded-2xl overflow-hidden" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);">
-            <div class="absolute top-0 left-0 right-0 h-0.5" style="background: rgba(255,255,255,0.2);"></div>
-            <div class="p-7">
-              <div class="flex items-center gap-3 mb-5">
-                <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: rgba(255,255,255,0.07);">
-                  <i data-lucide="medal" class="w-5 h-5 text-white/60"></i>
-                </div>
-                <div>
-                  <span class="font-display text-[10px] uppercase tracking-widest text-white/40 font-semibold block">Praia do Ano</span>
-                  <span class="font-display text-2xl font-bold text-white">2023</span>
-                </div>
-              </div>
-              <h3 class="font-display text-lg font-bold text-white leading-tight mb-1">Praia Fluvial do Vimieiro</h3>
-              <p class="text-white/40 text-sm mb-5">Penacova · Coimbra · <strong class="text-white/60">7.357 votos</strong></p>
-              <p class="text-white/60 text-sm leading-relaxed mb-6">Praia Fluvial do Ano 2023 com 7.357 votos, o Vimieiro é um paraíso nas margens do Rio Mondego. A paisagem verdejante e as águas calmas fazem desta praia uma das preferidas da região centro.</p>
-              <a href="praia.html?id=praia-fluvial-do-vimieiro" class="inline-flex items-center gap-2 text-white/50 font-display text-xs font-bold uppercase tracking-wider hover:text-white hover:gap-3 transition-all duration-300">
-                Ver Praia <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Older winners list -->
-        <div class="rounded-2xl overflow-hidden" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);">
-          <div class="px-7 py-5 border-b" style="border-color: rgba(255,255,255,0.08);">
-            <h3 class="font-display text-sm font-bold text-white/60 uppercase tracking-wider">Anteriores</h3>
-          </div>
-          <div class="divide-y" style="divide-color: rgba(255,255,255,0.06);">
-            <div class="flex items-center justify-between px-7 py-4">
-              <div class="flex items-center gap-4">
-                <span class="font-display text-lg font-bold text-praia-yellow-400/60 min-w-[52px]">2022</span>
-                <div>
-                  <p class="font-display text-sm font-semibold text-white/80">Quinta da Taberna – Videmonte</p>
-                  <p class="text-xs text-white/30">Guarda</p>
-                </div>
-              </div>
-              <i data-lucide="trophy" class="w-4 h-4 text-white/20 shrink-0"></i>
-            </div>
-            <div class="flex items-center justify-between px-7 py-4">
-              <div class="flex items-center gap-4">
-                <span class="font-display text-lg font-bold text-praia-yellow-400/60 min-w-[52px]">2021</span>
-                <div>
-                  <p class="font-display text-sm font-semibold text-white/80">Praia Fluvial Santa Luzia</p>
-                  <p class="text-xs text-white/30">Pampilhosa da Serra · Coimbra</p>
-                </div>
-              </div>
-              <i data-lucide="trophy" class="w-4 h-4 text-white/20 shrink-0"></i>
-            </div>
-            <div class="flex items-center justify-between px-7 py-4">
-              <div class="flex items-center gap-4">
-                <span class="font-display text-lg font-bold text-praia-yellow-400/60 min-w-[52px]">2020</span>
-                <div>
-                  <p class="font-display text-sm font-semibold text-white/80">Praia Fluvial Santa Luzia</p>
-                  <p class="text-xs text-white/30">Pampilhosa da Serra · Coimbra</p>
-                </div>
-              </div>
-              <i data-lucide="trophy" class="w-4 h-4 text-white/20 shrink-0"></i>
-            </div>
-          </div>
-          <div class="px-7 py-4 border-t" style="border-color: rgba(255,255,255,0.08);">
-            <p class="text-xs text-white/30 font-body">Fonte: <a href="https://praiasfluviais.pt/praia-do-ano/" target="_blank" rel="noopener" class="underline hover:text-white/50 transition-colors">praiasfluviais.pt/praia-do-ano</a> — Guia das Praias Fluviais</p>
-          </div>
-        </div>
-
       </div>
     </section>
 
@@ -373,6 +286,301 @@
         </div>
       </div>
     </section>
+
+    <!-- Previous Winners — at bottom -->
+    <section id="vencedores" class="relative py-16 md:py-24 overflow-hidden" style="background: linear-gradient(160deg, #002A2E 0%, #003A40 60%, #001E22 100%);">
+      <div class="noise-overlay absolute inset-0 pointer-events-none"></div>
+      <div class="relative z-10 max-w-6xl mx-auto px-6">
+
+        <div class="text-center mb-12">
+          <div class="inline-flex items-center gap-2 bg-praia-yellow-400/10 border border-praia-yellow-400/20 rounded-full px-4 py-1.5 mb-5">
+            <i data-lucide="award" class="w-4 h-4 text-praia-yellow-400"></i>
+            <span class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-semibold">Hall da Fama</span>
+          </div>
+          <h2 class="font-display text-3xl md:text-4xl font-bold text-white">Vencedoras dos Anos Anteriores</h2>
+        </div>
+
+        <!-- Year selector tabs -->
+        <div class="flex flex-wrap justify-center gap-2 mb-10">
+          <button onclick="showWinnersYear('2024')" id="tab-2024" class="winners-tab font-display text-sm font-bold px-5 py-2 rounded-full transition-all duration-200 bg-praia-yellow-400 text-praia-teal-800">2024</button>
+          <button onclick="showWinnersYear('2023')" id="tab-2023" class="winners-tab font-display text-sm font-bold px-5 py-2 rounded-full transition-all duration-200 bg-white/10 text-white/70 hover:bg-white/20 hover:text-white">2023</button>
+          <button onclick="showWinnersYear('2021-2022')" id="tab-2021-2022" class="winners-tab font-display text-sm font-bold px-5 py-2 rounded-full transition-all duration-200 bg-white/10 text-white/70 hover:bg-white/20 hover:text-white">2021–2022</button>
+          <button onclick="showWinnersYear('2020')" id="tab-2020" class="winners-tab font-display text-sm font-bold px-5 py-2 rounded-full transition-all duration-200 bg-white/10 text-white/70 hover:bg-white/20 hover:text-white">2020</button>
+        </div>
+
+        <!-- ===== 2024 ===== -->
+        <div id="panel-2024" class="winners-panel">
+          <!-- Winner + Revelação row -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5">
+            <!-- 1.º -->
+            <div class="lg:col-span-2 relative rounded-2xl overflow-hidden" style="background: linear-gradient(160deg, rgba(255,235,59,0.12) 0%, rgba(255,235,59,0.04) 100%); border: 1px solid rgba(255,235,59,0.3);">
+              <div class="absolute top-0 left-0 right-0 h-1" style="background: linear-gradient(90deg, #FFEB3B, #FFD600);"></div>
+              <div class="p-7">
+                <div class="flex items-start gap-4 mb-4">
+                  <div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style="background: rgba(255,235,59,0.15);">
+                    <i data-lucide="trophy" class="w-6 h-6 text-praia-yellow-400"></i>
+                  </div>
+                  <div>
+                    <span class="font-display text-[10px] uppercase tracking-widest text-praia-yellow-400/70 font-semibold block mb-0.5">1.º — Praia Fluvial do Ano 2024</span>
+                    <h3 class="font-display text-xl font-bold text-white leading-tight">Praia Fluvial de Avô</h3>
+                    <p class="text-white/40 text-sm mt-1">Oliveira do Hospital · Coimbra · <strong class="text-white/60">7.175 votos</strong></p>
+                  </div>
+                </div>
+                <p class="text-white/60 text-sm leading-relaxed mb-5">Nas águas cristalinas do Rio Alva, a Praia de Avô conquistou o galardão em 2024. A aldeia de Avô, com casas de xisto e pontes medievais, é uma das mais pitorescas da Serra do Açor.</p>
+                <a href="praia.html?id=praia-fluvial-de-avo" class="inline-flex items-center gap-2 text-praia-yellow-400 font-display text-xs font-bold uppercase tracking-wider hover:gap-3 transition-all duration-300">
+                  Ver Praia <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                </a>
+              </div>
+            </div>
+            <!-- Revelação 2024 -->
+            <div class="relative rounded-2xl overflow-hidden" style="background: rgba(2,136,209,0.1); border: 1px solid rgba(2,136,209,0.35);">
+              <div class="absolute top-0 left-0 right-0 h-0.5" style="background: rgba(2,136,209,0.7);"></div>
+              <div class="p-6">
+                <div class="flex items-center gap-3 mb-5">
+                  <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background: rgba(2,136,209,0.15);">
+                    <i data-lucide="sparkles" class="w-5 h-5" style="color: #0288D1;"></i>
+                  </div>
+                  <div>
+                    <span class="font-display text-[10px] uppercase tracking-widest font-semibold block mb-0.5" style="color: rgba(2,136,209,0.9);">Galardão</span>
+                    <span class="font-display text-sm font-bold text-white">Praia Revelação 2024</span>
+                  </div>
+                </div>
+                <div class="space-y-3">
+                  <div class="flex items-start gap-3">
+                    <span class="font-display text-[10px] font-bold uppercase tracking-wider mt-0.5 shrink-0 w-10 text-right" style="color: rgba(2,136,209,0.9);">Norte</span>
+                    <div>
+                      <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial do Sabugal</p>
+                      <p class="text-white/40 text-xs">Sabugal</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start gap-3">
+                    <span class="font-display text-[10px] font-bold uppercase tracking-wider mt-0.5 shrink-0 w-10 text-right" style="color: rgba(2,136,209,0.9);">Centro</span>
+                    <div>
+                      <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial do Poço Corga</p>
+                      <p class="text-white/40 text-xs">Castanheira de Pera</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start gap-3">
+                    <span class="font-display text-[10px] font-bold uppercase tracking-wider mt-0.5 shrink-0 w-10 text-right" style="color: rgba(2,136,209,0.9);">Sul</span>
+                    <div>
+                      <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial do Lago</p>
+                      <p class="text-white/40 text-xs">Moura</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 2.º e 3.º -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div class="rounded-2xl p-5 flex items-start gap-4" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);">
+              <span class="font-display text-2xl font-bold shrink-0 mt-0.5" style="color: rgba(192,192,192,0.8);">2.º</span>
+              <div>
+                <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial da Ucha</p>
+                <p class="text-white/40 text-xs mt-0.5">São Pedro do Sul</p>
+              </div>
+            </div>
+            <div class="rounded-2xl p-5 flex items-start gap-4" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);">
+              <span class="font-display text-2xl font-bold shrink-0 mt-0.5" style="color: rgba(205,127,50,0.8);">3.º</span>
+              <div>
+                <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial da Carriça</p>
+                <p class="text-white/40 text-xs mt-0.5">Oliveira de Frades</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== 2023 ===== -->
+        <div id="panel-2023" class="winners-panel hidden">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5">
+            <!-- 1.º -->
+            <div class="lg:col-span-2 relative rounded-2xl overflow-hidden" style="background: linear-gradient(160deg, rgba(255,235,59,0.12) 0%, rgba(255,235,59,0.04) 100%); border: 1px solid rgba(255,235,59,0.3);">
+              <div class="absolute top-0 left-0 right-0 h-1" style="background: linear-gradient(90deg, #FFEB3B, #FFD600);"></div>
+              <div class="p-7">
+                <div class="flex items-start gap-4 mb-4">
+                  <div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style="background: rgba(255,235,59,0.15);">
+                    <i data-lucide="trophy" class="w-6 h-6 text-praia-yellow-400"></i>
+                  </div>
+                  <div>
+                    <span class="font-display text-[10px] uppercase tracking-widest text-praia-yellow-400/70 font-semibold block mb-0.5">1.º — Praia Fluvial do Ano 2023</span>
+                    <h3 class="font-display text-xl font-bold text-white leading-tight">Praia Fluvial do Vimieiro</h3>
+                    <p class="text-white/40 text-sm mt-1">Penacova · Coimbra · <strong class="text-white/60">7.357 votos</strong></p>
+                  </div>
+                </div>
+                <p class="text-white/60 text-sm leading-relaxed mb-5">Praia Fluvial do Ano 2023 com 7.357 votos, o Vimieiro é um paraíso nas margens do Rio Mondego. A paisagem verdejante e as águas calmas fazem desta praia uma das preferidas da região centro.</p>
+                <a href="praia.html?id=praia-fluvial-do-vimieiro" class="inline-flex items-center gap-2 text-praia-yellow-400 font-display text-xs font-bold uppercase tracking-wider hover:gap-3 transition-all duration-300">
+                  Ver Praia <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                </a>
+              </div>
+            </div>
+            <!-- Revelação 2023 -->
+            <div class="relative rounded-2xl overflow-hidden" style="background: rgba(2,136,209,0.1); border: 1px solid rgba(2,136,209,0.35);">
+              <div class="absolute top-0 left-0 right-0 h-0.5" style="background: rgba(2,136,209,0.7);"></div>
+              <div class="p-6">
+                <div class="flex items-center gap-3 mb-5">
+                  <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background: rgba(2,136,209,0.15);">
+                    <i data-lucide="sparkles" class="w-5 h-5" style="color: #0288D1;"></i>
+                  </div>
+                  <div>
+                    <span class="font-display text-[10px] uppercase tracking-widest font-semibold block mb-0.5" style="color: rgba(2,136,209,0.9);">Galardão</span>
+                    <span class="font-display text-sm font-bold text-white">Praia Revelação 2023</span>
+                  </div>
+                </div>
+                <div class="space-y-3">
+                  <div class="flex items-start gap-3">
+                    <span class="font-display text-xs font-bold mt-0.5 shrink-0" style="color: rgba(2,136,209,0.9);">1.º</span>
+                    <div>
+                      <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial do Sorraia</p>
+                      <p class="text-white/40 text-xs">Coruche</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start gap-3">
+                    <span class="font-display text-xs font-bold mt-0.5 shrink-0" style="color: rgba(2,136,209,0.7);">2.º</span>
+                    <div>
+                      <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial de Constância</p>
+                      <p class="text-white/40 text-xs">Constância</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 2.º -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div class="rounded-2xl p-5 flex items-start gap-4" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);">
+              <span class="font-display text-2xl font-bold shrink-0 mt-0.5" style="color: rgba(192,192,192,0.8);">2.º</span>
+              <div>
+                <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial do Reconquinho</p>
+                <p class="text-white/40 text-xs mt-0.5">Penacova</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== 2021–2022 ===== -->
+        <div id="panel-2021-2022" class="winners-panel hidden">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5">
+            <!-- 1.º -->
+            <div class="lg:col-span-2 relative rounded-2xl overflow-hidden" style="background: linear-gradient(160deg, rgba(255,235,59,0.12) 0%, rgba(255,235,59,0.04) 100%); border: 1px solid rgba(255,235,59,0.3);">
+              <div class="absolute top-0 left-0 right-0 h-1" style="background: linear-gradient(90deg, #FFEB3B, #FFD600);"></div>
+              <div class="p-7">
+                <div class="flex items-start gap-4 mb-4">
+                  <div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style="background: rgba(255,235,59,0.15);">
+                    <i data-lucide="trophy" class="w-6 h-6 text-praia-yellow-400"></i>
+                  </div>
+                  <div>
+                    <span class="font-display text-[10px] uppercase tracking-widest text-praia-yellow-400/70 font-semibold block mb-0.5">1.º — Praia Fluvial do Ano 2021–2022</span>
+                    <h3 class="font-display text-xl font-bold text-white leading-tight">Quinta da Taberna – Videmonte</h3>
+                    <p class="text-white/40 text-sm mt-1">Guarda</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Revelação 2021–2022 -->
+            <div class="relative rounded-2xl overflow-hidden" style="background: rgba(2,136,209,0.1); border: 1px solid rgba(2,136,209,0.35);">
+              <div class="absolute top-0 left-0 right-0 h-0.5" style="background: rgba(2,136,209,0.7);"></div>
+              <div class="p-6">
+                <div class="flex items-center gap-3 mb-5">
+                  <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background: rgba(2,136,209,0.15);">
+                    <i data-lucide="sparkles" class="w-5 h-5" style="color: #0288D1;"></i>
+                  </div>
+                  <div>
+                    <span class="font-display text-[10px] uppercase tracking-widest font-semibold block mb-0.5" style="color: rgba(2,136,209,0.9);">Galardão</span>
+                    <span class="font-display text-sm font-bold text-white">Praia Revelação 2021–2022</span>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <i data-lucide="award" class="w-4 h-4 shrink-0 mt-0.5" style="color: #0288D1;"></i>
+                  <div>
+                    <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial de Alqueva</p>
+                    <p class="text-white/40 text-xs">Portel</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 2.º e 3.º -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div class="rounded-2xl p-5 flex items-start gap-4" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);">
+              <span class="font-display text-2xl font-bold shrink-0 mt-0.5" style="color: rgba(192,192,192,0.8);">2.º</span>
+              <div>
+                <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial Santa Luzia</p>
+                <p class="text-white/40 text-xs mt-0.5">Pampilhosa da Serra</p>
+              </div>
+            </div>
+            <div class="rounded-2xl p-5 flex items-start gap-4" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);">
+              <span class="font-display text-2xl font-bold shrink-0 mt-0.5" style="color: rgba(205,127,50,0.8);">3.º</span>
+              <div>
+                <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial de Aldeia Viçosa</p>
+                <p class="text-white/40 text-xs mt-0.5">Guarda</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== 2020 ===== -->
+        <div id="panel-2020" class="winners-panel hidden">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5">
+            <!-- 1.º -->
+            <div class="lg:col-span-2 relative rounded-2xl overflow-hidden" style="background: linear-gradient(160deg, rgba(255,235,59,0.12) 0%, rgba(255,235,59,0.04) 100%); border: 1px solid rgba(255,235,59,0.3);">
+              <div class="absolute top-0 left-0 right-0 h-1" style="background: linear-gradient(90deg, #FFEB3B, #FFD600);"></div>
+              <div class="p-7">
+                <div class="flex items-start gap-4 mb-4">
+                  <div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style="background: rgba(255,235,59,0.15);">
+                    <i data-lucide="trophy" class="w-6 h-6 text-praia-yellow-400"></i>
+                  </div>
+                  <div>
+                    <span class="font-display text-[10px] uppercase tracking-widest text-praia-yellow-400/70 font-semibold block mb-0.5">1.º — Praia Fluvial do Ano 2020</span>
+                    <h3 class="font-display text-xl font-bold text-white leading-tight">Praia Fluvial Santa Luzia</h3>
+                    <p class="text-white/40 text-sm mt-1">Pampilhosa da Serra · Coimbra</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Revelação 2020 -->
+            <div class="relative rounded-2xl overflow-hidden" style="background: rgba(2,136,209,0.1); border: 1px solid rgba(2,136,209,0.35);">
+              <div class="absolute top-0 left-0 right-0 h-0.5" style="background: rgba(2,136,209,0.7);"></div>
+              <div class="p-6">
+                <div class="flex items-center gap-3 mb-5">
+                  <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background: rgba(2,136,209,0.15);">
+                    <i data-lucide="sparkles" class="w-5 h-5" style="color: #0288D1;"></i>
+                  </div>
+                  <div>
+                    <span class="font-display text-[10px] uppercase tracking-widest font-semibold block mb-0.5" style="color: rgba(2,136,209,0.9);">Galardão</span>
+                    <span class="font-display text-sm font-bold text-white">Praia Revelação 2020</span>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <i data-lucide="award" class="w-4 h-4 shrink-0 mt-0.5" style="color: #0288D1;"></i>
+                  <div>
+                    <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial da Amieira</p>
+                    <p class="text-white/40 text-xs">Portel</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- 2.º e 3.º -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div class="rounded-2xl p-5 flex items-start gap-4" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);">
+              <span class="font-display text-2xl font-bold shrink-0 mt-0.5" style="color: rgba(192,192,192,0.8);">2.º</span>
+              <div>
+                <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial de Fontes</p>
+                <p class="text-white/40 text-xs mt-0.5">Abrantes</p>
+              </div>
+            </div>
+            <div class="rounded-2xl p-5 flex items-start gap-4" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);">
+              <span class="font-display text-2xl font-bold shrink-0 mt-0.5" style="color: rgba(205,127,50,0.8);">3.º</span>
+              <div>
+                <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial do Troviscal</p>
+                <p class="text-white/40 text-xs mt-0.5">Sertã</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
   </main>
 
   <!-- Mobile Bottom Nav -->
@@ -394,6 +602,23 @@
     document.addEventListener("DOMContentLoaded", () => {
       if (window.AuthUtils) { AuthUtils.initHeaderAuth(); AuthUtils.initMobileMenuAuth(); }
     });
+
+    function showWinnersYear(year) {
+      document.querySelectorAll('.winners-panel').forEach(p => p.classList.add('hidden'));
+      document.querySelectorAll('.winners-tab').forEach(t => {
+        t.classList.remove('bg-praia-yellow-400', 'text-praia-teal-800');
+        t.classList.add('bg-white/10', 'text-white/70');
+        t.classList.remove('hover:bg-white/20', 'hover:text-white');
+        t.classList.add('hover:bg-white/20', 'hover:text-white');
+      });
+      const panel = document.getElementById('panel-' + year);
+      const tab = document.getElementById('tab-' + year);
+      if (panel) panel.classList.remove('hidden');
+      if (tab) {
+        tab.classList.remove('bg-white/10', 'text-white/70', 'hover:bg-white/20', 'hover:text-white');
+        tab.classList.add('bg-praia-yellow-400', 'text-praia-teal-800');
+      }
+    }
   </script>
 </body>
 </html>

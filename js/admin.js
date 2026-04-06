@@ -1,5 +1,5 @@
 // ─── Admin Panel — JSON Visual Editor ───
-const SECTIONS = ['beaches', 'articles', 'locations-guia', 'locations-passaporte', 'descontos', 'settings', 'utilizadores'];
+const SECTIONS = ['beaches', 'articles', 'locations-guia-passaporte', 'locations-carimbos', 'descontos', 'produtos', 'encomendas', 'utilizadores', 'comentarios', 'settings'];
 
 // ─── Supabase (read-only, for Utilizadores tab) ───
 const ADMIN_SUPABASE_URL      = 'https://tjvhnbukzfyxtpkrhpsw.supabase.co';
@@ -101,7 +101,8 @@ async function loginAdmin() {
 
 // ─── Dashboard ───
 async function initDashboard() {
-  for (const section of SECTIONS) {
+  const jsonSections = SECTIONS.filter(s => s !== 'utilizadores' && s !== 'comentarios' && s !== 'encomendas' && s !== 'produtos');
+  for (const section of jsonSections) {
     try {
       const res = await fetch(`data/${section}.json`);
       state.data[section] = await res.json();
@@ -109,21 +110,35 @@ async function initDashboard() {
       state.data[section] = section === 'settings' ? {} : [];
     }
   }
+  // Products: load from data/products.json
+  try {
+    const res = await fetch('data/products.json');
+    state.data['produtos'] = await res.json();
+  } catch {
+    state.data['produtos'] = [];
+  }
+  // Encomendas: loaded lazily from Supabase when tab is opened
+  state.data['encomendas'] = null;
+  state.data['utilizadores'] = null;
+  state.data['comentarios'] = null;
   renderDashboard();
 }
 
-// Keep backward compat: old 'locations' key maps to 'locations-guia'
+// Keep backward compat: old 'locations' key maps to 'locations-guia-passaporte'
 function getLocationsKey(section) { return section; }
 
 function renderDashboard() {
   const sectionMeta = {
-    beaches:               { icon: '🏖️', label: 'Praias' },
-    articles:              { icon: '📰', label: 'Artigos' },
-    'locations-guia':      { icon: '📗', label: 'Guia & Passaporte' },
-    'locations-passaporte':{ icon: '🔖', label: 'Carimbo Passaporte' },
+    beaches:               { icon: '🏖️', label: 'Praias Fluviais' },
+    articles:              { icon: '📰', label: 'Novidades' },
+    'locations-guia-passaporte': { icon: '📗', label: 'Guia & Passaporte' },
+    'locations-carimbos':        { icon: '🔖', label: 'Carimbo' },
     descontos:             { icon: '🏷️', label: 'Descontos' },
+    produtos:              { icon: '🛍️', label: 'Loja — Produtos' },
+    encomendas:            { icon: '📦', label: 'Loja — Encomendas' },
+    utilizadores:          { icon: '👥', label: 'Dados' },
+    comentarios:           { icon: '💬', label: 'Comentários' },
     settings:              { icon: '⚙️', label: 'Configurações' },
-    utilizadores:          { icon: '👥', label: 'Utilizadores' },
   };
 
   document.getElementById('admin-app').innerHTML = `
@@ -166,11 +181,14 @@ function renderSection() {
   switch (state.currentSection) {
     case 'beaches':                renderBeaches(content); break;
     case 'articles':               renderArticles(content); break;
-    case 'locations-guia':         renderLocationsGuia(content); break;
-    case 'locations-passaporte':   renderLocationsPassaporte(content); break;
+    case 'locations-guia-passaporte': renderLocationsGuia(content); break;
+    case 'locations-carimbos':        renderLocationsPassaporte(content); break;
     case 'descontos':              renderDescontos(content); break;
     case 'settings':               renderSettings(content); break;
+    case 'produtos':               renderProdutos(content); break;
+    case 'encomendas':             renderEncomendas(content); break;
     case 'utilizadores':           renderUtilizadores(content); break;
+    case 'comentarios':            renderComentarios(content); break;
   }
 }
 
@@ -670,7 +688,7 @@ const GUIA_TYPE_COLORS = { guia: '#F59E0B', guia_passaporte: '#43A047' };
 const GUIA_TYPE_LABELS = { guia: 'Só Guia', guia_passaporte: 'Guia + Passaporte' };
 
 function renderLocationsGuia(container) {
-  const section = 'locations-guia';
+  const section = 'locations-guia-passaporte';
   const items = state.data[section] || [];
   const guiaCount = items.filter(l => l.type === 'guia').length;
   const gpCount   = items.filter(l => l.type === 'guia_passaporte').length;
@@ -681,7 +699,7 @@ function renderLocationsGuia(container) {
         <h1 class="font-display text-2xl font-bold text-praia-teal-800">Pontos — Guia &amp; Passaporte (${items.length})</h1>
         <div class="flex gap-2">
           <a href="../onde-encontrar.html" target="_blank" class="admin-btn bg-praia-sand-200 text-praia-teal-700 text-xs">Ver no site ↗</a>
-          <button onclick="exportSection('locations-guia')" class="admin-btn admin-btn-export">Exportar</button>
+          <button onclick="exportSection('locations-guia-passaporte')" class="admin-btn admin-btn-export">Exportar</button>
           <button onclick="editLocationGuia(null)" class="admin-btn admin-btn-primary">+ Adicionar</button>
         </div>
       </div>
@@ -719,7 +737,7 @@ function renderLocationsGuia(container) {
                 <td class="px-4 py-3 text-xs">${l.seasonal ? '<span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-semibold text-[10px] border border-amber-300">Só época</span>' : '<span class="text-praia-sand-300">Todo o ano</span>'}</td>
                 <td class="px-4 py-3 text-right">
                   <button onclick="editLocationGuia(${i})" class="text-praia-teal-600 text-xs font-semibold mr-2">Editar</button>
-                  <button onclick="deleteItem('locations-guia', ${i})" class="text-red-400 text-xs font-semibold">Eliminar</button>
+                  <button onclick="deleteItem('locations-guia-passaporte', ${i})" class="text-red-400 text-xs font-semibold">Eliminar</button>
                 </td>
               </tr>`;
             }).join('')}
@@ -748,7 +766,7 @@ function filterLocationsGuia() {
 }
 
 function editLocationGuia(index) {
-  const section = 'locations-guia';
+  const section = 'locations-guia-passaporte';
   const l = index !== null ? state.data[section][index] : {
     name: '', municipality: '', address: '', phone: '',
     type: 'guia', seasonal: false, coordinates: { lat: 39.5, lng: -8.0 }
@@ -788,7 +806,7 @@ function editLocationGuia(index) {
 }
 
 function saveLocationGuia(index) {
-  const section = 'locations-guia';
+  const section = 'locations-guia-passaporte';
   const loc = {
     name: document.getElementById('l-name').value.trim(),
     municipality: document.getElementById('l-municipality').value.trim(),
@@ -810,7 +828,7 @@ function saveLocationGuia(index) {
 
 // ─── Locations — Carimbo Passaporte ───
 function renderLocationsPassaporte(container) {
-  const section = 'locations-passaporte';
+  const section = 'locations-carimbos';
   const items = state.data[section] || [];
 
   container.innerHTML = `
@@ -819,7 +837,7 @@ function renderLocationsPassaporte(container) {
         <h1 class="font-display text-2xl font-bold text-praia-teal-800">Postos de Carimbo (${items.length})</h1>
         <div class="flex gap-2">
           <a href="../onde-carimbar-passaporte.html" target="_blank" class="admin-btn bg-praia-sand-200 text-praia-teal-700 text-xs">Ver no site ↗</a>
-          <button onclick="exportSection('locations-passaporte')" class="admin-btn admin-btn-export">Exportar</button>
+          <button onclick="exportSection('locations-carimbos')" class="admin-btn admin-btn-export">Exportar</button>
           <button onclick="editLocationPassaporte(null)" class="admin-btn admin-btn-primary">+ Adicionar</button>
         </div>
       </div>
@@ -852,7 +870,7 @@ function renderLocationsPassaporte(container) {
                 <td class="px-4 py-3 text-xs">${l.seasonal ? '<span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-semibold text-[10px] border border-amber-300">Só época</span>' : '<span class="text-praia-sand-300">Todo o ano</span>'}</td>
                 <td class="px-4 py-3 text-right">
                   <button onclick="editLocationPassaporte(${i})" class="text-praia-teal-600 text-xs font-semibold mr-2">Editar</button>
-                  <button onclick="deleteItem('locations-passaporte', ${i})" class="text-red-400 text-xs font-semibold">Eliminar</button>
+                  <button onclick="deleteItem('locations-carimbos', ${i})" class="text-red-400 text-xs font-semibold">Eliminar</button>
                 </td>
               </tr>`;
             }).join('')}
@@ -880,7 +898,7 @@ function filterLocationsPassaporte() {
 }
 
 function editLocationPassaporte(index) {
-  const section = 'locations-passaporte';
+  const section = 'locations-carimbos';
   const l = index !== null ? state.data[section][index] : {
     name: '', municipality: '', address: '', phone: '', beaches: [], seasonal: false,
     coordinates: { lat: 39.5, lng: -8.0 }
@@ -918,7 +936,7 @@ function editLocationPassaporte(index) {
 }
 
 function saveLocationPassaporte(index) {
-  const section = 'locations-passaporte';
+  const section = 'locations-carimbos';
   const beachesRaw = document.getElementById('l-beaches').value;
   const beaches = beachesRaw.split('\n').map(s => s.trim()).filter(Boolean);
   const loc = {
@@ -1069,12 +1087,16 @@ function filterAdminTable(query) {
 
 // ─── Export / Import ───
 function exportSection(section) {
+  if (section === 'encomendas' || section === 'utilizadores' || section === 'comentarios') return; // Supabase-managed, não exportar
   const data = state.data[section];
+  if (data === null || data === undefined) return;
+  // produtos → ficheiro chama-se products.json
+  const filename = section === 'produtos' ? 'products.json' : `${section}.json`;
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href = url; a.download = `${section}.json`; a.click();
+  const a = document.createElement('a'); a.href = url; a.download = filename; a.click();
   URL.revokeObjectURL(url);
-  toast(`${section}.json exportado!`, 'success');
+  toast(`${filename} exportado!`, 'success');
 }
 
 function exportAll() {
@@ -1258,6 +1280,678 @@ async function renderUtilizadores(content) {
   } catch (err) {
     document.getElementById('util-loading').innerHTML = `<span class="text-red-500 text-sm">Erro ao carregar dados: ${escHtml(err.message)}</span>`;
   }
+}
+
+// ─── Comentários (moderation) ───
+async function renderComentarios(content) {
+  const sb = getAdminSb();
+  if (!sb) {
+    content.innerHTML = `
+      <div class="p-8 max-w-xl">
+        <h2 class="font-display text-xl font-bold text-praia-teal-800 mb-2">Comentários</h2>
+        <div class="bg-praia-yellow-100 border border-praia-yellow-300 rounded-xl p-4 text-sm text-praia-teal-800">
+          <strong>Configuração necessária:</strong> Substitua <code>ADMIN_SUPABASE_URL</code> e <code>ADMIN_SUPABASE_ANON_KEY</code>
+          no topo de <code>js/admin.js</code> com as credenciais do projeto Supabase.
+        </div>
+      </div>`;
+    return;
+  }
+
+  const beaches = state.data['beaches'] || [];
+  const beachOptions = beaches.map(b =>
+    `<option value="${escHtml(b.id)}">${escHtml(b.name || b.nome || b.id)}</option>`
+  ).join('');
+
+  content.innerHTML = `
+    <div class="p-8">
+      <div class="flex items-start justify-between mb-5">
+        <h2 class="font-display text-xl font-bold text-praia-teal-800">Comentários da Comunidade</h2>
+      </div>
+
+      <!-- Filtros -->
+      <div class="bg-white border border-praia-sand-200 rounded-xl p-4 mb-6 flex flex-wrap gap-3 items-end">
+        <!-- Pesquisa texto -->
+        <div class="flex-1 min-w-[180px]">
+          <label class="block text-xs font-display font-semibold text-praia-sand-500 uppercase tracking-wider mb-1">Pesquisar</label>
+          <div class="relative">
+            <input type="text" id="com-search" oninput="renderComentariosContent()" placeholder="Texto, utilizador…"
+                   class="pl-8 pr-3 py-2 text-sm rounded-lg border border-praia-sand-200 bg-praia-sand-50 focus:outline-none focus:border-praia-teal-400 w-full">
+            <svg class="absolute left-2.5 top-2.5 w-3.5 h-3.5 text-praia-sand-400 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          </div>
+        </div>
+        <!-- Praia -->
+        <div class="min-w-[180px]">
+          <label class="block text-xs font-display font-semibold text-praia-sand-500 uppercase tracking-wider mb-1">Praia</label>
+          <select id="com-filter-beach" onchange="renderComentariosContent()"
+                  class="w-full py-2 px-3 text-sm rounded-lg border border-praia-sand-200 bg-praia-sand-50 focus:outline-none focus:border-praia-teal-400">
+            <option value="">Todas as praias</option>
+            ${beachOptions}
+          </select>
+        </div>
+        <!-- Estado -->
+        <div class="min-w-[140px]">
+          <label class="block text-xs font-display font-semibold text-praia-sand-500 uppercase tracking-wider mb-1">Estado</label>
+          <select id="com-filter-estado" onchange="renderComentariosContent()"
+                  class="w-full py-2 px-3 text-sm rounded-lg border border-praia-sand-200 bg-praia-sand-50 focus:outline-none focus:border-praia-teal-400">
+            <option value="todos">Todos</option>
+            <option value="visiveis">Visíveis</option>
+            <option value="apagados">Apagados</option>
+          </select>
+        </div>
+        <!-- Limpar -->
+        <button onclick="comClearFilters()" class="py-2 px-4 text-xs font-display font-semibold text-praia-sand-500 hover:text-praia-teal-700 border border-praia-sand-200 rounded-lg transition-colors whitespace-nowrap">
+          Limpar filtros
+        </button>
+      </div>
+
+      <div id="com-loading" class="flex items-center gap-3 text-praia-sand-400">
+        <div class="w-5 h-5 border-2 border-praia-teal-400 border-t-transparent rounded-full animate-spin"></div>
+        A carregar comentários…
+      </div>
+      <div id="com-content" class="hidden"></div>
+    </div>
+
+    <!-- Modal de confirmação de remoção -->
+    <div id="com-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" style="background:rgba(0,0,0,0.45);">
+      <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 animate-[slideIn_0.2s_ease]">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+          </div>
+          <div>
+            <h3 class="font-display font-bold text-praia-teal-800">Remover comentário?</h3>
+            <p class="text-xs text-praia-sand-400 mt-0.5">Esta ação pode ser revertida mais tarde.</p>
+          </div>
+        </div>
+        <div class="bg-praia-sand-50 rounded-xl p-3 mb-5 border border-praia-sand-200">
+          <p class="text-xs text-praia-sand-500 font-display font-semibold uppercase tracking-wider mb-1">Comentário</p>
+          <p id="com-modal-text" class="text-sm text-praia-sand-700 leading-relaxed"></p>
+          <p id="com-modal-meta" class="text-xs text-praia-sand-400 mt-1"></p>
+        </div>
+        <p class="text-sm text-praia-sand-600 mb-5">O comentário ficará visível na comunidade como <em>"Este comentário foi removido pelo administrador."</em></p>
+        <div class="flex gap-3 justify-end">
+          <button onclick="comModalClose()" class="px-4 py-2 text-sm font-display font-semibold text-praia-sand-500 hover:text-praia-teal-800 border border-praia-sand-200 rounded-xl transition-colors">
+            Cancelar
+          </button>
+          <button id="com-modal-confirm" class="px-5 py-2 text-sm font-display font-bold text-white bg-red-500 hover:bg-red-600 rounded-xl transition-colors">
+            Remover
+          </button>
+        </div>
+      </div>
+    </div>`;
+
+  try {
+    const { data: reviews, error } = await sb
+      .from('reviews')
+      .select('id, text, images, created_at, beach_id, deleted_by_admin, profiles(username, avatar_url)')
+      .order('created_at', { ascending: false })
+      .limit(300);
+
+    if (error) throw error;
+
+    window._adminReviews = reviews || [];
+    window._adminBeaches = beaches;
+
+    document.getElementById('com-loading').classList.add('hidden');
+    document.getElementById('com-content').classList.remove('hidden');
+    renderComentariosContent();
+  } catch (err) {
+    document.getElementById('com-loading').innerHTML =
+      `<span class="text-red-500 text-sm">Erro ao carregar comentários: ${escHtml(err.message)}</span>`;
+  }
+}
+
+function comClearFilters() {
+  const s = document.getElementById('com-search');
+  const b = document.getElementById('com-filter-beach');
+  const e = document.getElementById('com-filter-estado');
+  if (s) s.value = '';
+  if (b) b.value = '';
+  if (e) e.value = 'todos';
+  renderComentariosContent();
+}
+
+function comToggleExpand(id) {
+  const el = document.getElementById(`com-text-${id}`);
+  const btn = document.getElementById(`com-expand-${id}`);
+  if (!el || !btn) return;
+  const expanded = el.dataset.expanded === 'true';
+  el.dataset.expanded = expanded ? 'false' : 'true';
+  el.style.webkitLineClamp = expanded ? '3' : 'unset';
+  el.style.display = expanded ? '-webkit-box' : 'block';
+  btn.textContent = expanded ? 'Ver mais' : 'Ver menos';
+}
+
+function comModalClose() {
+  document.getElementById('com-modal')?.classList.add('hidden');
+}
+
+function renderComentariosContent() {
+  const container = document.getElementById('com-content');
+  if (!container) return;
+
+  const reviews = window._adminReviews || [];
+  const beaches = window._adminBeaches || [];
+  const query   = (document.getElementById('com-search')?.value || '').toLowerCase().trim();
+  const beach   = document.getElementById('com-filter-beach')?.value || '';
+  const estado  = document.getElementById('com-filter-estado')?.value || 'todos';
+
+  let filtered = reviews;
+  if (estado === 'visiveis') filtered = filtered.filter(r => !r.deleted_by_admin);
+  if (estado === 'apagados') filtered = filtered.filter(r => !!r.deleted_by_admin);
+  if (beach) filtered = filtered.filter(r => r.beach_id === beach);
+  if (query) filtered = filtered.filter(r => {
+    const beachName = (beaches.find(b => b.id === r.beach_id)?.name || beaches.find(b => b.id === r.beach_id)?.nome || r.beach_id || '').toLowerCase();
+    return (r.text || '').toLowerCase().includes(query) ||
+      (r.profiles?.username || '').toLowerCase().includes(query) ||
+      beachName.includes(query);
+  });
+
+  const total    = reviews.length;
+  const visiveis = reviews.filter(r => !r.deleted_by_admin).length;
+  const apagados = reviews.filter(r => !!r.deleted_by_admin).length;
+
+  if (filtered.length === 0) {
+    container.innerHTML = `
+      <div class="flex items-center gap-4 text-xs text-praia-sand-400 mb-4">
+        <span>${total} total</span><span>·</span><span class="text-green-600">${visiveis} visíveis</span><span>·</span><span class="text-red-500">${apagados} apagados</span>
+      </div>
+      <p class="text-sm text-praia-sand-400 py-4">Nenhum comentário encontrado com estes filtros.</p>`;
+    return;
+  }
+
+  container.innerHTML = `
+    <div class="flex items-center gap-4 text-xs text-praia-sand-400 mb-4">
+      <span>${total} total</span><span>·</span><span class="text-green-600">${visiveis} visíveis</span><span>·</span><span class="text-red-500">${apagados} apagados</span>
+      ${filtered.length !== total ? `<span>·</span><span class="font-semibold text-praia-teal-600">${filtered.length} com filtro ativo</span>` : ''}
+    </div>
+    <div class="bg-white rounded-xl overflow-hidden border border-praia-sand-200">
+      <table class="w-full text-sm">
+        <thead class="bg-praia-sand-100 text-praia-sand-500 text-xs uppercase tracking-wider font-display">
+          <tr>
+            <th class="text-left px-4 py-3 w-36">Utilizador</th>
+            <th class="text-left px-4 py-3 w-36">Praia</th>
+            <th class="text-left px-4 py-3">Comentário</th>
+            <th class="text-left px-4 py-3 w-24">Data</th>
+            <th class="text-left px-4 py-3 w-24">Estado</th>
+            <th class="px-4 py-3 w-28"></th>
+          </tr>
+        </thead>
+        <tbody>
+          ${filtered.map(r => {
+            const beach    = beaches.find(b => b.id === r.beach_id);
+            const username = r.profiles?.username || '—';
+            const avatar   = r.profiles?.avatar_url;
+            const date     = r.created_at ? new Date(r.created_at).toLocaleDateString('pt-PT') : '';
+            const isDeleted = !!r.deleted_by_admin;
+            const text     = r.text || '';
+            const isLong   = text.length > 120;
+            const rowBg    = isDeleted ? 'bg-red-50' : 'hover:bg-praia-sand-50';
+            return `<tr class="border-t border-praia-sand-100 ${rowBg}" id="com-row-${r.id}">
+              <td class="px-4 py-3">
+                <div class="flex items-center gap-2">
+                  <div class="w-7 h-7 rounded-full bg-praia-teal-800 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                    ${avatar
+                      ? `<img src="${escHtml(avatar)}" alt="" class="w-full h-full object-cover">`
+                      : `<span class="text-white font-display font-bold text-xs">${escHtml(username[0]?.toUpperCase() || '?')}</span>`}
+                  </div>
+                  <span class="font-medium text-praia-teal-800 text-xs">${escHtml(username)}</span>
+                </div>
+              </td>
+              <td class="px-4 py-3 text-praia-sand-500 text-xs">${escHtml(beach?.name || beach?.nome || r.beach_id || '—')}</td>
+              <td class="px-4 py-3">
+                ${isDeleted
+                  ? `<span class="italic text-praia-sand-400 text-xs">Removido pelo administrador</span>`
+                  : `<div>
+                       <p id="com-text-${r.id}" data-expanded="false"
+                          style="display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;"
+                          class="text-praia-sand-700 text-xs leading-relaxed">${escHtml(text)}</p>
+                       ${isLong ? `<button id="com-expand-${r.id}" onclick="comToggleExpand('${r.id}')"
+                                           class="text-[10px] font-display font-semibold text-praia-teal-500 hover:text-praia-teal-700 mt-1 transition-colors">Ver mais</button>` : ''}
+                       ${r.images?.length ? `<span class="text-[10px] text-praia-sand-400 mt-0.5 block">${r.images.length} foto${r.images.length > 1 ? 's' : ''}</span>` : ''}
+                     </div>`}
+              </td>
+              <td class="px-4 py-3 text-praia-sand-400 text-xs whitespace-nowrap">${date}</td>
+              <td class="px-4 py-3">
+                ${isDeleted
+                  ? `<span class="inline-flex text-[10px] font-display font-semibold uppercase tracking-wider text-red-500 bg-red-100 px-2 py-1 rounded-full whitespace-nowrap">Apagado</span>`
+                  : `<span class="inline-flex text-[10px] font-display font-semibold uppercase tracking-wider text-green-600 bg-green-100 px-2 py-1 rounded-full whitespace-nowrap">Visível</span>`}
+              </td>
+              <td class="px-4 py-3 text-right whitespace-nowrap">
+                ${isDeleted
+                  ? `<button onclick="adminRestoreReview('${r.id}')"
+                             class="text-xs font-display font-semibold text-praia-teal-600 hover:text-praia-teal-800 border border-praia-teal-300 hover:border-praia-teal-500 px-3 py-1.5 rounded-lg transition-colors">
+                       Restaurar
+                     </button>`
+                  : `<button onclick="adminDeleteReview('${r.id}', '${escHtml(username)}', '${escHtml(beach?.name || beach?.nome || '')}', \`${escHtml(text.slice(0, 120))}\`)"
+                             class="text-xs font-display font-semibold text-red-500 hover:text-red-700 border border-red-200 hover:border-red-400 px-3 py-1.5 rounded-lg transition-colors">
+                       Remover
+                     </button>`}
+              </td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>`;
+}
+
+function adminDeleteReview(reviewId, username, beachName, previewText) {
+  const modal = document.getElementById('com-modal');
+  if (!modal) return;
+
+  document.getElementById('com-modal-text').textContent = previewText + (previewText.length >= 120 ? '…' : '');
+  document.getElementById('com-modal-meta').textContent = `por ${username}${beachName ? ' · ' + beachName : ''}`;
+
+  const btn = document.getElementById('com-modal-confirm');
+  // Remove previous listener clone
+  const newBtn = btn.cloneNode(true);
+  btn.parentNode.replaceChild(newBtn, btn);
+  newBtn.addEventListener('click', async () => {
+    newBtn.disabled = true;
+    newBtn.textContent = 'A remover…';
+    const sb = getAdminSb();
+    const { error } = await sb.from('reviews').update({ deleted_by_admin: true }).eq('id', reviewId);
+    comModalClose();
+    if (error) {
+      toast('Erro ao remover comentário: ' + error.message, 'error');
+      newBtn.disabled = false;
+      newBtn.textContent = 'Remover';
+      return;
+    }
+    const r = (window._adminReviews || []).find(r => r.id === reviewId);
+    if (r) r.deleted_by_admin = true;
+    renderComentariosContent();
+    toast('Comentário removido.', 'success');
+  });
+
+  modal.classList.remove('hidden');
+}
+
+async function adminRestoreReview(reviewId) {
+  const sb = getAdminSb();
+  if (!sb) return;
+
+  const { error } = await sb.from('reviews').update({ deleted_by_admin: false }).eq('id', reviewId);
+  if (error) { toast('Erro ao restaurar: ' + error.message, 'error'); return; }
+
+  const r = (window._adminReviews || []).find(r => r.id === reviewId);
+  if (r) r.deleted_by_admin = false;
+  renderComentariosContent();
+  toast('Comentário restaurado.', 'success');
+}
+
+// ─── Produtos (CRUD sobre data/products.json) ────────────────────────────────
+
+function renderProdutos(container) {
+  const products = state.data['produtos'] || [];
+
+  function fmtPrice(cents) {
+    if (cents === 0) return 'Grátis';
+    return (cents / 100).toFixed(2).replace('.', ',') + '€';
+  }
+
+  container.innerHTML = `
+    <div class="p-6">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="font-display text-xl font-bold text-praia-teal-800">Produtos da Loja</h2>
+        <button onclick="addNewProduct()" class="admin-btn admin-btn-primary px-5 py-2.5">+ Novo Produto</button>
+      </div>
+
+      <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-praia-sand-100">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="bg-praia-teal-800 text-white">
+              <th class="text-left px-4 py-3 font-display text-xs uppercase tracking-wider font-semibold">Produto</th>
+              <th class="text-left px-4 py-3 font-display text-xs uppercase tracking-wider font-semibold">Categoria</th>
+              <th class="text-left px-4 py-3 font-display text-xs uppercase tracking-wider font-semibold">Preço</th>
+              <th class="text-left px-4 py-3 font-display text-xs uppercase tracking-wider font-semibold">Estado</th>
+              <th class="text-left px-4 py-3 font-display text-xs uppercase tracking-wider font-semibold">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="products-tbody">
+            ${products.map((p, i) => `
+              <tr class="${i % 2 === 0 ? 'bg-white' : 'bg-praia-sand-50'} border-b border-praia-sand-100">
+                <td class="px-4 py-3">
+                  <div class="flex items-center gap-3">
+                    ${p.images && p.images[0] ? `<img src="${p.images[0]}" class="w-10 h-10 rounded-lg object-cover border border-praia-sand-100" onerror="this.style.display='none'">` : '<div class="w-10 h-10 rounded-lg bg-praia-sand-100 flex items-center justify-center text-praia-sand-400 text-lg">📦</div>'}
+                    <div>
+                      <div class="font-display font-semibold text-praia-teal-800">${p.name}</div>
+                      <div class="text-praia-sand-400 text-xs">${p.id}</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-4 py-3 font-display text-praia-sand-600 capitalize">${p.category || '—'}</td>
+                <td class="px-4 py-3 font-display font-semibold text-praia-teal-800">${fmtPrice(p.price)}</td>
+                <td class="px-4 py-3">
+                  <span class="inline-flex items-center gap-1 font-display text-xs font-semibold px-2 py-0.5 rounded-full ${p.available ? 'bg-praia-green-500/10 text-praia-green-600' : 'bg-red-50 text-red-500'}">
+                    ${p.available ? '● Disponível' : '○ Esgotado'}
+                  </span>
+                  ${p.featured ? '<span class="ml-1 inline-flex items-center gap-1 font-display text-xs font-semibold px-2 py-0.5 rounded-full bg-praia-yellow-400/20 text-praia-teal-800">⭐ Destaque</span>' : ''}
+                </td>
+                <td class="px-4 py-3">
+                  <div class="flex gap-2">
+                    <button onclick="editProduct('${p.id}')" class="admin-btn py-1 px-3 text-xs">Editar</button>
+                    <button onclick="toggleProductAvailability('${p.id}')" class="admin-btn py-1 px-3 text-xs ${p.available ? 'bg-praia-sand-100 text-praia-sand-600' : 'bg-praia-green-500/10 text-praia-green-600'}">${p.available ? 'Esgotar' : 'Disponibilizar'}</button>
+                    <button onclick="deleteProduct('${p.id}')" class="admin-btn admin-btn-danger py-1 px-3 text-xs">Remover</button>
+                  </div>
+                </td>
+              </tr>
+            `).join('')}
+            ${!products.length ? `<tr><td colspan="5" class="text-center py-12 text-praia-sand-400 font-display">Sem produtos. Cria o primeiro!</td></tr>` : ''}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="mt-6 bg-praia-teal-50 border border-praia-teal-100 rounded-xl p-4 text-sm text-praia-teal-700 font-display">
+        <p class="font-semibold mb-1">Como funciona</p>
+        <p class="text-praia-teal-600">As alterações são guardadas em <strong>data/products.json</strong> e refletem-se imediatamente na loja. Usa "Exportar Tudo" na barra lateral para fazer download do ficheiro atualizado.</p>
+      </div>
+
+      <!-- Edit modal -->
+      <div id="product-modal" class="hidden fixed inset-0 z-[3000] flex items-center justify-center px-4 bg-black/50 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6">
+          <h3 class="font-display font-bold text-lg text-praia-teal-800 mb-5" id="product-modal-title">Editar Produto</h3>
+          <div id="product-modal-body"></div>
+          <div class="flex gap-3 mt-6 pt-5 border-t border-praia-sand-100">
+            <button onclick="saveProduct()" class="admin-btn admin-btn-primary flex-1 py-3">Guardar</button>
+            <button onclick="document.getElementById('product-modal').classList.add('hidden')" class="admin-btn flex-1 py-3">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function productFormHTML(p) {
+  const variants = p.variants || [];
+  return `
+    <div class="space-y-4">
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="admin-label">ID (slug único)</label>
+          <input id="p-id" class="admin-input" value="${p.id || ''}" placeholder="ex: tshirt-2026">
+        </div>
+        <div>
+          <label class="admin-label">Categoria</label>
+          <select id="p-category" class="admin-input">
+            <option value="vestuario" ${p.category === 'vestuario' ? 'selected' : ''}>Vestuário</option>
+            <option value="publicacao" ${p.category === 'publicacao' ? 'selected' : ''}>Publicação</option>
+            <option value="acessorio" ${p.category === 'acessorio' ? 'selected' : ''}>Acessório</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <label class="admin-label">Nome</label>
+        <input id="p-name" class="admin-input" value="${p.name || ''}" placeholder="Nome do produto">
+      </div>
+      <div>
+        <label class="admin-label">Descrição</label>
+        <textarea id="p-description" class="admin-input" rows="3">${p.description || ''}</textarea>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="admin-label">Preço (cêntimos — 0 = Grátis)</label>
+          <input id="p-price" type="number" min="0" class="admin-input" value="${p.price ?? 0}" placeholder="2500">
+        </div>
+        <div class="flex flex-col gap-2 pt-5">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input id="p-available" type="checkbox" class="w-4 h-4" ${p.available ? 'checked' : ''}> <span class="text-sm font-display text-praia-sand-700">Disponível</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input id="p-featured" type="checkbox" class="w-4 h-4" ${p.featured ? 'checked' : ''}> <span class="text-sm font-display text-praia-sand-700">Destaque</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input id="p-shipping" type="checkbox" class="w-4 h-4" ${p.shippingRequired ? 'checked' : ''}> <span class="text-sm font-display text-praia-sand-700">Requer envio</span>
+          </label>
+        </div>
+      </div>
+      <div>
+        <label class="admin-label">Imagens (uma por linha)</label>
+        <textarea id="p-images" class="admin-input font-mono text-xs" rows="4" placeholder="brand_assets/itens_loja/imagem.jpg">${(p.images || []).join('\n')}</textarea>
+      </div>
+      <div>
+        <label class="admin-label">Variantes (tamanhos) — formato: XS,S,M,L,XL,XXL (separados por vírgula, vazio = sem variantes)</label>
+        <input id="p-variants" class="admin-input" value="${variants.map(v => v.id).join(',')}" placeholder="XS,S,M,L,XL,XXL">
+      </div>
+    </div>`;
+}
+
+function editProduct(productId) {
+  const products = state.data['produtos'] || [];
+  const p = products.find(p => p.id === productId) || {};
+  document.getElementById('product-modal-title').textContent = 'Editar Produto';
+  document.getElementById('product-modal-body').innerHTML = productFormHTML(p);
+  document.getElementById('product-modal').dataset.editId = productId;
+  document.getElementById('product-modal').classList.remove('hidden');
+}
+
+function addNewProduct() {
+  document.getElementById('product-modal-title').textContent = 'Novo Produto';
+  document.getElementById('product-modal-body').innerHTML = productFormHTML({});
+  document.getElementById('product-modal').dataset.editId = '';
+  document.getElementById('product-modal').classList.remove('hidden');
+}
+
+function saveProduct() {
+  const editId = document.getElementById('product-modal').dataset.editId;
+  const products = state.data['produtos'] || [];
+
+  const id          = document.getElementById('p-id').value.trim();
+  const name        = document.getElementById('p-name').value.trim();
+  const description = document.getElementById('p-description').value.trim();
+  const category    = document.getElementById('p-category').value;
+  const price       = parseInt(document.getElementById('p-price').value || '0', 10);
+  const available   = document.getElementById('p-available').checked;
+  const featured    = document.getElementById('p-featured').checked;
+  const shippingRequired = document.getElementById('p-shipping').checked;
+  const images      = document.getElementById('p-images').value.split('\n').map(s => s.trim()).filter(Boolean);
+  const variantStr  = document.getElementById('p-variants').value.trim();
+  const variants    = variantStr
+    ? variantStr.split(',').map(s => s.trim()).filter(Boolean).map(v => ({ id: v, label: v, available: true }))
+    : [];
+
+  if (!id || !name) { toast('ID e Nome são obrigatórios.', 'error'); return; }
+
+  const product = { id, name, description, category, price, images, variants, shippingRequired, available, featured };
+
+  if (editId) {
+    const idx = products.findIndex(p => p.id === editId);
+    if (idx >= 0) products[idx] = product;
+    else products.push(product);
+  } else {
+    if (products.some(p => p.id === id)) { toast('Já existe um produto com este ID.', 'error'); return; }
+    products.push(product);
+  }
+
+  state.data['produtos'] = products;
+  document.getElementById('product-modal').classList.add('hidden');
+  renderDashboard();
+  toast('Produto guardado. Usa "Exportar Tudo" para guardar as alterações.', 'success');
+}
+
+function toggleProductAvailability(productId) {
+  const products = state.data['produtos'] || [];
+  const p = products.find(p => p.id === productId);
+  if (p) { p.available = !p.available; renderDashboard(); }
+}
+
+function deleteProduct(productId) {
+  if (!confirm('Remover este produto?')) return;
+  state.data['produtos'] = (state.data['produtos'] || []).filter(p => p.id !== productId);
+  renderDashboard();
+  toast('Produto removido. Usa "Exportar Tudo" para guardar.', 'success');
+}
+
+// ─── Encomendas (leitura do Supabase) ────────────────────────────────────────
+
+async function renderEncomendas(container) {
+  container.innerHTML = `
+    <div class="p-6">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="font-display text-xl font-bold text-praia-teal-800">Encomendas</h2>
+        <button onclick="renderEncomendas(document.getElementById('admin-content'))" class="admin-btn px-4 py-2">↺ Atualizar</button>
+      </div>
+      <div id="orders-admin-content">
+        <div class="flex items-center justify-center py-20">
+          <div class="w-10 h-10 border-2 border-praia-teal-200 border-t-praia-teal-600 rounded-full animate-spin"></div>
+        </div>
+      </div>
+    </div>`;
+
+  const sb = getAdminSb();
+  if (!sb) {
+    document.getElementById('orders-admin-content').innerHTML = `<p class="text-red-500 font-display text-sm">Supabase não configurado.</p>`;
+    return;
+  }
+
+  const { data: orders, error } = await sb
+    .from('orders')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    document.getElementById('orders-admin-content').innerHTML = `<p class="text-red-500 font-display text-sm">Erro: ${error.message}</p>`;
+    return;
+  }
+
+  window._adminOrders = orders || [];
+  renderEncomendasContent();
+}
+
+function renderEncomendasContent() {
+  const orders = window._adminOrders || [];
+  const container = document.getElementById('orders-admin-content');
+  if (!container) return;
+
+  const statusColors = {
+    pendente:   'bg-praia-sand-100 text-praia-sand-700',
+    processado: 'bg-praia-teal-50 text-praia-teal-700',
+    enviado:    'bg-blue-50 text-blue-700',
+    entregue:   'bg-praia-green-500/10 text-praia-green-600',
+  };
+
+  function fmtPrice(cents) {
+    return (cents / 100).toFixed(2).replace('.', ',') + '€';
+  }
+  function fmtDate(dt) {
+    return new Date(dt).toLocaleString('pt-PT', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  }
+
+  if (!orders.length) {
+    container.innerHTML = `<div class="text-center py-20 text-praia-sand-400 font-display">Ainda não há encomendas.</div>`;
+    return;
+  }
+
+  container.innerHTML = `
+    <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-praia-sand-100">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-praia-teal-800 text-white">
+            <th class="text-left px-4 py-3 font-display text-xs uppercase tracking-wider font-semibold">ID</th>
+            <th class="text-left px-4 py-3 font-display text-xs uppercase tracking-wider font-semibold">Email</th>
+            <th class="text-left px-4 py-3 font-display text-xs uppercase tracking-wider font-semibold">Data</th>
+            <th class="text-left px-4 py-3 font-display text-xs uppercase tracking-wider font-semibold">Total</th>
+            <th class="text-left px-4 py-3 font-display text-xs uppercase tracking-wider font-semibold">Estado</th>
+            <th class="text-left px-4 py-3 font-display text-xs uppercase tracking-wider font-semibold">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${orders.map((o, i) => `
+            <tr class="${i % 2 === 0 ? 'bg-white' : 'bg-praia-sand-50'} border-b border-praia-sand-100" id="order-row-${o.id}">
+              <td class="px-4 py-3">
+                <span class="font-display font-bold text-praia-teal-800 text-xs">#${o.id.slice(0, 8).toUpperCase()}</span>
+              </td>
+              <td class="px-4 py-3 text-praia-sand-600 font-display text-xs">${o.email || '—'}</td>
+              <td class="px-4 py-3 text-praia-sand-500 font-display text-xs">${fmtDate(o.created_at)}</td>
+              <td class="px-4 py-3 font-display font-bold text-praia-teal-800">${fmtPrice(o.total)}</td>
+              <td class="px-4 py-3">
+                <select onchange="updateOrderStatus('${o.id}', this.value)"
+                  class="font-display text-xs px-2 py-1 rounded-lg border border-praia-sand-200 ${statusColors[o.status] || ''}">
+                  <option value="pendente" ${o.status === 'pendente' ? 'selected' : ''}>Pendente</option>
+                  <option value="processado" ${o.status === 'processado' ? 'selected' : ''}>Em processamento</option>
+                  <option value="enviado" ${o.status === 'enviado' ? 'selected' : ''}>Enviado</option>
+                  <option value="entregue" ${o.status === 'entregue' ? 'selected' : ''}>Entregue</option>
+                </select>
+              </td>
+              <td class="px-4 py-3">
+                <button onclick="viewOrderDetails('${o.id}')" class="admin-btn py-1 px-3 text-xs">Ver detalhes</button>
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Order detail modal -->
+    <div id="order-detail-modal" class="hidden fixed inset-0 z-[3000] flex items-center justify-center px-4 bg-black/50 backdrop-blur-sm">
+      <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="font-display font-bold text-lg text-praia-teal-800" id="order-detail-title">Detalhes</h3>
+          <button onclick="document.getElementById('order-detail-modal').classList.add('hidden')" class="text-praia-sand-400 hover:text-praia-sand-600 text-xl font-bold">×</button>
+        </div>
+        <div id="order-detail-body"></div>
+      </div>
+    </div>`;
+}
+
+async function updateOrderStatus(orderId, newStatus) {
+  const sb = getAdminSb();
+  if (!sb) return;
+  const { error } = await sb.from('orders').update({ status: newStatus }).eq('id', orderId);
+  if (error) { toast('Erro ao atualizar: ' + error.message, 'error'); return; }
+  const order = (window._adminOrders || []).find(o => o.id === orderId);
+  if (order) order.status = newStatus;
+  toast('Estado atualizado.', 'success');
+}
+
+function viewOrderDetails(orderId) {
+  const order = (window._adminOrders || []).find(o => o.id === orderId);
+  if (!order) return;
+
+  function fmtPrice(cents) { return (cents / 100).toFixed(2).replace('.', ',') + '€'; }
+  const items = Array.isArray(order.items) ? order.items : [];
+  const addr  = order.shipping_address || {};
+
+  document.getElementById('order-detail-title').textContent = `#${order.id.slice(0, 8).toUpperCase()}`;
+  document.getElementById('order-detail-body').innerHTML = `
+    <div class="space-y-4 text-sm font-display">
+      <div>
+        <p class="text-[10px] uppercase tracking-wider text-praia-sand-400 mb-1">Email</p>
+        <p class="text-praia-teal-800 font-semibold">${order.email}</p>
+      </div>
+      <div>
+        <p class="text-[10px] uppercase tracking-wider text-praia-sand-400 mb-1">Morada</p>
+        <p class="text-praia-teal-800">${addr.name || ''}<br>${addr.line1 || ''}${addr.line2 ? ', ' + addr.line2 : ''}<br>${addr.postal_code || ''} ${addr.city || ''}<br>${addr.country || 'PT'}</p>
+      </div>
+      <div>
+        <p class="text-[10px] uppercase tracking-wider text-praia-sand-400 mb-2">Itens</p>
+        <div class="space-y-1">
+          ${items.map(item => `
+            <div class="flex justify-between">
+              <span class="text-praia-sand-600">${item.name}${item.variant && item.variant !== 'sem-variante' ? ` (${item.variant})` : ''} × ${item.quantity}</span>
+              <span class="font-semibold text-praia-teal-800">${item.price === 0 ? 'Grátis' : fmtPrice(item.price * item.quantity)}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+      <div class="border-t border-praia-sand-100 pt-3 space-y-1">
+        <div class="flex justify-between text-praia-sand-500">
+          <span>Subtotal</span><span>${fmtPrice(order.subtotal)}</span>
+        </div>
+        <div class="flex justify-between text-praia-sand-500">
+          <span>Envio (${order.shipping_zone === 'ilhas' ? 'Açores/Madeira' : 'Continental'})</span>
+          <span>${order.shipping_price === 0 ? 'Grátis' : fmtPrice(order.shipping_price)}</span>
+        </div>
+        <div class="flex justify-between font-bold text-praia-teal-800 text-base">
+          <span>Total</span><span>${fmtPrice(order.total)}</span>
+        </div>
+      </div>
+      <div>
+        <p class="text-[10px] uppercase tracking-wider text-praia-sand-400 mb-1">Stripe Session</p>
+        <p class="text-praia-sand-500 text-xs break-all">${order.stripe_session_id}</p>
+      </div>
+    </div>`;
+
+  document.getElementById('order-detail-modal').classList.remove('hidden');
 }
 
 // ─── Init ───

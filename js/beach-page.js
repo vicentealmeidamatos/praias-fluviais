@@ -319,6 +319,24 @@ async function loadReviews(beachId, currentUser, beaches) {
   }));
 
   function reviewCardHTML(r, isReply = false) {
+    // Tombstone for admin-deleted comments
+    if (r.deleted_by_admin) {
+      const commentReplies = replies.filter(reply => reply.parent_id === r.id);
+      const repliesHtml = commentReplies.length > 0
+        ? `<div class="mt-3 space-y-2 border-l-2 border-praia-sand-200 pl-4">
+             ${commentReplies.map(reply => reviewCardHTML(reply, true)).join('')}
+           </div>`
+        : '';
+      return `
+        <div class="bg-praia-sand-50 rounded-xl p-4 border border-praia-sand-200 ${isReply ? 'shadow-none rounded-lg' : ''}" data-review-id="${r.id}">
+          <div class="flex items-center gap-2 text-praia-sand-400">
+            <i data-lucide="shield-off" class="w-3.5 h-3.5 flex-shrink-0"></i>
+            <span class="text-xs italic">Este comentário foi removido pelo administrador.</span>
+          </div>
+          ${repliesHtml}
+        </div>`;
+    }
+
     const profile    = r.profiles;
     const name       = profile?.username || 'Visitante';
     const userId     = r.user_id;

@@ -5,13 +5,33 @@
     "municipality": "Braga",
     "freguesia": "Adaúfe",
     "district": "Braga",
-    "region": "norte",
+    "type": "praia_fluvial",
     "river": "Rio Cávado",
-    "coordinates": { "lat": 41.5547, "lng": -8.4253 },
+    "coordinates": {
+      "lat": 41.5547,
+      "lng": -8.4253
+    },
     "description": "Situada nas margens do Rio Cávado, a Praia Fluvial de Adaúfe é uma das mais procuradas do Minho. Com excelentes infraestruturas, águas cristalinas e um enquadramento natural deslumbrante, é ideal para famílias e amantes da natureza.",
-    "photos": ["https://placehold.co/800x600/003A40/FFEB3B?text=Adau%CC%81fe+1", "https://placehold.co/800x600/005D56/FFEB3B?text=Adau%CC%81fe+2", "https://placehold.co/800x600/002A2E/FFEB3B?text=Adau%CC%81fe+3"],
+    "photos": [
+      "img/uploads/1775440478710_BRAGA_ADAUFE_2025_11.jpg"
+    ],
     "video360": null,
-    "services": { "bar": true, "grills": true, "lifeguard": true, "blueFlag": true, "goldQuality": false, "accessible": true, "parking": true, "wc": true, "picnicArea": true, "camping": false, "petFriendly": false, "playground": false, "boatRental": false, "nacional2": false },
+    "services": {
+      "blueFlag": true,
+      "goldQuality": false,
+      "accessible": true,
+      "lifeguard": true,
+      "bar": true,
+      "picnicArea": true,
+      "petFriendly": false,
+      "playground": false,
+      "boatRental": false,
+      "camping": false,
+      "wc": true,
+      "nacional2": false,
+      "grills": true,
+      "parking": true
+    },
     "waterQuality": "excelente",
     "featured": true,
     "passportStamp": true
@@ -24,11 +44,33 @@
     "district": "Coimbra",
     "region": "centro",
     "river": "Rio Mondego",
-    "coordinates": { "lat": 40.2754, "lng": -8.2256 },
+    "coordinates": {
+      "lat": 40.2754,
+      "lng": -8.2256
+    },
     "description": "No coração da Serra do Buçaco, junto ao Rio Mondego, a Praia do Reconquinho oferece águas límpidas rodeadas por densa vegetação. Foi finalista ao galardão Praia Fluvial do Ano em 2023.",
-    "photos": ["https://placehold.co/800x600/003A40/FFEB3B?text=Reconquinho+1", "https://placehold.co/800x600/005D56/FFEB3B?text=Reconquinho+2", "https://placehold.co/800x600/002A2E/FFEB3B?text=Reconquinho+3"],
+    "photos": [
+      "https://placehold.co/800x600/003A40/FFEB3B?text=Reconquinho+1",
+      "https://placehold.co/800x600/005D56/FFEB3B?text=Reconquinho+2",
+      "https://placehold.co/800x600/002A2E/FFEB3B?text=Reconquinho+3"
+    ],
     "video360": null,
-    "services": { "bar": true, "grills": false, "lifeguard": true, "blueFlag": true, "goldQuality": false, "accessible": false, "parking": true, "wc": true, "picnicArea": true, "camping": false, "petFriendly": false, "playground": false, "boatRental": false, "nacional2": false },
+    "services": {
+      "bar": true,
+      "grills": false,
+      "lifeguard": true,
+      "blueFlag": true,
+      "goldQuality": false,
+      "accessible": false,
+      "parking": true,
+      "wc": true,
+      "picnicArea": true,
+      "camping": false,
+      "petFriendly": false,
+      "playground": false,
+      "boatRental": false,
+      "nacional2": false
+    },
     "waterQuality": "excelente",
     "featured": false,
     "passportStamp": true
@@ -41,11 +83,33 @@
     "district": "Coimbra",
     "region": "centro",
     "river": "Rio Alva",
-    "coordinates": { "lat": 40.2935, "lng": -7.8870 },
+    "coordinates": {
+      "lat": 40.2935,
+      "lng": -7.887
+    },
     "description": "A Praia Fluvial de Avô, nas águas cristalinas do Rio Alva, foi eleita Praia Fluvial do Ano 2024 com 7.175 votos. A aldeia de Avô, com as suas casas de xisto e pontes medievais, é uma das mais pitorescas da Serra do Açor.",
-    "photos": ["https://placehold.co/800x600/003A40/FFEB3B?text=Av%C3%B4+1", "https://placehold.co/800x600/005D56/FFEB3B?text=Av%C3%B4+2", "https://placehold.co/800x600/002A2E/FFEB3B?text=Av%C3%B4+3"],
+    "photos": [
+      "https://placehold.co/800x600/003A40/FFEB3B?text=Av%C3%B4+1",
+      "https://placehold.co/800x600/005D56/FFEB3B?text=Av%C3%B4+2",
+      "https://placehold.co/800x600/002A2E/FFEB3B?text=Av%C3%B4+3"
+    ],
     "video360": null,
-    "services": { "bar": true, "grills": true, "lifeguard": true, "blueFlag": false, "goldQuality": true, "accessible": false, "parking": true, "wc": true, "picnicArea": true, "camping": false, "petFriendly": false, "playground": false, "boatRental": false, "nacional2": false },
+    "services": {
+      "bar": true,
+      "grills": true,
+      "lifeguard": true,
+      "blueFlag": false,
+      "goldQuality": true,
+      "accessible": false,
+      "parking": true,
+      "wc": true,
+      "picnicArea": true,
+      "camping": false,
+      "petFriendly": false,
+      "playground": false,
+      "boatRental": false,
+      "nacional2": false
+    },
     "waterQuality": "excelente",
     "featured": true,
     "passportStamp": true
@@ -58,11 +122,33 @@
     "district": "Coimbra",
     "region": "centro",
     "river": "Rio Mondego",
-    "coordinates": { "lat": 40.2658, "lng": -8.2807 },
+    "coordinates": {
+      "lat": 40.2658,
+      "lng": -8.2807
+    },
     "description": "Praia Fluvial do Ano 2023 com 7.357 votos, a praia do Vimieiro é um paraíso nas margens do Rio Mondego. A paisagem verdejante e as águas calmas fazem desta praia uma das preferidas da região centro.",
-    "photos": ["https://placehold.co/800x600/003A40/FFEB3B?text=Vimieiro+1", "https://placehold.co/800x600/005D56/FFEB3B?text=Vimieiro+2", "https://placehold.co/800x600/002A2E/FFEB3B?text=Vimieiro+3"],
+    "photos": [
+      "https://placehold.co/800x600/003A40/FFEB3B?text=Vimieiro+1",
+      "https://placehold.co/800x600/005D56/FFEB3B?text=Vimieiro+2",
+      "https://placehold.co/800x600/002A2E/FFEB3B?text=Vimieiro+3"
+    ],
     "video360": null,
-    "services": { "bar": true, "grills": true, "lifeguard": true, "blueFlag": true, "goldQuality": false, "accessible": true, "parking": true, "wc": true, "picnicArea": true, "camping": false, "petFriendly": false, "playground": false, "boatRental": false, "nacional2": false },
+    "services": {
+      "bar": true,
+      "grills": true,
+      "lifeguard": true,
+      "blueFlag": true,
+      "goldQuality": false,
+      "accessible": true,
+      "parking": true,
+      "wc": true,
+      "picnicArea": true,
+      "camping": false,
+      "petFriendly": false,
+      "playground": false,
+      "boatRental": false,
+      "nacional2": false
+    },
     "waterQuality": "excelente",
     "featured": true,
     "passportStamp": true
@@ -75,11 +161,33 @@
     "district": "Viseu",
     "region": "centro",
     "river": "Rio Vouga",
-    "coordinates": { "lat": 40.7300, "lng": -8.1700 },
+    "coordinates": {
+      "lat": 40.73,
+      "lng": -8.17
+    },
     "description": "Vencedora do galardão Praia Fluvial do Ano 2025, a Carriça é um espaço de fruição ribeirinha junto ao Rio Vouga. Enquadrada numa paisagem de rara beleza, oferece excelentes condições para banhos e lazer.",
-    "photos": ["https://placehold.co/800x600/003A40/FFEB3B?text=Carri%C3%A7a+1", "https://placehold.co/800x600/005D56/FFEB3B?text=Carri%C3%A7a+2", "https://placehold.co/800x600/002A2E/FFEB3B?text=Carri%C3%A7a+3"],
+    "photos": [
+      "https://placehold.co/800x600/003A40/FFEB3B?text=Carri%C3%A7a+1",
+      "https://placehold.co/800x600/005D56/FFEB3B?text=Carri%C3%A7a+2",
+      "https://placehold.co/800x600/002A2E/FFEB3B?text=Carri%C3%A7a+3"
+    ],
     "video360": null,
-    "services": { "bar": true, "grills": false, "lifeguard": true, "blueFlag": false, "goldQuality": false, "accessible": true, "parking": true, "wc": true, "picnicArea": true, "camping": false, "petFriendly": false, "playground": false, "boatRental": false, "nacional2": false },
+    "services": {
+      "bar": true,
+      "grills": false,
+      "lifeguard": true,
+      "blueFlag": false,
+      "goldQuality": false,
+      "accessible": true,
+      "parking": true,
+      "wc": true,
+      "picnicArea": true,
+      "camping": false,
+      "petFriendly": false,
+      "playground": false,
+      "boatRental": false,
+      "nacional2": false
+    },
     "waterQuality": "boa",
     "featured": true,
     "passportStamp": true
@@ -92,11 +200,33 @@
     "district": "Guarda",
     "region": "centro",
     "river": "Ribeira de Loriga",
-    "coordinates": { "lat": 40.3339, "lng": -7.6720 },
+    "coordinates": {
+      "lat": 40.3339,
+      "lng": -7.672
+    },
     "description": "Conhecida como a 'Suíça Portuguesa', Loriga oferece uma das praias fluviais mais espetaculares do país, com águas gélidas e cristalinas provenientes da Serra da Estrela. As piscinas naturais são rodeadas de enormes penedos de granito.",
-    "photos": ["https://placehold.co/800x600/003A40/FFEB3B?text=Loriga+1", "https://placehold.co/800x600/005D56/FFEB3B?text=Loriga+2", "https://placehold.co/800x600/002A2E/FFEB3B?text=Loriga+3"],
+    "photos": [
+      "https://placehold.co/800x600/003A40/FFEB3B?text=Loriga+1",
+      "https://placehold.co/800x600/005D56/FFEB3B?text=Loriga+2",
+      "https://placehold.co/800x600/002A2E/FFEB3B?text=Loriga+3"
+    ],
     "video360": null,
-    "services": { "bar": true, "grills": false, "lifeguard": true, "blueFlag": true, "goldQuality": true, "accessible": false, "parking": true, "wc": true, "picnicArea": false, "camping": false, "petFriendly": false, "playground": false, "boatRental": false, "nacional2": false },
+    "services": {
+      "bar": true,
+      "grills": false,
+      "lifeguard": true,
+      "blueFlag": true,
+      "goldQuality": true,
+      "accessible": false,
+      "parking": true,
+      "wc": true,
+      "picnicArea": false,
+      "camping": false,
+      "petFriendly": false,
+      "playground": false,
+      "boatRental": false,
+      "nacional2": false
+    },
     "waterQuality": "excelente",
     "featured": true,
     "passportStamp": true
@@ -109,11 +239,33 @@
     "district": "Braga",
     "region": "norte",
     "river": "Rio Cávado",
-    "coordinates": { "lat": 41.5700, "lng": -8.3900 },
+    "coordinates": {
+      "lat": 41.57,
+      "lng": -8.39
+    },
     "description": "Praia Fluvial Revelação da Região Norte em 2024, o Cavadinho é um recanto escondido nas margens do Rio Cávado. As suas águas calmas e o ambiente sereno fazem dela uma descoberta imperdível.",
-    "photos": ["https://placehold.co/800x600/003A40/FFEB3B?text=Cavadinho+1", "https://placehold.co/800x600/005D56/FFEB3B?text=Cavadinho+2", "https://placehold.co/800x600/002A2E/FFEB3B?text=Cavadinho+3"],
+    "photos": [
+      "https://placehold.co/800x600/003A40/FFEB3B?text=Cavadinho+1",
+      "https://placehold.co/800x600/005D56/FFEB3B?text=Cavadinho+2",
+      "https://placehold.co/800x600/002A2E/FFEB3B?text=Cavadinho+3"
+    ],
     "video360": null,
-    "services": { "bar": false, "grills": false, "lifeguard": false, "blueFlag": false, "goldQuality": false, "accessible": false, "parking": true, "wc": false, "picnicArea": true, "camping": false, "petFriendly": false, "playground": false, "boatRental": false, "nacional2": false },
+    "services": {
+      "bar": false,
+      "grills": false,
+      "lifeguard": false,
+      "blueFlag": false,
+      "goldQuality": false,
+      "accessible": false,
+      "parking": true,
+      "wc": false,
+      "picnicArea": true,
+      "camping": false,
+      "petFriendly": false,
+      "playground": false,
+      "boatRental": false,
+      "nacional2": false
+    },
     "waterQuality": "boa",
     "featured": false,
     "passportStamp": true
@@ -126,11 +278,33 @@
     "district": "Coimbra",
     "region": "centro",
     "river": "Rio Ceira",
-    "coordinates": { "lat": 40.1056, "lng": -8.2361 },
+    "coordinates": {
+      "lat": 40.1056,
+      "lng": -8.2361
+    },
     "description": "Nas margens do Rio Ceira, junto à Serra da Lousã, esta praia fluvial é um dos locais mais encantadores do centro de Portugal. Rodeada por floresta densa e com excelentes infraestruturas de apoio.",
-    "photos": ["https://placehold.co/800x600/003A40/FFEB3B?text=Sra+Piedade+1", "https://placehold.co/800x600/005D56/FFEB3B?text=Sra+Piedade+2", "https://placehold.co/800x600/002A2E/FFEB3B?text=Sra+Piedade+3"],
+    "photos": [
+      "https://placehold.co/800x600/003A40/FFEB3B?text=Sra+Piedade+1",
+      "https://placehold.co/800x600/005D56/FFEB3B?text=Sra+Piedade+2",
+      "https://placehold.co/800x600/002A2E/FFEB3B?text=Sra+Piedade+3"
+    ],
     "video360": null,
-    "services": { "bar": true, "grills": true, "lifeguard": true, "blueFlag": true, "goldQuality": false, "accessible": true, "parking": true, "wc": true, "picnicArea": true, "camping": false, "petFriendly": false, "playground": false, "boatRental": false, "nacional2": false },
+    "services": {
+      "bar": true,
+      "grills": true,
+      "lifeguard": true,
+      "blueFlag": true,
+      "goldQuality": false,
+      "accessible": true,
+      "parking": true,
+      "wc": true,
+      "picnicArea": true,
+      "camping": false,
+      "petFriendly": false,
+      "playground": false,
+      "boatRental": false,
+      "nacional2": false
+    },
     "waterQuality": "excelente",
     "featured": false,
     "passportStamp": true
@@ -143,11 +317,33 @@
     "district": "Bragança",
     "region": "norte",
     "river": "Rio Azibo",
-    "coordinates": { "lat": 41.5500, "lng": -6.8700 },
+    "coordinates": {
+      "lat": 41.55,
+      "lng": -6.87
+    },
     "description": "A Albufeira do Azibo é uma das maiores e mais bonitas praias interiores de Portugal. Com Bandeira Azul, oferece excelentes condições para banhos, desportos náuticos e observação de aves na Paisagem Protegida.",
-    "photos": ["https://placehold.co/800x600/003A40/FFEB3B?text=Azibo+1", "https://placehold.co/800x600/005D56/FFEB3B?text=Azibo+2", "https://placehold.co/800x600/002A2E/FFEB3B?text=Azibo+3"],
+    "photos": [
+      "https://placehold.co/800x600/003A40/FFEB3B?text=Azibo+1",
+      "https://placehold.co/800x600/005D56/FFEB3B?text=Azibo+2",
+      "https://placehold.co/800x600/002A2E/FFEB3B?text=Azibo+3"
+    ],
     "video360": null,
-    "services": { "bar": true, "grills": true, "lifeguard": true, "blueFlag": true, "goldQuality": true, "accessible": true, "parking": true, "wc": true, "picnicArea": true, "camping": true, "petFriendly": false, "playground": false, "boatRental": false, "nacional2": false },
+    "services": {
+      "bar": true,
+      "grills": true,
+      "lifeguard": true,
+      "blueFlag": true,
+      "goldQuality": true,
+      "accessible": true,
+      "parking": true,
+      "wc": true,
+      "picnicArea": true,
+      "camping": true,
+      "petFriendly": false,
+      "playground": false,
+      "boatRental": false,
+      "nacional2": false
+    },
     "waterQuality": "excelente",
     "featured": true,
     "passportStamp": true
@@ -160,11 +356,33 @@
     "district": "Faro",
     "region": "algarve",
     "river": "Ribeira de Cadavais",
-    "coordinates": { "lat": 37.4700, "lng": -7.4700 },
+    "coordinates": {
+      "lat": 37.47,
+      "lng": -7.47
+    },
     "description": "A praia fluvial mais meridional de Portugal, o Pego Fundo em Alcoutim é um oásis no interior algarvio. As suas águas límpidas e o ambiente tranquilo fazem desta praia um segredo bem guardado do sul.",
-    "photos": ["https://placehold.co/800x600/003A40/FFEB3B?text=Pego+Fundo+1", "https://placehold.co/800x600/005D56/FFEB3B?text=Pego+Fundo+2", "https://placehold.co/800x600/002A2E/FFEB3B?text=Pego+Fundo+3"],
+    "photos": [
+      "https://placehold.co/800x600/003A40/FFEB3B?text=Pego+Fundo+1",
+      "https://placehold.co/800x600/005D56/FFEB3B?text=Pego+Fundo+2",
+      "https://placehold.co/800x600/002A2E/FFEB3B?text=Pego+Fundo+3"
+    ],
     "video360": null,
-    "services": { "bar": true, "grills": true, "lifeguard": true, "blueFlag": false, "goldQuality": false, "accessible": true, "parking": true, "wc": true, "picnicArea": true, "camping": false, "petFriendly": false, "playground": false, "boatRental": false, "nacional2": false },
+    "services": {
+      "bar": true,
+      "grills": true,
+      "lifeguard": true,
+      "blueFlag": false,
+      "goldQuality": false,
+      "accessible": true,
+      "parking": true,
+      "wc": true,
+      "picnicArea": true,
+      "camping": false,
+      "petFriendly": false,
+      "playground": false,
+      "boatRental": false,
+      "nacional2": false
+    },
     "waterQuality": "boa",
     "featured": false,
     "passportStamp": true
@@ -177,11 +395,33 @@
     "district": "Beja",
     "region": "alentejo",
     "river": "Minas de São Domingos",
-    "coordinates": { "lat": 37.6700, "lng": -7.5000 },
+    "coordinates": {
+      "lat": 37.67,
+      "lng": -7.5
+    },
     "description": "No coração do Alentejo mineiro, a Tapada Grande em Minas de São Domingos é uma praia única, rodeada pela paisagem marcante das antigas minas. As águas calmas e a areia fina fazem recordar uma praia marítima.",
-    "photos": ["https://placehold.co/800x600/003A40/FFEB3B?text=Tapada+Grande+1", "https://placehold.co/800x600/005D56/FFEB3B?text=Tapada+Grande+2", "https://placehold.co/800x600/002A2E/FFEB3B?text=Tapada+Grande+3"],
+    "photos": [
+      "https://placehold.co/800x600/003A40/FFEB3B?text=Tapada+Grande+1",
+      "https://placehold.co/800x600/005D56/FFEB3B?text=Tapada+Grande+2",
+      "https://placehold.co/800x600/002A2E/FFEB3B?text=Tapada+Grande+3"
+    ],
     "video360": null,
-    "services": { "bar": true, "grills": false, "lifeguard": true, "blueFlag": false, "goldQuality": false, "accessible": false, "parking": true, "wc": true, "picnicArea": false, "camping": false, "petFriendly": false, "playground": false, "boatRental": false, "nacional2": false },
+    "services": {
+      "bar": true,
+      "grills": false,
+      "lifeguard": true,
+      "blueFlag": false,
+      "goldQuality": false,
+      "accessible": false,
+      "parking": true,
+      "wc": true,
+      "picnicArea": false,
+      "camping": false,
+      "petFriendly": false,
+      "playground": false,
+      "boatRental": false,
+      "nacional2": false
+    },
     "waterQuality": "boa",
     "featured": false,
     "passportStamp": true
@@ -194,11 +434,33 @@
     "district": "Braga",
     "region": "norte",
     "river": "Rio Cávado",
-    "coordinates": { "lat": 41.5300, "lng": -8.5800 },
+    "coordinates": {
+      "lat": 41.53,
+      "lng": -8.58
+    },
     "description": "Finalista da Praia Fluvial do Ano 2024 com quase 7 mil votos, a Praia da Ucha é um dos locais mais apreciados no Rio Cávado. Possui excelentes condições de acesso e infraestruturas de apoio completas.",
-    "photos": ["https://placehold.co/800x600/003A40/FFEB3B?text=Ucha+1", "https://placehold.co/800x600/005D56/FFEB3B?text=Ucha+2", "https://placehold.co/800x600/002A2E/FFEB3B?text=Ucha+3"],
+    "photos": [
+      "https://placehold.co/800x600/003A40/FFEB3B?text=Ucha+1",
+      "https://placehold.co/800x600/005D56/FFEB3B?text=Ucha+2",
+      "https://placehold.co/800x600/002A2E/FFEB3B?text=Ucha+3"
+    ],
     "video360": null,
-    "services": { "bar": true, "grills": true, "lifeguard": true, "blueFlag": true, "goldQuality": false, "accessible": true, "parking": true, "wc": true, "picnicArea": true, "camping": false, "petFriendly": false, "playground": false, "boatRental": false, "nacional2": false },
+    "services": {
+      "bar": true,
+      "grills": true,
+      "lifeguard": true,
+      "blueFlag": true,
+      "goldQuality": false,
+      "accessible": true,
+      "parking": true,
+      "wc": true,
+      "picnicArea": true,
+      "camping": false,
+      "petFriendly": false,
+      "playground": false,
+      "boatRental": false,
+      "nacional2": false
+    },
     "waterQuality": "excelente",
     "featured": false,
     "passportStamp": true
@@ -211,11 +473,33 @@
     "district": "Porto",
     "region": "norte",
     "river": "Rio Leça",
-    "coordinates": { "lat": 41.3500, "lng": -8.4800 },
+    "coordinates": {
+      "lat": 41.35,
+      "lng": -8.48
+    },
     "description": "A Praia Fluvial de Burgães, nas margens do Rio Leça, é um oásis de frescura no distrito do Porto. Requalificada recentemente, oferece excelentes condições de banho e espaços de lazer.",
-    "photos": ["https://placehold.co/800x600/003A40/FFEB3B?text=Burga%CC%83es+1", "https://placehold.co/800x600/005D56/FFEB3B?text=Burga%CC%83es+2", "https://placehold.co/800x600/002A2E/FFEB3B?text=Burga%CC%83es+3"],
+    "photos": [
+      "https://placehold.co/800x600/003A40/FFEB3B?text=Burga%CC%83es+1",
+      "https://placehold.co/800x600/005D56/FFEB3B?text=Burga%CC%83es+2",
+      "https://placehold.co/800x600/002A2E/FFEB3B?text=Burga%CC%83es+3"
+    ],
     "video360": null,
-    "services": { "bar": true, "grills": false, "lifeguard": true, "blueFlag": false, "goldQuality": false, "accessible": true, "parking": true, "wc": true, "picnicArea": true, "camping": false, "petFriendly": false, "playground": false, "boatRental": false, "nacional2": false },
+    "services": {
+      "bar": true,
+      "grills": false,
+      "lifeguard": true,
+      "blueFlag": false,
+      "goldQuality": false,
+      "accessible": true,
+      "parking": true,
+      "wc": true,
+      "picnicArea": true,
+      "camping": false,
+      "petFriendly": false,
+      "playground": false,
+      "boatRental": false,
+      "nacional2": false
+    },
     "waterQuality": "boa",
     "featured": false,
     "passportStamp": true
@@ -228,11 +512,33 @@
     "district": "Santarém",
     "region": "centro",
     "river": "Rio Zêzere (Albufeira de Castelo de Bode)",
-    "coordinates": { "lat": 39.5900, "lng": -8.1300 },
+    "coordinates": {
+      "lat": 39.59,
+      "lng": -8.13
+    },
     "description": "Nas margens da Albufeira de Castelo de Bode, a Praia de Aldeia do Mato oferece águas tranquilas e vistas magníficas. Muito procurada para desportos náuticos e passeios de barco.",
-    "photos": ["https://placehold.co/800x600/003A40/FFEB3B?text=Aldeia+Mato+1", "https://placehold.co/800x600/005D56/FFEB3B?text=Aldeia+Mato+2", "https://placehold.co/800x600/002A2E/FFEB3B?text=Aldeia+Mato+3"],
+    "photos": [
+      "https://placehold.co/800x600/003A40/FFEB3B?text=Aldeia+Mato+1",
+      "https://placehold.co/800x600/005D56/FFEB3B?text=Aldeia+Mato+2",
+      "https://placehold.co/800x600/002A2E/FFEB3B?text=Aldeia+Mato+3"
+    ],
     "video360": null,
-    "services": { "bar": true, "grills": true, "lifeguard": true, "blueFlag": true, "goldQuality": false, "accessible": false, "parking": true, "wc": true, "picnicArea": true, "camping": true, "petFriendly": false, "playground": false, "boatRental": false, "nacional2": false },
+    "services": {
+      "bar": true,
+      "grills": true,
+      "lifeguard": true,
+      "blueFlag": true,
+      "goldQuality": false,
+      "accessible": false,
+      "parking": true,
+      "wc": true,
+      "picnicArea": true,
+      "camping": true,
+      "petFriendly": false,
+      "playground": false,
+      "boatRental": false,
+      "nacional2": false
+    },
     "waterQuality": "excelente",
     "featured": false,
     "passportStamp": true
@@ -245,11 +551,33 @@
     "district": "Castelo Branco",
     "region": "centro",
     "river": "Ribeira da Goldra",
-    "coordinates": { "lat": 40.2700, "lng": -7.5200 },
+    "coordinates": {
+      "lat": 40.27,
+      "lng": -7.52
+    },
     "description": "Na encosta da Serra da Estrela, esta praia fluvial é alimentada pelas águas frias da montanha. Os seus poços naturais e cascatas são uma atração imperdível no verão.",
-    "photos": ["https://placehold.co/800x600/003A40/FFEB3B?text=Palheiros+Zorro+1", "https://placehold.co/800x600/005D56/FFEB3B?text=Palheiros+Zorro+2", "https://placehold.co/800x600/002A2E/FFEB3B?text=Palheiros+Zorro+3"],
+    "photos": [
+      "https://placehold.co/800x600/003A40/FFEB3B?text=Palheiros+Zorro+1",
+      "https://placehold.co/800x600/005D56/FFEB3B?text=Palheiros+Zorro+2",
+      "https://placehold.co/800x600/002A2E/FFEB3B?text=Palheiros+Zorro+3"
+    ],
     "video360": null,
-    "services": { "bar": true, "grills": false, "lifeguard": true, "blueFlag": false, "goldQuality": false, "accessible": false, "parking": true, "wc": true, "picnicArea": false, "camping": false, "petFriendly": false, "playground": false, "boatRental": false, "nacional2": false },
+    "services": {
+      "bar": true,
+      "grills": false,
+      "lifeguard": true,
+      "blueFlag": false,
+      "goldQuality": false,
+      "accessible": false,
+      "parking": true,
+      "wc": true,
+      "picnicArea": false,
+      "camping": false,
+      "petFriendly": false,
+      "playground": false,
+      "boatRental": false,
+      "nacional2": false
+    },
     "waterQuality": "boa",
     "featured": false,
     "passportStamp": true
@@ -262,11 +590,33 @@
     "district": "Castelo Branco",
     "region": "centro",
     "river": "Rio Zêzere",
-    "coordinates": { "lat": 40.1400, "lng": -7.5100 },
+    "coordinates": {
+      "lat": 40.14,
+      "lng": -7.51
+    },
     "description": "Junto à icónica Aldeia Histórica de Janeiro de Cima, a Praia da Devesa oferece um enquadramento natural único nas margens do Rio Zêzere. A paisagem de xisto e a tranquilidade do local são memoráveis.",
-    "photos": ["https://placehold.co/800x600/003A40/FFEB3B?text=Devesa+1", "https://placehold.co/800x600/005D56/FFEB3B?text=Devesa+2", "https://placehold.co/800x600/002A2E/FFEB3B?text=Devesa+3"],
+    "photos": [
+      "https://placehold.co/800x600/003A40/FFEB3B?text=Devesa+1",
+      "https://placehold.co/800x600/005D56/FFEB3B?text=Devesa+2",
+      "https://placehold.co/800x600/002A2E/FFEB3B?text=Devesa+3"
+    ],
     "video360": null,
-    "services": { "bar": true, "grills": false, "lifeguard": false, "blueFlag": false, "goldQuality": false, "accessible": false, "parking": true, "wc": true, "picnicArea": true, "camping": false, "petFriendly": false, "playground": false, "boatRental": false, "nacional2": false },
+    "services": {
+      "bar": true,
+      "grills": false,
+      "lifeguard": false,
+      "blueFlag": false,
+      "goldQuality": false,
+      "accessible": false,
+      "parking": true,
+      "wc": true,
+      "picnicArea": true,
+      "camping": false,
+      "petFriendly": false,
+      "playground": false,
+      "boatRental": false,
+      "nacional2": false
+    },
     "waterQuality": "boa",
     "featured": false,
     "passportStamp": true
@@ -279,11 +629,33 @@
     "district": "Coimbra",
     "region": "centro",
     "river": "Rio Piódão",
-    "coordinates": { "lat": 40.2300, "lng": -7.8300 },
+    "coordinates": {
+      "lat": 40.23,
+      "lng": -7.83
+    },
     "description": "Junto à famosa Aldeia Histórica de Piódão, esta praia fluvial oferece águas cristalinas numa das paisagens mais emblemáticas de Portugal. As casas de xisto e a serra envolvente criam um cenário de postal.",
-    "photos": ["https://placehold.co/800x600/003A40/FFEB3B?text=Pi%C3%B3d%C3%A3o+1", "https://placehold.co/800x600/005D56/FFEB3B?text=Pi%C3%B3d%C3%A3o+2", "https://placehold.co/800x600/002A2E/FFEB3B?text=Pi%C3%B3d%C3%A3o+3"],
+    "photos": [
+      "https://placehold.co/800x600/003A40/FFEB3B?text=Pi%C3%B3d%C3%A3o+1",
+      "https://placehold.co/800x600/005D56/FFEB3B?text=Pi%C3%B3d%C3%A3o+2",
+      "https://placehold.co/800x600/002A2E/FFEB3B?text=Pi%C3%B3d%C3%A3o+3"
+    ],
     "video360": null,
-    "services": { "bar": true, "grills": false, "lifeguard": false, "blueFlag": false, "goldQuality": false, "accessible": false, "parking": true, "wc": true, "picnicArea": false, "camping": false, "petFriendly": false, "playground": false, "boatRental": false, "nacional2": false },
+    "services": {
+      "bar": true,
+      "grills": false,
+      "lifeguard": false,
+      "blueFlag": false,
+      "goldQuality": false,
+      "accessible": false,
+      "parking": true,
+      "wc": true,
+      "picnicArea": false,
+      "camping": false,
+      "petFriendly": false,
+      "playground": false,
+      "boatRental": false,
+      "nacional2": false
+    },
     "waterQuality": "boa",
     "featured": false,
     "passportStamp": true
@@ -296,11 +668,33 @@
     "district": "Guarda",
     "region": "centro",
     "river": "Rio Zêzere",
-    "coordinates": { "lat": 40.3900, "lng": -7.5400 },
+    "coordinates": {
+      "lat": 40.39,
+      "lng": -7.54
+    },
     "description": "No coração do vale glaciar do Rio Zêzere, na Serra da Estrela, a Praia do Pontão é alimentada pelas águas geladas da montanha. O cenário é grandioso, com vertentes cobertas de floresta.",
-    "photos": ["https://placehold.co/800x600/003A40/FFEB3B?text=Pont%C3%A3o+1", "https://placehold.co/800x600/005D56/FFEB3B?text=Pont%C3%A3o+2", "https://placehold.co/800x600/002A2E/FFEB3B?text=Pont%C3%A3o+3"],
+    "photos": [
+      "https://placehold.co/800x600/003A40/FFEB3B?text=Pont%C3%A3o+1",
+      "https://placehold.co/800x600/005D56/FFEB3B?text=Pont%C3%A3o+2",
+      "https://placehold.co/800x600/002A2E/FFEB3B?text=Pont%C3%A3o+3"
+    ],
     "video360": null,
-    "services": { "bar": true, "grills": false, "lifeguard": true, "blueFlag": false, "goldQuality": false, "accessible": false, "parking": true, "wc": true, "picnicArea": true, "camping": false, "petFriendly": false, "playground": false, "boatRental": false, "nacional2": false },
+    "services": {
+      "bar": true,
+      "grills": false,
+      "lifeguard": true,
+      "blueFlag": false,
+      "goldQuality": false,
+      "accessible": false,
+      "parking": true,
+      "wc": true,
+      "picnicArea": true,
+      "camping": false,
+      "petFriendly": false,
+      "playground": false,
+      "boatRental": false,
+      "nacional2": false
+    },
     "waterQuality": "excelente",
     "featured": false,
     "passportStamp": true
@@ -313,11 +707,33 @@
     "district": "Coimbra",
     "region": "centro",
     "river": "Rio Unhais",
-    "coordinates": { "lat": 40.0500, "lng": -7.8800 },
+    "coordinates": {
+      "lat": 40.05,
+      "lng": -7.88
+    },
     "description": "Escondida entre montanhas na Pampilhosa da Serra, a Praia do Pessegueiro é um refúgio de paz absoluta. As águas são incrivelmente transparentes e o cenário natural intocado.",
-    "photos": ["https://placehold.co/800x600/003A40/FFEB3B?text=Pessegueiro+1", "https://placehold.co/800x600/005D56/FFEB3B?text=Pessegueiro+2", "https://placehold.co/800x600/002A2E/FFEB3B?text=Pessegueiro+3"],
+    "photos": [
+      "https://placehold.co/800x600/003A40/FFEB3B?text=Pessegueiro+1",
+      "https://placehold.co/800x600/005D56/FFEB3B?text=Pessegueiro+2",
+      "https://placehold.co/800x600/002A2E/FFEB3B?text=Pessegueiro+3"
+    ],
     "video360": null,
-    "services": { "bar": true, "grills": true, "lifeguard": true, "blueFlag": false, "goldQuality": false, "accessible": false, "parking": true, "wc": true, "picnicArea": true, "camping": false, "petFriendly": false, "playground": false, "boatRental": false, "nacional2": false },
+    "services": {
+      "bar": true,
+      "grills": true,
+      "lifeguard": true,
+      "blueFlag": false,
+      "goldQuality": false,
+      "accessible": false,
+      "parking": true,
+      "wc": true,
+      "picnicArea": true,
+      "camping": false,
+      "petFriendly": false,
+      "playground": false,
+      "boatRental": false,
+      "nacional2": false
+    },
     "waterQuality": "excelente",
     "featured": false,
     "passportStamp": true
@@ -330,11 +746,33 @@
     "district": "Portalegre",
     "region": "alentejo",
     "river": "Ribeira de Cabeço do Vide",
-    "coordinates": { "lat": 39.1200, "lng": -7.6400 },
+    "coordinates": {
+      "lat": 39.12,
+      "lng": -7.64
+    },
     "description": "Uma das poucas praias fluviais do Alto Alentejo, a praia de Cabeço do Vide é um oásis de frescura na planície alentejana. Ideal para quem procura sossego e águas tranquilas.",
-    "photos": ["https://placehold.co/800x600/003A40/FFEB3B?text=Cabeco+Vide+1", "https://placehold.co/800x600/005D56/FFEB3B?text=Cabeco+Vide+2", "https://placehold.co/800x600/002A2E/FFEB3B?text=Cabeco+Vide+3"],
+    "photos": [
+      "https://placehold.co/800x600/003A40/FFEB3B?text=Cabeco+Vide+1",
+      "https://placehold.co/800x600/005D56/FFEB3B?text=Cabeco+Vide+2",
+      "https://placehold.co/800x600/002A2E/FFEB3B?text=Cabeco+Vide+3"
+    ],
     "video360": null,
-    "services": { "bar": true, "grills": true, "lifeguard": true, "blueFlag": false, "goldQuality": false, "accessible": true, "parking": true, "wc": true, "picnicArea": true, "camping": false, "petFriendly": false, "playground": false, "boatRental": false, "nacional2": false },
+    "services": {
+      "bar": true,
+      "grills": true,
+      "lifeguard": true,
+      "blueFlag": false,
+      "goldQuality": false,
+      "accessible": true,
+      "parking": true,
+      "wc": true,
+      "picnicArea": true,
+      "camping": false,
+      "petFriendly": false,
+      "playground": false,
+      "boatRental": false,
+      "nacional2": false
+    },
     "waterQuality": "boa",
     "featured": false,
     "passportStamp": true
@@ -347,11 +785,33 @@
     "district": "Castelo Branco",
     "region": "centro",
     "river": "Ribeira da Isna",
-    "coordinates": { "lat": 39.7700, "lng": -7.9100 },
+    "coordinates": {
+      "lat": 39.77,
+      "lng": -7.91
+    },
     "description": "Nas serranias de Proença-a-Nova, esta praia fluvial oferece um mergulho refrescante na Ribeira da Isna. O espaço envolvente é perfeito para um dia em família junto à natureza.",
-    "photos": ["https://placehold.co/800x600/003A40/FFEB3B?text=Malhada+Velha+1", "https://placehold.co/800x600/005D56/FFEB3B?text=Malhada+Velha+2", "https://placehold.co/800x600/002A2E/FFEB3B?text=Malhada+Velha+3"],
+    "photos": [
+      "https://placehold.co/800x600/003A40/FFEB3B?text=Malhada+Velha+1",
+      "https://placehold.co/800x600/005D56/FFEB3B?text=Malhada+Velha+2",
+      "https://placehold.co/800x600/002A2E/FFEB3B?text=Malhada+Velha+3"
+    ],
     "video360": null,
-    "services": { "bar": false, "grills": true, "lifeguard": false, "blueFlag": false, "goldQuality": false, "accessible": false, "parking": true, "wc": true, "picnicArea": true, "camping": false, "petFriendly": false, "playground": false, "boatRental": false, "nacional2": false },
+    "services": {
+      "bar": false,
+      "grills": true,
+      "lifeguard": false,
+      "blueFlag": false,
+      "goldQuality": false,
+      "accessible": false,
+      "parking": true,
+      "wc": true,
+      "picnicArea": true,
+      "camping": false,
+      "petFriendly": false,
+      "playground": false,
+      "boatRental": false,
+      "nacional2": false
+    },
     "waterQuality": "boa",
     "featured": false,
     "passportStamp": true
@@ -364,11 +824,33 @@
     "district": "Viseu",
     "region": "centro",
     "river": "Rio Dão",
-    "coordinates": { "lat": 40.6500, "lng": -7.8200 },
+    "coordinates": {
+      "lat": 40.65,
+      "lng": -7.82
+    },
     "description": "Junto às termas de Alcafache, esta praia fluvial no Rio Dão é conhecida pelas suas águas tépidas naturais. Um local único onde a tradição termal encontra o lazer de verão.",
-    "photos": ["https://placehold.co/800x600/003A40/FFEB3B?text=Alcafache+1", "https://placehold.co/800x600/005D56/FFEB3B?text=Alcafache+2", "https://placehold.co/800x600/002A2E/FFEB3B?text=Alcafache+3"],
+    "photos": [
+      "https://placehold.co/800x600/003A40/FFEB3B?text=Alcafache+1",
+      "https://placehold.co/800x600/005D56/FFEB3B?text=Alcafache+2",
+      "https://placehold.co/800x600/002A2E/FFEB3B?text=Alcafache+3"
+    ],
     "video360": null,
-    "services": { "bar": true, "grills": false, "lifeguard": true, "blueFlag": false, "goldQuality": false, "accessible": true, "parking": true, "wc": true, "picnicArea": false, "camping": false, "petFriendly": false, "playground": false, "boatRental": false, "nacional2": false },
+    "services": {
+      "bar": true,
+      "grills": false,
+      "lifeguard": true,
+      "blueFlag": false,
+      "goldQuality": false,
+      "accessible": true,
+      "parking": true,
+      "wc": true,
+      "picnicArea": false,
+      "camping": false,
+      "petFriendly": false,
+      "playground": false,
+      "boatRental": false,
+      "nacional2": false
+    },
     "waterQuality": "boa",
     "featured": false,
     "passportStamp": true
@@ -381,11 +863,33 @@
     "district": "Coimbra",
     "region": "centro",
     "river": "Rio Zêzere",
-    "coordinates": { "lat": 40.0800, "lng": -7.9100 },
+    "coordinates": {
+      "lat": 40.08,
+      "lng": -7.91
+    },
     "description": "Na fronteira entre os distritos de Coimbra e Castelo Branco, a Praia do Cabril é banhada pelas águas frias do Rio Zêzere. O cenário de montanha e a vegetação luxuriante criam um ambiente mágico.",
-    "photos": ["https://placehold.co/800x600/003A40/FFEB3B?text=Cabril+1", "https://placehold.co/800x600/005D56/FFEB3B?text=Cabril+2", "https://placehold.co/800x600/002A2E/FFEB3B?text=Cabril+3"],
+    "photos": [
+      "https://placehold.co/800x600/003A40/FFEB3B?text=Cabril+1",
+      "https://placehold.co/800x600/005D56/FFEB3B?text=Cabril+2",
+      "https://placehold.co/800x600/002A2E/FFEB3B?text=Cabril+3"
+    ],
     "video360": null,
-    "services": { "bar": true, "grills": true, "lifeguard": true, "blueFlag": false, "goldQuality": false, "accessible": false, "parking": true, "wc": true, "picnicArea": true, "camping": true, "petFriendly": false, "playground": false, "boatRental": false, "nacional2": false },
+    "services": {
+      "bar": true,
+      "grills": true,
+      "lifeguard": true,
+      "blueFlag": false,
+      "goldQuality": false,
+      "accessible": false,
+      "parking": true,
+      "wc": true,
+      "picnicArea": true,
+      "camping": true,
+      "petFriendly": false,
+      "playground": false,
+      "boatRental": false,
+      "nacional2": false
+    },
     "waterQuality": "excelente",
     "featured": false,
     "passportStamp": true
@@ -398,11 +902,33 @@
     "district": "Braga",
     "region": "norte",
     "river": "Rio Gerês",
-    "coordinates": { "lat": 41.7200, "lng": -8.1600 },
+    "coordinates": {
+      "lat": 41.72,
+      "lng": -8.16
+    },
     "description": "No coração do Parque Nacional da Peneda-Gerês, esta praia fluvial é um dos locais mais icónicos do norte de Portugal. As águas cristalinas do Rio Gerês, rodeadas pela floresta antiga, são irresistíveis.",
-    "photos": ["https://placehold.co/800x600/003A40/FFEB3B?text=Ger%C3%AAs+1", "https://placehold.co/800x600/005D56/FFEB3B?text=Ger%C3%AAs+2", "https://placehold.co/800x600/002A2E/FFEB3B?text=Ger%C3%AAs+3"],
+    "photos": [
+      "https://placehold.co/800x600/003A40/FFEB3B?text=Ger%C3%AAs+1",
+      "https://placehold.co/800x600/005D56/FFEB3B?text=Ger%C3%AAs+2",
+      "https://placehold.co/800x600/002A2E/FFEB3B?text=Ger%C3%AAs+3"
+    ],
     "video360": null,
-    "services": { "bar": true, "grills": false, "lifeguard": true, "blueFlag": false, "goldQuality": true, "accessible": false, "parking": true, "wc": true, "picnicArea": true, "camping": false, "petFriendly": false, "playground": false, "boatRental": false, "nacional2": false },
+    "services": {
+      "bar": true,
+      "grills": false,
+      "lifeguard": true,
+      "blueFlag": false,
+      "goldQuality": true,
+      "accessible": false,
+      "parking": true,
+      "wc": true,
+      "picnicArea": true,
+      "camping": false,
+      "petFriendly": false,
+      "playground": false,
+      "boatRental": false,
+      "nacional2": false
+    },
     "waterQuality": "excelente",
     "featured": true,
     "passportStamp": true
@@ -415,11 +941,33 @@
     "district": "Portalegre",
     "region": "alentejo",
     "river": "Rio Tejo",
-    "coordinates": { "lat": 39.4600, "lng": -7.9100 },
+    "coordinates": {
+      "lat": 39.46,
+      "lng": -7.91
+    },
     "description": "Nas margens do Rio Tejo, a Praia do Alamal em Gavião é uma das mais bonitas do Alentejo ribatejano. As águas calmas e o extenso areal rodeado por vegetação mediterrânica criam um ambiente paradisíaco.",
-    "photos": ["https://placehold.co/800x600/003A40/FFEB3B?text=Alamal+1", "https://placehold.co/800x600/005D56/FFEB3B?text=Alamal+2", "https://placehold.co/800x600/002A2E/FFEB3B?text=Alamal+3"],
+    "photos": [
+      "https://placehold.co/800x600/003A40/FFEB3B?text=Alamal+1",
+      "https://placehold.co/800x600/005D56/FFEB3B?text=Alamal+2",
+      "https://placehold.co/800x600/002A2E/FFEB3B?text=Alamal+3"
+    ],
     "video360": null,
-    "services": { "bar": true, "grills": true, "lifeguard": true, "blueFlag": true, "goldQuality": false, "accessible": true, "parking": true, "wc": true, "picnicArea": true, "camping": true, "petFriendly": false, "playground": false, "boatRental": false, "nacional2": false },
+    "services": {
+      "bar": true,
+      "grills": true,
+      "lifeguard": true,
+      "blueFlag": true,
+      "goldQuality": false,
+      "accessible": true,
+      "parking": true,
+      "wc": true,
+      "picnicArea": true,
+      "camping": true,
+      "petFriendly": false,
+      "playground": false,
+      "boatRental": false,
+      "nacional2": false
+    },
     "waterQuality": "excelente",
     "featured": false,
     "passportStamp": true
@@ -432,11 +980,33 @@
     "district": "Aveiro",
     "region": "norte",
     "river": "Rio Paiva",
-    "coordinates": { "lat": 40.9500, "lng": -8.1300 },
+    "coordinates": {
+      "lat": 40.95,
+      "lng": -8.13
+    },
     "description": "No vale do Rio Paiva, perto dos famosos Passadiços do Paiva, esta praia fluvial é um tesouro do Arouca UNESCO Global Geopark. Águas transparentes e paisagens de cortar a respiração.",
-    "photos": ["https://placehold.co/800x600/003A40/FFEB3B?text=Olhos+%C3%81gua+1", "https://placehold.co/800x600/005D56/FFEB3B?text=Olhos+%C3%81gua+2", "https://placehold.co/800x600/002A2E/FFEB3B?text=Olhos+%C3%81gua+3"],
+    "photos": [
+      "https://placehold.co/800x600/003A40/FFEB3B?text=Olhos+%C3%81gua+1",
+      "https://placehold.co/800x600/005D56/FFEB3B?text=Olhos+%C3%81gua+2",
+      "https://placehold.co/800x600/002A2E/FFEB3B?text=Olhos+%C3%81gua+3"
+    ],
     "video360": null,
-    "services": { "bar": false, "grills": false, "lifeguard": false, "blueFlag": false, "goldQuality": false, "accessible": false, "parking": true, "wc": false, "picnicArea": false, "camping": false, "petFriendly": false, "playground": false, "boatRental": false, "nacional2": false },
+    "services": {
+      "bar": false,
+      "grills": false,
+      "lifeguard": false,
+      "blueFlag": false,
+      "goldQuality": false,
+      "accessible": false,
+      "parking": true,
+      "wc": false,
+      "picnicArea": false,
+      "camping": false,
+      "petFriendly": false,
+      "playground": false,
+      "boatRental": false,
+      "nacional2": false
+    },
     "waterQuality": "excelente",
     "featured": false,
     "passportStamp": true
@@ -449,11 +1019,33 @@
     "district": "Guarda",
     "region": "norte",
     "river": "Rio Torto",
-    "coordinates": { "lat": 40.9600, "lng": -7.2100 },
+    "coordinates": {
+      "lat": 40.96,
+      "lng": -7.21
+    },
     "description": "Na região do Douro, o Poço da Coriscada é uma praia fluvial de rara beleza. As formações rochosas criaram poços naturais de águas cristalinas, perfeitas para um mergulho refrescante.",
-    "photos": ["https://placehold.co/800x600/003A40/FFEB3B?text=Coriscada+1", "https://placehold.co/800x600/005D56/FFEB3B?text=Coriscada+2", "https://placehold.co/800x600/002A2E/FFEB3B?text=Coriscada+3"],
+    "photos": [
+      "https://placehold.co/800x600/003A40/FFEB3B?text=Coriscada+1",
+      "https://placehold.co/800x600/005D56/FFEB3B?text=Coriscada+2",
+      "https://placehold.co/800x600/002A2E/FFEB3B?text=Coriscada+3"
+    ],
     "video360": null,
-    "services": { "bar": true, "grills": true, "lifeguard": true, "blueFlag": false, "goldQuality": false, "accessible": false, "parking": true, "wc": true, "picnicArea": true, "camping": false, "petFriendly": false, "playground": false, "boatRental": false, "nacional2": false },
+    "services": {
+      "bar": true,
+      "grills": true,
+      "lifeguard": true,
+      "blueFlag": false,
+      "goldQuality": false,
+      "accessible": false,
+      "parking": true,
+      "wc": true,
+      "picnicArea": true,
+      "camping": false,
+      "petFriendly": false,
+      "playground": false,
+      "boatRental": false,
+      "nacional2": false
+    },
     "waterQuality": "boa",
     "featured": false,
     "passportStamp": true
@@ -466,11 +1058,33 @@
     "district": "Évora",
     "region": "alentejo",
     "river": "Albufeira de Alqueva",
-    "coordinates": { "lat": 38.2000, "lng": -7.5300 },
+    "coordinates": {
+      "lat": 38.2,
+      "lng": -7.53
+    },
     "description": "Nas margens do maior lago artificial da Europa, a Praia de Alqueva oferece uma experiência única no Alentejo. As águas calmas e mornas, a paisagem de montado e os céus estrelados são inesquecíveis.",
-    "photos": ["https://placehold.co/800x600/003A40/FFEB3B?text=Alqueva+1", "https://placehold.co/800x600/005D56/FFEB3B?text=Alqueva+2", "https://placehold.co/800x600/002A2E/FFEB3B?text=Alqueva+3"],
+    "photos": [
+      "https://placehold.co/800x600/003A40/FFEB3B?text=Alqueva+1",
+      "https://placehold.co/800x600/005D56/FFEB3B?text=Alqueva+2",
+      "https://placehold.co/800x600/002A2E/FFEB3B?text=Alqueva+3"
+    ],
     "video360": null,
-    "services": { "bar": true, "grills": false, "lifeguard": true, "blueFlag": true, "goldQuality": false, "accessible": true, "parking": true, "wc": true, "picnicArea": false, "camping": false, "petFriendly": false, "playground": false, "boatRental": false, "nacional2": false },
+    "services": {
+      "bar": true,
+      "grills": false,
+      "lifeguard": true,
+      "blueFlag": true,
+      "goldQuality": false,
+      "accessible": true,
+      "parking": true,
+      "wc": true,
+      "picnicArea": false,
+      "camping": false,
+      "petFriendly": false,
+      "playground": false,
+      "boatRental": false,
+      "nacional2": false
+    },
     "waterQuality": "boa",
     "featured": false,
     "passportStamp": true
@@ -483,11 +1097,33 @@
     "district": "Coimbra",
     "region": "centro",
     "river": "Rio Alva",
-    "coordinates": { "lat": 40.2300, "lng": -8.1700 },
+    "coordinates": {
+      "lat": 40.23,
+      "lng": -8.17
+    },
     "description": "Banhada pelas águas do Rio Alva, a Praia de Cornicovo é um recanto de paz no centro de Portugal. Muito apreciada por famílias, oferece boas infraestruturas e um ambiente acolhedor.",
-    "photos": ["https://placehold.co/800x600/003A40/FFEB3B?text=Cornicovo+1", "https://placehold.co/800x600/005D56/FFEB3B?text=Cornicovo+2", "https://placehold.co/800x600/002A2E/FFEB3B?text=Cornicovo+3"],
+    "photos": [
+      "https://placehold.co/800x600/003A40/FFEB3B?text=Cornicovo+1",
+      "https://placehold.co/800x600/005D56/FFEB3B?text=Cornicovo+2",
+      "https://placehold.co/800x600/002A2E/FFEB3B?text=Cornicovo+3"
+    ],
     "video360": null,
-    "services": { "bar": true, "grills": true, "lifeguard": true, "blueFlag": false, "goldQuality": false, "accessible": true, "parking": true, "wc": true, "picnicArea": true, "camping": false, "petFriendly": false, "playground": false, "boatRental": false, "nacional2": false },
+    "services": {
+      "bar": true,
+      "grills": true,
+      "lifeguard": true,
+      "blueFlag": false,
+      "goldQuality": false,
+      "accessible": true,
+      "parking": true,
+      "wc": true,
+      "picnicArea": true,
+      "camping": false,
+      "petFriendly": false,
+      "playground": false,
+      "boatRental": false,
+      "nacional2": false
+    },
     "waterQuality": "boa",
     "featured": false,
     "passportStamp": true
@@ -500,11 +1136,33 @@
     "district": "Guarda",
     "region": "centro",
     "river": "Rio Zêzere",
-    "coordinates": { "lat": 40.4200, "lng": -7.4200 },
+    "coordinates": {
+      "lat": 40.42,
+      "lng": -7.42
+    },
     "description": "No sopé da Serra da Estrela, a Praia de Valhelhas é uma das mais procuradas da região da Guarda. As águas geladas do Rio Zêzere e o cenário montanhoso fazem desta praia um destino obrigatório.",
-    "photos": ["https://placehold.co/800x600/003A40/FFEB3B?text=Valhelhas+1", "https://placehold.co/800x600/005D56/FFEB3B?text=Valhelhas+2", "https://placehold.co/800x600/002A2E/FFEB3B?text=Valhelhas+3"],
+    "photos": [
+      "https://placehold.co/800x600/003A40/FFEB3B?text=Valhelhas+1",
+      "https://placehold.co/800x600/005D56/FFEB3B?text=Valhelhas+2",
+      "https://placehold.co/800x600/002A2E/FFEB3B?text=Valhelhas+3"
+    ],
     "video360": null,
-    "services": { "bar": true, "grills": true, "lifeguard": true, "blueFlag": true, "goldQuality": false, "accessible": false, "parking": true, "wc": true, "picnicArea": true, "camping": false, "petFriendly": false, "playground": false, "boatRental": false, "nacional2": false },
+    "services": {
+      "bar": true,
+      "grills": true,
+      "lifeguard": true,
+      "blueFlag": true,
+      "goldQuality": false,
+      "accessible": false,
+      "parking": true,
+      "wc": true,
+      "picnicArea": true,
+      "camping": false,
+      "petFriendly": false,
+      "playground": false,
+      "boatRental": false,
+      "nacional2": false
+    },
     "waterQuality": "excelente",
     "featured": false,
     "passportStamp": true

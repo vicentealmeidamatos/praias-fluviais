@@ -51,7 +51,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const username     = profile?.username || (isOwnProfile ? currentUser?.email?.split('@')[0] : 'Utilizador') || 'Utilizador';
 
   // ── Render hero ─────────────────────────────────────────────────────────────
-  document.getElementById('profile-avatar-wrap').innerHTML = avatarHTML(profile, 96);
+  const profileWithName = { ...profile, username };
+  document.getElementById('profile-avatar-wrap').innerHTML = avatarHTML(profileWithName, 96);
   document.getElementById('profile-name').textContent      = username;
   document.getElementById('profile-email').textContent     = isOwnProfile ? (currentUser?.email || '') : '';
   document.getElementById('profile-since').textContent     = 'Membro desde ' + new Date(profile?.created_at || currentUser?.created_at || Date.now()).toLocaleDateString('pt-PT', { month: 'long', year: 'numeric' });
@@ -319,10 +320,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     modal.classList.remove('hidden');
     // Prefill current values
     document.getElementById('edit-username').value = profile?.username || '';
-    // Show current avatar
+    // Show current avatar (or initial letter if no photo set)
     const avatarWrap = document.getElementById('edit-avatar-preview');
-    if (avatarWrap && profile?.avatar_url) {
-      avatarWrap.innerHTML = `<img src="${profile.avatar_url}" alt="Avatar" class="w-20 h-20 rounded-full object-cover border-2 border-praia-yellow-400">`;
+    if (avatarWrap) {
+      avatarWrap.innerHTML = avatarHTML(profileWithName, 80);
     }
     // Clear password fields
     document.getElementById('edit-current-password').value = '';
@@ -437,7 +438,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const label = document.getElementById('edit-email-resend-label');
     if (btn) btn.disabled = true;
     if (label) label.textContent = 'A enviar…';
-    await _sb.auth.updateUser({ email: _pendingNewEmail });
+    await _sb.auth.updateUser({ email: _pendingNewEmail, options: { emailRedirectTo: `${location.origin}/perfil.html` } });
     startEmailResendCountdown(60);
     lucide.createIcons();
   };
@@ -470,7 +471,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     btn.disabled = true;
     const { error } = await _sb.auth.updateUser({
       email: newEmail,
-      options: { emailRedirectTo: `${location.origin}/auth.html` },
+      options: { emailRedirectTo: `${location.origin}/perfil.html` },
     });
     btn.textContent = 'Alterar Email';
     btn.disabled = false;
@@ -479,6 +480,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       errEl.classList.remove('hidden');
     } else {
       _pendingNewEmail = newEmail;
+      localStorage.setItem('gpf_email_change_to', newEmail);
+      localStorage.setItem('gpf_email_change_ts', Date.now().toString());
       document.getElementById('edit-email-form').classList.add('hidden');
       document.getElementById('edit-email-sent-to').textContent = newEmail;
       document.getElementById('edit-email-success').classList.remove('hidden');
@@ -578,9 +581,136 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
+  // ── Encomendas (apenas perfil próprio) ────────────────────────────────────
+  if (isOwnProfile && currentUser) {
+    // Mostrar tab de encomendas
+    const tabEncomendas = document.getElementById('tab-encomendas');
+    if (tabEncomendas) tabEncomendas.classList.remove('hidden');
+
+    // Carregar e renderizar encomendas
+    async function renderOrders() {
+      const container = document.getElementById('orders-list');
+      if (!container) return;
+
+      container.innerHTML = `
+        <div class="flex items-center justify-center py-10">
+          <div class="w-8 h-8 border-2 border-praia-teal-200 border-t-praia-teal-600 rounded-full animate-spin"></div>
+        </div>`;
+
+      try {
+        const { data: orders, error } = await _sb
+          .from('orders')
+          .select('*')
+          .eq('user_id', currentUser.id)
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        if (!orders || orders.length === 0) {
+          container.innerHTML = `
+            <div class="text-center py-12">
+              <i data-lucide="package" class="w-12 h-12 mx-auto text-praia-sand-300 mb-3"></i>
+              <p class="font-display text-sm font-semibold text-praia-sand-400">Ainda não fizeste nenhuma encomenda</p>
+              <a href="loja.html" class="inline-flex items-center gap-2 mt-4 bg-praia-teal-800 text-white font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-xl hover:bg-praia-teal-700 transition-colors">
+                <i data-lucide="shopping-bag" class="w-4 h-4"></i> Ver loja
+              </a>
+            </div>`;
+          lucide.createIcons();
+          return;
+        }
+
+        const statusColors = {
+          pendente:    'bg-praia-sand-100 text-praia-sand-600',
+          processado:  'bg-praia-teal-50 text-praia-teal-700',
+          enviado:     'bg-blue-50 text-blue-700',
+          entregue:    'bg-praia-green-500/10 text-praia-green-600',
+        };
+        const statusLabels = {
+          pendente:   'Pendente',
+          processado: 'Em processamento',
+          enviado:    'Enviado',
+          entregue:   'Entregue',
+        };
+
+        function fmtPrice(cents) {
+          return (cents / 100).toFixed(2).replace('.', ',') + '€';
+        }
+
+        container.innerHTML = orders.map(order => {
+          const items = Array.isArray(order.items) ? order.items : [];
+          const date  = new Date(order.created_at).toLocaleDateString('pt-PT', { day: 'numeric', month: 'long', year: 'numeric' });
+          const statusCls = statusColors[order.status] || statusColors.pendente;
+          const statusLbl = statusLabels[order.status] || order.status;
+          const shortId   = order.id.slice(0, 8).toUpperCase();
+
+          return `
+            <div class="bg-white rounded-2xl border border-praia-sand-100 shadow-sm overflow-hidden">
+              <div class="flex items-center justify-between px-5 py-4 border-b border-praia-sand-100">
+                <div>
+                  <p class="font-display font-bold text-praia-teal-800 text-sm">#${shortId}</p>
+                  <p class="font-display text-xs text-praia-sand-400 mt-0.5">${date}</p>
+                </div>
+                <div class="flex items-center gap-3">
+                  <span class="inline-flex items-center gap-1.5 font-display font-semibold text-xs px-3 py-1 rounded-full ${statusCls}">
+                    ${statusLbl}
+                  </span>
+                  <span class="font-display font-bold text-praia-teal-800">${fmtPrice(order.total)}</span>
+                </div>
+              </div>
+              ${items.length ? `
+                <div class="px-5 py-3 space-y-1.5">
+                  ${items.map(item => `
+                    <div class="flex justify-between text-sm">
+                      <span class="text-praia-sand-600 font-display">${item.name}${item.variant && item.variant !== 'sem-variante' ? ` <span class="text-praia-sand-400 text-xs">(${item.variant})</span>` : ''} × ${item.quantity}</span>
+                      <span class="font-display font-semibold text-praia-teal-800">${item.price === 0 ? 'Grátis' : fmtPrice(item.price * item.quantity)}</span>
+                    </div>
+                  `).join('')}
+                </div>
+              ` : ''}
+              <div class="px-5 py-3 bg-praia-sand-50 flex items-center gap-2 text-xs text-praia-sand-400 font-display">
+                <i data-lucide="truck" class="w-3.5 h-3.5"></i>
+                ${order.shipping_zone === 'ilhas' ? 'Açores / Madeira' : 'Portugal Continental'} —
+                ${order.shipping_price === 0 ? 'Envio grátis' : `Envio ${fmtPrice(order.shipping_price)}`}
+              </div>
+            </div>`;
+        }).join('');
+
+        lucide.createIcons();
+      } catch (err) {
+        console.error('Erro ao carregar encomendas:', err);
+        container.innerHTML = `
+          <div class="text-center py-12 text-praia-sand-400">
+            <i data-lucide="alert-circle" class="w-8 h-8 mx-auto mb-2"></i>
+            <p class="text-sm font-display">Erro ao carregar encomendas.</p>
+          </div>`;
+        lucide.createIcons();
+      }
+    }
+
+    // Carregar quando tab for clicado (lazy)
+    let _ordersLoaded = false;
+    document.querySelector('[data-tab="orders"]')?.addEventListener('click', () => {
+      if (!_ordersLoaded) { _ordersLoaded = true; renderOrders(); }
+    });
+  }
+
   // ── Show hidden sections ───────────────────────────────────────────────────
   document.getElementById('profile-loading')?.classList.add('hidden');
   document.getElementById('profile-content')?.classList.remove('hidden');
+
+  // ── Email change success toast (localStorage, persists across tabs) ──────────
+  const _pendingTo = localStorage.getItem('gpf_email_change_to');
+  const _pendingTs = parseInt(localStorage.getItem('gpf_email_change_ts') || '0', 10);
+  const _tsValid   = Date.now() - _pendingTs < 10 * 60 * 1000; // 10 min window
+  if (_pendingTo && _tsValid && currentUser?.email?.toLowerCase() === _pendingTo.toLowerCase()) {
+    localStorage.removeItem('gpf_email_change_to');
+    localStorage.removeItem('gpf_email_change_ts');
+    const t = document.createElement('div');
+    t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999;background:#003A40;color:#FFEB3B;font-family:\'Poppins\',sans-serif;font-size:14px;font-weight:600;padding:14px 24px;border-radius:12px;box-shadow:0 8px 32px rgba(0,58,64,0.4);max-width:90vw;text-align:center;';
+    t.textContent = `✓ Email alterado para ${_pendingTo} com sucesso`;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 5000);
+  }
 });
 
 // ── Image viewer ──────────────────────────────────────────────────────────────

@@ -129,7 +129,7 @@ async function voteUpdatePublic(userId, year, isPublic) {
 async function reviewsGetForBeach(beachId) {
   const { data } = await _sb
     .from('reviews')
-    .select('*, profiles(id, username, avatar_url), parent_id')
+    .select('*, profiles(id, username, avatar_url), parent_id, deleted_by_admin')
     .eq('beach_id', beachId)
     .order('created_at', { ascending: true });
   return data || [];
@@ -601,7 +601,8 @@ async function initHeaderAuth() {
   // Render if: no prior cache (new session/registration), or data changed
   const dataChanged = !hadCache
     || oldCache.avatar_url !== (profile?.avatar_url || null)
-    || oldCache.username   !== name;
+    || oldCache.username   !== name
+    || oldCache.email      !== (user.email || '');
   if (dataChanged) {
     slot.innerHTML = _buildHeaderUserHTML(name, user.email, profile?.avatar_url);
     lucide.createIcons();

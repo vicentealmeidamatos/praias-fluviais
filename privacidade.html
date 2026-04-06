@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Política de Privacidade — Guia das Praias Fluviais</title>
+  <meta name="description" content="Política de Privacidade do Guia das Praias Fluviais. Saiba como recolhemos, usamos e protegemos os seus dados pessoais.">
+  <meta name="robots" content="noindex">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/shared.js"></script>
+  <script src="js/lucide.min.js"></script>
+  <link rel="stylesheet" href="css/shared.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+
+  <style>
+    .privacy-hero {
+      background: linear-gradient(160deg, #001A1D 0%, #002A2E 50%, #003A40 100%);
+      position: relative; overflow: hidden;
+    }
+    .privacy-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 10% 80%, rgba(255,235,59,0.05) 0%, transparent 55%),
+        radial-gradient(ellipse at 90% 10%, rgba(2,136,209,0.04) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .section-card {
+      background: #ffffff;
+      border-radius: 20px;
+      border: 1px solid rgba(0,58,64,0.08);
+      box-shadow: 0 2px 20px rgba(0,58,64,0.06), 0 8px 40px rgba(0,0,0,0.04);
+    }
+    .section-label {
+      font-family: 'Poppins', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #003A40;
+    }
+    .section-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: #0d2326;
+      line-height: 1.3;
+      margin: 0 0 16px;
+    }
+    .prose-body {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 14px;
+      line-height: 1.8;
+      color: #4a5568;
+    }
+    .prose-body p { margin: 0 0 14px; }
+    .prose-body p:last-child { margin-bottom: 0; }
+    .prose-body ul { margin: 8px 0 14px 0; padding: 0; list-style: none; }
+    .prose-body ul li {
+      display: flex; align-items: flex-start; gap: 8px;
+      margin-bottom: 8px; padding: 0;
+    }
+    .prose-body ul li::before {
+      content: '';
+      flex-shrink: 0;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #FFEB3B;
+      margin-top: 7px;
+      border: 1px solid #003A40;
+    }
+    .toc-item {
+      font-family: 'Poppins', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: #003A40;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .toc-item:hover {
+      background: rgba(0,58,64,0.06);
+    }
+    .toc-number {
+      font-size: 10px;
+      font-weight: 700;
+      color: #FFEB3B;
+      background: #003A40;
+      border-radius: 4px;
+      width: 20px; height: 20px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp 0.5s ease both; }
+    .fade-up-1 { animation-delay: 0.05s; }
+    .fade-up-2 { animation-delay: 0.12s; }
+    .fade-up-3 { animation-delay: 0.19s; }
+  </style>
+</head>
+
+<body class="bg-praia-sand-50 font-body text-praia-sand-900 antialiased overflow-x-hidden">
+  <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:bg-praia-yellow-400 focus:text-praia-teal-800 focus:px-4 focus:py-2 focus:rounded-lg focus:font-display focus:font-semibold">Saltar para o conteúdo</a>
+
+  <!-- Header -->
+  <header id="main-header" class="fixed top-0 left-0 right-0 z-[1000] bg-praia-teal-800/90 backdrop-blur-md">
+    <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-10">
+      <div class="flex items-center justify-between h-16 md:h-[70px]">
+        <a href="index.html" class="flex-shrink-0 mr-4">
+          <img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-14 md:h-[58px] w-auto">
+        </a>
+        <nav class="hidden lg:flex items-center gap-0.5">
+          <a href="rede.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Rede</a>
+          <a href="votar.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Votar</a>
+          <a href="passaporte.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Passaporte</a>
+          <a href="artigos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Novidades</a>
+          <a href="descontos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Descontos</a>
+          <a href="loja.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Loja</a>
+          <a href="contactos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Contactos</a>
+          <a href="carrinho.html" class="relative nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-2.5 py-2 flex items-center" aria-label="Carrinho de compras">
+            <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+            <span id="cart-badge" class="absolute -top-0.5 -right-0.5 bg-praia-yellow-400 text-praia-teal-800 text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center hidden">0</span>
+          </a>
+        </nav>
+        <div class="hidden lg:flex items-center gap-1.5 ml-auto">
+          <a href="https://www.facebook.com/praiasfluviais" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:bg-praia-yellow-400 hover:text-praia-teal-800 transition-colors duration-300">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+          <a href="https://www.instagram.com/guiadaspraiasfluviais" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:bg-praia-yellow-400 hover:text-praia-teal-800 transition-colors duration-300">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+        </div>
+        <div class="hidden md:flex items-center gap-2 ml-3">
+          <a href="onde-encontrar.html" class="inline-flex items-center gap-1.5 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-[11px] uppercase tracking-wider px-3 py-1.5 rounded-full btn-primary shadow-layered-yellow whitespace-nowrap">
+            <i data-lucide="book-open" class="w-3.5 h-3.5"></i> Onde Encontrar
+          </a>
+          <div id="header-auth-slot" class="flex items-center"></div>
+        </div>
+        <button id="nav-hamburger" class="lg:hidden text-white p-2 -mr-2" aria-label="Abrir menu">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Menu -->
+  <div id="menu-overlay" class="fixed inset-0 bg-black/50 z-[1001] opacity-0 pointer-events-none transition-opacity duration-300"></div>
+  <nav id="mobile-menu" class="fixed top-0 right-0 bottom-0 w-72 bg-praia-teal-800 z-[1002] translate-x-full transition-transform duration-300 ease-out flex flex-col">
+    <div class="flex items-center justify-between p-5 border-b border-white/10">
+      <img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-7">
+      <button id="nav-close" class="text-white p-1"><i data-lucide="x" class="w-6 h-6"></i></button>
+    </div>
+    <div class="flex-1 overflow-y-auto py-4">
+      <a href="rede.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="network" class="w-5 h-5"></i> Rede de Praias</a>
+      <a href="votar.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="vote" class="w-5 h-5"></i> Votar 2026</a>
+      <a href="passaporte.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="stamp" class="w-5 h-5"></i> Passaporte</a>
+      <a href="artigos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="newspaper" class="w-5 h-5"></i> Novidades</a>
+      <a href="descontos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="percent" class="w-5 h-5"></i> Descontos</a>
+      <a href="loja.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="shopping-bag" class="w-5 h-5"></i> Loja</a>
+      <a href="contactos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="mail" class="w-5 h-5"></i> Contactos</a>
+    </div>
+    <div class="p-5 border-t border-white/10">
+      <a href="carrinho.html" class="flex items-center justify-center gap-2 bg-white/10 border border-white/20 text-white hover:bg-white/20 font-display font-bold text-sm uppercase tracking-wider px-5 py-2.5 rounded-full transition-all duration-200 w-full mb-2 relative">
+        <i data-lucide="shopping-cart" class="w-4 h-4"></i> Carrinho
+        <span id="mobile-cart-badge" class="absolute -top-1.5 right-3 bg-praia-yellow-400 text-praia-teal-800 text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center hidden">0</span>
+      </a>
+      <div id="mobile-auth-slot"></div>
+    </div>
+  </nav>
+
+  <main id="main">
+
+    <!-- Hero -->
+    <section class="privacy-hero pt-16 md:pt-[70px]">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-12">
+        <div class="fade-up fade-up-1">
+          <div class="inline-flex items-center gap-2 mb-5 px-3 py-1.5 rounded-full border border-white/15 bg-white/5">
+            <i data-lucide="shield" class="w-3.5 h-3.5 text-praia-yellow-400"></i>
+            <span class="font-display text-[11px] font-semibold uppercase tracking-widest text-white/50">RGPD — Proteção de Dados</span>
+          </div>
+          <h1 class="font-display text-3xl md:text-4xl font-extrabold text-white tracking-tight leading-tight mb-4">
+            Política de<br><span class="text-praia-yellow-400">Privacidade</span>
+          </h1>
+          <p class="text-white/40 text-sm leading-relaxed max-w-xl">
+            Artigos 8.º, 13.º, 14.º e 21.º do Regulamento Geral de Proteção de Dados.
+            A sua privacidade é importante para nós.
+          </p>
+        </div>
+
+        <!-- Meta bar -->
+        <div class="fade-up fade-up-2 flex flex-wrap items-center gap-4 mt-8 pt-8 border-t border-white/10">
+          <div class="flex items-center gap-2 text-white/30 text-xs font-display">
+            <i data-lucide="building-2" class="w-3.5 h-3.5"></i>
+            <span>Blanche, Lda.</span>
+          </div>
+          <div class="flex items-center gap-2 text-white/30 text-xs font-display">
+            <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
+            <span>Atualizado em 2026</span>
+          </div>
+          <div class="flex items-center gap-2 text-white/30 text-xs font-display">
+            <i data-lucide="mail" class="w-3.5 h-3.5"></i>
+            <a href="mailto:info.blanche@gmail.com" class="hover:text-white/60 transition-colors">info.blanche@gmail.com</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Content -->
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="fade-up fade-up-3 grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-8 items-start">
+
+        <!-- Table of Contents (sticky sidebar) -->
+        <aside class="lg:sticky lg:top-24">
+          <div class="section-card p-5">
+            <p class="section-label mb-4">Índice</p>
+            <nav class="flex flex-col gap-0.5">
+              <a href="#sobre" class="toc-item"><span class="toc-number">1</span>Sobre esta Política</a>
+              <a href="#recolha" class="toc-item"><span class="toc-number">2</span>O que recolhemos</a>
+              <a href="#uso" class="toc-item"><span class="toc-number">3</span>Como usamos</a>
+              <a href="#direitos" class="toc-item"><span class="toc-number">4</span>Os seus direitos</a>
+              <a href="#cookies" class="toc-item"><span class="toc-number">5</span>Cookies</a>
+              <a href="#seguranca" class="toc-item"><span class="toc-number">6</span>Segurança</a>
+              <a href="#contactos" class="toc-item"><span class="toc-number">7</span>Contactos</a>
+            </nav>
+          </div>
+        </aside>
+
+        <!-- Main content -->
+        <div class="flex flex-col gap-6">
+
+          <!-- 1. Sobre -->
+          <div id="sobre" class="section-card p-8">
+            <p class="section-label mb-2">01</p>
+            <h2 class="section-title">Acerca desta Política de Privacidade</h2>
+            <div class="prose-body">
+              <p>Este Website pertence à empresa <strong style="color:#003A40;">Blanche, Lda.</strong></p>
+              <p>A Blanche, Lda. respeita as suas preferências no que concerne à recolha e uso dos seus Dados Pessoais.</p>
+              <p><strong>«Dados Pessoais»</strong> refere-se à informação relativa a uma pessoa singular identificada ou identificável («Titular dos Dados»); é considerada identificável uma pessoa singular que possa ser identificada, direta ou indiretamente, em especial por referência a um identificador, como por exemplo um nome, um número de identificação, dados de localização, identificadores por via eletrónica ou mais elementos específicos da identidade física, fisiológica, genética, mental, económica, cultural ou social dessa pessoa singular.</p>
+              <p>Esta Política permite-lhe saber como a Blanche, Lda. recolhe e usa os seus Dados Pessoais, como pode controlar o seu uso e descreve as práticas em relação à informação recolhida.</p>
+            </div>
+          </div>
+
+          <!-- 2. Recolha -->
+          <div id="recolha" class="section-card p-8">
+            <p class="section-label mb-2">02</p>
+            <h2 class="section-title">Que informação recolhemos acerca de si?</h2>
+            <div class="prose-body">
+              <p>Os dados pessoais recolhidos são os necessários à finalidade pela qual nos contactou, tratando-se nesse âmbito dados como o nome e o endereço de e-mail. Ao disponibilizar os seus dados pessoais, está a autorizar a recolha, uso e divulgação dos mesmos de acordo com as regras aqui definidas.</p>
+              <p>A informação de uso do website é recolhida usando cookies, mas não o identificam especificamente, sendo ou podendo ser recolhidos os dados seguintes:</p>
+              <ul>
+                <li>Endereço IP.</li>
+                <li>Localização geográfica.</li>
+                <li>Informação acerca do dispositivo que está a aceder ao website, nomeadamente, tipo e versão do navegador, sistema operativo, resolução do ecrã, linguagem preferida, informação contida nos cabeçalhos HTTP e versão do agente.</li>
+                <li>O motor de busca que usou para localizar e aceder ao website.</li>
+                <li>Data e tempo de atividade no website, bem como, páginas web e conteúdos visitados.</li>
+              </ul>
+              <p>Importa realçar que esta informação de uso não o identifica deliberadamente e se excecionalmente o identificar a mesma será anonimizada de imediato. Ao ceder a informação está a dar o seu consentimento informado e inequívoco de que consente o tratamento dos dados que lhe digam respeito de forma automatizada.</p>
+              <p>Alguns dos dados solicitados são de caráter obrigatório, estando os mesmos identificados, podendo a falta ou inexatidão das respostas dadas comprometer o serviço prestado.</p>
+            </div>
+          </div>
+
+          <!-- 3. Uso -->
+          <div id="uso" class="section-card p-8">
+            <p class="section-label mb-2">03</p>
+            <h2 class="section-title">De que forma usamos a informação sobre si?</h2>
+            <div class="prose-body">
+              <p>Os dados recolhidos servem para processar o seu pedido, gerir a sua conta e, se concordar, enviar-lhe por correio eletrónico informação acerca de outros assuntos que pensamos ser do seu interesse. Usamos a informação recolhida do website para personalizar as suas próximas visitas ao nosso website.</p>
+              <p>A Blanche, Lda. não partilha a sua informação para campanhas de marketing com outras empresas, nem transfere os seus Dados Pessoais para um país terceiro.</p>
+              <p>Embora a informação fornecida seja geralmente tratada como privada na Blanche, Lda., os dados recolhidos serão utilizados em conformidade com o regulamento de proteção de dados pessoais, durante todo o processo de tratamento; pode, no entanto, ser necessário transferir Dados Pessoais de forma privada para outros órgãos, nomeadamente, o judicial, e ao processar o seu pedido, podemos enviar os seus dados para e, também, usar informação de agências de crédito e de prevenção de fraudes.</p>
+              <p>Tem o direito de apresentar reclamação a uma Autoridade de Controlo da União Europeia em relação à proteção dos seus Dados Pessoais. A Blanche, Lda. prestará a sua colaboração à Autoridade de Controlo facultando-lhe todas as informações que por esta, no exercício das suas competências, lhe forem solicitadas.</p>
+              <p>A informação recolhida neste website não envolve a tomada de decisões automatizadas, incluindo a definição de perfis. Neste website não são efetuadas comparações, interconexões ou qualquer outra forma de inter-relacionar as informações registadas.</p>
+            </div>
+          </div>
+
+          <!-- 4. Direitos -->
+          <div id="direitos" class="section-card p-8">
+            <p class="section-label mb-2">04</p>
+            <h2 class="section-title">Acesso, correção e direitos do utilizador</h2>
+            <div class="prose-body">
+              <p>Confiamos no Utilizador para nos fornecer informações precisas e completas e para proceder à atualização dos dados em relação a qualquer alteração na informação fornecida.</p>
+              <p>O Utilizador tem o direito de retirar o seu consentimento em qualquer altura, sem comprometer a licitude do tratamento efetuado com base no consentimento previamente dado, e o direito de solicitar à Blanche, Lda. o acesso aos Dados Pessoais que lhe digam respeito, bem como a sua retificação ou à sua eliminação, e a limitação do tratamento no que disser respeito ao Utilizador, ou do direito de se opor ao tratamento, bem como do direito à portabilidade dos dados.</p>
+              <p>Os Dados Pessoais necessários para a execução do contrato no qual o Utilizador é parte, para o cumprimento das obrigações jurídicas a que o Responsável pelo Tratamento esteja sujeito e os que sejam necessários para efeito dos interesses legítimos prosseguidos pela Blanche, Lda. não estão incluídos no ponto anterior.</p>
+              <p>Sem prejuízo de disposições legais ou regulamentares em contrário, os Dados Pessoais serão conservados apenas pelo período mínimo necessário para as finalidades que motivaram a sua recolha ou o seu posterior tratamento, após os quais são eliminados ou, caso seja do interesse da Blanche, Lda., processados para fins estatísticos e anonimizados, não sendo possível identificar o seu Titular.</p>
+              <p>Carece de consentimento o tratamento posterior dos Dados Pessoais para um fim que não seja aquele para o qual os dados tenham sido recolhidos; antes desse tratamento, o Responsável pelo Tratamento fornece ao Titular dos Dados informações sobre esse fim e quaisquer outras informações pertinentes.</p>
+              <p>Tem o direito de solicitar uma cópia da informação que temos acerca de si. Se quiser solicitar uma cópia parcial ou total da informação retida sobre si, basta enviar um e-mail para <a href="mailto:info.blanche@gmail.com" style="color:#003A40;font-weight:600;">info.blanche@gmail.com</a> com o assunto <em>«Solicitar informação pessoal»</em>, com o seu nome e o email utilizado aquando do seu contacto connosco.</p>
+            </div>
+          </div>
+
+          <!-- 5. Cookies -->
+          <div id="cookies" class="section-card p-8">
+            <p class="section-label mb-2">05</p>
+            <h2 class="section-title">Cookies</h2>
+            <div class="prose-body">
+              <p>São pequenos ficheiros de texto guardados no seu computador que servem para recolher informação acerca do seu dispositivo e informação acerca da sua experiência de utilização. Esta informação é usada para registar o número de visitas efetuadas e compilar informação estatística acerca da atividade do website.</p>
+              <p><strong style="color:#003A40;">Tipos de Cookies consoante a entidade que os gere:</strong></p>
+              <ul>
+                <li><strong>Cookies próprios:</strong> um cookie gerido por este domínio / website.</li>
+                <li><strong>Cookies de terceiros:</strong> um cookie gerido por outro domínio / website.</li>
+                <li><strong>Cookies persistentes:</strong> a informação do cookie encontra-se armazenada de forma permanente no seu equipamento.</li>
+                <li><strong>Cookies de sessão:</strong> a informação do cookie não se encontra armazenada de forma permanente no seu equipamento.</li>
+              </ul>
+              <p>A informação relativa aos cookies é controlada e acedida pelo proprietário do website. Pode configurar o seu browser para não aceitar cookies e os websites mencionados anteriormente explicam-lhe como pode removê-los. No entanto, a não aceitação de cookies pode resultar na execução incorreta de algumas funcionalidades do Website.</p>
+              <p>Nenhum dos cookies usados é essencial para a utilização do Website, para uma funcionalidade em particular ou para o melhoramento do desempenho do Website.</p>
+              <p>A utilização de cookies pela Blanche, Lda. tem os objetivos de analisar o uso do Website e permitir-lhe ter uma experiência de navegação sem problemas; em momento algum recolhemos Dados Pessoais através de cookies. Os cookies não serão usados para nenhum outro propósito dos mencionados.</p>
+            </div>
+          </div>
+
+          <!-- 6. Segurança -->
+          <div id="seguranca" class="section-card p-8">
+            <p class="section-label mb-2">06</p>
+            <h2 class="section-title">Segurança</h2>
+            <div class="prose-body">
+              <p>A Blanche, Lda. aplica medidas técnicas e organizativas adequadas para assegurar um nível de segurança adequado ao risco, por manter em arquivo os Dados Pessoais e durante a transmissão dos mesmos.</p>
+              <p>As nossas políticas de privacidade são revistas regularmente e todas as alterações serão publicadas neste Website.</p>
+            </div>
+          </div>
+
+          <!-- 7. Contactos -->
+          <div id="contactos" class="section-card p-8" style="background:linear-gradient(135deg,#003A40 0%,#005D56 100%);border-color:transparent;">
+            <p class="section-label mb-2" style="color:rgba(255,235,59,0.7);">07</p>
+            <h2 class="section-title" style="color:#ffffff;">Contactos</h2>
+            <div class="prose-body" style="color:rgba(255,255,255,0.65);">
+              <p>O Responsável pelo Tratamento de dados deste website é a <strong style="color:#ffffff;">Blanche, Lda.</strong> e o mesmo pode ser contactado através do seguinte endereço de email:</p>
+            </div>
+            <a href="mailto:info.blanche@gmail.com"
+               class="inline-flex items-center gap-2 mt-4 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider px-5 py-3 rounded-full shadow-layered-yellow btn-primary">
+              <i data-lucide="mail" class="w-4 h-4"></i>
+              info.blanche@gmail.com
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-praia-teal-900 relative overflow-hidden mt-8">
+    <div class="noise-overlay absolute inset-0 pointer-events-none"></div>
+    <div class="relative z-10">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+          <a href="index.html">
+            <img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-8 opacity-60 hover:opacity-80 transition-opacity">
+          </a>
+          <div class="flex items-center gap-4">
+            <p class="text-white/30 text-xs font-display text-center">&copy; 2026 Guia das Praias Fluviais. Todos os direitos reservados.</p>
+            <img src="brand_assets/logo_blanche.png" alt="Blanche" class="h-4 opacity-25 grayscale brightness-200 -ml-2">
+          </div>
+          <a href="privacidade.html" class="text-praia-yellow-400/60 hover:text-praia-yellow-400 text-xs font-display font-semibold transition-colors duration-300">Política de Privacidade</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/auth.js"></script>
+  <script>
+    lucide.createIcons();
+    document.addEventListener('DOMContentLoaded', () => {
+      AuthUtils.initHeaderAuth();
+      AuthUtils.initMobileMenuAuth();
+      document.getElementById('nav-close')?.addEventListener('click', () => {
+        document.getElementById('mobile-menu').classList.add('translate-x-full');
+        document.getElementById('mobile-menu').classList.remove('translate-x-0');
+        document.getElementById('menu-overlay').classList.add('opacity-0', 'pointer-events-none');
+        document.body.style.overflow = '';
+      });
+      document.getElementById('nav-hamburger')?.addEventListener('click', () => {
+        document.getElementById('mobile-menu').classList.remove('translate-x-full');
+        document.getElementById('mobile-menu').classList.add('translate-x-0');
+        document.getElementById('menu-overlay').classList.remove('opacity-0', 'pointer-events-none');
+        document.body.style.overflow = 'hidden';
+      });
+      document.getElementById('menu-overlay')?.addEventListener('click', () => {
+        document.getElementById('mobile-menu').classList.add('translate-x-full');
+        document.getElementById('mobile-menu').classList.remove('translate-x-0');
+        document.getElementById('menu-overlay').classList.add('opacity-0', 'pointer-events-none');
+        document.body.style.overflow = '';
+      });
+    });
+  </script>
+</body>
+</html>

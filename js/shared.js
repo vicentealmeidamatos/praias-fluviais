@@ -148,6 +148,40 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+// ─── Cart Badge (global) ─────────────────────────────────────────────────────
+// Lê o total de itens do carrinho do Supabase e atualiza os badges no header.
+// Chamado por auth.js após confirmar sessão, ou por qualquer página que queira o badge.
+async function initCartBadge() {
+  try {
+    // _sb é inicializado em auth.js antes desta função ser chamada
+    if (typeof _sb === 'undefined' || typeof authGetUser === 'undefined') return;
+
+    const user = await authGetUser();
+    if (!user) { _updateCartBadge(0); return; }
+
+    const { data } = await _sb
+      .from('cart_items')
+      .select('quantity')
+      .eq('user_id', user.id);
+
+    const total = data ? data.reduce((sum, item) => sum + item.quantity, 0) : 0;
+    _updateCartBadge(total);
+  } catch { /* silencioso */ }
+}
+
+function _updateCartBadge(count) {
+  ['cart-badge', 'mobile-cart-badge'].forEach(id => {
+    const badge = document.getElementById(id);
+    if (!badge) return;
+    if (count > 0) {
+      badge.textContent = count > 99 ? '99+' : count;
+      badge.classList.remove('hidden');
+    } else {
+      badge.classList.add('hidden');
+    }
+  });
+}
+
 // ─── Utility Functions ───
 function formatDistance(km) {
   if (km < 1) return `${Math.round(km * 1000)} m`;

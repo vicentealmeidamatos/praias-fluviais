@@ -84,13 +84,17 @@
       <div class="flex items-center justify-between h-16 md:h-[70px]">
         <a href="index.html" class="flex-shrink-0 mr-4"><img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-14 md:h-[58px] w-auto"></a>
         <nav class="hidden lg:flex items-center gap-0.5">
-          <a href="index.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Início</a>
           <a href="rede.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Rede</a>
           <a href="votar.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Votar</a>
           <a href="passaporte.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Passaporte</a>
           <a href="artigos.html" class="nav-link active font-display text-xs font-semibold uppercase tracking-wider text-white px-3 py-2">Novidades</a>
           <a href="descontos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Descontos</a>
+          <a href="loja.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Loja</a>
           <a href="contactos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Contactos</a>
+          <a href="carrinho.html" class="relative nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-2.5 py-2 flex items-center" aria-label="Carrinho de compras">
+            <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+            <span id="cart-badge" class="absolute -top-0.5 -right-0.5 bg-praia-yellow-400 text-praia-teal-800 text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center hidden">0</span>
+          </a>
         </nav>
         <!-- Social -->
         <div class="hidden lg:flex items-center gap-1.5 ml-auto">
@@ -127,7 +131,6 @@
       <button id="nav-hamburger" class="text-white p-1" aria-label="Fechar menu"><i data-lucide="x" class="w-6 h-6"></i></button>
     </div>
     <div class="flex-1 overflow-y-auto py-4">
-      <a href="index.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="home" class="w-5 h-5"></i> Início</a>
       <a href="rede.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="network" class="w-5 h-5"></i> Rede de Praias</a>
       <a href="votar.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="vote" class="w-5 h-5"></i> Votar 2026</a>
       <a href="passaporte.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="stamp" class="w-5 h-5"></i> Passaporte</a>
@@ -135,6 +138,7 @@
       <a href="onde-encontrar.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="book-open" class="w-5 h-5"></i> Onde Encontrar</a>
       <a href="onde-carimbar-passaporte.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="stamp" class="w-5 h-5"></i> Onde Carimbar</a>
       <a href="descontos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="percent" class="w-5 h-5"></i> Descontos</a>
+      <a href="loja.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="shopping-bag" class="w-5 h-5"></i> Loja</a>
       <a href="contactos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="mail" class="w-5 h-5"></i> Contactos</a>
     </div>
     <div class="p-5 border-t border-white/10">
@@ -148,6 +152,10 @@
       </div>
       <a href="onde-encontrar.html" class="flex items-center justify-center gap-2 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider px-5 py-3 rounded-full btn-primary w-full">
         <i data-lucide="map-pin" class="w-4 h-4"></i> Onde Encontrar
+      </a>
+      <a href="carrinho.html" class="flex items-center justify-center gap-2 bg-white/10 border border-white/20 text-white hover:bg-white/20 font-display font-bold text-sm uppercase tracking-wider px-5 py-2.5 rounded-full transition-all duration-200 w-full mt-2 relative">
+        <i data-lucide="shopping-cart" class="w-4 h-4"></i> Carrinho
+        <span id="mobile-cart-badge" class="absolute -top-1.5 right-3 bg-praia-yellow-400 text-praia-teal-800 text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center hidden">0</span>
       </a>
       <div id="mobile-auth-slot" class="mt-2"></div>
     </div>

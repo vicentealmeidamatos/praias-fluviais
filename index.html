@@ -146,13 +146,17 @@
 
         <!-- Desktop Nav -->
         <nav class="hidden lg:flex items-center gap-0.5">
-          <a href="index.html" class="nav-link active font-display text-xs font-semibold uppercase tracking-wider text-white px-3 py-2">Início</a>
           <a href="rede.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Rede</a>
           <a href="votar.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Votar</a>
           <a href="passaporte.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Passaporte</a>
           <a href="artigos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Novidades</a>
           <a href="descontos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Descontos</a>
+          <a href="loja.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Loja</a>
           <a href="contactos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Contactos</a>
+          <a href="carrinho.html" class="relative nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-2.5 py-2 flex items-center" aria-label="Carrinho de compras">
+            <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+            <span id="cart-badge" class="absolute -top-0.5 -right-0.5 bg-praia-yellow-400 text-praia-teal-800 text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center hidden">0</span>
+          </a>
         </nav>
 
         <!-- Social -->
@@ -198,9 +202,6 @@
       </button>
     </div>
     <div class="flex-1 overflow-y-auto py-4">
-      <a href="index.html" class="flex items-center gap-3 px-6 py-3.5 text-praia-yellow-400 font-display font-semibold text-sm uppercase tracking-wider">
-        <i data-lucide="home" class="w-5 h-5"></i> Início
-      </a>
       <a href="rede.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider">
         <i data-lucide="network" class="w-5 h-5"></i> Rede de Praias
       </a>
@@ -218,6 +219,9 @@
       <a href="descontos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider">
         <i data-lucide="percent" class="w-5 h-5"></i> Descontos
       </a>
+      <a href="loja.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider">
+        <i data-lucide="shopping-bag" class="w-5 h-5"></i> Loja
+      </a>
       <a href="contactos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider">
         <i data-lucide="mail" class="w-5 h-5"></i> Contactos
       </a>
@@ -234,6 +238,10 @@
       <a href="onde-encontrar.html" class="flex items-center justify-center gap-2 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider px-5 py-3 rounded-full btn-primary w-full">
         <i data-lucide="map-pin" class="w-4 h-4"></i>
         Onde Encontrar
+      </a>
+      <a href="carrinho.html" class="flex items-center justify-center gap-2 bg-white/10 border border-white/20 text-white hover:bg-white/20 font-display font-bold text-sm uppercase tracking-wider px-5 py-2.5 rounded-full transition-all duration-200 w-full mt-2 relative">
+        <i data-lucide="shopping-cart" class="w-4 h-4"></i> Carrinho
+        <span id="mobile-cart-badge" class="absolute -top-1.5 right-3 bg-praia-yellow-400 text-praia-teal-800 text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center hidden">0</span>
       </a>
       <div id="mobile-auth-slot" class="mt-2"></div>
     </div>
@@ -837,8 +845,11 @@
 
           <!-- Bottom bar -->
           <div class="border-t border-white/10 mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p class="text-white/30 text-xs">&copy; 2026 Guia das Praias Fluviais. Todos os direitos reservados.</p>
-            <a href="#" class="text-white/30 hover:text-white/50 text-xs transition-colors duration-300">Política de Privacidade</a>
+            <div class="flex items-center gap-4">
+              <p class="text-white/30 text-xs">&copy; 2026 Guia das Praias Fluviais. Todos os direitos reservados.</p>
+              <img src="brand_assets/logo_blanche.png" alt="Blanche" class="h-4 opacity-25 grayscale brightness-200 -ml-2">
+            </div>
+            <a href="privacidade.html" class="text-white/30 hover:text-white/50 text-xs transition-colors duration-300">Política de Privacidade</a>
           </div>
         </div>
       </div>
@@ -963,10 +974,43 @@
   <script src="js/auth.js"></script>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
       if (window.AuthUtils) {
         AuthUtils.initHeaderAuth();
         AuthUtils.initMobileMenuAuth();
+      }
+
+      // Redirect to profile after email change confirmation
+      const _pe = localStorage.getItem('gpf_email_change_to');
+      const _pt = parseInt(localStorage.getItem('gpf_email_change_ts') || '0', 10);
+      if (_pe && Date.now() - _pt < 10 * 60 * 1000) {
+        const _u = await AuthUtils.authGetUser();
+        if (_u?.email?.toLowerCase() === _pe.toLowerCase()) {
+          window.location.href = 'perfil.html';
+          return;
+        }
+      }
+
+      // Handle Supabase auth error fragments (e.g. otp_expired from email change links)
+      const hashParams = new URLSearchParams(window.location.hash.substring(1));
+      const authError = hashParams.get('error');
+      const authErrorCode = hashParams.get('error_code');
+      if (authError) {
+        history.replaceState(null, '', location.pathname);
+        let msg = 'Ocorreu um erro de autenticação.';
+        let action = '';
+        if (authErrorCode === 'otp_expired') {
+          msg = 'O link de confirmação de email expirou.';
+          action = '<a href="perfil.html" style="color:#FFEB3B;text-decoration:underline;margin-left:8px;">Tentar novamente</a>';
+        } else if (authErrorCode === 'access_denied') {
+          msg = 'Acesso negado. O link pode já ter sido utilizado.';
+          action = '<a href="perfil.html" style="color:#FFEB3B;text-decoration:underline;margin-left:8px;">Ir para o perfil</a>';
+        }
+        const t = document.createElement('div');
+        t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999;background:#7f1d1d;color:#fca5a5;font-family:\'Poppins\',sans-serif;font-size:13px;font-weight:600;padding:14px 24px;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,0.4);white-space:nowrap;display:flex;align-items:center;gap:4px;';
+        t.innerHTML = '✕ ' + msg + action;
+        document.body.appendChild(t);
+        setTimeout(() => t.remove(), 8000);
       }
     });
   </script>

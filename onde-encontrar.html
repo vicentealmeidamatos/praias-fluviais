@@ -91,13 +91,17 @@
       <div class="flex items-center justify-between h-16 md:h-[70px]">
         <a href="index.html" class="flex-shrink-0 mr-4"><img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-14 md:h-[58px] w-auto"></a>
         <nav class="hidden lg:flex items-center gap-0.5">
-          <a href="index.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Início</a>
           <a href="rede.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Rede</a>
           <a href="votar.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Votar</a>
           <a href="passaporte.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Passaporte</a>
           <a href="artigos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Novidades</a>
           <a href="descontos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Descontos</a>
+          <a href="loja.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Loja</a>
           <a href="contactos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-3 py-2">Contactos</a>
+          <a href="carrinho.html" class="relative nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-2.5 py-2 flex items-center" aria-label="Carrinho de compras">
+            <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+            <span id="cart-badge" class="absolute -top-0.5 -right-0.5 bg-praia-yellow-400 text-praia-teal-800 text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center hidden">0</span>
+          </a>
         </nav>
         <div class="hidden lg:flex items-center gap-1.5 ml-auto">
           <a href="https://www.facebook.com/praiasfluviais" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:bg-praia-yellow-400 hover:text-praia-teal-800 transition-colors duration-300">
@@ -133,7 +137,6 @@
       <button id="nav-close" class="text-white p-1" aria-label="Fechar menu"><i data-lucide="x" class="w-6 h-6"></i></button>
     </div>
     <div class="flex-1 overflow-y-auto py-4">
-      <a href="index.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="home" class="w-5 h-5"></i> Início</a>
       <a href="rede.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="network" class="w-5 h-5"></i> Rede de Praias</a>
       <a href="votar.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="vote" class="w-5 h-5"></i> Votar 2026</a>
       <a href="passaporte.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="stamp" class="w-5 h-5"></i> Passaporte</a>
@@ -141,6 +144,7 @@
       <a href="onde-encontrar.html" class="flex items-center gap-3 px-6 py-3.5 text-praia-yellow-400 font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="book-open" class="w-5 h-5"></i> Onde Encontrar</a>
       <a href="onde-carimbar-passaporte.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="stamp" class="w-5 h-5"></i> Onde Carimbar</a>
       <a href="descontos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="percent" class="w-5 h-5"></i> Descontos</a>
+      <a href="loja.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="shopping-bag" class="w-5 h-5"></i> Loja</a>
       <a href="contactos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="mail" class="w-5 h-5"></i> Contactos</a>
     </div>
     <div class="p-5 border-t border-white/10">
@@ -154,6 +158,10 @@
       </div>
       <a href="onde-encontrar.html" class="flex items-center justify-center gap-2 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider px-5 py-3 rounded-full btn-primary w-full">
         <i data-lucide="map-pin" class="w-4 h-4"></i> Onde Encontrar
+      </a>
+      <a href="carrinho.html" class="flex items-center justify-center gap-2 bg-white/10 border border-white/20 text-white hover:bg-white/20 font-display font-bold text-sm uppercase tracking-wider px-5 py-2.5 rounded-full transition-all duration-200 w-full mt-2 relative">
+        <i data-lucide="shopping-cart" class="w-4 h-4"></i> Carrinho
+        <span id="mobile-cart-badge" class="absolute -top-1.5 right-3 bg-praia-yellow-400 text-praia-teal-800 text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center hidden">0</span>
       </a>
       <div id="mobile-auth-slot" class="mt-2"></div>
     </div>
@@ -290,7 +298,7 @@
     };
 
     // ─── Load data ───
-    const allLocations = await fetch('data/locations-guia.json').then(r => r.json());
+    const allLocations = await fetch('data/locations-guia-passaporte.json').then(r => r.json());
 
     // ─── Map ───
     const PT_BOUNDS = [[36.8, -9.6], [42.2, -6.1]];
@@ -317,9 +325,10 @@
       });
     }
 
-    function makeNavButtons(lat, lng) {
-      const gmapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
-      const wazeUrl  = `https://waze.com/ul?ll=${lat},${lng}&navigate=yes`;
+    function makeNavButtons(address) {
+      const query = encodeURIComponent(address + ', Portugal');
+      const gmapsUrl = `https://www.google.com/maps/search/?api=1&query=${query}`;
+      const wazeUrl  = `https://waze.com/ul?q=${query}&navigate=yes`;
       return `
         <div style="display:flex;gap:6px;margin-top:8px;">
           <a href="${gmapsUrl}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;padding:5px 10px;border-radius:20px;background:#4285F4;color:white;font-size:11px;font-family:'Poppins',sans-serif;font-weight:600;text-decoration:none;letter-spacing:0.03em;">
@@ -345,14 +354,16 @@
           <div style="color:#8A7D60;font-size:11px;margin-bottom:6px;line-height:1.4;">${loc.address}</div>
           <div style="margin-bottom:4px;">${typeBadge}</div>
           ${loc.phone ? `<div style="font-size:11px;color:#0288D1;font-weight:600;margin-top:4px;">${loc.phone}</div>` : ''}
-          ${makeNavButtons(loc.coordinates.lat, loc.coordinates.lng)}
+          ${makeNavButtons(loc.address)}
         </div>`;
 
-      const marker = L.marker([loc.coordinates.lat, loc.coordinates.lng], { icon: makeIcon(typeInfo.color) })
-        .addTo(markersLayer)
-        .bindPopup(popupHTML, { maxWidth: 280 });
-
-      markerObjects.push({ marker, type: loc.type });
+      // Only add map marker if coordinates are available
+      if (loc.coordinates?.lat && loc.coordinates?.lng) {
+        const marker = L.marker([loc.coordinates.lat, loc.coordinates.lng], { icon: makeIcon(typeInfo.color) })
+          .addTo(markersLayer)
+          .bindPopup(popupHTML, { maxWidth: 280 });
+        markerObjects.push({ marker, type: loc.type });
+      }
     });
 
     // ─── Filter bar ───
@@ -401,8 +412,9 @@
 
       grouped[concelho].forEach(loc => {
         const typeInfo = TYPES[loc.type] || TYPES['guia'];
-        const gmapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${loc.coordinates.lat},${loc.coordinates.lng}`;
-        const wazeUrl  = `https://waze.com/ul?ll=${loc.coordinates.lat},${loc.coordinates.lng}&navigate=yes`;
+        const navQuery = encodeURIComponent(loc.address + ', Portugal');
+        const gmapsUrl = `https://www.google.com/maps/search/?api=1&query=${navQuery}`;
+        const wazeUrl  = `https://waze.com/ul?q=${navQuery}&navigate=yes`;
 
         const seasonalBadge = loc.seasonal
           ? `<span class="inline-flex items-center gap-1 text-[10px] font-display font-bold uppercase tracking-wide px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 border border-amber-300 ml-1.5">
