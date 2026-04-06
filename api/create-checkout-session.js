@@ -1,6 +1,8 @@
 // api/create-checkout-session.js — Vercel Serverless Function
 
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+import Stripe from 'stripe';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 // Stripe Shipping Rate IDs (criados no Dashboard)
 const SHIPPING_RATES = {
@@ -16,7 +18,7 @@ const BASE_URL = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : 'https://praiasfluviais.pt';
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -25,6 +27,8 @@ module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Método não permitido' });
 
   try {
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
     const { items, user_id } = req.body;
 
     if (!items || !Array.isArray(items) || items.length === 0) {
@@ -32,9 +36,7 @@ module.exports = async function handler(req, res) {
     }
 
     // Ler produtos do ficheiro (server-authoritative)
-    const fs = require('fs');
-    const path = require('path');
-    const products = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'data', 'products.json'), 'utf8'));
+    const products = JSON.parse(readFileSync(join(process.cwd(), 'data', 'products.json'), 'utf8'));
 
     const lineItems = [];
     let subtotal = 0;
@@ -122,7 +124,6 @@ module.exports = async function handler(req, res) {
       metadata,
       success_url: `${BASE_URL}/confirmacao-pedido.html?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${BASE_URL}/carrinho.html`,
-      payment_method_types: ['card', 'mbway', 'multibanco'],
     });
 
     return res.status(200).json({ url: session.url });
@@ -130,4 +131,4 @@ module.exports = async function handler(req, res) {
     console.error('[create-checkout-session] Erro:', err);
     return res.status(500).json({ error: 'Erro interno. Tenta novamente.' });
   }
-};
+}
