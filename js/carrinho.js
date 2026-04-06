@@ -49,39 +49,47 @@ function renderEmptyCart(notLoggedIn = false) {
   const container = document.getElementById('cart-content');
   if (!container) return;
 
-  // When not logged in, expand to full grid width so the message is truly centred
-  if (notLoggedIn) {
-    container.classList.remove('lg:col-span-2');
-    container.classList.add('lg:col-span-3');
-  } else {
-    container.classList.remove('lg:col-span-3');
-    container.classList.add('lg:col-span-2');
+  // Override the grid entirely — empty state fills viewport height
+  const grid = container.parentElement;
+  if (grid) {
+    grid.style.display = 'flex';
+    grid.style.alignItems = 'center';
+    grid.style.justifyContent = 'center';
+    grid.style.minHeight = 'calc(100vh - 220px)';
+    grid.style.padding = '2rem 1rem';
   }
+  container.style.width = '100%';
+  container.style.maxWidth = '480px';
 
   if (notLoggedIn) {
     container.innerHTML = `
-      <div class="flex flex-col items-center justify-center py-24 text-center">
-        <div class="w-20 h-20 bg-praia-teal-50 rounded-full flex items-center justify-center mb-6">
-          <i data-lucide="lock" class="w-9 h-9 text-praia-teal-400"></i>
+      <div style="text-align:center;">
+        <div style="width:80px;height:80px;background:#f0fafa;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;">
+          <i data-lucide="lock" style="width:36px;height:36px;color:#5eada8;"></i>
         </div>
-        <h2 class="font-display font-bold text-2xl text-praia-teal-800 mb-3">Inicia sessão para ver o teu carrinho</h2>
-        <p class="text-praia-sand-500 max-w-sm mb-8">O carrinho fica guardado na tua conta. Para comprar basta ter um email — não precisas de criar conta.</p>
-        <a href="auth.html" class="inline-flex items-center gap-2 bg-praia-teal-800 text-white font-display font-bold text-sm uppercase tracking-wider px-6 py-3 rounded-xl hover:bg-praia-teal-700 transition-colors">
-          <i data-lucide="log-in" class="w-4 h-4"></i> Entrar / Registar
-        </a>
-        <a href="loja.html" class="mt-4 text-praia-sand-400 font-display text-sm hover:text-praia-sand-600 transition-colors">← Ver produtos</a>
+        <h2 style="font-family:'Poppins',sans-serif;font-weight:700;font-size:1.5rem;color:#003A40;margin-bottom:0.75rem;">Inicia sessão para ver o teu carrinho</h2>
+        <p style="color:#a89880;font-size:0.95rem;margin-bottom:0.5rem;line-height:1.6;">O carrinho fica guardado na tua conta.</p>
+        <p style="color:#bfae9a;font-size:0.85rem;margin-bottom:2rem;line-height:1.6;">Para comprar sem conta, usa o botão <strong style="color:#003A40;">Comprar Já</strong> em cada produto na loja.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;">
+          <a href="auth.html" style="display:inline-flex;align-items:center;gap:8px;background:#003A40;color:white;font-family:'Poppins',sans-serif;font-weight:700;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.08em;padding:12px 24px;border-radius:12px;text-decoration:none;">
+            <i data-lucide="log-in" style="width:16px;height:16px;"></i> Entrar / Registar
+          </a>
+          <a href="loja.html" style="display:inline-flex;align-items:center;gap:8px;background:#FFEB3B;color:#003A40;font-family:'Poppins',sans-serif;font-weight:700;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.08em;padding:12px 24px;border-radius:12px;text-decoration:none;">
+            <i data-lucide="zap" style="width:16px;height:16px;"></i> Comprar Já
+          </a>
+        </div>
       </div>
     `;
   } else {
     container.innerHTML = `
-      <div class="flex flex-col items-center justify-center py-24 text-center">
-        <div class="w-20 h-20 bg-praia-teal-50 rounded-full flex items-center justify-center mb-6">
-          <i data-lucide="shopping-cart" class="w-9 h-9 text-praia-teal-300"></i>
+      <div style="text-align:center;">
+        <div style="width:80px;height:80px;background:#f0fafa;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;">
+          <i data-lucide="shopping-cart" style="width:36px;height:36px;color:#5eada8;"></i>
         </div>
-        <h2 class="font-display font-bold text-2xl text-praia-teal-800 mb-3">O carrinho está vazio</h2>
-        <p class="text-praia-sand-500 max-w-sm mb-8">Ainda não adicionaste nenhum produto ao carrinho.</p>
-        <a href="loja.html" class="inline-flex items-center gap-2 bg-praia-teal-800 text-white font-display font-bold text-sm uppercase tracking-wider px-6 py-3 rounded-xl hover:bg-praia-teal-700 transition-colors">
-          <i data-lucide="shopping-bag" class="w-4 h-4"></i> Ver produtos
+        <h2 style="font-family:'Poppins',sans-serif;font-weight:700;font-size:1.5rem;color:#003A40;margin-bottom:0.75rem;">O carrinho está vazio</h2>
+        <p style="color:#a89880;font-size:0.95rem;margin-bottom:2rem;line-height:1.6;">Ainda não adicionaste nenhum produto ao carrinho.</p>
+        <a href="loja.html" style="display:inline-flex;align-items:center;gap:8px;background:#003A40;color:white;font-family:'Poppins',sans-serif;font-weight:700;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.08em;padding:12px 24px;border-radius:12px;text-decoration:none;">
+          <i data-lucide="shopping-bag" style="width:16px;height:16px;"></i> Ver produtos
         </a>
       </div>
     `;
@@ -132,7 +140,7 @@ function renderCartItem(item) {
             <button onclick="changeQty('${item.id}', 1)" class="w-7 h-7 rounded-lg bg-praia-sand-100 hover:bg-praia-sand-200 flex items-center justify-center text-praia-sand-600 font-bold text-sm transition-colors">+</button>
           </div>
           <div class="flex items-center gap-3">
-            <span class="font-display font-bold text-praia-teal-800 text-sm">
+            <span class="font-display font-bold text-praia-teal-800 text-sm" id="price-${item.id}">
               ${isFree ? '<span class="text-praia-green-600">Grátis</span>' : formatPrice(product.price * item.quantity)}
             </span>
             <button onclick="removeItem('${item.id}')" class="text-praia-sand-300 hover:text-red-400 transition-colors" aria-label="Remover">
@@ -224,6 +232,8 @@ async function changeQty(itemId, delta) {
     item.quantity = newQty;
     const qtyEl = document.getElementById(`qty-${itemId}`);
     if (qtyEl) qtyEl.textContent = newQty;
+    const priceEl = document.getElementById(`price-${itemId}`);
+    if (priceEl && item.product.price > 0) priceEl.textContent = formatPrice(item.product.price * newQty);
     renderSummary();
     updateCartBadge();
   }

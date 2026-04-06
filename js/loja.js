@@ -147,15 +147,26 @@ function renderProductCard(product) {
           </div>
         ` : ''}
 
-        <button
-          onclick="handleAddToCart('${product.id}')"
-          class="add-to-cart-btn w-full flex items-center justify-center gap-2 bg-praia-teal-800 text-white font-display font-bold text-sm uppercase tracking-wider px-4 py-3 rounded-xl hover:bg-praia-teal-700 active:scale-[0.98] transition-all duration-200 shadow-sm"
-          data-product-id="${product.id}"
-          ${!product.available ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : ''}
-        >
-          <i data-lucide="shopping-cart" class="w-4 h-4"></i>
-          ${!product.available ? 'Esgotado' : 'Adicionar ao carrinho'}
-        </button>
+        <div class="flex gap-2">
+          <button
+            onclick="handleBuyNow('${product.id}')"
+            class="buy-now-btn flex-1 flex items-center justify-center gap-2 bg-praia-yellow-400 text-praia-teal-900 font-display font-bold text-sm uppercase tracking-wider px-4 py-3 rounded-xl hover:bg-praia-yellow-300 active:scale-[0.98] transition-all duration-200 shadow-sm"
+            data-buynow-id="${product.id}"
+            ${!product.available ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : ''}
+          >
+            <i data-lucide="zap" class="w-4 h-4"></i>
+            ${!product.available ? 'Esgotado' : 'Comprar Já'}
+          </button>
+          <button
+            onclick="handleAddToCart('${product.id}')"
+            class="add-to-cart-btn flex items-center justify-center gap-2 bg-praia-teal-800 text-white font-display font-bold text-sm px-3 py-3 rounded-xl hover:bg-praia-teal-700 active:scale-[0.98] transition-all duration-200 shadow-sm"
+            data-product-id="${product.id}"
+            title="Adicionar ao carrinho"
+            ${!product.available ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : ''}
+          >
+            <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+          </button>
+        </div>
       </div>
     </article>
   `;
@@ -204,6 +215,55 @@ function getSelectedVariant(productId) {
   if (!container) return null;
   const selected = container.querySelector('.variant-btn.bg-praia-teal-700');
   return selected ? selected.dataset.variant : null;
+}
+
+// ─── Comprar Já ───────────────────────────────────────────────────────────────
+
+async function handleBuyNow(productId) {
+  const product = _products.find(p => p.id === productId);
+  if (!product || !product.available) return;
+
+  const variant = getSelectedVariant(productId);
+  if (product.variants && product.variants.length > 0 && !variant) {
+    showToast('Seleciona um tamanho primeiro.', 'warning');
+    return;
+  }
+
+  const btn = document.querySelector(`[data-buynow-id="${productId}"]`);
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = `<div class="w-4 h-4 border-2 border-praia-teal-800/30 border-t-praia-teal-800 rounded-full animate-spin"></div> A processar…`;
+  }
+
+  try {
+    const user = await authGetUser();
+    const payload = {
+      items: [{ product_id: productId, variant: variant || 'sem-variante', quantity: 1 }],
+      user_id: user?.id ?? null,
+    };
+
+    const res = await fetch('/api/create-checkout-session', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'Erro ao criar sessão de pagamento.');
+    }
+
+    const { url } = await res.json();
+    if (url) window.location.href = url;
+  } catch (err) {
+    console.error('Buy now error:', err);
+    showToast(err.message || 'Erro ao iniciar o pagamento. Tenta novamente.', 'error');
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = `<i data-lucide="zap" class="w-4 h-4"></i> Comprar Já`;
+      if (window.lucide) lucide.createIcons();
+    }
+  }
 }
 
 // ─── Carrinho ─────────────────────────────────────────────────────────────────
