@@ -56,10 +56,13 @@ async function handleCheckoutComplete(session) {
   try {
     const metadata = session.metadata || {};
     const userId = metadata.user_id || null;
-    const shippingZone = metadata.shipping_zone || 'mainland';
-    const shippingPrice = parseInt(metadata.shipping_price || '0', 10);
     const subtotal = parseInt(metadata.subtotal || '0', 10);
-    const total = session.amount_total || (subtotal + shippingPrice);
+    const shippingPrice = session.shipping_cost?.amount_total ?? 0;
+    const total = session.amount_total ?? (subtotal + shippingPrice);
+
+    // Determinar zona pelo shipping rate ID
+    const shippingRateId = session.shipping_cost?.shipping_rate;
+    const shippingZone = shippingRateId === 'shr_1TJJ5oFnlHn9HhlCDKm1Wpwh' ? 'ilhas' : 'mainland';
 
     // Parse items
     let items = [];

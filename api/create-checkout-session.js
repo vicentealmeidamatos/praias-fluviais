@@ -1,17 +1,15 @@
 // api/create-checkout-session.js — Vercel Serverless Function
-// Cria uma Stripe Checkout Session com os itens do carrinho.
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const { createClient } = require('@supabase/supabase-js');
 
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
+// Stripe Shipping Rate IDs (criados no Dashboard)
+const SHIPPING_RATES = {
+  mainland: 'shr_1TJJ8KFnlHn9HhlC5NJ5EqDY', // Portugal Continental — 3,90€
+  ilhas:    'shr_1TJJ5oFnlHn9HhlCDKm1Wpwh', // Arquipélagos — 4,90€
+};
 
-// Shipping rates (cêntimos) — em sync com data/settings.json
-const SHIPPING = { mainland: 350, ilhas: 550 };
-const FREE_SHIPPING_THRESHOLD = 3000;
+// Acima deste valor (cêntimos) o envio é grátis
+const FREE_SHIPPING_THRESHOLD = 3000; // 30,00€
 
 // URL base do site
 const BASE_URL = process.env.VERCEL_URL
@@ -19,7 +17,6 @@ const BASE_URL = process.env.VERCEL_URL
   : 'https://praiasfluviais.pt';
 
 module.exports = async function handler(req, res) {
-  // CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -28,24 +25,17 @@ module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Método não permitido' });
 
   try {
-    const { items, shipping_zone, user_id } = req.body;
+    const { items, user_id } = req.body;
 
-    // Validações básicas
     if (!items || !Array.isArray(items) || items.length === 0) {
       return res.status(400).json({ error: 'Carrinho vazio.' });
     }
-    if (!['mainland', 'ilhas'].includes(shipping_zone)) {
-      return res.status(400).json({ error: 'Zona de envio inválida.' });
-    }
 
-    // Carregar produtos do Supabase storage/API não existe — lemos products.json via fetch
-    // (em Vercel, podemos ler ficheiros estáticos com fs)
+    // Ler produtos do ficheiro (server-authoritative)
     const fs = require('fs');
     const path = require('path');
-    const productsPath = path.join(process.cwd(), 'data', 'products.json');
-    const products = JSON.parse(fs.readFileSync(productsPath, 'utf8'));
+    const products = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'data', 'products.json'), 'utf8'));
 
-    // Validar cada item e calcular preços do servidor (nunca confiar no cliente)
     const lineItems = [];
     let subtotal = 0;
 
@@ -55,85 +45,37 @@ module.exports = async function handler(req, res) {
         return res.status(400).json({ error: `Produto "${item.product_id}" indisponível.` });
       }
 
-      const qty = Math.max(1, Math.min(99, parseInt(item.quantity) || 1));
-      const unitPrice = product.price; // cêntimos (server-authoritative)
-
-      // Validar variante se o produto tem variantes
+      // Validar variante
       if (product.variants && product.variants.length > 0) {
-        const variantId = item.variant;
-        const variant = product.variants.find(v => v.id === variantId && v.available);
+        const variant = product.variants.find(v => v.id === item.variant && v.available);
         if (!variant) {
           return res.status(400).json({ error: `Variante inválida para "${product.name}".` });
         }
       }
 
+      const qty = Math.max(1, Math.min(99, parseInt(item.quantity) || 1));
+      const unitPrice = product.price;
       const variantLabel = item.variant && item.variant !== 'sem-variante' ? ` (${item.variant})` : '';
+
       subtotal += unitPrice * qty;
 
-      if (unitPrice > 0) {
-        lineItems.push({
-          price_data: {
-            currency: 'eur',
-            product_data: {
-              name: `${product.name}${variantLabel}`,
-              images: product.images && product.images[0]
-                ? [`https://praiasfluviais.pt/${product.images[0]}`]
-                : [],
-            },
-            unit_amount: unitPrice,
-          },
-          quantity: qty,
-        });
-      } else {
-        // Produto grátis — adicionar como line item a 0 não funciona no Stripe
-        // Incluir no nome do envio ou ignorar (shipping cobre o custo)
-        lineItems.push({
-          price_data: {
-            currency: 'eur',
-            product_data: {
-              name: `${product.name}${variantLabel} (Grátis — pagas apenas portes)`,
-              images: product.images && product.images[0]
-                ? [`https://praiasfluviais.pt/${product.images[0]}`]
-                : [],
-            },
-            unit_amount: 1, // Stripe não aceita 0 — cobrar 1 cêntimo simbólico e ajustar no shipping
-          },
-          quantity: qty,
-        });
-        subtotal += qty; // adicionar 1 cêntimo por item grátis ao subtotal real
-      }
-    }
-
-    // Calcular envio (server-side)
-    let shippingPrice = 0;
-    const hasPhysical = items.some(item => {
-      const p = products.find(pr => pr.id === item.product_id);
-      return p && p.shippingRequired;
-    });
-
-    if (hasPhysical) {
-      shippingPrice = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : (SHIPPING[shipping_zone] || SHIPPING.mainland);
-    }
-
-    // Line item de envio (se houver custo)
-    if (shippingPrice > 0) {
+      // Stripe não aceita unit_amount = 0; produtos grátis usam 1 cêntimo simbólico
       lineItems.push({
         price_data: {
           currency: 'eur',
           product_data: {
-            name: `Envio — ${shipping_zone === 'ilhas' ? 'Açores / Madeira' : 'Portugal Continental'}`,
+            name: `${product.name}${variantLabel}`,
+            images: product.images?.[0] ? [`https://praiasfluviais.pt/${product.images[0]}`] : [],
           },
-          unit_amount: shippingPrice,
+          unit_amount: unitPrice > 0 ? unitPrice : 1,
         },
-        quantity: 1,
+        quantity: qty,
       });
     }
 
     // Metadata para o webhook
     const metadata = {
       user_id: user_id || '',
-      shipping_zone,
-      shipping_price: String(shippingPrice),
       subtotal: String(subtotal),
       items_json: JSON.stringify(items.map(item => {
         const p = products.find(pr => pr.id === item.product_id);
@@ -142,21 +84,40 @@ module.exports = async function handler(req, res) {
           variant: item.variant || 'sem-variante',
           quantity: item.quantity,
           price: p?.price ?? 0,
-          name: p?.name ?? item.product_id
+          name: p?.name ?? item.product_id,
         };
-      }))
+      })),
     };
 
-    // Criar Checkout Session
+    // Determinar opções de envio — grátis se subtotal >= 30€
+    const shippingOptions = subtotal >= FREE_SHIPPING_THRESHOLD
+      ? [
+          {
+            shipping_rate_data: {
+              type: 'fixed_amount',
+              fixed_amount: { amount: 0, currency: 'eur' },
+              display_name: 'Envio grátis',
+              delivery_estimate: {
+                minimum: { unit: 'business_day', value: 2 },
+                maximum: { unit: 'business_day', value: 5 },
+              },
+            },
+          },
+        ]
+      : [
+          { shipping_rate: SHIPPING_RATES.mainland },
+          { shipping_rate: SHIPPING_RATES.ilhas },
+        ];
+
+    // Criar Checkout Session — Stripe gere o envio e códigos promocionais
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       line_items: lineItems,
-      currency: 'eur',
-      billing_address_collection: 'required',
       shipping_address_collection: {
-        allowed_countries: ['PT'], // Apenas Portugal
+        allowed_countries: ['PT'],
       },
-      customer_email: user_id ? undefined : undefined, // Stripe pede email se não houver customer
+      shipping_options: shippingOptions,
+      allow_promotion_codes: true,
       locale: 'pt',
       metadata,
       success_url: `${BASE_URL}/confirmacao-pedido.html?session_id={CHECKOUT_SESSION_ID}`,

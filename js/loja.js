@@ -96,7 +96,7 @@ function renderProductCard(product) {
   return `
     <article class="product-card group bg-white rounded-2xl overflow-hidden shadow-layered hover:shadow-layered-hover transition-all duration-300 hover:-translate-y-1 flex flex-col" data-id="${product.id}">
       <!-- Image -->
-      <div class="relative overflow-hidden bg-praia-teal-50 aspect-[4/3]">
+      <a href="produto.html?id=${product.id}" class="relative overflow-hidden bg-praia-teal-50 aspect-[4/3] block">
         ${mainImage ? `
           <img src="${mainImage}" alt="${product.name}"
             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -107,13 +107,6 @@ function renderProductCard(product) {
             <i data-lucide="package" class="w-16 h-16"></i>
           </div>
         `}
-        <!-- Price badge -->
-        <div class="absolute top-3 left-3">
-          ${isFree
-            ? `<span class="bg-praia-green-500 text-white font-display font-bold text-[11px] uppercase tracking-wider px-3 py-1 rounded-full">Grátis + portes</span>`
-            : `<span class="bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm px-3 py-1 rounded-full">${formatPrice(product.price)}</span>`
-          }
-        </div>
         ${product.featured ? `
           <div class="absolute top-3 right-3">
             <span class="bg-praia-teal-800/80 backdrop-blur-sm text-praia-yellow-400 font-display font-bold text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full flex items-center gap-1">
@@ -127,12 +120,18 @@ function renderProductCard(product) {
             ${product.images.map((_, i) => `<button onclick="cycleImage(event, '${product.id}', ${i})" class="w-1.5 h-1.5 rounded-full ${i === 0 ? 'bg-white' : 'bg-white/40'} transition-colors" data-img-dot="${product.id}-${i}"></button>`).join('')}
           </div>
         ` : ''}
-      </div>
+      </a>
 
       <!-- Content -->
       <div class="p-5 flex flex-col flex-1">
-        <h3 class="font-display font-bold text-praia-teal-800 text-base leading-snug mb-1">${product.name}</h3>
-        <p class="text-praia-sand-500 text-sm leading-relaxed mb-4 flex-1">${product.description.length > 100 ? product.description.substring(0, 100) + '…' : product.description}</p>
+        <a href="produto.html?id=${product.id}" class="font-display font-bold text-praia-teal-800 text-base leading-snug mb-1 hover:text-praia-teal-600 transition-colors block">${product.name}</a>
+        <p class="text-praia-sand-500 text-sm leading-relaxed mb-3 flex-1">${product.description.length > 100 ? product.description.substring(0, 100) + '…' : product.description}</p>
+        <div class="mb-3">
+          ${isFree
+            ? `<span class="font-display font-bold text-2xl text-praia-green-500">Grátis</span>`
+            : `<span class="font-display font-bold text-2xl text-praia-teal-800">${formatPrice(product.price)}</span>`
+          }
+        </div>
 
         ${hasVariants ? `
           <div class="mb-4">

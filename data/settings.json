@@ -12,9 +12,13 @@
     "website": "https://praiasfluviais.pt"
   },
   "shop": {
+    "stripeShippingRates": {
+      "mainland": "shr_1TJJ8KFnlHn9HhlC5NJ5EqDY",
+      "ilhas": "shr_1TJJ5oFnlHn9HhlCDKm1Wpwh"
+    },
     "shipping": {
-      "mainland": 350,
-      "ilhas": 550
+      "mainland": 390,
+      "ilhas": 490
     },
     "freeShippingThreshold": 3000
   },

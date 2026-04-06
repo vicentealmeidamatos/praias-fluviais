@@ -920,8 +920,13 @@ function editLocationPassaporte(index) {
           <textarea id="l-beaches" rows="5" style="resize:vertical;">${escHtml(beachesStr)}</textarea>
         </div>
         <div class="mb-4 flex items-center gap-3">
-          <input type="checkbox" id="l-seasonal" class="w-4 h-4 accent-amber-500" ${l.seasonal ? 'checked' : ''}>
+          <input type="checkbox" id="l-seasonal" class="w-4 h-4 accent-amber-500" ${l.seasonal ? 'checked' : ''}
+            onchange="document.getElementById('seasonal-note-row').style.display=this.checked?'':'none'">
           <label for="l-seasonal" class="cursor-pointer select-none">Só aberto durante a época balnear <span class="font-normal text-amber-600 text-xs">(mostra aviso no site)</span></label>
+        </div>
+        <div id="seasonal-note-row" class="mb-4" style="display:${l.seasonal ? '' : 'none'}">
+          <label>Nota de época <span class="font-normal text-praia-sand-400">(opcional — ex: "1 Jun–15 Set, 10h–19h")</span></label>
+          <input type="text" id="l-seasonal-note" value="${escHtml(l.seasonal_note || '')}" placeholder="Deixar vazio para mostrar 'Só época balnear'">
         </div>
         <div class="grid grid-cols-2 gap-4 mb-4">
           <div><label>Latitude</label><input type="number" step="0.00001" id="l-lat" value="${l.coordinates?.lat || 39.5}"></div>
@@ -939,13 +944,16 @@ function saveLocationPassaporte(index) {
   const section = 'locations-carimbos';
   const beachesRaw = document.getElementById('l-beaches').value;
   const beaches = beachesRaw.split('\n').map(s => s.trim()).filter(Boolean);
+  const seasonal = document.getElementById('l-seasonal')?.checked || false;
+  const seasonalNote = (document.getElementById('l-seasonal-note')?.value || '').trim();
   const loc = {
     name: document.getElementById('l-name').value.trim(),
     municipality: document.getElementById('l-municipality').value.trim(),
     address: document.getElementById('l-address').value.trim(),
     phone: document.getElementById('l-phone').value.trim(),
     beaches,
-    seasonal: document.getElementById('l-seasonal')?.checked || false,
+    seasonal,
+    ...(seasonal && seasonalNote ? { seasonal_note: seasonalNote } : {}),
     coordinates: {
       lat: parseFloat(document.getElementById('l-lat').value) || 0,
       lng: parseFloat(document.getElementById('l-lng').value) || 0,
