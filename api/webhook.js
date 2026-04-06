@@ -1,9 +1,10 @@
 // api/webhook.js — Vercel Serverless Function
 // Processa eventos do Stripe Checkout e guarda encomendas no Supabase.
-//
-// IMPORTANTE: Este endpoint precisa de receber o body como raw bytes para
-// verificar a assinatura do Stripe. Configura no vercel.json:
-//   { "functions": { "api/webhook.js": { "bodyParser": false } } }
+
+// Desativar o bodyParser do Vercel para receber o body raw (necessário para verificar assinatura Stripe)
+module.exports.config = {
+  api: { bodyParser: false },
+};
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const { createClient } = require('@supabase/supabase-js');
