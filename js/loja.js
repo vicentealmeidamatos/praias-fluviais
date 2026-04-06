@@ -262,12 +262,6 @@ async function handleBuyNow(productId) {
     return;
   }
 
-  const beach = getSelectedBeach(productId);
-  if (product.customizable && !beach) {
-    showToast('Seleciona a praia que queres na t-shirt.', 'warning');
-    return;
-  }
-
   const btn = document.querySelector(`[data-buynow-id="${productId}"]`);
   if (btn) {
     btn.disabled = true;
@@ -277,7 +271,7 @@ async function handleBuyNow(productId) {
   try {
     const user = await authGetUser();
     const payload = {
-      items: [{ product_id: productId, variant: variant || 'sem-variante', beach: beach || null, quantity: 1 }],
+      items: [{ product_id: productId, variant: variant || 'sem-variante', quantity: 1 }],
       user_id: user?.id ?? null,
     };
 
@@ -323,12 +317,6 @@ async function handleAddToCart(productId) {
     return;
   }
 
-  const beach = getSelectedBeach(productId);
-  if (product.customizable && !beach) {
-    showToast('Seleciona a praia que queres na t-shirt.', 'warning');
-    return;
-  }
-
   const btn = document.querySelector(`[data-product-id="${productId}"]`);
   if (btn) {
     btn.disabled = true;
@@ -338,7 +326,6 @@ async function handleAddToCart(productId) {
   try {
     // Check if item already in cart
     const variantKey = variant || 'sem-variante';
-    const beachKey = beach || null;
     const { data: existing } = await _sb
       .from('cart_items')
       .select('id, quantity')
@@ -354,7 +341,6 @@ async function handleAddToCart(productId) {
         user_id: user.id,
         product_id: productId,
         variant: variantKey,
-        beach: beachKey,
         quantity: 1
       });
     }
