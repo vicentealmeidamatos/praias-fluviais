@@ -137,7 +137,16 @@ export default async function handler(req, res) {
       billing_address_collection: 'required',
       tax_id_collection: { enabled: true },
       customer_creation: 'always',
-      locale: 'pt',
+      custom_fields: [
+        {
+          key: 'nif',
+          label: { type: 'custom', custom: 'NIF (opcional)' },
+          type: 'text',
+          optional: true,
+          text: { minimum_length: 9, maximum_length: 9 },
+        },
+      ],
+      locale: 'auto',
       metadata,
       success_url: `${BASE_URL}/confirmacao-pedido.html?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${BASE_URL}/carrinho.html`,
