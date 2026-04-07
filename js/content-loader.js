@@ -148,7 +148,8 @@
     }
 
     // 1) Listas (renderizar primeiro porque criam novos nós com data-content)
-    document.querySelectorAll('[data-content-list]').forEach((container) => {
+    //    NOTA: ignorar containers que já foram tratados por data-cms-rebuild
+    document.querySelectorAll('[data-content-list]:not([data-cms-rebuild])').forEach((container) => {
       const path = container.dataset.contentList;
       const arr = resolve(content, path);
       if (!Array.isArray(arr)) return;
