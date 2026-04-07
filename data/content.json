@@ -6,9 +6,7 @@
     "ogImage": "brand_assets/praias-fluviais.png",
     "social": [
       { "id": "facebook", "label": "Facebook", "href": "https://www.facebook.com/praiasfluviais", "icon": "facebook" },
-      { "id": "instagram", "label": "Instagram", "href": "https://www.instagram.com/guiadaspraiasfluviais", "icon": "instagram" },
-      { "id": "youtube", "label": "YouTube", "href": "", "icon": "youtube" },
-      { "id": "tiktok", "label": "TikTok", "href": "", "icon": "music" }
+      { "id": "instagram", "label": "Instagram", "href": "https://www.instagram.com/guiadaspraiasfluviais", "icon": "instagram" }
     ],
     "nav": [
       { "id": "rede", "label": "Rede", "href": "rede.html", "icon": "network" },
