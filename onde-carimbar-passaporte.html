@@ -216,10 +216,33 @@
 
     <!-- Locations List -->
     <section class="max-w-5xl mx-auto px-6 pb-12 md:pb-16">
-      <div class="mb-8">
+      <div class="mb-6">
         <span class="font-display text-xs uppercase tracking-[0.15em] text-praia-teal-500 font-semibold block mb-2">Lista Completa</span>
-        <h2 class="font-display text-xl md:text-2xl font-bold text-praia-teal-800 tracking-tight">Todos os Postos de Carimbo</h2>
+        <h2 class="font-display text-xl md:text-2xl font-bold text-praia-teal-800 tracking-tight mb-5">Todos os Postos de Carimbo</h2>
+
+        <!-- List filters -->
+        <div class="flex flex-col sm:flex-row gap-3">
+          <div class="relative flex-1">
+            <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-praia-sand-400 pointer-events-none"></i>
+            <input type="text" id="list-search"
+              placeholder="Pesquisar por nome, concelho ou praia…"
+              class="w-full pl-9 pr-4 py-2.5 text-sm border border-praia-sand-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-praia-teal-300 font-body"
+              oninput="filterList()">
+          </div>
+          <select id="list-epoca-filter" onchange="filterList()"
+            class="px-4 py-2.5 text-sm border border-praia-sand-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-praia-teal-300 font-body font-semibold text-praia-teal-800 min-w-[180px]">
+            <option value="">Toda a época</option>
+            <option value="anual">Aberto todo o ano</option>
+            <option value="sazonal">Só época balnear</option>
+          </select>
+        </div>
+
+        <!-- Results count -->
+        <div id="list-results-count" class="mt-3 text-xs text-praia-sand-500 font-body hidden">
+          <span id="list-count-num"></span> postos encontrados
+        </div>
       </div>
+
       <div id="locations-list" class="space-y-8">
         <div class="space-y-4">
           <div class="skeleton h-6 w-32"></div>
@@ -370,7 +393,8 @@
             </span>`
           : '';
 
-        html += `<div class="location-card bg-white rounded-xl border border-praia-sand-100 shadow-layered p-5${loc.seasonal ? ' border-l-4 border-l-amber-400' : ''}">
+        const beachesData = (loc.beaches || []).join(' ').toLowerCase();
+        html += `<div class="loc-card location-card bg-white rounded-xl border border-praia-sand-100 shadow-layered p-5${loc.seasonal ? ' border-l-4 border-l-amber-400' : ''}" data-name="${loc.name.toLowerCase()}" data-municipality="${loc.municipality.toLowerCase()}" data-beaches="${beachesData}" data-seasonal="${!!loc.seasonal}">
           <div class="flex items-start gap-3">
             <div class="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style="background:${STAMP_COLOR}18;">
               <i data-lucide="stamp" class="w-5 h-5" style="color:${STAMP_COLOR};"></i>
@@ -416,6 +440,37 @@
     lucide.createIcons();
 
     if (typeof initScrollReveal === 'function') initScrollReveal();
+
+    // ─── List filter ───
+    window.filterList = function() {
+      const q     = (document.getElementById('list-search')?.value || '').toLowerCase();
+      const epoca = document.getElementById('list-epoca-filter')?.value || '';
+      let total = 0;
+
+      document.querySelectorAll('.loc-card').forEach(card => {
+        const nameMatch    = (card.dataset.name || '').includes(q);
+        const munMatch     = (card.dataset.municipality || '').includes(q);
+        const beachMatch   = (card.dataset.beaches || '').includes(q);
+        const seasonal     = card.dataset.seasonal === 'true';
+        const epocaMatch   = !epoca
+          || (epoca === 'anual'   && !seasonal)
+          || (epoca === 'sazonal' &&  seasonal);
+        const show = (nameMatch || munMatch || beachMatch) && epocaMatch;
+        card.style.display = show ? '' : 'none';
+        if (show) total++;
+      });
+
+      document.querySelectorAll('.concelho-section').forEach(sec => {
+        const visible = sec.querySelectorAll('.loc-card:not([style*="display: none"]):not([style*="display:none"])');
+        sec.style.display = visible.length > 0 ? '' : 'none';
+      });
+
+      const countEl  = document.getElementById('list-results-count');
+      const countNum = document.getElementById('list-count-num');
+      const isFiltering = q || epoca;
+      if (countEl)  countEl.classList.toggle('hidden', !isFiltering);
+      if (countNum) countNum.textContent = total;
+    };
   });
   </script>
   <script src="js/auth.js"></script>

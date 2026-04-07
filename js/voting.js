@@ -11,6 +11,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   const countEl      = document.getElementById('vote-count');
   if (!grid) return;
 
+  // ── Countdown arranca imediatamente com valor por defeito ───────────────────
+  initCountdown('2026-10-31T23:59:59');
+
   const { authGetUser, profileGet, voteGet, voteSubmit, celebrateBadge,
           badgesCompute, stampsGetAll, reviewsGetForUser, ALL_BADGES } = AuthUtils;
 
@@ -25,8 +28,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // ── Load settings & beaches ─────────────────────────────────────────────────
   let settings = {};
-  try { settings = await (await fetch('data/settings.json')).json(); } catch {}
-  initCountdown(settings.votingDeadline || '2026-10-31T23:59:59');
+  try {
+    settings = await (await fetch('data/settings.json')).json();
+    // Re-init countdown if settings has a different deadline
+    if (settings.votingDeadline && settings.votingDeadline !== '2026-10-31T23:59:59') {
+      initCountdown(settings.votingDeadline);
+    }
+  } catch {}
 
   let beaches = [];
   try {
@@ -144,7 +152,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 // ─── Countdown Timer ──────────────────────────────────────────────────────────
+let _countdownInterval = null;
 function initCountdown(deadline) {
+  if (_countdownInterval) { clearInterval(_countdownInterval); _countdownInterval = null; }
+
   const els = {
     days:    document.getElementById('cd-days'),
     hours:   document.getElementById('cd-hours'),
@@ -165,7 +176,7 @@ function initCountdown(deadline) {
     if (els.seconds) els.seconds.textContent = String(s).padStart(2, '0');
   }
   update();
-  setInterval(update, 1000);
+  _countdownInterval = setInterval(update, 1000);
 }
 
 // ─── Vote Modal ───────────────────────────────────────────────────────────────
