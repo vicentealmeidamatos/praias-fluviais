@@ -561,38 +561,57 @@
 
   function setupList(container) {
     const path = container.dataset.contentList;
-    const items = container.querySelectorAll('[data-content-item-index]');
-    items.forEach((it) => decorateListItem(container, it, path));
+    decorateAllItems(container, path);
 
-    // Botão adicionar
-    const addBtn = document.createElement('button');
-    addBtn.className = '__ie-list-add';
-    addBtn.textContent = '+ Adicionar item';
-    addBtn.addEventListener('click', () => {
-      const arr = (getByPath(window._siteContent, path) || []).slice();
-      const last = arr[arr.length - 1] || {};
-      const blank = {};
-      Object.keys(last).forEach((k) => (blank[k] = ''));
-      arr.push(blank);
-      sendListChange(path, arr);
-      alert('Item adicionado. Grave para ver na próxima recarga do preview.');
+    // Botão adicionar (apenas uma vez por container)
+    if (!container.__ieAddBtn) {
+      const addBtn = document.createElement('button');
+      addBtn.className = '__ie-list-add';
+      addBtn.textContent = '+ Adicionar item';
+      addBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const arr = (getByPath(window._siteContent, path) || []).slice();
+        const last = arr[arr.length - 1] || {};
+        const blank = {};
+        Object.keys(last).forEach((k) => {
+          // valores por defeito sensatos
+          if (k === 'id') blank[k] = 'item-' + Date.now();
+          else if (k === 'label') blank[k] = 'Novo item';
+          else if (k === 'href') blank[k] = '#';
+          else blank[k] = '';
+        });
+        arr.push(blank);
+        commitListChange(container, path, arr);
+      });
+      container.parentNode.insertBefore(addBtn, container.nextSibling);
+      container.__ieAddBtn = addBtn;
+    }
+  }
+
+  function decorateAllItems(container, path) {
+    container.querySelectorAll('[data-content-item-index]').forEach((it) => {
+      if (it.__ieDecorated) return;
+      decorateListItem(container, it, path);
     });
-    container.parentNode.insertBefore(addBtn, container.nextSibling);
   }
 
   function decorateListItem(container, item, path) {
+    item.__ieDecorated = true;
     const ctrls = document.createElement('div');
     ctrls.className = '__ie-list-controls';
     ctrls.innerHTML = `
-      <button data-act="up" title="Subir">↑</button>
-      <button data-act="down" title="Descer">↓</button>
-      <button data-act="dup" title="Duplicar">⎘</button>
-      <button data-act="del" title="Eliminar">🗑</button>
+      <button type="button" data-act="up" title="Subir">↑</button>
+      <button type="button" data-act="down" title="Descer">↓</button>
+      <button type="button" data-act="dup" title="Duplicar">⎘</button>
+      <button type="button" data-act="edit" title="Editar">✎</button>
+      <button type="button" data-act="del" title="Eliminar">🗑</button>
     `;
     item.appendChild(ctrls);
     ctrls.addEventListener('click', (e) => {
       const btn = e.target.closest('button');
       if (!btn) return;
+      e.preventDefault();
       e.stopPropagation();
       const idx = Number(item.dataset.contentItemIndex);
       const arr = (getByPath(window._siteContent, path) || []).slice();
@@ -605,16 +624,57 @@
       } else if (btn.dataset.act === 'del') {
         if (!confirm('Eliminar este item?')) return;
         arr.splice(idx, 1);
+      } else if (btn.dataset.act === 'edit') {
+        return openItemEditor(path, idx, arr[idx], (newItem) => {
+          arr[idx] = newItem;
+          commitListChange(container, path, arr);
+        });
       } else return;
-      sendListChange(path, arr);
-      alert('Lista atualizada. Grave para ver na próxima recarga.');
+      commitListChange(container, path, arr);
     });
   }
 
-  function sendListChange(path, value) {
+  // Aplica a alteração: persiste no estado local, envia ao admin
+  // E re-renderiza visualmente o container com o novo array.
+  function commitListChange(container, path, value) {
+    setByPath(window._siteContent, path, value);
     send({ type: 'content-list-change', path, value });
     markDirty();
-    setByPath(window._siteContent, path, value);
+    if (typeof window._cmsRebuild === 'function' && container.dataset.cmsRebuild) {
+      window._cmsRebuild(container, value);
+      // Re-decorar com novos handlers (os antigos foram removidos pelo innerHTML)
+      decorateAllItems(container, path);
+    } else {
+      // Para data-content-list puros (sem cms-rebuild), recarregar é mais fiável
+      // mas perderia trabalho — preferimos manter o utilizador no lugar e
+      // mostrar um aviso de que precisa de gravar para ver a estrutura final.
+      decorateAllItems(container, path);
+    }
+  }
+
+  // Editor simples para um item de lista (label + href)
+  function openItemEditor(path, idx, item, onSave) {
+    const fields = Object.keys(item || {});
+    const inputsHtml = fields.map(k => {
+      if (k === 'id') return ''; // não editável
+      const v = item[k] || '';
+      return `<label>${k}</label><input type="text" data-k="${k}" value="${v.replace(/"/g,'&quot;')}">`;
+    }).join('');
+    const modal = createModal(`
+      <h3>Editar item #${idx + 1}</h3>
+      ${inputsHtml || '<p style="font-size:12px;color:#5C5340;">Sem campos editáveis.</p>'}
+      <div class="__ie-modal-actions">
+        <button class="__ie-btn-ghost" id="__ie-cancel">Cancelar</button>
+        <button class="__ie-btn-primary" id="__ie-save">Guardar</button>
+      </div>
+    `);
+    modal.querySelector('#__ie-cancel').addEventListener('click', closeModal);
+    modal.querySelector('#__ie-save').addEventListener('click', () => {
+      const out = { ...item };
+      modal.querySelectorAll('input[data-k]').forEach(inp => { out[inp.dataset.k] = inp.value; });
+      closeModal();
+      onSave(out);
+    });
   }
 
   // ────────────────────────────────────────────────────────────

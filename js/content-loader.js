@@ -27,10 +27,10 @@
   const previewDraft = params.get('preview') === 'draft';
 
   async function fetchContent() {
-    // 1) Draft em sessionStorage (modo preview)
+    // 1) Draft em localStorage (modo preview entre abas)
     if (previewDraft) {
       try {
-        const draft = sessionStorage.getItem('_contentDraft');
+        const draft = localStorage.getItem('_contentDraft') || sessionStorage.getItem('_contentDraft');
         if (draft) return JSON.parse(draft);
       } catch {}
     }
@@ -73,15 +73,22 @@
     //    data-content-list para o editor inline.
     //    Aliases: "nav"→"global.nav", "social"→"global.social".
     const currentPage = (location.pathname.split('/').pop() || 'index.html');
-    document.querySelectorAll('[data-cms-rebuild]').forEach((container) => {
-      let path = container.dataset.cmsRebuild;
+
+    // Helper exposto globalmente para o inline-editor poder re-renderizar
+    // uma lista in-place após add/reorder/delete.
+    window._cmsRebuild = function (container, arr) {
+      if (!container) return;
+      let path = container.dataset.cmsRebuild || container.dataset.contentList;
       if (path === 'nav') path = 'global.nav';
       else if (path === 'social') path = 'global.social';
-      const arr = resolve(content, path);
-      if (!Array.isArray(arr) || !arr.length) return;
-      const tpl = container.firstElementChild;
-      if (!tpl) return;
-      const tplOuter = tpl.outerHTML;
+      if (!Array.isArray(arr)) return;
+      // Cachear template no primeiro rebuild
+      if (!container.__cmsTpl) {
+        const tpl = container.firstElementChild;
+        if (!tpl) return;
+        container.__cmsTpl = tpl.outerHTML;
+      }
+      const tplOuter = container.__cmsTpl;
       container.innerHTML = '';
       arr.forEach((item, idx) => {
         const wrap = document.createElement('div');
@@ -89,19 +96,15 @@
         const node = wrap.firstElementChild;
         if (!node) return;
 
-        // Encontrar a âncora real (pode ser o próprio nó ou um descendente)
         const anchor = node.matches && node.matches('a') ? node : node.querySelector('a');
         if (anchor && item.href != null) anchor.href = item.href || '#';
 
-        // Substituir o ícone Lucide se item.icon existir
         if (item.icon) {
           const iconEl = (anchor || node).querySelector('[data-lucide]');
           if (iconEl) iconEl.setAttribute('data-lucide', item.icon);
         }
 
-        // Atualizar o label de texto preservando ícones inline
         const labelTarget = anchor || node;
-        // Estratégia: encontrar o último text-node não vazio direto OU o span sem ícone
         let textNode = null;
         for (const child of labelTarget.childNodes) {
           if (child.nodeType === 3 && child.textContent.trim()) textNode = child;
@@ -109,7 +112,6 @@
         if (textNode) {
           textNode.textContent = ' ' + (item.label || '') + ' ';
         } else {
-          // procurar span filho direto
           const span = Array.from(labelTarget.children).find(
             c => c.tagName === 'SPAN' && !c.querySelector('[data-lucide]')
           );
@@ -117,13 +119,11 @@
           else if (!labelTarget.querySelector('[data-lucide]')) {
             labelTarget.textContent = item.label || '';
           } else {
-            // appendar text node
             labelTarget.appendChild(document.createTextNode(' ' + (item.label || '')));
           }
         }
 
-        // Estado active na navegação (por pathname)
-        if (path.endsWith('.nav') || path === 'global.nav') {
+        if (path && (path.endsWith('.nav') || path === 'global.nav')) {
           if (anchor) {
             anchor.classList.remove('active');
             const itemFile = (item.href || '').split('/').pop();
@@ -138,7 +138,21 @@
         node.setAttribute('data-content-item-index', String(idx));
         container.appendChild(node);
       });
-      // Tornar editável pelo inline editor
+      // Re-renderizar ícones Lucide
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        try { window.lucide.createIcons(); } catch {}
+      }
+      // Disparar evento para o inline editor re-decorar
+      container.dispatchEvent(new CustomEvent('cms-rebuilt', { bubbles: true, detail: { path } }));
+    };
+
+    document.querySelectorAll('[data-cms-rebuild]').forEach((container) => {
+      let path = container.dataset.cmsRebuild;
+      if (path === 'nav') path = 'global.nav';
+      else if (path === 'social') path = 'global.social';
+      const arr = resolve(content, path);
+      if (!Array.isArray(arr) || !arr.length) return;
+      window._cmsRebuild(container, arr);
       container.setAttribute('data-content-list', path);
     });
 

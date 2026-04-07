@@ -2714,7 +2714,8 @@ async function contentSave() {
     if (!res.ok) throw new Error(json.error || 'erro');
     state.editingContent = JSON.parse(JSON.stringify(_content.current));
     _clearUnsaved();
-    toast('Conteúdo gravado com sucesso!', 'success');
+    try { localStorage.removeItem('_contentDraft'); } catch {}
+    toast('Conteúdo gravado com sucesso! O site público já reflete as alterações.', 'success');
     document.getElementById('content-iframe').src = _contentIframeSrc();
   } catch (e) {
     toast('Erro ao gravar: ' + e.message, 'error');
@@ -2777,12 +2778,13 @@ async function contentRestoreVersion(id) {
 }
 
 function contentPreviewVisitor() {
-  // Guardar draft em sessionStorage e abrir página com ?preview=draft
+  // Guardar draft em localStorage (acessível por outras abas) e abrir página com ?preview=draft
   try {
+    localStorage.setItem('_contentDraft', JSON.stringify(_content.current));
     sessionStorage.setItem('_contentDraft', JSON.stringify(_content.current));
   } catch {}
   const page = CONTENT_PAGES.find(p => p.id === _content.page) || CONTENT_PAGES[0];
-  window.open(`${page.file}?preview=draft`, '_blank');
+  window.open(`${page.file}?preview=draft&_=${Date.now()}`, '_blank');
 }
 
 function contentOpenPageSettings() {
