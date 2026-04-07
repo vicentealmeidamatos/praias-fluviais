@@ -7,10 +7,10 @@ import { join } from 'path';
 // Acima deste valor (cêntimos) o envio é grátis
 const FREE_SHIPPING_THRESHOLD = 3000; // 30,00€
 
-// URL base do site
-const BASE_URL = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : 'https://praiasfluviais.pt';
+// URL base do site — SITE_URL tem prioridade, depois produção Vercel, depois fallback
+const BASE_URL = process.env.SITE_URL
+  || (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : null)
+  || 'https://praiasfluviais.pt';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
