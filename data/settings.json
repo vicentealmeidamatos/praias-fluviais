@@ -3,6 +3,13 @@
   "currentYear": 2026,
   "featuredBeaches": ["praia-fluvial-de-loriga", "praia-fluvial-de-avo", "albufeira-do-azibo", "praia-fluvial-de-geres"],
   "featuredArticles": ["melhores-praias-centro", "cascatas-portugal", "alcoutim-nova-praia"],
+  "announcement": {
+    "enabled": false,
+    "text": ""
+  },
+  "shippingPriceContinent": 390,
+  "shippingPriceIslands": 490,
+  "freeShippingThreshold": 3000,
   "socialMedia": {
     "facebook": "https://www.facebook.com/praiasfluviais",
     "instagram": "https://www.instagram.com/guiadaspraiasfluviais"
@@ -11,23 +18,29 @@
     "email": "info@praiasfluviais.pt",
     "website": "https://praiasfluviais.pt"
   },
-  "shop": {
-    "stripeShippingRates": {
-      "mainland": "shr_1TJJ8KFnlHn9HhlC5NJ5EqDY",
-      "ilhas": "shr_1TJJ5oFnlHn9HhlCDKm1Wpwh"
-    },
-    "shipping": {
-      "mainland": 390,
-      "ilhas": 490
-    },
-    "freeShippingThreshold": 3000
-  },
   "previousWinners": [
-    { "year": 2025, "name": "Zona de Fruição Ribeirinha da Carriça", "municipality": "Oliveira de Frades", "district": "Viseu", "votes": null, "beachId": "praia-fluvial-da-carrica" },
-    { "year": 2024, "name": "Praia Fluvial de Avô", "municipality": "Oliveira do Hospital", "district": "Coimbra", "votes": 7175, "beachId": "praia-fluvial-de-avo" },
-    { "year": 2023, "name": "Praia Fluvial do Vimieiro", "municipality": "Penacova", "district": "Coimbra", "votes": 7357, "beachId": "praia-fluvial-do-vimieiro" },
-    { "year": 2022, "name": "Quinta da Taberna – Videmonte", "municipality": "Guarda", "district": "Guarda", "votes": null, "beachId": null },
-    { "year": 2021, "name": "Praia Fluvial Santa Luzia", "municipality": "Pampilhosa da Serra", "district": "Coimbra", "votes": null, "beachId": null },
-    { "year": 2020, "name": "Praia Fluvial Santa Luzia", "municipality": "Pampilhosa da Serra", "district": "Coimbra", "votes": null, "beachId": null }
+    { "year": 2025, "winner": "Zona de Fruição Ribeirinha da Carriça", "second": "", "third": "", "revelations": [] },
+    { "year": 2024, "winner": "Praia Fluvial de Avô", "second": "Praia Fluvial da Ucha", "third": "Praia Fluvial da Carriça",
+      "revelations": [
+        { "label": "Norte", "name": "Praia Fluvial do Sabugal" },
+        { "label": "Centro", "name": "Praia Fluvial do Poço Corga" },
+        { "label": "Sul", "name": "Praia Fluvial do Lago" }
+      ]
+    },
+    { "year": 2023, "winner": "Praia Fluvial do Vimieiro", "second": "Praia Fluvial do Reconquinho", "third": "",
+      "revelations": [
+        { "label": "1.º", "name": "Praia Fluvial do Sorraia" },
+        { "label": "2.º", "name": "Praia Fluvial de Constância" }
+      ]
+    },
+    { "year": 2022, "winner": "Quinta da Taberna – Videmonte", "second": "", "third": "",
+      "revelations": [{ "label": "", "name": "Praia Fluvial de Alqueva" }]
+    },
+    { "year": 2021, "winner": "Praia Fluvial Santa Luzia", "second": "Praia Fluvial de Aldeia Viçosa", "third": "",
+      "revelations": []
+    },
+    { "year": 2020, "winner": "Praia Fluvial Santa Luzia", "second": "Praia Fluvial de Fontes", "third": "Praia Fluvial do Troviscal",
+      "revelations": [{ "label": "", "name": "Praia Fluvial da Amieira" }]
+    }
   ]
 }

@@ -16,6 +16,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="js/shared.js"></script>
+  <script src="js/content-loader.js"></script>
   <script src="js/lucide.min.js"></script>
   <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
@@ -187,13 +188,12 @@
           <div class="flex-1 text-center md:text-left">
             <div class="inline-flex items-center gap-2 bg-praia-yellow-400/10 border border-praia-yellow-400/20 rounded-full px-4 py-1.5 mb-5 reveal-on-scroll">
               <i data-lucide="book-open" class="w-4 h-4 text-praia-yellow-400"></i>
-              <span class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-semibold">Distribuição</span>
+              <span class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-semibold" data-content="onde_guia.label">Distribuição</span>
             </div>
-            <h1 class="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight mb-4 reveal-on-scroll" data-reveal-delay="100">
-              Onde Encontrar<br>
-              <span class="text-praia-yellow-400">o Guia e o Passaporte</span>
+            <h1 class="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight mb-4 reveal-on-scroll" data-reveal-delay="100" data-content="onde_guia.title">
+              Onde Encontrar o Guia e o Passaporte
             </h1>
-            <p class="text-white/55 text-base md:text-lg max-w-lg leading-relaxed-plus reveal-on-scroll" data-reveal-delay="200">
+            <p class="text-white/55 text-base md:text-lg max-w-lg leading-relaxed-plus reveal-on-scroll" data-reveal-delay="200" data-content="onde_guia.description">
               Mapa com todos os pontos de distribuição do Guia das Praias Fluviais e do Passaporte em Portugal.
             </p>
             <div class="mt-6 reveal-on-scroll" data-reveal-delay="300">

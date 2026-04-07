@@ -16,6 +16,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="js/shared.js"></script>
+  <script src="js/content-loader.js"></script>
   <script src="js/lucide.min.js"></script>
   <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
@@ -240,13 +241,12 @@
       <div class="relative z-10 max-w-4xl mx-auto px-6 text-center">
         <div class="inline-flex items-center gap-2 bg-praia-yellow-400/10 border border-praia-yellow-400/20 rounded-full px-4 py-1.5 mb-6 reveal-on-scroll">
           <i data-lucide="stamp" class="w-4 h-4 text-praia-yellow-400"></i>
-          <span class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-semibold">Passaporte Turístico</span>
+          <span class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-semibold" data-content="passaporte.label">Passaporte Turístico</span>
         </div>
-        <h1 class="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight mb-4 reveal-on-scroll" data-reveal-delay="100">
-          Colecione carimbos<br>
-          <span class="text-praia-yellow-400">nas praias fluviais de Portugal</span>
+        <h1 class="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight mb-4 reveal-on-scroll" data-reveal-delay="100" data-content="passaporte.title">
+          Colecione carimbos nas praias fluviais de Portugal
         </h1>
-        <p class="text-white/50 text-lg max-w-2xl mx-auto leading-relaxed-plus reveal-on-scroll" data-reveal-delay="200">
+        <p class="text-white/50 text-lg max-w-2xl mx-auto leading-relaxed-plus reveal-on-scroll" data-reveal-delay="200" data-content="passaporte.description">
           Visite praias fluviais, recolha carimbos em cada local e conquiste prémios. Mais de 200 locais de lazer de norte a sul do país.
         </p>
       </div>

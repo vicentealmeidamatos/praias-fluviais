@@ -65,6 +65,7 @@
     "id": "guia-2026",
     "name": "Guia das Praias Fluviais 2026",
     "description": "A edição completa do Guia das Praias Fluviais 2026 — mais de 200 praias fluviais portuguesas com mapas, serviços, qualidade da água e muito mais.",
+    "highlights": ["200+ praias fluviais", "Mapas e coordenadas GPS", "Qualidade da água certificada"],
     "price": 0,
     "images": [
       "brand_assets/itens_loja/guia/guia.png"
@@ -78,7 +79,8 @@
   {
     "id": "passaporte-2026",
     "name": "Passaporte das Praias Fluviais 2026",
-    "description": "O passaporte físico oficial para coleccionar os carimbos das praias fluviais em Portugal. Reúne todas as praias da rede e tem espaço para os teus registos de visita.",
+    "description": "O passaporte físico oficial para colecionar os carimbos das praias fluviais em Portugal. Reúne todas as praias da rede e tem espaço para registar as suas visitas.",
+    "highlights": ["Carimbos em 200+ praias", "Registo das suas visitas", "Edição coleccionável 2026"],
     "price": 0,
     "images": [
       "brand_assets/itens_loja/passaporte/passaporte_capa.png",

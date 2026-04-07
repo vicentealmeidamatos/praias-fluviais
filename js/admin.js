@@ -1,5 +1,5 @@
 // ─── Admin Panel — JSON Visual Editor ───
-const SECTIONS = ['beaches', 'articles', 'locations-guia-passaporte', 'locations-carimbos', 'descontos', 'produtos', 'encomendas', 'utilizadores', 'comentarios', 'settings'];
+const SECTIONS = ['beaches', 'articles', 'locations-guia-passaporte', 'locations-carimbos', 'descontos', 'produtos', 'encomendas', 'utilizadores', 'comentarios', 'conteudo', 'settings'];
 
 // ─── Supabase (read-only, for Utilizadores tab) ───
 const ADMIN_SUPABASE_URL      = 'https://tjvhnbukzfyxtpkrhpsw.supabase.co';
@@ -16,8 +16,11 @@ const state = {
   currentSection: 'beaches',
   data: {},
   editingId: null,
-  editingPhotos: [],        // [{ src: string, name: string }]
-  editingArticleImage: null // { src: string, name: string } | null
+  editingPhotos: [],           // [{ src: string, name: string }]
+  editingArticleImage: null,   // { src: string, name: string } | null
+  editingProductImages: [],    // [{ src: string, name: string }]
+  editingDescontoLogo: null,   // { src: string, name: string } | null
+  editingContent: {},          // for content.json editor
 };
 
 // ─── Constants ───
@@ -101,7 +104,7 @@ async function loginAdmin() {
 
 // ─── Dashboard ───
 async function initDashboard() {
-  const jsonSections = SECTIONS.filter(s => s !== 'utilizadores' && s !== 'comentarios' && s !== 'encomendas' && s !== 'produtos');
+  const jsonSections = SECTIONS.filter(s => !['utilizadores','comentarios','encomendas','produtos','conteudo'].includes(s));
   for (const section of jsonSections) {
     try {
       const res = await fetch(`data/${section}.json`);
@@ -116,6 +119,15 @@ async function initDashboard() {
     state.data['produtos'] = await res.json();
   } catch {
     state.data['produtos'] = [];
+  }
+  // Content: load from data/content.json
+  try {
+    const res = await fetch('data/content.json');
+    state.data['conteudo'] = await res.json();
+    state.editingContent = JSON.parse(JSON.stringify(state.data['conteudo']));
+  } catch {
+    state.data['conteudo'] = {};
+    state.editingContent = {};
   }
   // Encomendas: loaded lazily from Supabase when tab is opened
   state.data['encomendas'] = null;
@@ -138,6 +150,7 @@ function renderDashboard() {
     encomendas:            { icon: '📦', label: 'Loja — Encomendas' },
     utilizadores:          { icon: '👥', label: 'Dados' },
     comentarios:           { icon: '💬', label: 'Comentários' },
+    conteudo:              { icon: '✏️', label: 'Conteúdo do Site' },
     settings:              { icon: '⚙️', label: 'Configurações' },
   };
 
@@ -173,6 +186,8 @@ function switchSection(section) {
   state.editingId = null;
   state.editingPhotos = [];
   state.editingArticleImage = null;
+  state.editingProductImages = [];
+  state.editingDescontoLogo = null;
   renderDashboard();
 }
 
@@ -184,6 +199,7 @@ function renderSection() {
     case 'locations-guia-passaporte': renderLocationsGuia(content); break;
     case 'locations-carimbos':        renderLocationsPassaporte(content); break;
     case 'descontos':              renderDescontos(content); break;
+    case 'conteudo':               renderConteudo(content); break;
     case 'settings':               renderSettings(content); break;
     case 'produtos':               renderProdutos(content); break;
     case 'encomendas':             renderEncomendas(content); break;
@@ -193,11 +209,11 @@ function renderSection() {
 }
 
 // ─── Image Upload ───
-async function uploadImageFile(file) {
+async function uploadImageFile(file, folder = 'misc') {
   try {
     const res = await fetch('/api/upload', {
       method: 'POST',
-      headers: { 'Content-Type': file.type, 'X-Filename': file.name },
+      headers: { 'Content-Type': file.type, 'X-Filename': file.name, 'X-Folder': folder },
       body: file,
     });
     if (!res.ok) throw new Error('Servidor não disponível');
@@ -214,6 +230,110 @@ async function uploadImageFile(file) {
   }
 }
 
+// ─── Quill WYSIWYG Helpers ───
+const _quillInstances = {};
+
+function initQuillEditor(elementId, existingHtml = '', opts = {}) {
+  if (_quillInstances[elementId]) {
+    try { _quillInstances[elementId] = null; } catch(e) {}
+  }
+  const el = document.getElementById(elementId);
+  if (!el) return null;
+  const toolbar = opts.minimal
+    ? [['bold', 'italic'], ['link'], [{ list: 'ordered' }, { list: 'bullet' }]]
+    : [[{ header: [2, 3, false] }], ['bold', 'italic', 'underline'],
+       [{ list: 'ordered' }, { list: 'bullet' }], ['link', 'blockquote'], ['clean']];
+  try {
+    const q = new Quill(`#${elementId}`, { theme: 'snow', modules: { toolbar } });
+    if (existingHtml) {
+      const delta = q.clipboard.convert({ html: existingHtml });
+      q.setContents(delta, 'silent');
+    }
+    _quillInstances[elementId] = q;
+    return q;
+  } catch(e) {
+    console.warn('[Quill]', e);
+    return null;
+  }
+}
+
+function getQuillHTML(elementId) {
+  const q = _quillInstances[elementId];
+  if (!q) return '';
+  return q.getSemanticHTML() || '';
+}
+
+// ─── Geocodificação (Nominatim / OpenStreetMap) ───
+async function geocodeAddress(address) {
+  const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=1&countrycodes=pt`;
+  const res = await fetch(url, {
+    headers: { 'Accept-Language': 'pt', 'User-Agent': 'GuiaPraiasFluviais/1.0' }
+  });
+  const results = await res.json();
+  if (!results.length) throw new Error('Endereço não encontrado em Portugal');
+  return {
+    lat: parseFloat(results[0].lat),
+    lng: parseFloat(results[0].lon),
+    display: results[0].display_name
+  };
+}
+
+async function geocodeCurrentLocation(latFieldId, lngFieldId, addressFieldId, btnEl) {
+  const address = document.getElementById(addressFieldId)?.value.trim();
+  if (!address) { toast('Introduza uma morada primeiro.', 'error'); return; }
+  const btn = btnEl || document.querySelector('[data-geocode-btn]');
+  const origText = btn ? btn.textContent : '';
+  if (btn) { btn.disabled = true; btn.textContent = 'A localizar…'; }
+  try {
+    const { lat, lng, display } = await geocodeAddress(address);
+    const latEl = document.getElementById(latFieldId);
+    const lngEl = document.getElementById(lngFieldId);
+    if (latEl) latEl.value = lat.toFixed(6);
+    if (lngEl) lngEl.value = lng.toFixed(6);
+    toast(`Localizado: ${display.split(',').slice(0, 3).join(', ')}`, 'success');
+  } catch(e) {
+    toast(e.message, 'error');
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = origText; }
+  }
+}
+
+// ─── Drag-and-drop reorder helper ───
+function makeDraggableList(containerId, onReorder) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  let dragging = null;
+  container.addEventListener('dragstart', e => {
+    dragging = e.target.closest('[draggable="true"]');
+    if (dragging) dragging.classList.add('opacity-50');
+  });
+  container.addEventListener('dragend', () => {
+    if (dragging) dragging.classList.remove('opacity-50');
+    dragging = null;
+  });
+  container.addEventListener('dragover', e => {
+    e.preventDefault();
+    const over = e.target.closest('[draggable="true"]');
+    if (over && over !== dragging && dragging) {
+      const rect = over.getBoundingClientRect();
+      const mid = rect.top + rect.height / 2;
+      over.parentNode.insertBefore(dragging, e.clientY < mid ? over : over.nextSibling);
+    }
+    if (over) over.classList.add('drag-over');
+  });
+  container.addEventListener('dragleave', e => {
+    const over = e.target.closest('[draggable="true"]');
+    if (over) over.classList.remove('drag-over');
+  });
+  container.addEventListener('drop', e => {
+    e.preventDefault();
+    const over = e.target.closest('[draggable="true"]');
+    if (over) over.classList.remove('drag-over');
+    const ids = [...container.querySelectorAll('[draggable="true"]')].map(el => el.dataset.id);
+    onReorder(ids);
+  });
+}
+
 // ─── Beach Photo Gallery ───
 function renderPhotoGallery() {
   const gallery = document.getElementById('photo-gallery');
@@ -225,12 +345,24 @@ function renderPhotoGallery() {
   }
 
   gallery.innerHTML = state.editingPhotos.map((p, i) => `
-    <div class="photo-thumb-item" style="position:relative;display:inline-block;margin:0 8px 8px 0;">
-      <img src="${p.src}" alt="Foto ${i+1}" style="width:100px;height:75px;object-fit:cover;border-radius:8px;border:2px solid #E2D9C6;">
-      <button onclick="removeBeachPhoto(${i})" style="position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;background:#D32F2F;color:white;border:none;cursor:pointer;font-size:12px;line-height:1;display:flex;align-items:center;justify-content:center;font-weight:bold;">×</button>
-      <div style="font-size:9px;color:#8A7D60;text-align:center;margin-top:3px;max-width:100px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">${p.name || ''}</div>
+    <div class="photo-thumb-item draggable-item" draggable="true" data-id="${i}" style="position:relative;display:inline-block;margin:0 8px 8px 0;vertical-align:top;">
+      <img src="${p.src}" alt="Foto ${i+1}" style="width:100px;height:75px;object-fit:cover;border-radius:8px;border:2px solid #E2D9C6;display:block;">
+      <button onclick="removeBeachPhoto(${i})" style="position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;background:#D32F2F;color:white;border:none;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;font-weight:bold;">×</button>
+      <div style="display:flex;gap:2px;justify-content:center;margin-top:4px;">
+        ${i > 0 ? `<button onclick="moveBeachPhoto(${i},-1)" style="background:#E2D9C6;border:none;border-radius:4px;padding:1px 5px;font-size:11px;cursor:pointer;" title="Mover para esquerda">←</button>` : '<span style="width:22px;"></span>'}
+        ${i < state.editingPhotos.length-1 ? `<button onclick="moveBeachPhoto(${i},1)" style="background:#E2D9C6;border:none;border-radius:4px;padding:1px 5px;font-size:11px;cursor:pointer;" title="Mover para direita">→</button>` : '<span style="width:22px;"></span>'}
+      </div>
+      <div style="font-size:9px;color:#8A7D60;text-align:center;margin-top:2px;max-width:100px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">${p.name || ''}</div>
     </div>
   `).join('');
+}
+
+function moveBeachPhoto(i, dir) {
+  const arr = state.editingPhotos;
+  const n = i + dir;
+  if (n < 0 || n >= arr.length) return;
+  [arr[i], arr[n]] = [arr[n], arr[i]];
+  renderPhotoGallery();
 }
 
 function removeBeachPhoto(index) {
@@ -244,7 +376,7 @@ async function handleBeachPhotoFiles(files) {
 
   for (const file of Array.from(files)) {
     if (!file.type.startsWith('image/')) continue;
-    const result = await uploadImageFile(file);
+    const result = await uploadImageFile(file, 'beaches');
     state.editingPhotos.push(result);
   }
 
@@ -292,7 +424,7 @@ function removeArticleImage() {
 
 async function handleArticleImageFile(file) {
   if (!file || !file.type.startsWith('image/')) return;
-  const result = await uploadImageFile(file);
+  const result = await uploadImageFile(file, 'articles');
   state.editingArticleImage = result;
   const urlInput = document.getElementById('a-image');
   if (urlInput) urlInput.value = result.src;
@@ -438,7 +570,7 @@ function editBeach(index) {
       <!-- Descrição -->
       <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100">
         <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4">Descrição</h3>
-        <textarea id="b-description" rows="4">${escHtml(b.description)}</textarea>
+        <div id="b-description-editor" style="min-height:100px;"></div>
       </div>
 
       <!-- Fotografias -->
@@ -503,6 +635,7 @@ function editBeach(index) {
 
   renderPhotoGallery();
   setupPhotoDragDrop('photo-drop-zone', 'photo-file-input');
+  setTimeout(() => initQuillEditor('b-description-editor', b.description || '', { minimal: true }), 0);
 
   // Drop zone hover style
   const zone = document.getElementById('photo-drop-zone');
@@ -532,7 +665,7 @@ function saveBeach(index) {
       lat: parseFloat(document.getElementById('b-lat').value) || 0,
       lng: parseFloat(document.getElementById('b-lng').value) || 0,
     },
-    description: document.getElementById('b-description').value.trim(),
+    description: getQuillHTML('b-description-editor') || '',
     photos: state.editingPhotos.map(p => p.src),
     video360: null,
     services,
@@ -619,16 +752,14 @@ function editArticle(index) {
           </div>
         </div>
         <div class="mb-4"><label>Excerto</label><textarea id="a-excerpt" rows="2">${escHtml(a.excerpt)}</textarea></div>
-        <div class="mb-2"><label>Conteúdo (HTML)</label><textarea id="a-content" rows="12" style="font-family:monospace;font-size:12px;">${escHtml(a.content)}</textarea></div>
+        <div class="mb-2"><label>Conteúdo do Artigo</label><div id="a-content-editor" style="min-height:240px;"></div></div>
       </div>
 
       <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100">
         <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-3">Imagem de Capa</h3>
         <div id="article-img-preview"></div>
-        <div style="margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-          <button onclick="document.getElementById('article-img-file').click()" class="admin-btn admin-btn-primary" style="font-size:11px;padding:6px 14px;">📁 Carregar do Disco</button>
-          <span style="color:#C4B898;font-size:12px;">ou</span>
-          <input type="url" id="a-image" value="${escHtml(a.image)}" placeholder="URL da imagem..." style="flex:1;min-width:200px;" oninput="onArticleImageUrlInput(this.value)">
+        <div id="article-img-drop" style="margin-top:10px;border:2px dashed #C4B898;border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:all 0.2s;background:#FAF8F5;" onclick="document.getElementById('article-img-file').click()">
+          <div style="font-family:'Poppins',sans-serif;font-size:12px;color:#8A7D60;font-weight:600;">Arraste ou clique para carregar imagem de capa</div>
         </div>
         <input type="file" id="article-img-file" accept="image/*" style="display:none;" onchange="handleArticleImageFile(this.files[0]); this.value='';">
       </div>
@@ -647,6 +778,16 @@ function editArticle(index) {
     </div>`;
 
   renderArticleImagePreview();
+  setTimeout(() => initQuillEditor('a-content-editor', a.content || ''), 0);
+  // Setup article image drop zone
+  setTimeout(() => {
+    const dz = document.getElementById('article-img-drop');
+    if (dz) {
+      dz.addEventListener('dragover', e => { e.preventDefault(); dz.style.borderColor = '#003A40'; dz.style.background = '#EEF5F5'; });
+      dz.addEventListener('dragleave', () => { dz.style.borderColor = '#C4B898'; dz.style.background = '#FAF8F5'; });
+      dz.addEventListener('drop', e => { e.preventDefault(); dz.style.borderColor = '#C4B898'; dz.style.background = '#FAF8F5'; if (e.dataTransfer.files[0]) handleArticleImageFile(e.dataTransfer.files[0]); });
+    }
+  }, 0);
 }
 
 function onArticleImageUrlInput(value) {
@@ -667,8 +808,8 @@ function saveArticle(index) {
     slug: document.getElementById('a-slug').value.trim() || slugify(title),
     title,
     excerpt: document.getElementById('a-excerpt').value.trim(),
-    content: document.getElementById('a-content').value,
-    image: state.editingArticleImage?.src || document.getElementById('a-image').value.trim() || '',
+    content: getQuillHTML('a-content-editor') || '',
+    image: state.editingArticleImage?.src || '',
     date: document.getElementById('a-date').value,
     category: document.getElementById('a-category').value,
     featured: document.getElementById('a-featured').checked,
@@ -784,7 +925,13 @@ function editLocationGuia(index) {
       <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100 admin-form">
         <div class="mb-4"><label>Nome</label><input type="text" id="l-name" value="${escHtml(l.name)}"></div>
         <div class="mb-4"><label>Concelho</label><input type="text" id="l-municipality" value="${escHtml(l.municipality)}"></div>
-        <div class="mb-4"><label>Morada</label><input type="text" id="l-address" value="${escHtml(l.address || '')}"></div>
+        <div class="mb-4">
+          <label>Morada</label>
+          <div style="display:flex;gap:8px;align-items:flex-end;">
+            <input type="text" id="l-address" value="${escHtml(l.address || '')}" style="flex:1;">
+            <button onclick="geocodeCurrentLocation('l-lat','l-lng','l-address',this)" style="white-space:nowrap;flex-shrink:0;" class="admin-btn admin-btn-secondary">📍 Localizar</button>
+          </div>
+        </div>
         <div class="mb-4"><label>Telefone</label><input type="text" id="l-phone" value="${escHtml(l.phone || '')}"></div>
         <div class="mb-4"><label>Tipo</label>
           <select id="l-type">${typeOptions}</select>
@@ -797,6 +944,7 @@ function editLocationGuia(index) {
           <div><label>Latitude</label><input type="number" step="0.00001" id="l-lat" value="${l.coordinates?.lat || 39.5}"></div>
           <div><label>Longitude</label><input type="number" step="0.00001" id="l-lng" value="${l.coordinates?.lng || -8.0}"></div>
         </div>
+        <p class="text-xs text-praia-sand-400">Escreva a morada e clique em "📍 Localizar" para preencher as coordenadas automaticamente.</p>
       </div>
       <div class="flex gap-3">
         <button onclick="saveLocationGuia(${index})" class="admin-btn admin-btn-success">Guardar</button>
@@ -913,7 +1061,13 @@ function editLocationPassaporte(index) {
       <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100 admin-form">
         <div class="mb-4"><label>Nome</label><input type="text" id="l-name" value="${escHtml(l.name)}"></div>
         <div class="mb-4"><label>Concelho</label><input type="text" id="l-municipality" value="${escHtml(l.municipality)}"></div>
-        <div class="mb-4"><label>Morada</label><input type="text" id="l-address" value="${escHtml(l.address || '')}"></div>
+        <div class="mb-4">
+          <label>Morada</label>
+          <div style="display:flex;gap:8px;align-items:flex-end;">
+            <input type="text" id="l-address" value="${escHtml(l.address || '')}" style="flex:1;">
+            <button onclick="geocodeCurrentLocation('l-lat','l-lng','l-address',this)" style="white-space:nowrap;flex-shrink:0;" class="admin-btn admin-btn-secondary">📍 Localizar</button>
+          </div>
+        </div>
         <div class="mb-4"><label>Telefone</label><input type="text" id="l-phone" value="${escHtml(l.phone || '')}"></div>
         <div class="mb-4">
           <label>Praias que se pode carimbar <span class="font-normal text-praia-sand-400">(uma por linha)</span></label>
@@ -932,6 +1086,7 @@ function editLocationPassaporte(index) {
           <div><label>Latitude</label><input type="number" step="0.00001" id="l-lat" value="${l.coordinates?.lat || 39.5}"></div>
           <div><label>Longitude</label><input type="number" step="0.00001" id="l-lng" value="${l.coordinates?.lng || -8.0}"></div>
         </div>
+        <p class="text-xs text-praia-sand-400">Escreva a morada e clique em "📍 Localizar" para preencher as coordenadas automaticamente.</p>
       </div>
       <div class="flex gap-3">
         <button onclick="saveLocationPassaporte(${index})" class="admin-btn admin-btn-success">Guardar</button>
@@ -997,8 +1152,10 @@ function renderDescontos(container) {
 
 function editDesconto(index) {
   const d = index !== null ? state.data.descontos[index] : {
-    name: '', description: '', conditions: '', region: 'centro', category: 'alojamento', municipality: ''
+    name: '', description: '', conditions: '', region: 'centro', category: 'alojamento', municipality: '', logo: ''
   };
+  state.editingDescontoLogo = d.logo ? { src: d.logo, name: '' } : null;
+
   const container = document.getElementById('admin-content');
   container.innerHTML = `
     <div class="p-6 max-w-2xl admin-form">
@@ -1006,8 +1163,16 @@ function editDesconto(index) {
       <h2 class="font-display text-xl font-bold text-praia-teal-800 mb-6">${index !== null ? 'Editar' : 'Adicionar'} Desconto</h2>
       <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100">
         <div class="mb-4"><label>Nome do Parceiro</label><input type="text" id="d-name" value="${escHtml(d.name)}"></div>
-        <div class="mb-4"><label>Descrição do Desconto</label><textarea id="d-description" rows="2">${escHtml(d.description)}</textarea></div>
-        <div class="mb-4"><label>Condições</label><textarea id="d-conditions" rows="2">${escHtml(d.conditions)}</textarea></div>
+        <div class="mb-4">
+          <label>Logo do Parceiro</label>
+          <div id="desconto-logo-preview"></div>
+          <div id="desconto-logo-drop" style="margin-top:8px;border:2px dashed #C4B898;border-radius:10px;padding:14px;text-align:center;cursor:pointer;background:#FAF8F5;" onclick="document.getElementById('desconto-logo-file').click()">
+            <span style="font-size:12px;color:#8A7D60;font-family:'Poppins',sans-serif;font-weight:600;">Clique ou arraste para carregar logo</span>
+          </div>
+          <input type="file" id="desconto-logo-file" accept="image/*" style="display:none;" onchange="handleDescontoLogoFile(this.files[0]); this.value='';">
+        </div>
+        <div class="mb-4"><label>Descrição do Desconto</label><div id="d-description-editor" style="min-height:80px;"></div></div>
+        <div class="mb-4"><label>Condições</label><div id="d-conditions-editor" style="min-height:80px;"></div></div>
         <div class="grid grid-cols-3 gap-4">
           <div><label>Região</label>
             <select id="d-region">
@@ -1033,16 +1198,48 @@ function editDesconto(index) {
         <button onclick="renderSection()" class="admin-btn bg-praia-sand-200 text-praia-sand-700">Cancelar</button>
       </div>
     </div>`;
+
+  renderDescontoLogoPreview();
+  setTimeout(() => {
+    initQuillEditor('d-description-editor', d.description || '', { minimal: true });
+    initQuillEditor('d-conditions-editor', d.conditions || '', { minimal: true });
+    const dz = document.getElementById('desconto-logo-drop');
+    if (dz) {
+      dz.addEventListener('dragover', e => { e.preventDefault(); dz.style.borderColor = '#003A40'; });
+      dz.addEventListener('dragleave', () => { dz.style.borderColor = '#C4B898'; });
+      dz.addEventListener('drop', e => { e.preventDefault(); dz.style.borderColor = '#C4B898'; if (e.dataTransfer.files[0]) handleDescontoLogoFile(e.dataTransfer.files[0]); });
+    }
+  }, 0);
+}
+
+function renderDescontoLogoPreview() {
+  const container = document.getElementById('desconto-logo-preview');
+  if (!container) return;
+  if (!state.editingDescontoLogo) { container.innerHTML = ''; return; }
+  container.innerHTML = `
+    <div style="position:relative;display:inline-block;margin-top:6px;">
+      <img src="${state.editingDescontoLogo.src}" alt="Logo" style="max-width:160px;max-height:80px;object-fit:contain;border-radius:8px;border:2px solid #E2D9C6;background:#fff;padding:4px;">
+      <button onclick="state.editingDescontoLogo=null;renderDescontoLogoPreview();" style="position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;background:#D32F2F;color:white;border:none;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;font-weight:bold;">×</button>
+    </div>`;
+}
+
+async function handleDescontoLogoFile(file) {
+  if (!file || !file.type.startsWith('image/')) return;
+  const result = await uploadImageFile(file, 'discounts');
+  state.editingDescontoLogo = result;
+  renderDescontoLogoPreview();
+  toast('Logo carregado.', 'success');
 }
 
 function saveDesconto(index) {
   const d = {
     name: document.getElementById('d-name').value.trim(),
-    description: document.getElementById('d-description').value.trim(),
-    conditions: document.getElementById('d-conditions').value.trim(),
+    description: getQuillHTML('d-description-editor') || '',
+    conditions: getQuillHTML('d-conditions-editor') || '',
     region: document.getElementById('d-region').value,
     category: document.getElementById('d-category').value,
     municipality: document.getElementById('d-municipality').value.trim(),
+    logo: state.editingDescontoLogo?.src || '',
   };
   if (index !== null) state.data.descontos[index] = d;
   else state.data.descontos.push(d);
@@ -1053,27 +1250,275 @@ function saveDesconto(index) {
 // ─── Settings ───
 function renderSettings(container) {
   const s = state.data.settings || {};
+  const beaches = state.data.beaches || [];
+  const articles = state.data.articles || [];
+  const featuredBeaches = s.featuredBeaches || [];
+  const featuredArticles = s.featuredArticles || [];
+  const prevWinners = s.previousWinners || [];
+  const announcement = s.announcement || { enabled: false, text: '' };
+
   container.innerHTML = `
-    <div class="p-6 max-w-2xl admin-form">
-      <h1 class="font-display text-2xl font-bold text-praia-teal-800 mb-6">Configurações</h1>
+    <div class="p-6 max-w-3xl admin-form">
+      <h1 class="font-display text-2xl font-bold text-praia-teal-800 mb-6">Configurações do Site</h1>
+
+      <!-- Votação -->
       <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100">
-        <div class="mb-4"><label>Data Limite Votação</label><input type="datetime-local" id="s-deadline" value="${(s.votingDeadline || '').slice(0, 16)}"></div>
-        <div class="mb-4"><label>Ano Corrente</label><input type="number" id="s-year" value="${s.currentYear || 2026}"></div>
-        <div class="mb-4"><label>Praias em Destaque (IDs, um por linha)</label><textarea id="s-featured" rows="4">${(s.featuredBeaches || []).join('\n')}</textarea></div>
+        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4">Votação</h3>
+        <div class="grid grid-cols-2 gap-4">
+          <div><label>Data Limite Votação</label><input type="datetime-local" id="s-deadline" value="${(s.votingDeadline || '').slice(0, 16)}"></div>
+          <div><label>Ano Corrente</label><input type="number" id="s-year" value="${s.currentYear || 2026}"></div>
+        </div>
       </div>
+
+      <!-- Anúncio -->
+      <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100">
+        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4">Anúncio do Site</h3>
+        <label class="flex items-center gap-2 cursor-pointer text-sm mb-3">
+          <input type="checkbox" id="s-announcement-enabled" ${announcement.enabled ? 'checked' : ''} style="accent-color:#003A40;">
+          Mostrar banner de anúncio no topo do site
+        </label>
+        <div><label>Texto do Anúncio</label><textarea id="s-announcement-text" rows="2">${escHtml(announcement.text || '')}</textarea></div>
+      </div>
+
+      <!-- Loja -->
+      <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100">
+        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4">Loja — Portes de Envio</h3>
+        <div class="grid grid-cols-3 gap-4">
+          <div><label>Portes Continental (€)</label><input type="number" step="0.01" id="s-shipping-cont" value="${((s.shippingPriceContinent || 350) / 100).toFixed(2)}"></div>
+          <div><label>Portes Ilhas (€)</label><input type="number" step="0.01" id="s-shipping-ilhas" value="${((s.shippingPriceIslands || 600) / 100).toFixed(2)}"></div>
+          <div><label>Grátis a partir de (€)</label><input type="number" step="0.01" id="s-shipping-free" value="${((s.freeShippingThreshold || 3000) / 100).toFixed(2)}"></div>
+        </div>
+      </div>
+
+      <!-- Praias em Destaque -->
+      <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100">
+        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-3">Praias em Destaque (Homepage)</h3>
+        <p class="text-xs text-praia-sand-400 mb-3">Arraste para reordenar. Clique × para remover.</p>
+        <div id="featured-beaches-list" style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px;">
+          ${featuredBeaches.map(id => {
+            const beach = beaches.find(b => b.id === id);
+            return `<div draggable="true" data-id="${id}" class="draggable-item" style="display:flex;align-items:center;justify-content:space-between;background:#FAF8F5;border-radius:10px;padding:10px 14px;border:1px solid #E2D9C6;cursor:grab;">
+              <span style="font-family:'Poppins',sans-serif;font-size:13px;color:#003A40;font-weight:600;">⠿ ${escHtml(beach?.name || id)}</span>
+              <button onclick="removeFeaturedBeach('${id}')" style="color:#EF4444;font-size:13px;font-weight:700;background:none;border:none;cursor:pointer;font-family:'Poppins',sans-serif;">×</button>
+            </div>`;
+          }).join('')}
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <select id="s-add-beach" class="flex-1 px-3 py-2 text-sm border border-praia-sand-200 rounded-lg bg-white">
+            <option value="">— Adicionar praia —</option>
+            ${beaches.filter(b => !featuredBeaches.includes(b.id)).map(b => `<option value="${b.id}">${escHtml(b.name)}</option>`).join('')}
+          </select>
+          <button onclick="addFeaturedBeach()" class="admin-btn admin-btn-primary" style="white-space:nowrap;">+ Adicionar</button>
+        </div>
+      </div>
+
+      <!-- Artigos em Destaque -->
+      <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100">
+        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-3">Artigos em Destaque (Homepage)</h3>
+        <p class="text-xs text-praia-sand-400 mb-3">Arraste para reordenar. Clique × para remover.</p>
+        <div id="featured-articles-list" style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px;">
+          ${featuredArticles.map(slug => {
+            const article = articles.find(a => a.slug === slug);
+            return `<div draggable="true" data-id="${slug}" class="draggable-item" style="display:flex;align-items:center;justify-content:space-between;background:#FAF8F5;border-radius:10px;padding:10px 14px;border:1px solid #E2D9C6;cursor:grab;">
+              <span style="font-family:'Poppins',sans-serif;font-size:13px;color:#003A40;font-weight:600;">⠿ ${escHtml(article?.title || slug)}</span>
+              <button onclick="removeFeaturedArticle('${slug}')" style="color:#EF4444;font-size:13px;font-weight:700;background:none;border:none;cursor:pointer;font-family:'Poppins',sans-serif;">×</button>
+            </div>`;
+          }).join('')}
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <select id="s-add-article" class="flex-1 px-3 py-2 text-sm border border-praia-sand-200 rounded-lg bg-white">
+            <option value="">— Adicionar artigo —</option>
+            ${articles.filter(a => !featuredArticles.includes(a.slug)).map(a => `<option value="${a.slug}">${escHtml(a.title)}</option>`).join('')}
+          </select>
+          <button onclick="addFeaturedArticle()" class="admin-btn admin-btn-primary" style="white-space:nowrap;">+ Adicionar</button>
+        </div>
+      </div>
+
+      <!-- Vencedores Anteriores -->
+      <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100">
+        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-1">Vencedores Anteriores</h3>
+        <p style="font-size:12px;color:#8A7D60;margin-bottom:14px;">Pode adicionar múltiplas Praias Revelação — use o campo "Label" para indicar zona (Norte, Centro, Sul) ou posição (1.º, 2.º) ou deixar em branco.</p>
+        <div id="winners-list" style="display:flex;flex-direction:column;gap:12px;margin-bottom:12px;">
+          ${prevWinners.map((w, i) => {
+            const revs = w.revelations || [];
+            return `
+            <div style="background:#FAF8F5;border-radius:12px;border:1px solid #E2D9C6;overflow:hidden;">
+              <!-- Header: ano + remover -->
+              <div style="display:flex;align-items:center;justify-content:space-between;background:#003A40;padding:10px 14px;">
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span style="font-family:'Poppins',sans-serif;font-size:11px;font-weight:700;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:.05em;">Ano</span>
+                  <input type="number" value="${w.year}" id="w-year-${i}"
+                    style="width:72px;padding:4px 8px;font-size:14px;font-weight:700;border:1px solid rgba(255,255,255,0.2);border-radius:6px;background:rgba(255,255,255,0.1);color:white;font-family:'Poppins',sans-serif;text-align:center;">
+                </div>
+                <button onclick="removeWinner(${i})" style="color:rgba(255,100,100,0.8);font-size:11px;font-weight:700;background:none;border:none;cursor:pointer;font-family:'Poppins',sans-serif;letter-spacing:.05em;text-transform:uppercase;">× Remover</button>
+              </div>
+              <!-- Pódio -->
+              <div style="padding:14px;display:flex;flex-direction:column;gap:8px;">
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span style="font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;color:#FFEB3B;min-width:26px;">🏆</span>
+                  <input type="text" value="${escHtml(w.winner || '')}" placeholder="1.º Praia Fluvial do Ano" id="w-winner-${i}"
+                    style="flex:1;padding:7px 10px;font-size:13px;border:1px solid #E2D9C6;border-radius:8px;background:white;font-family:'Open Sans',sans-serif;color:#2D2820;">
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span style="font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;color:#C0C0C0;min-width:26px;">🥈</span>
+                  <input type="text" value="${escHtml(w.second || '')}" placeholder="2.º Lugar (opcional)" id="w-second-${i}"
+                    style="flex:1;padding:7px 10px;font-size:13px;border:1px solid #E2D9C6;border-radius:8px;background:white;font-family:'Open Sans',sans-serif;color:#2D2820;">
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span style="font-family:'Poppins',sans-serif;font-size:12px;font-weight:700;color:#CD7F32;min-width:26px;">🥉</span>
+                  <input type="text" value="${escHtml(w.third || '')}" placeholder="3.º Lugar (opcional)" id="w-third-${i}"
+                    style="flex:1;padding:7px 10px;font-size:13px;border:1px solid #E2D9C6;border-radius:8px;background:white;font-family:'Open Sans',sans-serif;color:#2D2820;">
+                </div>
+                <!-- Revelações -->
+                <div style="margin-top:4px;padding-top:10px;border-top:1px solid #E2D9C6;">
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                    <span style="font-family:'Poppins',sans-serif;font-size:11px;font-weight:700;color:#0288D1;text-transform:uppercase;letter-spacing:.05em;">✨ Praias Revelação</span>
+                    <button onclick="addRevelation(${i})" style="font-family:'Poppins',sans-serif;font-size:11px;font-weight:700;color:#0288D1;background:rgba(2,136,209,0.08);border:1px solid rgba(2,136,209,0.3);border-radius:6px;padding:3px 10px;cursor:pointer;">+ Adicionar</button>
+                  </div>
+                  ${revs.length === 0 ? `<p style="font-size:12px;color:#C4B898;font-family:'Open Sans',sans-serif;">Sem praias revelação registadas.</p>` : ''}
+                  ${revs.map((r, j) => `
+                    <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
+                      <input type="text" value="${escHtml(r.label || '')}" placeholder="Label (Norte / 1.º / …)" id="w-rev-label-${i}-${j}"
+                        style="width:110px;padding:6px 8px;font-size:12px;border:1px solid #E2D9C6;border-radius:7px;background:white;font-family:'Open Sans',sans-serif;color:#2D2820;flex-shrink:0;">
+                      <input type="text" value="${escHtml(r.name || '')}" placeholder="Nome da praia" id="w-rev-name-${i}-${j}"
+                        style="flex:1;padding:6px 8px;font-size:12px;border:1px solid #E2D9C6;border-radius:7px;background:white;font-family:'Open Sans',sans-serif;color:#2D2820;">
+                      <button onclick="removeRevelation(${i},${j})" style="color:#EF4444;font-size:16px;font-weight:700;background:none;border:none;cursor:pointer;line-height:1;flex-shrink:0;">×</button>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            </div>`;
+          }).join('')}
+        </div>
+        <button onclick="addWinner()" class="admin-btn admin-btn-secondary text-sm">+ Adicionar Vencedor</button>
+      </div>
+
       <div class="flex gap-2">
         <button onclick="saveSettings()" class="admin-btn admin-btn-success">Guardar Configurações</button>
         <button onclick="exportSection('settings')" class="admin-btn admin-btn-export">Exportar JSON</button>
       </div>
     </div>`;
+
+  // Setup drag-and-drop for featured lists
+  makeDraggableList('featured-beaches-list', ids => {
+    state.data.settings = state.data.settings || {};
+    state.data.settings.featuredBeaches = ids;
+  });
+  makeDraggableList('featured-articles-list', ids => {
+    state.data.settings = state.data.settings || {};
+    state.data.settings.featuredArticles = ids;
+  });
+}
+
+function addFeaturedBeach() {
+  const sel = document.getElementById('s-add-beach');
+  const id = sel?.value;
+  if (!id) return;
+  const s = state.data.settings || {};
+  s.featuredBeaches = [...(s.featuredBeaches || []), id];
+  state.data.settings = s;
+  renderSettings(document.getElementById('admin-content'));
+}
+
+function removeFeaturedBeach(id) {
+  const s = state.data.settings || {};
+  s.featuredBeaches = (s.featuredBeaches || []).filter(b => b !== id);
+  state.data.settings = s;
+  renderSettings(document.getElementById('admin-content'));
+}
+
+function addFeaturedArticle() {
+  const sel = document.getElementById('s-add-article');
+  const slug = sel?.value;
+  if (!slug) return;
+  const s = state.data.settings || {};
+  s.featuredArticles = [...(s.featuredArticles || []), slug];
+  state.data.settings = s;
+  renderSettings(document.getElementById('admin-content'));
+}
+
+function removeFeaturedArticle(slug) {
+  const s = state.data.settings || {};
+  s.featuredArticles = (s.featuredArticles || []).filter(a => a !== slug);
+  state.data.settings = s;
+  renderSettings(document.getElementById('admin-content'));
+}
+
+function addWinner() {
+  _flushWinnersFromDOM();
+  const s = state.data.settings || {};
+  s.previousWinners = [{ year: new Date().getFullYear() - 1, winner: '', second: '', third: '', revelations: [] }, ...(s.previousWinners || [])];
+  state.data.settings = s;
+  renderSettings(document.getElementById('admin-content'));
+}
+
+function removeWinner(i) {
+  _flushWinnersFromDOM();
+  const s = state.data.settings || {};
+  s.previousWinners = (s.previousWinners || []).filter((_, idx) => idx !== i);
+  state.data.settings = s;
+  renderSettings(document.getElementById('admin-content'));
+}
+
+function addRevelation(winnerIdx) {
+  _flushWinnersFromDOM();
+  const s = state.data.settings || {};
+  const w = s.previousWinners?.[winnerIdx];
+  if (!w) return;
+  w.revelations = [...(w.revelations || []), { label: '', name: '' }];
+  state.data.settings = s;
+  renderSettings(document.getElementById('admin-content'));
+}
+
+function removeRevelation(winnerIdx, revIdx) {
+  _flushWinnersFromDOM();
+  const s = state.data.settings || {};
+  const w = s.previousWinners?.[winnerIdx];
+  if (!w) return;
+  w.revelations = (w.revelations || []).filter((_, idx) => idx !== revIdx);
+  state.data.settings = s;
+  renderSettings(document.getElementById('admin-content'));
+}
+
+// Read all winner fields from DOM into state (before any re-render)
+function _flushWinnersFromDOM() {
+  const s = state.data.settings || {};
+  const winners = s.previousWinners || [];
+  winners.forEach((w, i) => {
+    const yearEl = document.getElementById(`w-year-${i}`);
+    const winnerEl = document.getElementById(`w-winner-${i}`);
+    const secondEl = document.getElementById(`w-second-${i}`);
+    const thirdEl = document.getElementById(`w-third-${i}`);
+    if (yearEl) w.year = parseInt(yearEl.value) || w.year;
+    if (winnerEl) w.winner = winnerEl.value.trim();
+    if (secondEl) w.second = secondEl.value.trim();
+    if (thirdEl) w.third = thirdEl.value.trim();
+    (w.revelations || []).forEach((r, j) => {
+      const labelEl = document.getElementById(`w-rev-label-${i}-${j}`);
+      const nameEl = document.getElementById(`w-rev-name-${i}-${j}`);
+      if (labelEl) r.label = labelEl.value.trim();
+      if (nameEl) r.name = nameEl.value.trim();
+    });
+  });
+  state.data.settings = s;
 }
 
 function saveSettings() {
+  // Flush all winner DOM fields into state first
+  _flushWinnersFromDOM();
+
   state.data.settings = {
     ...state.data.settings,
     votingDeadline: (document.getElementById('s-deadline').value || '') + ':00',
     currentYear: parseInt(document.getElementById('s-year').value) || 2026,
-    featuredBeaches: document.getElementById('s-featured').value.trim().split('\n').filter(Boolean),
+    announcement: {
+      enabled: document.getElementById('s-announcement-enabled')?.checked || false,
+      text: document.getElementById('s-announcement-text')?.value.trim() || '',
+    },
+    shippingPriceContinent: Math.round(parseFloat(document.getElementById('s-shipping-cont')?.value || '3.50') * 100),
+    shippingPriceIslands: Math.round(parseFloat(document.getElementById('s-shipping-ilhas')?.value || '6.00') * 100),
+    freeShippingThreshold: Math.round(parseFloat(document.getElementById('s-shipping-free')?.value || '30.00') * 100),
+    // previousWinners already flushed into state by _flushWinnersFromDOM()
   };
   toast('Configurações guardadas!', 'success');
 }
@@ -1095,7 +1540,8 @@ function filterAdminTable(query) {
 
 // ─── Export / Import ───
 function exportSection(section) {
-  if (section === 'encomendas' || section === 'utilizadores' || section === 'comentarios') return; // Supabase-managed, não exportar
+  if (['encomendas','utilizadores','comentarios'].includes(section)) return; // Supabase-managed
+  if (section === 'conteudo') { exportContentJSON(); return; }
   const data = state.data[section];
   if (data === null || data === undefined) return;
   // produtos → ficheiro chama-se products.json
@@ -1108,7 +1554,9 @@ function exportSection(section) {
 }
 
 function exportAll() {
-  SECTIONS.forEach((section, i) => setTimeout(() => exportSection(section), 250 * i));
+  SECTIONS.forEach((section, i) => setTimeout(() => exportSection(section), 300 * i));
+  // Also export content.json
+  setTimeout(() => exportContentJSON(), 300 * SECTIONS.length);
 }
 
 function importJSON() { document.getElementById('import-file')?.click(); }
@@ -1121,8 +1569,14 @@ function handleImport(event) {
     try {
       const data = JSON.parse(e.target.result);
       const name = file.name.replace('.json', '');
-      if (SECTIONS.includes(name)) {
+      if (name === 'content') {
+        state.data['conteudo'] = data;
+        state.editingContent = JSON.parse(JSON.stringify(data));
+        toast('content.json importado!', 'success');
+        renderSection();
+      } else if (SECTIONS.includes(name)) {
         state.data[name] = data;
+        if (name === 'conteudo') state.editingContent = JSON.parse(JSON.stringify(data));
         toast(`${file.name} importado com sucesso!`, 'success');
         renderSection();
       } else {
@@ -1696,7 +2150,7 @@ function productFormHTML(p) {
 
       <div>
         <label>Descrição</label>
-        <textarea id="p-description" rows="3">${p.description || ''}</textarea>
+        <div id="p-description-editor" style="min-height:80px;"></div>
       </div>
 
       <div class="grid grid-cols-2 gap-4">
@@ -1721,8 +2175,12 @@ function productFormHTML(p) {
       </div>
 
       <div>
-        <label>Imagens (uma por linha)</label>
-        <textarea id="p-images" rows="3" style="font-family:monospace;font-size:0.78rem;" placeholder="brand_assets/itens_loja/imagem.jpg">${(p.images || []).join('\n')}</textarea>
+        <label>Imagens do Produto</label>
+        <div id="product-img-gallery" style="margin-bottom:8px;min-height:20px;"></div>
+        <div id="product-img-drop" style="border:2px dashed #C4B898;border-radius:10px;padding:16px;text-align:center;cursor:pointer;background:#FAF8F5;" onclick="document.getElementById('product-img-file').click()">
+          <span style="font-size:12px;color:#8A7D60;font-family:'Poppins',sans-serif;font-weight:600;">Arraste ou clique para adicionar imagens</span>
+        </div>
+        <input type="file" id="product-img-file" accept="image/*" multiple style="display:none;" onchange="handleProductImageFiles(this.files); this.value='';">
       </div>
 
       <div>
@@ -1733,20 +2191,82 @@ function productFormHTML(p) {
     </div>`;
 }
 
+function renderProductImageGallery() {
+  const gallery = document.getElementById('product-img-gallery');
+  if (!gallery) return;
+  if (state.editingProductImages.length === 0) {
+    gallery.innerHTML = '';
+    return;
+  }
+  gallery.innerHTML = state.editingProductImages.map((p, i) => `
+    <div style="position:relative;display:inline-block;margin:0 6px 6px 0;vertical-align:top;">
+      <img src="${p.src}" alt="" style="width:80px;height:80px;object-fit:cover;border-radius:8px;border:2px solid #E2D9C6;display:block;">
+      <button onclick="removeProductImage(${i})" style="position:absolute;top:-5px;right:-5px;width:18px;height:18px;border-radius:50%;background:#D32F2F;color:white;border:none;cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;font-weight:bold;">×</button>
+      <div style="display:flex;gap:2px;justify-content:center;margin-top:3px;">
+        ${i > 0 ? `<button onclick="moveProductImage(${i},-1)" style="background:#E2D9C6;border:none;border-radius:4px;padding:1px 4px;font-size:11px;cursor:pointer;">←</button>` : ''}
+        ${i < state.editingProductImages.length-1 ? `<button onclick="moveProductImage(${i},1)" style="background:#E2D9C6;border:none;border-radius:4px;padding:1px 4px;font-size:11px;cursor:pointer;">→</button>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function removeProductImage(i) {
+  state.editingProductImages.splice(i, 1);
+  renderProductImageGallery();
+}
+
+function moveProductImage(i, dir) {
+  const arr = state.editingProductImages;
+  const n = i + dir;
+  if (n < 0 || n >= arr.length) return;
+  [arr[i], arr[n]] = [arr[n], arr[i]];
+  renderProductImageGallery();
+}
+
+async function handleProductImageFiles(files) {
+  for (const file of Array.from(files)) {
+    if (!file.type.startsWith('image/')) continue;
+    const result = await uploadImageFile(file, 'products');
+    state.editingProductImages.push(result);
+  }
+  renderProductImageGallery();
+  toast(`${files.length} imagem(ns) adicionada(s).`, 'success');
+}
+
+function setupProductImageDrop() {
+  const dz = document.getElementById('product-img-drop');
+  if (!dz) return;
+  dz.addEventListener('dragover', e => { e.preventDefault(); dz.style.borderColor = '#003A40'; dz.style.background = '#EEF5F5'; });
+  dz.addEventListener('dragleave', () => { dz.style.borderColor = '#C4B898'; dz.style.background = '#FAF8F5'; });
+  dz.addEventListener('drop', e => { e.preventDefault(); dz.style.borderColor = '#C4B898'; dz.style.background = '#FAF8F5'; if (e.dataTransfer.files.length) handleProductImageFiles(e.dataTransfer.files); });
+}
+
 function editProduct(productId) {
   const products = state.data['produtos'] || [];
   const p = products.find(p => p.id === productId) || {};
+  state.editingProductImages = (p.images || []).map(src => ({ src, name: '' }));
   document.getElementById('product-modal-title').textContent = 'Editar Produto';
   document.getElementById('product-modal-body').innerHTML = productFormHTML(p);
   document.getElementById('product-modal').dataset.editId = productId;
   document.getElementById('product-modal').classList.remove('hidden');
+  setTimeout(() => {
+    renderProductImageGallery();
+    setupProductImageDrop();
+    initQuillEditor('p-description-editor', p.description || '', { minimal: true });
+  }, 0);
 }
 
 function addNewProduct() {
+  state.editingProductImages = [];
   document.getElementById('product-modal-title').textContent = 'Novo Produto';
   document.getElementById('product-modal-body').innerHTML = productFormHTML({});
   document.getElementById('product-modal').dataset.editId = '';
   document.getElementById('product-modal').classList.remove('hidden');
+  setTimeout(() => {
+    renderProductImageGallery();
+    setupProductImageDrop();
+    initQuillEditor('p-description-editor', '', { minimal: true });
+  }, 0);
 }
 
 function saveProduct() {
@@ -1755,14 +2275,14 @@ function saveProduct() {
 
   const id          = document.getElementById('p-id').value.trim();
   const name        = document.getElementById('p-name').value.trim();
-  const description = document.getElementById('p-description').value.trim();
+  const description = getQuillHTML('p-description-editor') || '';
   const category    = document.getElementById('p-category').value;
   const price       = parseInt(document.getElementById('p-price').value || '0', 10);
   const available      = document.getElementById('p-available').checked;
   const featured       = document.getElementById('p-featured').checked;
   const shippingRequired = document.getElementById('p-shipping').checked;
   const customizable   = document.getElementById('p-customizable').checked;
-  const images         = document.getElementById('p-images').value.split('\n').map(s => s.trim()).filter(Boolean);
+  const images         = state.editingProductImages.map(p => p.src);
   const variantStr     = document.getElementById('p-variants').value.trim();
   const variants       = variantStr
     ? variantStr.split(',').map(s => s.trim()).filter(Boolean).map(v => ({ id: v, label: v, available: true }))
@@ -1971,6 +2491,254 @@ function viewOrderDetails(orderId) {
     </div>`;
 
   document.getElementById('order-detail-modal').classList.remove('hidden');
+}
+
+// ─── Conteúdo do Site ───
+function renderConteudo(container) {
+  const c = state.editingContent || {};
+  const tabs = [
+    { id: 'global', label: 'Global' },
+    { id: 'homepage', label: 'Homepage' },
+    { id: 'votar', label: 'Votação' },
+    { id: 'artigos', label: 'Artigos' },
+    { id: 'loja', label: 'Loja' },
+    { id: 'descontos', label: 'Descontos' },
+    { id: 'passaporte', label: 'Passaporte' },
+    { id: 'rede', label: 'Rede' },
+    { id: 'onde_guia', label: 'Onde Encontrar' },
+    { id: 'onde_passaporte', label: 'Onde Carimbar' },
+  ];
+  const activeTab = state._conteudoTab || 'global';
+
+  container.innerHTML = `
+    <div class="p-6 max-w-3xl">
+      <div class="flex items-center justify-between mb-4">
+        <h1 class="font-display text-2xl font-bold text-praia-teal-800">Conteúdo do Site</h1>
+        <button onclick="exportContentJSON()" class="admin-btn admin-btn-export">Exportar content.json</button>
+      </div>
+      <p class="text-sm text-praia-sand-500 mb-5">Edite todos os textos e imagens do site. Após guardar, clique em "Exportar content.json" e substitua o ficheiro em <code>data/content.json</code>.</p>
+
+      <!-- Tabs -->
+      <div class="flex flex-wrap gap-2 mb-6">
+        ${tabs.map(t => `
+          <button onclick="switchConteudoTab('${t.id}')" class="px-4 py-2 rounded-xl text-sm font-display font-semibold transition-colors ${activeTab === t.id ? 'bg-praia-teal-800 text-white' : 'bg-white border border-praia-sand-200 text-praia-teal-700 hover:border-praia-teal-400'}">
+            ${t.label}
+          </button>
+        `).join('')}
+      </div>
+
+      <!-- Tab Content -->
+      <div id="conteudo-tab-body"></div>
+    </div>`;
+
+  renderConteudoTab(activeTab);
+}
+
+function switchConteudoTab(tabId) {
+  // Save current tab values silently before switching (no toast)
+  saveConteudoTabValues(state._conteudoTab || 'global', true);
+  state._conteudoTab = tabId;
+  renderConteudo(document.getElementById('admin-content'));
+}
+
+function renderConteudoTab(tabId) {
+  const body = document.getElementById('conteudo-tab-body');
+  if (!body) return;
+  const c = state.editingContent || {};
+
+  const field = (key, label, value, type = 'text') => `
+    <div class="mb-4">
+      <label>${label}</label>
+      <input type="${type}" data-content-key="${key}" value="${escHtml(String(value || ''))}">
+    </div>`;
+
+  const textarea = (key, label, value, rows = 2) => `
+    <div class="mb-4">
+      <label>${label}</label>
+      <textarea data-content-key="${key}" rows="${rows}">${escHtml(String(value || ''))}</textarea>
+    </div>`;
+
+  const imgField = (key, label, value) => `
+    <div class="mb-4">
+      <label>${label}</label>
+      <div id="img-preview-${key.replace(/\./g,'_')}" style="margin-bottom:6px;">${value ? `<img src="${escHtml(value)}" style="max-height:60px;border-radius:6px;border:2px solid #E2D9C6;">` : ''}</div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input type="text" data-content-key="${key}" value="${escHtml(String(value || ''))}" placeholder="URL da imagem" style="flex:1;" oninput="updateImgPreview('${key.replace(/\./g,'_')}', this.value)">
+        <button onclick="triggerContentImgUpload('${key}', '${key.replace(/\./g,'_')}')" class="admin-btn admin-btn-secondary" style="white-space:nowrap;">📁 Upload</button>
+      </div>
+      <input type="file" id="content-img-file-${key.replace(/\./g,'_')}" accept="image/*" style="display:none;" onchange="handleContentImgFile(this.files[0],'${key}','${key.replace(/\./g,'_')}');this.value='';">
+    </div>`;
+
+  const g = c.global || {};
+  const h = c.homepage || {};
+  const v = c.votar || {};
+  const a = c.artigos || {};
+  const l = c.loja || {};
+  const d = c.descontos || {};
+  const p = c.passaporte || {};
+  const r = c.rede || {};
+  const og = c.onde_guia || {};
+  const op = c.onde_passaporte || {};
+
+  const tabContents = {
+    global: `
+      <div class="bg-white rounded-xl p-5 shadow-sm border border-praia-sand-100 admin-form">
+        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4">Imagens Globais</h3>
+        ${imgField('global.logoUrl', 'Logo Principal', g.logoUrl)}
+        ${imgField('global.logoFooterUrl', 'Logo Rodapé (branca)', g.logoFooterUrl)}
+        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4 mt-6">Nome e Footer</h3>
+        ${field('global.siteName', 'Nome do Site', g.siteName)}
+        ${textarea('global.footer.tagline', 'Tagline / Slogan', g.footer?.tagline)}
+        ${textarea('global.footer.newsletterTitle', 'Título Newsletter', g.footer?.newsletterTitle)}
+        ${textarea('global.footer.newsletterDesc', 'Descrição Newsletter', g.footer?.newsletterDesc)}
+        ${field('global.footer.copyright', 'Copyright', g.footer?.copyright)}
+        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4 mt-6">Redes Sociais</h3>
+        ${field('global.social.facebook', 'Facebook URL', g.social?.facebook)}
+        ${field('global.social.instagram', 'Instagram URL', g.social?.instagram)}
+        ${field('global.social.youtube', 'YouTube URL', g.social?.youtube)}
+        ${field('global.social.tiktok', 'TikTok URL', g.social?.tiktok)}
+        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4 mt-6">Navegação — Labels do Menu</h3>
+        ${field('global.nav.rede', 'Rede de Praias', g.nav?.rede)}
+        ${field('global.nav.votar', 'Votar', g.nav?.votar)}
+        ${field('global.nav.passaporte', 'Passaporte', g.nav?.passaporte)}
+        ${field('global.nav.novidades', 'Novidades / Blog', g.nav?.novidades)}
+        ${field('global.nav.onde_encontrar', 'Onde Encontrar', g.nav?.onde_encontrar)}
+        ${field('global.nav.onde_carimbar', 'Onde Carimbar', g.nav?.onde_carimbar)}
+        ${field('global.nav.descontos', 'Descontos', g.nav?.descontos)}
+        ${field('global.nav.loja', 'Loja', g.nav?.loja)}
+      </div>`,
+    homepage: `
+      <div class="bg-white rounded-xl p-5 shadow-sm border border-praia-sand-100 admin-form">
+        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4">Estatísticas Hero</h3>
+        <div class="grid grid-cols-2 gap-4">
+          ${field('homepage.stat1Label', 'Estatística 1 — Label', h.stat1Label)}
+          ${field('homepage.stat1Value', 'Estatística 1 — Valor', h.stat1Value)}
+          ${field('homepage.stat2Label', 'Estatística 2 — Label', h.stat2Label)}
+          ${field('homepage.stat2Value', 'Estatística 2 — Valor', h.stat2Value)}
+          ${field('homepage.stat3Label', 'Estatística 3 — Label', h.stat3Label)}
+          ${field('homepage.stat3Value', 'Estatística 3 — Valor', h.stat3Value)}
+        </div>
+        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4 mt-6">CTAs</h3>
+        ${field('homepage.heroCtaPrimary', 'CTA Primário', h.heroCtaPrimary)}
+        ${field('homepage.heroCtaSecondary', 'CTA Secundário', h.heroCtaSecondary)}
+        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4 mt-6">Secções</h3>
+        ${field('homepage.destaquesSectionTitle', 'Título Secção Destaques', h.destaquesSectionTitle)}
+        ${field('homepage.yearSectionLabel', 'Label Secção Votação', h.yearSectionLabel)}
+        ${field('homepage.yearSectionTitle', 'Título Secção Votação', h.yearSectionTitle)}
+        ${textarea('homepage.yearSectionDesc', 'Descrição Secção Votação', h.yearSectionDesc, 3)}
+      </div>`,
+    votar: `
+      <div class="bg-white rounded-xl p-5 shadow-sm border border-praia-sand-100 admin-form">
+        ${field('votar.label', 'Label (badge)', v.label)}
+        ${field('votar.title', 'Título da Página', v.title)}
+        ${textarea('votar.description', 'Descrição', v.description, 3)}
+        ${field('votar.hallOfFameLabel', 'Label Hall da Fama', v.hallOfFameLabel)}
+        ${field('votar.hallOfFameTitle', 'Título Hall da Fama', v.hallOfFameTitle)}
+        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4 mt-4">Cards Informativos</h3>
+        ${field('votar.card1Title', 'Card 1 — Título', v.card1Title)}
+        ${textarea('votar.card1Text', 'Card 1 — Texto', v.card1Text, 3)}
+        ${field('votar.card2Title', 'Card 2 — Título', v.card2Title)}
+        ${textarea('votar.card2Text', 'Card 2 — Texto', v.card2Text, 3)}
+      </div>`,
+    artigos: `
+      <div class="bg-white rounded-xl p-5 shadow-sm border border-praia-sand-100 admin-form">
+        ${field('artigos.label', 'Label (badge)', a.label)}
+        ${field('artigos.title', 'Título da Página', a.title)}
+        ${textarea('artigos.description', 'Descrição', a.description, 3)}
+      </div>`,
+    loja: `
+      <div class="bg-white rounded-xl p-5 shadow-sm border border-praia-sand-100 admin-form">
+        ${field('loja.label', 'Label (badge)', l.label)}
+        ${field('loja.title', 'Título da Página', l.title)}
+        ${textarea('loja.description', 'Descrição', l.description, 3)}
+        ${field('loja.shippingNote', 'Nota de Envio 1', l.shippingNote)}
+        ${field('loja.shippingNote2', 'Nota de Envio 2', l.shippingNote2)}
+      </div>`,
+    descontos: `
+      <div class="bg-white rounded-xl p-5 shadow-sm border border-praia-sand-100 admin-form">
+        ${field('descontos.label', 'Label (badge)', d.label)}
+        ${field('descontos.title', 'Título da Página', d.title)}
+        ${textarea('descontos.description', 'Descrição', d.description, 3)}
+      </div>`,
+    passaporte: `
+      <div class="bg-white rounded-xl p-5 shadow-sm border border-praia-sand-100 admin-form">
+        ${field('passaporte.label', 'Label (badge)', p.label)}
+        ${field('passaporte.title', 'Título da Página', p.title)}
+        ${textarea('passaporte.description', 'Descrição', p.description, 3)}
+      </div>`,
+    rede: `
+      <div class="bg-white rounded-xl p-5 shadow-sm border border-praia-sand-100 admin-form">
+        ${field('rede.heading', 'Heading Principal', r.heading)}
+        ${field('rede.subheading', 'Subheading', r.subheading)}
+      </div>`,
+    onde_guia: `
+      <div class="bg-white rounded-xl p-5 shadow-sm border border-praia-sand-100 admin-form">
+        ${field('onde_guia.label', 'Label (badge)', og.label)}
+        ${field('onde_guia.title', 'Título da Página', og.title)}
+        ${textarea('onde_guia.description', 'Descrição', og.description, 3)}
+      </div>`,
+    onde_passaporte: `
+      <div class="bg-white rounded-xl p-5 shadow-sm border border-praia-sand-100 admin-form">
+        ${field('onde_passaporte.label', 'Label (badge)', op.label)}
+        ${field('onde_passaporte.title', 'Título da Página', op.title)}
+        ${textarea('onde_passaporte.description', 'Descrição', op.description, 3)}
+      </div>`,
+  };
+
+  body.innerHTML = (tabContents[tabId] || '') + `
+    <div class="mt-4 flex gap-3">
+      <button onclick="saveConteudoTabValues('${tabId}')" class="admin-btn admin-btn-success">Guardar Alterações</button>
+      <button onclick="exportContentJSON()" class="admin-btn admin-btn-export">Exportar content.json</button>
+    </div>`;
+}
+
+function saveConteudoTabValues(tabId, silent = false) {
+  const body = document.getElementById('conteudo-tab-body');
+  if (!body) return;
+
+  body.querySelectorAll('[data-content-key]').forEach(el => {
+    const key = el.dataset.contentKey;
+    const value = el.value;
+    const parts = key.split('.');
+    let obj = state.editingContent;
+    for (let i = 0; i < parts.length - 1; i++) {
+      if (!obj[parts[i]] || typeof obj[parts[i]] !== 'object') obj[parts[i]] = {};
+      obj = obj[parts[i]];
+    }
+    obj[parts[parts.length - 1]] = value;
+  });
+
+  if (!silent) toast('Conteúdo guardado (clique em Exportar para descarregar o ficheiro).', 'success');
+}
+
+function updateImgPreview(keyId, url) {
+  const preview = document.getElementById(`img-preview-${keyId}`);
+  if (!preview) return;
+  preview.innerHTML = url ? `<img src="${escHtml(url)}" style="max-height:60px;border-radius:6px;border:2px solid #E2D9C6;">` : '';
+}
+
+function triggerContentImgUpload(key, keyId) {
+  document.getElementById(`content-img-file-${keyId}`)?.click();
+}
+
+async function handleContentImgFile(file, key, keyId) {
+  if (!file || !file.type.startsWith('image/')) return;
+  const result = await uploadImageFile(file, 'content');
+  // Update the input field
+  const input = document.querySelector(`[data-content-key="${key}"]`);
+  if (input) input.value = result.src;
+  updateImgPreview(keyId, result.src);
+  toast('Imagem carregada.', 'success');
+}
+
+function exportContentJSON() {
+  saveConteudoTabValues(state._conteudoTab || 'global');
+  const data = state.editingContent;
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'content.json'; a.click();
+  URL.revokeObjectURL(url);
+  toast('content.json exportado! Substitua o ficheiro em data/content.json', 'success');
 }
 
 // ─── Init ───

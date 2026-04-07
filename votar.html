@@ -16,6 +16,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="js/shared.js"></script>
+  <script src="js/content-loader.js"></script>
   <script src="js/lucide.min.js"></script>
   <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
@@ -185,7 +186,7 @@
       <div class="relative z-10 max-w-5xl mx-auto px-6 text-center">
         <div class="inline-flex items-center gap-2 bg-praia-yellow-400/10 border border-praia-yellow-400/20 rounded-full px-4 py-1.5 mb-6 reveal-on-scroll">
           <i data-lucide="trophy" class="w-4 h-4 text-praia-yellow-400"></i>
-          <span class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-semibold">Votação 2026</span>
+          <span class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-semibold" data-content="votar.label">Votação 2026</span>
         </div>
 
         <h1 class="font-display text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white tracking-tight leading-tight mb-6 reveal-on-scroll" data-reveal-delay="100">
@@ -238,9 +239,9 @@
               <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background: rgba(255,235,59,0.12);">
                 <i data-lucide="trophy" class="w-5 h-5 text-praia-yellow-400"></i>
               </div>
-              <h2 class="font-display text-base font-bold text-praia-yellow-400 uppercase tracking-wider">Praia Fluvial do Ano</h2>
+              <h2 class="font-display text-base font-bold text-praia-yellow-400 uppercase tracking-wider" data-content="votar.card1Title">Praia Fluvial do Ano</h2>
             </div>
-            <p class="text-white/65 text-sm leading-relaxed">Todos os anos, os leitores do Guia das Praias Fluviais escolhem a sua praia fluvial favorita de todo o território nacional. São elegíveis para votação todas as praias fluviais classificadas pela APA e uma selecção das melhores zonas balneares não classificadas de Portugal. Vence o prémio de <strong class="text-white/90">Praia Fluvial do Ano</strong> a praia mais votada pelo público.</p>
+            <p class="text-white/65 text-sm leading-relaxed" data-content-html="votar.card1Text">Todos os anos, os leitores do Guia das Praias Fluviais escolhem a sua praia fluvial favorita de todo o território nacional. São elegíveis para votação todas as praias fluviais classificadas pela APA e uma selecção das melhores zonas balneares não classificadas de Portugal. Vence o prémio de <strong class="text-white/90">Praia Fluvial do Ano</strong> a praia mais votada pelo público.</p>
           </div>
 
           <!-- Praia Revelação card -->
@@ -249,9 +250,9 @@
               <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background: rgba(2,136,209,0.12);">
                 <i data-lucide="sparkles" class="w-5 h-5" style="color: #0288D1;"></i>
               </div>
-              <h2 class="font-display text-base font-bold uppercase tracking-wider" style="color: #0288D1;">Praia Fluvial Revelação</h2>
+              <h2 class="font-display text-base font-bold uppercase tracking-wider" style="color: #0288D1;" data-content="votar.card2Title">Praia Fluvial Revelação</h2>
             </div>
-            <p class="text-white/65 text-sm leading-relaxed">Paralelamente, o Guia das Praias Fluviais atribui anualmente o galardão <strong class="text-white/90">Praia Fluvial Revelação</strong> às novas zonas balneares interiores que mais se destacam na sua estreia pela qualidade das infraestruturas apresentadas, oferta de serviços disponibilizados e especialmente pelo cuidado e atenção na preservação ambiental do projeto.</p>
+            <p class="text-white/65 text-sm leading-relaxed" data-content-html="votar.card2Text">Paralelamente, o Guia das Praias Fluviais atribui anualmente o galardão <strong class="text-white/90">Praia Fluvial Revelação</strong> às novas zonas balneares interiores que mais se destacam na sua estreia pela qualidade das infraestruturas apresentadas, oferta de serviços disponibilizados e especialmente pelo cuidado e atenção na preservação ambiental do projeto.</p>
           </div>
 
         </div>
@@ -295,21 +296,18 @@
         <div class="text-center mb-12">
           <div class="inline-flex items-center gap-2 bg-praia-yellow-400/10 border border-praia-yellow-400/20 rounded-full px-4 py-1.5 mb-5">
             <i data-lucide="award" class="w-4 h-4 text-praia-yellow-400"></i>
-            <span class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-semibold">Hall da Fama</span>
+            <span class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-semibold" data-content="votar.hallOfFameLabel">Hall da Fama</span>
           </div>
-          <h2 class="font-display text-3xl md:text-4xl font-bold text-white">Vencedores dos Anos Anteriores</h2>
+          <h2 class="font-display text-3xl md:text-4xl font-bold text-white" data-content="votar.hallOfFameTitle">Vencedores dos Anos Anteriores</h2>
         </div>
 
-        <!-- Year selector tabs -->
-        <div class="flex flex-wrap justify-center gap-2 mb-10">
-          <button onclick="showWinnersYear('2024')" id="tab-2024" class="winners-tab font-display text-sm font-bold px-5 py-2 rounded-full transition-all duration-200 bg-praia-yellow-400 text-praia-teal-800">2024</button>
-          <button onclick="showWinnersYear('2023')" id="tab-2023" class="winners-tab font-display text-sm font-bold px-5 py-2 rounded-full transition-all duration-200 bg-white/10 text-white/70 hover:bg-white/20 hover:text-white">2023</button>
-          <button onclick="showWinnersYear('2021-2022')" id="tab-2021-2022" class="winners-tab font-display text-sm font-bold px-5 py-2 rounded-full transition-all duration-200 bg-white/10 text-white/70 hover:bg-white/20 hover:text-white">2021–2022</button>
-          <button onclick="showWinnersYear('2020')" id="tab-2020" class="winners-tab font-display text-sm font-bold px-5 py-2 rounded-full transition-all duration-200 bg-white/10 text-white/70 hover:bg-white/20 hover:text-white">2020</button>
-        </div>
+        <!-- Year selector tabs — gerado dinamicamente de settings.json -->
+        <div id="winners-tabs" class="flex flex-wrap justify-center gap-2 mb-10"></div>
 
+        <!-- Painéis gerados dinamicamente de settings.json -->
+        <div id="winners-panels">
         <!-- ===== 2024 ===== -->
-        <div id="panel-2024" class="winners-panel">
+        <div id="panel-2024" class="winners-panel hidden">
           <!-- Winner + Revelação row -->
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5">
             <!-- 1.º -->
@@ -578,6 +576,7 @@
             </div>
           </div>
         </div>
+        </div><!-- /winners-panels -->
 
       </div>
     </section>
@@ -608,17 +607,150 @@
       document.querySelectorAll('.winners-tab').forEach(t => {
         t.classList.remove('bg-praia-yellow-400', 'text-praia-teal-800');
         t.classList.add('bg-white/10', 'text-white/70');
-        t.classList.remove('hover:bg-white/20', 'hover:text-white');
-        t.classList.add('hover:bg-white/20', 'hover:text-white');
       });
       const panel = document.getElementById('panel-' + year);
       const tab = document.getElementById('tab-' + year);
       if (panel) panel.classList.remove('hidden');
       if (tab) {
-        tab.classList.remove('bg-white/10', 'text-white/70', 'hover:bg-white/20', 'hover:text-white');
+        tab.classList.remove('bg-white/10', 'text-white/70');
         tab.classList.add('bg-praia-yellow-400', 'text-praia-teal-800');
       }
     }
+
+    // ─── Render winners from settings.json ───
+    (async function initWinners() {
+      try {
+        const res = await fetch('data/settings.json');
+        const settings = await res.json();
+        const winners = (settings.previousWinners || [])
+          .slice()
+          .sort((a, b) => b.year - a.year);
+
+        if (!winners.length) return;
+
+        const tabsContainer = document.getElementById('winners-tabs');
+        const panelsContainer = document.getElementById('winners-panels');
+        if (!tabsContainer || !panelsContainer) return;
+
+        // Clear existing tabs
+        tabsContainer.innerHTML = '';
+
+        // Add tab buttons for all years
+        winners.forEach((w, i) => {
+          const key = String(w.year);
+          // Check if a hardcoded panel already exists
+          const existingPanel = document.getElementById('panel-' + key);
+
+          const btn = document.createElement('button');
+          btn.id = 'tab-' + key;
+          btn.className = 'winners-tab font-display text-sm font-bold px-5 py-2 rounded-full transition-all duration-200 ' +
+            (i === 0 ? 'bg-praia-yellow-400 text-praia-teal-800' : 'bg-white/10 text-white/70 hover:bg-white/20 hover:text-white');
+          btn.textContent = String(w.year);
+          btn.onclick = () => showWinnersYear(key);
+          tabsContainer.appendChild(btn);
+
+          // If no hardcoded panel, create one dynamically
+          if (!existingPanel) {
+            const revs = Array.isArray(w.revelations) ? w.revelations : (w.revelation ? [{label:'', name: w.revelation}] : []);
+            const hasRevs = revs.length > 0;
+            const hasSecond = !!w.second;
+            const hasThird = !!w.third;
+            const hasPodium = hasSecond || hasThird;
+
+            // Build podium row (2nd + 3rd)
+            const podiumHTML = hasPodium ? `
+              <div style="display:grid;grid-template-columns:${hasSecond && hasThird ? '1fr 1fr' : '1fr'};gap:12px;margin-top:12px;">
+                ${hasSecond ? `
+                <div style="position:relative;border-radius:16px;overflow:hidden;background:linear-gradient(160deg,rgba(192,192,192,.12),rgba(192,192,192,.04));border:1px solid rgba(192,192,192,.3);">
+                  <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#C0C0C0,#9E9E9E);"></div>
+                  <div style="padding:20px;">
+                    <div style="display:flex;align-items:flex-start;gap:12px;">
+                      <div style="width:36px;height:36px;border-radius:10px;background:rgba(192,192,192,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;">🥈</div>
+                      <div>
+                        <span style="font-family:'Poppins',sans-serif;font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:rgba(192,192,192,.8);font-weight:600;display:block;margin-bottom:2px;">2.º Lugar</span>
+                        <p style="font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;color:white;line-height:1.3;margin:0;">${w.second}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>` : ''}
+                ${hasThird ? `
+                <div style="position:relative;border-radius:16px;overflow:hidden;background:linear-gradient(160deg,rgba(205,127,50,.1),rgba(205,127,50,.04));border:1px solid rgba(205,127,50,.28);">
+                  <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#CD7F32,#A0522D);"></div>
+                  <div style="padding:20px;">
+                    <div style="display:flex;align-items:flex-start;gap:12px;">
+                      <div style="width:36px;height:36px;border-radius:10px;background:rgba(205,127,50,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;">🥉</div>
+                      <div>
+                        <span style="font-family:'Poppins',sans-serif;font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:rgba(205,127,50,.85);font-weight:600;display:block;margin-bottom:2px;">3.º Lugar</span>
+                        <p style="font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;color:white;line-height:1.3;margin:0;">${w.third}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>` : ''}
+              </div>` : '';
+
+            // Build revelações section
+            const revelationsHTML = hasRevs ? `
+              <div style="margin-top:12px;position:relative;border-radius:16px;overflow:hidden;background:rgba(2,136,209,.1);border:1px solid rgba(2,136,209,.35);">
+                <div style="position:absolute;top:0;left:0;right:0;height:3px;background:rgba(2,136,209,.7);"></div>
+                <div style="padding:20px;">
+                  <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+                    <div style="width:36px;height:36px;border-radius:10px;background:rgba(2,136,209,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                      <i data-lucide="sparkles" style="width:16px;height:16px;color:#0288D1;"></i>
+                    </div>
+                    <div>
+                      <span style="font-family:'Poppins',sans-serif;font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:rgba(2,136,209,.9);font-weight:600;display:block;">Galardão</span>
+                      <span style="font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;color:white;">Praia${revs.length > 1 ? 's' : ''} Revelação ${w.year}</span>
+                    </div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:8px;">
+                    ${revs.map(rv => `
+                    <div style="display:flex;align-items:flex-start;gap:10px;">
+                      <i data-lucide="award" style="width:14px;height:14px;flex-shrink:0;margin-top:2px;color:#0288D1;"></i>
+                      <div>
+                        ${rv.label ? `<span style="font-family:'Poppins',sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:rgba(2,136,209,.8);font-weight:600;">${rv.label} — </span>` : ''}
+                        <span style="font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;color:white;">${rv.name}</span>
+                      </div>
+                    </div>`).join('')}
+                  </div>
+                </div>
+              </div>` : '';
+
+            const panel = document.createElement('div');
+            panel.id = 'panel-' + key;
+            panel.className = 'winners-panel hidden';
+            panel.innerHTML = `
+              <!-- Praia do Ano -->
+              <div style="position:relative;border-radius:16px;overflow:hidden;background:linear-gradient(160deg,rgba(255,235,59,.12) 0%,rgba(255,235,59,.04) 100%);border:1px solid rgba(255,235,59,.3);">
+                <div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#FFEB3B,#FFD600);"></div>
+                <div style="padding:28px;">
+                  <div style="display:flex;align-items:flex-start;gap:16px;">
+                    <div style="width:48px;height:48px;border-radius:14px;background:rgba(255,235,59,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                      <i data-lucide="trophy" style="width:24px;height:24px;color:#FFEB3B;"></i>
+                    </div>
+                    <div>
+                      <span style="font-family:'Poppins',sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,235,59,.7);font-weight:600;display:block;margin-bottom:4px;">1.º — Praia Fluvial do Ano ${w.year}</span>
+                      <h3 style="font-family:'Poppins',sans-serif;font-size:22px;font-weight:800;color:white;line-height:1.2;margin:0;">${w.winner}</h3>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              ${podiumHTML}
+              ${revelationsHTML}`;
+            panelsContainer.appendChild(panel);
+            lucide.createIcons({ el: panel });
+          }
+        });
+
+        // Show first panel
+        showWinnersYear(String(winners[0].year));
+
+      } catch(e) {
+        // Fallback: show hardcoded first panel if settings.json fails
+        const firstPanel = document.querySelector('.winners-panel');
+        if (firstPanel) firstPanel.classList.remove('hidden');
+        console.warn('[winners]', e);
+      }
+    })();
   </script>
 </body>
 </html>

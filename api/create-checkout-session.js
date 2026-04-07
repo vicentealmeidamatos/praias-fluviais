@@ -61,7 +61,12 @@ export default async function handler(req, res) {
           currency: 'eur',
           product_data: {
             name: `${product.name}${variantLabel}`,
-            images: product.images?.[0] ? [`https://praiasfluviais.pt/${product.images[0]}`] : [],
+            images: (() => {
+              const img = product.images?.[0];
+              if (!img) return [];
+              if (img.startsWith('http://') || img.startsWith('https://')) return [img];
+              return [`https://praiasfluviais.pt/${img}`];
+            })(),
           },
           unit_amount: unitPrice > 0 ? unitPrice : 1,
         },

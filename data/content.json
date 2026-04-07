@@ -1,0 +1,152 @@
+{
+  "global": {
+    "siteName": "Guia das Praias Fluviais",
+    "logoUrl": "",
+    "logoWhiteUrl": "",
+    "ogImage": "brand_assets/praias-fluviais.png",
+    "social": {
+      "facebook": "https://www.facebook.com/praiasfluviais",
+      "instagram": "https://www.instagram.com/guiadaspraiasfluviais",
+      "youtube": "",
+      "tiktok": ""
+    },
+    "nav": {
+      "rede": "Rede",
+      "votar": "Votar",
+      "passaporte": "Passaporte",
+      "novidades": "Novidades",
+      "descontos": "Descontos",
+      "loja": "Loja",
+      "contactos": "Contactos",
+      "onde_encontrar": "Onde Encontrar",
+      "onde_carimbar": "Onde Carimbar"
+    },
+    "footer": {
+      "newsletterTitle": "Receba o Guia das Praias Fluviais na sua casa",
+      "newsletterDesc": "Subscreva para receber o guia das praias fluviais e passaporte em sua casa.",
+      "col1Title": "Explorar",
+      "col2Title": "O Guia das Praias Fluviais",
+      "col3Title": "Siga-nos",
+      "copyright": "© 2026 Guia das Praias Fluviais. Todos os direitos reservados.",
+      "privacyLabel": "Política de Privacidade"
+    }
+  },
+  "homepage": {
+    "heroImageUrl": "",
+    "stat1Label": "Praias",
+    "stat1Value": "200+",
+    "stat2Label": "Guias Distribuídos",
+    "stat2Value": "120k",
+    "stat3Label": "Descontos",
+    "stat3Value": "250+",
+    "heroCtaPrimary": "Explorar Mapa",
+    "heroCtaSecondary": "Votar Praia do Ano",
+    "destaquesSectionTitle": "Histórias do Interior de Portugal",
+    "destaquesVerTodos": "Ver Todos",
+    "yearSectionLabel": "Galardão Anual",
+    "yearSectionTitle": "Praia Fluvial do Ano 2026",
+    "yearSectionDesc": "Todos os anos, milhares de portugueses elegem a sua praia fluvial favorita de todo o território nacional. Uma eleição anual de âmbito nacional que premeia as melhores zonas balneares do interior do país.",
+    "sections": {
+      "destaques": true,
+      "quicklinks": true,
+      "votar": true,
+      "mapa": true
+    }
+  },
+  "votar": {
+    "label": "Votação 2026",
+    "heroTitle": "Qual é a sua Praia Fluvial",
+    "heroTitleHighlight": "Favorita em 2026?",
+    "countdownTitle": "Tic-Tac, Tic-Tac…",
+    "ctaVotar": "Votar Agora",
+    "ctaVencedores": "Vencedores Anteriores",
+    "card1Title": "Praia Fluvial do Ano",
+    "card1Text": "Todos os anos, os leitores do Guia das Praias Fluviais escolhem a sua praia fluvial favorita de todo o território nacional. São elegíveis para votação todas as praias fluviais classificadas pela APA e uma selecção das melhores zonas balneares não classificadas de Portugal. Vence o prémio de <strong>Praia Fluvial do Ano</strong> a praia mais votada pelo público.",
+    "card2Title": "Praia Fluvial Revelação",
+    "card2Text": "Paralelamente, o Guia das Praias Fluviais atribui anualmente o galardão <strong>Praia Fluvial Revelação</strong> às novas zonas balneares interiores que mais se destacam na sua estreia pela qualidade das infraestruturas apresentadas, oferta de serviços disponibilizados e especialmente pelo cuidado e atenção na preservação ambiental do projeto.",
+    "hallOfFameLabel": "Hall da Fama",
+    "hallOfFameTitle": "Vencedores dos Anos Anteriores",
+    "searchPlaceholder": "Procure a sua praia...",
+    "allDistrictsLabel": "Todos os distritos"
+  },
+  "artigos": {
+    "label": "Blog",
+    "title": "Novidades",
+    "subtitle": "das Praias Fluviais",
+    "description": "Roteiros, dicas, descobertas e informações sobre o universo das praias fluviais de Portugal.",
+    "heroImageUrl": ""
+  },
+  "loja": {
+    "label": "Loja Oficial",
+    "title": "Leva um bocado do verão contigo",
+    "description": "Merchandising oficial das Praias Fluviais — t-shirts, guia e passaporte físico.",
+    "shippingNote": "Portes grátis em compras acima de 30€",
+    "shippingNote2": "Envio apenas para Portugal",
+    "heroImageUrl": ""
+  },
+  "descontos": {
+    "label": "Parcerias Exclusivas",
+    "title": "Aproveite os Descontos",
+    "description": "Descontos exclusivos em alojamento, restauração, atividades e comércio para portadores do Guia das Praias Fluviais e do Passaporte.",
+    "emptyState": "Nenhum desconto encontrado com estes filtros.",
+    "heroImageUrl": ""
+  },
+  "passaporte": {
+    "label": "Passaporte Turístico",
+    "title": "Colecione carimbos nas praias fluviais de Portugal",
+    "description": "Visite praias fluviais, recolha carimbos em cada local e conquiste prémios. Mais de 200 locais de lazer de norte a sul do país.",
+    "tabDigital": "Passaporte Digital",
+    "tabComoFunciona": "Como Funciona",
+    "tabPremios": "Prémios",
+    "howItWorksTitle": "Duas formas de colecionar",
+    "physicalTitle": "Passaporte Físico",
+    "physicalDesc": "Adquira o passaporte físico numa livraria ou parceiro oficial. Carregue os seus carimbos nas praias durante a época balnear.",
+    "digitalTitle": "Passaporte Digital",
+    "digitalDesc": "Registe-se gratuitamente e guarde os seus carimbos digitais. Consulte o seu álbum e conquiste medalhas online.",
+    "rewardsTitle": "Reúna carimbos, ganhe prémios reais",
+    "rewardsDesc": "Todos os carimbos das edições 2024 e 2025 contam para a coleção anual. Conquiste medalhas e troque-as por prémios exclusivos.",
+    "ctaOndeCarimbar": "Onde Carimbar?",
+    "guestMessage": "Crie conta gratuita para guardar os seus carimbos e medalhas.",
+    "guestCta": "Criar Conta",
+    "heroImageUrl": ""
+  },
+  "rede": {
+    "heading": "Encontre a sua praia",
+    "subheading": "Mapa Interativo",
+    "searchPlaceholder": "Procurar praia, concelho, rio...",
+    "nearMeLabel": "Perto de Mim",
+    "filterAll": "Todas",
+    "filterPraias": "Praias Fluviais",
+    "filterZonas": "Zonas Balneares"
+  },
+  "onde_guia": {
+    "label": "Rede de Distribuição",
+    "title": "Onde Encontrar o Guia",
+    "description": "Encontre o Guia das Praias Fluviais nos pontos de distribuição por todo o país — livrarias, postos de turismo, câmaras municipais e parceiros oficiais.",
+    "searchPlaceholder": "Pesquisar por localidade ou nome...",
+    "heroImageUrl": ""
+  },
+  "onde_passaporte": {
+    "label": "Rede de Carimbagem",
+    "title": "Onde Carimbar o Passaporte",
+    "description": "Carregue o seu passaporte nas praias fluviais e em postos de carimbo espalhados por todo o país. Cada carimbo é um passo para conquistar medalhas e prémios.",
+    "searchPlaceholder": "Pesquisar por localidade ou praia...",
+    "heroImageUrl": ""
+  },
+  "confirmacao": {
+    "loadingMessage": "A confirmar encomenda…",
+    "successTitle": "Encomenda confirmada!",
+    "successMessage": "Obrigado pela sua encomenda. Receberá um email de confirmação em breve com os detalhes do envio.",
+    "ctaContinuar": "Continuar a comprar",
+    "ctaEncomendas": "As minhas encomendas",
+    "errorTitle": "Não foi possível confirmar",
+    "errorMessage": "Se o pagamento foi realizado, receberá um email de confirmação. Caso contrário, tente novamente.",
+    "ctaVoltar": "Voltar ao carrinho",
+    "ctaSuporte": "Contactar suporte"
+  },
+  "seo": {
+    "homepageTitle": "Praias Fluviais | Guia das Zonas Balneares e de Lazer de Portugal",
+    "homepageDescription": "Descubra mais de 200 praias fluviais e zonas balneares de Portugal. Mapa interativo, votação Praia do Ano, passaporte digital e muito mais.",
+    "siteDescription": "Descubra as melhores praias fluviais e zonas balneares de Portugal no guia mais completo do país."
+  }
+}

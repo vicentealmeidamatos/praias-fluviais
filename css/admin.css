@@ -94,6 +94,14 @@
   background: #FFEB3B;
   color: #003A40;
 }
+.admin-btn-secondary {
+  background: #EEF5F5;
+  color: #003A40;
+  border: 1px solid #C8DFE0;
+}
+.admin-btn-secondary:hover {
+  background: #D4EAEB;
+}
 
 /* Photo drop zone */
 #photo-drop-zone.dragover,

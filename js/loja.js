@@ -103,6 +103,8 @@ function renderProductCard(product) {
   const hasVariants = product.variants && product.variants.length > 0;
   const mainImage = product.images && product.images[0] ? product.images[0] : null;
   const availableVariants = product.variants ? product.variants.filter(v => v.available) : [];
+  const isSimple = !hasVariants && !product.customizable;
+  const descText = isSimple ? product.description : (product.description.length > 100 ? product.description.substring(0, 100) + '…' : product.description);
 
   return `
     <article class="product-card group bg-white rounded-2xl overflow-hidden shadow-layered hover:shadow-layered-hover transition-all duration-300 hover:-translate-y-1 flex flex-col" data-id="${product.id}">
@@ -110,7 +112,7 @@ function renderProductCard(product) {
       <a href="produto.html?id=${product.id}" class="relative overflow-hidden bg-praia-teal-50 aspect-[4/3] block">
         ${mainImage ? `
           <img src="${mainImage}" alt="${product.name}"
-            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            class="w-full h-full object-cover product-img"
             onerror="this.parentElement.innerHTML='<div class=\'w-full h-full flex items-center justify-center text-praia-teal-200\'><i data-lucide=\'package\' class=\'w-16 h-16\'></i></div>';lucide.createIcons();"
           >
         ` : `
@@ -119,7 +121,7 @@ function renderProductCard(product) {
           </div>
         `}
         ${product.featured ? `
-          <div class="absolute top-3 right-3">
+          <div class="absolute top-3 left-3">
             <span class="bg-praia-teal-800/80 backdrop-blur-sm text-praia-yellow-400 font-display font-bold text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full flex items-center gap-1">
               <i data-lucide="star" class="w-3 h-3 fill-current"></i> Destaque
             </span>
@@ -136,7 +138,19 @@ function renderProductCard(product) {
       <!-- Content -->
       <div class="p-5 flex flex-col flex-1">
         <a href="produto.html?id=${product.id}" class="font-display font-bold text-praia-teal-800 text-base leading-snug mb-1 hover:text-praia-teal-600 transition-colors block">${product.name}</a>
-        <p class="text-praia-sand-500 text-sm leading-relaxed mb-3 flex-1">${product.description.length > 100 ? product.description.substring(0, 100) + '…' : product.description}</p>
+        <p class="text-praia-sand-500 text-sm leading-relaxed mb-3 ${isSimple ? '' : 'flex-1'}">${descText}</p>
+        ${isSimple && product.highlights && product.highlights.length ? `
+          <ul class="flex-1 flex flex-col justify-center gap-2 mb-3">
+            ${product.highlights.map(h => `
+              <li style="display:flex;align-items:center;gap:8px;">
+                <span style="flex-shrink:0;width:20px;height:20px;border-radius:50%;background:#003A40;display:flex;align-items:center;justify-content:center;">
+                  <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#FFEB3B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <span style="font-family:'Open Sans',sans-serif;font-size:13px;color:#4a5568;">${h}</span>
+              </li>
+            `).join('')}
+          </ul>
+        ` : (!isSimple ? '' : '<div class="flex-1"></div>')}
         <div class="mb-3">
           ${isFree
             ? `<span class="font-display font-bold text-2xl text-praia-green-500">Grátis</span>`
