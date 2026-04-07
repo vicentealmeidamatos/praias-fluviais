@@ -1,0 +1,674 @@
+/**
+ * inline-editor.js — Editor visual injetado em páginas com ?edit=1
+ *
+ * Responsável por:
+ *   - Tornar elementos com data-content* clicáveis e editáveis
+ *   - Toolbar flutuante para texto rico (B / I / link / listas)
+ *   - Upload de imagens via /api/upload (folder content)
+ *   - Picker de link (páginas internas + URL externo)
+ *   - Reordenar / adicionar / eliminar itens em data-content-list
+ *   - Reordenar secções marcadas com data-section-id
+ *   - Suprime navegação e abertura de modais durante edição
+ *   - Envia diffs ao parent (admin) via postMessage
+ *
+ * Mensagens emitidas para o parent:
+ *   { type:'inline-editor-ready' }
+ *   { type:'content-change', path, value }                  → texto/html/img/href
+ *   { type:'content-list-change', path, value }             → lista completa após reorder/add/remove
+ *   { type:'sections-order-change', value }                 → array sectionsOrder
+ *   { type:'dirty' }                                        → houve alteração
+ *   { type:'request-pages' }                                → pede dropdown de páginas internas
+ *
+ * Mensagens recebidas:
+ *   { type:'pages-list', pages: [{label,href},...] }
+ *   { type:'apply-content', content }                       → forçar refresh (undo/redo)
+ *   { type:'set-device', width }                            → debug
+ */
+(function () {
+  if (window.__inlineEditorLoaded) return;
+  window.__inlineEditorLoaded = true;
+
+  const PARENT = window.parent !== window ? window.parent : null;
+  function send(msg) {
+    if (PARENT) PARENT.postMessage(msg, '*');
+  }
+  function markDirty() { send({ type: 'dirty' }); }
+
+  // ────────────────────────────────────────────────────────────
+  // STYLES
+  // ────────────────────────────────────────────────────────────
+  const css = `
+    *[data-content], *[data-content-html], *[data-content-img], *[data-content-href] {
+      cursor: text;
+      transition: outline-color .12s ease, background-color .12s ease;
+      outline: 2px solid transparent;
+      outline-offset: 3px;
+      border-radius: 3px;
+      position: relative;
+    }
+    *[data-content]:hover, *[data-content-html]:hover, *[data-content-href]:hover {
+      outline-color: #0288D1;
+      background-color: rgba(2, 136, 209, 0.06);
+    }
+    *[data-content-img]:hover {
+      outline-color: #0288D1;
+      box-shadow: 0 0 0 3px rgba(2,136,209,.15);
+    }
+    .__ie-editing {
+      outline: 2px solid #003A40 !important;
+      background-color: rgba(255, 235, 59, 0.18) !important;
+    }
+    .__ie-toolbar {
+      position: fixed;
+      z-index: 2147483647;
+      background: #003A40;
+      color: white;
+      border-radius: 10px;
+      box-shadow: 0 12px 32px rgba(0,0,0,.35);
+      padding: 6px;
+      display: flex;
+      gap: 4px;
+      font-family: 'Poppins', system-ui, sans-serif;
+      font-size: 12px;
+      animation: __ie-pop .14s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .__ie-toolbar button {
+      background: transparent;
+      border: 0;
+      color: white;
+      cursor: pointer;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .__ie-toolbar button:hover { background: rgba(255,255,255,.16); }
+    .__ie-toolbar button.active { background: #FFEB3B; color: #003A40; }
+    .__ie-toolbar .__ie-sep { width: 1px; background: rgba(255,255,255,.18); margin: 4px 2px; }
+    @keyframes __ie-pop { from { opacity: 0; transform: translateY(4px) scale(.96); } to { opacity: 1; transform: none; } }
+
+    .__ie-list-controls {
+      position: absolute;
+      top: -14px;
+      right: -14px;
+      z-index: 2147483646;
+      display: none;
+      gap: 4px;
+      background: white;
+      border: 1px solid #003A40;
+      border-radius: 8px;
+      padding: 2px;
+      box-shadow: 0 6px 16px rgba(0,0,0,.18);
+    }
+    [data-content-item-index]:hover > .__ie-list-controls,
+    [data-content-item-index].__ie-active > .__ie-list-controls {
+      display: flex;
+    }
+    [data-content-item-index] {
+      position: relative;
+      outline: 1px dashed transparent;
+      outline-offset: 3px;
+      transition: outline-color .12s;
+    }
+    [data-content-item-index]:hover {
+      outline-color: rgba(2,136,209,.4);
+    }
+    .__ie-list-controls button {
+      background: white; border: 0; cursor: pointer;
+      width: 24px; height: 24px; border-radius: 5px;
+      font-size: 13px; display: inline-flex; align-items: center; justify-content: center;
+      color: #003A40;
+    }
+    .__ie-list-controls button:hover { background: #FFEB3B; }
+    .__ie-list-add {
+      display: block;
+      margin: 12px auto;
+      background: #FFEB3B;
+      color: #003A40;
+      border: 0;
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,58,64,.2);
+    }
+
+    [data-section-id] { position: relative; }
+    .__ie-section-handle {
+      position: absolute;
+      top: 12px; left: 12px;
+      z-index: 2147483645;
+      background: #003A40;
+      color: #FFEB3B;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font: 600 11px 'Poppins', sans-serif;
+      cursor: grab;
+      box-shadow: 0 4px 12px rgba(0,0,0,.3);
+      user-select: none;
+      display: none;
+    }
+    body.__ie-show-handles .__ie-section-handle { display: inline-flex; align-items: center; gap: 6px; }
+    [data-section-id].__ie-dragging { opacity: .4; }
+    [data-section-id].__ie-drop-target { box-shadow: inset 0 4px 0 #FFEB3B; }
+
+    .__ie-modal-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(0,30,32,.5);
+      z-index: 2147483646;
+      display: flex; align-items: center; justify-content: center;
+      animation: __ie-fade .15s;
+    }
+    .__ie-modal {
+      background: white; border-radius: 16px; padding: 24px;
+      max-width: 440px; width: 90%;
+      box-shadow: 0 24px 60px rgba(0,0,0,.4);
+      font-family: 'Open Sans', system-ui, sans-serif;
+    }
+    .__ie-modal h3 { font-family: 'Poppins', sans-serif; font-weight: 700; color: #003A40; margin: 0 0 14px; font-size: 16px; }
+    .__ie-modal label { display: block; font-size: 11px; font-weight: 600; color: #5C5340; text-transform: uppercase; letter-spacing: .03em; margin-bottom: 4px; margin-top: 12px; }
+    .__ie-modal input, .__ie-modal select {
+      width: 100%; padding: 9px 12px; border: 1.5px solid #E2D9C6; border-radius: 8px;
+      font-size: 14px; font-family: inherit; color: #003A40;
+      transition: border-color .12s;
+    }
+    .__ie-modal input:focus, .__ie-modal select:focus { outline: none; border-color: #003A40; }
+    .__ie-modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 18px; }
+    .__ie-modal button {
+      padding: 9px 16px; border-radius: 8px; border: 0; cursor: pointer;
+      font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 13px;
+    }
+    .__ie-btn-primary { background: #003A40; color: white; }
+    .__ie-btn-primary:hover { background: #00252A; }
+    .__ie-btn-ghost { background: #FAF8F5; color: #003A40; }
+    @keyframes __ie-fade { from { opacity: 0; } to { opacity: 1; } }
+
+    .__ie-image-library {
+      max-height: 340px; overflow-y: auto;
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 8px; margin-top: 8px; padding: 8px;
+      background: #FAF8F5; border-radius: 8px;
+    }
+    .__ie-image-library img {
+      width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 6px;
+      cursor: pointer; transition: transform .12s, outline-color .12s;
+      outline: 2px solid transparent;
+    }
+    .__ie-image-library img:hover { transform: scale(1.05); outline-color: #003A40; }
+  `;
+  const style = document.createElement('style');
+  style.textContent = css;
+  document.head.appendChild(style);
+
+  // Quill (carregado a pedido se ainda não estiver presente)
+  function ensureQuill() {
+    return new Promise((resolve) => {
+      if (window.Quill) return resolve(window.Quill);
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = 'https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css';
+      document.head.appendChild(link);
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js';
+      s.onload = () => resolve(window.Quill);
+      document.head.appendChild(s);
+    });
+  }
+
+  // ────────────────────────────────────────────────────────────
+  // UTILS
+  // ────────────────────────────────────────────────────────────
+  function setByPath(obj, path, value) {
+    const parts = path.split('.');
+    let cur = obj;
+    for (let i = 0; i < parts.length - 1; i++) {
+      const k = parts[i];
+      const next = parts[i + 1];
+      const isIdx = /^\d+$/.test(next);
+      if (cur[k] == null) cur[k] = isIdx ? [] : {};
+      cur = cur[k];
+    }
+    cur[parts[parts.length - 1]] = value;
+  }
+  function getByPath(obj, path) {
+    return path.split('.').reduce((o, k) => (o == null ? undefined : o[k]), obj);
+  }
+
+  // Suprimir navegação durante edição
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('a');
+    if (a && !a.closest('.__ie-toolbar') && !a.closest('.__ie-modal')) {
+      e.preventDefault();
+    }
+    // Suprimir submits
+    if (e.target.closest('button[type="submit"]')) e.preventDefault();
+  }, true);
+  document.addEventListener('submit', (e) => e.preventDefault(), true);
+
+  // ────────────────────────────────────────────────────────────
+  // TEXTO SIMPLES (data-content)
+  // ────────────────────────────────────────────────────────────
+  document.querySelectorAll('[data-content]').forEach((el) => {
+    if (el.closest('.__ie-toolbar, .__ie-modal')) return;
+    el.setAttribute('contenteditable', 'plaintext-only');
+    el.addEventListener('focus', () => el.classList.add('__ie-editing'));
+    el.addEventListener('blur', () => {
+      el.classList.remove('__ie-editing');
+      const path = el.dataset.content;
+      send({ type: 'content-change', path, value: el.textContent.trim() });
+    });
+    el.addEventListener('input', markDirty);
+    el.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') { e.preventDefault(); el.blur(); }
+    });
+  });
+
+  // ────────────────────────────────────────────────────────────
+  // TEXTO RICO (data-content-html) — toolbar flutuante
+  // ────────────────────────────────────────────────────────────
+  let activeRich = null;
+  let toolbarEl = null;
+
+  function createToolbar() {
+    if (toolbarEl) return toolbarEl;
+    toolbarEl = document.createElement('div');
+    toolbarEl.className = '__ie-toolbar';
+    toolbarEl.innerHTML = `
+      <button data-cmd="bold" title="Negrito"><b>B</b></button>
+      <button data-cmd="italic" title="Itálico"><i>I</i></button>
+      <button data-cmd="link" title="Inserir link">🔗</button>
+      <div class="__ie-sep"></div>
+      <button data-cmd="ul" title="Lista">•</button>
+      <button data-cmd="ol" title="Lista numerada">1.</button>
+      <div class="__ie-sep"></div>
+      <button data-cmd="clear" title="Limpar formatação">✕</button>
+    `;
+    document.body.appendChild(toolbarEl);
+    toolbarEl.addEventListener('mousedown', (e) => e.preventDefault());
+    toolbarEl.addEventListener('click', (e) => {
+      const btn = e.target.closest('button');
+      if (!btn || !activeRich) return;
+      const cmd = btn.dataset.cmd;
+      if (cmd === 'bold') document.execCommand('bold');
+      else if (cmd === 'italic') document.execCommand('italic');
+      else if (cmd === 'ul') document.execCommand('insertUnorderedList');
+      else if (cmd === 'ol') document.execCommand('insertOrderedList');
+      else if (cmd === 'clear') document.execCommand('removeFormat');
+      else if (cmd === 'link') openLinkPicker((url, target) => {
+        const sel = document.getSelection();
+        if (!sel || sel.isCollapsed) {
+          document.execCommand('insertHTML', false, `<a href="${url}"${target ? ' target="_blank" rel="noopener"' : ''}>${url}</a>`);
+        } else {
+          document.execCommand('createLink', false, url);
+          // marcar target=_blank
+          if (target) {
+            const a = sel.anchorNode?.parentElement?.closest('a');
+            if (a) { a.target = '_blank'; a.rel = 'noopener'; }
+          }
+        }
+        markDirty();
+        flushRich();
+      });
+      markDirty();
+    });
+    return toolbarEl;
+  }
+
+  function positionToolbar(el) {
+    const tb = createToolbar();
+    const rect = el.getBoundingClientRect();
+    tb.style.display = 'flex';
+    const tbRect = tb.getBoundingClientRect();
+    let top = rect.top - tbRect.height - 10;
+    if (top < 8) top = rect.bottom + 10;
+    let left = rect.left + (rect.width / 2) - (tbRect.width / 2);
+    if (left < 8) left = 8;
+    if (left + tbRect.width > window.innerWidth - 8) left = window.innerWidth - tbRect.width - 8;
+    tb.style.top = `${top}px`;
+    tb.style.left = `${left}px`;
+  }
+
+  function flushRich() {
+    if (!activeRich) return;
+    send({ type: 'content-change', path: activeRich.dataset.contentHtml, value: activeRich.innerHTML.trim() });
+  }
+
+  document.querySelectorAll('[data-content-html]').forEach((el) => {
+    el.setAttribute('contenteditable', 'true');
+    el.addEventListener('focus', () => {
+      activeRich = el;
+      el.classList.add('__ie-editing');
+      positionToolbar(el);
+    });
+    el.addEventListener('blur', () => {
+      setTimeout(() => {
+        if (toolbarEl && !toolbarEl.matches(':hover')) {
+          toolbarEl.style.display = 'none';
+          el.classList.remove('__ie-editing');
+          flushRich();
+          activeRich = null;
+        }
+      }, 200);
+    });
+    el.addEventListener('input', () => {
+      markDirty();
+      positionToolbar(el);
+    });
+    el.addEventListener('scroll', () => activeRich === el && positionToolbar(el));
+  });
+  window.addEventListener('scroll', () => activeRich && positionToolbar(activeRich), true);
+  window.addEventListener('resize', () => activeRich && positionToolbar(activeRich));
+
+  // ────────────────────────────────────────────────────────────
+  // IMAGENS (data-content-img)
+  // ────────────────────────────────────────────────────────────
+  document.querySelectorAll('[data-content-img]').forEach((img) => {
+    img.style.cursor = 'pointer';
+    img.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      openImagePicker(img);
+    });
+  });
+
+  function openImagePicker(img) {
+    const path = img.dataset.contentImg;
+    const altPath = img.dataset.contentAlt;
+    const modal = createModal(`
+      <h3>Substituir imagem</h3>
+      <p style="font-size:12px;color:#5C5340;margin:0 0 6px;">A imagem será carregada para o servidor automaticamente.</p>
+      <input type="file" id="__ie-file" accept="image/*" style="margin-top:8px;">
+      ${altPath ? `<label>Texto alternativo (alt)</label><input type="text" id="__ie-alt" placeholder="Descrição da imagem para acessibilidade">` : ''}
+      <label>Ou escolher de imagens já carregadas</label>
+      <div class="__ie-image-library" id="__ie-lib"><div style="grid-column:1/-1;font-size:12px;color:#8B7B5D;">A carregar…</div></div>
+      <div class="__ie-modal-actions">
+        <button class="__ie-btn-ghost" id="__ie-cancel">Cancelar</button>
+      </div>
+    `);
+    if (altPath) {
+      const altInput = modal.querySelector('#__ie-alt');
+      altInput.value = img.alt || '';
+      altInput.addEventListener('input', () => {
+        send({ type: 'content-change', path: altPath, value: altInput.value });
+        img.alt = altInput.value;
+        markDirty();
+      });
+    }
+    modal.querySelector('#__ie-cancel').addEventListener('click', closeModal);
+    modal.querySelector('#__ie-file').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const url = await uploadImage(file);
+      if (url) {
+        img.src = url;
+        send({ type: 'content-change', path, value: url });
+        markDirty();
+        closeModal();
+      }
+    });
+    loadImageLibrary(modal.querySelector('#__ie-lib'), (url) => {
+      img.src = url;
+      send({ type: 'content-change', path, value: url });
+      markDirty();
+      closeModal();
+    });
+  }
+
+  async function uploadImage(file) {
+    try {
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': file.type, 'X-Filename': file.name, 'X-Folder': 'content' },
+        body: file,
+      });
+      if (!res.ok) throw new Error('upload falhou');
+      const json = await res.json();
+      return json.path || json.url;
+    } catch (e) {
+      alert('Erro ao carregar imagem: ' + e.message);
+      return null;
+    }
+  }
+
+  async function loadImageLibrary(container, onPick) {
+    try {
+      const SUPABASE_URL = 'https://tjvhnbukzfyxtpkrhpsw.supabase.co';
+      const SUPABASE_ANON = 'sb_publishable_ke--Q7xNRNCxTjgxFCNFIQ_6zPD3zM3';
+      const res = await fetch(`${SUPABASE_URL}/storage/v1/object/list/media`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', apikey: SUPABASE_ANON, Authorization: `Bearer ${SUPABASE_ANON}` },
+        body: JSON.stringify({ prefix: 'content', limit: 60, sortBy: { column: 'created_at', order: 'desc' } }),
+      });
+      if (!res.ok) throw new Error('list falhou');
+      const items = await res.json();
+      if (!items.length) {
+        container.innerHTML = '<div style="grid-column:1/-1;font-size:12px;color:#8B7B5D;">Sem imagens carregadas ainda.</div>';
+        return;
+      }
+      container.innerHTML = '';
+      items.forEach((it) => {
+        const url = `${SUPABASE_URL}/storage/v1/object/public/media/content/${it.name}`;
+        const im = document.createElement('img');
+        im.src = url;
+        im.title = it.name;
+        im.addEventListener('click', () => onPick(url));
+        container.appendChild(im);
+      });
+    } catch (e) {
+      container.innerHTML = `<div style="grid-column:1/-1;font-size:12px;color:#8B7B5D;">Não foi possível carregar a biblioteca: ${e.message}</div>`;
+    }
+  }
+
+  // ────────────────────────────────────────────────────────────
+  // LINKS (data-content-href)
+  // ────────────────────────────────────────────────────────────
+  document.querySelectorAll('[data-content-href]').forEach((el) => {
+    if (el.hasAttribute('data-content') || el.hasAttribute('data-content-html')) return; // já edita texto
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      openLinkPicker((url, target) => {
+        el.href = url;
+        if (target) { el.target = '_blank'; el.rel = 'noopener'; }
+        send({ type: 'content-change', path: el.dataset.contentHref, value: url });
+        markDirty();
+      }, el.href);
+    });
+  });
+
+  let _pages = null;
+  function openLinkPicker(onSave, currentUrl = '') {
+    const modal = createModal(`
+      <h3>Inserir link</h3>
+      <label>Página interna</label>
+      <select id="__ie-page"><option value="">— escolher —</option></select>
+      <label>Ou URL externo</label>
+      <input type="url" id="__ie-url" placeholder="https://..." value="${currentUrl || ''}">
+      <label style="display:flex;align-items:center;gap:8px;text-transform:none;font-size:13px;font-weight:500;">
+        <input type="checkbox" id="__ie-target" style="width:auto;"> Abrir em nova aba
+      </label>
+      <div class="__ie-modal-actions">
+        <button class="__ie-btn-ghost" id="__ie-cancel">Cancelar</button>
+        <button class="__ie-btn-primary" id="__ie-save">Inserir</button>
+      </div>
+    `);
+    const sel = modal.querySelector('#__ie-page');
+    const url = modal.querySelector('#__ie-url');
+    const target = modal.querySelector('#__ie-target');
+    const fillPages = (pages) => {
+      pages.forEach((p) => {
+        const opt = document.createElement('option');
+        opt.value = p.href; opt.textContent = p.label;
+        sel.appendChild(opt);
+      });
+    };
+    if (_pages) fillPages(_pages);
+    else {
+      // discover pages from current site (the inline editor knows the host)
+      const defaultPages = [
+        { label: 'Início', href: '/' },
+        { label: 'Mapa', href: '/mapa.html' },
+        { label: 'Rede de Praias', href: '/rede.html' },
+        { label: 'Votar', href: '/votar.html' },
+        { label: 'Passaporte', href: '/passaporte.html' },
+        { label: 'Novidades', href: '/artigos.html' },
+        { label: 'Loja', href: '/loja.html' },
+        { label: 'Descontos', href: '/descontos.html' },
+        { label: 'Onde Encontrar o Guia', href: '/onde-encontrar.html' },
+        { label: 'Onde Carimbar', href: '/onde-carimbar-passaporte.html' },
+        { label: 'Contactos', href: '/contactos.html' },
+      ];
+      _pages = defaultPages;
+      fillPages(defaultPages);
+    }
+    sel.addEventListener('change', () => { if (sel.value) url.value = sel.value; });
+    modal.querySelector('#__ie-cancel').addEventListener('click', closeModal);
+    modal.querySelector('#__ie-save').addEventListener('click', () => {
+      const v = url.value.trim();
+      if (!v) return;
+      onSave(v, target.checked);
+      closeModal();
+    });
+  }
+
+  // ────────────────────────────────────────────────────────────
+  // MODAIS
+  // ────────────────────────────────────────────────────────────
+  let _modalEl = null;
+  function createModal(innerHTML) {
+    closeModal();
+    const back = document.createElement('div');
+    back.className = '__ie-modal-backdrop';
+    back.innerHTML = `<div class="__ie-modal">${innerHTML}</div>`;
+    back.addEventListener('click', (e) => { if (e.target === back) closeModal(); });
+    document.body.appendChild(back);
+    _modalEl = back;
+    return back.querySelector('.__ie-modal');
+  }
+  function closeModal() {
+    if (_modalEl) { _modalEl.remove(); _modalEl = null; }
+  }
+
+  // ────────────────────────────────────────────────────────────
+  // LISTAS (data-content-list) — controles inline + DnD
+  // ────────────────────────────────────────────────────────────
+  document.querySelectorAll('[data-content-list]').forEach(setupList);
+
+  function setupList(container) {
+    const path = container.dataset.contentList;
+    const items = container.querySelectorAll('[data-content-item-index]');
+    items.forEach((it) => decorateListItem(container, it, path));
+
+    // Botão adicionar
+    const addBtn = document.createElement('button');
+    addBtn.className = '__ie-list-add';
+    addBtn.textContent = '+ Adicionar item';
+    addBtn.addEventListener('click', () => {
+      const arr = (getByPath(window._siteContent, path) || []).slice();
+      const last = arr[arr.length - 1] || {};
+      const blank = {};
+      Object.keys(last).forEach((k) => (blank[k] = ''));
+      arr.push(blank);
+      sendListChange(path, arr);
+      alert('Item adicionado. Grave para ver na próxima recarga do preview.');
+    });
+    container.parentNode.insertBefore(addBtn, container.nextSibling);
+  }
+
+  function decorateListItem(container, item, path) {
+    const ctrls = document.createElement('div');
+    ctrls.className = '__ie-list-controls';
+    ctrls.innerHTML = `
+      <button data-act="up" title="Subir">↑</button>
+      <button data-act="down" title="Descer">↓</button>
+      <button data-act="dup" title="Duplicar">⎘</button>
+      <button data-act="del" title="Eliminar">🗑</button>
+    `;
+    item.appendChild(ctrls);
+    ctrls.addEventListener('click', (e) => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      e.stopPropagation();
+      const idx = Number(item.dataset.contentItemIndex);
+      const arr = (getByPath(window._siteContent, path) || []).slice();
+      if (btn.dataset.act === 'up' && idx > 0) {
+        [arr[idx - 1], arr[idx]] = [arr[idx], arr[idx - 1]];
+      } else if (btn.dataset.act === 'down' && idx < arr.length - 1) {
+        [arr[idx + 1], arr[idx]] = [arr[idx], arr[idx + 1]];
+      } else if (btn.dataset.act === 'dup') {
+        arr.splice(idx + 1, 0, JSON.parse(JSON.stringify(arr[idx])));
+      } else if (btn.dataset.act === 'del') {
+        if (!confirm('Eliminar este item?')) return;
+        arr.splice(idx, 1);
+      } else return;
+      sendListChange(path, arr);
+      alert('Lista atualizada. Grave para ver na próxima recarga.');
+    });
+  }
+
+  function sendListChange(path, value) {
+    send({ type: 'content-list-change', path, value });
+    markDirty();
+    setByPath(window._siteContent, path, value);
+  }
+
+  // ────────────────────────────────────────────────────────────
+  // SECÇÕES REORDENÁVEIS (data-section-id)
+  // ────────────────────────────────────────────────────────────
+  const sections = Array.from(document.querySelectorAll('[data-section-id]'));
+  if (sections.length) {
+    document.body.classList.add('__ie-show-handles');
+    sections.forEach((s) => {
+      const handle = document.createElement('div');
+      handle.className = '__ie-section-handle';
+      handle.draggable = true;
+      handle.innerHTML = `⠿ ${s.dataset.sectionId}`;
+      s.appendChild(handle);
+
+      handle.addEventListener('dragstart', () => s.classList.add('__ie-dragging'));
+      handle.addEventListener('dragend', () => {
+        s.classList.remove('__ie-dragging');
+        sections.forEach((x) => x.classList.remove('__ie-drop-target'));
+        // Compor nova ordem
+        const parent = sections[0].parentNode;
+        const order = Array.from(parent.querySelectorAll('[data-section-id]')).map((el) => ({
+          id: el.dataset.sectionId,
+          visible: el.style.display !== 'none',
+        }));
+        send({ type: 'sections-order-change', value: order });
+        markDirty();
+      });
+    });
+    // Drop sobre secções
+    sections.forEach((target) => {
+      target.addEventListener('dragover', (e) => {
+        const dragging = document.querySelector('[data-section-id].__ie-dragging');
+        if (!dragging || dragging === target) return;
+        e.preventDefault();
+        target.classList.add('__ie-drop-target');
+        const rect = target.getBoundingClientRect();
+        const after = e.clientY > rect.top + rect.height / 2;
+        target.parentNode.insertBefore(dragging, after ? target.nextSibling : target);
+      });
+      target.addEventListener('dragleave', () => target.classList.remove('__ie-drop-target'));
+    });
+  }
+
+  // ────────────────────────────────────────────────────────────
+  // BRIDGE
+  // ────────────────────────────────────────────────────────────
+  window.addEventListener('message', (e) => {
+    const data = e.data || {};
+    if (data.type === 'apply-content') {
+      // Recarregar a página com query timestamp para forçar fetch
+      location.reload();
+    }
+  });
+
+  send({ type: 'inline-editor-ready' });
+})();

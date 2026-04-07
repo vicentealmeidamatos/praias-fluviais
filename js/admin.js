@@ -2493,8 +2493,376 @@ function viewOrderDetails(orderId) {
   document.getElementById('order-detail-modal').classList.remove('hidden');
 }
 
-// ─── Conteúdo do Site ───
+// ─── Conteúdo do Site — Editor Visual Inline ───
+const CONTENT_PAGES = [
+  { id: 'index',           label: 'Início',                file: 'index.html' },
+  { id: 'votar',           label: 'Votar',                 file: 'votar.html' },
+  { id: 'rede',            label: 'Rede de Praias',        file: 'rede.html' },
+  { id: 'passaporte',      label: 'Passaporte',            file: 'passaporte.html' },
+  { id: 'artigos',         label: 'Novidades',             file: 'artigos.html' },
+  { id: 'loja',            label: 'Loja',                  file: 'loja.html' },
+  { id: 'descontos',       label: 'Descontos',             file: 'descontos.html' },
+  { id: 'onde-encontrar',  label: 'Onde Encontrar Guia',   file: 'onde-encontrar.html' },
+  { id: 'onde-carimbar',   label: 'Onde Carimbar',         file: 'onde-carimbar-passaporte.html' },
+  { id: 'contactos',       label: 'Contactos',             file: 'contactos.html' },
+];
+const PAGE_SETTINGS_FIELDS = {
+  index: [
+    { path: 'seo.homepageTitle',       label: 'Título SEO',           hint: 'Aparece nos resultados Google. Ideal: até 60 caracteres.', max: 60 },
+    { path: 'seo.homepageDescription', label: 'Descrição SEO',        hint: 'Resumo nos resultados Google. Ideal: até 160 caracteres.', max: 160, type: 'textarea' },
+    { path: 'global.ogImage',          label: 'Imagem partilha redes sociais', type: 'image' },
+    { path: 'global.logoUrl',          label: 'Logotipo principal',   type: 'image' },
+    { path: 'global.logoWhiteUrl',     label: 'Logotipo branco (rodapé)', type: 'image' },
+  ],
+};
+
+const _content = {
+  current: null,            // estado atual em memória (objeto content)
+  history: [],              // stack de snapshots para undo
+  redoStack: [],
+  dirty: false,
+  page: 'index',
+  device: 'desktop',
+  unsavedListeners: false,
+};
+
+function _contentSnapshot() {
+  return JSON.parse(JSON.stringify(_content.current));
+}
+function _contentPushHistory() {
+  _content.history.push(_contentSnapshot());
+  if (_content.history.length > 50) _content.history.shift();
+  _content.redoStack = [];
+}
+function _setByPath(obj, path, value) {
+  const parts = path.split('.');
+  let cur = obj;
+  for (let i = 0; i < parts.length - 1; i++) {
+    const k = parts[i], next = parts[i + 1];
+    if (cur[k] == null) cur[k] = /^\d+$/.test(next) ? [] : {};
+    cur = cur[k];
+  }
+  cur[parts[parts.length - 1]] = value;
+}
+function _getByPath(obj, path) {
+  return path.split('.').reduce((o, k) => (o == null ? undefined : o[k]), obj);
+}
+
+function _markUnsaved() {
+  _content.dirty = true;
+  const badge = document.getElementById('content-dirty-badge');
+  if (badge) badge.style.display = 'inline-flex';
+  if (!_content.unsavedListeners) {
+    window.addEventListener('beforeunload', _beforeUnloadGuard);
+    _content.unsavedListeners = true;
+  }
+}
+function _clearUnsaved() {
+  _content.dirty = false;
+  const badge = document.getElementById('content-dirty-badge');
+  if (badge) badge.style.display = 'none';
+  window.removeEventListener('beforeunload', _beforeUnloadGuard);
+  _content.unsavedListeners = false;
+}
+function _beforeUnloadGuard(e) { e.preventDefault(); e.returnValue = ''; }
+
 function renderConteudo(container) {
+  // Inicializar estado a partir de state.editingContent (já carregado em initDashboard)
+  if (!_content.current) _content.current = JSON.parse(JSON.stringify(state.editingContent || {}));
+
+  const deviceWidths = { desktop: '100%', tablet: '768px', mobile: '375px' };
+  const w = deviceWidths[_content.device];
+
+  container.innerHTML = `
+    <div class="flex flex-col h-full" style="height:100vh;">
+      <!-- Topbar -->
+      <div class="flex items-center gap-3 px-5 py-3 bg-white border-b border-praia-sand-200 flex-wrap">
+        <div>
+          <h1 class="font-display text-lg font-bold text-praia-teal-800">Conteúdo do Site</h1>
+          <p class="text-[11px] text-praia-sand-500">Clique em qualquer texto ou imagem do site para editar.</p>
+        </div>
+        <select id="content-page-sel" onchange="contentSwitchPage(this.value)"
+                class="ml-2 px-3 py-2 rounded-lg border border-praia-sand-300 text-sm font-display font-semibold text-praia-teal-800 bg-white">
+          ${CONTENT_PAGES.map(p => `<option value="${p.id}" ${_content.page===p.id?'selected':''}>${p.label}</option>`).join('')}
+        </select>
+
+        <div class="flex items-center gap-1 bg-praia-sand-100 rounded-lg p-1">
+          ${['desktop','tablet','mobile'].map(d => `
+            <button onclick="contentSetDevice('${d}')" title="${d}"
+              class="px-2.5 py-1 rounded text-sm ${_content.device===d?'bg-white shadow text-praia-teal-800':'text-praia-sand-500'}">
+              ${d==='desktop'?'🖥':d==='tablet'?'💻':'📱'}
+            </button>
+          `).join('')}
+        </div>
+
+        <div class="flex items-center gap-1 ml-1">
+          <button onclick="contentUndo()" title="Anular (Ctrl+Z)"
+            class="w-8 h-8 rounded-lg border border-praia-sand-300 bg-white hover:bg-praia-sand-50 text-praia-teal-700 font-bold">↶</button>
+          <button onclick="contentRedo()" title="Refazer (Ctrl+Shift+Z)"
+            class="w-8 h-8 rounded-lg border border-praia-sand-300 bg-white hover:bg-praia-sand-50 text-praia-teal-700 font-bold">↷</button>
+        </div>
+
+        <button onclick="contentOpenPageSettings()"
+          class="px-3 py-2 rounded-lg border border-praia-sand-300 bg-white text-sm font-display font-semibold text-praia-teal-800 hover:bg-praia-sand-50">
+          ⚙ Definições da página
+        </button>
+
+        <button onclick="contentPreviewVisitor()"
+          class="px-3 py-2 rounded-lg border border-praia-sand-300 bg-white text-sm font-display font-semibold text-praia-teal-800 hover:bg-praia-sand-50">
+          👁 Pré-visualizar
+        </button>
+
+        <span id="content-dirty-badge"
+          class="ml-auto items-center gap-2 px-3 py-1.5 rounded-full bg-amber-100 text-amber-800 text-xs font-semibold"
+          style="display:none;">● alterações por gravar</span>
+
+        <button onclick="contentOpenHistory()"
+          class="px-3 py-2 rounded-lg border border-praia-sand-300 bg-white text-sm font-display font-semibold text-praia-teal-800 hover:bg-praia-sand-50">
+          🕘 Histórico
+        </button>
+
+        <button onclick="contentSave()" class="admin-btn admin-btn-success" style="margin:0;">💾 Gravar</button>
+      </div>
+
+      <!-- Iframe canvas -->
+      <div class="flex-1 bg-praia-sand-100 overflow-auto flex justify-center items-start p-6">
+        <iframe id="content-iframe"
+          src="${_contentIframeSrc()}"
+          style="width:${w};max-width:100%;min-height:80vh;border:0;border-radius:14px;background:white;box-shadow:0 12px 40px rgba(0,0,0,.12);transition:width .25s;">
+        </iframe>
+      </div>
+    </div>
+  `;
+
+  // Bridge postMessage
+  if (!window.__contentBridgeInit) {
+    window.__contentBridgeInit = true;
+    window.addEventListener('message', _contentOnMessage);
+  }
+}
+
+function _contentIframeSrc() {
+  const page = CONTENT_PAGES.find(p => p.id === _content.page) || CONTENT_PAGES[0];
+  return `${page.file}?edit=1&_=${Date.now()}`;
+}
+
+function _contentOnMessage(e) {
+  const m = e.data || {};
+  if (!m.type) return;
+  if (m.type === 'inline-editor-ready') return;
+  if (m.type === 'dirty') { _markUnsaved(); return; }
+  if (m.type === 'content-change') {
+    _contentPushHistory();
+    _setByPath(_content.current, m.path, m.value);
+    _markUnsaved();
+  } else if (m.type === 'content-list-change') {
+    _contentPushHistory();
+    _setByPath(_content.current, m.path, m.value);
+    _markUnsaved();
+  } else if (m.type === 'sections-order-change') {
+    _contentPushHistory();
+    _setByPath(_content.current, 'homepage.sectionsOrder', m.value);
+    _markUnsaved();
+  }
+}
+
+function contentSwitchPage(pageId) {
+  if (_content.dirty && !confirm('Há alterações por gravar. Mudar de página vai recarregar o preview mas as alterações em memória mantêm-se. Continuar?')) {
+    document.getElementById('content-page-sel').value = _content.page;
+    return;
+  }
+  _content.page = pageId;
+  document.getElementById('content-iframe').src = _contentIframeSrc();
+}
+
+function contentSetDevice(d) {
+  _content.device = d;
+  renderConteudo(document.getElementById('admin-content'));
+}
+
+function contentUndo() {
+  if (!_content.history.length) { toast('Nada para anular.', 'info'); return; }
+  _content.redoStack.push(_contentSnapshot());
+  _content.current = _content.history.pop();
+  _markUnsaved();
+  document.getElementById('content-iframe').src = _contentIframeSrc();
+}
+function contentRedo() {
+  if (!_content.redoStack.length) { toast('Nada para refazer.', 'info'); return; }
+  _content.history.push(_contentSnapshot());
+  _content.current = _content.redoStack.pop();
+  _markUnsaved();
+  document.getElementById('content-iframe').src = _contentIframeSrc();
+}
+
+async function contentSave() {
+  // Validações soft
+  const warnings = [];
+  const seoTitle = _getByPath(_content.current, 'seo.homepageTitle') || '';
+  if (seoTitle.length > 60) warnings.push(`Título SEO tem ${seoTitle.length} caracteres (recomendado ≤ 60).`);
+  const seoDesc = _getByPath(_content.current, 'seo.homepageDescription') || '';
+  if (seoDesc.length > 160) warnings.push(`Descrição SEO tem ${seoDesc.length} caracteres (recomendado ≤ 160).`);
+  if (warnings.length && !confirm('Avisos:\n\n' + warnings.join('\n') + '\n\nGravar mesmo assim?')) return;
+
+  try {
+    const res = await fetch('/api/save-content', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ data: _content.current }),
+    });
+    const json = await res.json();
+    if (!res.ok) throw new Error(json.error || 'erro');
+    state.editingContent = JSON.parse(JSON.stringify(_content.current));
+    _clearUnsaved();
+    toast('Conteúdo gravado com sucesso!', 'success');
+    document.getElementById('content-iframe').src = _contentIframeSrc();
+  } catch (e) {
+    toast('Erro ao gravar: ' + e.message, 'error');
+  }
+}
+
+async function contentOpenHistory() {
+  let history = [];
+  try {
+    const res = await fetch('/api/save-content');
+    const json = await res.json();
+    history = json.history || [];
+  } catch {}
+  const html = `
+    <div class="fixed inset-0 bg-black/40 z-50 flex items-center justify-center" onclick="if(event.target===this)this.remove()">
+      <div class="bg-white rounded-2xl p-6 max-w-lg w-full mx-4 max-h-[80vh] flex flex-col">
+        <h2 class="font-display text-xl font-bold text-praia-teal-800 mb-3">Histórico de versões</h2>
+        <p class="text-sm text-praia-sand-500 mb-4">Restaure uma versão anterior do conteúdo.</p>
+        <div class="overflow-y-auto -mx-2 px-2">
+          ${history.length ? history.map(h => `
+            <div class="flex items-center justify-between py-3 border-b border-praia-sand-100">
+              <div>
+                <div class="font-display text-sm font-semibold text-praia-teal-800">${new Date(h.created_at).toLocaleString('pt-PT')}</div>
+                ${h.note ? `<div class="text-xs text-praia-sand-500">${h.note}</div>` : ''}
+              </div>
+              <button onclick="contentRestoreVersion(${h.id})" class="admin-btn admin-btn-primary" style="margin:0;padding:6px 14px;font-size:12px;">Restaurar</button>
+            </div>
+          `).join('') : '<p class="text-sm text-praia-sand-500 text-center py-8">Sem versões anteriores.</p>'}
+        </div>
+        <div class="mt-4 flex justify-end">
+          <button onclick="this.closest('.fixed').remove()" class="admin-btn admin-btn-ghost" style="margin:0;">Fechar</button>
+        </div>
+      </div>
+    </div>
+  `;
+  const div = document.createElement('div');
+  div.innerHTML = html;
+  document.body.appendChild(div.firstElementChild);
+}
+
+async function contentRestoreVersion(id) {
+  if (!confirm('Restaurar esta versão? As alterações por gravar serão perdidas.')) return;
+  try {
+    const res = await fetch('/api/save-content', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ restoreId: id }),
+    });
+    const json = await res.json();
+    if (!res.ok) throw new Error(json.error || 'erro');
+    _content.current = json.data;
+    state.editingContent = JSON.parse(JSON.stringify(json.data));
+    _clearUnsaved();
+    document.querySelector('.fixed.inset-0')?.remove();
+    document.getElementById('content-iframe').src = _contentIframeSrc();
+    toast('Versão restaurada.', 'success');
+  } catch (e) {
+    toast('Erro: ' + e.message, 'error');
+  }
+}
+
+function contentPreviewVisitor() {
+  // Guardar draft em sessionStorage e abrir página com ?preview=draft
+  try {
+    sessionStorage.setItem('_contentDraft', JSON.stringify(_content.current));
+  } catch {}
+  const page = CONTENT_PAGES.find(p => p.id === _content.page) || CONTENT_PAGES[0];
+  window.open(`${page.file}?preview=draft`, '_blank');
+}
+
+function contentOpenPageSettings() {
+  const fields = PAGE_SETTINGS_FIELDS[_content.page] || PAGE_SETTINGS_FIELDS.index;
+  const fieldHtml = fields.map(f => {
+    const val = _getByPath(_content.current, f.path) || '';
+    if (f.type === 'image') {
+      const id = f.path.replace(/\./g,'_');
+      return `
+        <label class="block text-xs uppercase tracking-wider font-semibold text-praia-teal-700 mt-4 mb-2">${f.label}</label>
+        <div class="flex items-center gap-3">
+          <img id="ps-img-${id}" src="${escHtml(val)}" style="width:64px;height:64px;object-fit:cover;border-radius:8px;background:#FAF8F5;border:1px solid #E2D9C6;${val?'':'display:none;'}">
+          <button onclick="document.getElementById('ps-file-${id}').click()" class="admin-btn admin-btn-primary" style="margin:0;">Carregar imagem</button>
+          <input type="file" id="ps-file-${id}" accept="image/*" class="hidden" onchange="contentPageSettingsUploadImg('${f.path}','${id}',this.files[0])">
+        </div>`;
+    }
+    if (f.type === 'textarea') {
+      const len = val.length;
+      const over = f.max && len > f.max;
+      return `
+        <label class="block text-xs uppercase tracking-wider font-semibold text-praia-teal-700 mt-4 mb-2">${f.label}</label>
+        <textarea rows="3" oninput="contentPageSettingsSet('${f.path}',this.value); document.getElementById('ps-count-${f.path.replace(/\./g,'_')}').textContent = this.value.length + (${f.max||0} ? '/${f.max||0}' : '');"
+          class="w-full p-2.5 border border-praia-sand-200 rounded-lg text-sm">${escHtml(val)}</textarea>
+        <div class="text-[10px] text-${over?'amber-600':'praia-sand-400'} mt-1">${f.hint||''} <span id="ps-count-${f.path.replace(/\./g,'_')}">${len}${f.max?'/'+f.max:''}</span></div>`;
+    }
+    const len = val.length;
+    const over = f.max && len > f.max;
+    return `
+      <label class="block text-xs uppercase tracking-wider font-semibold text-praia-teal-700 mt-4 mb-2">${f.label}</label>
+      <input type="text" value="${escHtml(val)}" oninput="contentPageSettingsSet('${f.path}',this.value); document.getElementById('ps-count-${f.path.replace(/\./g,'_')}').textContent = this.value.length + (${f.max||0} ? '/${f.max||0}' : '');"
+        class="w-full p-2.5 border border-praia-sand-200 rounded-lg text-sm">
+      <div class="text-[10px] text-${over?'amber-600':'praia-sand-400'} mt-1">${f.hint||''} <span id="ps-count-${f.path.replace(/\./g,'_')}">${len}${f.max?'/'+f.max:''}</span></div>`;
+  }).join('');
+
+  const html = `
+    <div class="fixed inset-0 bg-black/40 z-50 flex items-center justify-center" onclick="if(event.target===this)this.remove()">
+      <div class="bg-white rounded-2xl p-6 max-w-md w-full mx-4 max-h-[85vh] overflow-y-auto">
+        <h2 class="font-display text-xl font-bold text-praia-teal-800 mb-1">Definições da página</h2>
+        <p class="text-sm text-praia-sand-500 mb-4">SEO, partilhas e imagens globais. Lembre-se de gravar.</p>
+        ${fieldHtml}
+        <div class="mt-6 flex justify-end">
+          <button onclick="this.closest('.fixed').remove()" class="admin-btn admin-btn-primary" style="margin:0;">Fechar</button>
+        </div>
+      </div>
+    </div>
+  `;
+  const div = document.createElement('div');
+  div.innerHTML = html;
+  document.body.appendChild(div.firstElementChild);
+}
+
+function contentPageSettingsSet(path, value) {
+  _contentPushHistory();
+  _setByPath(_content.current, path, value);
+  _markUnsaved();
+}
+
+async function contentPageSettingsUploadImg(path, id, file) {
+  if (!file) return;
+  try {
+    const result = await uploadImageFile(file, 'content');
+    contentPageSettingsSet(path, result.src);
+    const img = document.getElementById('ps-img-' + id);
+    if (img) { img.src = result.src; img.style.display = ''; }
+    toast('Imagem carregada.', 'success');
+  } catch {
+    toast('Erro ao carregar imagem.', 'error');
+  }
+}
+
+// Atalhos de teclado
+document.addEventListener('keydown', (e) => {
+  if (state.currentSection !== 'conteudo') return;
+  if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) { e.preventDefault(); contentUndo(); }
+  else if ((e.ctrlKey || e.metaKey) && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) { e.preventDefault(); contentRedo(); }
+  else if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); contentSave(); }
+});
+
+// Stub para preservar API antiga (caso seja chamada de algum sítio)
+function _legacyRenderConteudo_unused(container) {
   const c = state.editingContent || {};
   const tabs = [
     { id: 'global', label: 'Global' },

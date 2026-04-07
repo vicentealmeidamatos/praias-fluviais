@@ -4,29 +4,37 @@
     "logoUrl": "",
     "logoWhiteUrl": "",
     "ogImage": "brand_assets/praias-fluviais.png",
-    "social": {
-      "facebook": "https://www.facebook.com/praiasfluviais",
-      "instagram": "https://www.instagram.com/guiadaspraiasfluviais",
-      "youtube": "",
-      "tiktok": ""
-    },
-    "nav": {
-      "rede": "Rede",
-      "votar": "Votar",
-      "passaporte": "Passaporte",
-      "novidades": "Novidades",
-      "descontos": "Descontos",
-      "loja": "Loja",
-      "contactos": "Contactos",
-      "onde_encontrar": "Onde Encontrar",
-      "onde_carimbar": "Onde Carimbar"
-    },
+    "social": [
+      { "id": "facebook", "label": "Facebook", "href": "https://www.facebook.com/praiasfluviais", "icon": "facebook" },
+      { "id": "instagram", "label": "Instagram", "href": "https://www.instagram.com/guiadaspraiasfluviais", "icon": "instagram" },
+      { "id": "youtube", "label": "YouTube", "href": "", "icon": "youtube" },
+      { "id": "tiktok", "label": "TikTok", "href": "", "icon": "music" }
+    ],
+    "nav": [
+      { "id": "rede", "label": "Rede", "href": "rede.html", "icon": "network" },
+      { "id": "votar", "label": "Votar", "href": "votar.html", "icon": "vote" },
+      { "id": "passaporte", "label": "Passaporte", "href": "passaporte.html", "icon": "stamp" },
+      { "id": "novidades", "label": "Novidades", "href": "artigos.html", "icon": "newspaper" },
+      { "id": "descontos", "label": "Descontos", "href": "descontos.html", "icon": "percent" },
+      { "id": "loja", "label": "Loja", "href": "loja.html", "icon": "shopping-bag" },
+      { "id": "contactos", "label": "Contactos", "href": "contactos.html", "icon": "mail" }
+    ],
     "footer": {
       "newsletterTitle": "Receba o Guia das Praias Fluviais na sua casa",
       "newsletterDesc": "Subscreva para receber o guia das praias fluviais e passaporte em sua casa.",
       "col1Title": "Explorar",
       "col2Title": "O Guia das Praias Fluviais",
       "col3Title": "Siga-nos",
+      "col1Links": [
+        { "id": "rede", "label": "Rede de Praias", "href": "rede.html" },
+        { "id": "novidades", "label": "Novidades", "href": "artigos.html" },
+        { "id": "descontos", "label": "Descontos", "href": "descontos.html" }
+      ],
+      "col2Links": [
+        { "id": "onde", "label": "Onde Encontrar", "href": "onde-encontrar.html" },
+        { "id": "passaporte", "label": "Passaporte Digital", "href": "passaporte.html" },
+        { "id": "votar", "label": "Votar 2026", "href": "votar.html" }
+      ],
       "copyright": "© 2026 Guia das Praias Fluviais. Todos os direitos reservados.",
       "privacyLabel": "Política de Privacidade"
     }
@@ -46,12 +54,12 @@
     "yearSectionLabel": "Galardão Anual",
     "yearSectionTitle": "Praia Fluvial do Ano 2026",
     "yearSectionDesc": "Todos os anos, milhares de portugueses elegem a sua praia fluvial favorita de todo o território nacional. Uma eleição anual de âmbito nacional que premeia as melhores zonas balneares do interior do país.",
-    "sections": {
-      "destaques": true,
-      "quicklinks": true,
-      "votar": true,
-      "mapa": true
-    }
+    "sectionsOrder": [
+      { "id": "destaques", "visible": true },
+      { "id": "quicklinks", "visible": true },
+      { "id": "votar", "visible": true },
+      { "id": "mapa", "visible": true }
+    ]
   },
   "votar": {
     "label": "Votação 2026",
@@ -132,6 +140,11 @@
     "description": "Carregue o seu passaporte nas praias fluviais e em postos de carimbo espalhados por todo o país. Cada carimbo é um passo para conquistar medalhas e prémios.",
     "searchPlaceholder": "Pesquisar por localidade ou praia...",
     "heroImageUrl": ""
+  },
+  "contactos": {
+    "label": "Fale Connosco",
+    "title": "Contactos",
+    "description": "Estamos disponíveis para responder a dúvidas, sugestões e parcerias."
   },
   "confirmacao": {
     "loadingMessage": "A confirmar encomenda…",
