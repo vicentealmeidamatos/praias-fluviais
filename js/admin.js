@@ -2569,16 +2569,16 @@ function renderConteudoTab(tabId) {
           <img src="${escHtml(value)}" style="height:56px;width:56px;object-fit:cover;border-radius:6px;">
           <button type="button" onclick="removeContentImg('${key}','${id}')" class="admin-btn admin-btn-danger" style="padding:4px 10px;font-size:11px;">Remover</button>
         </div>` : ''}</div>
-      <div id="content-img-drop-${id}" onclick="triggerContentImgUpload('${key}','${id}')"
+      <label id="content-img-drop-${id}" for="content-img-file-${id}"
            ondragover="event.preventDefault();this.style.background='#EEF5F5';this.style.borderColor='#003A40';"
            ondragleave="this.style.background='';this.style.borderColor='#E2D9C6';"
            ondrop="event.preventDefault();this.style.background='';this.style.borderColor='#E2D9C6';handleContentImgFile(event.dataTransfer.files[0],'${key}','${id}');"
-           style="cursor:pointer;border:2px dashed #E2D9C6;border-radius:10px;padding:18px;text-align:center;background:white;transition:all .15s;">
+           style="display:block;cursor:pointer;border:2px dashed #E2D9C6;border-radius:10px;padding:18px;text-align:center;background:white;transition:all .15s;">
         <div style="font-size:22px;margin-bottom:4px;">📁</div>
         <div style="font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;color:#005D56;">Clique ou arraste uma imagem</div>
         <div style="font-size:10px;color:#8B7B5D;margin-top:2px;">PNG, JPG, WebP, SVG (máx 10MB)</div>
-      </div>
-      <input type="file" id="content-img-file-${id}" accept="image/*" style="display:none;" onchange="handleContentImgFile(this.files[0],'${key}','${id}');this.value='';">
+      </label>
+      <input type="file" id="content-img-file-${id}" accept="image/*" style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;" onchange="handleContentImgFile(this.files[0],'${key}','${id}');this.value='';">
     </div>`;
   };
 
