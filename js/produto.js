@@ -76,7 +76,7 @@ function renderProduct() {
   const beachSelect = document.getElementById('beach-select');
   if (p.customizable && beachSection && beachSelect) {
     // Populate options from the already-loaded _beaches array (from beaches.json)
-    beachSelect.innerHTML = `<option value="">Escolhe a tua praia…</option>` +
+    beachSelect.innerHTML = `<option value="">Escolha a sua praia…</option>` +
       _beaches.map(b => `<option value="${b.id}">${b.name}</option>`).join('');
     beachSection.classList.remove('hidden');
   } else if (beachSection) {
@@ -403,7 +403,7 @@ function showLoginModalProduto() {
           <i data-lucide="shopping-cart" class="w-7 h-7 text-praia-teal-700"></i>
         </div>
         <h2 class="font-display font-bold text-xl text-praia-teal-800 mb-2">Inicia sessão para adicionar ao carrinho</h2>
-        <p class="text-praia-sand-500 text-sm mb-6">O carrinho fica guardado na tua conta.</p>
+        <p class="text-praia-sand-500 text-sm mb-6">O carrinho fica guardado na sua conta.</p>
         <a href="auth.html" class="block w-full bg-praia-teal-800 text-white font-display font-bold text-sm uppercase tracking-wider px-5 py-3 rounded-xl hover:bg-praia-teal-700 transition-colors mb-3">
           Entrar / Registar
         </a>

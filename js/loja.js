@@ -151,7 +151,7 @@ function renderProductCard(product) {
               <select id="beach-${product.id}"
                 class="w-full font-body text-sm text-praia-teal-800 bg-white border border-praia-sand-200 rounded-xl px-3 py-2 pr-8 appearance-none focus:outline-none focus:border-praia-teal-500 transition-colors cursor-pointer"
               >
-                <option value="">Escolhe a tua praia…</option>
+                <option value="">Escolha a sua praia…</option>
                 ${_beaches.map(b => `<option value="${b.id}">${b.name}</option>`).join('')}
               </select>
               <div class="pointer-events-none absolute inset-y-0 right-2.5 flex items-center">
@@ -401,8 +401,8 @@ function showLoginModal() {
         <div class="w-14 h-14 bg-praia-teal-50 rounded-full flex items-center justify-center mx-auto mb-4">
           <i data-lucide="shopping-cart" class="w-7 h-7 text-praia-teal-700"></i>
         </div>
-        <h2 class="font-display font-bold text-xl text-praia-teal-800 mb-2">Inicia sessão para adicionar ao carrinho</h2>
-        <p class="text-praia-sand-500 text-sm mb-6">O carrinho fica guardado na tua conta. Podes fazer a compra sem conta no checkout.</p>
+        <h2 class="font-display font-bold text-xl text-praia-teal-800 mb-2">Inicie sessão para adicionar ao carrinho</h2>
+        <p class="text-praia-sand-500 text-sm mb-6">O carrinho fica guardado na sua conta. Pode fazer a compra sem conta no checkout.</p>
         <a href="auth.html" class="block w-full bg-praia-teal-800 text-white font-display font-bold text-sm uppercase tracking-wider px-5 py-3 rounded-xl hover:bg-praia-teal-700 transition-colors mb-3">
           Entrar / Registar
         </a>
