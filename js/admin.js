@@ -2558,16 +2558,29 @@ function renderConteudoTab(tabId) {
       <textarea data-content-key="${key}" rows="${rows}">${escHtml(String(value || ''))}</textarea>
     </div>`;
 
-  const imgField = (key, label, value) => `
+  const imgField = (key, label, value) => {
+    const id = key.replace(/\./g,'_');
+    return `
     <div class="mb-4">
       <label>${label}</label>
-      <div id="img-preview-${key.replace(/\./g,'_')}" style="margin-bottom:6px;">${value ? `<img src="${escHtml(value)}" style="max-height:60px;border-radius:6px;border:2px solid #E2D9C6;">` : ''}</div>
-      <div style="display:flex;gap:8px;align-items:center;">
-        <input type="text" data-content-key="${key}" value="${escHtml(String(value || ''))}" placeholder="URL da imagem" style="flex:1;" oninput="updateImgPreview('${key.replace(/\./g,'_')}', this.value)">
-        <button onclick="triggerContentImgUpload('${key}', '${key.replace(/\./g,'_')}')" class="admin-btn admin-btn-secondary" style="white-space:nowrap;">📁 Upload</button>
+      <input type="hidden" data-content-key="${key}" id="content-img-input-${id}" value="${escHtml(String(value || ''))}">
+      <div id="img-preview-${id}" style="margin-bottom:8px;">${value ? `
+        <div style="display:inline-flex;align-items:center;gap:10px;padding:8px;border:1px solid #E2D9C6;border-radius:10px;background:#FAF8F5;">
+          <img src="${escHtml(value)}" style="height:56px;width:56px;object-fit:cover;border-radius:6px;">
+          <button type="button" onclick="removeContentImg('${key}','${id}')" class="admin-btn admin-btn-danger" style="padding:4px 10px;font-size:11px;">Remover</button>
+        </div>` : ''}</div>
+      <div id="content-img-drop-${id}" onclick="triggerContentImgUpload('${key}','${id}')"
+           ondragover="event.preventDefault();this.style.background='#EEF5F5';this.style.borderColor='#003A40';"
+           ondragleave="this.style.background='';this.style.borderColor='#E2D9C6';"
+           ondrop="event.preventDefault();this.style.background='';this.style.borderColor='#E2D9C6';handleContentImgFile(event.dataTransfer.files[0],'${key}','${id}');"
+           style="cursor:pointer;border:2px dashed #E2D9C6;border-radius:10px;padding:18px;text-align:center;background:white;transition:all .15s;">
+        <div style="font-size:22px;margin-bottom:4px;">📁</div>
+        <div style="font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;color:#005D56;">Clique ou arraste uma imagem</div>
+        <div style="font-size:10px;color:#8B7B5D;margin-top:2px;">PNG, JPG, WebP, SVG (máx 10MB)</div>
       </div>
-      <input type="file" id="content-img-file-${key.replace(/\./g,'_')}" accept="image/*" style="display:none;" onchange="handleContentImgFile(this.files[0],'${key}','${key.replace(/\./g,'_')}');this.value='';">
+      <input type="file" id="content-img-file-${id}" accept="image/*" style="display:none;" onchange="handleContentImgFile(this.files[0],'${key}','${id}');this.value='';">
     </div>`;
+  };
 
   const g = c.global || {};
   const h = c.homepage || {};
@@ -2711,10 +2724,14 @@ function saveConteudoTabValues(tabId, silent = false) {
   if (!silent) toast('Conteúdo guardado (clique em Exportar para descarregar o ficheiro).', 'success');
 }
 
-function updateImgPreview(keyId, url) {
+function updateImgPreview(keyId, url, key) {
   const preview = document.getElementById(`img-preview-${keyId}`);
   if (!preview) return;
-  preview.innerHTML = url ? `<img src="${escHtml(url)}" style="max-height:60px;border-radius:6px;border:2px solid #E2D9C6;">` : '';
+  preview.innerHTML = url ? `
+    <div style="display:inline-flex;align-items:center;gap:10px;padding:8px;border:1px solid #E2D9C6;border-radius:10px;background:#FAF8F5;">
+      <img src="${escHtml(url)}" style="height:56px;width:56px;object-fit:cover;border-radius:6px;">
+      <button type="button" onclick="removeContentImg('${key}','${keyId}')" class="admin-btn admin-btn-danger" style="padding:4px 10px;font-size:11px;">Remover</button>
+    </div>` : '';
 }
 
 function triggerContentImgUpload(key, keyId) {
@@ -2723,12 +2740,25 @@ function triggerContentImgUpload(key, keyId) {
 
 async function handleContentImgFile(file, key, keyId) {
   if (!file || !file.type.startsWith('image/')) return;
-  const result = await uploadImageFile(file, 'content');
-  // Update the input field
-  const input = document.querySelector(`[data-content-key="${key}"]`);
-  if (input) input.value = result.src;
-  updateImgPreview(keyId, result.src);
-  toast('Imagem carregada.', 'success');
+  const drop = document.getElementById(`content-img-drop-${keyId}`);
+  if (drop) { drop.style.opacity = '0.6'; drop.style.pointerEvents = 'none'; }
+  try {
+    const result = await uploadImageFile(file, 'content');
+    const input = document.getElementById(`content-img-input-${keyId}`);
+    if (input) input.value = result.src;
+    updateImgPreview(keyId, result.src, key);
+    toast('Imagem carregada.', 'success');
+  } catch {
+    toast('Erro a carregar imagem.', 'error');
+  } finally {
+    if (drop) { drop.style.opacity = ''; drop.style.pointerEvents = ''; }
+  }
+}
+
+function removeContentImg(key, keyId) {
+  const input = document.getElementById(`content-img-input-${keyId}`);
+  if (input) input.value = '';
+  updateImgPreview(keyId, '', key);
 }
 
 function exportContentJSON() {
