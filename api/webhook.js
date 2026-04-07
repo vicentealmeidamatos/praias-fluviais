@@ -256,6 +256,12 @@ async function createInvoiceXpressInvoice({ email, customerName, taxId, billingA
   const invoiceId = invoiceData.invoice_receipt?.id;
   console.log('[webhook] Fatura InvoiceXpress criada:', invoiceId);
 
+  // Modo teste: deixar como draft (sem valor fiscal, sem envio de email, pode apagar-se)
+  if (process.env.INVOICEXPRESS_TEST_MODE === 'true') {
+    console.log('[webhook] INVOICEXPRESS_TEST_MODE=true → fatura fica como rascunho (não finalizada, não enviada)');
+    return;
+  }
+
   // 3. Finalizar (state: finalized) e enviar por email
   if (invoiceId) {
     await fetch(`${baseUrl}/invoice_receipts/${invoiceId}/change-state.json?api_key=${apiKey}`, {
