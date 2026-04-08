@@ -126,7 +126,7 @@
     actionBar.innerHTML = `
       <button data-act="dup" title="Duplicar elemento (Ctrl+D)">⧉ Duplicar</button>
       <button data-act="link" title="Editar ligação">🔗 Ligação</button>
-      <button data-act="hide" class="danger" title="Esconder (Delete)">✕ Esconder</button>
+      <button data-act="close" class="danger" title="Fechar opções">✕ Fechar</button>
     `;
     // Posição: por cima do elemento se houver espaço; senão por baixo
     const barH = 36;
@@ -145,7 +145,11 @@
       const act = btn.dataset.act;
       if (act === 'dup') duplicateSelected();
       else if (act === 'link') editLinkOfSelected();
-      else if (act === 'hide') applyOverride(selected, { hidden: true });
+      else if (act === 'close') {
+        if (selected) selected.classList.remove('__lo-selected');
+        selected = null;
+        removeHandles();
+      }
     });
   }
 
