@@ -30,6 +30,8 @@
   const SS_PREFIX = '__dl_';
 
   const memCache = Object.create(null);
+  // Capturar fetch original imediatamente, antes do interceptor ser instalado
+  const _rawFetch = global.fetch ? global.fetch.bind(global) : null;
 
   function readSession(name) {
     try {
@@ -46,7 +48,7 @@
 
   async function fetchFromApi(name) {
     try {
-      const r = await fetch(`/api/save-data?dataset=${encodeURIComponent(name)}`, { cache: 'no-store' });
+      const r = await _rawFetch(`/api/save-data?dataset=${encodeURIComponent(name)}`, { cache: 'no-store' });
       if (r.status === 404) return { empty: true };
       if (!r.ok) return null;
       const j = await r.json();
@@ -58,7 +60,7 @@
     const file = FILES[name];
     if (!file) return null;
     try {
-      const r = await fetch(file + '?_=' + Date.now(), { cache: 'no-store' });
+      const r = await _rawFetch(file + '?_=' + Date.now(), { cache: 'no-store' });
       if (!r.ok) return null;
       const data = await r.json();
       return { data, fromFile: true };
@@ -115,7 +117,7 @@
    */
   async function saveDataset(name, data, opts = {}) {
     if (!FILES.hasOwnProperty(name)) throw new Error('dataset desconhecido: ' + name);
-    const r = await fetch('/api/save-data', {
+    const r = await _rawFetch('/api/save-data', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ dataset: name, data, note: opts.note || '' }),
@@ -194,7 +196,7 @@
     };
   }
 
-  const _origFetch = global.fetch ? global.fetch.bind(global) : null;
+  const _origFetch = _rawFetch;
   if (_origFetch && !global.__dlFetchPatched) {
     global.__dlFetchPatched = true;
     global.fetch = function (input, init) {
