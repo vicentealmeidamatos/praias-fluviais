@@ -376,9 +376,13 @@
     }
 
     function makeNavButtons(loc) {
-      const query = encodeURIComponent(getNavQuery(loc));
-      const gmapsUrl = `https://www.google.com/maps/search/?api=1&query=${query}`;
-      const wazeUrl  = `https://waze.com/ul?q=${query}&navigate=yes`;
+      const hasCoord = loc.coordinates?.lat != null && loc.coordinates?.lng != null;
+      const gmapsUrl = hasCoord
+        ? `https://www.google.com/maps/search/?api=1&query=${loc.coordinates.lat},${loc.coordinates.lng}`
+        : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(getNavQuery(loc))}`;
+      const wazeUrl  = hasCoord
+        ? `https://waze.com/ul?ll=${loc.coordinates.lat},${loc.coordinates.lng}&navigate=yes`
+        : `https://waze.com/ul?q=${encodeURIComponent(getNavQuery(loc))}&navigate=yes`;
       return `
         <div style="display:flex;gap:6px;margin-top:8px;">
           <a href="${gmapsUrl}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;padding:5px 10px;border-radius:20px;background:#4285F4;color:white;font-size:11px;font-family:'Poppins',sans-serif;font-weight:600;text-decoration:none;letter-spacing:0.03em;">
@@ -507,9 +511,13 @@
       grouped[concelho].forEach(loc => {
         const typeInfo = TYPES[loc.type] || TYPES['guia'];
         const locIdx = allLocations.indexOf(loc);
-        const navQuery = encodeURIComponent(getNavQuery(loc));
-        const gmapsUrl = `https://www.google.com/maps/search/?api=1&query=${navQuery}`;
-        const wazeUrl  = `https://waze.com/ul?q=${navQuery}&navigate=yes`;
+        const hasCoord = loc.coordinates?.lat != null && loc.coordinates?.lng != null;
+        const gmapsUrl = hasCoord
+          ? `https://www.google.com/maps/search/?api=1&query=${loc.coordinates.lat},${loc.coordinates.lng}`
+          : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(getNavQuery(loc))}`;
+        const wazeUrl  = hasCoord
+          ? `https://waze.com/ul?ll=${loc.coordinates.lat},${loc.coordinates.lng}&navigate=yes`
+          : `https://waze.com/ul?q=${encodeURIComponent(getNavQuery(loc))}&navigate=yes`;
 
         const seasonalBadge = loc.seasonal
           ? `<span class="inline-flex items-center gap-1 text-[10px] font-display font-bold uppercase tracking-wide px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 border border-amber-300 ml-1.5">
