@@ -1,6 +1,151 @@
 // ─── Admin Panel — JSON Visual Editor ───
 const SECTIONS = ['beaches', 'articles', 'locations-guia-passaporte', 'locations-carimbos', 'descontos', 'produtos', 'encomendas', 'utilizadores', 'comentarios', 'conteudo', 'settings'];
 
+// ─── Auto-save: section → dataset name (Supabase via /api/save-data) ───
+const SECTION_TO_DATASET = {
+  'beaches':                    'beaches',
+  'articles':                   'articles',
+  'locations-guia-passaporte':  'locationsGuia',
+  'locations-carimbos':         'locationsCarimbo',
+  'descontos':                  'descontos',
+  'produtos':                   'products',
+  'settings':                   'settings',
+  'conteudo':                   'content',
+  'layout':                     'layout',
+};
+
+const _autoSave = {
+  timers: Object.create(null),
+  pending: new Set(),
+  saving: new Set(),
+  lastError: null,
+};
+
+function _autoSaveStatus(text, kind = 'info') {
+  let el = document.getElementById('admin-autosave-status');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'admin-autosave-status';
+    el.style.cssText = 'position:fixed;bottom:16px;right:16px;z-index:99999;padding:8px 14px;border-radius:10px;font:600 12px system-ui;box-shadow:0 6px 20px rgba(0,0,0,.18);transition:opacity .2s;';
+    document.body.appendChild(el);
+  }
+  const colors = {
+    info:    'background:#003A40;color:#fff;',
+    saving:  'background:#0288D1;color:#fff;',
+    saved:   'background:#43A047;color:#fff;',
+    error:   'background:#C62828;color:#fff;',
+  };
+  el.style.cssText += colors[kind] || colors.info;
+  el.textContent = text;
+  el.style.opacity = '1';
+  if (kind === 'saved') {
+    setTimeout(() => { el.style.opacity = '0'; }, 1800);
+  }
+}
+
+async function _autoSaveFlush(section) {
+  const dataset = SECTION_TO_DATASET[section];
+  if (!dataset) return;
+  if (_autoSave.saving.has(section)) {
+    // Already saving — re-mark to retry after current save finishes
+    _autoSave.pending.add(section);
+    return;
+  }
+  _autoSave.saving.add(section);
+  _autoSave.pending.delete(section);
+  _autoSaveStatus(`A guardar ${section}…`, 'saving');
+  try {
+    const data = state.data[section];
+    if (typeof data === 'undefined') throw new Error('sem dados em memória');
+    if (!window.DataLoader) throw new Error('data-loader não carregado');
+    await window.DataLoader.saveDataset(dataset, data, { note: 'auto-save admin' });
+    _autoSaveStatus(`✓ ${section} guardado`, 'saved');
+    // Notificar listeners (vista Conteúdo, etc.) que o dataset mudou
+    try { window.dispatchEvent(new CustomEvent('datasetChanged:' + dataset, { detail: { section, dataset, data } })); } catch {}
+  } catch (e) {
+    _autoSave.lastError = e;
+    _autoSaveStatus(`✗ Erro a guardar ${section}: ${e.message}`, 'error');
+    console.error('[autoSave]', section, e);
+  } finally {
+    _autoSave.saving.delete(section);
+    if (_autoSave.pending.has(section)) {
+      // Retry pending
+      setTimeout(() => _autoSaveFlush(section), 200);
+    }
+  }
+}
+
+function markDirty(section) {
+  if (!SECTION_TO_DATASET[section]) return;
+  _autoSave.pending.add(section);
+  _renderPublishBar();
+}
+
+function _renderPublishBar() {
+  let bar = document.getElementById('admin-publish-bar');
+  const count = _autoSave.pending.size;
+  if (count === 0) {
+    if (bar) bar.remove();
+    return;
+  }
+  if (!bar) {
+    bar = document.createElement('div');
+    bar.id = 'admin-publish-bar';
+    bar.style.cssText = 'position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:99998;display:flex;align-items:center;gap:14px;background:#003A40;color:#fff;padding:12px 18px;border-radius:14px;box-shadow:0 18px 50px rgba(0,0,0,.35);font:600 13px Poppins,system-ui,sans-serif;';
+    document.body.appendChild(bar);
+  }
+  bar.innerHTML = `
+    <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#FFEB3B;box-shadow:0 0 12px #FFEB3B;"></span>
+    <span>${count} ${count === 1 ? 'alteração' : 'alterações'} por publicar</span>
+    <button onclick="publishPendingChanges()" style="background:#FFEB3B;color:#003A40;border:0;padding:8px 16px;border-radius:9px;font:700 12px Poppins,system-ui,sans-serif;cursor:pointer;letter-spacing:.02em;">Publicar no site</button>
+    <button onclick="discardPendingChanges()" title="Descartar (recarrega da base de dados)" style="background:transparent;color:rgba(255,255,255,.6);border:0;padding:6px 8px;border-radius:8px;font:600 11px Poppins,system-ui,sans-serif;cursor:pointer;">Descartar</button>
+  `;
+}
+
+async function publishPendingChanges() {
+  if (_autoSave.pending.size === 0) return;
+  const sections = Array.from(_autoSave.pending);
+  const list = sections.map(s => `• ${s}`).join('\n');
+  if (!confirm(`Vai publicar as seguintes alterações no site público:\n\n${list}\n\nConfirmar?`)) return;
+
+  const bar = document.getElementById('admin-publish-bar');
+  if (bar) bar.querySelector('button').disabled = true;
+
+  let okCount = 0, failCount = 0;
+  for (const section of sections) {
+    try {
+      await _autoSaveFlush(section);
+      okCount++;
+    } catch {
+      failCount++;
+    }
+  }
+  if (failCount === 0) {
+    toast(`✓ ${okCount} alteraç${okCount === 1 ? 'ão' : 'ões'} publicada${okCount === 1 ? '' : 's'} no site`, 'success');
+  } else {
+    toast(`Publicadas ${okCount}; ${failCount} falharam`, 'error');
+  }
+  _renderPublishBar();
+}
+
+async function discardPendingChanges() {
+  if (!confirm('Descartar todas as alterações por publicar e recarregar do servidor?')) return;
+  _autoSave.pending.clear();
+  _renderPublishBar();
+  if (window.DataLoader) window.DataLoader.invalidate();
+  location.reload();
+}
+
+// Permite que outras vistas (Conteúdo) reescrevam um dataset e re-rendam tudo
+function setDataset(section, data, { save = true } = {}) {
+  state.data[section] = data;
+  if (save) markDirty(section);
+  // Re-render se a secção actual coincide
+  if (state.currentSection === section) {
+    try { renderSection(); } catch {}
+  }
+}
+
 // ─── Supabase (read-only, for Utilizadores tab) ───
 const ADMIN_SUPABASE_URL      = 'https://tjvhnbukzfyxtpkrhpsw.supabase.co';
 const ADMIN_SUPABASE_ANON_KEY = 'sb_publishable_ke--Q7xNRNCxTjgxFCNFIQ_6zPD3zM3';
@@ -129,6 +274,11 @@ async function initDashboard() {
     state.data['conteudo'] = {};
     state.editingContent = {};
   }
+  // Layout overrides (carregado de Supabase via fetch interceptor que cai para vazio se não existir)
+  try {
+    if (window.DataLoader) state.data['layout'] = await window.DataLoader.loadDataset('layout') || {};
+    else state.data['layout'] = {};
+  } catch { state.data['layout'] = {}; }
   // Encomendas: loaded lazily from Supabase when tab is opened
   state.data['encomendas'] = null;
   state.data['utilizadores'] = null;
@@ -678,6 +828,7 @@ function saveBeach(index) {
   else state.data.beaches.push(beach);
 
   state.editingPhotos = [];
+  markDirty('beaches');
   toast('Praia guardada com sucesso!', 'success');
   renderSection();
 }
@@ -820,6 +971,7 @@ function saveArticle(index) {
   else state.data.articles.push(article);
 
   state.editingArticleImage = null;
+  markDirty('articles');
   toast('Artigo guardado!', 'success');
   renderSection();
 }
@@ -970,6 +1122,7 @@ function saveLocationGuia(index) {
   if (!state.data[section]) state.data[section] = [];
   if (index !== null) state.data[section][index] = loc;
   else state.data[section].push(loc);
+  markDirty('locations-guia-passaporte');
   toast('Local guardado!', 'success');
   renderSection();
 }
@@ -1117,6 +1270,7 @@ function saveLocationPassaporte(index) {
   if (!state.data[section]) state.data[section] = [];
   if (index !== null) state.data[section][index] = loc;
   else state.data[section].push(loc);
+  markDirty('locations-carimbos');
   toast('Posto de carimbo guardado!', 'success');
   renderSection();
 }
@@ -1243,6 +1397,7 @@ function saveDesconto(index) {
   };
   if (index !== null) state.data.descontos[index] = d;
   else state.data.descontos.push(d);
+  markDirty('descontos');
   toast('Desconto guardado!', 'success');
   renderSection();
 }
@@ -1520,6 +1675,7 @@ function saveSettings() {
     freeShippingThreshold: Math.round(parseFloat(document.getElementById('s-shipping-free')?.value || '30.00') * 100),
     // previousWinners already flushed into state by _flushWinnersFromDOM()
   };
+  markDirty('settings');
   toast('Configurações guardadas!', 'success');
 }
 
@@ -1527,6 +1683,7 @@ function saveSettings() {
 function deleteItem(section, index) {
   if (!confirm('Tem a certeza que deseja eliminar?')) return;
   state.data[section].splice(index, 1);
+  markDirty(section);
   toast('Item eliminado.', 'success');
   renderSection();
 }
@@ -2302,22 +2459,24 @@ function saveProduct() {
   }
 
   state.data['produtos'] = products;
+  markDirty('produtos');
   document.getElementById('product-modal').classList.add('hidden');
   renderDashboard();
-  toast('Produto guardado. Usa "Exportar Tudo" para guardar as alterações.', 'success');
+  toast('Produto guardado.', 'success');
 }
 
 function toggleProductAvailability(productId) {
   const products = state.data['produtos'] || [];
   const p = products.find(p => p.id === productId);
-  if (p) { p.available = !p.available; renderDashboard(); }
+  if (p) { p.available = !p.available; markDirty('produtos'); renderDashboard(); }
 }
 
 function deleteProduct(productId) {
   if (!confirm('Remover este produto?')) return;
   state.data['produtos'] = (state.data['produtos'] || []).filter(p => p.id !== productId);
+  markDirty('produtos');
   renderDashboard();
-  toast('Produto removido. Usa "Exportar Tudo" para guardar.', 'success');
+  toast('Produto removido.', 'success');
 }
 
 // ─── Encomendas (leitura do Supabase) ────────────────────────────────────────
@@ -2587,7 +2746,19 @@ function renderConteudo(container) {
         </div>
         <select id="content-page-sel" onchange="contentSwitchPage(this.value)"
                 class="ml-2 px-3 py-2 rounded-lg border border-praia-sand-300 text-sm font-display font-semibold text-praia-teal-800 bg-white">
-          ${CONTENT_PAGES.map(p => `<option value="${p.id}" ${_content.page===p.id?'selected':''}>${p.label}</option>`).join('')}
+          <optgroup label="Páginas estáticas">
+            ${CONTENT_PAGES.map(p => `<option value="${p.id}" ${_content.page===p.id?'selected':''}>${p.label}</option>`).join('')}
+          </optgroup>
+          <optgroup label="Páginas dinâmicas">
+            <option value="__dyn:praia"   ${_content.page==='__dyn:praia'?'selected':''}>Praia individual…</option>
+            <option value="__dyn:artigo"  ${_content.page==='__dyn:artigo'?'selected':''}>Artigo individual…</option>
+            <option value="__dyn:produto" ${_content.page==='__dyn:produto'?'selected':''}>Produto individual…</option>
+          </optgroup>
+        </select>
+        <select id="content-dyn-sel" onchange="contentSwitchDynItem(this.value)"
+                class="px-3 py-2 rounded-lg border border-praia-sand-300 text-sm font-display font-semibold text-praia-teal-800 bg-white"
+                style="display:${(_content.page||'').startsWith('__dyn:') || (_content.dynKind?true:false) ? 'inline-block':'none'};">
+          ${_renderDynOptions()}
         </select>
 
         <div class="flex items-center gap-1 bg-praia-sand-100 rounded-lg p-1">
@@ -2614,6 +2785,11 @@ function renderConteudo(container) {
         <button onclick="contentPreviewVisitor()"
           class="px-3 py-2 rounded-lg border border-praia-sand-300 bg-white text-sm font-display font-semibold text-praia-teal-800 hover:bg-praia-sand-50">
           👁 Pré-visualizar
+        </button>
+
+        <button onclick="contentToggleLayoutMode()" id="content-layout-btn" title="Modo Layout (drag/resize)"
+          class="px-3 py-2 rounded-lg border text-sm font-display font-semibold ${_content.layoutMode?'bg-praia-yellow-400 text-praia-teal-800 border-praia-yellow-500':'border-praia-sand-300 bg-white text-praia-teal-800 hover:bg-praia-sand-50'}">
+          🎯 Layout
         </button>
 
         <button onclick="contentToggleFullscreen()" title="${fs?'Sair de ecrã inteiro (Esc)':'Ecrã inteiro (F)'}"
@@ -2651,8 +2827,36 @@ function renderConteudo(container) {
 }
 
 function _contentIframeSrc() {
+  // Suporta páginas dinâmicas: _content.page = 'praia:<id>' | 'artigo:<slug>' | 'produto:<id>'
+  if (_content.dynKind && _content.dynItem) {
+    if (_content.dynKind === 'praia')   return `praia.html?id=${encodeURIComponent(_content.dynItem)}&edit=1&_=${Date.now()}`;
+    if (_content.dynKind === 'artigo')  return `artigo.html?slug=${encodeURIComponent(_content.dynItem)}&edit=1&_=${Date.now()}`;
+    if (_content.dynKind === 'produto') return `produto.html?id=${encodeURIComponent(_content.dynItem)}&edit=1&_=${Date.now()}`;
+  }
   const page = CONTENT_PAGES.find(p => p.id === _content.page) || CONTENT_PAGES[0];
   return `${page.file}?edit=1&_=${Date.now()}`;
+}
+
+function _renderDynOptions() {
+  const kind = _content.dynKind;
+  if (!kind) return '<option value="">— escolher —</option>';
+  let items = [];
+  if (kind === 'praia') {
+    items = (state.data['beaches'] || []).map(b => ({ id: b.id, label: b.name }));
+  } else if (kind === 'artigo') {
+    items = (state.data['articles'] || []).map(a => ({ id: a.slug, label: a.title }));
+  } else if (kind === 'produto') {
+    items = (state.data['produtos'] || []).map(p => ({ id: p.id, label: p.name }));
+  }
+  return ['<option value="">— escolher —</option>']
+    .concat(items.map(it => `<option value="${escHtml(it.id)}" ${_content.dynItem===it.id?'selected':''}>${escHtml(it.label)}</option>`))
+    .join('');
+}
+
+function contentSwitchDynItem(itemId) {
+  if (!itemId) return;
+  _content.dynItem = itemId;
+  _reloadContentIframe();
 }
 
 function _contentOnMessage(e) {
@@ -2679,6 +2883,35 @@ function _contentOnMessage(e) {
     const existing = _content.current.overrides[m.page][m.selector] || {};
     _content.current.overrides[m.page][m.selector] = { ...existing, ...m.value };
     _markUnsaved();
+  } else if (m.type === 'layout-change') {
+    // Acumula em state.data.layout[page][selector] (objecto, não breakpoint-aware nesta primeira iteração)
+    if (!state.data.layout) state.data.layout = {};
+    if (!state.data.layout[m.page]) state.data.layout[m.page] = {};
+    const existing = state.data.layout[m.page][m.selector] || {};
+    // Estrutura compatível com layout-overrides.js: { desktop: {...} }
+    const merged = { ...(existing.desktop || {}), ...m.value };
+    state.data.layout[m.page][m.selector] = { ...existing, desktop: merged };
+    if (!SECTION_TO_DATASET['layout']) SECTION_TO_DATASET['layout'] = 'layout';
+    state.data['layout'] = state.data.layout;
+    markDirty('layout');
+  }
+}
+
+function contentToggleLayoutMode() {
+  _content.layoutMode = !_content.layoutMode;
+  const iframe = document.getElementById('content-iframe');
+  if (iframe && iframe.contentWindow) {
+    try { iframe.contentWindow.postMessage({ type: 'layout-mode', on: _content.layoutMode }, '*'); } catch {}
+  }
+  const btn = document.getElementById('content-layout-btn');
+  if (btn) {
+    if (_content.layoutMode) {
+      btn.classList.add('bg-praia-yellow-400','border-praia-yellow-500');
+      btn.classList.remove('bg-white','border-praia-sand-300');
+    } else {
+      btn.classList.remove('bg-praia-yellow-400','border-praia-yellow-500');
+      btn.classList.add('bg-white','border-praia-sand-300');
+    }
   }
 }
 
@@ -2687,8 +2920,40 @@ function contentSwitchPage(pageId) {
     document.getElementById('content-page-sel').value = _content.page;
     return;
   }
+  // Páginas dinâmicas: __dyn:praia | __dyn:artigo | __dyn:produto
+  if (typeof pageId === 'string' && pageId.startsWith('__dyn:')) {
+    _content.dynKind = pageId.split(':')[1];
+    _content.dynItem = null;
+    _content.page = pageId;
+    // Re-render para mostrar o segundo dropdown
+    renderConteudo(document.getElementById('admin-content'));
+    return;
+  }
+  _content.dynKind = null;
+  _content.dynItem = null;
   _content.page = pageId;
-  document.getElementById('content-iframe').src = _contentIframeSrc();
+  _reloadContentIframe();
+}
+
+function _reloadContentIframe() {
+  const iframe = document.getElementById('content-iframe');
+  if (!iframe) {
+    renderConteudo(document.getElementById('admin-content'));
+    return;
+  }
+  // Listener de load para garantir re-init do editor inline depois do DOM ficar pronto
+  const onLoad = () => {
+    iframe.removeEventListener('load', onLoad);
+    // Pequeno delay para deixar content-loader correr
+    setTimeout(() => {
+      try { iframe.contentWindow.postMessage({ type: 're-init-editor' }, '*'); } catch {}
+    }, 200);
+    // Repetições defensivas (GSAP/scripts tardios)
+    setTimeout(() => { try { iframe.contentWindow.postMessage({ type: 're-init-editor' }, '*'); } catch {} }, 800);
+    setTimeout(() => { try { iframe.contentWindow.postMessage({ type: 're-init-editor' }, '*'); } catch {} }, 2000);
+  };
+  iframe.addEventListener('load', onLoad);
+  iframe.src = _contentIframeSrc();
 }
 
 function contentSetDevice(d) {

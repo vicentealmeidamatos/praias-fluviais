@@ -302,6 +302,10 @@
       s.src = '/js/inline-editor.js';
       s.defer = true;
       document.body.appendChild(s);
+      const s2 = document.createElement('script');
+      s2.src = '/js/layout-edit-mode.js';
+      s2.defer = true;
+      document.body.appendChild(s2);
     }
   } catch (e) {
     console.warn('[content-loader] erro:', e.message);

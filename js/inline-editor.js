@@ -839,6 +839,25 @@
       });
     });
 
+    // Ícones Lucide — clicar abre picker
+    root.querySelectorAll('[data-lucide], svg.lucide, i[data-lucide]').forEach((el) => {
+      // Quando o lucide cria SVG, mantém data-lucide no <i> original ou no <svg>
+      const host = el.closest('[data-lucide]') || el;
+      if (host.__ieIconReady) return;
+      if (host.closest('.__ie-toolbar, .__ie-modal')) return;
+      host.__ieIconReady = true;
+      host.style.cursor = 'pointer';
+      host.style.transition = 'outline-color .12s, background .12s';
+      host.style.outline = '2px dashed transparent';
+      host.style.outlineOffset = '3px';
+      host.addEventListener('mouseenter', () => host.style.outlineColor = '#FFEB3B');
+      host.addEventListener('mouseleave', () => host.style.outlineColor = 'transparent');
+      host.addEventListener('click', (e) => {
+        e.preventDefault(); e.stopPropagation();
+        openIconPicker(host);
+      }, true);
+    });
+
     // Links sem texto editável (ex: ícones sociais, botões com ícone) — ainda assim editar href
     root.querySelectorAll('a').forEach((a) => {
       if (a.__ieUniversal) return;
@@ -857,6 +876,62 @@
         }
       }, true);
     });
+  }
+
+  function openIconPicker(host) {
+    // Lista de ícones Lucide a partir do global `lucide.icons` (carregado por lucide.min.js)
+    let names = [];
+    try {
+      if (window.lucide && window.lucide.icons) {
+        names = Object.keys(window.lucide.icons);
+      }
+    } catch {}
+    if (!names.length) {
+      // Fallback: lista mínima de ícones comuns
+      names = ['map','navigation','tent','tree-pine','waves','sun','umbrella','car','utensils','home','heart','star','search','user','phone','mail','globe','camera','image','calendar','clock','info','check','x','arrow-right','arrow-left','arrow-up','arrow-down','menu','settings','shopping-cart','tag','gift','book','book-open','award','flag','compass','thermometer','droplets','wind','cloud','snowflake','flame','leaf','flower','fish'];
+    }
+    const current = host.getAttribute('data-lucide') || '';
+
+    const modal = createModal(`
+      <h3>Escolher ícone</h3>
+      <p style="font-size:12px;color:#5C5340;margin:0 0 6px;">Ícone actual: <strong>${current || '—'}</strong></p>
+      <input type="text" id="__ie-icon-q" placeholder="Procurar ícone (ex: map, sun, leaf)…" style="width:100%;padding:8px 12px;border:1px solid #E2D9C6;border-radius:8px;font-size:13px;">
+      <div id="__ie-icon-grid" style="margin-top:10px;max-height:380px;overflow-y:auto;display:grid;grid-template-columns:repeat(8,1fr);gap:6px;background:#FAF8F5;padding:10px;border-radius:10px;border:1px solid #E2D9C6;"></div>
+      <div class="__ie-modal-actions">
+        <button class="__ie-btn-ghost" id="__ie-cancel">Cancelar</button>
+      </div>
+    `);
+    const grid = modal.querySelector('#__ie-icon-grid');
+    const input = modal.querySelector('#__ie-icon-q');
+    modal.querySelector('#__ie-cancel').addEventListener('click', closeModal);
+
+    function render(filter) {
+      const f = (filter || '').toLowerCase().trim();
+      const matched = (f ? names.filter(n => n.toLowerCase().includes(f)) : names).slice(0, 240);
+      grid.innerHTML = matched.map(n => `
+        <button data-icon="${n}" title="${n}" style="aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:white;border:1px solid #E2D9C6;border-radius:8px;cursor:pointer;padding:8px;${n===current?'outline:2px solid #003A40;':''}">
+          <i data-lucide="${n}" style="width:20px;height:20px;color:#003A40;"></i>
+        </button>
+      `).join('');
+      try { window.lucide && window.lucide.createIcons && window.lucide.createIcons({ attrs: {} }); } catch {}
+      grid.querySelectorAll('button[data-icon]').forEach(btn => {
+        btn.addEventListener('click', (ev) => {
+          ev.preventDefault();
+          const name = btn.getAttribute('data-icon');
+          host.setAttribute('data-lucide', name);
+          // Substituir SVG actual
+          host.innerHTML = '';
+          try {
+            window.lucide && window.lucide.createIcons && window.lucide.createIcons({ nameAttr: 'data-lucide' });
+          } catch {}
+          sendOverride(host, { icon: name });
+          closeModal();
+        });
+      });
+    }
+    render('');
+    input.addEventListener('input', () => render(input.value));
+    setTimeout(() => input.focus(), 30);
   }
 
   function openUniversalImagePicker(img) {
@@ -897,11 +972,23 @@
   }
 
   // Aplicar agora e re-aplicar quando o DOM mudar (e.g., após cms-rebuild)
-  makeUniversallyEditable(document.body);
+  function reapply() {
+    try { makeUniversallyEditable(document.body); } catch {}
+  }
+  reapply();
+  // Garantia: re-aplicar depois do content-loader terminar
+  document.addEventListener('contentLoaded', () => { setTimeout(reapply, 30); });
+  // Garantia: re-aplicar quando o admin pede explicitamente
+  window.addEventListener('message', (e) => {
+    if (e.data && e.data.type === 're-init-editor') reapply();
+  });
+  // Re-aplicar a cada 1s durante os primeiros 5s (defesa em profundidade contra
+  // GSAP/scripts que rerenderizam DOM tarde)
+  let _ri = 0;
+  const _riT = setInterval(() => { reapply(); if (++_ri >= 5) clearInterval(_riT); }, 1000);
   const _mo = new MutationObserver(() => {
-    // Throttle simples
     clearTimeout(_mo._t);
-    _mo._t = setTimeout(() => makeUniversallyEditable(document.body), 200);
+    _mo._t = setTimeout(reapply, 80);
   });
   _mo.observe(document.body, { childList: true, subtree: true });
 
