@@ -223,6 +223,55 @@ function showLogin() {
     </div>`;
 }
 
+function showLoadingScreen() {
+  const app = document.getElementById('admin-app');
+  if (!app) return;
+  app.innerHTML = `
+    <div id="admin-loader" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#FAF8F5 0%,#F5F0E8 100%);z-index:9999;">
+      <div style="text-align:center;animation:loaderFadeIn .4s ease;">
+        <img src="brand_assets/logotipo.png" alt="Praias Fluviais" style="height:42px;margin:0 auto 28px;display:block;filter:brightness(0) saturate(100%) invert(14%) sepia(59%) saturate(2000%) hue-rotate(160deg);animation:loaderPulse 2s ease-in-out infinite;">
+        <div style="position:relative;width:64px;height:64px;margin:0 auto 22px;">
+          <svg viewBox="0 0 64 64" style="width:64px;height:64px;animation:loaderSpin 1.4s linear infinite;">
+            <defs>
+              <linearGradient id="lgrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#003A40"/>
+                <stop offset="100%" stop-color="#0288D1"/>
+              </linearGradient>
+            </defs>
+            <circle cx="32" cy="32" r="26" fill="none" stroke="#E2D9C6" stroke-width="5"/>
+            <circle cx="32" cy="32" r="26" fill="none" stroke="url(#lgrad)" stroke-width="5" stroke-linecap="round" stroke-dasharray="60 200" />
+          </svg>
+        </div>
+        <p style="font:700 14px 'Poppins',system-ui,sans-serif;color:#003A40;letter-spacing:.04em;margin:0 0 6px;">A carregar painel</p>
+        <p id="admin-loader-msg" style="font:500 12px 'Open Sans',system-ui,sans-serif;color:#8A7D60;margin:0;min-height:18px;">A preparar o ambiente…</p>
+      </div>
+      <style>
+        @keyframes loaderFadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+        @keyframes loaderPulse  { 0%,100% { opacity:1; } 50% { opacity:.55; } }
+        @keyframes loaderSpin   { to { transform: rotate(360deg); } }
+      </style>
+    </div>`;
+  // Mensagens cíclicas para sensação de progresso
+  const msgs = [
+    'A preparar o ambiente…',
+    'A obter conteúdos do site…',
+    'A sincronizar com a base de dados…',
+    'A carregar praias e artigos…',
+    'A organizar produtos e descontos…',
+    'Quase pronto…',
+  ];
+  let i = 0;
+  const el = document.getElementById('admin-loader-msg');
+  const it = setInterval(() => {
+    i = (i + 1) % msgs.length;
+    if (el) {
+      el.style.opacity = '0';
+      setTimeout(() => { el.textContent = msgs[i]; el.style.opacity = '1'; }, 150);
+    }
+    if (!document.getElementById('admin-loader')) clearInterval(it);
+  }, 1100);
+}
+
 async function simpleHash(str) {
   const data = new TextEncoder().encode(str);
   const hash = await crypto.subtle.digest('SHA-256', data);
@@ -235,6 +284,7 @@ async function loginAdmin() {
   const correctHash = await simpleHash('Johnny Bravo');
   if (inputHash === correctHash) {
     sessionStorage.setItem('admin_authenticated', 'true');
+    showLoadingScreen();
     initDashboard();
   } else {
     const errEl = document.getElementById('login-error');
@@ -2707,10 +2757,32 @@ function _getByPath(obj, path) {
   return path.split('.').reduce((o, k) => (o == null ? undefined : o[k]), obj);
 }
 
+function _updateSaveBtn() {
+  const btn = document.getElementById('content-save-btn');
+  if (!btn) return;
+  if (_content.dirty) {
+    btn.disabled = false;
+    btn.style.background = '#43A047';
+    btn.style.cursor = 'pointer';
+    btn.style.opacity = '1';
+    btn.style.boxShadow = '0 6px 18px rgba(67,160,71,.32)';
+    btn.onmouseover = () => { btn.style.transform = 'translateY(-1px)'; btn.style.boxShadow = '0 10px 24px rgba(67,160,71,.42)'; };
+    btn.onmouseout  = () => { btn.style.transform = ''; btn.style.boxShadow = '0 6px 18px rgba(67,160,71,.32)'; };
+  } else {
+    btn.disabled = true;
+    btn.style.background = '#C4B898';
+    btn.style.cursor = 'not-allowed';
+    btn.style.opacity = '.55';
+    btn.style.boxShadow = '';
+    btn.onmouseover = null;
+    btn.onmouseout = null;
+  }
+}
 function _markUnsaved() {
   _content.dirty = true;
   const badge = document.getElementById('content-dirty-badge');
   if (badge) badge.style.display = 'inline-flex';
+  _updateSaveBtn();
   if (!_content.unsavedListeners) {
     window.addEventListener('beforeunload', _beforeUnloadGuard);
     _content.unsavedListeners = true;
@@ -2720,6 +2792,7 @@ function _clearUnsaved() {
   _content.dirty = false;
   const badge = document.getElementById('content-dirty-badge');
   if (badge) badge.style.display = 'none';
+  _updateSaveBtn();
   window.removeEventListener('beforeunload', _beforeUnloadGuard);
   _content.unsavedListeners = false;
 }
@@ -2736,16 +2809,19 @@ function renderConteudo(container) {
   const wrapStyle = fs
     ? 'position:fixed;inset:0;z-index:9999;background:#FAF8F5;display:flex;flex-direction:column;'
     : 'height:100vh;display:flex;flex-direction:column;';
+  // Estilos partilhados dos botões topbar — cápsulas elegantes com hover lift
+  const tbBtn   = "display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 14px;border-radius:10px;border:1px solid #E2D9C6;background:#fff;color:#003A40;font:600 12.5px 'Poppins',system-ui,sans-serif;letter-spacing:.01em;cursor:pointer;transition:transform .15s cubic-bezier(.34,1.56,.64,1),box-shadow .15s,border-color .15s,background .15s;box-shadow:0 1px 0 rgba(0,58,64,.04);";
+  const tbBtnH  = "onmouseover=\"this.style.borderColor='#003A40';this.style.transform='translateY(-1px)';this.style.boxShadow='0 6px 16px rgba(0,58,64,.12)'\" onmouseout=\"this.style.borderColor='#E2D9C6';this.style.transform='';this.style.boxShadow='0 1px 0 rgba(0,58,64,.04)'\"";
   container.innerHTML = `
     <div class="flex flex-col" id="content-wrap" style="${wrapStyle}">
       <!-- Topbar -->
-      <div class="flex items-center gap-3 px-5 py-3 bg-white border-b border-praia-sand-200 flex-wrap">
+      <div class="flex items-center gap-2.5 px-5 py-3 bg-white border-b border-praia-sand-200 flex-wrap" style="box-shadow:0 1px 0 rgba(0,58,64,.04);">
         <div>
           <h1 class="font-display text-lg font-bold text-praia-teal-800">Conteúdo do Site</h1>
           <p class="text-[11px] text-praia-sand-500">Clique em qualquer texto ou imagem do site para editar.</p>
         </div>
         <select id="content-page-sel" onchange="contentSwitchPage(this.value)"
-                class="ml-2 px-3 py-2 rounded-lg border border-praia-sand-300 text-sm font-display font-semibold text-praia-teal-800 bg-white">
+                style="${tbBtn}padding-right:32px;background-image:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23003A40%22 stroke-width=%223%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><polyline points=%226 9 12 15 18 9%22/></svg>');background-repeat:no-repeat;background-position:right 12px center;-webkit-appearance:none;appearance:none;" ${tbBtnH}>
           <optgroup label="Páginas estáticas">
             ${CONTENT_PAGES.map(p => `<option value="${p.id}" ${_content.page===p.id?'selected':''}>${p.label}</option>`).join('')}
           </optgroup>
@@ -2756,57 +2832,66 @@ function renderConteudo(container) {
           </optgroup>
         </select>
         <select id="content-dyn-sel" onchange="contentSwitchDynItem(this.value)"
-                class="px-3 py-2 rounded-lg border border-praia-sand-300 text-sm font-display font-semibold text-praia-teal-800 bg-white"
-                style="display:${(_content.page||'').startsWith('__dyn:') || (_content.dynKind?true:false) ? 'inline-block':'none'};">
+                style="${tbBtn}padding-right:32px;background-image:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23003A40%22 stroke-width=%223%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><polyline points=%226 9 12 15 18 9%22/></svg>');background-repeat:no-repeat;background-position:right 12px center;-webkit-appearance:none;appearance:none;display:${(_content.page||'').startsWith('__dyn:') || (_content.dynKind?true:false) ? 'inline-flex':'none'};" ${tbBtnH}>
           ${_renderDynOptions()}
         </select>
 
-        <div class="flex items-center gap-1 bg-praia-sand-100 rounded-lg p-1">
-          ${['desktop','tablet','mobile'].map(d => `
-            <button onclick="contentSetDevice('${d}')" title="${d}"
-              class="px-2.5 py-1 rounded text-sm ${_content.device===d?'bg-white shadow text-praia-teal-800':'text-praia-sand-500'}">
-              ${d==='desktop'?'🖥':d==='tablet'?'💻':'📱'}
-            </button>
-          `).join('')}
+        <div class="flex items-center" style="background:#F5F0E8;border:1px solid #E2D9C6;border-radius:10px;padding:3px;gap:2px;">
+          ${['desktop','tablet','mobile'].map(d => {
+            const active = _content.device===d;
+            const ico = d==='desktop'
+              ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>'
+              : d==='tablet'
+              ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>'
+              : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>';
+            return `<button onclick="contentSetDevice('${d}')" title="${d}"
+              style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:30px;border-radius:7px;border:0;cursor:pointer;${active?'background:#fff;color:#003A40;box-shadow:0 2px 6px rgba(0,58,64,.12);':'background:transparent;color:#8A7D60;'}transition:all .15s;">${ico}</button>`;
+          }).join('')}
         </div>
 
-        <div class="flex items-center gap-1 ml-1">
+        <div class="flex items-center" style="gap:4px;">
           <button onclick="contentUndo()" title="Anular (Ctrl+Z)"
-            class="w-8 h-8 rounded-lg border border-praia-sand-300 bg-white hover:bg-praia-sand-50 text-praia-teal-700 font-bold">↶</button>
+            style="${tbBtn}width:38px;padding:0;justify-content:center;font-size:16px;" ${tbBtnH}>↶</button>
           <button onclick="contentRedo()" title="Refazer (Ctrl+Shift+Z)"
-            class="w-8 h-8 rounded-lg border border-praia-sand-300 bg-white hover:bg-praia-sand-50 text-praia-teal-700 font-bold">↷</button>
+            style="${tbBtn}width:38px;padding:0;justify-content:center;font-size:16px;" ${tbBtnH}>↷</button>
         </div>
 
-        <button onclick="contentOpenPageSettings()"
-          class="px-3 py-2 rounded-lg border border-praia-sand-300 bg-white text-sm font-display font-semibold text-praia-teal-800 hover:bg-praia-sand-50">
-          ⚙ Definições da página
+        <button onclick="contentOpenPageSettings()" style="${tbBtn}" ${tbBtnH}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          Definições
         </button>
 
-        <button onclick="contentPreviewVisitor()"
-          class="px-3 py-2 rounded-lg border border-praia-sand-300 bg-white text-sm font-display font-semibold text-praia-teal-800 hover:bg-praia-sand-50">
-          👁 Pré-visualizar
+        <button onclick="contentPreviewVisitor()" style="${tbBtn}" ${tbBtnH}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          Pré-visualizar
         </button>
 
         <button onclick="contentToggleLayoutMode()" id="content-layout-btn" title="Modo Layout (drag/resize)"
-          class="px-3 py-2 rounded-lg border text-sm font-display font-semibold ${_content.layoutMode?'bg-praia-yellow-400 text-praia-teal-800 border-praia-yellow-500':'border-praia-sand-300 bg-white text-praia-teal-800 hover:bg-praia-sand-50'}">
-          🎯 Layout
+          style="${tbBtn}${_content.layoutMode?'background:#FFEB3B;border-color:#FDD835;color:#003A40;box-shadow:0 6px 16px rgba(253,216,53,.4);':''}" ${tbBtnH}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+          Layout
         </button>
 
         <button onclick="contentToggleFullscreen()" title="${fs?'Sair de ecrã inteiro (Esc)':'Ecrã inteiro (F)'}"
-          class="px-3 py-2 rounded-lg border border-praia-sand-300 bg-white text-sm font-display font-semibold text-praia-teal-800 hover:bg-praia-sand-50">
-          ${fs ? '🗗 Sair' : '⛶ Ecrã inteiro'}
+          style="${tbBtn}" ${tbBtnH}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+          ${fs ? 'Sair' : 'Ecrã inteiro'}
         </button>
 
         <span id="content-dirty-badge"
-          class="ml-auto items-center gap-2 px-3 py-1.5 rounded-full bg-amber-100 text-amber-800 text-xs font-semibold"
-          style="display:none;">● alterações por gravar</span>
+          class="ml-auto items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold"
+          style="display:none;background:#FFF3CD;color:#8A6D00;border:1px solid #FFE69C;">● alterações por gravar</span>
 
-        <button onclick="contentOpenHistory()"
-          class="px-3 py-2 rounded-lg border border-praia-sand-300 bg-white text-sm font-display font-semibold text-praia-teal-800 hover:bg-praia-sand-50">
-          🕘 Histórico
+        <button onclick="contentOpenHistory()" style="${tbBtn}" ${tbBtnH}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
+          Histórico
         </button>
 
-        <button onclick="contentSave()" class="admin-btn admin-btn-success" style="margin:0;">💾 Gravar</button>
+        <button onclick="contentSave()" id="content-save-btn" disabled
+          style="display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 18px;border-radius:10px;border:0;background:#C4B898;color:#fff;font:700 12.5px 'Poppins',system-ui,sans-serif;letter-spacing:.02em;cursor:not-allowed;opacity:.55;transition:transform .15s cubic-bezier(.34,1.56,.64,1),box-shadow .15s,background .15s,opacity .15s;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          GRAVAR
+        </button>
       </div>
 
       <!-- Iframe canvas -->
@@ -2824,6 +2909,8 @@ function renderConteudo(container) {
     window.__contentBridgeInit = true;
     window.addEventListener('message', _contentOnMessage);
   }
+  // Sincronizar estado inicial do botão Gravar
+  _updateSaveBtn();
 }
 
 function _contentIframeSrc() {
@@ -3435,5 +3522,5 @@ function exportContentJSON() {
 
 // ─── Init ───
 document.addEventListener('DOMContentLoaded', () => {
-  if (checkAuth()) initDashboard();
+  if (checkAuth()) { showLoadingScreen(); initDashboard(); }
 });
