@@ -1527,8 +1527,8 @@
     "address": "Zona de Lazer de Ourondo, Rua do Mouchão, 6230 Ourondo",
     "type": "guia",
     "coordinates": {
-      "lat": 40.1501357,
-      "lng": -7.6870727
+      "lat": 40.1516355,
+      "lng": -7.6864322000000005
     },
     "seasonal": true
   },
@@ -1549,8 +1549,8 @@
     "address": "Zona de Lazer de Cortes do Meio, 6215 Cortes do Meio",
     "type": "guia",
     "coordinates": {
-      "lat": 40.2556312,
-      "lng": -7.578765700000001
+      "lat": 40.2575875,
+      "lng": -7.5813594
     },
     "seasonal": true
   },
@@ -3169,8 +3169,8 @@
     "address": "Praia Fluvial da Bogueira – Casal de Ermio, 3200-029 Foz de Arouce",
     "type": "guia",
     "coordinates": {
-      "lat": 40.153422,
-      "lng": -8.2448941
+      "lat": 40.1540551,
+      "lng": -8.241610399999999
     },
     "seasonal": true
   },
@@ -3180,8 +3180,8 @@
     "address": "Ermida da Sra.ª da Piedade – Praia Fluvial da Senhora da Piedade, 3200 Lousã",
     "type": "guia",
     "coordinates": {
-      "lat": 40.099580599999996,
-      "lng": -8.233914
+      "lat": 40.1002647,
+      "lng": -8.2343988
     },
     "seasonal": true
   },
@@ -4833,8 +4833,8 @@
     "address": "Praia Fluvial de Pampilhosa da Serra, Av. dos Bombeiros Voluntários, 3320-200 Pampilhosa da Serra",
     "type": "guia",
     "coordinates": {
-      "lat": 40.0468729,
-      "lng": -7.9476951
+      "lat": 40.046982,
+      "lng": -7.9502505999999995
     },
     "seasonal": true
   },
@@ -4966,8 +4966,8 @@
     "address": "Praia Fluvial do Cabril, Albufeira do Cabril – Vale de Góis, 3270-159 Pedrógão Grande",
     "type": "guia",
     "coordinates": {
-      "lat": 39.921640000000004,
-      "lng": -8.134808800000002
+      "lat": 39.9213287,
+      "lng": -8.1332386
     },
     "seasonal": true
   },
@@ -5130,8 +5130,8 @@
     "address": "Praia Fluvial do Vimieiro, 3360-000 São Pedro de Alva (Penacova)",
     "type": "guia",
     "coordinates": {
-      "lat": 40.3025477,
-      "lng": -8.1656616
+      "lat": 40.2768228,
+      "lng": -8.197849
     }
   },
   {
@@ -5182,8 +5182,8 @@
     "address": "EN 233, 6090-385 Meimoa",
     "type": "guia",
     "coordinates": {
-      "lat": 40.225988,
-      "lng": -7.1881995000000005
+      "lat": 40.22590340000001,
+      "lng": -7.187571999999999
     },
     "seasonal": true
   },
@@ -6179,8 +6179,8 @@
     "address": "Zona de Lazer de Sandomil, Bairro de São João, 6270-174 Sandomil",
     "type": "guia",
     "coordinates": {
-      "lat": 40.354543,
-      "lng": -7.783657199999999
+      "lat": 40.35732730000001,
+      "lng": -7.7849967
     },
     "seasonal": true
   },
@@ -6380,8 +6380,8 @@
     "address": "Alameda da Carvalha, n.º 2, 6100-730 Sertã",
     "type": "guia",
     "coordinates": {
-      "lat": 39.8015555,
-      "lng": -8.0984863
+      "lat": 39.8692407,
+      "lng": -8.135764199999999
     },
     "seasonal": true
   },
@@ -6773,8 +6773,8 @@
     "address": "Foz do Sabor, 5160 Torre de Moncorvo",
     "type": "guia",
     "coordinates": {
-      "lat": 41.1801857,
-      "lng": -7.111944599999999
+      "lat": 41.1856059,
+      "lng": -7.0498442
     }
   },
   {
