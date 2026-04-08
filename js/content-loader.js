@@ -63,6 +63,7 @@
     }, content);
   }
 
+  window._applyContent = function(c) { try { applyContent(c); } catch (e) { console.warn('[content-loader] apply:', e); } };
   function applyContent(content) {
     window._siteContent = content;
 

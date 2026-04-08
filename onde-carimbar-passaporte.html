@@ -396,19 +396,20 @@
           : '';
 
         const beachesData = (loc.beaches || []).join(' ').toLowerCase();
+        const locIdx = allLocations.indexOf(loc);
         html += `<div class="loc-card location-card bg-white rounded-xl border border-praia-sand-100 shadow-layered p-5${loc.seasonal ? ' border-l-4 border-l-amber-400' : ''}" data-name="${loc.name.toLowerCase()}" data-municipality="${loc.municipality.toLowerCase()}" data-beaches="${beachesData}" data-seasonal="${!!loc.seasonal}">
           <div class="flex items-start gap-3">
             <div class="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style="background:${STAMP_COLOR}18;">
               <i data-lucide="stamp" class="w-5 h-5" style="color:${STAMP_COLOR};"></i>
             </div>
             <div class="min-w-0 flex-1">
-              <div class="font-display text-sm font-bold text-praia-teal-800 mb-1">${loc.name}</div>
-              <div class="text-xs text-praia-sand-600 leading-relaxed mb-2">${loc.address}</div>
+              <div data-content-bind="locations-carimbos:${locIdx}.name" class="font-display text-sm font-bold text-praia-teal-800 mb-1">${loc.name}</div>
+              <div data-content-bind="locations-carimbos:${locIdx}.address" class="text-xs text-praia-sand-600 leading-relaxed mb-2">${loc.address}</div>
               <div class="mb-3 flex flex-wrap items-center gap-1">
                 <span class="inline-block text-[10px] font-display font-bold uppercase tracking-wide px-2 py-0.5 rounded-full" style="background:${STAMP_COLOR}22;color:${STAMP_COLOR};border:1px solid ${STAMP_COLOR}44;">Carimbo</span>
                 ${seasonalBadge}
               </div>
-              ${loc.phone ? `<div class="text-xs text-praia-blue-600 font-semibold mb-3"><i data-lucide="phone" class="w-3 h-3 inline mr-1"></i>${loc.phone}</div>` : ''}
+              ${loc.phone ? `<div class="text-xs text-praia-blue-600 font-semibold mb-3"><i data-lucide="phone" class="w-3 h-3 inline mr-1"></i><span data-content-bind="locations-carimbos:${locIdx}.phone">${loc.phone}</span></div>` : ''}
               ${loc.beaches && loc.beaches.length > 0 ? `
               <div class="mb-3 pt-2 border-t border-praia-sand-100">
                 <div class="font-display text-[9px] font-bold uppercase tracking-[0.1em] text-praia-teal-500 mb-1.5">Praias que pode carimbar</div>

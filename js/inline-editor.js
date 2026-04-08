@@ -67,6 +67,40 @@
   }
   function markDirty() { send({ type: 'dirty' }); }
 
+  // Sincroniza um elemento editado com um dataset do admin (settings, beaches,
+  // articles, descontos, produtos, locations…). Retorna true se enviou um
+  // dataset-change e o caller deve abortar (não criar override duplicado).
+  function sendBindIfBound(el, newHtmlOrText) {
+    if (!el || !el.closest) return false;
+    const bindHost = el.closest('[data-content-bind]');
+    if (bindHost) {
+      const spec = bindHost.getAttribute('data-content-bind') || '';
+      const i = spec.indexOf(':');
+      if (i > 0) {
+        const ds = spec.slice(0, i);
+        const path = spec.slice(i + 1);
+        // Para campos rich (data-content-html ou universal-edit) gravamos o
+        // HTML; para texto simples gravamos o texto.
+        const isHtml = el.hasAttribute('data-content-html') || (newHtmlOrText && /<\w/.test(newHtmlOrText));
+        const value = isHtml ? (newHtmlOrText || el.innerHTML.trim()) : el.textContent.trim();
+        send({ type: 'dataset-change', dataset: ds, path, value });
+        return true;
+      }
+    }
+    // Backward compat com data-content-settings
+    const settingsHost = el.closest('[data-content-settings]');
+    if (settingsHost) {
+      send({
+        type: 'dataset-change',
+        dataset: 'settings',
+        path: settingsHost.getAttribute('data-content-settings'),
+        value: el.textContent.trim(),
+      });
+      return true;
+    }
+    return false;
+  }
+
   // ────────────────────────────────────────────────────────────
   // STYLES
   // ────────────────────────────────────────────────────────────
@@ -341,6 +375,9 @@
       el.classList.remove('__ie-editing');
       const newText = el.textContent.trim();
       if (newText === el.__ieOriginalText) { setElementDirty(el, false); return; }
+      // Se o elemento (ou ancestral) estiver ligado a um dataset do admin
+      // via data-content-bind="dataset:path", grava lá em vez de no content.
+      if (sendBindIfBound(el, newText)) { setElementDirty(el, false); return; }
       const path = el.dataset.content;
       send({ type: 'content-change', path, value: newText });
     });
@@ -422,6 +459,7 @@
     if (!activeRich) return;
     const newHtml = activeRich.innerHTML.trim();
     if (newHtml === activeRich.__ieOriginalHtml) return; // sem alterações
+    if (sendBindIfBound(activeRich, newHtml)) return;
     send({ type: 'content-change', path: activeRich.dataset.contentHtml, value: newHtml });
   }
 
@@ -889,6 +927,11 @@
         el.classList.remove('__ie-editing');
         const newHtml = el.innerHTML.trim();
         if (newHtml === el.__ieOriginalHtml) { setElementDirty(el, false); return; }
+        // Generic binding to any admin dataset (settings, beaches, articles,
+        // descontos, produtos, locations…). Format:
+        //   data-content-bind="<dataset>:<dot.path>"
+        // e.g. data-content-bind="beaches:3.name" → state.data.beaches[3].name
+        if (sendBindIfBound(el, newHtml)) { setElementDirty(el, false); return; }
         sendOverride(el, { html: newHtml, text: el.textContent.trim() });
       });
       el.addEventListener('input', () => {
@@ -1023,19 +1066,7 @@
     const input = modal.querySelector('#__ie-icon-q');
     modal.querySelector('#__ie-cancel').addEventListener('click', closeModal);
 
-    function render(filter) {
-      const f = (filter || '').toLowerCase().trim();
-      const matched = (f ? names.filter(n => n.toLowerCase().includes(f)) : names).slice(0, 240);
-      grid.innerHTML = matched.map(n => `
-        <button data-icon="${n}" title="${n}" style="aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:white;border:1px solid #E2D9C6;border-radius:8px;cursor:pointer;padding:8px;${n===current?'outline:2px solid #003A40;':''}">
-          <i data-lucide="${n}" style="width:20px;height:20px;color:#003A40;"></i>
-        </button>
-      `).join('');
-      try { window.lucide && window.lucide.createIcons && window.lucide.createIcons({ attrs: {} }); } catch {}
-      grid.querySelectorAll('button[data-icon]').forEach(btn => {
-        btn.addEventListener('click', (ev) => {
-          ev.preventDefault();
-          const name = btn.getAttribute('data-icon');
+    function pickIcon(name) {
           // Estratégia: se o host é um <svg>, criar um <i data-lucide> ao lado
           // e deixar o lucide expandi-lo. Se já tem data-lucide ou é um <i>,
           // substituir directamente.
@@ -1062,9 +1093,45 @@
           } catch {}
           sendOverride(target, { icon: name });
           closeModal();
-        });
-      });
+          // Limpar marcações antigas dentro da área alterada para que a
+          // re-aplicação volte a decorar o ícone novo (permite trocá-lo
+          // múltiplas vezes seguidas).
+          try {
+            const scope = (target && target.parentElement) || document.body;
+            scope.querySelectorAll('.__ie-icon-host').forEach(n => {
+              n.classList.remove('__ie-icon-host');
+              n.__ieIconReady = false;
+            });
+            if (target && target.classList) {
+              target.classList.remove('__ie-icon-host');
+              target.__ieIconReady = false;
+            }
+          } catch {}
+          setTimeout(() => { try { window.__ieReinit && window.__ieReinit(); } catch {} }, 30);
+          setTimeout(() => { try { window.__ieReinit && window.__ieReinit(); } catch {} }, 200);
     }
+
+    function render(filter) {
+      const f = (filter || '').toLowerCase().trim();
+      const matched = (f ? names.filter(n => n.toLowerCase().includes(f)) : names).slice(0, 240);
+      grid.innerHTML = matched.map(n => `
+        <button type="button" data-icon="${n}" title="${n}" style="aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:white;border:1px solid #E2D9C6;border-radius:8px;cursor:pointer;padding:8px;${n===current?'outline:2px solid #003A40;':''}">
+          <i data-lucide="${n}" style="width:20px;height:20px;color:#003A40;pointer-events:none;"></i>
+        </button>
+      `).join('');
+      try { window.lucide && window.lucide.createIcons && window.lucide.createIcons({ attrs: {} }); } catch {}
+      // Garantir que o SVG criado pelo Lucide não capta o clique
+      grid.querySelectorAll('svg').forEach(s => { s.style.pointerEvents = 'none'; });
+    }
+    // Delegação única — robusta contra re-renders e interferência de handlers globais
+    grid.addEventListener('mousedown', (ev) => {
+      const btn = ev.target.closest && ev.target.closest('button[data-icon]');
+      if (!btn) return;
+      ev.preventDefault();
+      ev.stopPropagation();
+      try { pickIcon(btn.getAttribute('data-icon')); }
+      catch (err) { console.error('[icon-picker]', err); closeModal(); }
+    }, true);
     render('');
     input.addEventListener('input', () => render(input.value));
     setTimeout(() => input.focus(), 30);
@@ -1111,6 +1178,7 @@
   function reapply() {
     try { makeUniversallyEditable(document.body); } catch {}
   }
+  window.__ieReinit = reapply;
   reapply();
   // Garantia: re-aplicar depois do content-loader terminar
   document.addEventListener('contentLoaded', () => { setTimeout(reapply, 30); });
@@ -1135,6 +1203,20 @@
     const data = e.data || {};
     if (data.type === 'apply-content') {
       location.reload();
+    }
+    if (data.type === 'apply-state' && data.content) {
+      // Recarregar a página com o snapshot novo — é o caminho mais robusto
+      // para refletir undo/redo de texto/ícones/listas/sectionsOrder.
+      try { localStorage.setItem('_contentDraft', JSON.stringify(data.content)); } catch {}
+      try { sessionStorage.setItem('_contentDraft', JSON.stringify(data.content)); } catch {}
+      try {
+        if (typeof window._applyContent === 'function') {
+          window._applyContent(data.content);
+        }
+      } catch {}
+      // Re-decorar o editor inline após o re-apply
+      setTimeout(() => { try { window.__ieReinit && window.__ieReinit(); } catch {} }, 50);
+      return;
     }
     if (data.type === 'apply-snapshot' && data.content) {
       // Aplicar overrides de conteúdo (texto/html/img/icon) sem recarregar.

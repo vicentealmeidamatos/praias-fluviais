@@ -210,7 +210,8 @@
 
       const res = await fetch('data/articles.json');
       const articles = await res.json();
-      const article = articles.find(a => a.slug === slug);
+      const articleIdx = articles.findIndex(a => a.slug === slug);
+      const article = articleIdx >= 0 ? articles[articleIdx] : null;
 
       if (!article) {
         document.getElementById('article-container').innerHTML = `
@@ -262,10 +263,10 @@
             <span class="cat-badge cat-${article.category}">${categoryLabels[article.category] || article.category}</span>
             <span class="text-sm text-praia-sand-400">${formatDate(article.date)}</span>
           </div>
-          <h1 class="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-praia-teal-800 tracking-tight leading-tight mb-8">
+          <h1 data-content-bind="articles:${articleIdx}.title" class="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-praia-teal-800 tracking-tight leading-tight mb-8">
             ${article.title}
           </h1>
-          <div class="article-content font-body text-base">
+          <div data-content-bind="articles:${articleIdx}.content" class="article-content font-body text-base">
             ${article.content}
           </div>
         </div>

@@ -83,7 +83,7 @@ function renderProducts() {
     return;
   }
 
-  container.innerHTML = filtered.map(product => renderProductCard(product)).join('');
+  container.innerHTML = filtered.map(product => renderProductCard(product, _products.indexOf(product))).join('');
 
   // Init lucide icons for newly rendered elements
   if (window.lucide) lucide.createIcons();
@@ -98,7 +98,7 @@ function renderProducts() {
   }, 50);
 }
 
-function renderProductCard(product) {
+function renderProductCard(product, productIdx) {
   const isFree = product.price === 0;
   const hasVariants = product.variants && product.variants.length > 0;
   const mainImage = product.images && product.images[0] ? product.images[0] : null;
@@ -137,8 +137,8 @@ function renderProductCard(product) {
 
       <!-- Content -->
       <div class="p-5 flex flex-col flex-1">
-        <a href="produto.html?id=${product.id}" class="font-display font-bold text-praia-teal-800 text-base leading-snug mb-1 hover:text-praia-teal-600 transition-colors block">${product.name}</a>
-        <p class="text-praia-sand-500 text-sm leading-relaxed mb-3 ${isSimple ? '' : 'flex-1'}">${descText}</p>
+        <a href="produto.html?id=${product.id}" data-content-bind="produtos:${productIdx}.name" class="font-display font-bold text-praia-teal-800 text-base leading-snug mb-1 hover:text-praia-teal-600 transition-colors block">${product.name}</a>
+        <p data-content-bind="produtos:${productIdx}.description" class="text-praia-sand-500 text-sm leading-relaxed mb-3 ${isSimple ? '' : 'flex-1'}">${descText}</p>
         ${isSimple && product.highlights && product.highlights.length ? `
           <ul class="flex-1 flex flex-col justify-center gap-2 mb-3">
             ${product.highlights.map(h => `

@@ -1,6 +1,7 @@
 // ─── Página de Produto ────────────────────────────────────────────────────────
 
 let _product = null;
+let _productIdx = -1;
 let _products = [];
 let _beaches = [];
 let _activeImage = 0;
@@ -13,7 +14,8 @@ async function initProduto() {
 
   await Promise.all([loadProducts(), loadSettings(), loadBeachesProduto()]);
 
-  _product = _products.find(p => p.id === id);
+  _productIdx = _products.findIndex(p => p.id === id);
+  _product = _productIdx >= 0 ? _products[_productIdx] : null;
   if (!_product) { window.location.href = 'loja.html'; return; }
 
   document.title = `${_product.name} — Guia das Praias Fluviais`;
@@ -54,15 +56,23 @@ function renderProduct() {
   const availableVariants = hasVariants ? p.variants.filter(v => v.available) : [];
 
   // Breadcrumb
-  document.getElementById('breadcrumb-name').textContent = p.name;
+  const bc = document.getElementById('breadcrumb-name');
+  bc.textContent = p.name;
+  bc.setAttribute('data-content-bind', `produtos:${_productIdx}.name`);
 
   // Gallery
   renderGallery();
 
-  // Info
-  document.getElementById('product-name').textContent = p.name;
+  // Info — ligar campos editáveis ao dataset 'produtos' do admin
+  const nameEl = document.getElementById('product-name');
+  nameEl.textContent = p.name;
+  nameEl.setAttribute('data-content-bind', `produtos:${_productIdx}.name`);
+
   document.getElementById('product-price').textContent = isFree ? 'Grátis + portes' : formatPrice(p.price);
-  document.getElementById('product-description').textContent = p.description;
+
+  const descEl = document.getElementById('product-description');
+  descEl.textContent = p.description;
+  descEl.setAttribute('data-content-bind', `produtos:${_productIdx}.description`);
 
   // Category badge
   const catEl = document.getElementById('product-category');

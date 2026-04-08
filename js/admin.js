@@ -81,6 +81,23 @@ function markDirty(section) {
   _renderPublishBar();
 }
 
+// Botão "Gravar alterações" por secção — grava imediatamente no Supabase
+// (sem precisar do botão global da publish bar nem de export manual).
+async function saveSectionNow(section) {
+  if (!SECTION_TO_DATASET[section]) {
+    toast('Secção desconhecida.', 'error'); return;
+  }
+  _autoSave.pending.add(section);
+  _autoSave.lastError = null;
+  await _autoSaveFlush(section);
+  _renderPublishBar();
+  if (_autoSave.lastError) {
+    toast('Erro a gravar: ' + _autoSave.lastError.message, 'error');
+  } else {
+    toast('Alterações gravadas e publicadas no site.', 'success');
+  }
+}
+
 function _renderPublishBar() {
   let bar = document.getElementById('admin-publish-bar');
   const count = _autoSave.pending.size;
@@ -165,6 +182,29 @@ async function discardPendingChanges() {
       _clearUnsaved();
     }
   }
+  // Sempre que estamos no editor de Conteúdo, garantir que o estado em memória
+  // do editor visual também é descartado (mesmo que 'conteudo' não estivesse
+  // no autosave pending — texto/ícones só vivem em _content.current).
+  if (state.currentSection === 'conteudo' || _content.dirty) {
+    try {
+      const r = await fetch('data/content.json?_=' + Date.now(), { cache: 'no-store' });
+      if (r.ok) {
+        const fresh = await r.json();
+        state.data['conteudo'] = fresh;
+        state.editingContent = JSON.parse(JSON.stringify(fresh));
+        _content.current = JSON.parse(JSON.stringify(fresh));
+      }
+    } catch {}
+    // Recarregar layout do servidor também
+    try {
+      if (window.DataLoader) state.data['layout'] = (await window.DataLoader.loadDataset('layout', { force: true })) || {};
+    } catch {}
+    _content.history = [];
+    _content.redoStack = [];
+    _contentSetBaseline();
+    _clearUnsaved();
+  }
+
   _renderPublishBar();
 
   // Re-render só a secção actual (sem location.reload). Se for Conteúdo,
@@ -448,9 +488,6 @@ function renderDashboard() {
           `).join('')}
         </nav>
         <div class="p-4 border-t border-white/10 space-y-2">
-          <button onclick="exportAll()" class="admin-btn admin-btn-export w-full py-2.5 text-center">Exportar Tudo</button>
-          <button onclick="importJSON()" class="admin-btn w-full py-2.5 text-center bg-white/10 text-white/70">Importar JSON</button>
-          <input type="file" id="import-file" accept=".json" class="hidden" onchange="handleImport(event)">
           <button onclick="sessionStorage.removeItem('admin_authenticated'); location.reload();" class="w-full text-center text-xs text-white/30 hover:text-white/50 py-2">Sair</button>
         </div>
       </aside>
@@ -722,7 +759,7 @@ function renderBeaches(container) {
           <p class="text-sm text-praia-sand-500">${beaches.length} praias registadas</p>
         </div>
         <div class="flex gap-2">
-          <button onclick="exportSection('beaches')" class="admin-btn admin-btn-export">Exportar JSON</button>
+          <button onclick="saveSectionNow('beaches')" class="admin-btn admin-btn-export">Gravar alterações</button>
           <button onclick="editBeach(null)" class="admin-btn admin-btn-primary">+ Adicionar Praia</button>
         </div>
       </div>
@@ -970,7 +1007,7 @@ function renderArticles(container) {
       <div class="flex items-center justify-between mb-6">
         <h1 class="font-display text-2xl font-bold text-praia-teal-800">Artigos (${articles.length})</h1>
         <div class="flex gap-2">
-          <button onclick="exportSection('articles')" class="admin-btn admin-btn-export">Exportar</button>
+          <button onclick="saveSectionNow('articles')" class="admin-btn admin-btn-export">Gravar alterações</button>
           <button onclick="editArticle(null)" class="admin-btn admin-btn-primary">+ Novo Artigo</button>
         </div>
       </div>
@@ -1121,7 +1158,7 @@ function renderLocationsGuia(container) {
         <h1 class="font-display text-2xl font-bold text-praia-teal-800">Pontos — Guia &amp; Passaporte (${items.length})</h1>
         <div class="flex gap-2">
           <a href="../onde-encontrar.html" target="_blank" class="admin-btn bg-praia-sand-200 text-praia-teal-700 text-xs">Ver no site ↗</a>
-          <button onclick="exportSection('locations-guia-passaporte')" class="admin-btn admin-btn-export">Exportar</button>
+          <button onclick="saveSectionNow('locations-guia-passaporte')" class="admin-btn admin-btn-export">Gravar alterações</button>
           <button onclick="editLocationGuia(null)" class="admin-btn admin-btn-primary">+ Adicionar</button>
         </div>
       </div>
@@ -1267,7 +1304,7 @@ function renderLocationsPassaporte(container) {
         <h1 class="font-display text-2xl font-bold text-praia-teal-800">Postos de Carimbo (${items.length})</h1>
         <div class="flex gap-2">
           <a href="../onde-carimbar-passaporte.html" target="_blank" class="admin-btn bg-praia-sand-200 text-praia-teal-700 text-xs">Ver no site ↗</a>
-          <button onclick="exportSection('locations-carimbos')" class="admin-btn admin-btn-export">Exportar</button>
+          <button onclick="saveSectionNow('locations-carimbos')" class="admin-btn admin-btn-export">Gravar alterações</button>
           <button onclick="editLocationPassaporte(null)" class="admin-btn admin-btn-primary">+ Adicionar</button>
         </div>
       </div>
@@ -1412,7 +1449,7 @@ function renderDescontos(container) {
       <div class="flex items-center justify-between mb-6">
         <h1 class="font-display text-2xl font-bold text-praia-teal-800">Descontos (${items.length})</h1>
         <div class="flex gap-2">
-          <button onclick="exportSection('descontos')" class="admin-btn admin-btn-export">Exportar</button>
+          <button onclick="saveSectionNow('descontos')" class="admin-btn admin-btn-export">Gravar alterações</button>
           <button onclick="editDesconto(null)" class="admin-btn admin-btn-primary">+ Adicionar</button>
         </div>
       </div>
@@ -1679,7 +1716,7 @@ function renderSettings(container) {
 
       <div class="flex gap-2">
         <button onclick="saveSettings()" class="admin-btn admin-btn-success">Guardar Configurações</button>
-        <button onclick="exportSection('settings')" class="admin-btn admin-btn-export">Exportar JSON</button>
+        <button onclick="saveSectionNow('settings')" class="admin-btn admin-btn-export">Gravar alterações</button>
       </div>
     </div>`;
 
@@ -2342,7 +2379,10 @@ function renderProdutos(container) {
     <div class="p-6">
       <div class="flex items-center justify-between mb-6">
         <h2 class="font-display text-xl font-bold text-praia-teal-800">Produtos da Loja</h2>
-        <button onclick="addNewProduct()" class="admin-btn admin-btn-primary px-5 py-2.5">+ Novo Produto</button>
+        <div class="flex gap-2">
+          <button onclick="saveSectionNow('produtos')" class="admin-btn admin-btn-export">Gravar alterações</button>
+          <button onclick="addNewProduct()" class="admin-btn admin-btn-primary px-5 py-2.5">+ Novo Produto</button>
+        </div>
       </div>
 
       <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-praia-sand-100">
@@ -2392,7 +2432,7 @@ function renderProdutos(container) {
 
       <div class="mt-6 bg-praia-teal-50 border border-praia-teal-100 rounded-xl p-4 text-sm text-praia-teal-700 font-display">
         <p class="font-semibold mb-1">Como funciona</p>
-        <p class="text-praia-teal-600">As alterações são guardadas em <strong>data/products.json</strong> e refletem-se imediatamente na loja. Usa "Exportar Tudo" na barra lateral para fazer download do ficheiro atualizado.</p>
+        <p class="text-praia-teal-600">Edite os produtos e clique em <strong>Gravar alterações</strong> para publicar imediatamente na loja.</p>
       </div>
 
       <!-- Edit modal -->
@@ -2810,10 +2850,39 @@ const _content = {
   history: [],              // stack de snapshots para undo
   redoStack: [],
   dirty: false,
+  baseline: null,           // JSON do estado gravado, para comparar e calcular dirty real
   page: 'index',
   device: 'desktop',
   unsavedListeners: false,
 };
+
+function _contentSetBaseline() {
+  try {
+    _content.baseline = JSON.stringify({
+      content: _content.current || state.editingContent || {},
+      layout:  state.data.layout || {},
+    });
+  } catch { _content.baseline = null; }
+}
+function _recomputeDirty() {
+  if (_content.baseline == null) { _markUnsaved(); return; }
+  let cur;
+  try {
+    cur = JSON.stringify({
+      content: _content.current || {},
+      layout:  state.data.layout || {},
+    });
+  } catch { cur = null; }
+  if (cur === _content.baseline) {
+    _clearUnsaved();
+    // Limpar também o publish-bar para esta sessão de edição visual
+    _autoSave.pending.delete('layout');
+    _autoSave.pending.delete('conteudo');
+    try { _renderPublishBar(); } catch {}
+  } else {
+    _markUnsaved();
+  }
+}
 
 function _contentSnapshot() {
   // Captura estado de tudo o que pode ser revertido por undo/redo
@@ -2827,24 +2896,31 @@ function _contentPushHistory() {
   if (_content.history.length > 50) _content.history.shift();
   _content.redoStack = [];
 }
+function _writeContentDraft() {
+  // Mantém o draft em localStorage sincronizado com o estado em memória, para
+  // que o content-loader o possa servir após qualquer reload do iframe (p.ex.
+  // undo/redo, mudança de página).
+  try { localStorage.setItem('_contentDraft', JSON.stringify(_content.current || {})); } catch {}
+  try { sessionStorage.setItem('_contentDraft', JSON.stringify(_content.current || {})); } catch {}
+}
 function _restoreSnapshot(snap) {
   if (!snap) return;
   // Aceita formato antigo (sem .content) e novo
   const c = snap.content || snap;
   const l = snap.layout  || {};
   _content.current = JSON.parse(JSON.stringify(c));
+  state.data['conteudo'] = _content.current;
   state.data.layout = JSON.parse(JSON.stringify(l));
   state.data['layout'] = state.data.layout;
-  // Aplicar visualmente sem recarregar o iframe
+  // Para reflectir undo/redo de texto/ícones/listas/sectionsOrder de forma
+  // robusta, escrevemos o snapshot em localStorage como "draft" e recarregamos
+  // o iframe com ?preview=draft. O content-loader busca esse draft, dando-nos
+  // sempre um DOM limpo e consistente — não há resíduos de DOM editado.
+  try { localStorage.setItem('_contentDraft', JSON.stringify(_content.current)); } catch {}
+  try { sessionStorage.setItem('_contentDraft', JSON.stringify(_content.current)); } catch {}
   const iframe = document.getElementById('content-iframe');
-  if (iframe && iframe.contentWindow) {
-    try {
-      iframe.contentWindow.postMessage({
-        type: 'apply-snapshot',
-        content: _content.current,
-        layout: state.data.layout,
-      }, '*');
-    } catch {}
+  if (iframe) {
+    iframe.src = _contentIframeSrc({ draft: true });
   }
 }
 function _setByPath(obj, path, value) {
@@ -2905,6 +2981,7 @@ function _beforeUnloadGuard(e) { e.preventDefault(); e.returnValue = ''; }
 function renderConteudo(container) {
   // Inicializar estado a partir de state.editingContent (já carregado em initDashboard)
   if (!_content.current) _content.current = JSON.parse(JSON.stringify(state.editingContent || {}));
+  if (_content.baseline == null) _contentSetBaseline();
 
   const deviceWidths = { desktop: '100%', tablet: '768px', mobile: '375px' };
   const w = deviceWidths[_content.device];
@@ -3021,15 +3098,16 @@ function renderConteudo(container) {
   _updateSaveBtn();
 }
 
-function _contentIframeSrc() {
+function _contentIframeSrc(opts) {
+  const draft = opts && opts.draft ? '&preview=draft' : '';
   // Suporta páginas dinâmicas: _content.page = 'praia:<id>' | 'artigo:<slug>' | 'produto:<id>'
   if (_content.dynKind && _content.dynItem) {
-    if (_content.dynKind === 'praia')   return `praia.html?id=${encodeURIComponent(_content.dynItem)}&edit=1&_=${Date.now()}`;
-    if (_content.dynKind === 'artigo')  return `artigo.html?slug=${encodeURIComponent(_content.dynItem)}&edit=1&_=${Date.now()}`;
-    if (_content.dynKind === 'produto') return `produto.html?id=${encodeURIComponent(_content.dynItem)}&edit=1&_=${Date.now()}`;
+    if (_content.dynKind === 'praia')   return `praia.html?id=${encodeURIComponent(_content.dynItem)}&edit=1${draft}&_=${Date.now()}`;
+    if (_content.dynKind === 'artigo')  return `artigo.html?slug=${encodeURIComponent(_content.dynItem)}&edit=1${draft}&_=${Date.now()}`;
+    if (_content.dynKind === 'produto') return `produto.html?id=${encodeURIComponent(_content.dynItem)}&edit=1${draft}&_=${Date.now()}`;
   }
   const page = CONTENT_PAGES.find(p => p.id === _content.page) || CONTENT_PAGES[0];
-  return `${page.file}?edit=1&_=${Date.now()}`;
+  return `${page.file}?edit=1${draft}&_=${Date.now()}`;
 }
 
 function _renderDynOptions() {
@@ -3058,31 +3136,68 @@ function _contentOnMessage(e) {
   const m = e.data || {};
   if (!m.type) return;
   if (m.type === 'inline-editor-ready') return;
-  if (m.type === 'dirty') { _markUnsaved(); return; }
-  if (m.type === 'clean') {
-    // Só limpa se não houver nenhum override pendente real (o user reverteu manualmente)
-    _clearUnsaved();
-    return;
-  }
+  if (m.type === 'dirty') { _recomputeDirty(); return; }
+  if (m.type === 'clean') { _recomputeDirty(); return; }
   if (m.type === 'content-change') {
     _contentPushHistory();
     _setByPath(_content.current, m.path, m.value);
-    _markUnsaved();
+    state.data['conteudo'] = _content.current;
+    _writeContentDraft();
+    markDirty('conteudo');
+    _recomputeDirty();
   } else if (m.type === 'content-list-change') {
     _contentPushHistory();
     _setByPath(_content.current, m.path, m.value);
-    _markUnsaved();
+    state.data['conteudo'] = _content.current;
+    _writeContentDraft();
+    markDirty('conteudo');
+    _recomputeDirty();
   } else if (m.type === 'sections-order-change') {
     _contentPushHistory();
     _setByPath(_content.current, 'homepage.sectionsOrder', m.value);
-    _markUnsaved();
-  } else if (m.type === 'override-change') {
+    state.data['conteudo'] = _content.current;
+    _writeContentDraft();
+    markDirty('conteudo');
+    _recomputeDirty();
+  } else if (m.type === 'settings-change') {
+    // Backward compat: trata como dataset-change para 'settings'.
+    m = { type: 'dataset-change', dataset: 'settings', path: m.path, value: m.value };
+  }
+  if (m.type === 'dataset-change') {
+    // Edit feita no editor visual sobre um campo ligado a um dataset do
+    // admin (settings, beaches, articles, descontos, produtos, locations…).
+    // Atualiza state.data[<section>], marca como pendente, e re-renderiza
+    // a secção correspondente se estiver aberta — sincronizando os dois
+    // sentidos (Conteúdo ↔ secção dedicada do admin).
+    const ds = m.dataset;
+    if (!SECTION_TO_DATASET[ds]) {
+      console.warn('[dataset-change] dataset desconhecido:', ds);
+      return;
+    }
+    _contentPushHistory();
+    if (state.data[ds] == null) {
+      // Inicializa como array se o primeiro segmento for um índice numérico
+      const firstSeg = (m.path || '').split('.')[0];
+      state.data[ds] = /^\d+$/.test(firstSeg) ? [] : {};
+    }
+    _setByPath(state.data[ds], m.path, m.value);
+    markDirty(ds);
+    if (state.currentSection === ds) {
+      try { renderSection(); } catch {}
+    }
+    _recomputeDirty();
+    return;
+  }
+  if (m.type === 'override-change') {
     _contentPushHistory();
     if (!_content.current.overrides) _content.current.overrides = {};
     if (!_content.current.overrides[m.page]) _content.current.overrides[m.page] = {};
     const existing = _content.current.overrides[m.page][m.selector] || {};
     _content.current.overrides[m.page][m.selector] = { ...existing, ...m.value };
-    _markUnsaved();
+    state.data['conteudo'] = _content.current;
+    _writeContentDraft();
+    markDirty('conteudo');
+    _recomputeDirty();
   } else if (m.type === 'layout-change') {
     // Push history ANTES de mutar para podermos fazer undo
     _contentPushHistory();
@@ -3094,7 +3209,7 @@ function _contentOnMessage(e) {
     if (!SECTION_TO_DATASET['layout']) SECTION_TO_DATASET['layout'] = 'layout';
     state.data['layout'] = state.data.layout;
     markDirty('layout');
-    _markUnsaved();
+    _recomputeDirty();
   }
 }
 
@@ -3175,13 +3290,13 @@ function contentUndo() {
   if (!_content.history.length) { toast('Nada para anular.', 'info'); return; }
   _content.redoStack.push(_contentSnapshot());
   _restoreSnapshot(_content.history.pop());
-  _markUnsaved();
+  _recomputeDirty();
 }
 function contentRedo() {
   if (!_content.redoStack.length) { toast('Nada para refazer.', 'info'); return; }
   _content.history.push(_contentSnapshot());
   _restoreSnapshot(_content.redoStack.pop());
-  _markUnsaved();
+  _recomputeDirty();
 }
 
 async function contentSave() {
@@ -3202,8 +3317,13 @@ async function contentSave() {
     const json = await res.json();
     if (!res.ok) throw new Error(json.error || 'erro');
     state.editingContent = JSON.parse(JSON.stringify(_content.current));
+    _contentSetBaseline();
     _clearUnsaved();
     try { localStorage.removeItem('_contentDraft'); } catch {}
+    try { sessionStorage.removeItem('_contentDraft'); } catch {}
+    // Limpar do publish-bar
+    _autoSave.pending.delete('conteudo');
+    try { _renderPublishBar(); } catch {}
     toast('Conteúdo gravado com sucesso! O site público já reflete as alterações.', 'success');
     document.getElementById('content-iframe').src = _contentIframeSrc();
   } catch (e) {

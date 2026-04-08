@@ -382,7 +382,9 @@
         }
         emptyEl.classList.add('hidden');
 
-        gridEl.innerHTML = filtered.map(d => `
+        gridEl.innerHTML = filtered.map(d => {
+          const di = descontos.indexOf(d);
+          return `
           <div class="card-interactive bg-white rounded-xl border border-praia-sand-100 shadow-layered overflow-hidden">
             <div class="p-5">
               <div class="flex items-start justify-between gap-3 mb-3">
@@ -394,16 +396,16 @@
                   <span class="region-badge">${regionLabels[d.region] || d.region}</span>
                 </div>
               </div>
-              <h3 class="font-display text-base font-bold text-praia-teal-800 mb-2">${d.name}</h3>
-              <p class="text-sm text-praia-sand-700 leading-relaxed mb-3">${d.description}</p>
+              <h3 data-content-bind="descontos:${di}.name" class="font-display text-base font-bold text-praia-teal-800 mb-2">${d.name}</h3>
+              <p data-content-bind="descontos:${di}.description" class="text-sm text-praia-sand-700 leading-relaxed mb-3">${d.description}</p>
               <div class="flex items-start gap-2 text-xs text-praia-sand-500 bg-praia-sand-50 rounded-lg p-3">
                 <i data-lucide="info" class="w-3.5 h-3.5 flex-shrink-0 mt-0.5 text-praia-sand-400"></i>
-                <span>${d.conditions}</span>
+                <span data-content-bind="descontos:${di}.conditions">${d.conditions}</span>
               </div>
-              ${d.municipality ? `<div class="mt-3 text-xs text-praia-sand-400 flex items-center gap-1"><i data-lucide="map-pin" class="w-3 h-3"></i> ${d.municipality}</div>` : ''}
+              ${d.municipality ? `<div class="mt-3 text-xs text-praia-sand-400 flex items-center gap-1"><i data-lucide="map-pin" class="w-3 h-3"></i> <span data-content-bind="descontos:${di}.municipality">${d.municipality}</span></div>` : ''}
             </div>
           </div>
-        `).join('');
+        `;}).join('');
 
         lucide.createIcons();
       }

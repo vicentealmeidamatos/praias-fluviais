@@ -16,7 +16,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     return;
   }
 
-  const beach = beaches.find(b => b.id === beachId);
+  // Índice na lista original — necessário para ligar campos editáveis ao
+  // dataset 'beaches' do admin via data-content-bind="beaches:<idx>.<campo>"
+  const beachIdx = beaches.findIndex(b => b.id === beachId);
+  const beach = beachIdx >= 0 ? beaches[beachIdx] : null;
   if (!beach) {
     mainContent.innerHTML = '<div class="text-center py-20"><h2 class="font-display text-2xl font-bold text-praia-teal-800 mb-4">Praia não encontrada</h2><a href="rede.html" class="btn-primary inline-flex items-center gap-2 bg-praia-teal-800 text-praia-yellow-400 px-6 py-3 rounded-full font-display font-bold text-sm uppercase tracking-wider">Ver Mapa</a></div>';
     return;
@@ -109,8 +112,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       <div class="absolute inset-0 bg-gradient-to-t from-praia-teal-800/80 via-transparent to-transparent pointer-events-none z-10"></div>
       <div class="absolute bottom-0 left-0 right-0 p-6 md:p-10 z-20">
         <div class="flex flex-wrap gap-2 mb-3">${badges.join('')}</div>
-        <h1 class="font-display text-2xl md:text-4xl lg:text-5xl font-bold text-white tracking-tightest mb-2">${beach.name}</h1>
-        <p class="text-white/60 font-body text-sm md:text-base">${locationLine}</p>
+        <h1 data-content-bind="beaches:${beachIdx}.name" class="font-display text-2xl md:text-4xl lg:text-5xl font-bold text-white tracking-tightest mb-2">${beach.name}</h1>
+        <p class="text-white/60 font-body text-sm md:text-base"><span data-content-bind="beaches:${beachIdx}.municipality">${beach.municipality}</span>${beach.freguesia ? `, <span data-content-bind="beaches:${beachIdx}.freguesia">${beach.freguesia}</span>` : `, <span data-content-bind="beaches:${beachIdx}.district">${beach.district}</span>`} · <span data-content-bind="beaches:${beachIdx}.river">${beach.river}</span></p>
       </div>
     </div>
 
@@ -124,7 +127,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       <!-- Description -->
       <section class="mb-12">
         <h2 class="font-display text-xs uppercase tracking-[0.2em] text-praia-teal-500 font-semibold mb-4">Sobre esta Praia</h2>
-        <p class="text-praia-sand-700 leading-relaxed-plus text-base md:text-lg">${beach.description}</p>
+        <p data-content-bind="beaches:${beachIdx}.description" class="text-praia-sand-700 leading-relaxed-plus text-base md:text-lg">${beach.description}</p>
       </section>
 
       <!-- Weather -->

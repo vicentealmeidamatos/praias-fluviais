@@ -651,6 +651,10 @@
           btn.onclick = () => showWinnersYear(key);
           tabsContainer.appendChild(btn);
 
+          // Índice original na settings.previousWinners (necessário para
+          // ligação bidirecional com a secção Configurações no admin).
+          const origIdx = (settings.previousWinners || []).findIndex(p => p.year === w.year);
+
           // If no hardcoded panel, create one dynamically
           if (!existingPanel) {
             const revs = Array.isArray(w.revelations) ? w.revelations : (w.revelation ? [{label:'', name: w.revelation}] : []);
@@ -670,7 +674,7 @@
                       <div style="width:36px;height:36px;border-radius:10px;background:rgba(192,192,192,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;">🥈</div>
                       <div>
                         <span style="font-family:'Poppins',sans-serif;font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:rgba(192,192,192,.8);font-weight:600;display:block;margin-bottom:2px;">2.º Lugar</span>
-                        <p style="font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;color:white;line-height:1.3;margin:0;">${w.second}</p>
+                        <p data-content-settings="previousWinners.${origIdx}.second" style="font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;color:white;line-height:1.3;margin:0;">${w.second}</p>
                       </div>
                     </div>
                   </div>
@@ -683,7 +687,7 @@
                       <div style="width:36px;height:36px;border-radius:10px;background:rgba(205,127,50,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;">🥉</div>
                       <div>
                         <span style="font-family:'Poppins',sans-serif;font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:rgba(205,127,50,.85);font-weight:600;display:block;margin-bottom:2px;">3.º Lugar</span>
-                        <p style="font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;color:white;line-height:1.3;margin:0;">${w.third}</p>
+                        <p data-content-settings="previousWinners.${origIdx}.third" style="font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;color:white;line-height:1.3;margin:0;">${w.third}</p>
                       </div>
                     </div>
                   </div>
@@ -705,12 +709,12 @@
                     </div>
                   </div>
                   <div style="display:flex;flex-direction:column;gap:8px;">
-                    ${revs.map(rv => `
+                    ${revs.map((rv, ri) => `
                     <div style="display:flex;align-items:flex-start;gap:10px;">
                       <i data-lucide="award" style="width:14px;height:14px;flex-shrink:0;margin-top:2px;color:#0288D1;"></i>
                       <div>
                         ${rv.label ? `<span style="font-family:'Poppins',sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:rgba(2,136,209,.8);font-weight:600;">${rv.label} — </span>` : ''}
-                        <span style="font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;color:white;">${rv.name}</span>
+                        <span data-content-settings="previousWinners.${origIdx}.revelations.${ri}.name" style="font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;color:white;">${rv.name}</span>
                       </div>
                     </div>`).join('')}
                   </div>
@@ -731,7 +735,7 @@
                     </div>
                     <div>
                       <span style="font-family:'Poppins',sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,235,59,.7);font-weight:600;display:block;margin-bottom:4px;">1.º — Praia Fluvial do Ano ${w.year}</span>
-                      <h3 style="font-family:'Poppins',sans-serif;font-size:22px;font-weight:800;color:white;line-height:1.2;margin:0;">${w.winner}</h3>
+                      <h3 data-content-settings="previousWinners.${origIdx}.winner" style="font-family:'Poppins',sans-serif;font-size:22px;font-weight:800;color:white;line-height:1.2;margin:0;">${w.winner}</h3>
                     </div>
                   </div>
                 </div>
