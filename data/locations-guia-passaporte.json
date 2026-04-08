@@ -165,8 +165,8 @@
     "address": "Biblioteca Municipal de Albergaria-a-Velha, Praça D. Teresa 7, 3850-137 Albergaria-a-Velha",
     "type": "guia",
     "coordinates": {
-      "lat": 40.69304650000001,
-      "lng": -8.479317
+      "lat": 40.7285786,
+      "lng": -8.4581401
     }
   },
   {
@@ -175,8 +175,8 @@
     "address": "Rua 5 de Outubro, 8200-000 Albufeira",
     "type": "guia",
     "coordinates": {
-      "lat": 37.0898465,
-      "lng": -8.2542484
+      "lat": 37.0954106,
+      "lng": -8.2555348
     }
   },
   {
@@ -215,8 +215,8 @@
     "address": "Praça do Pelourinho, 2460-601 Aljubarrota",
     "type": "guia",
     "coordinates": {
-      "lat": 39.5666881,
-      "lng": -8.9295821
+      "lat": 39.5498608,
+      "lng": -8.978558500000002
     }
   },
   {
@@ -295,8 +295,8 @@
     "address": "Av. 1 Maio - Centro documentação Local, 7600-068  Aljustrel",
     "type": "guia",
     "coordinates": {
-      "lat": 37.8771689,
-      "lng": -8.1636113
+      "lat": 37.8683692,
+      "lng": -8.1634972
     }
   },
   {
@@ -335,8 +335,8 @@
     "address": "CEDET – Edifício da Alfândega, 6355-217 Vilar Formoso",
     "type": "guia",
     "coordinates": {
-      "lat": 40.6148457,
-      "lng": -6.837111999999999
+      "lat": 40.60659340000001,
+      "lng": -6.826166100000001
     }
   },
   {
@@ -355,8 +355,8 @@
     "address": "Largo da Praça de Touros, Loja 9, 2080-030 Almeirim",
     "type": "guia",
     "coordinates": {
-      "lat": 39.200928,
-      "lng": -8.6270463
+      "lat": 39.2077904,
+      "lng": -8.6287416
     }
   },
   {
@@ -375,8 +375,8 @@
     "address": "Praça José Rodrigues Faustino Pinho, 2090-222 Alpiarça.",
     "type": "guia",
     "coordinates": {
-      "lat": 39.2959162,
-      "lng": -8.5622859
+      "lat": 39.2504434,
+      "lng": -8.582595099999999
     }
   },
   {
@@ -395,8 +395,8 @@
     "address": "Praça do Município, 3250-100 Alvaiázere",
     "type": "guia",
     "coordinates": {
-      "lat": 39.8250484,
-      "lng": -8.381832800000002
+      "lat": 39.8219115,
+      "lng": -8.3774401
     }
   },
   {
@@ -435,8 +435,8 @@
     "address": "Avenida Afonso Manuel Pereira de Azevedo – Caldelas, 4720-249 Amares",
     "type": "guia",
     "coordinates": {
-      "lat": 41.6681081,
-      "lng": -8.3740881
+      "lat": 41.6682688,
+      "lng": -8.3705879
     }
   },
   {
@@ -555,8 +555,8 @@
     "address": "Rua João Mendonça, n.º 8, 3800-200 Aveiro",
     "type": "guia",
     "coordinates": {
-      "lat": 40.6415418,
-      "lng": -8.6545204
+      "lat": 40.6442139,
+      "lng": -8.64074
     }
   },
   {
@@ -675,8 +675,8 @@
     "address": "Quinta do Rio, 6250 Belmonte",
     "type": "guia",
     "coordinates": {
-      "lat": 40.3521918,
-      "lng": -7.3645608
+      "lat": 40.366352,
+      "lng": -7.352464999999999
     }
   },
   {
@@ -765,8 +765,8 @@
     "address": "Rua Gomes Monteiro 3, 5460-304 Boticas",
     "type": "guia",
     "coordinates": {
-      "lat": 41.6867227,
-      "lng": -7.6684748
+      "lat": 41.6896993,
+      "lng": -7.6648312
     }
   },
   {
@@ -985,8 +985,8 @@
     "address": "Museu Municipal Manuel Soares de Albergaria, Rua Alexandre Braga, n.º 32, 3430-007 Carregal do Sal",
     "type": "guia",
     "coordinates": {
-      "lat": 40.43420709999999,
-      "lng": -7.9955622
+      "lat": 40.4353613,
+      "lng": -8.002609
     }
   },
   {
@@ -1015,8 +1015,8 @@
     "address": "Avenida da República, 2750-475 Cascais",
     "type": "guia",
     "coordinates": {
-      "lat": 38.6942707,
-      "lng": -9.4297685
+      "lat": 38.694404399999996,
+      "lng": -9.423059199999999
     }
   },
   {
@@ -1346,8 +1346,8 @@
     "address": "Rua da Corredoura – Edifício Centro Cultural, 1º andar, 6360-100 Celorico da Beira",
     "type": "guia",
     "coordinates": {
-      "lat": 40.635107,
-      "lng": -7.3928795
+      "lat": 40.6350043,
+      "lng": -7.3939409000000005
     }
   },
   {
@@ -1700,8 +1700,8 @@
     "address": "Rua Marquês d’Ávila e Bolama, 6201-001 Covilhã",
     "type": "guia",
     "coordinates": {
-      "lat": 40.2823347,
-      "lng": -7.5023037
+      "lat": 40.277797899999996,
+      "lng": -7.5084757
     }
   },
   {
@@ -1730,8 +1730,8 @@
     "address": "Av. Frei Heitor Pinto, n.º 19, 6200-113 Covilhã",
     "type": "guia_passaporte",
     "coordinates": {
-      "lat": 40.284742,
-      "lng": -7.5062609
+      "lat": 40.2801735,
+      "lng": -7.5043638
     }
   },
   {
@@ -1850,8 +1850,8 @@
     "address": "Praça Francisco Barbosa, 3864-001 Estarreja",
     "type": "guia",
     "coordinates": {
-      "lat": 40.752266999999996,
-      "lng": -8.569992
+      "lat": 40.7539479,
+      "lng": -8.569979000000002
     }
   },
   {
@@ -1920,8 +1920,8 @@
     "address": "Lago Azul – Castanheira, 2240-332 Ferreira do Zêzere",
     "type": "guia",
     "coordinates": {
-      "lat": 39.677401,
-      "lng": -8.234033
+      "lat": 39.6676332,
+      "lng": -8.2334342
     }
   },
   {
@@ -2030,8 +2030,8 @@
     "address": "Esplanada Silva Guimarães Castelo Engenheiro Silva, 3080-085 Figueira da Foz",
     "type": "guia",
     "coordinates": {
-      "lat": 40.1494477,
-      "lng": -8.866205899999999
+      "lat": 40.1482253,
+      "lng": -8.8548195
     }
   },
   {
@@ -2040,8 +2040,8 @@
     "address": "Av. 25 de Abril, 3080-501 Figueira da Foz",
     "type": "guia",
     "coordinates": {
-      "lat": 40.1524958,
-      "lng": -8.8668751
+      "lat": 40.1482253,
+      "lng": -8.8548195
     }
   },
   {
@@ -2191,8 +2191,8 @@
     "address": "Av. Heróis dos Atoleiros, 7460-101 Fronteira",
     "type": "guia",
     "coordinates": {
-      "lat": 39.0504951,
-      "lng": -7.6435788
+      "lat": 39.05599730000001,
+      "lng": -7.647754000000001
     }
   },
   {
@@ -2513,8 +2513,8 @@
     "address": "Casa de N.ª Senhora da Conceição, Rua Anselmo Patrício, n.º 5, 6040-102 Gavião",
     "type": "guia",
     "coordinates": {
-      "lat": 39.4659436,
-      "lng": -7.9327227
+      "lat": 39.4652958,
+      "lng": -7.933602
     }
   },
   {
@@ -2878,8 +2878,8 @@
     "address": "Rua da Senhora do Almortão, 6060-112 Idanha-a-Nova",
     "type": "guia_passaporte",
     "coordinates": {
-      "lat": 39.9221336,
-      "lng": -7.23496
+      "lat": 39.9241165,
+      "lng": -7.2409664000000005
     }
   },
   {
@@ -3029,8 +3029,8 @@
     "address": "Loja Intendente, Largo do Intendente Pina Manique n.º 23, 1100­-285 Lisboa",
     "type": "guia",
     "coordinates": {
-      "lat": 38.7210281,
-      "lng": -9.1351233
+      "lat": 38.710109599999996,
+      "lng": -9.1392056
     }
   },
   {
@@ -3049,8 +3049,8 @@
     "address": "Rua Vila Santos 9, 1070-068 Lisboa",
     "type": "guia_passaporte",
     "coordinates": {
-      "lat": 38.7264712,
-      "lng": -9.1661979
+      "lat": 38.71982500000001,
+      "lng": -9.119935
     }
   },
   {
@@ -3099,8 +3099,8 @@
     "address": "Pólo Museológico Cândido Guerreiro e Condes de Alte, 8100-012 Alte (Loulé)",
     "type": "guia",
     "coordinates": {
-      "lat": 37.2357611,
-      "lng": -8.1760916
+      "lat": 37.2386098,
+      "lng": -8.1690075
     }
   },
   {
@@ -3139,8 +3139,8 @@
     "address": "Pavilhão de Macau, Parque da Cidade, 2670-455 Loures",
     "type": "guia",
     "coordinates": {
-      "lat": 38.8297603,
-      "lng": -9.166369699999999
+      "lat": 38.8269625,
+      "lng": -9.1600637
     }
   },
   {
@@ -3180,8 +3180,8 @@
     "address": "Ermida da Sra.ª da Piedade – Praia Fluvial da Senhora da Piedade, 3200 Lousã",
     "type": "guia",
     "coordinates": {
-      "lat": 40.1002647,
-      "lng": -8.2343988
+      "lat": 40.099580599999996,
+      "lng": -8.233914
     },
     "seasonal": true
   },
@@ -3242,8 +3242,8 @@
     "address": "Museu Municipal Prof. Álvaro Viana de Lemos, Rua Miguel Bombarda, 18, 3200-249 Lousã",
     "type": "guia_passaporte",
     "coordinates": {
-      "lat": 40.109275,
-      "lng": -8.24577
+      "lat": 40.1004146,
+      "lng": -8.235504299999999
     }
   },
   {
@@ -3262,8 +3262,8 @@
     "address": "Praça D. António Meireles, 18, 4620-130 Lousada",
     "type": "guia",
     "coordinates": {
-      "lat": 41.2481829,
-      "lng": -8.2769169
+      "lat": 41.2758179,
+      "lng": -8.2833541
     }
   },
   {
@@ -3325,8 +3325,8 @@
     "address": "Rua Principal 238/274, Monte Penedo, 6120-613 Penhascoso",
     "type": "guia",
     "coordinates": {
-      "lat": 39.5079444,
-      "lng": -8.0350762
+      "lat": 39.5553112,
+      "lng": -7.9966673
     }
   },
   {
@@ -3355,8 +3355,8 @@
     "address": "Rua da Eira, n.º 200, Juntos, 6120-159 Amêndoa",
     "type": "guia",
     "coordinates": {
-      "lat": 39.6571484,
-      "lng": -8.0125313
+      "lat": 39.5553112,
+      "lng": -7.9966673
     }
   },
   {
@@ -3516,8 +3516,8 @@
     "address": "Largo da Estação, 5340-215 Macedo de Cavaleiros",
     "type": "guia_passaporte",
     "coordinates": {
-      "lat": 41.5333535,
-      "lng": -6.9550595
+      "lat": 41.533937,
+      "lng": -6.9555179
     }
   },
   {
@@ -3727,8 +3727,8 @@
     "address": "Souto do Concelho, 6260-000 Manteigas",
     "type": "guia",
     "coordinates": {
-      "lat": 40.3924866,
-      "lng": -7.508012
+      "lat": 40.3970841,
+      "lng": -7.5128894
     }
   },
   {
@@ -3737,8 +3737,8 @@
     "address": "Alameda Dr. Miranda da Rocha, 4630-200 Marco de Canaveses",
     "type": "guia_passaporte",
     "coordinates": {
-      "lat": 41.1867218,
-      "lng": -8.1488268
+      "lat": 41.1866209,
+      "lng": -8.149429
     }
   },
   {
@@ -4068,8 +4068,8 @@
     "address": "Lugar do Cabeço de Lebrais (Leomil), 3620-163 Leomil (Moimenta da Beira)",
     "type": "guia",
     "coordinates": {
-      "lat": 40.9853084,
-      "lng": -7.6516626
+      "lat": 40.9720568,
+      "lng": -7.647384499999999
     }
   },
   {
@@ -4478,8 +4478,8 @@
     "address": "Largo Marquês de Pombal, Palácio do Marquês de Pombal, 2784-501 Oeiras",
     "type": "guia_passaporte",
     "coordinates": {
-      "lat": 38.6923672,
-      "lng": -9.314606399999999
+      "lat": 38.6773507,
+      "lng": -9.3168401
     }
   },
   {
@@ -4792,8 +4792,8 @@
     "address": "Av. Infante D. Henrique - Praia do Furadouro, 3880-355  Ovar",
     "type": "guia",
     "coordinates": {
-      "lat": 40.8748319,
-      "lng": -8.6769126
+      "lat": 40.8593444,
+      "lng": -8.6245699
     }
   },
   {
@@ -5048,8 +5048,8 @@
     "address": "Cit – Centro de Interpretação Turística, Valbom, 3274-909 Pedrógão Grande",
     "type": "guia_passaporte",
     "coordinates": {
-      "lat": 39.9207582,
-      "lng": -8.152597199999999
+      "lat": 39.919182,
+      "lng": -8.145714
     }
   },
   {
@@ -5100,8 +5100,8 @@
     "address": "Quinta da Conchada, 3360-315 Travanca do Mondego",
     "type": "guia",
     "coordinates": {
-      "lat": 40.323764,
-      "lng": -8.186928199999999
+      "lat": 40.3373146,
+      "lng": -8.2161855
     }
   },
   {
@@ -5120,8 +5120,8 @@
     "address": "Largo Alberto Leitão, 3360-341 Penacova",
     "type": "guia_passaporte",
     "coordinates": {
-      "lat": 40.2702364,
-      "lng": -8.280813499999999
+      "lat": 40.2693328,
+      "lng": -8.2732355
     }
   },
   {
@@ -5150,8 +5150,8 @@
     "address": "Avenida Castendo, 3550-185 Penalva do Castelo",
     "type": "guia",
     "coordinates": {
-      "lat": 40.6758138,
-      "lng": -7.7018985
+      "lat": 40.684900999999996,
+      "lng": -7.711513399999999
     }
   },
   {
@@ -5182,8 +5182,8 @@
     "address": "EN 233, 6090-385 Meimoa",
     "type": "guia",
     "coordinates": {
-      "lat": 40.22590340000001,
-      "lng": -7.187571999999999
+      "lat": 40.167353,
+      "lng": -7.1704239
     },
     "seasonal": true
   },
@@ -5719,8 +5719,8 @@
     "address": "Loja Interativa de Turismo, Rua José Pereira Monteiro, 4660-215 Resende",
     "type": "guia",
     "coordinates": {
-      "lat": 41.1119883,
-      "lng": -7.9280158
+      "lat": 41.1060891,
+      "lng": -7.9637672
     }
   },
   {
@@ -6003,8 +6003,8 @@
     "address": "Avenida da Ponte, 3660-484 São Pedro do Sul",
     "type": "guia",
     "coordinates": {
-      "lat": 40.7597561,
-      "lng": -8.0596976
+      "lat": 40.739202,
+      "lng": -8.092957799999999
     }
   },
   {
@@ -6320,8 +6320,8 @@
     "address": "Av. Bombeiros Voluntários, 6270-425 Seia",
     "type": "guia",
     "coordinates": {
-      "lat": 40.4127978,
-      "lng": -7.706430999999999
+      "lat": 40.4078513,
+      "lng": -7.7098007
     }
   },
   {
@@ -6380,8 +6380,8 @@
     "address": "Alameda da Carvalha, n.º 2, 6100-730 Sertã",
     "type": "guia",
     "coordinates": {
-      "lat": 39.8692407,
-      "lng": -8.135764199999999
+      "lat": 39.8015555,
+      "lng": -8.0984863
     },
     "seasonal": true
   },
@@ -6513,8 +6513,8 @@
     "address": "Casa da Baía, Centro de Promoção Turística, Avenida Luísa Todi n.º468, 2900-456 Setúbal",
     "type": "guia",
     "coordinates": {
-      "lat": 38.5231515,
-      "lng": -8.898776699999999
+      "lat": 38.52072810000001,
+      "lng": -8.8893529
     }
   },
   {
@@ -6663,8 +6663,8 @@
     "address": "Rua Dr. Francisco Beirão, n.º 16, 3420-325 Tábua",
     "type": "guia_passaporte",
     "coordinates": {
-      "lat": 40.3596164,
-      "lng": -8.0287031
+      "lat": 40.369194799999995,
+      "lng": -8.0238103
     }
   },
   {
@@ -6773,8 +6773,8 @@
     "address": "Foz do Sabor, 5160 Torre de Moncorvo",
     "type": "guia",
     "coordinates": {
-      "lat": 41.1856059,
-      "lng": -7.0498442
+      "lat": 41.1801857,
+      "lng": -7.111944599999999
     }
   },
   {
@@ -6853,8 +6853,8 @@
     "address": "Parques N. Sr.ª das Dores e Dr. Lima Carneiro, Rua Padre Joaquim Augusto da Fonseca Pedrosa,, Fórum Trofa XXI, n.º 92, 4785-419 Trofa",
     "type": "guia",
     "coordinates": {
-      "lat": 41.3385908,
-      "lng": -8.5450288
+      "lat": 41.3396377,
+      "lng": -8.553697999999999
     }
   },
   {
@@ -6903,8 +6903,8 @@
     "address": "Av. Eng. Luís de Castro Saraiva, 5430-472 Valpaços",
     "type": "guia_passaporte",
     "coordinates": {
-      "lat": 41.6093597,
-      "lng": -7.3070281
+      "lat": 41.604213699999995,
+      "lng": -7.3104928
     }
   },
   {
