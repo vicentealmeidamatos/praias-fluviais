@@ -272,7 +272,13 @@ async function handleBuyNow(productId) {
 
   const variant = getSelectedVariant(productId);
   if (product.variants && product.variants.length > 0 && !variant) {
-    showToast('Seleciona um tamanho primeiro.', 'warning');
+    showToast('Selecione um tamanho primeiro.', 'warning');
+    return;
+  }
+
+  const beach = getSelectedBeach(productId);
+  if (product.customizable && !beach) {
+    showToast('Selecione a praia que quer na t-shirt.', 'warning');
     return;
   }
 
@@ -285,7 +291,7 @@ async function handleBuyNow(productId) {
   try {
     const user = await authGetUser();
     const payload = {
-      items: [{ product_id: productId, variant: variant || 'sem-variante', quantity: 1 }],
+      items: [{ product_id: productId, variant: variant || 'sem-variante', beach: beach || null, quantity: 1 }],
       user_id: user?.id ?? null,
     };
 
@@ -327,7 +333,13 @@ async function handleAddToCart(productId) {
 
   const variant = getSelectedVariant(productId);
   if (product.variants && product.variants.length > 0 && !variant) {
-    showToast('Seleciona um tamanho primeiro.', 'warning');
+    showToast('Selecione um tamanho primeiro.', 'warning');
+    return;
+  }
+
+  const beach = getSelectedBeach(productId);
+  if (product.customizable && !beach) {
+    showToast('Selecione a praia que quer na t-shirt.', 'warning');
     return;
   }
 
@@ -340,13 +352,15 @@ async function handleAddToCart(productId) {
   try {
     // Check if item already in cart
     const variantKey = variant || 'sem-variante';
-    const { data: existing } = await _sb
+    const beachKey = beach || null;
+    let query = _sb
       .from('cart_items')
       .select('id, quantity')
       .eq('user_id', user.id)
       .eq('product_id', productId)
-      .eq('variant', variantKey)
-      .single();
+      .eq('variant', variantKey);
+    query = beachKey ? query.eq('beach', beachKey) : query.is('beach', null);
+    const { data: existing } = await query.single();
 
     if (existing) {
       await _sb.from('cart_items').update({ quantity: existing.quantity + 1 }).eq('id', existing.id);
@@ -355,6 +369,7 @@ async function handleAddToCart(productId) {
         user_id: user.id,
         product_id: productId,
         variant: variantKey,
+        beach: beachKey,
         quantity: 1
       });
     }
