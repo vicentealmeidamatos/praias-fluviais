@@ -2573,8 +2573,12 @@ function renderConteudo(container) {
   const deviceWidths = { desktop: '100%', tablet: '768px', mobile: '375px' };
   const w = deviceWidths[_content.device];
 
+  const fs = _content.fullscreen;
+  const wrapStyle = fs
+    ? 'position:fixed;inset:0;z-index:9999;background:#FAF8F5;display:flex;flex-direction:column;'
+    : 'height:100vh;display:flex;flex-direction:column;';
   container.innerHTML = `
-    <div class="flex flex-col h-full" style="height:100vh;">
+    <div class="flex flex-col" id="content-wrap" style="${wrapStyle}">
       <!-- Topbar -->
       <div class="flex items-center gap-3 px-5 py-3 bg-white border-b border-praia-sand-200 flex-wrap">
         <div>
@@ -2610,6 +2614,11 @@ function renderConteudo(container) {
         <button onclick="contentPreviewVisitor()"
           class="px-3 py-2 rounded-lg border border-praia-sand-300 bg-white text-sm font-display font-semibold text-praia-teal-800 hover:bg-praia-sand-50">
           👁 Pré-visualizar
+        </button>
+
+        <button onclick="contentToggleFullscreen()" title="${fs?'Sair de ecrã inteiro (Esc)':'Ecrã inteiro (F)'}"
+          class="px-3 py-2 rounded-lg border border-praia-sand-300 bg-white text-sm font-display font-semibold text-praia-teal-800 hover:bg-praia-sand-50">
+          ${fs ? '🗗 Sair' : '⛶ Ecrã inteiro'}
         </button>
 
         <span id="content-dirty-badge"
@@ -2684,6 +2693,11 @@ function contentSwitchPage(pageId) {
 
 function contentSetDevice(d) {
   _content.device = d;
+  renderConteudo(document.getElementById('admin-content'));
+}
+
+function contentToggleFullscreen() {
+  _content.fullscreen = !_content.fullscreen;
   renderConteudo(document.getElementById('admin-content'));
 }
 
@@ -2868,6 +2882,12 @@ document.addEventListener('keydown', (e) => {
   if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) { e.preventDefault(); contentUndo(); }
   else if ((e.ctrlKey || e.metaKey) && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) { e.preventDefault(); contentRedo(); }
   else if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); contentSave(); }
+  else if (e.key === 'F' && !e.ctrlKey && !e.metaKey && !e.target.matches('input,textarea,select')) {
+    e.preventDefault(); contentToggleFullscreen();
+  }
+  else if (e.key === 'Escape' && _content.fullscreen) {
+    _content.fullscreen = false; renderConteudo(document.getElementById('admin-content'));
+  }
 });
 
 // Stub para preservar API antiga (caso seja chamada de algum sítio)
