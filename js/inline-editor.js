@@ -253,12 +253,24 @@
     }
     const a = e.target.closest('a');
     if (a) {
-      // Permitir navegação a outra página (admin escolhe deixar ir)
-      // mas suprimir links âncora/JS para não disparar modais.
       const href = a.getAttribute('href') || '';
+      // Suprimir links âncora/JS — não disparar modais
       if (!href || href.startsWith('#') || href.startsWith('javascript:')) {
         e.preventDefault();
         e.stopImmediatePropagation();
+        return;
+      }
+      // Suprimir TODA a navegação dentro de header/nav/footer — esses links
+      // devem ser editáveis em vez de navegar (causa do bug onde os textos
+      // deixam de ser editáveis após mudar de página).
+      // Excepção: links para páginas específicas de praia/artigo/produto
+      // (precisos para abrir as páginas dinâmicas no editor).
+      const inChrome = a.closest('header, nav, footer');
+      const isDynamic = /^(?:\/)?(?:praia|artigo|produto)\.html(?:\?|$)/i.test(href);
+      if (inChrome && !isDynamic) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        return;
       }
     }
   }, true);
@@ -801,7 +813,7 @@
     // Texto: tornar editável qualquer leaf de texto que ainda não tenha data-content*
     root.querySelectorAll('*').forEach((el) => {
       if (SKIP_INSIDE.has(el.tagName)) return;
-      if (el.closest('.__ie-toolbar, .__ie-modal, header#main-header, nav#mobile-menu')) return;
+      if (el.closest('.__ie-toolbar, .__ie-modal')) return;
       if (el.hasAttribute('data-content') || el.hasAttribute('data-content-html')) return;
       if (!isLeafTextElement(el)) return;
       if (el.__ieUniversal) return;
