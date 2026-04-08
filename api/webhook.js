@@ -184,7 +184,7 @@ async function createInvoiceXpressInvoice({ email, customerName, taxId, billingA
       country: 'Portugal',
       fiscal_id: taxId || '999999990', // 999999990 = consumidor final
       language: 'pt',
-      send_options: 'email',
+      send_options: 2,
     },
   };
 
