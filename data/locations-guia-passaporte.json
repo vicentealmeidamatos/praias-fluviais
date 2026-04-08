@@ -1549,8 +1549,8 @@
     "address": "Zona de Lazer de Cortes do Meio, 6215 Cortes do Meio",
     "type": "guia",
     "coordinates": {
-      "lat": 40.2817346,
-      "lng": -7.505275800000001
+      "lat": 40.2575875,
+      "lng": -7.5813594
     },
     "seasonal": true
   },
@@ -3109,8 +3109,8 @@
     "address": "Polo Museológico da Água, Largo da Igreja de N.ª Sra da Assunção – Querença, 8100-495 Querença (Loulé)",
     "type": "guia",
     "coordinates": {
-      "lat": 37.1390921,
-      "lng": -8.0214271
+      "lat": 37.1990603,
+      "lng": -7.987557799999999
     }
   },
   {
@@ -3159,8 +3159,8 @@
     "address": "Largo do Turismo – Praia da Areia Branca, 2530-216 Lourinhã",
     "type": "guia",
     "coordinates": {
-      "lat": 39.2430533,
-      "lng": -9.3135769
+      "lat": 39.2659346,
+      "lng": -9.3341529
     }
   },
   {
@@ -4855,8 +4855,8 @@
     "address": "Praia Fluvial de Santa Luzia – Casal da Lapa, 3320-391 Vidual",
     "type": "guia",
     "coordinates": {
-      "lat": 40.0468729,
-      "lng": -7.9476951
+      "lat": 40.0904764,
+      "lng": -7.8523741000000005
     },
     "seasonal": true
   },
@@ -5523,8 +5523,8 @@
     "address": "Bar da Associação Desportiva Cultural e Recreativa de Cerejeira, Praia Fluvial da Cerejeira – Sobreira Formosa, 6150 Proença-a-Nova",
     "type": "guia",
     "coordinates": {
-      "lat": 39.8099286,
-      "lng": -7.7531058999999996
+      "lat": 39.809715,
+      "lng": -7.753256799999999
     },
     "seasonal": true
   },
@@ -6033,8 +6033,8 @@
     "address": "Praia Fluvial do Trabulo, 3560-030 Decermilo (Sátão)",
     "type": "guia",
     "coordinates": {
-      "lat": 40.7720182,
-      "lng": -7.652510299999999
+      "lat": 40.7423572,
+      "lng": -7.732120099999999
     },
     "seasonal": true
   },
