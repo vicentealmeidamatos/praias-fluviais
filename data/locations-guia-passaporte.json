@@ -705,8 +705,8 @@
     "address": "EMPDS Belmonte EM, Biblioteca Municipal de Belmonte, Rua Pedro Álvares Cabral, 6250-088 Belmonte",
     "type": "guia",
     "coordinates": {
-      "lat": 40.3584057,
-      "lng": -7.3501791999999995
+      "lat": 40.3583421,
+      "lng": -7.3514561
     }
   },
   {
@@ -1306,8 +1306,8 @@
     "address": "Rua Dr. Pio de Figueiredo, nº 42, 3600-214 Castro Daire",
     "type": "guia_passaporte",
     "coordinates": {
-      "lat": 40.898674,
-      "lng": -7.9340516
+      "lat": 40.8983376,
+      "lng": -7.9326434
     }
   },
   {
@@ -1346,8 +1346,8 @@
     "address": "Rua da Corredoura – Edifício Centro Cultural, 1º andar, 6360-100 Celorico da Beira",
     "type": "guia",
     "coordinates": {
-      "lat": 40.6350043,
-      "lng": -7.3939409000000005
+      "lat": 40.635107,
+      "lng": -7.3928795
     }
   },
   {
@@ -1386,8 +1386,8 @@
     "address": "Rua Sacadura Cabral, 6360 Celorico da Beira",
     "type": "guia",
     "coordinates": {
-      "lat": 40.6350043,
-      "lng": -7.3939409000000005
+      "lat": 40.6343939,
+      "lng": -7.3945468
     }
   },
   {
@@ -1960,8 +1960,8 @@
     "address": "Castanheira, 2240-332 Ferreira do Zêzere",
     "type": "guia",
     "coordinates": {
-      "lat": 39.677401,
-      "lng": -8.234033
+      "lat": 39.6687125,
+      "lng": -8.2318281
     }
   },
   {
@@ -2938,8 +2938,8 @@
     "address": "Av. 25 de Abril, 3830-044 Ílhavo",
     "type": "guia",
     "coordinates": {
-      "lat": 40.601937299999996,
-      "lng": -8.670328999999999
+      "lat": 40.6013922,
+      "lng": -8.6680768
     }
   },
   {
@@ -4866,8 +4866,8 @@
     "address": "Parque Fluvial de Pessegueiro, 3320-996 Pessegueiro",
     "type": "guia",
     "coordinates": {
-      "lat": 40.0516378,
-      "lng": -8.0241236
+      "lat": 40.0526811,
+      "lng": -8.0208814
     }
   },
   {
@@ -4926,8 +4926,8 @@
     "address": "Rua Rangel de Lima, 3320-229 Pampilhosa da Serra",
     "type": "guia_passaporte",
     "coordinates": {
-      "lat": 40.046284400000005,
-      "lng": -7.950415399999999
+      "lat": 40.0479046,
+      "lng": -7.9516806
     }
   },
   {
@@ -6483,8 +6483,8 @@
     "address": "Av. Padre Manuel Antunes, 6100-781 Sertã",
     "type": "guia_passaporte",
     "coordinates": {
-      "lat": 39.8001443,
-      "lng": -8.097254399999999
+      "lat": 39.8003198,
+      "lng": -8.096778
     }
   },
   {
