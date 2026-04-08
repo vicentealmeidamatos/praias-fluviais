@@ -182,47 +182,60 @@ function extractTaxId(session) {
   return null;
 }
 
+// ISO country code → nome PT (InvoiceXpress aceita nomes)
+const COUNTRY_NAMES = {
+  PT: 'Portugal', ES: 'Espanha', FR: 'França', DE: 'Alemanha', IT: 'Itália',
+  GB: 'Reino Unido', UK: 'Reino Unido', BE: 'Bélgica', NL: 'Holanda',
+  LU: 'Luxemburgo', CH: 'Suíça', US: 'Estados Unidos', BR: 'Brasil',
+  IE: 'Irlanda', AT: 'Áustria', SE: 'Suécia', DK: 'Dinamarca', NO: 'Noruega',
+  FI: 'Finlândia', PL: 'Polónia', CZ: 'República Checa', AO: 'Angola',
+  CV: 'Cabo Verde', MZ: 'Moçambique',
+};
+
 async function createInvoiceXpressInvoice({ email, customerName, taxId, billingAddress, items, shippingPrice, sessionId }) {
   const account = process.env.INVOICEXPRESS_ACCOUNT;
   const apiKey = process.env.INVOICEXPRESS_API_KEY;
   const baseUrl = `https://${account}.app.invoicexpress.com`;
 
-  // 1. Criar/atualizar cliente
+  const effectiveFiscalId = taxId || '999999990'; // 999999990 = consumidor final
+  const countryName = COUNTRY_NAMES[(billingAddress.country || 'PT').toUpperCase()] || 'Portugal';
+  // Usamos o email como código do cliente — estável, único e deixa o
+  // campo "NIF" do IX (fiscal_id) livre para o NIF real.
+  const clientCode = (email || `cliente-${Date.now()}`).toLowerCase();
+
   const clientPayload = {
     client: {
       name: customerName,
-      email,
+      code: clientCode,
+      email: email || '',
       address: [billingAddress.line1, billingAddress.line2].filter(Boolean).join(', '),
       city: billingAddress.city || '',
       postal_code: billingAddress.postal_code || '',
-      country: 'Portugal',
-      fiscal_id: taxId || '999999990', // 999999990 = consumidor final
+      country: countryName,
+      fiscal_id: effectiveFiscalId,
       language: 'pt',
       send_options: 2,
     },
   };
 
   let clientId;
-  const effectiveFiscalId = taxId || '999999990';
 
-  // 1a. Se temos NIF real, procurar primeiro por código fiscal (mais fiável que por nome)
-  if (taxId) {
-    try {
-      const findByCodeRes = await fetch(
-        `${baseUrl}/clients/find-by-code.json?api_key=${apiKey}&client_code=${encodeURIComponent(taxId)}`,
-        { headers: { Accept: 'application/json' } }
-      );
-      if (findByCodeRes.ok) {
-        const data = await findByCodeRes.json();
-        clientId = data.client?.id;
-        if (clientId) console.log('[webhook] Cliente InvoiceXpress encontrado por NIF:', clientId);
-      }
-    } catch (e) {
-      console.log('[webhook] find-by-code falhou (ignorado):', e.message);
+  // 1. Procurar cliente existente pelo email (clientCode)
+  try {
+    const findRes = await fetch(
+      `${baseUrl}/clients/find-by-code.json?api_key=${apiKey}&client_code=${encodeURIComponent(clientCode)}`,
+      { headers: { Accept: 'application/json' } }
+    );
+    if (findRes.ok) {
+      const data = await findRes.json();
+      clientId = data.client?.id;
+      if (clientId) console.log('[webhook] Cliente InvoiceXpress encontrado por email:', clientId);
     }
+  } catch (e) {
+    console.log('[webhook] find-by-code(email) falhou (ignorado):', e.message);
   }
 
-  // 1b. Se não encontrou por NIF, tentar por nome
+  // 2. Fallback: procurar por nome (compatibilidade com clientes antigos)
   if (!clientId) {
     try {
       const findRes = await fetch(
@@ -232,65 +245,45 @@ async function createInvoiceXpressInvoice({ email, customerName, taxId, billingA
       if (findRes.ok) {
         const data = await findRes.json();
         clientId = data.client?.id;
-        if (clientId) {
-          console.log('[webhook] Cliente InvoiceXpress encontrado por nome:', clientId);
-          // Se temos NIF e o cliente existente pode ter outro fiscal_id, atualizar
-          if (taxId) {
-            try {
-              const updateRes = await fetch(
-                `${baseUrl}/clients/${clientId}.json?api_key=${apiKey}`,
-                {
-                  method: 'PUT',
-                  headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-                  body: JSON.stringify(clientPayload),
-                }
-              );
-              console.log('[webhook] PUT /clients/' + clientId + ' →', updateRes.status);
-            } catch (e) {
-              console.log('[webhook] update cliente falhou (ignorado):', e.message);
-            }
-          }
-        }
+        if (clientId) console.log('[webhook] Cliente InvoiceXpress encontrado por nome:', clientId);
       }
     } catch (e) {
       console.log('[webhook] find-by-name falhou (ignorado):', e.message);
     }
   }
 
-  // 1c. Se não encontrou, tentar criar
+  // 3. Criar se não existe
   if (!clientId) {
     const clientRes = await fetch(`${baseUrl}/clients.json?api_key=${apiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       body: JSON.stringify(clientPayload),
     });
-
     const clientBody = await clientRes.text();
-    console.log('[webhook] InvoiceXpress POST /clients.json →', clientRes.status, clientBody.slice(0, 500));
-
+    console.log('[webhook] POST /clients.json →', clientRes.status, clientBody.slice(0, 300));
     if (clientRes.ok) {
-      try {
-        const data = JSON.parse(clientBody);
-        clientId = data.client?.id;
-      } catch {}
-    } else if (clientRes.status === 422) {
-      // 422 = já existe → tentar encontrar de novo (por código fiscal)
-      if (taxId) {
-        const findByCodeRes = await fetch(
-          `${baseUrl}/clients/find-by-code.json?api_key=${apiKey}&client_code=${encodeURIComponent(taxId)}`,
-          { headers: { Accept: 'application/json' } }
-        );
-        if (findByCodeRes.ok) {
-          const data = await findByCodeRes.json();
-          clientId = data.client?.id;
-          if (clientId) console.log('[webhook] Cliente encontrado por código fiscal após 422:', clientId);
+      try { clientId = JSON.parse(clientBody).client?.id; } catch {}
+    }
+  } else {
+    // 4. Sempre PUT para garantir email, NIF, morada e país actualizados
+    try {
+      const updateRes = await fetch(
+        `${baseUrl}/clients/${clientId}.json?api_key=${apiKey}`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(clientPayload),
         }
-      }
+      );
+      const updateBody = await updateRes.text();
+      console.log('[webhook] PUT /clients/' + clientId + ' →', updateRes.status, updateBody.slice(0, 200));
+    } catch (e) {
+      console.log('[webhook] PUT cliente falhou (ignorado):', e.message);
     }
   }
 
   if (!clientId) {
-    throw new Error(`Não foi possível criar/encontrar cliente no InvoiceXpress (account=${account}, name=${customerName}, taxId=${taxId || 'n/a'})`);
+    throw new Error(`Não foi possível criar/encontrar cliente no InvoiceXpress (account=${account}, name=${customerName})`);
   }
 
   // 2. Criar fatura-recibo
@@ -316,18 +309,7 @@ async function createInvoiceXpressInvoice({ email, customerName, taxId, billingA
     invoice_receipt: {
       date: today,
       due_date: today,
-      client: {
-        name: customerName,
-        code: effectiveFiscalId,
-        email,
-        address: [billingAddress.line1, billingAddress.line2].filter(Boolean).join(', '),
-        city: billingAddress.city || '',
-        postal_code: billingAddress.postal_code || '',
-        country: 'Portugal',
-        fiscal_id: effectiveFiscalId,
-        language: 'pt',
-        send_options: 2,
-      },
+      client: { name: customerName, code: clientCode },
       items: invoiceItems,
       observations: `Pedido Stripe: ${sessionId}`,
     },
