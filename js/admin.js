@@ -494,12 +494,6 @@ function renderDashboard() {
         <div class="p-5 border-b border-white/10">
           <img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-8">
           <p class="text-white/40 text-xs mt-2 font-display uppercase tracking-wider">Painel Admin</p>
-          <button onclick="discardAndReload()" title="Recarrega a página e descarta todas as alterações não guardadas"
-                  style="margin-top:12px;width:100%;display:inline-flex;align-items:center;justify-content:center;gap:6px;background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.15);padding:8px 10px;border-radius:9px;font:600 11px Poppins,system-ui,sans-serif;cursor:pointer;letter-spacing:.02em;transition:background .15s;"
-                  onmouseover="this.style.background='rgba(255,235,59,.15)';this.style.color='#FFEB3B';this.style.borderColor='rgba(255,235,59,.4)'"
-                  onmouseout="this.style.background='rgba(255,255,255,.08)';this.style.color='#fff';this.style.borderColor='rgba(255,255,255,.15)'">
-            ↻ Recarregar / descartar
-          </button>
         </div>
         <nav class="flex-1 py-2">
           ${SECTIONS.map(s => `
