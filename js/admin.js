@@ -2625,10 +2625,10 @@ function renderConteudo(container) {
       </div>
 
       <!-- Iframe canvas -->
-      <div class="flex-1 bg-praia-sand-100 overflow-auto flex justify-center items-start p-6">
+      <div class="flex-1 bg-praia-sand-100 flex justify-center items-stretch p-4" style="min-height:0;">
         <iframe id="content-iframe"
           src="${_contentIframeSrc()}"
-          style="width:${w};max-width:100%;min-height:80vh;border:0;border-radius:14px;background:white;box-shadow:0 12px 40px rgba(0,0,0,.12);transition:width .25s;">
+          style="width:${w};max-width:100%;height:100%;border:0;border-radius:14px;background:white;box-shadow:0 12px 40px rgba(0,0,0,.12);transition:width .25s;">
         </iframe>
       </div>
     </div>
@@ -2662,6 +2662,13 @@ function _contentOnMessage(e) {
   } else if (m.type === 'sections-order-change') {
     _contentPushHistory();
     _setByPath(_content.current, 'homepage.sectionsOrder', m.value);
+    _markUnsaved();
+  } else if (m.type === 'override-change') {
+    _contentPushHistory();
+    if (!_content.current.overrides) _content.current.overrides = {};
+    if (!_content.current.overrides[m.page]) _content.current.overrides[m.page] = {};
+    const existing = _content.current.overrides[m.page][m.selector] || {};
+    _content.current.overrides[m.page][m.selector] = { ...existing, ...m.value };
     _markUnsaved();
   }
 }

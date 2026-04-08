@@ -250,6 +250,26 @@
       if (val === false) el.style.display = 'none';
     });
 
+    // 7.5) Overrides universais por seletor CSS, agrupados por página.
+    //      Cada chave é um seletor; o valor é { text | html | src | href | alt }.
+    try {
+      const pageKey = (location.pathname.split('/').pop() || 'index.html').replace('.html', '') || 'index';
+      const overrides = (content.overrides && content.overrides[pageKey]) || null;
+      if (overrides) {
+        Object.entries(overrides).forEach(([sel, val]) => {
+          if (!sel || !val) return;
+          let el;
+          try { el = document.querySelector(sel); } catch { return; }
+          if (!el) return;
+          if (val.text != null) el.textContent = val.text;
+          if (val.html != null) el.innerHTML = val.html;
+          if (val.src != null && 'src' in el) el.src = val.src;
+          if (val.href != null && 'href' in el) el.href = val.href;
+          if (val.alt != null && 'alt' in el) el.alt = val.alt;
+        });
+      }
+    } catch (e) { console.warn('[content-loader] overrides:', e.message); }
+
     // 8) Reordenar secções da homepage com base em homepage.sectionsOrder
     const order = resolve(content, 'homepage.sectionsOrder');
     if (Array.isArray(order)) {

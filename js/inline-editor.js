@@ -720,6 +720,170 @@
   }
 
   // ────────────────────────────────────────────────────────────
+  // EDITOR UNIVERSAL — torna TODOS os textos, imagens e links
+  // editáveis, mesmo sem data-content*. As alterações vão como
+  // "override-change" com um seletor CSS estável + página atual.
+  // ────────────────────────────────────────────────────────────
+  const PAGE_KEY = (location.pathname.split('/').pop() || 'index.html').replace('.html', '') || 'index';
+
+  function genSelector(el) {
+    if (!el || el === document.body) return 'body';
+    if (el.id) return '#' + CSS.escape(el.id);
+    const parts = [];
+    let cur = el;
+    while (cur && cur.nodeType === 1 && cur !== document.body) {
+      let part = cur.tagName.toLowerCase();
+      // Classes filtradas: ignorar utilities Tailwind voláteis e classes do editor
+      const cls = (typeof cur.className === 'string' ? cur.className : '')
+        .trim().split(/\s+/)
+        .filter(c => c && !c.startsWith('__ie') && !c.includes(':') && !c.startsWith('hover') && c.length < 25)
+        .slice(0, 2);
+      if (cls.length) part += '.' + cls.map(c => CSS.escape(c)).join('.');
+      const parent = cur.parentNode;
+      if (parent && parent.children) {
+        const sibs = Array.from(parent.children).filter(s => s.tagName === cur.tagName);
+        if (sibs.length > 1) part += `:nth-of-type(${sibs.indexOf(cur) + 1})`;
+      }
+      parts.unshift(part);
+      cur = cur.parentNode;
+      if (parts.length > 8) break;
+    }
+    return parts.join(' > ');
+  }
+
+  function sendOverride(el, payload) {
+    const selector = genSelector(el);
+    send({ type: 'override-change', page: PAGE_KEY, selector, value: payload });
+    markDirty();
+  }
+
+  // Critério: o elemento contém apenas texto + tags inline simples (sem outros editáveis dentro)
+  const TEXT_TAGS = new Set(['H1','H2','H3','H4','H5','H6','P','SPAN','A','LI','BUTTON','STRONG','EM','SMALL','LABEL','TD','TH','BLOCKQUOTE','FIGCAPTION','SUMMARY','DT','DD']);
+  const SKIP_INSIDE = new Set(['SCRIPT','STYLE','SVG','IFRAME','NOSCRIPT','TEMPLATE','INPUT','TEXTAREA','SELECT','OPTION']);
+
+  function isLeafTextElement(el) {
+    if (!el || !TEXT_TAGS.has(el.tagName)) return false;
+    if (!el.textContent || !el.textContent.trim()) return false;
+    // Não pode ter descendentes que sejam outros TEXT_TAGS — só inline simples
+    const childEls = el.querySelectorAll('*');
+    for (const c of childEls) {
+      if (TEXT_TAGS.has(c.tagName) && c !== el) {
+        // exceções: span/strong/em/small dentro de h1/p são OK
+        if (!['SPAN','STRONG','EM','SMALL','BR'].includes(c.tagName)) return false;
+      }
+    }
+    return true;
+  }
+
+  function makeUniversallyEditable(root) {
+    // Texto: tornar editável qualquer leaf de texto que ainda não tenha data-content*
+    root.querySelectorAll('*').forEach((el) => {
+      if (SKIP_INSIDE.has(el.tagName)) return;
+      if (el.closest('.__ie-toolbar, .__ie-modal, header#main-header, nav#mobile-menu')) return;
+      if (el.hasAttribute('data-content') || el.hasAttribute('data-content-html')) return;
+      if (!isLeafTextElement(el)) return;
+      if (el.__ieUniversal) return;
+      el.__ieUniversal = true;
+
+      el.setAttribute('contenteditable', 'true');
+      el.addEventListener('focus', () => el.classList.add('__ie-editing'));
+      el.addEventListener('blur', () => {
+        el.classList.remove('__ie-editing');
+        sendOverride(el, { html: el.innerHTML.trim(), text: el.textContent.trim() });
+      });
+      el.addEventListener('input', markDirty);
+      el.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && el.tagName !== 'P' && el.tagName !== 'LI') {
+          e.preventDefault(); el.blur();
+        }
+      });
+    });
+
+    // Imagens: tornar todas clicáveis (exceto header/footer logo já data-content-img)
+    root.querySelectorAll('img').forEach((img) => {
+      if (img.__ieUniversal) return;
+      if (img.closest('.__ie-toolbar, .__ie-modal')) return;
+      if (img.hasAttribute('data-content-img')) return;
+      img.__ieUniversal = true;
+      img.style.cursor = 'pointer';
+      img.style.outline = '2px dashed transparent';
+      img.style.outlineOffset = '3px';
+      img.style.transition = 'outline-color .12s';
+      img.addEventListener('mouseenter', () => img.style.outlineColor = '#0288D1');
+      img.addEventListener('mouseleave', () => img.style.outlineColor = 'transparent');
+      img.addEventListener('click', (e) => {
+        e.preventDefault(); e.stopPropagation();
+        openUniversalImagePicker(img);
+      });
+    });
+
+    // Links sem texto editável (ex: ícones sociais, botões com ícone) — ainda assim editar href
+    root.querySelectorAll('a').forEach((a) => {
+      if (a.__ieUniversal) return;
+      if (a.closest('.__ie-toolbar, .__ie-modal')) return;
+      if (a.hasAttribute('data-content-href')) return;
+      // Se já é editável como texto, deixar a edição de texto + Alt+click muda href
+      a.__ieUniversal = true;
+      a.addEventListener('click', (e) => {
+        if (e.altKey) {
+          e.preventDefault(); e.stopPropagation();
+          openLinkPicker((url, target) => {
+            a.href = url;
+            if (target) { a.target = '_blank'; a.rel = 'noopener'; }
+            sendOverride(a, { href: url });
+          }, a.href);
+        }
+      }, true);
+    });
+  }
+
+  function openUniversalImagePicker(img) {
+    const modal = createModal(`
+      <h3>Substituir imagem</h3>
+      <p style="font-size:12px;color:#5C5340;margin:0 0 6px;">A imagem será carregada para o servidor automaticamente.</p>
+      <input type="file" id="__ie-file" accept="image/*" style="margin-top:8px;">
+      <label>Texto alternativo (alt)</label>
+      <input type="text" id="__ie-alt" placeholder="Descrição da imagem">
+      <label>Ou escolher de imagens já carregadas</label>
+      <div class="__ie-image-library" id="__ie-lib"><div style="grid-column:1/-1;font-size:12px;color:#8B7B5D;">A carregar…</div></div>
+      <div class="__ie-modal-actions">
+        <button class="__ie-btn-ghost" id="__ie-cancel">Cancelar</button>
+      </div>
+    `);
+    const altInput = modal.querySelector('#__ie-alt');
+    altInput.value = img.alt || '';
+    altInput.addEventListener('input', () => {
+      img.alt = altInput.value;
+      sendOverride(img, { alt: altInput.value });
+    });
+    modal.querySelector('#__ie-cancel').addEventListener('click', closeModal);
+    modal.querySelector('#__ie-file').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const url = await uploadImage(file);
+      if (url) {
+        img.src = url;
+        sendOverride(img, { src: url });
+        closeModal();
+      }
+    });
+    loadImageLibrary(modal.querySelector('#__ie-lib'), (url) => {
+      img.src = url;
+      sendOverride(img, { src: url });
+      closeModal();
+    });
+  }
+
+  // Aplicar agora e re-aplicar quando o DOM mudar (e.g., após cms-rebuild)
+  makeUniversallyEditable(document.body);
+  const _mo = new MutationObserver(() => {
+    // Throttle simples
+    clearTimeout(_mo._t);
+    _mo._t = setTimeout(() => makeUniversallyEditable(document.body), 200);
+  });
+  _mo.observe(document.body, { childList: true, subtree: true });
+
+  // ────────────────────────────────────────────────────────────
   // BRIDGE
   // ────────────────────────────────────────────────────────────
   window.addEventListener('message', (e) => {
