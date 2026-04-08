@@ -290,13 +290,20 @@
   document.querySelectorAll('[data-content]').forEach((el) => {
     if (el.closest('.__ie-toolbar, .__ie-modal')) return;
     el.setAttribute('contenteditable', 'plaintext-only');
-    el.addEventListener('focus', () => el.classList.add('__ie-editing'));
+    el.addEventListener('focus', () => {
+      el.classList.add('__ie-editing');
+      el.__ieOriginalText = el.textContent.trim();
+    });
     el.addEventListener('blur', () => {
       el.classList.remove('__ie-editing');
+      const newText = el.textContent.trim();
+      if (newText === el.__ieOriginalText) return; // sem alterações
       const path = el.dataset.content;
-      send({ type: 'content-change', path, value: el.textContent.trim() });
+      send({ type: 'content-change', path, value: newText });
     });
-    el.addEventListener('input', markDirty);
+    el.addEventListener('input', () => {
+      if (el.textContent.trim() !== el.__ieOriginalText) markDirty();
+    });
     el.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') { e.preventDefault(); el.blur(); }
     });
@@ -369,7 +376,9 @@
 
   function flushRich() {
     if (!activeRich) return;
-    send({ type: 'content-change', path: activeRich.dataset.contentHtml, value: activeRich.innerHTML.trim() });
+    const newHtml = activeRich.innerHTML.trim();
+    if (newHtml === activeRich.__ieOriginalHtml) return; // sem alterações
+    send({ type: 'content-change', path: activeRich.dataset.contentHtml, value: newHtml });
   }
 
   document.querySelectorAll('[data-content-html]').forEach((el) => {
@@ -377,6 +386,7 @@
     el.addEventListener('focus', () => {
       activeRich = el;
       el.classList.add('__ie-editing');
+      el.__ieOriginalHtml = el.innerHTML.trim();
       positionToolbar(el);
     });
     el.addEventListener('blur', () => {
@@ -390,7 +400,7 @@
       }, 200);
     });
     el.addEventListener('input', () => {
-      markDirty();
+      if (el.innerHTML.trim() !== el.__ieOriginalHtml) markDirty();
       positionToolbar(el);
     });
     el.addEventListener('scroll', () => activeRich === el && positionToolbar(el));
@@ -820,12 +830,19 @@
       el.__ieUniversal = true;
 
       el.setAttribute('contenteditable', 'true');
-      el.addEventListener('focus', () => el.classList.add('__ie-editing'));
+      el.addEventListener('focus', () => {
+        el.classList.add('__ie-editing');
+        el.__ieOriginalHtml = el.innerHTML.trim();
+      });
       el.addEventListener('blur', () => {
         el.classList.remove('__ie-editing');
-        sendOverride(el, { html: el.innerHTML.trim(), text: el.textContent.trim() });
+        const newHtml = el.innerHTML.trim();
+        if (newHtml === el.__ieOriginalHtml) return; // sem alterações reais → não marca dirty
+        sendOverride(el, { html: newHtml, text: el.textContent.trim() });
       });
-      el.addEventListener('input', markDirty);
+      el.addEventListener('input', () => {
+        if (el.innerHTML.trim() !== el.__ieOriginalHtml) markDirty();
+      });
       el.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && el.tagName !== 'P' && el.tagName !== 'LI') {
           e.preventDefault(); el.blur();
