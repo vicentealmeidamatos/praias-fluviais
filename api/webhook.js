@@ -188,28 +188,57 @@ async function createInvoiceXpressInvoice({ email, customerName, taxId, billingA
     },
   };
 
-  const clientRes = await fetch(`${baseUrl}/clients.json?api_key=${apiKey}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-    body: JSON.stringify(clientPayload),
-  });
-
-  // Se já existe (422), procurar por nome ou continuar
   let clientId;
-  if (clientRes.ok) {
-    const data = await clientRes.json();
-    clientId = data.client?.id;
-  } else if (clientRes.status === 422) {
-    // Procurar cliente existente por nome
-    const findRes = await fetch(`${baseUrl}/clients/find-by-name.json?api_key=${apiKey}&client_name=${encodeURIComponent(customerName)}`);
+
+  // 1a. Tentar encontrar cliente existente por nome primeiro (evita 422 a cada checkout)
+  try {
+    const findRes = await fetch(
+      `${baseUrl}/clients/find-by-name.json?api_key=${apiKey}&client_name=${encodeURIComponent(customerName)}`,
+      { headers: { Accept: 'application/json' } }
+    );
     if (findRes.ok) {
       const data = await findRes.json();
       clientId = data.client?.id;
+      if (clientId) console.log('[webhook] Cliente InvoiceXpress encontrado por nome:', clientId);
+    }
+  } catch (e) {
+    console.log('[webhook] find-by-name falhou (ignorado):', e.message);
+  }
+
+  // 1b. Se não encontrou, tentar criar
+  if (!clientId) {
+    const clientRes = await fetch(`${baseUrl}/clients.json?api_key=${apiKey}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify(clientPayload),
+    });
+
+    const clientBody = await clientRes.text();
+    console.log('[webhook] InvoiceXpress POST /clients.json →', clientRes.status, clientBody.slice(0, 500));
+
+    if (clientRes.ok) {
+      try {
+        const data = JSON.parse(clientBody);
+        clientId = data.client?.id;
+      } catch {}
+    } else if (clientRes.status === 422) {
+      // 422 = já existe → tentar encontrar de novo (por código fiscal)
+      if (taxId) {
+        const findByCodeRes = await fetch(
+          `${baseUrl}/clients/find-by-code.json?api_key=${apiKey}&client_code=${encodeURIComponent(taxId)}`,
+          { headers: { Accept: 'application/json' } }
+        );
+        if (findByCodeRes.ok) {
+          const data = await findByCodeRes.json();
+          clientId = data.client?.id;
+          if (clientId) console.log('[webhook] Cliente encontrado por código fiscal após 422:', clientId);
+        }
+      }
     }
   }
 
   if (!clientId) {
-    throw new Error('Não foi possível criar/encontrar cliente no InvoiceXpress');
+    throw new Error(`Não foi possível criar/encontrar cliente no InvoiceXpress (account=${account}, name=${customerName}, taxId=${taxId || 'n/a'})`);
   }
 
   // 2. Criar fatura-recibo
