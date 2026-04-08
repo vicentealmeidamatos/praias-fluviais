@@ -315,7 +315,10 @@
     return !!el.closest('[data-edit-allow-nav]');
   }
   // Selector dos elementos do PRÓPRIO editor — esses nunca devem ser bloqueados.
-  const EDITOR_SAFE_SEL = '.__ie-toolbar, .__ie-modal, .__ie-modal-backdrop, .__ie-list-controls, .__ie-section-handle, .__ie-icon-host, .__lo-actionbar, .__lo-toolbar, .__lo-handle, .__lo-overlay';
+  // NOTA: __ie-icon-host NÃO entra aqui — é tratado separadamente, porque
+  // queremos abrir o picker de ícones MAS continuar a impedir que o link/botão
+  // pai navegue.
+  const EDITOR_SAFE_SEL = '.__ie-toolbar, .__ie-modal, .__ie-modal-backdrop, .__ie-list-controls, .__ie-section-handle, .__lo-actionbar, .__lo-toolbar, .__lo-handle, .__lo-overlay';
   function isInsideEditorUI(el) {
     return !!(el && el.closest && el.closest(EDITOR_SAFE_SEL));
   }
