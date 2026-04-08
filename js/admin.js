@@ -3125,6 +3125,12 @@ function renderConteudo(container) {
           class="ml-auto items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold"
           style="display:none;background:#FFF3CD;color:#8A6D00;border:1px solid #FFE69C;">● alterações por gravar</span>
 
+        <button onclick="discardAndReload()" title="Recarregar página e descartar alterações não guardadas"
+          style="${tbBtn}" ${tbBtnH}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-7"/><path d="M3 3v6h6"/></svg>
+          Recarregar
+        </button>
+
         <button onclick="contentOpenHistory()" style="${tbBtn}" ${tbBtnH}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
           Histórico
