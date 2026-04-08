@@ -341,7 +341,7 @@
         </div>`;
     }
 
-    allLocations.forEach(loc => {
+    function locCardHTML(loc) {
       const beachesHTML = loc.beaches && loc.beaches.length > 0
         ? `<div style="margin-top:8px;padding-top:8px;border-top:1px solid #e5e1d8;">
             <div style="font-family:'Poppins',sans-serif;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#8A7D60;margin-bottom:4px;">Praias que pode carimbar</div>
@@ -350,9 +350,8 @@
             </div>
           </div>`
         : '';
-
-      const popupHTML = `
-        <div style="padding:14px 16px;min-width:220px;max-width:280px;font-family:'Open Sans',sans-serif;">
+      return `
+        <div style="font-family:'Open Sans',sans-serif;">
           <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:13px;color:#003A40;margin-bottom:4px;">${loc.name}</div>
           <div style="color:#8A7D60;font-size:11px;margin-bottom:6px;line-height:1.4;">${loc.address}</div>
           <span style="display:inline-block;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;font-family:'Poppins',sans-serif;text-transform:uppercase;letter-spacing:0.04em;background:${STAMP_COLOR}22;color:${STAMP_COLOR};border:1px solid ${STAMP_COLOR}44;">Carimbo</span>
@@ -360,10 +359,25 @@
           ${beachesHTML}
           ${makeNavButtons(loc)}
         </div>`;
+    }
 
-      L.marker([loc.coordinates.lat, loc.coordinates.lng], { icon: makeIcon() })
+    // Agrupar locais por coordenada (alguns estabelecimentos partilham edifício)
+    const byCoord = new Map();
+    allLocations.forEach(loc => {
+      if (!loc.coordinates?.lat || !loc.coordinates?.lng) return;
+      const k = loc.coordinates.lat.toFixed(5) + ',' + loc.coordinates.lng.toFixed(5);
+      if (!byCoord.has(k)) byCoord.set(k, []);
+      byCoord.get(k).push(loc);
+    });
+
+    byCoord.forEach((locs) => {
+      const popupHTML = `
+        <div style="padding:14px 16px;min-width:220px;max-width:300px;max-height:60vh;overflow-y:auto;">
+          ${locs.map(locCardHTML).join('<div style="margin:14px -16px;border-top:1px solid #e5e1d8;"></div>')}
+        </div>`;
+      L.marker([locs[0].coordinates.lat, locs[0].coordinates.lng], { icon: makeIcon() })
         .addTo(map)
-        .bindPopup(popupHTML, { maxWidth: 280 });
+        .bindPopup(popupHTML, { maxWidth: 300 });
     });
 
     // ─── Location list grouped by município ───

@@ -394,26 +394,42 @@
 
     const markerObjects = [];
 
-    allLocations.forEach(loc => {
+    function locCardHTML(loc) {
       const typeInfo = TYPES[loc.type] || TYPES['guia'];
       const typeBadge = `<span style="display:inline-block;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;font-family:'Poppins',sans-serif;text-transform:uppercase;letter-spacing:0.04em;background:${typeInfo.color}22;color:${typeInfo.color};border:1px solid ${typeInfo.color}44;">${typeInfo.label}</span>`;
-
-      const popupHTML = `
-        <div style="padding:14px 16px;min-width:220px;font-family:'Open Sans',sans-serif;">
+      return `
+        <div style="font-family:'Open Sans',sans-serif;">
           <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:13px;color:#003A40;margin-bottom:4px;">${loc.name}</div>
           <div style="color:#8A7D60;font-size:11px;margin-bottom:6px;line-height:1.4;">${loc.address}</div>
           <div style="margin-bottom:4px;">${typeBadge}</div>
           ${loc.phone ? `<div style="font-size:11px;color:#0288D1;font-weight:600;margin-top:4px;">${loc.phone}</div>` : ''}
           ${makeNavButtons(loc)}
         </div>`;
+    }
 
-      // Only add map marker if coordinates are available
-      if (loc.coordinates?.lat && loc.coordinates?.lng) {
-        const marker = L.marker([loc.coordinates.lat, loc.coordinates.lng], { icon: makeIcon(typeInfo.color) })
-          .addTo(markersLayer)
-          .bindPopup(popupHTML, { maxWidth: 280 });
-        markerObjects.push({ marker, type: loc.type });
-      }
+    // Agrupar locais por coordenada (alguns partilham edifício)
+    const byCoord = new Map();
+    allLocations.forEach(loc => {
+      if (!loc.coordinates?.lat || !loc.coordinates?.lng) return;
+      const k = loc.coordinates.lat.toFixed(5) + ',' + loc.coordinates.lng.toFixed(5);
+      if (!byCoord.has(k)) byCoord.set(k, []);
+      byCoord.get(k).push(loc);
+    });
+
+    byCoord.forEach((locs) => {
+      // Cor do marker: se há misto, usar a do guia_passaporte (mais "rico")
+      const hasPass = locs.some(l => l.type === 'guia_passaporte');
+      const typeInfo = hasPass ? TYPES['guia_passaporte'] : (TYPES[locs[0].type] || TYPES['guia']);
+      const popupHTML = `
+        <div style="padding:14px 16px;min-width:220px;max-width:300px;max-height:60vh;overflow-y:auto;">
+          ${locs.map(locCardHTML).join('<div style="margin:14px -16px;border-top:1px solid #e5e1d8;"></div>')}
+        </div>`;
+      const marker = L.marker([locs[0].coordinates.lat, locs[0].coordinates.lng], { icon: makeIcon(typeInfo.color) })
+        .addTo(markersLayer)
+        .bindPopup(popupHTML, { maxWidth: 300 });
+      // Tipos contidos no grupo (para o filtro)
+      const types = [...new Set(locs.map(l => l.type))];
+      markerObjects.push({ marker, types });
     });
 
     // ─── Map filter bar (only affects map markers) ───
@@ -429,10 +445,10 @@
 
       // "guia" button shows all (both types have guia), "guia_passaporte" shows only passaporte ones
       markersLayer.clearLayers();
-      markerObjects.forEach(({ marker, type }) => {
+      markerObjects.forEach(({ marker, types }) => {
         const show = activeMapFilter === 'all'
-          || activeMapFilter === 'guia'           // Guia button → show all
-          || type === activeMapFilter;            // Passaporte button → only guia_passaporte
+          || activeMapFilter === 'guia'                    // Guia button → show all
+          || types.includes(activeMapFilter);              // Passaporte button → grupos com pelo menos um guia_passaporte
         if (show) markersLayer.addLayer(marker);
       });
     });
