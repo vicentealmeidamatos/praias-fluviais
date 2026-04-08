@@ -354,7 +354,7 @@
         <div style="font-family:'Open Sans',sans-serif;">
           <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:13px;color:#003A40;margin-bottom:4px;">${loc.name}</div>
           <div style="color:#8A7D60;font-size:11px;margin-bottom:6px;line-height:1.4;">${loc.address}</div>
-          <span style="display:inline-block;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;font-family:'Poppins',sans-serif;text-transform:uppercase;letter-spacing:0.04em;background:${STAMP_COLOR}22;color:${STAMP_COLOR};border:1px solid ${STAMP_COLOR}44;">Carimbo</span>
+          <span style="display:inline-block;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;font-family:'Poppins',sans-serif;text-transform:uppercase;letter-spacing:0.04em;background:${STAMP_COLOR}22;color:${STAMP_COLOR};border:1px solid ${STAMP_COLOR}44;">Carimbo</span>${loc.seasonal ? ` <span style="display:inline-block;margin-left:4px;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;font-family:'Poppins',sans-serif;text-transform:uppercase;letter-spacing:0.04em;background:#F57C0022;color:#E65100;border:1px solid #F57C0044;">Só época balnear</span>` : ''}
           ${loc.phone ? `<div style="font-size:11px;color:#0288D1;font-weight:600;margin-top:6px;">${loc.phone}</div>` : ''}
           ${beachesHTML}
           ${makeNavButtons(loc)}
