@@ -162,12 +162,21 @@ function extractTaxId(session) {
 
   // 1. Tax ID oficial (quando o cliente marca "Estou comprando como empresa")
   const officialTaxId = session.customer_details?.tax_ids?.[0]?.value;
-  if (officialTaxId) return officialTaxId.replace(/^PT/i, '').trim();
+  if (officialTaxId) {
+    const cleaned = officialTaxId.replace(/^PT/i, '').trim();
+    console.log('[webhook] extractTaxId → usando tax_id de empresa:', cleaned);
+    return cleaned;
+  }
 
   // 2. Custom field NIF (particulares)
   const nifField = session.custom_fields?.find(f => f.key === 'nif');
-  if (nifField?.text?.value) return nifField.text.value.trim();
+  if (nifField?.text?.value) {
+    const cleaned = nifField.text.value.trim();
+    console.log('[webhook] extractTaxId → usando custom_field NIF (particular):', cleaned);
+    return cleaned;
+  }
 
+  console.log('[webhook] extractTaxId → nenhum NIF fornecido, será consumidor final');
   return null;
 }
 
