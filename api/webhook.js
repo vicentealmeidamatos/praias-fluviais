@@ -192,23 +192,61 @@ async function createInvoiceXpressInvoice({ email, customerName, taxId, billingA
   };
 
   let clientId;
+  const effectiveFiscalId = taxId || '999999990';
 
-  // 1a. Tentar encontrar cliente existente por nome primeiro (evita 422 a cada checkout)
-  try {
-    const findRes = await fetch(
-      `${baseUrl}/clients/find-by-name.json?api_key=${apiKey}&client_name=${encodeURIComponent(customerName)}`,
-      { headers: { Accept: 'application/json' } }
-    );
-    if (findRes.ok) {
-      const data = await findRes.json();
-      clientId = data.client?.id;
-      if (clientId) console.log('[webhook] Cliente InvoiceXpress encontrado por nome:', clientId);
+  // 1a. Se temos NIF real, procurar primeiro por código fiscal (mais fiável que por nome)
+  if (taxId) {
+    try {
+      const findByCodeRes = await fetch(
+        `${baseUrl}/clients/find-by-code.json?api_key=${apiKey}&client_code=${encodeURIComponent(taxId)}`,
+        { headers: { Accept: 'application/json' } }
+      );
+      if (findByCodeRes.ok) {
+        const data = await findByCodeRes.json();
+        clientId = data.client?.id;
+        if (clientId) console.log('[webhook] Cliente InvoiceXpress encontrado por NIF:', clientId);
+      }
+    } catch (e) {
+      console.log('[webhook] find-by-code falhou (ignorado):', e.message);
     }
-  } catch (e) {
-    console.log('[webhook] find-by-name falhou (ignorado):', e.message);
   }
 
-  // 1b. Se não encontrou, tentar criar
+  // 1b. Se não encontrou por NIF, tentar por nome
+  if (!clientId) {
+    try {
+      const findRes = await fetch(
+        `${baseUrl}/clients/find-by-name.json?api_key=${apiKey}&client_name=${encodeURIComponent(customerName)}`,
+        { headers: { Accept: 'application/json' } }
+      );
+      if (findRes.ok) {
+        const data = await findRes.json();
+        clientId = data.client?.id;
+        if (clientId) {
+          console.log('[webhook] Cliente InvoiceXpress encontrado por nome:', clientId);
+          // Se temos NIF e o cliente existente pode ter outro fiscal_id, atualizar
+          if (taxId) {
+            try {
+              const updateRes = await fetch(
+                `${baseUrl}/clients/${clientId}.json?api_key=${apiKey}`,
+                {
+                  method: 'PUT',
+                  headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+                  body: JSON.stringify(clientPayload),
+                }
+              );
+              console.log('[webhook] PUT /clients/' + clientId + ' →', updateRes.status);
+            } catch (e) {
+              console.log('[webhook] update cliente falhou (ignorado):', e.message);
+            }
+          }
+        }
+      }
+    } catch (e) {
+      console.log('[webhook] find-by-name falhou (ignorado):', e.message);
+    }
+  }
+
+  // 1c. Se não encontrou, tentar criar
   if (!clientId) {
     const clientRes = await fetch(`${baseUrl}/clients.json?api_key=${apiKey}`, {
       method: 'POST',
@@ -267,7 +305,7 @@ async function createInvoiceXpressInvoice({ email, customerName, taxId, billingA
     invoice_receipt: {
       date: today,
       due_date: today,
-      client: { name: customerName, code: taxId || '999999990' },
+      client: { name: customerName, code: effectiveFiscalId },
       items: invoiceItems,
       observations: `Pedido Stripe: ${sessionId}`,
     },
