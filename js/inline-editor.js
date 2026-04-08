@@ -321,6 +321,8 @@
   // mesmo os recém-criados pelo lucide depois de uma troca.
   document.addEventListener('click', (e) => {
     if (e.target.closest('.__ie-toolbar, .__ie-modal, .__lo-actionbar, .__lo-toolbar, .__lo-handle')) return;
+    // Em modo Layout não permitir trocar ícones — só posições/tamanhos.
+    if (window.__layoutModeActive) return;
     const iconHost = e.target.closest('.__ie-icon-host');
     if (iconHost) {
       e.preventDefault();

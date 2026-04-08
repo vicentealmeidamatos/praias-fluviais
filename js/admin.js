@@ -3144,6 +3144,28 @@ function renderConteudo(container) {
   }
   // Sincronizar estado inicial do botão Gravar
   _updateSaveBtn();
+
+  // Re-baselinar quando o iframe acaba de carregar — garante que os datasets
+  // assíncronos (layout, etc.) estão todos no estado antes de comparar.
+  // Sem isto, o carregamento tardio do layout marca falsamente como "sujo".
+  const ifr = document.getElementById('content-iframe');
+  if (ifr) {
+    ifr.addEventListener('load', () => {
+      // Pequeno delay para deixar data-loader/content-loader/layout-overrides
+      // do iframe correrem e popularem state.data.layout no admin via DataLoader.
+      setTimeout(async () => {
+        try {
+          if (window.DataLoader) {
+            // Recarregar layout fresco do servidor para incluir no baseline
+            state.data['layout'] = (await window.DataLoader.loadDataset('layout')) || {};
+          }
+        } catch {}
+        if (!_content.dirty && _autoSave.pending.size === 0) {
+          _contentSetBaseline();
+        }
+      }, 400);
+    });
+  }
 }
 
 function _contentIframeSrc(opts) {
@@ -3184,8 +3206,10 @@ function _contentOnMessage(e) {
   const m = e.data || {};
   if (!m.type) return;
   if (m.type === 'inline-editor-ready') return;
-  if (m.type === 'dirty') { _recomputeDirty(); return; }
-  if (m.type === 'clean') { _recomputeDirty(); return; }
+  // 'dirty'/'clean' do inline-editor são heurísticas sobre contenteditable;
+  // ignoramos completamente — só consideramos sujo quando chega uma mensagem
+  // de mutação real (content-change, override-change, layout-change, etc.).
+  if (m.type === 'dirty' || m.type === 'clean') return;
   if (m.type === 'content-change') {
     _contentPushHistory();
     _setByPath(_content.current, m.path, m.value);
