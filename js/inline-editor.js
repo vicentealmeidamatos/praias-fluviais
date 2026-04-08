@@ -320,7 +320,7 @@
   // Delegação global para hosts de ícone — funciona para qualquer host actual,
   // mesmo os recém-criados pelo lucide depois de uma troca.
   document.addEventListener('click', (e) => {
-    if (e.target.closest('.__ie-toolbar, .__ie-modal')) return;
+    if (e.target.closest('.__ie-toolbar, .__ie-modal, .__lo-actionbar, .__lo-toolbar, .__lo-handle')) return;
     const iconHost = e.target.closest('.__ie-icon-host');
     if (iconHost) {
       e.preventDefault();
@@ -332,7 +332,7 @@
   }, true);
 
   document.addEventListener('click', (e) => {
-    if (e.target.closest('.__ie-toolbar, .__ie-modal, .__ie-list-controls, .__ie-section-handle, .__ie-icon-host')) return;
+    if (e.target.closest('.__ie-toolbar, .__ie-modal, .__ie-list-controls, .__ie-section-handle, .__ie-icon-host, .__lo-actionbar, .__lo-toolbar, .__lo-handle')) return;
 
     const btn = e.target.closest('button');
     if (btn) {
@@ -367,7 +367,7 @@
   }, true);
   document.addEventListener('submit', (e) => e.preventDefault(), true);
   document.addEventListener('mousedown', (e) => {
-    if (e.target.closest('.__ie-toolbar, .__ie-modal, .__ie-list-controls, .__ie-section-handle, .__ie-icon-host')) return;
+    if (e.target.closest('.__ie-toolbar, .__ie-modal, .__ie-list-controls, .__ie-section-handle, .__ie-icon-host, .__lo-actionbar, .__lo-toolbar, .__lo-handle')) return;
     const btn = e.target.closest('button');
     if (btn && !isAllowedNavTarget(btn)) {
       e.preventDefault();
