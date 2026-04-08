@@ -283,7 +283,7 @@ async function createInvoiceXpressInvoice({ email, customerName, taxId, billingA
   }
 
   if (!clientId) {
-    throw new Error(`Não foi possível criar/encontrar cliente no InvoiceXpress (account=${account}, name=${customerName})`);
+    throw new Error(`Não foi possível criar/encontrar cliente no InvoiceXpress (account=${account}, name=${customerName}, code=${clientCode}). Verifica os logs POST/PUT acima e o limite de documentos da conta IX.`);
   }
 
   // 2. Criar fatura-recibo
