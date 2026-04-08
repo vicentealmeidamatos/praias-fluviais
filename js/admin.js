@@ -2951,28 +2951,16 @@ function _restoreSnapshot(snap) {
       renderSection();
     }
   } catch {}
-  // Para reflectir undo/redo de texto/ícones/listas/sectionsOrder e edições
-  // ligadas a datasets (data-content-bind) SEM recarregar o iframe, enviamos
-  // um postMessage com o snapshot completo. O inline-editor aplica em DOM:
-  //  - content via window._applyContent (texto/html/listas/overrides)
-  //  - datasets via [data-content-bind="ds:path"] update direto.
-  // Mantemos o draft em storage como fallback se o iframe for recarregado.
+  // Reflectir undo/redo recarregando o iframe com ?preview=draft. É o caminho
+  // mais seguro para garantir que mutações estruturais (duplicações, wraps em
+  // <a>, remoções de overrides) são totalmente revertidas — apply-state via
+  // postMessage não consegue desfazer alterações que já tinham sido aplicadas
+  // ao DOM, só reaplicar overrides existentes.
   _writeContentDraft();
   _writeDatasetDrafts();
   const iframe = document.getElementById('content-iframe');
-  if (iframe && iframe.contentWindow) {
-    const datasetsPayload = {};
-    for (const ds of _SNAPSHOT_DATASETS) {
-      if (state.data[ds] != null) datasetsPayload[ds] = state.data[ds];
-    }
-    try {
-      iframe.contentWindow.postMessage({
-        type: 'apply-state',
-        content: _content.current,
-        layout: state.data.layout || {},
-        datasets: datasetsPayload,
-      }, '*');
-    } catch {}
+  if (iframe) {
+    iframe.src = _contentIframeSrc({ draft: true });
   }
 }
 

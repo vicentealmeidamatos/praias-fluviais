@@ -360,7 +360,9 @@ window.__BRAND_ICONS = {
       const pageKey = (location.pathname.split('/').pop() || 'index.html').replace('.html', '') || 'index';
       applyOverridesGroup(content.overrides && content.overrides.__global__);
       applyOverridesGroup(content.overrides && content.overrides[pageKey]);
-      // Aplicar duplicações criadas no editor de Layout
+      // Limpar duplicações anteriores e re-aplicar a partir do estado actual
+      // (necessário para que undo/redo as remova/adicione correctamente).
+      document.querySelectorAll('[data-dup-key]').forEach(n => n.remove());
       applyDuplicates(content.overrides && content.overrides.__global__);
       applyDuplicates(content.overrides && content.overrides[pageKey]);
     } catch (e) { console.warn('[content-loader] overrides:', e.message); }
