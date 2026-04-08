@@ -146,6 +146,7 @@
     if (typeof patch.w === 'number') el.style.width = patch.w + 'px';
     if (typeof patch.h === 'number') el.style.height = patch.h + 'px';
     if (typeof patch.hidden === 'boolean') el.style.display = patch.hidden ? 'none' : '';
+    el.setAttribute('data-lo-applied', '1');
     drawHandles();
     send({ type: 'layout-change', page: PAGE_KEY, selector: genSelector(el), value: patch });
   }
@@ -244,6 +245,38 @@
   window.addEventListener('message', (e) => {
     const m = e.data || {};
     if (m.type === 'layout-mode') setActive(!!m.on);
+    if (m.type === 'apply-snapshot' && m.layout) {
+      // Reaplicar overrides de layout para a página actual a partir do snapshot
+      try {
+        const pageOverrides = m.layout[PAGE_KEY] || {};
+        // Limpar todos os elementos previamente alterados (best-effort)
+        document.querySelectorAll('[data-lo-applied]').forEach(el => {
+          el.style.transform = '';
+          el.style.width = '';
+          el.style.height = '';
+          el.style.display = '';
+          el.removeAttribute('data-lo-applied');
+        });
+        // Aplicar do snapshot
+        for (const [sel, cfg] of Object.entries(pageOverrides)) {
+          const v = (cfg && cfg.desktop) || cfg;
+          if (!v) continue;
+          // sel pode ser um selector CSS gerado por genSelector
+          let el = null;
+          try { el = document.querySelector(sel); } catch {}
+          if (!el) continue;
+          if (typeof v.x === 'number' || typeof v.y === 'number') {
+            el.style.position = 'relative';
+            el.style.transform = `translate(${v.x || 0}px, ${v.y || 0}px)`;
+          }
+          if (typeof v.w === 'number') el.style.width = v.w + 'px';
+          if (typeof v.h === 'number') el.style.height = v.h + 'px';
+          if (v.hidden) el.style.display = 'none';
+          el.setAttribute('data-lo-applied', '1');
+        }
+        if (selected) drawHandles();
+      } catch {}
+    }
   });
 
   // Re-desenhar handles em scroll/resize

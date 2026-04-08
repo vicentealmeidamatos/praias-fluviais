@@ -129,11 +129,52 @@ async function publishPendingChanges() {
 }
 
 async function discardPendingChanges() {
-  if (!confirm('Descartar todas as alterações por publicar e recarregar do servidor?')) return;
+  if (!confirm('Descartar todas as alterações por publicar?')) return;
+  const sections = Array.from(_autoSave.pending);
   _autoSave.pending.clear();
-  _renderPublishBar();
   if (window.DataLoader) window.DataLoader.invalidate();
-  location.reload();
+
+  // Re-fetch só dos datasets afectados, sem recarregar o painel inteiro
+  const sectionToFile = {
+    'beaches': 'data/beaches.json',
+    'articles': 'data/articles.json',
+    'locations-guia-passaporte': 'data/locations-guia-passaporte.json',
+    'locations-carimbos': 'data/locations-carimbos.json',
+    'descontos': 'data/descontos.json',
+    'produtos': 'data/products.json',
+    'settings': 'data/settings.json',
+    'conteudo': 'data/content.json',
+    'layout': null,
+  };
+  for (const section of sections) {
+    const file = sectionToFile[section];
+    if (file) {
+      try {
+        const r = await fetch(file + '?_=' + Date.now(), { cache: 'no-store' });
+        if (r.ok) state.data[section] = await r.json();
+      } catch {}
+    } else if (section === 'layout' && window.DataLoader) {
+      try { state.data['layout'] = (await window.DataLoader.loadDataset('layout', { force: true })) || {}; } catch {}
+    }
+    // Caso especial: conteudo também alimenta _content / state.editingContent
+    if (section === 'conteudo') {
+      state.editingContent = JSON.parse(JSON.stringify(state.data['conteudo'] || {}));
+      _content.current = JSON.parse(JSON.stringify(state.editingContent));
+      _content.history = [];
+      _content.redoStack = [];
+      _clearUnsaved();
+    }
+  }
+  _renderPublishBar();
+
+  // Re-render só a secção actual (sem location.reload). Se for Conteúdo,
+  // recarregar o iframe para reflectir o estado restaurado.
+  if (state.currentSection === 'conteudo') {
+    _reloadContentIframe();
+  } else {
+    try { renderSection(); } catch {}
+  }
+  toast('Alterações descartadas.', 'success');
 }
 
 // Permite que outras vistas (Conteúdo) reescrevam um dataset e re-rendam tudo
@@ -2775,12 +2816,36 @@ const _content = {
 };
 
 function _contentSnapshot() {
-  return JSON.parse(JSON.stringify(_content.current));
+  // Captura estado de tudo o que pode ser revertido por undo/redo
+  return {
+    content: JSON.parse(JSON.stringify(_content.current)),
+    layout:  JSON.parse(JSON.stringify(state.data.layout || {})),
+  };
 }
 function _contentPushHistory() {
   _content.history.push(_contentSnapshot());
   if (_content.history.length > 50) _content.history.shift();
   _content.redoStack = [];
+}
+function _restoreSnapshot(snap) {
+  if (!snap) return;
+  // Aceita formato antigo (sem .content) e novo
+  const c = snap.content || snap;
+  const l = snap.layout  || {};
+  _content.current = JSON.parse(JSON.stringify(c));
+  state.data.layout = JSON.parse(JSON.stringify(l));
+  state.data['layout'] = state.data.layout;
+  // Aplicar visualmente sem recarregar o iframe
+  const iframe = document.getElementById('content-iframe');
+  if (iframe && iframe.contentWindow) {
+    try {
+      iframe.contentWindow.postMessage({
+        type: 'apply-snapshot',
+        content: _content.current,
+        layout: state.data.layout,
+      }, '*');
+    } catch {}
+  }
 }
 function _setByPath(obj, path, value) {
   const parts = path.split('.');
@@ -3019,16 +3084,17 @@ function _contentOnMessage(e) {
     _content.current.overrides[m.page][m.selector] = { ...existing, ...m.value };
     _markUnsaved();
   } else if (m.type === 'layout-change') {
-    // Acumula em state.data.layout[page][selector] (objecto, não breakpoint-aware nesta primeira iteração)
+    // Push history ANTES de mutar para podermos fazer undo
+    _contentPushHistory();
     if (!state.data.layout) state.data.layout = {};
     if (!state.data.layout[m.page]) state.data.layout[m.page] = {};
     const existing = state.data.layout[m.page][m.selector] || {};
-    // Estrutura compatível com layout-overrides.js: { desktop: {...} }
     const merged = { ...(existing.desktop || {}), ...m.value };
     state.data.layout[m.page][m.selector] = { ...existing, desktop: merged };
     if (!SECTION_TO_DATASET['layout']) SECTION_TO_DATASET['layout'] = 'layout';
     state.data['layout'] = state.data.layout;
     markDirty('layout');
+    _markUnsaved();
   }
 }
 
@@ -3108,16 +3174,14 @@ function contentToggleFullscreen() {
 function contentUndo() {
   if (!_content.history.length) { toast('Nada para anular.', 'info'); return; }
   _content.redoStack.push(_contentSnapshot());
-  _content.current = _content.history.pop();
+  _restoreSnapshot(_content.history.pop());
   _markUnsaved();
-  document.getElementById('content-iframe').src = _contentIframeSrc();
 }
 function contentRedo() {
   if (!_content.redoStack.length) { toast('Nada para refazer.', 'info'); return; }
   _content.history.push(_contentSnapshot());
-  _content.current = _content.redoStack.pop();
+  _restoreSnapshot(_content.redoStack.pop());
   _markUnsaved();
-  document.getElementById('content-iframe').src = _contentIframeSrc();
 }
 
 async function contentSave() {

@@ -1134,8 +1134,28 @@
   window.addEventListener('message', (e) => {
     const data = e.data || {};
     if (data.type === 'apply-content') {
-      // Recarregar a página com query timestamp para forçar fetch
       location.reload();
+    }
+    if (data.type === 'apply-snapshot' && data.content) {
+      // Aplicar overrides de conteúdo (texto/html/img/icon) sem recarregar.
+      try {
+        const ov = data.content.overrides || {};
+        const groups = [ov.__global__, ov[(location.pathname.split('/').pop()||'index.html').replace(/\.html?$/,'')||'index']];
+        for (const g of groups) {
+          if (!g) continue;
+          for (const [sel, val] of Object.entries(g)) {
+            if (!val) continue;
+            let el = null;
+            try { el = document.querySelector(sel); } catch {}
+            if (!el) continue;
+            if (val.text != null) el.textContent = val.text;
+            if (val.html != null) el.innerHTML = val.html;
+            if (val.src != null && 'src' in el) el.src = val.src;
+            if (val.alt != null && 'alt' in el) el.alt = val.alt;
+            if (val.href != null && 'href' in el) el.href = val.href;
+          }
+        }
+      } catch {}
     }
   });
 
