@@ -332,9 +332,13 @@
     const t = e.target;
     if (!t || isInsideEditorUI(t)) return;
     if (isAllowedNavTarget(t)) return;
-    // Permitir contenteditable activo: o user precisa de poder clicar/digitar.
-    const editable = t.closest && (t.closest('[contenteditable="true"]') || t.closest('.__ie-editing'));
-    if (editable) return;
+    // Contenteditable: permitimos APENAS os eventos necessários para selecionar
+    // e digitar (mousedown/mouseup/pointerdown/pointerup/touchstart/touchend),
+    // mas continuamos a bloquear `click` para que o <a> pai não navegue.
+    const editable = t.closest && (t.closest('[contenteditable], [contenteditable=""], [contenteditable="true"], [contenteditable="plaintext-only"]') || t.closest('.__ie-editing'));
+    if (editable && e.type !== 'click' && e.type !== 'auxclick' && e.type !== 'dblclick' && e.type !== 'submit') {
+      return;
+    }
     // Permitir clicks no host de um ícone (vai abrir o picker via outro hook)
     if (t.closest && t.closest('.__ie-icon-host') && !window.__layoutModeActive && e.type === 'click') {
       // O picker é aberto pelo iconPickerHook; aqui apenas suprimimos a acção
