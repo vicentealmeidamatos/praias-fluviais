@@ -157,6 +157,9 @@ async function handleCheckoutComplete(session, supabase) {
 // ─── InvoiceXpress ────────────────────────────────────────────────────────────
 
 function extractTaxId(session) {
+  console.log('[webhook] extractTaxId — customer_details.tax_ids:', JSON.stringify(session.customer_details?.tax_ids));
+  console.log('[webhook] extractTaxId — custom_fields:', JSON.stringify(session.custom_fields));
+
   // 1. Tax ID oficial (quando o cliente marca "Estou comprando como empresa")
   const officialTaxId = session.customer_details?.tax_ids?.[0]?.value;
   if (officialTaxId) return officialTaxId.replace(/^PT/i, '').trim();
