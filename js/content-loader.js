@@ -251,23 +251,46 @@
     });
 
     // 7.5) Overrides universais por seletor CSS, agrupados por página.
-    //      Cada chave é um seletor; o valor é { text | html | src | href | alt }.
+    //      Cada chave é um seletor; o valor é { text | html | src | href | alt | icon }.
+    //      Aplica primeiro overrides globais (header/nav/footer — partilhados
+    //      entre todas as páginas) e depois os específicos da página actual.
+    function applyOverridesGroup(group) {
+      if (!group) return;
+      Object.entries(group).forEach(([sel, val]) => {
+        if (!sel || !val) return;
+        let el;
+        try { el = document.querySelector(sel); } catch { return; }
+        if (!el) return;
+        if (val.text != null) el.textContent = val.text;
+        if (val.html != null) el.innerHTML = val.html;
+        if (val.src != null && 'src' in el) el.src = val.src;
+        if (val.href != null && 'href' in el) el.href = val.href;
+        if (val.alt != null && 'alt' in el) el.alt = val.alt;
+        if (val.icon != null) {
+          // Substituir ícone Lucide
+          if (el.tagName && el.tagName.toLowerCase() === 'svg') {
+            const i = document.createElement('i');
+            i.setAttribute('data-lucide', val.icon);
+            try {
+              const r = el.getBoundingClientRect();
+              if (r.width)  i.style.width  = r.width + 'px';
+              if (r.height) i.style.height = r.height + 'px';
+              i.style.display = 'inline-block';
+              i.style.color = getComputedStyle(el).color || 'currentColor';
+            } catch {}
+            el.parentNode.replaceChild(i, el);
+          } else {
+            el.setAttribute('data-lucide', val.icon);
+            el.innerHTML = '';
+          }
+          try { window.lucide && window.lucide.createIcons && window.lucide.createIcons({ nameAttr: 'data-lucide' }); } catch {}
+        }
+      });
+    }
     try {
       const pageKey = (location.pathname.split('/').pop() || 'index.html').replace('.html', '') || 'index';
-      const overrides = (content.overrides && content.overrides[pageKey]) || null;
-      if (overrides) {
-        Object.entries(overrides).forEach(([sel, val]) => {
-          if (!sel || !val) return;
-          let el;
-          try { el = document.querySelector(sel); } catch { return; }
-          if (!el) return;
-          if (val.text != null) el.textContent = val.text;
-          if (val.html != null) el.innerHTML = val.html;
-          if (val.src != null && 'src' in el) el.src = val.src;
-          if (val.href != null && 'href' in el) el.href = val.href;
-          if (val.alt != null && 'alt' in el) el.alt = val.alt;
-        });
-      }
+      applyOverridesGroup(content.overrides && content.overrides.__global__);
+      applyOverridesGroup(content.overrides && content.overrides[pageKey]);
     } catch (e) { console.warn('[content-loader] overrides:', e.message); }
 
     // 8) Reordenar secções da homepage com base em homepage.sectionsOrder

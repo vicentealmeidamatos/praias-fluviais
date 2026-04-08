@@ -258,7 +258,7 @@
       <!-- ═══════════════════════════════════════════════ -->
       <div class="relative z-10 max-w-lg mx-auto px-6 mt-10 reveal-on-scroll" data-reveal-delay="300">
         <div class="flex rounded-full overflow-hidden border border-white/15 shadow-lg">
-          <button
+          <button data-edit-allow-nav
             id="tab-btn-digital"
             class="tab-nav-btn active w-1/3 flex items-center justify-center gap-2 font-display font-bold text-xs uppercase tracking-wider px-2 py-3"
             aria-selected="true"
@@ -267,7 +267,7 @@
             <i data-lucide="stamp" class="w-3.5 h-3.5 flex-shrink-0"></i>
             <span class="leading-tight text-center">Passaporte Digital</span>
           </button>
-          <button
+          <button data-edit-allow-nav
             id="tab-btn-como"
             class="tab-nav-btn w-1/3 flex items-center justify-center gap-2 font-display font-bold text-xs uppercase tracking-wider px-2 py-3 border-l border-white/15"
             aria-selected="false"
@@ -276,7 +276,7 @@
             <i data-lucide="book-open" class="w-3.5 h-3.5 flex-shrink-0"></i>
             <span class="leading-tight text-center">Como Funciona</span>
           </button>
-          <button
+          <button data-edit-allow-nav
             id="tab-btn-premios"
             class="tab-nav-btn w-1/3 flex items-center justify-center gap-2 font-display font-bold text-xs uppercase tracking-wider px-2 py-3 border-l border-white/15"
             aria-selected="false"
@@ -413,7 +413,7 @@
               </div>
             </div>
             <p class="text-white/60 text-sm leading-relaxed flex-1">Digitalize o QR Code disponível em cada praia e registe a sua visita diretamente no seu telemóvel. Acompanhe o progresso, conquiste medalhas e acumule visitas.</p>
-            <button onclick="switchTab('digital')" class="inline-flex items-center gap-2 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full self-start btn-primary shadow-layered-yellow">
+            <button data-edit-allow-nav onclick="switchTab('digital')" class="inline-flex items-center gap-2 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full self-start btn-primary shadow-layered-yellow">
               <i data-lucide="stamp" class="w-3.5 h-3.5"></i>
               Ver o Meu Passaporte
             </button>

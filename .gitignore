@@ -27,3 +27,4 @@ img/uploads/
 .DS_Store
 Thumbs.db
 sync-from-admin.mjs
+.sync-cache/

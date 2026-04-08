@@ -278,17 +278,55 @@ async function simpleHash(str) {
   return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
+const LOGIN_MAX_ATTEMPTS = 10;
+const LOGIN_LOCK_KEY = 'admin_login_lock';
+
+function _getLoginAttempts() {
+  return parseInt(localStorage.getItem('admin_login_attempts') || '0', 10);
+}
+function _setLoginAttempts(n) {
+  localStorage.setItem('admin_login_attempts', String(n));
+}
+function _isLocked() {
+  const until = parseInt(localStorage.getItem(LOGIN_LOCK_KEY) || '0', 10);
+  return until && Date.now() < until;
+}
+function _lockMinutesLeft() {
+  const until = parseInt(localStorage.getItem(LOGIN_LOCK_KEY) || '0', 10);
+  return Math.ceil((until - Date.now()) / 60000);
+}
+
 async function loginAdmin() {
+  if (_isLocked()) {
+    const errEl = document.getElementById('login-error');
+    if (errEl) {
+      errEl.textContent = `Demasiadas tentativas. Tente novamente daqui a ${_lockMinutesLeft()} minuto(s).`;
+      errEl.classList.remove('hidden');
+    }
+    return;
+  }
   const pass = document.getElementById('login-pass').value;
   const inputHash   = await simpleHash(pass);
   const correctHash = await simpleHash('Johnny Bravo');
   if (inputHash === correctHash) {
+    _setLoginAttempts(0);
+    localStorage.removeItem(LOGIN_LOCK_KEY);
     sessionStorage.setItem('admin_authenticated', 'true');
     showLoadingScreen();
     initDashboard();
   } else {
+    const attempts = _getLoginAttempts() + 1;
+    _setLoginAttempts(attempts);
+    const remaining = LOGIN_MAX_ATTEMPTS - attempts;
     const errEl = document.getElementById('login-error');
     if (errEl) {
+      if (remaining <= 0) {
+        // Bloquear por 15 minutos
+        localStorage.setItem(LOGIN_LOCK_KEY, String(Date.now() + 15 * 60 * 1000));
+        errEl.textContent = 'Limite de tentativas excedido. Bloqueado por 15 minutos.';
+      } else {
+        errEl.textContent = `Password incorreta. ${remaining} tentativa(s) restante(s).`;
+      }
       errEl.classList.remove('hidden');
       errEl.style.animation = 'none';
       void errEl.offsetWidth;
@@ -2710,6 +2748,7 @@ const CONTENT_PAGES = [
   { id: 'passaporte',      label: 'Passaporte',            file: 'passaporte.html' },
   { id: 'artigos',         label: 'Novidades',             file: 'artigos.html' },
   { id: 'loja',            label: 'Loja',                  file: 'loja.html' },
+  { id: 'carrinho',        label: 'Carrinho',              file: 'carrinho.html' },
   { id: 'descontos',       label: 'Descontos',             file: 'descontos.html' },
   { id: 'onde-encontrar',  label: 'Onde Encontrar Guia',   file: 'onde-encontrar.html' },
   { id: 'onde-carimbar',   label: 'Onde Carimbar',         file: 'onde-carimbar-passaporte.html' },
@@ -2851,9 +2890,13 @@ function renderConteudo(container) {
 
         <div class="flex items-center" style="gap:4px;">
           <button onclick="contentUndo()" title="Anular (Ctrl+Z)"
-            style="${tbBtn}width:38px;padding:0;justify-content:center;font-size:16px;" ${tbBtnH}>↶</button>
+            style="${tbBtn}width:38px;padding:0;justify-content:center;" ${tbBtnH}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-15-6.7L3 13"/></svg>
+          </button>
           <button onclick="contentRedo()" title="Refazer (Ctrl+Shift+Z)"
-            style="${tbBtn}width:38px;padding:0;justify-content:center;font-size:16px;" ${tbBtnH}>↷</button>
+            style="${tbBtn}width:38px;padding:0;justify-content:center;" ${tbBtnH}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 7v6h-6"/><path d="M3 17a9 9 0 0 1 15-6.7L21 13"/></svg>
+          </button>
         </div>
 
         <button onclick="contentOpenPageSettings()" style="${tbBtn}" ${tbBtnH}>
@@ -2951,6 +2994,11 @@ function _contentOnMessage(e) {
   if (!m.type) return;
   if (m.type === 'inline-editor-ready') return;
   if (m.type === 'dirty') { _markUnsaved(); return; }
+  if (m.type === 'clean') {
+    // Só limpa se não houver nenhum override pendente real (o user reverteu manualmente)
+    _clearUnsaved();
+    return;
+  }
   if (m.type === 'content-change') {
     _contentPushHistory();
     _setByPath(_content.current, m.path, m.value);
@@ -2993,11 +3041,15 @@ function contentToggleLayoutMode() {
   const btn = document.getElementById('content-layout-btn');
   if (btn) {
     if (_content.layoutMode) {
-      btn.classList.add('bg-praia-yellow-400','border-praia-yellow-500');
-      btn.classList.remove('bg-white','border-praia-sand-300');
+      btn.style.background = '#FFEB3B';
+      btn.style.borderColor = '#FDD835';
+      btn.style.color = '#003A40';
+      btn.style.boxShadow = '0 6px 18px rgba(253,216,53,.45)';
     } else {
-      btn.classList.remove('bg-praia-yellow-400','border-praia-yellow-500');
-      btn.classList.add('bg-white','border-praia-sand-300');
+      btn.style.background = '#fff';
+      btn.style.borderColor = '#E2D9C6';
+      btn.style.color = '#003A40';
+      btn.style.boxShadow = '0 1px 0 rgba(0,58,64,.04)';
     }
   }
 }
@@ -3096,37 +3148,53 @@ async function contentSave() {
 }
 
 async function contentOpenHistory() {
+  // Mostrar modal IMEDIATAMENTE com loader; carregar histórico em background
+  const modal = document.createElement('div');
+  modal.className = 'fixed inset-0 bg-black/40 z-50 flex items-center justify-center';
+  modal.style.animation = 'loaderFadeIn .15s ease';
+  modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
+  modal.innerHTML = `
+    <div class="bg-white rounded-2xl p-6 max-w-lg w-full mx-4 max-h-[80vh] flex flex-col" style="box-shadow:0 30px 80px rgba(0,0,0,.3);">
+      <h2 class="font-display text-xl font-bold text-praia-teal-800 mb-1">Histórico de versões</h2>
+      <p class="text-sm text-praia-sand-500 mb-4">Restaure uma versão anterior do conteúdo.</p>
+      <div id="hist-body" class="overflow-y-auto -mx-2 px-2 min-h-[200px] flex items-center justify-center">
+        <div style="text-align:center;">
+          <svg width="36" height="36" viewBox="0 0 36 36" style="animation:loaderSpin 1.2s linear infinite;">
+            <circle cx="18" cy="18" r="14" fill="none" stroke="#E2D9C6" stroke-width="3.5"/>
+            <circle cx="18" cy="18" r="14" fill="none" stroke="#003A40" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="35 100"/>
+          </svg>
+          <p style="font:600 12px 'Poppins',system-ui,sans-serif;color:#8A7D60;margin:10px 0 0;">A carregar histórico…</p>
+        </div>
+      </div>
+      <div class="mt-4 flex justify-end">
+        <button onclick="this.closest('.fixed').remove()" class="admin-btn admin-btn-ghost" style="margin:0;">Fechar</button>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+
+  // Fetch em background
   let history = [];
   try {
-    const res = await fetch('/api/save-content');
+    const res = await fetch('/api/save-content', { cache: 'no-store' });
     const json = await res.json();
     history = json.history || [];
   } catch {}
-  const html = `
-    <div class="fixed inset-0 bg-black/40 z-50 flex items-center justify-center" onclick="if(event.target===this)this.remove()">
-      <div class="bg-white rounded-2xl p-6 max-w-lg w-full mx-4 max-h-[80vh] flex flex-col">
-        <h2 class="font-display text-xl font-bold text-praia-teal-800 mb-3">Histórico de versões</h2>
-        <p class="text-sm text-praia-sand-500 mb-4">Restaure uma versão anterior do conteúdo.</p>
-        <div class="overflow-y-auto -mx-2 px-2">
-          ${history.length ? history.map(h => `
-            <div class="flex items-center justify-between py-3 border-b border-praia-sand-100">
-              <div>
-                <div class="font-display text-sm font-semibold text-praia-teal-800">${new Date(h.created_at).toLocaleString('pt-PT')}</div>
-                ${h.note ? `<div class="text-xs text-praia-sand-500">${h.note}</div>` : ''}
-              </div>
-              <button onclick="contentRestoreVersion(${h.id})" class="admin-btn admin-btn-primary" style="margin:0;padding:6px 14px;font-size:12px;">Restaurar</button>
-            </div>
-          `).join('') : '<p class="text-sm text-praia-sand-500 text-center py-8">Sem versões anteriores.</p>'}
+
+  // Verifica se o modal ainda está montado (utilizador pode ter fechado)
+  if (!modal.isConnected) return;
+  const body = modal.querySelector('#hist-body');
+  body.classList.remove('flex','items-center','justify-center');
+  body.innerHTML = history.length
+    ? history.map(h => `
+        <div class="flex items-center justify-between py-3 border-b border-praia-sand-100">
+          <div>
+            <div class="font-display text-sm font-semibold text-praia-teal-800">${new Date(h.created_at).toLocaleString('pt-PT')}</div>
+            ${h.note ? `<div class="text-xs text-praia-sand-500">${h.note}</div>` : ''}
+          </div>
+          <button onclick="contentRestoreVersion(${h.id})" class="admin-btn admin-btn-primary" style="margin:0;padding:6px 14px;font-size:12px;">Restaurar</button>
         </div>
-        <div class="mt-4 flex justify-end">
-          <button onclick="this.closest('.fixed').remove()" class="admin-btn admin-btn-ghost" style="margin:0;">Fechar</button>
-        </div>
-      </div>
-    </div>
-  `;
-  const div = document.createElement('div');
-  div.innerHTML = html;
-  document.body.appendChild(div.firstElementChild);
+      `).join('')
+    : '<p class="text-sm text-praia-sand-500 text-center py-8">Sem versões anteriores.</p>';
 }
 
 async function contentRestoreVersion(id) {

@@ -28,9 +28,42 @@
   if (window.__inlineEditorLoaded) return;
   window.__inlineEditorLoaded = true;
 
+  // Em modo edição, garantir que NENHUM perfil aparece como autenticado
+  // dentro do iframe (mesmo que o utilizador tenha sessão Supabase noutro tab).
+  // Limpamos chaves de auth do storage do iframe ANTES de qualquer script
+  // de UI ler o estado e fazemos signOut do cliente Supabase quando criado.
+  try {
+    Object.keys(localStorage).forEach(k => { if (/^sb-.*-auth-token/.test(k)) localStorage.removeItem(k); });
+    Object.keys(sessionStorage).forEach(k => { if (/^sb-.*-auth-token/.test(k)) sessionStorage.removeItem(k); });
+  } catch {}
+  // Hook para esconder qualquer UI "logged-in" (avatar, nome, botão "Sair", etc.)
+  function hideAuthUi() {
+    document.querySelectorAll('[data-auth="logged-in"], .js-auth-logged-in, #profile-button, #user-menu, [data-user-menu]')
+      .forEach(el => { try { el.style.display = 'none'; } catch {} });
+    document.querySelectorAll('[data-auth="logged-out"], .js-auth-logged-out')
+      .forEach(el => { try { el.style.display = ''; } catch {} });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', hideAuthUi);
+  else hideAuthUi();
+  setTimeout(hideAuthUi, 500);
+  setTimeout(hideAuthUi, 1500);
+
   const PARENT = window.parent !== window ? window.parent : null;
   function send(msg) {
     if (PARENT) PARENT.postMessage(msg, '*');
+  }
+
+  // Tracker de "está realmente sujo?": guarda Set de elementos divergentes
+  // do seu valor original. Quando o set fica vazio, envia 'clean' ao parent.
+  const _dirtySet = new Set();
+  function _refreshDirty() {
+    if (_dirtySet.size > 0) send({ type: 'dirty' });
+    else send({ type: 'clean' });
+  }
+  function setElementDirty(el, isDirty) {
+    if (isDirty) _dirtySet.add(el);
+    else _dirtySet.delete(el);
+    _refreshDirty();
   }
   function markDirty() { send({ type: 'dirty' }); }
 
@@ -243,10 +276,20 @@
   // Links continuam clicáveis (Alt+click abre picker; sem Alt navega para
   // permitir mudar de página). Botões NUNCA disparam handlers — só servem
   // para edição de texto.
+  // Permitir navegação a partir de elementos marcados com data-edit-allow-nav
+  // Útil para os botões do hero da página passaporte que abrem sub-páginas.
+  function isAllowedNavTarget(el) {
+    if (!el) return false;
+    return !!el.closest('[data-edit-allow-nav], [data-passport-action]');
+  }
+
   document.addEventListener('click', (e) => {
-    if (e.target.closest('.__ie-toolbar, .__ie-modal, .__ie-list-controls, .__ie-section-handle')) return;
+    if (e.target.closest('.__ie-toolbar, .__ie-modal, .__ie-list-controls, .__ie-section-handle, .__ie-icon-host')) return;
+
     const btn = e.target.closest('button');
     if (btn) {
+      // Excepção: botões marcados como nav permitida
+      if (isAllowedNavTarget(btn)) return;
       e.preventDefault();
       e.stopImmediatePropagation();
       return;
@@ -256,18 +299,18 @@
       const href = a.getAttribute('href') || '';
       // Suprimir links âncora/JS — não disparar modais
       if (!href || href.startsWith('#') || href.startsWith('javascript:')) {
+        if (isAllowedNavTarget(a)) return;
         e.preventDefault();
         e.stopImmediatePropagation();
         return;
       }
-      // Suprimir TODA a navegação dentro de header/nav/footer — esses links
-      // devem ser editáveis em vez de navegar (causa do bug onde os textos
-      // deixam de ser editáveis após mudar de página).
-      // Excepção: links para páginas específicas de praia/artigo/produto
-      // (precisos para abrir as páginas dinâmicas no editor).
+      // Suprimir navegação em header/nav/footer — esses links devem ser
+      // editáveis. Excepção: links para páginas dinâmicas (praia/artigo/produto)
+      // e passaporte.html (sub-páginas do passaporte).
       const inChrome = a.closest('header, nav, footer');
       const isDynamic = /^(?:\/)?(?:praia|artigo|produto)\.html(?:\?|$)/i.test(href);
-      if (inChrome && !isDynamic) {
+      const isPassportSub = /^(?:\/)?passaporte(?:[-_][\w-]+)?\.html(?:\?|$)/i.test(href);
+      if (inChrome && !isDynamic && !isPassportSub && !isAllowedNavTarget(a)) {
         e.preventDefault();
         e.stopImmediatePropagation();
         return;
@@ -275,10 +318,10 @@
     }
   }, true);
   document.addEventListener('submit', (e) => e.preventDefault(), true);
-  // Bloquear também mousedown nos botões (alguns sites usam mousedown)
   document.addEventListener('mousedown', (e) => {
-    if (e.target.closest('.__ie-toolbar, .__ie-modal, .__ie-list-controls, .__ie-section-handle')) return;
-    if (e.target.closest('button')) {
+    if (e.target.closest('.__ie-toolbar, .__ie-modal, .__ie-list-controls, .__ie-section-handle, .__ie-icon-host')) return;
+    const btn = e.target.closest('button');
+    if (btn && !isAllowedNavTarget(btn)) {
       e.preventDefault();
       e.stopImmediatePropagation();
     }
@@ -292,17 +335,18 @@
     el.setAttribute('contenteditable', 'plaintext-only');
     el.addEventListener('focus', () => {
       el.classList.add('__ie-editing');
-      el.__ieOriginalText = el.textContent.trim();
+      if (typeof el.__ieOriginalText === 'undefined') el.__ieOriginalText = el.textContent.trim();
     });
     el.addEventListener('blur', () => {
       el.classList.remove('__ie-editing');
       const newText = el.textContent.trim();
-      if (newText === el.__ieOriginalText) return; // sem alterações
+      if (newText === el.__ieOriginalText) { setElementDirty(el, false); return; }
       const path = el.dataset.content;
       send({ type: 'content-change', path, value: newText });
     });
     el.addEventListener('input', () => {
-      if (el.textContent.trim() !== el.__ieOriginalText) markDirty();
+      const isDiff = el.textContent.trim() !== el.__ieOriginalText;
+      setElementDirty(el, isDiff);
     });
     el.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') { e.preventDefault(); el.blur(); }
@@ -386,7 +430,7 @@
     el.addEventListener('focus', () => {
       activeRich = el;
       el.classList.add('__ie-editing');
-      el.__ieOriginalHtml = el.innerHTML.trim();
+      if (typeof el.__ieOriginalHtml === 'undefined') el.__ieOriginalHtml = el.innerHTML.trim();
       positionToolbar(el);
     });
     el.addEventListener('blur', () => {
@@ -394,13 +438,15 @@
         if (toolbarEl && !toolbarEl.matches(':hover')) {
           toolbarEl.style.display = 'none';
           el.classList.remove('__ie-editing');
-          flushRich();
+          if (el.innerHTML.trim() === el.__ieOriginalHtml) setElementDirty(el, false);
+          else flushRich();
           activeRich = null;
         }
       }, 200);
     });
     el.addEventListener('input', () => {
-      if (el.innerHTML.trim() !== el.__ieOriginalHtml) markDirty();
+      const isDiff = el.innerHTML.trim() !== el.__ieOriginalHtml;
+      setElementDirty(el, isDiff);
       positionToolbar(el);
     });
     el.addEventListener('scroll', () => activeRich === el && positionToolbar(el));
@@ -797,12 +843,17 @@
 
   function sendOverride(el, payload) {
     const selector = genSelector(el);
-    send({ type: 'override-change', page: PAGE_KEY, selector, value: payload });
+    // Elementos dentro de header/nav/footer são partilhados entre todas as
+    // páginas — gravar como overrides globais para que a edição se reflicta
+    // automaticamente em todo o site.
+    const inChrome = el && el.closest && el.closest('header, nav, footer');
+    const page = inChrome ? '__global__' : PAGE_KEY;
+    send({ type: 'override-change', page, selector, value: payload });
     markDirty();
   }
 
   // Critério: o elemento contém apenas texto + tags inline simples (sem outros editáveis dentro)
-  const TEXT_TAGS = new Set(['H1','H2','H3','H4','H5','H6','P','SPAN','A','LI','BUTTON','STRONG','EM','SMALL','LABEL','TD','TH','BLOCKQUOTE','FIGCAPTION','SUMMARY','DT','DD']);
+  const TEXT_TAGS = new Set(['H1','H2','H3','H4','H5','H6','P','SPAN','A','LI','BUTTON','STRONG','EM','SMALL','LABEL','TD','TH','BLOCKQUOTE','FIGCAPTION','SUMMARY','DT','DD','DIV','B','I','U','MARK','TIME','CITE','CODE','KBD','ABBR']);
   const SKIP_INSIDE = new Set(['SCRIPT','STYLE','SVG','IFRAME','NOSCRIPT','TEMPLATE','INPUT','TEXTAREA','SELECT','OPTION']);
 
   function isLeafTextElement(el) {
@@ -832,16 +883,17 @@
       el.setAttribute('contenteditable', 'true');
       el.addEventListener('focus', () => {
         el.classList.add('__ie-editing');
-        el.__ieOriginalHtml = el.innerHTML.trim();
+        if (typeof el.__ieOriginalHtml === 'undefined') el.__ieOriginalHtml = el.innerHTML.trim();
       });
       el.addEventListener('blur', () => {
         el.classList.remove('__ie-editing');
         const newHtml = el.innerHTML.trim();
-        if (newHtml === el.__ieOriginalHtml) return; // sem alterações reais → não marca dirty
+        if (newHtml === el.__ieOriginalHtml) { setElementDirty(el, false); return; }
         sendOverride(el, { html: newHtml, text: el.textContent.trim() });
       });
       el.addEventListener('input', () => {
-        if (el.innerHTML.trim() !== el.__ieOriginalHtml) markDirty();
+        const isDiff = el.innerHTML.trim() !== el.__ieOriginalHtml;
+        setElementDirty(el, isDiff);
       });
       el.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && el.tagName !== 'P' && el.tagName !== 'LI') {
@@ -868,19 +920,41 @@
       });
     });
 
-    // Ícones Lucide — clicar abre picker
-    root.querySelectorAll('[data-lucide], svg.lucide, i[data-lucide]').forEach((el) => {
-      // Quando o lucide cria SVG, mantém data-lucide no <i> original ou no <svg>
-      const host = el.closest('[data-lucide]') || el;
+    // Ícones — clicar abre picker. Suporta:
+    //  • [data-lucide] (Lucide cria SVG dentro)
+    //  • <svg> standalone (qualquer SVG inline)
+    //  • <i class="lucide-…">
+    //  • Botões/links cujo único conteúdo visível é um SVG (ex: hambúrguer, carrinho)
+    function findIconHosts() {
+      const hosts = new Set();
+      // 1) data-lucide
+      root.querySelectorAll('[data-lucide]').forEach(el => hosts.add(el));
+      // 2) SVG standalone — agarra o pai mais útil (button/a/span próximo)
+      root.querySelectorAll('svg').forEach(svg => {
+        if (svg.closest('.__ie-toolbar, .__ie-modal, .__ie-icon-host')) return;
+        // Subir até botão/link/span pai com classes utilitárias
+        const wrap = svg.closest('button, a, span, label, div');
+        const host = wrap || svg;
+        // Se o pai tem texto significativo, melhor marcar o próprio SVG
+        const hasText = wrap && wrap.textContent && wrap.textContent.trim().length > 0;
+        hosts.add(hasText ? svg : host);
+      });
+      return hosts;
+    }
+    findIconHosts().forEach((host) => {
       if (host.__ieIconReady) return;
       if (host.closest('.__ie-toolbar, .__ie-modal')) return;
       host.__ieIconReady = true;
-      host.style.cursor = 'pointer';
-      host.style.transition = 'outline-color .12s, background .12s';
-      host.style.outline = '2px dashed transparent';
-      host.style.outlineOffset = '3px';
-      host.addEventListener('mouseenter', () => host.style.outlineColor = '#FFEB3B');
-      host.addEventListener('mouseleave', () => host.style.outlineColor = 'transparent');
+      host.classList.add('__ie-icon-host');
+      // Aplicar estilos via setProperty para SVGs
+      try {
+        host.style.cursor = 'pointer';
+        host.style.transition = 'outline-color .12s, background .12s';
+        host.style.outline = '2px dashed transparent';
+        host.style.outlineOffset = '3px';
+      } catch {}
+      host.addEventListener('mouseenter', () => { try { host.style.outlineColor = '#FFEB3B'; } catch {} });
+      host.addEventListener('mouseleave', () => { try { host.style.outlineColor = 'transparent'; } catch {} });
       host.addEventListener('click', (e) => {
         e.preventDefault(); e.stopPropagation();
         openIconPicker(host);
@@ -919,7 +993,22 @@
       // Fallback: lista mínima de ícones comuns
       names = ['map','navigation','tent','tree-pine','waves','sun','umbrella','car','utensils','home','heart','star','search','user','phone','mail','globe','camera','image','calendar','clock','info','check','x','arrow-right','arrow-left','arrow-up','arrow-down','menu','settings','shopping-cart','tag','gift','book','book-open','award','flag','compass','thermometer','droplets','wind','cloud','snowflake','flame','leaf','flower','fish'];
     }
-    const current = host.getAttribute('data-lucide') || '';
+    // Se o host é um SVG sem data-lucide, encontrar o ícone "actual" via class lucide-X
+    let current = host.getAttribute && host.getAttribute('data-lucide');
+    if (!current && host.tagName) {
+      // <svg class="lucide lucide-menu …">
+      const cls = host.className && (host.className.baseVal || host.className);
+      if (typeof cls === 'string') {
+        const m = cls.match(/lucide-([a-z0-9-]+)/);
+        if (m) current = m[1];
+      }
+      // Procurar dentro do host
+      if (!current) {
+        const inner = host.querySelector && host.querySelector('[data-lucide]');
+        if (inner) current = inner.getAttribute('data-lucide');
+      }
+    }
+    current = current || '';
 
     const modal = createModal(`
       <h3>Escolher ícone</h3>
@@ -947,13 +1036,31 @@
         btn.addEventListener('click', (ev) => {
           ev.preventDefault();
           const name = btn.getAttribute('data-icon');
-          host.setAttribute('data-lucide', name);
-          // Substituir SVG actual
-          host.innerHTML = '';
+          // Estratégia: se o host é um <svg>, criar um <i data-lucide> ao lado
+          // e deixar o lucide expandi-lo. Se já tem data-lucide ou é um <i>,
+          // substituir directamente.
+          let target = host;
+          if (host.tagName === 'svg' || host.tagName === 'SVG') {
+            const i = document.createElement('i');
+            i.setAttribute('data-lucide', name);
+            // copiar dimensões/cores se possível
+            try {
+              const r = host.getBoundingClientRect();
+              if (r.width)  i.style.width  = r.width + 'px';
+              if (r.height) i.style.height = r.height + 'px';
+              i.style.display = 'inline-block';
+              i.style.color = getComputedStyle(host).color || '#003A40';
+            } catch {}
+            host.parentNode.replaceChild(i, host);
+            target = i;
+          } else {
+            host.setAttribute('data-lucide', name);
+            host.innerHTML = '';
+          }
           try {
             window.lucide && window.lucide.createIcons && window.lucide.createIcons({ nameAttr: 'data-lucide' });
           } catch {}
-          sendOverride(host, { icon: name });
+          sendOverride(target, { icon: name });
           closeModal();
         });
       });
