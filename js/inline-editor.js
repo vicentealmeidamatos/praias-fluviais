@@ -625,10 +625,24 @@
 
   let _pages = null;
   function openLinkPicker(onSave, currentUrl = '') {
+    const SOCIAL_PRESETS = [
+      { label: 'Facebook',  url: 'https://www.facebook.com/' },
+      { label: 'Instagram', url: 'https://www.instagram.com/' },
+      { label: 'Twitter / X', url: 'https://x.com/' },
+      { label: 'YouTube',   url: 'https://www.youtube.com/@' },
+      { label: 'LinkedIn',  url: 'https://www.linkedin.com/in/' },
+      { label: 'TikTok',    url: 'https://www.tiktok.com/@' },
+      { label: 'WhatsApp',  url: 'https://wa.me/' },
+      { label: 'Telegram',  url: 'https://t.me/' },
+      { label: 'Email',     url: 'mailto:' },
+      { label: 'Telefone',  url: 'tel:+351' },
+    ];
     const modal = createModal(`
-      <h3>Inserir link</h3>
+      <h3>Editar ligação</h3>
       <label>Página interna</label>
       <select id="__ie-page"><option value="">— escolher —</option></select>
+      <label>Ou rede social / contacto</label>
+      <select id="__ie-social"><option value="">— escolher —</option>${SOCIAL_PRESETS.map(s => `<option value="${s.url}">${s.label}</option>`).join('')}</select>
       <label>Ou URL externo</label>
       <input type="url" id="__ie-url" placeholder="https://..." value="${currentUrl || ''}">
       <label style="display:flex;align-items:center;gap:8px;text-transform:none;font-size:13px;font-weight:500;">
@@ -636,9 +650,11 @@
       </label>
       <div class="__ie-modal-actions">
         <button class="__ie-btn-ghost" id="__ie-cancel">Cancelar</button>
-        <button class="__ie-btn-primary" id="__ie-save">Inserir</button>
+        <button class="__ie-btn-primary" id="__ie-save">Aplicar</button>
       </div>
     `);
+    const social = modal.querySelector('#__ie-social');
+    social.addEventListener('change', () => { if (social.value) modal.querySelector('#__ie-url').value = social.value; });
     const sel = modal.querySelector('#__ie-page');
     const url = modal.querySelector('#__ie-url');
     const target = modal.querySelector('#__ie-target');
@@ -677,6 +693,8 @@
       closeModal();
     });
   }
+  // Expor para o layout-edit-mode poder reutilizar o picker.
+  window.__ieOpenLinkPicker = openLinkPicker;
 
   // ────────────────────────────────────────────────────────────
   // MODAIS
@@ -923,6 +941,9 @@
   }
 
   function makeUniversallyEditable(root) {
+    // Não marcar elementos como editáveis enquanto o modo Layout está activo —
+    // nesse modo o utilizador apenas mexe em posição/tamanho.
+    if (window.__layoutModeActive) return;
     // Texto: tornar editável qualquer leaf de texto que ainda não tenha data-content*
     root.querySelectorAll('*').forEach((el) => {
       if (SKIP_INSIDE.has(el.tagName)) return;
@@ -1037,6 +1058,24 @@
     });
   }
 
+  // BRAND ICONS — definidos em content-loader.js (window.__BRAND_ICONS) para
+  // estarem disponíveis em todas as páginas.
+  const BRAND_ICONS = window.__BRAND_ICONS || {};
+  // Devolve um <svg> standalone para um brand name (string).
+  function makeBrandSvg(brand) {
+    const tpl = BRAND_ICONS[brand];
+    if (!tpl) return null;
+    const div = document.createElement('div');
+    div.innerHTML = tpl;
+    const svg = div.firstElementChild;
+    if (svg) {
+      svg.setAttribute('data-brand-icon', brand);
+      svg.style.width = svg.style.width || '24px';
+      svg.style.height = svg.style.height || '24px';
+    }
+    return svg;
+  }
+
   function openIconPicker(host) {
     // Lista de ícones Lucide a partir do global `lucide.icons` (carregado por lucide.min.js)
     let names = [];
@@ -1045,6 +1084,9 @@
         names = Object.keys(window.lucide.icons);
       }
     } catch {}
+    // Acrescentar marcas (redes sociais) — prefixadas com "brand:"
+    const brandNames = Object.keys(BRAND_ICONS).map(b => 'brand:' + b);
+    names = [...brandNames, ...names];
     if (!names.length) {
       // Fallback: lista mínima de ícones comuns
       names = ['map','navigation','tent','tree-pine','waves','sun','umbrella','car','utensils','home','heart','star','search','user','phone','mail','globe','camera','image','calendar','clock','info','check','x','arrow-right','arrow-left','arrow-up','arrow-down','menu','settings','shopping-cart','tag','gift','book','book-open','award','flag','compass','thermometer','droplets','wind','cloud','snowflake','flame','leaf','flower','fish'];
@@ -1091,14 +1133,23 @@
     });
 
     function pickIcon(name) {
-          // Estratégia: se o host é um <svg>, criar um <i data-lucide> ao lado
-          // e deixar o lucide expandi-lo. Se já tem data-lucide ou é um <i>,
-          // substituir directamente.
           let target = host;
-          if (host.tagName === 'svg' || host.tagName === 'SVG') {
+          // Caso brand: substituímos sempre o host por um <svg> inline.
+          if (name && name.startsWith('brand:')) {
+            const brand = name.slice(6);
+            const newSvg = makeBrandSvg(brand);
+            if (!newSvg) return;
+            try {
+              const r = host.getBoundingClientRect();
+              if (r.width)  newSvg.style.width  = r.width + 'px';
+              if (r.height) newSvg.style.height = r.height + 'px';
+              newSvg.style.color = getComputedStyle(host).color || 'currentColor';
+            } catch {}
+            host.parentNode.replaceChild(newSvg, host);
+            target = newSvg;
+          } else if (host.tagName === 'svg' || host.tagName === 'SVG') {
             const i = document.createElement('i');
             i.setAttribute('data-lucide', name);
-            // copiar dimensões/cores se possível
             try {
               const r = host.getBoundingClientRect();
               if (r.width)  i.style.width  = r.width + 'px';
@@ -1106,7 +1157,7 @@
               i.style.display = 'inline-block';
               i.style.color = getComputedStyle(host).color || '#003A40';
             } catch {}
-            host.parentNode.replaceChild(i, host);
+            host.replaceWith(i);
             target = i;
           } else {
             host.setAttribute('data-lucide', name);
@@ -1145,13 +1196,20 @@
       countLabel.textContent = f
         ? `${all.length} ${all.length === 1 ? 'resultado' : 'resultados'}`
         : `A mostrar ${matched.length} de ${all.length} — pesquise para filtrar`;
-      grid.innerHTML = matched.map(n => `
-        <button type="button" data-icon="${n}" title="${n}" style="aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:white;border:1px solid #E2D9C6;border-radius:8px;cursor:pointer;padding:8px;${n===selected?'outline:2px solid #003A40;background:#FFF8C5;':(n===current?'outline:2px solid #003A40;':'')}">
-          <i data-lucide="${n}" style="width:20px;height:20px;color:#003A40;pointer-events:none;"></i>
-        </button>
-      `).join('');
+      grid.innerHTML = matched.map(n => {
+        const isBrand = n.startsWith('brand:');
+        const label = isBrand ? n.slice(6) : n;
+        const inner = isBrand
+          ? `<span style="display:inline-block;width:20px;height:20px;color:#003A40;pointer-events:none;">${BRAND_ICONS[label] || ''}</span>`
+          : `<i data-lucide="${n}" style="width:20px;height:20px;color:#003A40;pointer-events:none;"></i>`;
+        return `<button type="button" data-icon="${n}" title="${label}" style="aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:white;border:1px solid #E2D9C6;border-radius:8px;cursor:pointer;padding:8px;${n===selected?'outline:2px solid #003A40;background:#FFF8C5;':(n===current?'outline:2px solid #003A40;':'')}">${inner}</button>`;
+      }).join('');
       try { window.lucide && window.lucide.createIcons && window.lucide.createIcons({ attrs: {} }); } catch {}
-      grid.querySelectorAll('svg').forEach(s => { s.style.pointerEvents = 'none'; });
+      grid.querySelectorAll('svg').forEach(s => {
+        s.style.pointerEvents = 'none';
+        if (!s.getAttribute('width'))  s.setAttribute('width', '20');
+        if (!s.getAttribute('height')) s.setAttribute('height', '20');
+      });
     }
     function setSelected(name) {
       selected = name;

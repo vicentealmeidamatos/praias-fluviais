@@ -34,6 +34,7 @@
   let selected = null;
   let overlay = null;
   let handlesEl = null;
+  let actionBar = null;
 
   const css = `
     .__lo-mode-on, .__lo-mode-on * { user-select: none !important; }
@@ -55,6 +56,20 @@
     }
     .__lo-toolbar button { background: rgba(255,255,255,.1); color: #fff; border: 0; padding: 6px 10px; border-radius: 8px; cursor: pointer; font: 600 11px Poppins,system-ui,sans-serif; }
     .__lo-toolbar button.primary { background: #FFEB3B; color: #003A40; }
+    .__lo-actionbar {
+      position: fixed; z-index: 2147483647; background: #003A40; color: #fff;
+      padding: 6px 8px; border-radius: 10px; display: flex; gap: 6px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+      font: 600 11px Poppins,system-ui,sans-serif;
+    }
+    .__lo-actionbar button {
+      background: rgba(255,255,255,.12); color: #fff; border: 0;
+      padding: 6px 10px; border-radius: 7px; cursor: pointer;
+      font: 600 11px Poppins,system-ui,sans-serif;
+      display: inline-flex; align-items: center; gap: 5px;
+    }
+    .__lo-actionbar button:hover { background: rgba(255,235,59,.25); color: #FFEB3B; }
+    .__lo-actionbar button.danger:hover { background: rgba(220,38,38,.4); color: #fff; }
   `;
 
   function injectCss() {
@@ -99,6 +114,120 @@
 
   function removeHandles() {
     if (handlesEl) { handlesEl.remove(); handlesEl = null; }
+    if (actionBar) { actionBar.remove(); actionBar = null; }
+  }
+
+  function drawActionBar() {
+    if (actionBar) { actionBar.remove(); actionBar = null; }
+    if (!selected) return;
+    const r = selected.getBoundingClientRect();
+    actionBar = document.createElement('div');
+    actionBar.className = '__lo-actionbar';
+    actionBar.innerHTML = `
+      <button data-act="dup" title="Duplicar elemento (Ctrl+D)">⧉ Duplicar</button>
+      <button data-act="link" title="Editar ligação">🔗 Ligação</button>
+      <button data-act="hide" class="danger" title="Esconder (Delete)">✕ Esconder</button>
+    `;
+    // Posição: por cima do elemento se houver espaço; senão por baixo
+    const barH = 36;
+    let top = r.top - barH - 8;
+    if (top < 8) top = r.bottom + 8;
+    let left = r.left;
+    if (left + 260 > window.innerWidth) left = window.innerWidth - 268;
+    if (left < 8) left = 8;
+    actionBar.style.top = top + 'px';
+    actionBar.style.left = left + 'px';
+    document.body.appendChild(actionBar);
+    actionBar.addEventListener('click', (ev) => {
+      const btn = ev.target.closest('button[data-act]');
+      if (!btn) return;
+      ev.preventDefault(); ev.stopPropagation();
+      const act = btn.dataset.act;
+      if (act === 'dup') duplicateSelected();
+      else if (act === 'link') editLinkOfSelected();
+      else if (act === 'hide') applyOverride(selected, { hidden: true });
+    });
+  }
+
+  function duplicateSelected() {
+    if (!selected || !selected.parentNode) return;
+    const clone = selected.cloneNode(true);
+    // Limpar marcações de selecção/handles no clone
+    clone.classList.remove('__lo-selected');
+    clone.removeAttribute('data-lo-applied');
+    selected.parentNode.insertBefore(clone, selected.nextSibling);
+    // Persistir no parent: enviar HTML + selector do "âncora" (selected)
+    try {
+      send({
+        type: 'duplicate-element',
+        page: PAGE_KEY,
+        afterSelector: genSelector(selected),
+        html: clone.outerHTML,
+      });
+    } catch {}
+    // Selecionar o clone
+    if (selected) selected.classList.remove('__lo-selected');
+    selected = clone;
+    selected.classList.add('__lo-selected');
+    drawHandles();
+  }
+
+  function findLinkAncestor(el) {
+    let cur = el;
+    while (cur && cur !== document.body) {
+      if (cur.tagName === 'A') return cur;
+      cur = cur.parentNode;
+    }
+    return null;
+  }
+
+  function editLinkOfSelected() {
+    if (!selected) return;
+    let a = findLinkAncestor(selected);
+    // Se não há <a>, podemos envolver o elemento num <a> novo
+    const wrapWithAnchor = !a;
+    const opener = window.parent && window.parent !== window
+      ? null // o iframe partilha origin, basta usar o do próprio inline-editor
+      : null;
+    if (typeof window.__ieOpenLinkPicker !== 'function') {
+      // fallback simples
+      const v = prompt('URL da ligação:', a ? a.getAttribute('href') || '' : '');
+      if (v == null) return;
+      applyLinkChange(a, v, false, wrapWithAnchor);
+      return;
+    }
+    window.__ieOpenLinkPicker((url, openInNew) => {
+      applyLinkChange(a, url, openInNew, wrapWithAnchor);
+    }, a ? (a.getAttribute('href') || '') : '');
+  }
+
+  function applyLinkChange(a, url, openInNew, wrapWithAnchor) {
+    let target = a;
+    if (!target && wrapWithAnchor && selected) {
+      target = document.createElement('a');
+      selected.parentNode.insertBefore(target, selected);
+      target.appendChild(selected);
+    }
+    if (!target) return;
+    target.setAttribute('href', url);
+    if (openInNew) {
+      target.setAttribute('target', '_blank');
+      target.setAttribute('rel', 'noopener');
+    } else {
+      target.removeAttribute('target');
+      target.removeAttribute('rel');
+    }
+    // Persistir como override de href no content (mesmo formato que inline-editor usa)
+    try {
+      const inChrome = target.closest && target.closest('header, nav, footer');
+      send({
+        type: 'override-change',
+        page: inChrome ? '__global__' : PAGE_KEY,
+        selector: genSelector(target),
+        value: { href: url },
+      });
+    } catch {}
+    drawHandles();
   }
 
   function drawHandles() {
@@ -124,6 +253,7 @@
       h.addEventListener('mousedown', startResize);
     }
     document.body.appendChild(handlesEl);
+    drawActionBar();
   }
 
   let dragState = null;
@@ -154,7 +284,7 @@
   function onClickSelect(ev) {
     if (!active) return;
     const el = ev.target;
-    if (!el || el === document.body || el.closest('.__lo-toolbar, .__lo-handle, .__lo-overlay')) return;
+    if (!el || el === document.body || el.closest('.__lo-toolbar, .__lo-handle, .__lo-overlay, .__lo-actionbar, .__ie-modal-backdrop, .__ie-modal')) return;
     ev.preventDefault(); ev.stopPropagation();
     if (selected) selected.classList.remove('__lo-selected');
     selected = el;
@@ -211,6 +341,9 @@
     if (!active) return;
     if (ev.key === 'Escape') {
       if (selected) { selected.classList.remove('__lo-selected'); selected = null; removeHandles(); }
+    } else if (selected && (ev.ctrlKey || ev.metaKey) && (ev.key === 'd' || ev.key === 'D')) {
+      ev.preventDefault();
+      duplicateSelected();
     } else if (selected && (ev.key === 'Delete' || ev.key === 'Backspace')) {
       ev.preventDefault();
       applyOverride(selected, { hidden: true });
@@ -232,6 +365,13 @@
       document.addEventListener('click', onClickSelect, true);
       document.addEventListener('mousedown', startMove, true);
       document.addEventListener('keydown', onKey);
+      // Suspender edição de texto enquanto o modo Layout está ativo: guardar
+      // o estado original de contenteditable em cada elemento e desligá-lo.
+      document.querySelectorAll('[contenteditable]').forEach(el => {
+        if (el.__loCePrev == null) el.__loCePrev = el.getAttribute('contenteditable');
+        el.setAttribute('contenteditable', 'false');
+      });
+      window.__layoutModeActive = true;
     } else {
       document.removeEventListener('click', onClickSelect, true);
       document.removeEventListener('mousedown', startMove, true);
@@ -239,6 +379,14 @@
       if (selected) selected.classList.remove('__lo-selected');
       selected = null;
       removeHandles();
+      // Restaurar contenteditable
+      document.querySelectorAll('[contenteditable]').forEach(el => {
+        if (el.__loCePrev != null) {
+          el.setAttribute('contenteditable', el.__loCePrev);
+          el.__loCePrev = null;
+        }
+      });
+      window.__layoutModeActive = false;
     }
   }
 

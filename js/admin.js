@@ -3249,6 +3249,21 @@ function _contentOnMessage(e) {
     _recomputeDirty();
     return;
   }
+  if (m.type === 'duplicate-element') {
+    // Persistir clones criados no modo Layout. Guardamos uma lista por
+    // página em content.overrides[page].__duplicates: [{ afterSelector, html }]
+    _contentPushHistory();
+    if (!_content.current.overrides) _content.current.overrides = {};
+    if (!_content.current.overrides[m.page]) _content.current.overrides[m.page] = {};
+    const ov = _content.current.overrides[m.page];
+    if (!Array.isArray(ov.__duplicates)) ov.__duplicates = [];
+    ov.__duplicates.push({ afterSelector: m.afterSelector, html: m.html });
+    state.data['conteudo'] = _content.current;
+    _writeContentDraft();
+    markDirty('conteudo');
+    _recomputeDirty();
+    return;
+  }
   if (m.type === 'override-change') {
     _contentPushHistory();
     if (!_content.current.overrides) _content.current.overrides = {};
