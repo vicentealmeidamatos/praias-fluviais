@@ -254,13 +254,27 @@ async function createInvoiceXpressInvoice({ email, customerName, taxId, billingA
 
   // 3. Criar se não existe
   if (!clientId) {
-    const clientRes = await fetch(`${baseUrl}/clients.json?api_key=${apiKey}`, {
+    let clientRes = await fetch(`${baseUrl}/clients.json?api_key=${apiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       body: JSON.stringify(clientPayload),
     });
-    const clientBody = await clientRes.text();
+    let clientBody = await clientRes.text();
     console.log('[webhook] POST /clients.json →', clientRes.status, clientBody.slice(0, 300));
+
+    // Fallback: NIF inválido → tentar como consumidor final
+    if (!clientRes.ok && /Contribuinte não é válido|fiscal_id/i.test(clientBody) && clientPayload.client.fiscal_id !== '999999990') {
+      console.log('[webhook] NIF inválido, refazendo como consumidor final');
+      clientPayload.client.fiscal_id = '999999990';
+      clientRes = await fetch(`${baseUrl}/clients.json?api_key=${apiKey}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(clientPayload),
+      });
+      clientBody = await clientRes.text();
+      console.log('[webhook] POST /clients.json (retry) →', clientRes.status, clientBody.slice(0, 300));
+    }
+
     if (clientRes.ok) {
       try { clientId = JSON.parse(clientBody).client?.id; } catch {}
     }
