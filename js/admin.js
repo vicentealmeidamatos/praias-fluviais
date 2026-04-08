@@ -107,11 +107,13 @@ function _renderPublishBar() {
   if (bar) bar.remove();
 }
 
-// Recarregar página inteira — descarta tudo o que não foi gravado.
-function discardAndReload() {
+// Recarregar APENAS o preview do Conteúdo — descarta as alterações não
+// guardadas dessa sessão de edição visual sem mexer no resto do admin.
+async function discardAndReload() {
   const hasPending = (_autoSave && _autoSave.pending && _autoSave.pending.size > 0) || (_content && _content.dirty);
-  if (hasPending && !confirm('Recarregar a página vai descartar todas as alterações não guardadas. Continuar?')) return;
-  // Limpar drafts em storage para que o reload arranque do estado gravado
+  if (hasPending && !confirm('Recarregar o preview vai descartar todas as alterações não guardadas desta secção. Continuar?')) return;
+
+  // 1) Limpar drafts em storage
   try {
     for (const ds of (_SNAPSHOT_DATASETS || [])) {
       localStorage.removeItem('_datasetDraft:' + ds);
@@ -120,7 +122,37 @@ function discardAndReload() {
     localStorage.removeItem('_contentDraft');
     sessionStorage.removeItem('_contentDraft');
   } catch {}
-  location.reload();
+
+  // 2) Re-fetch fresh do servidor para os datasets editáveis e content
+  try {
+    const r = await fetch('data/content.json?_=' + Date.now(), { cache: 'no-store' });
+    if (r.ok) {
+      const fresh = await r.json();
+      state.data['conteudo'] = fresh;
+      state.editingContent = JSON.parse(JSON.stringify(fresh));
+      _content.current = JSON.parse(JSON.stringify(fresh));
+    }
+  } catch {}
+  if (window.DataLoader) {
+    try { window.DataLoader.invalidate(); } catch {}
+    try { state.data['layout'] = (await window.DataLoader.loadDataset('layout', { force: true })) || {}; } catch {}
+    for (const ds of (_SNAPSHOT_DATASETS || [])) {
+      try { state.data[ds] = (await window.DataLoader.loadDataset(ds, { force: true })) || state.data[ds]; } catch {}
+    }
+  }
+
+  // 3) Reset histórico/dirty/pending
+  _content.history = [];
+  _content.redoStack = [];
+  _autoSave.pending.clear();
+  _contentSetBaseline();
+  _clearUnsaved();
+
+  // 4) Recarregar só o iframe (sem ?preview=draft já que acabámos de limpar)
+  const iframe = document.getElementById('content-iframe');
+  if (iframe) iframe.src = _contentIframeSrc();
+
+  toast('Preview recarregado — alterações não guardadas descartadas.', 'success');
 }
 
 async function publishPendingChanges() {
