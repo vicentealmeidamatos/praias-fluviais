@@ -239,16 +239,38 @@
     return path.split('.').reduce((o, k) => (o == null ? undefined : o[k]), obj);
   }
 
-  // Suprimir navegação durante edição
+  // Suprimir navegação e interações durante edição.
+  // Links continuam clicáveis (Alt+click abre picker; sem Alt navega para
+  // permitir mudar de página). Botões NUNCA disparam handlers — só servem
+  // para edição de texto.
   document.addEventListener('click', (e) => {
-    const a = e.target.closest('a');
-    if (a && !a.closest('.__ie-toolbar') && !a.closest('.__ie-modal')) {
+    if (e.target.closest('.__ie-toolbar, .__ie-modal, .__ie-list-controls, .__ie-section-handle')) return;
+    const btn = e.target.closest('button');
+    if (btn) {
       e.preventDefault();
+      e.stopImmediatePropagation();
+      return;
     }
-    // Suprimir submits
-    if (e.target.closest('button[type="submit"]')) e.preventDefault();
+    const a = e.target.closest('a');
+    if (a) {
+      // Permitir navegação a outra página (admin escolhe deixar ir)
+      // mas suprimir links âncora/JS para não disparar modais.
+      const href = a.getAttribute('href') || '';
+      if (!href || href.startsWith('#') || href.startsWith('javascript:')) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+      }
+    }
   }, true);
   document.addEventListener('submit', (e) => e.preventDefault(), true);
+  // Bloquear também mousedown nos botões (alguns sites usam mousedown)
+  document.addEventListener('mousedown', (e) => {
+    if (e.target.closest('.__ie-toolbar, .__ie-modal, .__ie-list-controls, .__ie-section-handle')) return;
+    if (e.target.closest('button')) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    }
+  }, true);
 
   // ────────────────────────────────────────────────────────────
   // TEXTO SIMPLES (data-content)
