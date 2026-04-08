@@ -307,75 +307,89 @@
   }
 
   // Suprimir navegação e interações durante edição.
-  // Links continuam clicáveis (Alt+click abre picker; sem Alt navega para
-  // permitir mudar de página). Botões NUNCA disparam handlers — só servem
-  // para edição de texto.
-  // Permitir navegação a partir de elementos marcados com data-edit-allow-nav
-  // Útil para os botões do hero da página passaporte que abrem sub-páginas.
+  // Filosofia: NADA na página deve disparar handlers do site (modais,
+  // navegação, abertura de menus, etc). Apenas a edição é que deve funcionar.
+  // Excepções pontuais: elementos com `data-edit-allow-nav` (raros).
   function isAllowedNavTarget(el) {
     if (!el) return false;
-    return !!el.closest('[data-edit-allow-nav], [data-passport-action]');
+    return !!el.closest('[data-edit-allow-nav]');
   }
-
-  // Delegação global para hosts de ícone — funciona para qualquer host actual,
-  // mesmo os recém-criados pelo lucide depois de uma troca.
-  document.addEventListener('click', (e) => {
-    if (e.target.closest('.__ie-toolbar, .__ie-modal, .__lo-actionbar, .__lo-toolbar, .__lo-handle')) return;
-    // Em modo Layout não permitir trocar ícones — só posições/tamanhos.
-    if (window.__layoutModeActive) return;
-    const iconHost = e.target.closest('.__ie-icon-host');
-    if (iconHost) {
+  // Selector dos elementos do PRÓPRIO editor — esses nunca devem ser bloqueados.
+  const EDITOR_SAFE_SEL = '.__ie-toolbar, .__ie-modal, .__ie-modal-backdrop, .__ie-list-controls, .__ie-section-handle, .__ie-icon-host, .__lo-actionbar, .__lo-toolbar, .__lo-handle, .__lo-overlay';
+  function isInsideEditorUI(el) {
+    return !!(el && el.closest && el.closest(EDITOR_SAFE_SEL));
+  }
+  // Bloqueio universal: para clicks/pointer/mouse/touch/keydown que NÃO
+  // estejam em UI do editor nem marcados como nav permitida, faz preventDefault
+  // + stopImmediatePropagation. Excepção adicional: edição de texto inline
+  // continua a funcionar porque os handlers de focus/blur são attach DIRECTAMENTE
+  // nos elementos editáveis e os event types que deixamos passar (focus/input)
+  // não são interceptados aqui.
+  function blockSiteInteractions(e) {
+    const t = e.target;
+    if (!t || isInsideEditorUI(t)) return;
+    if (isAllowedNavTarget(t)) return;
+    // Permitir contenteditable activo: o user precisa de poder clicar/digitar.
+    const editable = t.closest && (t.closest('[contenteditable="true"]') || t.closest('.__ie-editing'));
+    if (editable) return;
+    // Permitir clicks no host de um ícone (vai abrir o picker via outro hook)
+    if (t.closest && t.closest('.__ie-icon-host') && !window.__layoutModeActive && e.type === 'click') {
+      // O picker é aberto pelo iconPickerHook; aqui apenas suprimimos a acção
+      // nativa do botão/link onde o ícone está. Não fazemos return.
+    }
+    e.preventDefault();
+    e.stopPropagation();
+    if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
+  }
+  // O icon picker é tratado dentro do mesmo handler (blockSiteInteractions
+  // chama openIconPicker quando o target é um icon host).
+  const _origBlock = blockSiteInteractions;
+  function blockSiteInteractionsWithIcon(e) {
+    const t = e.target;
+    if (!t || isInsideEditorUI(t)) return;
+    // Icon host: abrir picker (excepto em modo layout) e parar a propagação.
+    if (e.type === 'click' && !window.__layoutModeActive && t.closest && t.closest('.__ie-icon-host')) {
       e.preventDefault();
       e.stopPropagation();
-      e.stopImmediatePropagation();
-      openIconPicker(iconHost);
+      if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+      try { openIconPicker(t.closest('.__ie-icon-host')); } catch {}
       return;
     }
-  }, true);
-
-  document.addEventListener('click', (e) => {
-    if (e.target.closest('.__ie-toolbar, .__ie-modal, .__ie-list-controls, .__ie-section-handle, .__ie-icon-host, .__lo-actionbar, .__lo-toolbar, .__lo-handle')) return;
-
-    const btn = e.target.closest('button');
-    if (btn) {
-      // Excepção: botões marcados como nav permitida
-      if (isAllowedNavTarget(btn)) return;
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      return;
-    }
-    const a = e.target.closest('a');
-    if (a) {
-      const href = a.getAttribute('href') || '';
-      // Suprimir links âncora/JS — não disparar modais
-      if (!href || href.startsWith('#') || href.startsWith('javascript:')) {
-        if (isAllowedNavTarget(a)) return;
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        return;
-      }
-      // Suprimir navegação em header/nav/footer — esses links devem ser
-      // editáveis. Excepção: links para páginas dinâmicas (praia/artigo/produto)
-      // e passaporte.html (sub-páginas do passaporte).
-      const inChrome = a.closest('header, nav, footer');
-      const isDynamic = /^(?:\/)?(?:praia|artigo|produto)\.html(?:\?|$)/i.test(href);
-      const isPassportSub = /^(?:\/)?passaporte(?:[-_][\w-]+)?\.html(?:\?|$)/i.test(href);
-      if (inChrome && !isDynamic && !isPassportSub && !isAllowedNavTarget(a)) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        return;
-      }
-    }
-  }, true);
-  document.addEventListener('submit', (e) => e.preventDefault(), true);
-  document.addEventListener('mousedown', (e) => {
-    if (e.target.closest('.__ie-toolbar, .__ie-modal, .__ie-list-controls, .__ie-section-handle, .__ie-icon-host, .__lo-actionbar, .__lo-toolbar, .__lo-handle')) return;
-    const btn = e.target.closest('button');
-    if (btn && !isAllowedNavTarget(btn)) {
+    _origBlock(e);
+  }
+  const BLOCKED_EVENTS = ['click', 'auxclick', 'dblclick', 'mousedown', 'mouseup', 'pointerdown', 'pointerup', 'touchstart', 'touchend', 'submit'];
+  BLOCKED_EVENTS.forEach(ev => {
+    document.addEventListener(ev, blockSiteInteractionsWithIcon, true);
+  });
+  // Suprimir Enter/Space em botões focados (também ativa onclick)
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const t = e.target;
+    if (!t || isInsideEditorUI(t) || isAllowedNavTarget(t)) return;
+    if (t.closest && t.closest('[contenteditable="true"], .__ie-editing, input, textarea, select')) return;
+    if (t.closest && t.closest('button, a, [role=button]')) {
       e.preventDefault();
       e.stopImmediatePropagation();
     }
   }, true);
+  // Bloquear navegação programática (window.open, location.assign/replace, location.href)
+  try {
+    const noop = function(){ return null; };
+    window.open = noop;
+    const _assign = location.assign.bind(location);
+    const _replace = location.replace.bind(location);
+    location.assign = function(){ /* bloqueado em modo edição */ };
+    location.replace = function(){ /* bloqueado em modo edição */ };
+    // Permitir setar location.href apenas pelo nosso código (postMessage do parent).
+    // Tentativa best-effort; alguns browsers não permitem redefinir.
+    Object.defineProperty(location, 'href', {
+      configurable: true,
+      get: () => location.toString(),
+      set: function(v) { /* bloqueado em modo edição */ },
+    });
+  } catch {}
+
+  // (icon picker tratado dentro de blockSiteInteractionsWithIcon acima)
 
   // ────────────────────────────────────────────────────────────
   // TEXTO SIMPLES (data-content)
