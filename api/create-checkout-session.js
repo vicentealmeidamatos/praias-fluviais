@@ -145,7 +145,7 @@ export default async function handler(req, res) {
       custom_fields: [
         {
           key: 'nif',
-          label: { type: 'custom', custom: 'NIF (particulares — empresas usem o campo abaixo)' },
+          label: { type: 'custom', custom: 'NIF (opcional)' },
           type: 'text',
           optional: true,
           text: { minimum_length: 1, maximum_length: 20 },
