@@ -26,6 +26,38 @@
   const editMode = params.get('edit') === '1';
   const previewDraft = params.get('preview') === 'draft';
 
+  // Em modo preview de draft, intercepta fetch para data/<dataset>.json e
+  // devolve o draft em localStorage (escrito pelo admin durante undo/redo).
+  // Permite que páginas como praia.html / artigo.html / produto.html /
+  // descontos.html / onde-encontrar.html reflictam edições não-gravadas.
+  if (previewDraft && !window.__draftFetchInstalled) {
+    window.__draftFetchInstalled = true;
+    const FILE_TO_DATASET = {
+      'data/beaches.json':                         'beaches',
+      'data/articles.json':                        'articles',
+      'data/locations-guia-passaporte.json':       'locations-guia-passaporte',
+      'data/locations-carimbos.json':              'locations-carimbos',
+      'data/descontos.json':                       'descontos',
+      'data/products.json':                        'produtos',
+      'data/settings.json':                        'settings',
+    };
+    const _origFetch = window.fetch.bind(window);
+    window.fetch = function(input, init) {
+      try {
+        const url = typeof input === 'string' ? input : (input && input.url) || '';
+        const cleaned = url.replace(/^\.?\//, '').split('?')[0];
+        const ds = FILE_TO_DATASET[cleaned];
+        if (ds) {
+          const draft = localStorage.getItem('_datasetDraft:' + ds) || sessionStorage.getItem('_datasetDraft:' + ds);
+          if (draft) {
+            return Promise.resolve(new Response(draft, { status: 200, headers: { 'Content-Type': 'application/json' } }));
+          }
+        }
+      } catch {}
+      return _origFetch(input, init);
+    };
+  }
+
   async function fetchContent() {
     // 1) Draft em localStorage (modo preview entre abas)
     if (previewDraft) {

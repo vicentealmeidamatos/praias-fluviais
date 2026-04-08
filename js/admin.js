@@ -205,6 +205,17 @@ async function discardPendingChanges() {
     _clearUnsaved();
   }
 
+  // Limpar drafts de datasets em storage
+  try {
+    for (const ds of (_SNAPSHOT_DATASETS || [])) {
+      localStorage.removeItem('_datasetDraft:' + ds);
+      sessionStorage.removeItem('_datasetDraft:' + ds);
+    }
+    localStorage.removeItem('_contentDraft');
+    sessionStorage.removeItem('_contentDraft');
+  } catch {}
+  _contentSetBaseline();
+
   _renderPublishBar();
 
   // Re-render só a secção actual (sem location.reload). Se for Conteúdo,
@@ -2856,23 +2867,25 @@ const _content = {
   unsavedListeners: false,
 };
 
+function _baselinePayload() {
+  const datasets = {};
+  for (const ds of _SNAPSHOT_DATASETS || []) {
+    if (state.data[ds] != null) datasets[ds] = state.data[ds];
+  }
+  return {
+    content: _content.current || state.editingContent || {},
+    layout:  state.data.layout || {},
+    datasets,
+  };
+}
 function _contentSetBaseline() {
-  try {
-    _content.baseline = JSON.stringify({
-      content: _content.current || state.editingContent || {},
-      layout:  state.data.layout || {},
-    });
-  } catch { _content.baseline = null; }
+  try { _content.baseline = JSON.stringify(_baselinePayload()); }
+  catch { _content.baseline = null; }
 }
 function _recomputeDirty() {
   if (_content.baseline == null) { _markUnsaved(); return; }
   let cur;
-  try {
-    cur = JSON.stringify({
-      content: _content.current || {},
-      layout:  state.data.layout || {},
-    });
-  } catch { cur = null; }
+  try { cur = JSON.stringify(_baselinePayload()); } catch { cur = null; }
   if (cur === _content.baseline) {
     _clearUnsaved();
     // Limpar também o publish-bar para esta sessão de edição visual
@@ -2884,11 +2897,23 @@ function _recomputeDirty() {
   }
 }
 
+// Datasets que entram no snapshot do undo/redo do editor visual.
+const _SNAPSHOT_DATASETS = ['beaches','articles','locations-guia-passaporte','locations-carimbos','descontos','produtos','settings'];
+
 function _contentSnapshot() {
-  // Captura estado de tudo o que pode ser revertido por undo/redo
+  // Captura estado de tudo o que pode ser revertido por undo/redo:
+  // content (textos/overrides), layout, e todos os datasets do admin que
+  // podem ser editados via data-content-bind no preview.
+  const datasets = {};
+  for (const ds of _SNAPSHOT_DATASETS) {
+    if (state.data[ds] != null) {
+      try { datasets[ds] = JSON.parse(JSON.stringify(state.data[ds])); } catch {}
+    }
+  }
   return {
-    content: JSON.parse(JSON.stringify(_content.current)),
-    layout:  JSON.parse(JSON.stringify(state.data.layout || {})),
+    content:  JSON.parse(JSON.stringify(_content.current)),
+    layout:   JSON.parse(JSON.stringify(state.data.layout || {})),
+    datasets,
   };
 }
 function _contentPushHistory() {
@@ -2912,15 +2937,50 @@ function _restoreSnapshot(snap) {
   state.data['conteudo'] = _content.current;
   state.data.layout = JSON.parse(JSON.stringify(l));
   state.data['layout'] = state.data.layout;
-  // Para reflectir undo/redo de texto/ícones/listas/sectionsOrder de forma
-  // robusta, escrevemos o snapshot em localStorage como "draft" e recarregamos
-  // o iframe com ?preview=draft. O content-loader busca esse draft, dando-nos
-  // sempre um DOM limpo e consistente — não há resíduos de DOM editado.
-  try { localStorage.setItem('_contentDraft', JSON.stringify(_content.current)); } catch {}
-  try { sessionStorage.setItem('_contentDraft', JSON.stringify(_content.current)); } catch {}
+  // Restaurar datasets capturados (beaches/articles/produtos/...).
+  if (snap.datasets) {
+    for (const ds of _SNAPSHOT_DATASETS) {
+      if (snap.datasets[ds] != null) {
+        try { state.data[ds] = JSON.parse(JSON.stringify(snap.datasets[ds])); } catch {}
+      }
+    }
+  }
+  // Re-render se a secção actual coincide
+  try {
+    if (state.currentSection && _SNAPSHOT_DATASETS.includes(state.currentSection)) {
+      renderSection();
+    }
+  } catch {}
+  // Para reflectir undo/redo de texto/ícones/listas/sectionsOrder e edições
+  // ligadas a datasets (data-content-bind) SEM recarregar o iframe, enviamos
+  // um postMessage com o snapshot completo. O inline-editor aplica em DOM:
+  //  - content via window._applyContent (texto/html/listas/overrides)
+  //  - datasets via [data-content-bind="ds:path"] update direto.
+  // Mantemos o draft em storage como fallback se o iframe for recarregado.
+  _writeContentDraft();
+  _writeDatasetDrafts();
   const iframe = document.getElementById('content-iframe');
-  if (iframe) {
-    iframe.src = _contentIframeSrc({ draft: true });
+  if (iframe && iframe.contentWindow) {
+    const datasetsPayload = {};
+    for (const ds of _SNAPSHOT_DATASETS) {
+      if (state.data[ds] != null) datasetsPayload[ds] = state.data[ds];
+    }
+    try {
+      iframe.contentWindow.postMessage({
+        type: 'apply-state',
+        content: _content.current,
+        layout: state.data.layout || {},
+        datasets: datasetsPayload,
+      }, '*');
+    } catch {}
+  }
+}
+
+function _writeDatasetDrafts() {
+  for (const ds of _SNAPSHOT_DATASETS) {
+    if (state.data[ds] == null) continue;
+    try { localStorage.setItem('_datasetDraft:' + ds, JSON.stringify(state.data[ds])); } catch {}
+    try { sessionStorage.setItem('_datasetDraft:' + ds, JSON.stringify(state.data[ds])); } catch {}
   }
 }
 function _setByPath(obj, path, value) {
@@ -3181,6 +3241,7 @@ function _contentOnMessage(e) {
       state.data[ds] = /^\d+$/.test(firstSeg) ? [] : {};
     }
     _setByPath(state.data[ds], m.path, m.value);
+    _writeDatasetDrafts();
     markDirty(ds);
     if (state.currentSection === ds) {
       try { renderSection(); } catch {}

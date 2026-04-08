@@ -317,6 +317,20 @@
     return !!el.closest('[data-edit-allow-nav], [data-passport-action]');
   }
 
+  // Delegação global para hosts de ícone — funciona para qualquer host actual,
+  // mesmo os recém-criados pelo lucide depois de uma troca.
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('.__ie-toolbar, .__ie-modal')) return;
+    const iconHost = e.target.closest('.__ie-icon-host');
+    if (iconHost) {
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      openIconPicker(iconHost);
+      return;
+    }
+  }, true);
+
   document.addEventListener('click', (e) => {
     if (e.target.closest('.__ie-toolbar, .__ie-modal, .__ie-list-controls, .__ie-section-handle, .__ie-icon-host')) return;
 
@@ -984,24 +998,23 @@
       });
       return hosts;
     }
+    // Marcar visualmente os hosts de ícone (estilo + classe). O click é
+    // tratado por delegação única no body — assim qualquer host (mesmo
+    // criado depois por lucide.createIcons após uma troca) responde a
+    // novos cliques sem precisar de re-attach manual.
     findIconHosts().forEach((host) => {
-      if (host.__ieIconReady) return;
       if (host.closest('.__ie-toolbar, .__ie-modal')) return;
-      host.__ieIconReady = true;
       host.classList.add('__ie-icon-host');
-      // Aplicar estilos via setProperty para SVGs
       try {
         host.style.cursor = 'pointer';
         host.style.transition = 'outline-color .12s, background .12s';
-        host.style.outline = '2px dashed transparent';
+        if (!host.style.outline) host.style.outline = '2px dashed transparent';
         host.style.outlineOffset = '3px';
       } catch {}
+      if (host.__ieIconHover) return;
+      host.__ieIconHover = true;
       host.addEventListener('mouseenter', () => { try { host.style.outlineColor = '#FFEB3B'; } catch {} });
       host.addEventListener('mouseleave', () => { try { host.style.outlineColor = 'transparent'; } catch {} });
-      host.addEventListener('click', (e) => {
-        e.preventDefault(); e.stopPropagation();
-        openIconPicker(host);
-      }, true);
     });
 
     // Links sem texto editável (ex: ícones sociais, botões com ícone) — ainda assim editar href
@@ -1055,16 +1068,27 @@
 
     const modal = createModal(`
       <h3>Escolher ícone</h3>
-      <p style="font-size:12px;color:#5C5340;margin:0 0 6px;">Ícone actual: <strong>${current || '—'}</strong></p>
+      <p style="font-size:12px;color:#5C5340;margin:0 0 6px;">Ícone actual: <strong>${current || '—'}</strong> · Seleccionado: <strong id="__ie-icon-sel">—</strong></p>
       <input type="text" id="__ie-icon-q" placeholder="Procurar ícone (ex: map, sun, leaf)…" style="width:100%;padding:8px 12px;border:1px solid #E2D9C6;border-radius:8px;font-size:13px;">
+      <div id="__ie-icon-count" style="font-size:11px;color:#8A7D60;margin-top:6px;"></div>
       <div id="__ie-icon-grid" style="margin-top:10px;max-height:380px;overflow-y:auto;display:grid;grid-template-columns:repeat(8,1fr);gap:6px;background:#FAF8F5;padding:10px;border-radius:10px;border:1px solid #E2D9C6;"></div>
       <div class="__ie-modal-actions">
         <button class="__ie-btn-ghost" id="__ie-cancel">Cancelar</button>
+        <button class="__ie-btn-primary" id="__ie-apply" disabled style="opacity:.5;cursor:not-allowed;">Aplicar</button>
       </div>
     `);
     const grid = modal.querySelector('#__ie-icon-grid');
     const input = modal.querySelector('#__ie-icon-q');
+    const selLabel = modal.querySelector('#__ie-icon-sel');
+    const applyBtn = modal.querySelector('#__ie-apply');
+    const countLabel = modal.querySelector('#__ie-icon-count');
+    let selected = '';
     modal.querySelector('#__ie-cancel').addEventListener('click', closeModal);
+    applyBtn.addEventListener('click', () => {
+      if (!selected) return;
+      try { pickIcon(selected); }
+      catch (err) { console.error('[icon-picker]', err); closeModal(); }
+    });
 
     function pickIcon(name) {
           // Estratégia: se o host é um <svg>, criar um <i data-lucide> ao lado
@@ -1113,25 +1137,47 @@
 
     function render(filter) {
       const f = (filter || '').toLowerCase().trim();
-      const matched = (f ? names.filter(n => n.toLowerCase().includes(f)) : names).slice(0, 240);
+      // Sem limite — mostrar todos os ícones disponíveis (>1000 no Lucide).
+      // Quando não há filtro mostramos os primeiros 600 e indicamos para
+      // pesquisar para ver os restantes.
+      const all = f ? names.filter(n => n.toLowerCase().includes(f)) : names;
+      const matched = f ? all : all.slice(0, 600);
+      countLabel.textContent = f
+        ? `${all.length} ${all.length === 1 ? 'resultado' : 'resultados'}`
+        : `A mostrar ${matched.length} de ${all.length} — pesquise para filtrar`;
       grid.innerHTML = matched.map(n => `
-        <button type="button" data-icon="${n}" title="${n}" style="aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:white;border:1px solid #E2D9C6;border-radius:8px;cursor:pointer;padding:8px;${n===current?'outline:2px solid #003A40;':''}">
+        <button type="button" data-icon="${n}" title="${n}" style="aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:white;border:1px solid #E2D9C6;border-radius:8px;cursor:pointer;padding:8px;${n===selected?'outline:2px solid #003A40;background:#FFF8C5;':(n===current?'outline:2px solid #003A40;':'')}">
           <i data-lucide="${n}" style="width:20px;height:20px;color:#003A40;pointer-events:none;"></i>
         </button>
       `).join('');
       try { window.lucide && window.lucide.createIcons && window.lucide.createIcons({ attrs: {} }); } catch {}
-      // Garantir que o SVG criado pelo Lucide não capta o clique
       grid.querySelectorAll('svg').forEach(s => { s.style.pointerEvents = 'none'; });
     }
-    // Delegação única — robusta contra re-renders e interferência de handlers globais
-    grid.addEventListener('mousedown', (ev) => {
+    function setSelected(name) {
+      selected = name;
+      selLabel.textContent = name || '—';
+      applyBtn.disabled = !name;
+      applyBtn.style.opacity = name ? '1' : '.5';
+      applyBtn.style.cursor = name ? 'pointer' : 'not-allowed';
+      // Re-render para destacar
+      render(input.value);
+    }
+    // Click na grelha apenas SELECIONA (não aplica). Aplicar requer botão.
+    grid.addEventListener('click', (ev) => {
       const btn = ev.target.closest && ev.target.closest('button[data-icon]');
       if (!btn) return;
       ev.preventDefault();
       ev.stopPropagation();
-      try { pickIcon(btn.getAttribute('data-icon')); }
-      catch (err) { console.error('[icon-picker]', err); closeModal(); }
-    }, true);
+      setSelected(btn.getAttribute('data-icon'));
+    });
+    // Duplo-clique = seleccionar + aplicar (atalho)
+    grid.addEventListener('dblclick', (ev) => {
+      const btn = ev.target.closest && ev.target.closest('button[data-icon]');
+      if (!btn) return;
+      ev.preventDefault();
+      ev.stopPropagation();
+      try { pickIcon(btn.getAttribute('data-icon')); } catch {}
+    });
     render('');
     input.addEventListener('input', () => render(input.value));
     setTimeout(() => input.focus(), 30);
@@ -1205,16 +1251,39 @@
       location.reload();
     }
     if (data.type === 'apply-state' && data.content) {
-      // Recarregar a página com o snapshot novo — é o caminho mais robusto
-      // para refletir undo/redo de texto/ícones/listas/sectionsOrder.
+      // Aplicar snapshot SEM recarregar a página.
       try { localStorage.setItem('_contentDraft', JSON.stringify(data.content)); } catch {}
       try { sessionStorage.setItem('_contentDraft', JSON.stringify(data.content)); } catch {}
-      try {
-        if (typeof window._applyContent === 'function') {
-          window._applyContent(data.content);
-        }
-      } catch {}
-      // Re-decorar o editor inline após o re-apply
+      // 1) Re-correr content-loader para texto/listas/overrides/sectionsOrder
+      try { if (typeof window._applyContent === 'function') window._applyContent(data.content); } catch {}
+      // 2) Aplicar datasets ligados via [data-content-bind="ds:path"]
+      if (data.datasets) {
+        try {
+          const get = (obj, path) => path.split('.').reduce((o, k) => {
+            if (o == null) return undefined;
+            if (Array.isArray(o) && /^\d+$/.test(k)) return o[Number(k)];
+            return o[k];
+          }, obj);
+          document.querySelectorAll('[data-content-bind]').forEach(el => {
+            const spec = el.getAttribute('data-content-bind') || '';
+            const i = spec.indexOf(':');
+            if (i <= 0) return;
+            const ds = spec.slice(0, i);
+            const path = spec.slice(i + 1);
+            const ds_data = data.datasets[ds];
+            if (ds_data == null) return;
+            const v = get(ds_data, path);
+            if (v == null) return;
+            // Heurística: se o elemento parece HTML (article-content) usar innerHTML
+            if (el.matches('[data-content-html], .article-content')) {
+              el.innerHTML = String(v);
+            } else {
+              el.textContent = String(v);
+            }
+          });
+        } catch (err) { console.warn('[apply-state datasets]', err); }
+      }
+      // 3) Re-decorar
       setTimeout(() => { try { window.__ieReinit && window.__ieReinit(); } catch {} }, 50);
       return;
     }
