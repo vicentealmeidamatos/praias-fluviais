@@ -148,7 +148,7 @@ export default async function handler(req, res) {
           label: { type: 'custom', custom: 'NIF (opcional)' },
           type: 'text',
           optional: true,
-          text: { minimum_length: 9, maximum_length: 9 },
+          text: { minimum_length: 1, maximum_length: 20 },
         },
       ],
       locale: 'auto',

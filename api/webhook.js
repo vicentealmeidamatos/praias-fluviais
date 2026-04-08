@@ -168,12 +168,14 @@ function extractTaxId(session) {
     return cleaned;
   }
 
-  // 2. Custom field NIF (particulares)
+  // 2. Custom field NIF (particulares) — limpar espaços, prefixo PT, etc.
   const nifField = session.custom_fields?.find(f => f.key === 'nif');
   if (nifField?.text?.value) {
-    const cleaned = nifField.text.value.trim();
-    console.log('[webhook] extractTaxId → usando custom_field NIF (particular):', cleaned);
-    return cleaned;
+    const cleaned = nifField.text.value.replace(/[^0-9]/g, '').trim();
+    if (cleaned) {
+      console.log('[webhook] extractTaxId → usando custom_field NIF (particular):', cleaned);
+      return cleaned;
+    }
   }
 
   console.log('[webhook] extractTaxId → nenhum NIF fornecido, será consumidor final');
