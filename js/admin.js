@@ -99,24 +99,28 @@ async function saveSectionNow(section) {
 }
 
 function _renderPublishBar() {
-  let bar = document.getElementById('admin-publish-bar');
-  const count = _autoSave.pending.size;
-  if (count === 0) {
-    if (bar) bar.remove();
-    return;
-  }
-  if (!bar) {
-    bar = document.createElement('div');
-    bar.id = 'admin-publish-bar';
-    bar.style.cssText = 'position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:99998;display:flex;align-items:center;gap:14px;background:#003A40;color:#fff;padding:12px 18px;border-radius:14px;box-shadow:0 18px 50px rgba(0,0,0,.35);font:600 13px Poppins,system-ui,sans-serif;';
-    document.body.appendChild(bar);
-  }
-  bar.innerHTML = `
-    <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#FFEB3B;box-shadow:0 0 12px #FFEB3B;"></span>
-    <span>${count} ${count === 1 ? 'alteração' : 'alterações'} por publicar</span>
-    <button onclick="publishPendingChanges()" style="background:#FFEB3B;color:#003A40;border:0;padding:8px 16px;border-radius:9px;font:700 12px Poppins,system-ui,sans-serif;cursor:pointer;letter-spacing:.02em;">Publicar no site</button>
-    <button onclick="discardPendingChanges()" title="Descartar (recarrega da base de dados)" style="background:transparent;color:rgba(255,255,255,.6);border:0;padding:6px 8px;border-radius:8px;font:600 11px Poppins,system-ui,sans-serif;cursor:pointer;">Descartar</button>
-  `;
+  // O aviso flutuante "X alterações por publicar" foi removido a pedido do
+  // utilizador. As alterações pendentes são agora descartadas pelo botão
+  // "Recarregar" no topo (discardAndReload). Mantemos este stub para que
+  // chamadas existentes não falhem.
+  const bar = document.getElementById('admin-publish-bar');
+  if (bar) bar.remove();
+}
+
+// Recarregar página inteira — descarta tudo o que não foi gravado.
+function discardAndReload() {
+  const hasPending = (_autoSave && _autoSave.pending && _autoSave.pending.size > 0) || (_content && _content.dirty);
+  if (hasPending && !confirm('Recarregar a página vai descartar todas as alterações não guardadas. Continuar?')) return;
+  // Limpar drafts em storage para que o reload arranque do estado gravado
+  try {
+    for (const ds of (_SNAPSHOT_DATASETS || [])) {
+      localStorage.removeItem('_datasetDraft:' + ds);
+      sessionStorage.removeItem('_datasetDraft:' + ds);
+    }
+    localStorage.removeItem('_contentDraft');
+    sessionStorage.removeItem('_contentDraft');
+  } catch {}
+  location.reload();
 }
 
 async function publishPendingChanges() {
@@ -490,6 +494,12 @@ function renderDashboard() {
         <div class="p-5 border-b border-white/10">
           <img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-8">
           <p class="text-white/40 text-xs mt-2 font-display uppercase tracking-wider">Painel Admin</p>
+          <button onclick="discardAndReload()" title="Recarrega a página e descarta todas as alterações não guardadas"
+                  style="margin-top:12px;width:100%;display:inline-flex;align-items:center;justify-content:center;gap:6px;background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.15);padding:8px 10px;border-radius:9px;font:600 11px Poppins,system-ui,sans-serif;cursor:pointer;letter-spacing:.02em;transition:background .15s;"
+                  onmouseover="this.style.background='rgba(255,235,59,.15)';this.style.color='#FFEB3B';this.style.borderColor='rgba(255,235,59,.4)'"
+                  onmouseout="this.style.background='rgba(255,255,255,.08)';this.style.color='#fff';this.style.borderColor='rgba(255,255,255,.15)'">
+            ↻ Recarregar / descartar
+          </button>
         </div>
         <nav class="flex-1 py-2">
           ${SECTIONS.map(s => `
