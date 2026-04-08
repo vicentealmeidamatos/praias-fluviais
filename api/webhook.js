@@ -300,19 +300,19 @@ async function createInvoiceXpressInvoice({ email, customerName, taxId, billingA
     throw new Error(`Não foi possível criar/encontrar cliente no InvoiceXpress (account=${account}, name=${customerName}, code=${clientCode}). Verifica os logs POST/PUT acima e o limite de documentos da conta IX.`);
   }
 
-  // 2. Criar fatura-recibo
+  // 2. Criar fatura-recibo — preços do site já incluem IVA, dividir por 1.23
+  const VAT = 1.23;
   const invoiceItems = items.map(item => ({
     name: `${item.name}${item.variant && item.variant !== 'sem-variante' ? ` (${item.variant})` : ''}`,
-    unit_price: ((item.price > 0 ? item.price : 0) / 100).toFixed(2),
+    unit_price: ((item.price > 0 ? item.price : 0) / 100 / VAT).toFixed(4),
     quantity: item.quantity,
     tax: { name: 'IVA23', value: 23 },
   }));
 
-  // Adicionar portes como item se houver
   if (shippingPrice > 0) {
     invoiceItems.push({
       name: 'Portes de envio',
-      unit_price: (shippingPrice / 100).toFixed(2),
+      unit_price: (shippingPrice / 100 / VAT).toFixed(4),
       quantity: 1,
       tax: { name: 'IVA23', value: 23 },
     });
