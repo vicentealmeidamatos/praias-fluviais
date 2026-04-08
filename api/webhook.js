@@ -264,7 +264,7 @@ async function createInvoiceXpressInvoice({ email, customerName, taxId, billingA
     invoice_receipt: {
       date: today,
       due_date: today,
-      client: { id: clientId },
+      client: { id: clientId, name: customerName, code: taxId || '999999990' },
       items: invoiceItems,
       observations: `Pedido Stripe: ${sessionId}`,
     },
