@@ -88,20 +88,31 @@ function markClean(section) {
 
 // Botão "Gravar alterações" por secção — grava imediatamente no Supabase
 // (sem precisar do botão global da publish bar nem de export manual).
+function sectionHasRealChanges(section) {
+  const dataKey = Object.keys(SECTION_TO_DATASET).includes(section) ? section : null;
+  if (!dataKey) return false;
+  const current = JSON.stringify(state.data[dataKey] ?? null);
+  const original = state.serverSnapshot?.[dataKey] ?? 'null';
+  return current !== original;
+}
+
 async function saveSectionNow(section) {
   if (!SECTION_TO_DATASET[section]) {
     toast('Secção desconhecida.', 'error'); return;
   }
-  if (!_autoSave.pending.has(section)) {
+  if (!sectionHasRealChanges(section)) {
     toast('Não existem alterações por gravar nesta secção.', 'info'); return;
   }
   if (!confirm('As alterações serão publicadas no site em produção. Deseja continuar?')) return;
+  _autoSave.pending.add(section);
   _autoSave.lastError = null;
   await _autoSaveFlush(section);
   _renderPublishBar();
   if (_autoSave.lastError) {
     toast('Erro a gravar: ' + _autoSave.lastError.message, 'error');
   } else {
+    // Atualizar snapshot após gravar com sucesso
+    state.serverSnapshot[section] = JSON.stringify(state.data[section]);
     toast('Alterações gravadas e publicadas no site.', 'success');
   }
 }
@@ -504,6 +515,11 @@ async function initDashboard() {
   state.data['encomendas'] = null;
   state.data['utilizadores'] = null;
   state.data['comentarios'] = null;
+  // Snapshot dos dados originais do servidor para detetar alterações reais
+  state.serverSnapshot = {};
+  for (const key of Object.keys(state.data)) {
+    if (state.data[key] != null) state.serverSnapshot[key] = JSON.stringify(state.data[key]);
+  }
   renderDashboard();
 }
 
@@ -521,7 +537,7 @@ function renderDashboard() {
     encomendas:            { icon: '📦', label: 'Loja — Encomendas' },
     utilizadores:          { icon: '👥', label: 'Dados' },
     comentarios:           { icon: '💬', label: 'Comentários' },
-    conteudo:              { icon: '✏️', label: 'Conteúdo do Site' },
+    conteudo:              { icon: '✏️', label: 'Editor Visual' },
     settings:              { icon: '⚙️', label: 'Configurações' },
   };
 
@@ -2953,7 +2969,7 @@ function viewOrderDetails(orderId) {
   document.getElementById('order-detail-modal').classList.remove('hidden');
 }
 
-// ─── Conteúdo do Site — Editor Visual Inline ───
+// ─── Editor Visual — Editor Visual Inline ───
 const CONTENT_PAGES = [
   { id: 'index',           label: 'Início',                file: 'index.html' },
   { id: 'votar',           label: 'Votar',                 file: 'votar.html' },
@@ -3167,7 +3183,7 @@ function renderConteudo(container) {
       <!-- Topbar -->
       <div class="flex items-center gap-2.5 px-5 py-3 bg-white border-b border-praia-sand-200 flex-wrap" style="box-shadow:0 1px 0 rgba(0,58,64,.04);">
         <div>
-          <h1 class="font-display text-lg font-bold text-praia-teal-800">Conteúdo do Site</h1>
+          <h1 class="font-display text-lg font-bold text-praia-teal-800">Editor Visual</h1>
           <p class="text-[11px] text-praia-sand-500">Clique em qualquer texto ou imagem do site para editar.</p>
         </div>
         <select id="content-page-sel" onchange="contentSwitchPage(this.value)"
@@ -3729,7 +3745,7 @@ function _legacyRenderConteudo_unused(container) {
   container.innerHTML = `
     <div class="p-6 max-w-3xl">
       <div class="flex items-center justify-between mb-4">
-        <h1 class="font-display text-2xl font-bold text-praia-teal-800">Conteúdo do Site</h1>
+        <h1 class="font-display text-2xl font-bold text-praia-teal-800">Editor Visual</h1>
         <button onclick="exportContentJSON()" class="admin-btn admin-btn-export">Exportar content.json</button>
       </div>
       <p class="text-sm text-praia-sand-500 mb-5">Edite todos os textos e imagens do site. Após guardar, clique em "Exportar content.json" e substitua o ficheiro em <code>data/content.json</code>.</p>
