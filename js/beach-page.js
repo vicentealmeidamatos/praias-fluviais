@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     boatRental:  { icon: 'sailboat',      label: 'Embarcações' },
     camping:     { icon: 'tent',          label: 'Alojamento' },
     wc:          { icon: 'bath',          label: 'Instal. Sanitárias' },
-    nacional2:   { icon: 'milestone',     label: 'Estrada Nacional 2' },
+    nacional2:   { icon: 'signpost',      label: 'Estrada Nacional 2' },
   };
 
   const servicesHtml = Object.entries(beach.services)
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const nearbyHtml = nearby.map(b => `
     <a href="praia.html?id=${b.id}" class="card-interactive rounded-xl overflow-hidden bg-white shadow-layered group">
       <div class="relative h-36 overflow-hidden">
-        <img src="${b.photos[0]}" alt="${b.name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+        <img src="${b.thumbnail || b.photos[0]}" alt="${b.name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
         <div class="absolute inset-0 bg-gradient-to-t from-praia-teal-800/60 via-transparent to-transparent"></div>
       </div>
       <div class="p-4">
@@ -230,7 +230,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     "description": beach.description,
     "address": { "@type": "PostalAddress", "addressLocality": beach.municipality, "addressRegion": beach.district, "addressCountry": "PT" },
     "geo": { "@type": "GeoCoordinates", "latitude": beach.coordinates.lat, "longitude": beach.coordinates.lng },
-    "image": beach.photos[0],
+    "image": beach.thumbnail || beach.photos[0],
     "isAccessibleForFree": true,
     "publicAccess": true
   });

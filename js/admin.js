@@ -832,7 +832,10 @@ function renderBeaches(container) {
                 const activeServices = ALL_SERVICES.filter(s => b.services?.[s.key]).map(s => s.label).join(', ') || '—';
                 return `
                 <tr class="border-t border-praia-sand-100 hover:bg-praia-sand-50 admin-table-row" data-search="${(b.name + ' ' + b.municipality + ' ' + (b.freguesia||'') + ' ' + (b.district||'')).toLowerCase()}">
-                  <td class="px-4 py-3 font-semibold text-praia-teal-800">${b.name}</td>
+                  <td class="px-4 py-3 font-semibold text-praia-teal-800" style="display:flex;align-items:center;gap:8px;">
+                    ${b.thumbnail ? `<img src="${escHtml(b.thumbnail)}" style="width:36px;height:24px;object-fit:cover;border-radius:4px;flex-shrink:0;">` : ''}
+                    ${b.name}
+                  </td>
                   <td class="px-4 py-3 text-praia-sand-600">${b.municipality}</td>
                   <td class="px-4 py-3 text-praia-sand-600">${b.district || '—'}</td>
                   <td class="px-4 py-3">
@@ -858,6 +861,7 @@ function editBeach(index) {
   const b = index !== null ? state.data.beaches[index] : {
     id: '', name: '', municipality: '', freguesia: '', district: '', type: 'praia_fluvial', river: '',
     coordinates: { lat: 39.5, lng: -8.0 }, description: '',
+    thumbnail: '',
     photos: [],
     video360: null,
     services: { ...DEFAULT_SERVICES },
@@ -934,6 +938,14 @@ function editBeach(index) {
       <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100">
         <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4">Descrição</h3>
         <div id="b-description-editor" style="min-height:100px;"></div>
+      </div>
+
+      <!-- Miniatura (Thumbnail) -->
+      <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100">
+        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-3">Miniatura</h3>
+        <p style="font-size:12px;color:#A89A78;margin-bottom:8px;">Imagem pequena usada nas listagens, mapa e votação. Separada da galeria de fotos.</p>
+        ${b.thumbnail ? `<div style="margin-bottom:8px;"><img src="${escHtml(b.thumbnail)}" style="max-height:80px;border-radius:8px;border:1px solid #E8DFD0;"></div>` : ''}
+        <input type="text" id="b-thumbnail" value="${escHtml(b.thumbnail || '')}" placeholder="Caminho da imagem (ex: brand_assets/fotos/...)" class="admin-input w-full" style="font-size:12px;">
       </div>
 
       <!-- Fotografias -->
@@ -1029,6 +1041,7 @@ function saveBeach(index) {
       lng: parseFloat(document.getElementById('b-lng').value) || 0,
     },
     description: getQuillHTML('b-description-editor') || '',
+    thumbnail: document.getElementById('b-thumbnail').value.trim(),
     photos: state.editingPhotos.map(p => p.src),
     video360: null,
     services,
@@ -1715,8 +1728,8 @@ function renderSettings(container) {
               <div style="display:flex;align-items:center;justify-content:space-between;background:#003A40;padding:10px 14px;">
                 <div style="display:flex;align-items:center;gap:8px;">
                   <span style="font-family:'Poppins',sans-serif;font-size:11px;font-weight:700;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:.05em;">Ano</span>
-                  <input type="number" value="${w.year}" id="w-year-${i}"
-                    style="width:72px;padding:4px 8px;font-size:14px;font-weight:700;border:1px solid rgba(255,255,255,0.2);border-radius:6px;background:rgba(255,255,255,0.1);color:white;font-family:'Poppins',sans-serif;text-align:center;">
+                  <input type="text" value="${w.year}" id="w-year-${i}" placeholder="ex: 2024 ou 2021-2022"
+                    style="width:100px;padding:4px 8px;font-size:14px;font-weight:700;border:1px solid rgba(255,255,255,0.2);border-radius:6px;background:rgba(255,255,255,0.1);color:white;font-family:'Poppins',sans-serif;text-align:center;">
                 </div>
                 <button onclick="removeWinner(${i})" style="color:rgba(255,100,100,0.8);font-size:11px;font-weight:700;background:none;border:none;cursor:pointer;font-family:'Poppins',sans-serif;letter-spacing:.05em;text-transform:uppercase;">× Remover</button>
               </div>
@@ -1857,7 +1870,7 @@ function _flushWinnersFromDOM() {
     const winnerEl = document.getElementById(`w-winner-${i}`);
     const secondEl = document.getElementById(`w-second-${i}`);
     const thirdEl = document.getElementById(`w-third-${i}`);
-    if (yearEl) w.year = parseInt(yearEl.value) || w.year;
+    if (yearEl) { const v = yearEl.value.trim(); w.year = /^\d+$/.test(v) ? parseInt(v) : (v || w.year); }
     if (winnerEl) w.winner = winnerEl.value.trim();
     if (secondEl) w.second = secondEl.value.trim();
     if (thirdEl) w.third = thirdEl.value.trim();
@@ -2461,7 +2474,6 @@ function renderProdutos(container) {
                   <span class="inline-flex items-center gap-1 font-display text-xs font-semibold px-2 py-0.5 rounded-full ${p.available ? 'bg-praia-green-500/10 text-praia-green-600' : 'bg-red-50 text-red-500'}">
                     ${p.available ? '● Disponível' : '○ Esgotado'}
                   </span>
-                  ${p.featured ? '<span class="ml-1 inline-flex items-center gap-1 font-display text-xs font-semibold px-2 py-0.5 rounded-full bg-praia-yellow-400/20 text-praia-teal-800">⭐ Destaque</span>' : ''}
                 </td>
                 <td class="px-4 py-3">
                   <div class="flex gap-2">
@@ -2534,9 +2546,6 @@ function productFormHTML(p) {
         <div class="flex flex-col justify-center gap-2.5 pt-1">
           <label class="flex items-center gap-2 cursor-pointer normal-case tracking-normal text-sm font-semibold text-praia-sand-700" style="text-transform:none;letter-spacing:0;">
             <input id="p-available" type="checkbox" class="w-4 h-4 accent-praia-teal-700" ${p.available ? 'checked' : ''}> Disponível
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer" style="text-transform:none;letter-spacing:0;">
-            <input id="p-featured" type="checkbox" class="w-4 h-4 accent-praia-teal-700" ${p.featured ? 'checked' : ''}> Destaque
           </label>
           <label class="flex items-center gap-2 cursor-pointer" style="text-transform:none;letter-spacing:0;">
             <input id="p-shipping" type="checkbox" class="w-4 h-4 accent-praia-teal-700" ${p.shippingRequired ? 'checked' : ''}> Requer envio
@@ -2652,7 +2661,6 @@ function saveProduct() {
   const category    = document.getElementById('p-category').value;
   const price       = parseInt(document.getElementById('p-price').value || '0', 10);
   const available      = document.getElementById('p-available').checked;
-  const featured       = document.getElementById('p-featured').checked;
   const shippingRequired = document.getElementById('p-shipping').checked;
   const customizable   = document.getElementById('p-customizable').checked;
   const images         = state.editingProductImages.map(p => p.src);
@@ -2663,7 +2671,7 @@ function saveProduct() {
 
   if (!id || !name) { toast('ID e Nome são obrigatórios.', 'error'); return; }
 
-  const product = { id, name, description, category, price, images, variants, shippingRequired, available, featured, ...(customizable ? { customizable: true } : {}) };
+  const product = { id, name, description, category, price, images, variants, shippingRequired, available, ...(customizable ? { customizable: true } : {}) };
 
   if (editId) {
     const idx = products.findIndex(p => p.id === editId);

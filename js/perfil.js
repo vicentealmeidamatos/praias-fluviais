@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     container.innerHTML = stamped.map(b => `
       <a href="praia.html?id=${b.id}" class="card-interactive block rounded-xl overflow-hidden bg-white shadow-layered group">
         <div class="relative h-32 overflow-hidden">
-          <img src="${b.photos?.[0] || ''}" alt="${b.name}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">
+          <img src="${b.thumbnail || b.photos?.[0] || ''}" alt="${b.name}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">
           <div class="absolute inset-0 bg-gradient-to-t from-praia-teal-800/70 via-transparent to-transparent"></div>
           <div class="absolute top-2.5 right-2.5 bg-praia-yellow-400 rounded-full p-1">
             <i data-lucide="check" class="w-3 h-3 text-praia-teal-800"></i>

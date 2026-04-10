@@ -59,13 +59,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Create markers
   const allMarkers = [];
   beaches.forEach(beach => {
-    let color = '#003A40';
+    const isBalnear = beach.type === 'zona_balnear';
+    let color = isBalnear ? '#0288D1' : '#003A40';
     if (beach.services.blueFlag) color = '#0288D1';
     if (beach.services.goldQuality) color = '#F5B800';
+    const border = isBalnear ? '#fff' : 'white';
 
     const icon = L.divIcon({
       className: '',
-      html: `<div style="width:14px;height:14px;border-radius:50%;background:${color};border:2.5px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.3);cursor:pointer;"></div>`,
+      html: `<div style="width:14px;height:14px;border-radius:50%;background:${color};border:2.5px solid ${border};box-shadow:0 2px 8px rgba(0,0,0,0.3);cursor:pointer;"></div>`,
       iconSize: [14, 14],
       iconAnchor: [7, 7],
     });
@@ -79,7 +81,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     marker.bindPopup(`
       <div style="min-width:220px;font-family:'Open Sans',sans-serif;">
-        <img src="${beach.photos[0]}" alt="${beach.name}" style="width:100%;height:120px;object-fit:cover;border-radius:8px 8px 0 0;" loading="lazy">
+        <img src="${beach.thumbnail || beach.photos[0]}" alt="${beach.name}" style="width:100%;height:120px;object-fit:cover;border-radius:8px 8px 0 0;" loading="lazy">
         <div style="padding:12px;">
           <h3 style="font-family:Poppins,sans-serif;font-weight:700;font-size:14px;color:#003A40;margin:0 0 4px;">${beach.name}</h3>
           <p style="font-size:12px;color:#8A7D60;margin:0 0 8px;">${beach.municipality} · ${beach.river}</p>

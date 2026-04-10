@@ -21,6 +21,10 @@
 .section-reveal-clip.revealed {
   clip-path: inset(0% 0% 0% 0% round 0px);
 }
+/* Last section must never clip — prevents sand-coloured gap before footer */
+.magazine-page:last-child.section-reveal-clip {
+  clip-path: none !important;
+}
 
 /* ─── Parallax Depth Layers ─── */
 .parallax-slow { will-change: transform; }

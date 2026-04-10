@@ -17,8 +17,7 @@
       { "id": "XXL", "label": "XXL", "available": true }
     ],
     "shippingRequired": true,
-    "available": true,
-    "featured": true
+    "available": true
   },
   {
     "id": "tshirt-praias-fluviais",
@@ -37,8 +36,7 @@
       { "id": "XXL", "label": "XXL", "available": true }
     ],
     "shippingRequired": true,
-    "available": true,
-    "featured": true
+    "available": true
   },
   {
     "id": "tshirt-figueiro",
@@ -58,8 +56,7 @@
       { "id": "XXL", "label": "XXL", "available": true }
     ],
     "shippingRequired": true,
-    "available": true,
-    "featured": false
+    "available": true
   },
   {
     "id": "guia-2026",
@@ -73,8 +70,7 @@
     "category": "publicacao",
     "variants": [],
     "shippingRequired": true,
-    "available": true,
-    "featured": true
+    "available": true
   },
   {
     "id": "passaporte-2026",
@@ -89,7 +85,6 @@
     "category": "publicacao",
     "variants": [],
     "shippingRequired": true,
-    "available": true,
-    "featured": false
+    "available": true
   }
 ]

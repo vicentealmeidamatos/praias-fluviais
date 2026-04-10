@@ -120,13 +120,6 @@ function renderProductCard(product, productIdx) {
             <i data-lucide="package" class="w-16 h-16"></i>
           </div>
         `}
-        ${product.featured ? `
-          <div class="absolute top-3 left-3">
-            <span class="bg-praia-teal-800/80 backdrop-blur-sm text-praia-yellow-400 font-display font-bold text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full flex items-center gap-1">
-              <i data-lucide="star" class="w-3 h-3 fill-current"></i> Destaque
-            </span>
-          </div>
-        ` : ''}
         <!-- Multi-image indicator -->
         ${product.images && product.images.length > 1 ? `
           <div class="absolute bottom-2 right-2 flex gap-1">

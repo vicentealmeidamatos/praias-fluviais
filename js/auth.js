@@ -184,25 +184,25 @@ const ALL_BADGES = [
   { id: 'eleitor',           name: 'Eleitor',               desc: 'Participou na votação Praia do Ano',             icon: 'vote',           tier: 'bronze',   type: 'voted'                             },
   { id: 'voz-comunidade',    name: 'Voz da Comunidade',     desc: 'Publicou 3 comentários numa praia',              icon: 'message-circle', tier: 'bronze',   type: 'reviews',            threshold: 3  },
   // ── Prata ────────────────────────────────────────────────────────────────
-  { id: 'aventureiro',       name: 'Aventureiro',           desc: 'Visitou 10 praias fluviais',                     icon: 'mountain',       tier: 'prata',    type: 'stamps',             threshold: 10 },
-  { id: 'filho-norte',       name: 'Filho do Norte',        desc: '3 praias na região Norte',                       icon: 'navigation',     tier: 'prata',    type: 'region',  region: 'norte',  threshold: 3  },
-  { id: 'coracao-centro',    name: 'Coração do Centro',     desc: '3 praias na região Centro',                      icon: 'heart',          tier: 'prata',    type: 'region',  region: 'centro', threshold: 3  },
-  { id: 'alma-sul',          name: 'Alma do Sul',           desc: '2 praias no Alentejo ou Algarve',                icon: 'sun',            tier: 'prata',    type: 'regions', regions: ['alentejo','algarve'], threshold: 2 },
-  { id: 'velocista',         name: 'Velocista',             desc: '3 carimbos no mesmo mês',                        icon: 'zap',            tier: 'prata',    type: 'speed'                             },
+  { id: 'aventureiro',       name: 'Aventureiro',           desc: 'Visitou 15 praias fluviais',                     icon: 'mountain',       tier: 'prata',    type: 'stamps',             threshold: 15 },
+  { id: 'filho-norte',       name: 'Filho do Norte',        desc: '5 praias na região Norte',                       icon: 'navigation',     tier: 'prata',    type: 'region',  region: 'norte',  threshold: 5  },
+  { id: 'coracao-centro',    name: 'Coração do Centro',     desc: '5 praias na região Centro',                      icon: 'heart',          tier: 'prata',    type: 'region',  region: 'centro', threshold: 5  },
+  { id: 'alma-sul',          name: 'Alma do Sul',           desc: '3 praias no Alentejo ou Algarve',                icon: 'sun',            tier: 'prata',    type: 'regions', regions: ['alentejo','algarve'], threshold: 3 },
+  { id: 'velocista',         name: 'Velocista',             desc: '5 carimbos no mesmo mês',                        icon: 'zap',            tier: 'prata',    type: 'speed'                             },
   { id: 'critico-elite',     name: 'Crítico de Elite',      desc: '5 comentários com fotografias',                  icon: 'camera',         tier: 'prata',    type: 'reviews_photos',     threshold: 5  },
   // ── Ouro ─────────────────────────────────────────────────────────────────
-  { id: 'desbravador',       name: 'Desbravador',           desc: 'Visitou 15 praias fluviais',                     icon: 'map',            tier: 'ouro',     type: 'stamps',             threshold: 15 },
-  { id: 'rei-norte',         name: 'Rei do Norte',          desc: '5 praias na região Norte',                       icon: 'crown',          tier: 'ouro',     type: 'region',  region: 'norte',  threshold: 5  },
-  { id: 'mestre-centro',     name: 'Mestre do Centro',      desc: '5 praias na região Centro',                      icon: 'star',           tier: 'ouro',     type: 'region',  region: 'centro', threshold: 5  },
-  { id: 'rio-acima',         name: 'Rio Acima',             desc: '3 praias fluviais no mesmo rio',                 icon: 'waves',          tier: 'ouro',     type: 'river'                             },
-  { id: 'cacador-praias',    name: 'Caçador de Praias',     desc: 'Votou e tem 10 ou mais carimbos',                icon: 'target',         tier: 'ouro',     type: 'combo_vote_stamps',  threshold: 10 },
+  { id: 'desbravador',       name: 'Desbravador',           desc: 'Visitou 30 praias fluviais',                     icon: 'map',            tier: 'ouro',     type: 'stamps',             threshold: 30 },
+  { id: 'rei-norte',         name: 'Rei do Norte',          desc: '10 praias na região Norte',                      icon: 'crown',          tier: 'ouro',     type: 'region',  region: 'norte',  threshold: 10 },
+  { id: 'mestre-centro',     name: 'Mestre do Centro',      desc: '10 praias na região Centro',                     icon: 'star',           tier: 'ouro',     type: 'region',  region: 'centro', threshold: 10 },
+  { id: 'rio-acima',         name: 'Rio Acima',             desc: '5 praias fluviais no mesmo rio',                 icon: 'waves',          tier: 'ouro',     type: 'river'                             },
+  { id: 'cacador-praias',    name: 'Caçador de Praias',     desc: 'Votou e tem 25 ou mais carimbos',                icon: 'target',         tier: 'ouro',     type: 'combo_vote_stamps',  threshold: 25 },
   // ── Diamante ─────────────────────────────────────────────────────────────
-  { id: 'mestre-praias',     name: 'Mestre das Praias',     desc: 'Visitou 20 praias fluviais',                     icon: 'shield',         tier: 'diamante', type: 'stamps',             threshold: 20 },
-  { id: 'elite-fluvial',     name: 'Elite Fluvial',         desc: 'Visitou 25 praias fluviais',                     icon: 'award',          tier: 'diamante', type: 'stamps',             threshold: 25 },
-  { id: 'passaportista',     name: 'Passaportista Supremo', desc: '20 carimbos + 5 comentários + voto',             icon: 'bookmark',       tier: 'diamante', type: 'combo_all',          stampsMin: 20, reviewsMin: 5 },
+  { id: 'mestre-praias',     name: 'Mestre das Praias',     desc: 'Visitou 50 praias fluviais',                     icon: 'shield',         tier: 'diamante', type: 'stamps',             threshold: 50 },
+  { id: 'elite-fluvial',     name: 'Elite Fluvial',         desc: 'Visitou 75 praias fluviais',                     icon: 'award',          tier: 'diamante', type: 'stamps',             threshold: 75 },
+  { id: 'passaportista',     name: 'Passaportista Supremo', desc: '50 carimbos + 10 comentários + voto',            icon: 'bookmark',       tier: 'diamante', type: 'combo_all',          stampsMin: 50, reviewsMin: 10 },
   // ── Mítico ───────────────────────────────────────────────────────────────
-  { id: 'lenda-aguas',       name: 'Lenda das Águas',       desc: 'Carimbou todas as praias disponíveis',           icon: 'trophy',         tier: 'mitico',   type: 'all_stamps'                        },
-  { id: 'lenda-fluvial',     name: 'Lenda Fluvial',         desc: 'Todas as praias + 10 comentários + voto',        icon: 'gem',            tier: 'mitico',   type: 'combo_legend',       reviewsMin: 10 },
+  { id: 'lenda-aguas',       name: 'Lenda das Águas',       desc: 'Carimbou 100 praias fluviais',                   icon: 'trophy',         tier: 'mitico',   type: 'stamps',             threshold: 100 },
+  { id: 'lenda-fluvial',     name: 'Lenda Fluvial',         desc: '100 carimbos + 15 comentários + voto',           icon: 'gem',            tier: 'mitico',   type: 'combo_legend',       stampsMin: 100, reviewsMin: 15 },
 ];
 
 function badgesCompute({ stamps, reviews, voted, beaches }) {
@@ -230,7 +230,7 @@ function badgesCompute({ stamps, reviews, voted, beaches }) {
       const k = (s.stamped_at || '').substring(0, 7);
       if (k) byMonth[k] = (byMonth[k] || 0) + 1;
     });
-    return Object.values(byMonth).some(c => c >= 3);
+    return Object.values(byMonth).some(c => c >= 5);
   }
   function hasRiver() {
     const byRiver = {};
@@ -238,7 +238,7 @@ function badgesCompute({ stamps, reviews, voted, beaches }) {
       const b = beaches.find(x => x.id === id);
       if (b && b.river) byRiver[b.river] = (byRiver[b.river] || 0) + 1;
     });
-    return Object.values(byRiver).some(c => c >= 3);
+    return Object.values(byRiver).some(c => c >= 5);
   }
 
   return ALL_BADGES.map(badge => {
@@ -274,8 +274,8 @@ function badgesCompute({ stamps, reviews, voted, beaches }) {
       case 'all_stamps':
         earned = available > 0 && total >= available; progress = Math.min(total, available); max = available; break;
       case 'combo_legend':
-        earned = available > 0 && total >= available && totalRev >= badge.reviewsMin && voted;
-        progress = (voted ? 1 : 0) + (total >= available ? 1 : 0) + (totalRev >= badge.reviewsMin ? 1 : 0);
+        earned = total >= badge.stampsMin && totalRev >= badge.reviewsMin && voted;
+        progress = (voted ? 1 : 0) + (total >= badge.stampsMin ? 1 : 0) + (totalRev >= badge.reviewsMin ? 1 : 0);
         max = 3; break;
     }
     return { ...badge, earned, progress, max };

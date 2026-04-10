@@ -174,9 +174,23 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ─── 2. Section Clip-Path Reveals ───
+  const lastIndex = pages.length - 1;
   pages.forEach((page, i) => {
     if (i === 0) {
       setActiveDot(0);
+      return;
+    }
+
+    // Skip clip-path on last section so no gap appears before footer
+    if (i === lastIndex) {
+      ScrollTrigger.create({
+        trigger: page,
+        start: 'top center',
+        end: 'bottom center',
+        onEnter: () => setActiveDot(i),
+        onEnterBack: () => setActiveDot(i),
+        onLeaveBack: () => setActiveDot(Math.max(0, i - 1)),
+      });
       return;
     }
 

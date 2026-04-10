@@ -19,28 +19,25 @@
     "website": "https://praiasfluviais.pt"
   },
   "previousWinners": [
-    { "year": 2025, "winner": "Zona de Fruição Ribeirinha da Carriça", "second": "", "third": "", "revelations": [] },
-    { "year": 2024, "winner": "Praia Fluvial de Avô", "second": "Praia Fluvial da Ucha", "third": "Praia Fluvial da Carriça",
+    { "year": 2025, "winner": "Praia Fluvial de Carriça", "second": "", "third": "", "revelations": [] },
+    { "year": 2024, "winner": "Praia Fluvial de Avô", "second": "Praia Fluvial de Ucha", "third": "Praia Fluvial de Carriça",
       "revelations": [
-        { "label": "Norte", "name": "Praia Fluvial do Sabugal" },
-        { "label": "Centro", "name": "Praia Fluvial do Poço Corga" },
-        { "label": "Sul", "name": "Praia Fluvial do Lago" }
+        { "label": "Norte", "name": "Praia Fluvial de Sabugal - Devesa" },
+        { "label": "Centro", "name": "Praia Fluvial de Corga" },
+        { "label": "Sul", "name": "Praia Fluvial de Praia do Lago" }
       ]
     },
-    { "year": 2023, "winner": "Praia Fluvial do Vimieiro", "second": "Praia Fluvial do Reconquinho", "third": "",
+    { "year": 2023, "winner": "Praia Fluvial de Vimieiro", "second": "Praia Fluvial de Reconquinho", "third": "",
       "revelations": [
-        { "label": "1.º", "name": "Praia Fluvial do Sorraia" },
+        { "label": "1.º", "name": "Praia Fluvial de Sorraia" },
         { "label": "2.º", "name": "Praia Fluvial de Constância" }
       ]
     },
-    { "year": 2022, "winner": "Quinta da Taberna – Videmonte", "second": "", "third": "",
+    { "year": "2021-2022", "winner": "Praia Fluvial de Videmonte - Quinta da Taberna", "second": "Praia Fluvial de Santa Luzia", "third": "Praia Fluvial de Aldeia Viçosa",
       "revelations": [{ "label": "", "name": "Praia Fluvial de Alqueva" }]
     },
-    { "year": 2021, "winner": "Praia Fluvial Santa Luzia", "second": "Praia Fluvial de Aldeia Viçosa", "third": "",
-      "revelations": []
-    },
-    { "year": 2020, "winner": "Praia Fluvial Santa Luzia", "second": "Praia Fluvial de Fontes", "third": "Praia Fluvial do Troviscal",
-      "revelations": [{ "label": "", "name": "Praia Fluvial da Amieira" }]
+    { "year": 2020, "winner": "Praia Fluvial de Santa Luzia", "second": "Praia Fluvial de Fontes", "third": "Praia Fluvial de Troviscal",
+      "revelations": [{ "label": "", "name": "Praia Fluvial de Amieira" }]
     }
   ]
 }

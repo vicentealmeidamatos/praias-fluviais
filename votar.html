@@ -276,6 +276,7 @@
           <select id="vote-sort" class="px-4 py-2.5 rounded-xl bg-white border border-praia-sand-200 text-sm focus:outline-none focus:border-praia-teal-400 min-w-[180px]">
             <option value="az-nome">A-Z (Nome da Praia)</option>
             <option value="az-concelho">A-Z (Nome do Concelho)</option>
+            <option value="distance" hidden>Perto de Mim</option>
           </select>
           <button id="vote-near-me" class="btn-primary inline-flex items-center justify-center gap-2 bg-praia-teal-800 text-praia-yellow-400 font-display text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-xl whitespace-nowrap">
             <i data-lucide="navigation" class="w-4 h-4"></i> Perto de Mim
@@ -291,6 +292,17 @@
     </section>
 
     <!-- Previous Winners — at bottom -->
+    <style>
+      .winner-first, .winner-card { cursor: pointer; text-decoration: none; transition: transform 0.2s, border-color 0.2s, background 0.2s; }
+      .winner-first:hover, .winner-card:hover { transform: translateY(-2px); border-color: rgba(255,235,59,0.5) !important; }
+      .winner-card:hover { background: rgba(255,255,255,0.08) !important; }
+      .winner-first:hover { background: linear-gradient(160deg, rgba(255,235,59,0.18) 0%, rgba(255,235,59,0.08) 100%) !important; }
+      .winner-first .winner-arrow, .winner-card .winner-arrow { opacity: 0; transform: translateX(-4px); transition: opacity 0.2s, transform 0.2s; }
+      .winner-first:hover .winner-arrow, .winner-card:hover .winner-arrow { opacity: 1; transform: translateX(0); }
+      .winner-rev { cursor: pointer; text-decoration: none; }
+      .winner-rev:hover p.font-semibold { text-decoration: underline; text-underline-offset: 2px; }
+      .winner-rev:hover { background: rgba(255,255,255,0.06); }
+    </style>
     <section id="vencedores" class="relative py-16 md:py-24 overflow-hidden" style="background: linear-gradient(160deg, #002A2E 0%, #003A40 60%, #001E22 100%);">
       <div class="noise-overlay absolute inset-0 pointer-events-none"></div>
       <div class="relative z-10 max-w-6xl mx-auto px-6">
@@ -313,25 +325,23 @@
           <!-- Winner + Revelação row -->
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5">
             <!-- 1.º -->
-            <div class="lg:col-span-2 relative rounded-2xl overflow-hidden" style="background: linear-gradient(160deg, rgba(255,235,59,0.12) 0%, rgba(255,235,59,0.04) 100%); border: 1px solid rgba(255,235,59,0.3);">
+            <a href="praia.html?id=praia-fluvial-de-avo" class="winner-first lg:col-span-2 relative rounded-2xl overflow-hidden block" style="background: linear-gradient(160deg, rgba(255,235,59,0.12) 0%, rgba(255,235,59,0.04) 100%); border: 1px solid rgba(255,235,59,0.3); text-decoration: none;">
               <div class="absolute top-0 left-0 right-0 h-1" style="background: linear-gradient(90deg, #FFEB3B, #FFD600);"></div>
               <div class="p-7">
                 <div class="flex items-start gap-4 mb-4">
                   <div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style="background: rgba(255,235,59,0.15);">
                     <i data-lucide="trophy" class="w-6 h-6 text-praia-yellow-400"></i>
                   </div>
-                  <div>
+                  <div class="flex-1">
                     <span class="font-display text-[10px] uppercase tracking-widest text-praia-yellow-400/70 font-semibold block mb-0.5">1.º — Praia Fluvial do Ano 2024</span>
                     <h3 class="font-display text-xl font-bold text-white leading-tight">Praia Fluvial de Avô</h3>
                     <p class="text-white/40 text-sm mt-1">Oliveira do Hospital · Coimbra · <strong class="text-white/60">7.175 votos</strong></p>
                   </div>
+                  <span class="winner-arrow text-praia-yellow-400 font-display text-sm font-bold mt-2">→</span>
                 </div>
-                <p class="text-white/60 text-sm leading-relaxed mb-5">Nas águas cristalinas do Rio Alva, a Praia de Avô conquistou o galardão em 2024. A aldeia de Avô, com casas de xisto e pontes medievais, é uma das mais pitorescas da Serra do Açor.</p>
-                <a href="praia.html?id=praia-fluvial-de-avo" class="inline-flex items-center gap-2 text-praia-yellow-400 font-display text-xs font-bold uppercase tracking-wider hover:gap-3 transition-all duration-300">
-                  Ver Praia <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-                </a>
+                <p class="text-white/60 text-sm leading-relaxed">Nas águas cristalinas do Rio Alva, a Praia de Avô conquistou o galardão em 2024. A aldeia de Avô, com casas de xisto e pontes medievais, é uma das mais pitorescas da Serra do Açor.</p>
               </div>
-            </div>
+            </a>
             <!-- Revelação 2024 -->
             <div class="relative rounded-2xl overflow-hidden" style="background: rgba(2,136,209,0.1); border: 1px solid rgba(2,136,209,0.35);">
               <div class="absolute top-0 left-0 right-0 h-0.5" style="background: rgba(2,136,209,0.7);"></div>
@@ -346,47 +356,49 @@
                   </div>
                 </div>
                 <div class="space-y-3">
-                  <div class="flex items-start gap-3">
+                  <a href="praia.html?id=praia-fluvial-de-sabugal-devesa" class="winner-rev flex items-start gap-3 hover:bg-white/5 rounded-lg -mx-2 px-2 py-1 transition-colors duration-200">
                     <span class="font-display text-[10px] font-bold uppercase tracking-wider mt-0.5 shrink-0 w-10 text-right" style="color: rgba(2,136,209,0.9);">Norte</span>
                     <div>
-                      <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial do Sabugal</p>
+                      <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial de Sabugal - Devesa</p>
                       <p class="text-white/40 text-xs">Sabugal</p>
                     </div>
-                  </div>
-                  <div class="flex items-start gap-3">
+                  </a>
+                  <a href="praia.html?id=praia-fluvial-de-corga" class="winner-rev flex items-start gap-3 hover:bg-white/5 rounded-lg -mx-2 px-2 py-1 transition-colors duration-200">
                     <span class="font-display text-[10px] font-bold uppercase tracking-wider mt-0.5 shrink-0 w-10 text-right" style="color: rgba(2,136,209,0.9);">Centro</span>
                     <div>
-                      <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial do Poço Corga</p>
+                      <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial de Corga</p>
                       <p class="text-white/40 text-xs">Castanheira de Pera</p>
                     </div>
-                  </div>
-                  <div class="flex items-start gap-3">
+                  </a>
+                  <a href="praia.html?id=praia-fluvial-de-praia-do-lago" class="winner-rev flex items-start gap-3 hover:bg-white/5 rounded-lg -mx-2 px-2 py-1 transition-colors duration-200">
                     <span class="font-display text-[10px] font-bold uppercase tracking-wider mt-0.5 shrink-0 w-10 text-right" style="color: rgba(2,136,209,0.9);">Sul</span>
                     <div>
-                      <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial do Lago</p>
+                      <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial de Praia do Lago</p>
                       <p class="text-white/40 text-xs">Moura</p>
                     </div>
-                  </div>
+                  </a>
                 </div>
               </div>
             </div>
           </div>
           <!-- 2.º e 3.º -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div class="rounded-2xl p-5 flex items-start gap-4" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);">
-              <span class="font-display text-2xl font-bold shrink-0 mt-0.5" style="color: rgba(192,192,192,0.8);">2.º</span>
-              <div>
-                <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial da Ucha</p>
+            <a href="praia.html?id=praia-fluvial-de-ucha" class="winner-card rounded-2xl p-5 flex items-center gap-4" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);">
+              <span class="font-display text-2xl font-bold shrink-0" style="color: rgba(192,192,192,0.8);">2.º</span>
+              <div class="flex-1">
+                <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial de Ucha</p>
                 <p class="text-white/40 text-xs mt-0.5">São Pedro do Sul</p>
               </div>
-            </div>
-            <div class="rounded-2xl p-5 flex items-start gap-4" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);">
-              <span class="font-display text-2xl font-bold shrink-0 mt-0.5" style="color: rgba(205,127,50,0.8);">3.º</span>
-              <div>
-                <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial da Carriça</p>
+              <span class="winner-arrow text-praia-yellow-400 font-display text-xs font-bold">→</span>
+            </a>
+            <a href="praia.html?id=praia-fluvial-de-carrica" class="winner-card rounded-2xl p-5 flex items-center gap-4" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);">
+              <span class="font-display text-2xl font-bold shrink-0" style="color: rgba(205,127,50,0.8);">3.º</span>
+              <div class="flex-1">
+                <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial de Carriça</p>
                 <p class="text-white/40 text-xs mt-0.5">Oliveira de Frades</p>
               </div>
-            </div>
+              <span class="winner-arrow text-praia-yellow-400 font-display text-xs font-bold">→</span>
+            </a>
           </div>
         </div>
 
@@ -394,25 +406,23 @@
         <div id="panel-2023" class="winners-panel hidden">
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5">
             <!-- 1.º -->
-            <div class="lg:col-span-2 relative rounded-2xl overflow-hidden" style="background: linear-gradient(160deg, rgba(255,235,59,0.12) 0%, rgba(255,235,59,0.04) 100%); border: 1px solid rgba(255,235,59,0.3);">
+            <a href="praia.html?id=praia-fluvial-de-vimieiro" class="winner-first lg:col-span-2 relative rounded-2xl overflow-hidden block" style="background: linear-gradient(160deg, rgba(255,235,59,0.12) 0%, rgba(255,235,59,0.04) 100%); border: 1px solid rgba(255,235,59,0.3); text-decoration: none;">
               <div class="absolute top-0 left-0 right-0 h-1" style="background: linear-gradient(90deg, #FFEB3B, #FFD600);"></div>
               <div class="p-7">
                 <div class="flex items-start gap-4 mb-4">
                   <div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style="background: rgba(255,235,59,0.15);">
                     <i data-lucide="trophy" class="w-6 h-6 text-praia-yellow-400"></i>
                   </div>
-                  <div>
+                  <div class="flex-1">
                     <span class="font-display text-[10px] uppercase tracking-widest text-praia-yellow-400/70 font-semibold block mb-0.5">1.º — Praia Fluvial do Ano 2023</span>
-                    <h3 class="font-display text-xl font-bold text-white leading-tight">Praia Fluvial do Vimieiro</h3>
+                    <h3 class="font-display text-xl font-bold text-white leading-tight">Praia Fluvial de Vimieiro</h3>
                     <p class="text-white/40 text-sm mt-1">Penacova · Coimbra · <strong class="text-white/60">7.357 votos</strong></p>
                   </div>
+                  <span class="winner-arrow text-praia-yellow-400 font-display text-sm font-bold mt-2">→</span>
                 </div>
-                <p class="text-white/60 text-sm leading-relaxed mb-5">Praia Fluvial do Ano 2023 com 7.357 votos, o Vimieiro é um paraíso nas margens do Rio Mondego. A paisagem verdejante e as águas calmas fazem desta praia uma das preferidas da região centro.</p>
-                <a href="praia.html?id=praia-fluvial-do-vimieiro" class="inline-flex items-center gap-2 text-praia-yellow-400 font-display text-xs font-bold uppercase tracking-wider hover:gap-3 transition-all duration-300">
-                  Ver Praia <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-                </a>
+                <p class="text-white/60 text-sm leading-relaxed">Praia Fluvial do Ano 2023 com 7.357 votos, o Vimieiro é um paraíso nas margens do Rio Mondego. A paisagem verdejante e as águas calmas fazem desta praia uma das preferidas da região centro.</p>
               </div>
-            </div>
+            </a>
             <!-- Revelação 2023 -->
             <div class="relative rounded-2xl overflow-hidden" style="background: rgba(2,136,209,0.1); border: 1px solid rgba(2,136,209,0.35);">
               <div class="absolute top-0 left-0 right-0 h-0.5" style="background: rgba(2,136,209,0.7);"></div>
@@ -427,33 +437,34 @@
                   </div>
                 </div>
                 <div class="space-y-3">
-                  <div class="flex items-start gap-3">
+                  <a href="praia.html?id=praia-fluvial-de-sorraia" class="winner-rev flex items-start gap-3 hover:bg-white/5 rounded-lg -mx-2 px-2 py-1 transition-colors duration-200">
                     <span class="font-display text-xs font-bold mt-0.5 shrink-0" style="color: rgba(2,136,209,0.9);">1.º</span>
                     <div>
-                      <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial do Sorraia</p>
+                      <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial de Sorraia</p>
                       <p class="text-white/40 text-xs">Coruche</p>
                     </div>
-                  </div>
-                  <div class="flex items-start gap-3">
+                  </a>
+                  <a href="praia.html?id=praia-fluvial-de-constancia" class="winner-rev flex items-start gap-3 hover:bg-white/5 rounded-lg -mx-2 px-2 py-1 transition-colors duration-200">
                     <span class="font-display text-xs font-bold mt-0.5 shrink-0" style="color: rgba(2,136,209,0.7);">2.º</span>
                     <div>
                       <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial de Constância</p>
                       <p class="text-white/40 text-xs">Constância</p>
                     </div>
-                  </div>
+                  </a>
                 </div>
               </div>
             </div>
           </div>
           <!-- 2.º -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div class="rounded-2xl p-5 flex items-start gap-4" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);">
-              <span class="font-display text-2xl font-bold shrink-0 mt-0.5" style="color: rgba(192,192,192,0.8);">2.º</span>
-              <div>
-                <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial do Reconquinho</p>
+            <a href="praia.html?id=praia-fluvial-de-reconquinho" class="winner-card rounded-2xl p-5 flex items-center gap-4" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);">
+              <span class="font-display text-2xl font-bold shrink-0" style="color: rgba(192,192,192,0.8);">2.º</span>
+              <div class="flex-1">
+                <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial de Reconquinho</p>
                 <p class="text-white/40 text-xs mt-0.5">Penacova</p>
               </div>
-            </div>
+              <span class="winner-arrow text-praia-yellow-400 font-display text-xs font-bold">→</span>
+            </a>
           </div>
         </div>
 
@@ -461,21 +472,22 @@
         <div id="panel-2021-2022" class="winners-panel hidden">
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5">
             <!-- 1.º -->
-            <div class="lg:col-span-2 relative rounded-2xl overflow-hidden" style="background: linear-gradient(160deg, rgba(255,235,59,0.12) 0%, rgba(255,235,59,0.04) 100%); border: 1px solid rgba(255,235,59,0.3);">
+            <a href="praia.html?id=praia-fluvial-de-videmonte-quinta-da-taberna" class="winner-first lg:col-span-2 relative rounded-2xl overflow-hidden block" style="background: linear-gradient(160deg, rgba(255,235,59,0.12) 0%, rgba(255,235,59,0.04) 100%); border: 1px solid rgba(255,235,59,0.3); text-decoration: none;">
               <div class="absolute top-0 left-0 right-0 h-1" style="background: linear-gradient(90deg, #FFEB3B, #FFD600);"></div>
               <div class="p-7">
-                <div class="flex items-start gap-4 mb-4">
+                <div class="flex items-start gap-4">
                   <div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style="background: rgba(255,235,59,0.15);">
                     <i data-lucide="trophy" class="w-6 h-6 text-praia-yellow-400"></i>
                   </div>
-                  <div>
+                  <div class="flex-1">
                     <span class="font-display text-[10px] uppercase tracking-widest text-praia-yellow-400/70 font-semibold block mb-0.5">1.º — Praia Fluvial do Ano 2021–2022</span>
-                    <h3 class="font-display text-xl font-bold text-white leading-tight">Quinta da Taberna – Videmonte</h3>
+                    <h3 class="font-display text-xl font-bold text-white leading-tight">Praia Fluvial de Videmonte - Quinta da Taberna</h3>
                     <p class="text-white/40 text-sm mt-1">Guarda</p>
                   </div>
+                  <span class="winner-arrow text-praia-yellow-400 font-display text-sm font-bold mt-2">→</span>
                 </div>
               </div>
-            </div>
+            </a>
             <!-- Revelação 2021–2022 -->
             <div class="relative rounded-2xl overflow-hidden" style="background: rgba(2,136,209,0.1); border: 1px solid rgba(2,136,209,0.35);">
               <div class="absolute top-0 left-0 right-0 h-0.5" style="background: rgba(2,136,209,0.7);"></div>
@@ -489,32 +501,34 @@
                     <span class="font-display text-sm font-bold text-white">Praia Revelação 2021–2022</span>
                   </div>
                 </div>
-                <div class="flex items-start gap-3">
+                <a href="praia.html?id=praia-fluvial-de-alqueva" class="winner-rev flex items-start gap-3 hover:bg-white/5 rounded-lg -mx-2 px-2 py-1 transition-colors duration-200">
                   <i data-lucide="award" class="w-4 h-4 shrink-0 mt-0.5" style="color: #0288D1;"></i>
                   <div>
                     <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial de Alqueva</p>
                     <p class="text-white/40 text-xs">Portel</p>
                   </div>
-                </div>
+                </a>
               </div>
             </div>
           </div>
           <!-- 2.º e 3.º -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div class="rounded-2xl p-5 flex items-start gap-4" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);">
-              <span class="font-display text-2xl font-bold shrink-0 mt-0.5" style="color: rgba(192,192,192,0.8);">2.º</span>
-              <div>
-                <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial Santa Luzia</p>
+            <a href="praia.html?id=praia-fluvial-de-santa-luzia" class="winner-card rounded-2xl p-5 flex items-center gap-4" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);">
+              <span class="font-display text-2xl font-bold shrink-0" style="color: rgba(192,192,192,0.8);">2.º</span>
+              <div class="flex-1">
+                <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial de Santa Luzia</p>
                 <p class="text-white/40 text-xs mt-0.5">Pampilhosa da Serra</p>
               </div>
-            </div>
-            <div class="rounded-2xl p-5 flex items-start gap-4" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);">
-              <span class="font-display text-2xl font-bold shrink-0 mt-0.5" style="color: rgba(205,127,50,0.8);">3.º</span>
-              <div>
+              <span class="winner-arrow text-praia-yellow-400 font-display text-xs font-bold">→</span>
+            </a>
+            <a href="praia.html?id=praia-fluvial-de-aldeia-vicosa" class="winner-card rounded-2xl p-5 flex items-center gap-4" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);">
+              <span class="font-display text-2xl font-bold shrink-0" style="color: rgba(205,127,50,0.8);">3.º</span>
+              <div class="flex-1">
                 <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial de Aldeia Viçosa</p>
                 <p class="text-white/40 text-xs mt-0.5">Guarda</p>
               </div>
-            </div>
+              <span class="winner-arrow text-praia-yellow-400 font-display text-xs font-bold">→</span>
+            </a>
           </div>
         </div>
 
@@ -522,21 +536,22 @@
         <div id="panel-2020" class="winners-panel hidden">
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5">
             <!-- 1.º -->
-            <div class="lg:col-span-2 relative rounded-2xl overflow-hidden" style="background: linear-gradient(160deg, rgba(255,235,59,0.12) 0%, rgba(255,235,59,0.04) 100%); border: 1px solid rgba(255,235,59,0.3);">
+            <a href="praia.html?id=praia-fluvial-de-santa-luzia" class="winner-first lg:col-span-2 relative rounded-2xl overflow-hidden block" style="background: linear-gradient(160deg, rgba(255,235,59,0.12) 0%, rgba(255,235,59,0.04) 100%); border: 1px solid rgba(255,235,59,0.3); text-decoration: none;">
               <div class="absolute top-0 left-0 right-0 h-1" style="background: linear-gradient(90deg, #FFEB3B, #FFD600);"></div>
               <div class="p-7">
-                <div class="flex items-start gap-4 mb-4">
+                <div class="flex items-start gap-4">
                   <div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style="background: rgba(255,235,59,0.15);">
                     <i data-lucide="trophy" class="w-6 h-6 text-praia-yellow-400"></i>
                   </div>
-                  <div>
+                  <div class="flex-1">
                     <span class="font-display text-[10px] uppercase tracking-widest text-praia-yellow-400/70 font-semibold block mb-0.5">1.º — Praia Fluvial do Ano 2020</span>
-                    <h3 class="font-display text-xl font-bold text-white leading-tight">Praia Fluvial Santa Luzia</h3>
+                    <h3 class="font-display text-xl font-bold text-white leading-tight">Praia Fluvial de Santa Luzia</h3>
                     <p class="text-white/40 text-sm mt-1">Pampilhosa da Serra · Coimbra</p>
                   </div>
+                  <span class="winner-arrow text-praia-yellow-400 font-display text-sm font-bold mt-2">→</span>
                 </div>
               </div>
-            </div>
+            </a>
             <!-- Revelação 2020 -->
             <div class="relative rounded-2xl overflow-hidden" style="background: rgba(2,136,209,0.1); border: 1px solid rgba(2,136,209,0.35);">
               <div class="absolute top-0 left-0 right-0 h-0.5" style="background: rgba(2,136,209,0.7);"></div>
@@ -550,32 +565,34 @@
                     <span class="font-display text-sm font-bold text-white">Praia Revelação 2020</span>
                   </div>
                 </div>
-                <div class="flex items-start gap-3">
+                <a href="praia.html?id=praia-fluvial-de-amieira" class="winner-rev flex items-start gap-3 hover:bg-white/5 rounded-lg -mx-2 px-2 py-1 transition-colors duration-200">
                   <i data-lucide="award" class="w-4 h-4 shrink-0 mt-0.5" style="color: #0288D1;"></i>
                   <div>
-                    <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial da Amieira</p>
+                    <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial de Amieira</p>
                     <p class="text-white/40 text-xs">Portel</p>
                   </div>
-                </div>
+                </a>
               </div>
             </div>
           </div>
           <!-- 2.º e 3.º -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div class="rounded-2xl p-5 flex items-start gap-4" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);">
-              <span class="font-display text-2xl font-bold shrink-0 mt-0.5" style="color: rgba(192,192,192,0.8);">2.º</span>
-              <div>
+            <a href="praia.html?id=praia-fluvial-de-fontes" class="winner-card rounded-2xl p-5 flex items-center gap-4" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);">
+              <span class="font-display text-2xl font-bold shrink-0" style="color: rgba(192,192,192,0.8);">2.º</span>
+              <div class="flex-1">
                 <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial de Fontes</p>
                 <p class="text-white/40 text-xs mt-0.5">Abrantes</p>
               </div>
-            </div>
-            <div class="rounded-2xl p-5 flex items-start gap-4" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);">
-              <span class="font-display text-2xl font-bold shrink-0 mt-0.5" style="color: rgba(205,127,50,0.8);">3.º</span>
-              <div>
-                <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial do Troviscal</p>
+              <span class="winner-arrow text-praia-yellow-400 font-display text-xs font-bold">→</span>
+            </a>
+            <a href="praia.html?id=praia-fluvial-de-troviscal" class="winner-card rounded-2xl p-5 flex items-center gap-4" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);">
+              <span class="font-display text-2xl font-bold shrink-0" style="color: rgba(205,127,50,0.8);">3.º</span>
+              <div class="flex-1">
+                <p class="font-display text-sm font-semibold text-white leading-tight">Praia Fluvial de Troviscal</p>
                 <p class="text-white/40 text-xs mt-0.5">Sertã</p>
               </div>
-            </div>
+              <span class="winner-arrow text-praia-yellow-400 font-display text-xs font-bold">→</span>
+            </a>
           </div>
         </div>
         </div><!-- /winners-panels -->
@@ -583,6 +600,68 @@
       </div>
     </section>
   </main>
+
+
+  <footer class="bg-praia-teal-900 relative overflow-hidden">
+    <div class="noise-overlay absolute inset-0 pointer-events-none"></div>
+    <div class="relative z-10">
+      <!-- Footer links -->
+      <div class="max-w-7xl mx-auto px-6 py-14">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12">
+          <!-- Col 1 — Brand -->
+          <div>
+            <img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-8 mb-6">
+            <p class="text-white/40 text-sm leading-relaxed mb-6">Guia das Praias Fluviais — Zonas Balneares e de Lazer de Portugal desde 2001.</p>
+            <div class="flex gap-3">
+              <a href="https://www.facebook.com/praiasfluviais" target="_blank" rel="noopener" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white/60 hover:bg-praia-yellow-400 hover:text-praia-teal-800 transition-colors duration-300" aria-label="Facebook">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+              </a>
+              <a href="https://www.instagram.com/guiadaspraiasfluviais" target="_blank" rel="noopener" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white/60 hover:bg-praia-yellow-400 hover:text-praia-teal-800 transition-colors duration-300" aria-label="Instagram">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              </a>
+            </div>
+          </div>
+          <!-- Col 2 — Explorar -->
+          <div>
+            <h4 class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-semibold mb-4">Explorar</h4>
+            <ul class="space-y-2.5">
+              <li><a href="rede.html" class="text-white/50 hover:text-white text-sm transition-colors duration-300">Rede de Praias</a></li>
+              <li><a href="votar.html" class="text-white/50 hover:text-white text-sm transition-colors duration-300">Votar 2026</a></li>
+              <li><a href="artigos.html" class="text-white/50 hover:text-white text-sm transition-colors duration-300">Artigos</a></li>
+              <li><a href="descontos.html" class="text-white/50 hover:text-white text-sm transition-colors duration-300">Descontos</a></li>
+            </ul>
+          </div>
+          <!-- Col 3 — O Guia -->
+          <div>
+            <h4 class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-semibold mb-4">O Guia</h4>
+            <ul class="space-y-2.5">
+              <li><a href="onde-encontrar.html" class="text-white/50 hover:text-white text-sm transition-colors duration-300">Onde Encontrar</a></li>
+              <li><a href="onde-carimbar-passaporte.html" class="text-white/50 hover:text-white text-sm transition-colors duration-300">Onde Carimbar</a></li>
+              <li><a href="passaporte.html" class="text-white/50 hover:text-white text-sm transition-colors duration-300">Passaporte Digital</a></li>
+              <li><a href="loja.html" class="text-white/50 hover:text-white text-sm transition-colors duration-300">Loja</a></li>
+            </ul>
+          </div>
+          <!-- Col 4 — Informações -->
+          <div>
+            <h4 class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-semibold mb-4">Informações</h4>
+            <ul class="space-y-2.5">
+              <li><a href="contactos.html" class="text-white/50 hover:text-white text-sm transition-colors duration-300">Contactos</a></li>
+              <li><a href="privacidade.html" class="text-white/50 hover:text-white text-sm transition-colors duration-300">Política de Privacidade</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Bottom bar -->
+        <div class="border-t border-white/10 mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div class="flex items-center gap-4">
+            <p class="text-white/30 text-xs">&copy; 2026 Guia das Praias Fluviais. Todos os direitos reservados.</p>
+            <img src="brand_assets/logo_blanche.png" alt="Blanche" class="h-4 opacity-25 grayscale brightness-200 -ml-2 hover:opacity-100 hover:grayscale-0 hover:brightness-100 transition-all duration-300 cursor-pointer">
+          </div>
+          <p class="text-white/30 text-xs">120.000 exemplares distribuídos gratuitamente por todo o país.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
 
   <!-- Mobile Bottom Nav -->
   <nav class="bottom-nav fixed bottom-0 left-0 right-0 bg-praia-teal-800/95 backdrop-blur-md z-[999] lg:hidden border-t border-white/10">
@@ -619,6 +698,21 @@
       }
     }
 
+    // ─── Helper: slugify a beach name to build a link ───
+    function beachSlug(name) {
+      return name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    }
+    let _beachesLookup = null;
+    async function getBeachLink(name) {
+      if (!_beachesLookup) {
+        try { _beachesLookup = await (await fetch('data/beaches.json')).json(); } catch(e) { _beachesLookup = []; }
+      }
+      const norm = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+      const match = _beachesLookup.find(b => norm(b.name) === norm(name))
+        || _beachesLookup.find(b => norm(b.name).includes(norm(name.replace(/^Praia Fluvial d[eao]\s/i,'').replace(/^Praia Fluvial da\s/i,'').replace(/^Praia Fluvial do\s/i,''))));
+      return match ? `praia.html?id=${match.id}` : null;
+    }
+
     // ─── Render winners from settings.json ───
     (async function initWinners() {
       try {
@@ -626,7 +720,7 @@
         const settings = await res.json();
         const winners = (settings.previousWinners || [])
           .slice()
-          .sort((a, b) => b.year - a.year);
+          .sort((a, b) => String(b.year).localeCompare(String(a.year), undefined, { numeric: true }));
 
         if (!winners.length) return;
 
@@ -638,7 +732,8 @@
         tabsContainer.innerHTML = '';
 
         // Add tab buttons for all years
-        winners.forEach((w, i) => {
+        for (let i = 0; i < winners.length; i++) {
+          const w = winners[i];
           const key = String(w.year);
           // Check if a hardcoded panel already exists
           const existingPanel = document.getElementById('panel-' + key);
@@ -663,11 +758,16 @@
             const hasThird = !!w.third;
             const hasPodium = hasSecond || hasThird;
 
+            // Resolve beach links
+            const winnerLink = await getBeachLink(w.winner);
+            const secondLink = hasSecond ? await getBeachLink(w.second) : null;
+            const thirdLink = hasThird ? await getBeachLink(w.third) : null;
+
             // Build podium row (2nd + 3rd)
             const podiumHTML = hasPodium ? `
               <div style="display:grid;grid-template-columns:${hasSecond && hasThird ? '1fr 1fr' : '1fr'};gap:12px;margin-top:12px;">
                 ${hasSecond ? `
-                <div style="position:relative;border-radius:16px;overflow:hidden;background:linear-gradient(160deg,rgba(192,192,192,.12),rgba(192,192,192,.04));border:1px solid rgba(192,192,192,.3);">
+                <${secondLink ? `a href="${secondLink}"` : 'div'} class="${secondLink ? 'winner-card' : ''}" style="position:relative;border-radius:16px;overflow:hidden;background:linear-gradient(160deg,rgba(192,192,192,.12),rgba(192,192,192,.04));border:1px solid rgba(192,192,192,.3);display:block;text-decoration:none;">
                   <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#C0C0C0,#9E9E9E);"></div>
                   <div style="padding:20px;">
                     <div style="display:flex;align-items:flex-start;gap:12px;">
@@ -678,9 +778,9 @@
                       </div>
                     </div>
                   </div>
-                </div>` : ''}
+                </${secondLink ? 'a' : 'div'}>` : ''}
                 ${hasThird ? `
-                <div style="position:relative;border-radius:16px;overflow:hidden;background:linear-gradient(160deg,rgba(205,127,50,.1),rgba(205,127,50,.04));border:1px solid rgba(205,127,50,.28);">
+                <${thirdLink ? `a href="${thirdLink}"` : 'div'} class="${thirdLink ? 'winner-card' : ''}" style="position:relative;border-radius:16px;overflow:hidden;background:linear-gradient(160deg,rgba(205,127,50,.1),rgba(205,127,50,.04));border:1px solid rgba(205,127,50,.28);display:block;text-decoration:none;">
                   <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#CD7F32,#A0522D);"></div>
                   <div style="padding:20px;">
                     <div style="display:flex;align-items:flex-start;gap:12px;">
@@ -691,10 +791,15 @@
                       </div>
                     </div>
                   </div>
-                </div>` : ''}
+                </${thirdLink ? 'a' : 'div'}>` : ''}
               </div>` : '';
 
-            // Build revelações section
+            // Build revelações section (resolve links for each)
+            let revsWithLinks = [];
+            for (const rv of revs) {
+              const rvLink = await getBeachLink(rv.name);
+              revsWithLinks.push({ ...rv, link: rvLink });
+            }
             const revelationsHTML = hasRevs ? `
               <div style="margin-top:12px;position:relative;border-radius:16px;overflow:hidden;background:rgba(2,136,209,.1);border:1px solid rgba(2,136,209,.35);">
                 <div style="position:absolute;top:0;left:0;right:0;height:3px;background:rgba(2,136,209,.7);"></div>
@@ -709,14 +814,14 @@
                     </div>
                   </div>
                   <div style="display:flex;flex-direction:column;gap:8px;">
-                    ${revs.map((rv, ri) => `
-                    <div style="display:flex;align-items:flex-start;gap:10px;">
+                    ${revsWithLinks.map((rv, ri) => `
+                    <${rv.link ? `a href="${rv.link}" class="winner-rev" style="display:flex;align-items:flex-start;gap:10px;text-decoration:none;border-radius:8px;margin:-4px -8px;padding:4px 8px;"` : 'div style="display:flex;align-items:flex-start;gap:10px;"'}>
                       <i data-lucide="award" style="width:14px;height:14px;flex-shrink:0;margin-top:2px;color:#0288D1;"></i>
                       <div>
                         ${rv.label ? `<span style="font-family:'Poppins',sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:rgba(2,136,209,.8);font-weight:600;">${rv.label} — </span>` : ''}
                         <span data-content-settings="previousWinners.${origIdx}.revelations.${ri}.name" style="font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;color:white;">${rv.name}</span>
                       </div>
-                    </div>`).join('')}
+                    </${rv.link ? 'a' : 'div'}>`).join('')}
                   </div>
                 </div>
               </div>` : '';
@@ -726,26 +831,27 @@
             panel.className = 'winners-panel hidden';
             panel.innerHTML = `
               <!-- Praia do Ano -->
-              <div style="position:relative;border-radius:16px;overflow:hidden;background:linear-gradient(160deg,rgba(255,235,59,.12) 0%,rgba(255,235,59,.04) 100%);border:1px solid rgba(255,235,59,.3);">
+              <${winnerLink ? `a href="${winnerLink}"` : 'div'} class="${winnerLink ? 'winner-first' : ''}" style="position:relative;border-radius:16px;overflow:hidden;background:linear-gradient(160deg,rgba(255,235,59,.12) 0%,rgba(255,235,59,.04) 100%);border:1px solid rgba(255,235,59,.3);display:block;text-decoration:none;">
                 <div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#FFEB3B,#FFD600);"></div>
                 <div style="padding:28px;">
                   <div style="display:flex;align-items:flex-start;gap:16px;">
                     <div style="width:48px;height:48px;border-radius:14px;background:rgba(255,235,59,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
                       <i data-lucide="trophy" style="width:24px;height:24px;color:#FFEB3B;"></i>
                     </div>
-                    <div>
+                    <div style="flex:1;">
                       <span style="font-family:'Poppins',sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,235,59,.7);font-weight:600;display:block;margin-bottom:4px;">1.º — Praia Fluvial do Ano ${w.year}</span>
                       <h3 data-content-settings="previousWinners.${origIdx}.winner" style="font-family:'Poppins',sans-serif;font-size:22px;font-weight:800;color:white;line-height:1.2;margin:0;">${w.winner}</h3>
                     </div>
+                    ${winnerLink ? '<span class="winner-arrow" style="color:#FFEB3B;font-family:Poppins,sans-serif;font-size:16px;font-weight:700;margin-top:8px;">→</span>' : ''}
                   </div>
                 </div>
-              </div>
+              </${winnerLink ? 'a' : 'div'}>
               ${podiumHTML}
               ${revelationsHTML}`;
             panelsContainer.appendChild(panel);
             lucide.createIcons({ el: panel });
           }
-        });
+        }
 
         // Show first panel
         showWinnersYear(String(winners[0].year));

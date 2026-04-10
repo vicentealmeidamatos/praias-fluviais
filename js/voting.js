@@ -58,11 +58,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   const preselect = new URLSearchParams(window.location.search).get('preselect');
 
   let currentBeaches = [...beaches];
+  let sortMode = 'az-nome';
 
   function applySort(list) {
-    const sort = sortSel?.value || 'az-nome';
-    if (sort === 'az-nome')     return [...list].sort((a, b) => a.name.localeCompare(b.name, 'pt'));
-    if (sort === 'az-concelho') return [...list].sort((a, b) => a.municipality.localeCompare(b.municipality, 'pt'));
+    if (sortMode === 'az-nome')     return [...list].sort((a, b) => a.name.localeCompare(b.name, 'pt'));
+    if (sortMode === 'az-concelho') return [...list].sort((a, b) => a.municipality.localeCompare(b.municipality, 'pt'));
+    if (sortMode === 'distance')    return list; // already sorted by distance
     return list;
   }
 
@@ -82,7 +83,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       return `
         <div class="card-interactive rounded-2xl overflow-hidden bg-white shadow-layered group flex flex-col h-full ${isVoted ? 'ring-2 ring-praia-yellow-400' : ''}">
           <a href="praia.html?id=${b.id}" class="block relative h-44 overflow-hidden shrink-0" aria-label="Ver página de ${b.name}">
-            <img src="${b.photos?.[0] || ''}" alt="${b.name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+            <img src="${b.thumbnail || b.photos?.[0] || ''}" alt="${b.name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
             <div class="absolute inset-0 bg-gradient-to-t from-praia-teal-800/60 via-transparent to-transparent"></div>
             ${badgesHtml.length ? `<div class="absolute top-3 left-3 flex gap-1.5">${badgesHtml.join('')}</div>` : ''}
             ${isVoted ? '<div class="absolute top-3 right-3 bg-praia-yellow-400 text-praia-teal-800 rounded-full p-1.5"><i data-lucide="check" class="w-4 h-4"></i></div>' : ''}
@@ -123,14 +124,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   searchInput?.addEventListener('input', filterBeaches);
   districtSel?.addEventListener('change', filterBeaches);
-  sortSel?.addEventListener('change', () => renderCards(currentBeaches));
+  sortSel?.addEventListener('change', () => { sortMode = sortSel.value; renderCards(currentBeaches); });
 
   nearMeBtn?.addEventListener('click', async () => {
     nearMeBtn.disabled = true;
     nearMeBtn.textContent = 'A localizar…';
     try {
       const pos = await getUserLocation();
-      currentBeaches = sortByDistance(beaches, pos.lat, pos.lng);
+      currentBeaches = sortByDistance(currentBeaches, pos.lat, pos.lng);
+      sortMode = 'distance';
+      if (sortSel) sortSel.value = 'distance';
       renderCards(currentBeaches);
     } catch (err) {
       alert(err.message);
