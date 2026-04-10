@@ -212,16 +212,31 @@ function badgesCompute({ stamps, reviews, voted, beaches }) {
   const revPhotos  = reviews.filter(r => r.images && r.images.length > 0).length;
   const available  = beaches.filter(b => b.passportStamp).length;
 
+  // Map district → region (NUTS II)
+  const districtToRegion = {
+    'Viana do Castelo': 'norte', 'Braga': 'norte', 'Porto': 'norte',
+    'Vila Real': 'norte', 'Bragança': 'norte',
+    'Aveiro': 'centro', 'Viseu': 'centro', 'Guarda': 'centro',
+    'Coimbra': 'centro', 'Castelo Branco': 'centro', 'Leiria': 'centro',
+    'Santarém': 'centro',
+    'Lisboa': 'lisboa', 'Setúbal': 'lisboa',
+    'Portalegre': 'alentejo', 'Évora': 'alentejo', 'Beja': 'alentejo',
+    'Faro': 'algarve',
+  };
+  function getRegion(beach) {
+    return beach.region || districtToRegion[beach.district] || '';
+  }
+
   function regionCount(reg) {
     return stampIds.filter(id => {
       const b = beaches.find(x => x.id === id);
-      return b && b.region === reg;
+      return b && getRegion(b) === reg;
     }).length;
   }
   function regionsCount(regs) {
     return stampIds.filter(id => {
       const b = beaches.find(x => x.id === id);
-      return b && regs.includes(b.region);
+      return b && regs.includes(getRegion(b));
     }).length;
   }
   function hasSpeed() {
