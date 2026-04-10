@@ -187,7 +187,7 @@
     </div>
   </div>
 
-  <main id="main-content" class="pt-16 md:pt-[70px] pb-20 lg:pb-10">
+  <main id="main-content" class="pt-16 md:pt-[70px] pb-0">
 
     <!-- ═══════════════════════════════════════════════════ -->
     <!-- HERO                                               -->
@@ -387,7 +387,7 @@
               </div>
             </div>
             <p class="text-praia-sand-600 text-sm leading-relaxed flex-1">O passaporte impresso que pode adquirir nos pontos de distribuição. Recolha carimbos em papel diretamente nas praias e postos de turismo de cada concelho.</p>
-            <a href="onde-encontrar-passaporte.html" class="inline-flex items-center gap-2 bg-praia-teal-800 text-praia-yellow-400 font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full self-start btn-primary">
+            <a href="onde-encontrar.html" class="inline-flex items-center gap-2 bg-praia-teal-800 text-praia-yellow-400 font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full self-start btn-primary">
               <i data-lucide="book-open" class="w-3.5 h-3.5"></i>
               Onde Encontrar o Passaporte
             </a>
@@ -548,7 +548,7 @@
                   <span class="text-white text-sm font-semibold">1 Sacola</span>
                 </div>
                 <div class="flex items-center gap-2">
-                  <i data-lucide="flask-conical" class="w-4 h-4 text-praia-yellow-400 flex-shrink-0"></i>
+                  <i data-lucide="bottle" class="w-4 h-4 text-praia-yellow-400 flex-shrink-0"></i>
                   <span class="text-white text-sm font-semibold">1 Garrafa Térmica</span>
                 </div>
               </div>
@@ -604,19 +604,37 @@
             </a>
           </div>
 
-          <!-- Prize photos (placeholders) -->
+          <!-- Prize photos -->
           <div class="grid grid-cols-3 gap-4 mt-8 reveal-on-scroll">
-            <div class="aspect-square rounded-2xl overflow-hidden border border-white/10 bg-white/5 flex flex-col items-center justify-center gap-2 text-white/20">
-              <i data-lucide="image" class="w-8 h-8"></i>
-              <span class="font-display text-[10px] uppercase tracking-wider font-semibold">T-shirt</span>
+            <!-- T-Shirts -->
+            <div class="rounded-2xl overflow-hidden border border-white/10 relative group" style="background: linear-gradient(135deg, rgba(255,235,59,0.08), rgba(2,136,209,0.08));">
+              <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:4px; padding:6px; aspect-ratio:4/3;">
+                <img src="brand_assets/itens_loja/t-shirt-A.jpg" alt="T-Shirt Design A" style="width:100%; height:100%; object-fit:cover; border-radius:10px;" class="group-hover:scale-105 transition-transform duration-500">
+                <img src="brand_assets/itens_loja/t-shirt-B.jpg" alt="T-Shirt Praias Fluviais" style="width:100%; height:100%; object-fit:cover; border-radius:10px;" class="group-hover:scale-105 transition-transform duration-500 delay-75">
+                <img src="brand_assets/itens_loja/t-shirt-C.jpg" alt="T-Shirt Design B" style="width:100%; height:100%; object-fit:cover; border-radius:10px;" class="group-hover:scale-105 transition-transform duration-500 delay-150">
+              </div>
+              <div style="position:absolute; bottom:0; left:0; right:0; background:linear-gradient(to top, rgba(0,58,64,0.9), transparent 70%); padding:10px 14px;">
+                <div class="flex items-center gap-1.5">
+                  <i data-lucide="shirt" class="w-3 h-3 text-praia-yellow-400"></i>
+                  <span class="font-display text-[10px] uppercase tracking-wider font-bold text-white">T-shirts</span>
+                </div>
+              </div>
             </div>
-            <div class="aspect-square rounded-2xl overflow-hidden border border-white/10 bg-white/5 flex flex-col items-center justify-center gap-2 text-white/20">
-              <i data-lucide="image" class="w-8 h-8"></i>
-              <span class="font-display text-[10px] uppercase tracking-wider font-semibold">Sacola</span>
+            <!-- Sacola -->
+            <div class="rounded-2xl overflow-hidden border border-white/10 relative group flex flex-col items-center justify-center text-center" style="background: linear-gradient(135deg, rgba(255,235,59,0.06), rgba(67,160,71,0.06)); aspect-ratio:4/3;">
+              <div style="width:56px; height:56px; border-radius:16px; background:rgba(255,235,59,0.1); border:1px solid rgba(255,235,59,0.15); display:flex; align-items:center; justify-content:center; margin-bottom:12px;" class="group-hover:scale-110 transition-transform duration-300">
+                <i data-lucide="shopping-bag" class="w-6 h-6 text-praia-yellow-400/60"></i>
+              </div>
+              <span class="font-display text-[11px] uppercase tracking-wider font-bold text-white/50">Sacola</span>
+              <span class="font-body text-[9px] text-white/25 mt-1">Foto em breve</span>
             </div>
-            <div class="aspect-square rounded-2xl overflow-hidden border border-white/10 bg-white/5 flex flex-col items-center justify-center gap-2 text-white/20">
-              <i data-lucide="image" class="w-8 h-8"></i>
-              <span class="font-display text-[10px] uppercase tracking-wider font-semibold">Garrafa Térmica</span>
+            <!-- Garrafa Térmica -->
+            <div class="rounded-2xl overflow-hidden border border-white/10 relative group flex flex-col items-center justify-center text-center" style="background: linear-gradient(135deg, rgba(2,136,209,0.06), rgba(255,235,59,0.06)); aspect-ratio:4/3;">
+              <div style="width:56px; height:56px; border-radius:16px; background:rgba(2,136,209,0.1); border:1px solid rgba(2,136,209,0.15); display:flex; align-items:center; justify-content:center; margin-bottom:12px;" class="group-hover:scale-110 transition-transform duration-300">
+                <i data-lucide="bottle" class="w-6 h-6 text-praia-blue-400/60"></i>
+              </div>
+              <span class="font-display text-[11px] uppercase tracking-wider font-bold text-white/50">Garrafa Térmica</span>
+              <span class="font-body text-[9px] text-white/25 mt-1">Foto em breve</span>
             </div>
           </div>
         </div>

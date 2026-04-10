@@ -332,25 +332,29 @@
     const t = e.target;
     if (!t || isInsideEditorUI(t)) return;
     if (isAllowedNavTarget(t)) return;
-    // Contenteditable: permitimos APENAS os eventos necessários para selecionar
-    // e digitar (mousedown/mouseup/pointerdown/pointerup/touchstart/touchend),
-    // mas continuamos a bloquear `click` para que o <a> pai não navegue.
+
+    // Em modo Layout, o layout-edit-mode.js precisa de receber os eventos
+    // (click para selecionar, mousedown para drag, keydown para setas/delete).
+    // Apenas bloqueamos a propagação final para que o site não navegue, mas
+    // usamos só preventDefault (sem stopImmediatePropagation) para que os
+    // listeners do layout editor recebam o evento.
+    if (window.__layoutModeActive) {
+      e.preventDefault();
+      return;
+    }
+
+    // Contenteditable: permitimos mousedown/mouseup/pointer/touch para focus e
+    // cursor, mas bloqueamos click para que o <a> pai não navegue.
     const editable = t.closest && (t.closest('[contenteditable], [contenteditable=""], [contenteditable="true"], [contenteditable="plaintext-only"]') || t.closest('.__ie-editing'));
     if (editable && e.type !== 'click' && e.type !== 'auxclick' && e.type !== 'dblclick' && e.type !== 'submit') {
       return;
     }
-    // Permitir clicks no host de um ícone (vai abrir o picker via outro hook)
-    if (t.closest && t.closest('.__ie-icon-host') && !window.__layoutModeActive && e.type === 'click') {
-      // O picker é aberto pelo iconPickerHook; aqui apenas suprimimos a acção
-      // nativa do botão/link onde o ícone está. Não fazemos return.
-    }
+
     e.preventDefault();
     e.stopPropagation();
     if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
   }
-  // O icon picker é tratado dentro do mesmo handler (blockSiteInteractions
-  // chama openIconPicker quando o target é um icon host).
-  const _origBlock = blockSiteInteractions;
+
   function blockSiteInteractionsWithIcon(e) {
     const t = e.target;
     if (!t || isInsideEditorUI(t)) return;
@@ -362,7 +366,7 @@
       try { openIconPicker(t.closest('.__ie-icon-host')); } catch {}
       return;
     }
-    _origBlock(e);
+    blockSiteInteractions(e);
   }
   const BLOCKED_EVENTS = ['click', 'auxclick', 'dblclick', 'mousedown', 'mouseup', 'pointerdown', 'pointerup', 'touchstart', 'touchend', 'submit'];
   BLOCKED_EVENTS.forEach(ev => {

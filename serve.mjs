@@ -115,6 +115,44 @@ const server = createServer(async (req, res) => {
     return;
   }
 
+  // ─── Save Data (desenvolvimento local) ───
+  if ((req.method === 'POST' || req.method === 'GET') && url === '/api/save-data') {
+    try {
+      if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+        try {
+          const envFile = await readFile(join(__dirname, '.env'), 'utf8');
+          envFile.split('\n').forEach(line => {
+            const [k, ...v] = line.split('=');
+            if (k && v.length) process.env[k.trim()] = v.join('=').trim().replace(/^["']|["']$/g, '');
+          });
+        } catch {}
+      }
+      const handler = (await import('./api/save-data.js')).default;
+      let body = null;
+      if (req.method === 'POST') {
+        const chunks = [];
+        for await (const chunk of req) chunks.push(chunk);
+        try { body = JSON.parse(Buffer.concat(chunks).toString()); } catch {}
+      }
+      const fakeReq = { method: req.method, body, headers: req.headers, query: Object.fromEntries(new URL(req.url, 'http://localhost').searchParams), [Symbol.asyncIterator]: function* () {} };
+      const fakeRes = {
+        _status: 200, _headers: {}, _body: null,
+        status(s) { this._status = s; return this; },
+        setHeader(k, v) { this._headers[k] = v; return this; },
+        json(data) { this._body = JSON.stringify(data); return this; },
+        end() {},
+      };
+      await handler(fakeReq, fakeRes);
+      res.writeHead(fakeRes._status, { 'Content-Type': 'application/json', ...CORS });
+      res.end(fakeRes._body || '{}');
+    } catch (err) {
+      console.error('[/api/save-data] Erro:', err.message);
+      res.writeHead(500, { 'Content-Type': 'application/json', ...CORS });
+      res.end(JSON.stringify({ error: err.message }));
+    }
+    return;
+  }
+
   // ─── Checkout Session (desenvolvimento local) ───
   // Requer: npm install stripe @supabase/supabase-js  +  ficheiro .env com as chaves
   // Execute separadamente: stripe listen --forward-to localhost:3000/api/webhook

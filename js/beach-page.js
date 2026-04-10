@@ -334,7 +334,7 @@ async function loadReviews(beachId, currentUser, beaches) {
         <div class="bg-praia-sand-50 rounded-xl p-4 border border-praia-sand-200 ${isReply ? 'shadow-none rounded-lg' : ''}" data-review-id="${r.id}">
           <div class="flex items-center gap-2 text-praia-sand-400">
             <i data-lucide="shield-off" class="w-3.5 h-3.5 flex-shrink-0"></i>
-            <span class="text-xs italic">Este comentário foi removido pelo administrador.</span>
+            <span class="text-xs italic">Este comentário foi removido por um administrador.</span>
           </div>
           ${repliesHtml}
         </div>`;

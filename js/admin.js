@@ -81,13 +81,21 @@ function markDirty(section) {
   _renderPublishBar();
 }
 
+function markClean(section) {
+  _autoSave.pending.delete(section);
+  _renderPublishBar();
+}
+
 // Botão "Gravar alterações" por secção — grava imediatamente no Supabase
 // (sem precisar do botão global da publish bar nem de export manual).
 async function saveSectionNow(section) {
   if (!SECTION_TO_DATASET[section]) {
     toast('Secção desconhecida.', 'error'); return;
   }
-  _autoSave.pending.add(section);
+  if (!_autoSave.pending.has(section)) {
+    toast('Não existem alterações por gravar nesta secção.', 'info'); return;
+  }
+  if (!confirm('As alterações serão publicadas no site em produção. Deseja continuar?')) return;
   _autoSave.lastError = null;
   await _autoSaveFlush(section);
   _renderPublishBar();
@@ -316,9 +324,6 @@ const ALL_SERVICES = [
   { key: 'camping',     label: 'Alojamento' },
   { key: 'wc',          label: 'Instal. Sanitárias' },
   { key: 'nacional2',   label: 'Estrada Nacional 2' },
-  { key: 'grills',      label: 'Grelhadores' },
-  { key: 'parking',     label: 'Estacionamento' },
-  { key: 'wc',          label: 'WC/Balneários' },
 ];
 
 const DEFAULT_SERVICES = Object.fromEntries(ALL_SERVICES.map(s => [s.key, false]));
@@ -548,6 +553,7 @@ function switchSection(section) {
   state.currentSection = section;
   state.editingId = null;
   state.editingPhotos = [];
+  state.editingThumbnail = '';
   state.editingArticleImage = null;
   state.editingProductImages = [];
   state.editingDescontoLogo = null;
@@ -735,17 +741,19 @@ function removeBeachPhoto(index) {
 
 async function handleBeachPhotoFiles(files) {
   const uploadBtn = document.getElementById('photo-upload-btn');
+  const fileList = Array.from(files).filter(f => f.type.startsWith('image/'));
+  if (!fileList.length) return;
+
   if (uploadBtn) { uploadBtn.disabled = true; uploadBtn.textContent = 'A carregar...'; }
 
-  for (const file of Array.from(files)) {
-    if (!file.type.startsWith('image/')) continue;
+  for (const file of fileList) {
     const result = await uploadImageFile(file, 'beaches');
     state.editingPhotos.push(result);
   }
 
   if (uploadBtn) { uploadBtn.disabled = false; uploadBtn.textContent = '+ Adicionar Fotos'; }
   renderPhotoGallery();
-  toast(`${files.length} foto(s) adicionada(s).`, 'success');
+  toast(`${fileList.length} foto(s) adicionada(s).`, 'success');
 }
 
 function setupPhotoDragDrop(zoneId, inputId) {
@@ -761,6 +769,52 @@ function setupPhotoDragDrop(zoneId, inputId) {
     if (e.dataTransfer.files.length) handleBeachPhotoFiles(e.dataTransfer.files);
   });
   input.addEventListener('change', e => { if (e.target.files.length) handleBeachPhotoFiles(e.target.files); e.target.value = ''; });
+}
+
+// ─── Thumbnail Upload ───
+function renderThumbnailPreview() {
+  const container = document.getElementById('thumbnail-preview');
+  if (!container) return;
+  if (!state.editingThumbnail) {
+    container.innerHTML = '';
+    return;
+  }
+  container.innerHTML = `
+    <div style="position:relative;display:inline-block;">
+      <img src="${state.editingThumbnail}" style="max-height:80px;border-radius:8px;border:1px solid #E8DFD0;display:block;">
+      <button onclick="removeThumbnail()" style="position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;background:#D32F2F;color:white;border:none;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;font-weight:bold;">×</button>
+    </div>`;
+}
+
+function removeThumbnail() {
+  state.editingThumbnail = '';
+  renderThumbnailPreview();
+}
+
+async function handleThumbnailFile(files) {
+  const file = Array.from(files).find(f => f.type.startsWith('image/'));
+  if (!file) return;
+  if (state.editingThumbnail) {
+    if (!confirm('Esta secção apenas permite uma imagem. Deseja substituir a miniatura atual?')) return;
+  }
+  const result = await uploadImageFile(file, 'beaches');
+  state.editingThumbnail = result.src;
+  renderThumbnailPreview();
+}
+
+function setupThumbDragDrop() {
+  const zone = document.getElementById('thumb-drop-zone');
+  const input = document.getElementById('thumb-file-input');
+  if (!zone || !input) return;
+
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.borderColor = '#003A40'; zone.style.background = '#EEF5F5'; });
+  zone.addEventListener('dragleave', () => { zone.style.borderColor = '#C4B898'; zone.style.background = '#FAF8F5'; });
+  zone.addEventListener('drop', e => {
+    e.preventDefault();
+    zone.style.borderColor = '#C4B898'; zone.style.background = '#FAF8F5';
+    if (e.dataTransfer.files.length) handleThumbnailFile(e.dataTransfer.files);
+  });
+  input.addEventListener('change', e => { if (e.target.files.length) handleThumbnailFile(e.target.files); e.target.value = ''; });
 }
 
 // ─── Article Image ───
@@ -871,15 +925,15 @@ function editBeach(index) {
   // Merge any missing service keys
   const services = { ...DEFAULT_SERVICES, ...(b.services || {}) };
 
-  // Load photos into state
+  // Load photos and thumbnail into state
   state.editingPhotos = (b.photos || []).map(src => ({ src, name: '' }));
+  state.editingThumbnail = b.thumbnail || '';
 
   const districtOptions = DISTRICTS.map(d =>
     `<option value="${d}" ${b.district === d ? 'selected' : ''}>${d}</option>`
   ).join('');
 
-  const mainServices = ALL_SERVICES.slice(0, 10);
-  const extraServices = ALL_SERVICES.slice(10);
+  const allServices = ALL_SERVICES;
 
   const container = document.getElementById('admin-content');
   container.innerHTML = `
@@ -944,8 +998,13 @@ function editBeach(index) {
       <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100">
         <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-3">Miniatura</h3>
         <p style="font-size:12px;color:#A89A78;margin-bottom:8px;">Imagem pequena usada nas listagens, mapa e votação. Separada da galeria de fotos.</p>
-        ${b.thumbnail ? `<div style="margin-bottom:8px;"><img src="${escHtml(b.thumbnail)}" style="max-height:80px;border-radius:8px;border:1px solid #E8DFD0;"></div>` : ''}
-        <input type="text" id="b-thumbnail" value="${escHtml(b.thumbnail || '')}" placeholder="Caminho da imagem (ex: brand_assets/fotos/...)" class="admin-input w-full" style="font-size:12px;">
+        <div id="thumbnail-preview" style="margin-bottom:8px;"></div>
+        <div id="thumb-drop-zone" style="border:2px dashed #C4B898;border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:all 0.2s;background:#FAF8F5;" onclick="document.getElementById('thumb-file-input').click()">
+          <div style="font-family:'Poppins',sans-serif;font-size:13px;color:#8A7D60;font-weight:600;">Arraste a miniatura aqui</div>
+          <div style="font-size:12px;color:#C4B898;margin-top:4px;">ou clique para selecionar do disco</div>
+          <div style="font-size:11px;color:#C4B898;margin-top:4px;">JPG, PNG, WEBP</div>
+        </div>
+        <input type="file" id="thumb-file-input" accept="image/*" style="display:none;">
       </div>
 
       <!-- Fotografias -->
@@ -966,18 +1025,9 @@ function editBeach(index) {
 
       <!-- Serviços -->
       <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100">
-        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-3">Serviços Principais</h3>
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-4">
-          ${mainServices.map(s => `
-            <label class="flex items-center gap-2 cursor-pointer text-sm py-1.5 px-3 rounded-lg border border-praia-sand-100 hover:bg-praia-sand-50">
-              <input type="checkbox" class="b-service" data-key="${s.key}" ${services[s.key] ? 'checked' : ''} style="accent-color:#003A40;">
-              <span class="font-body">${s.label}</span>
-            </label>
-          `).join('')}
-        </div>
-        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-3">Infraestruturas</h3>
+        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-3">Serviços</h3>
         <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
-          ${extraServices.map(s => `
+          ${allServices.map(s => `
             <label class="flex items-center gap-2 cursor-pointer text-sm py-1.5 px-3 rounded-lg border border-praia-sand-100 hover:bg-praia-sand-50">
               <input type="checkbox" class="b-service" data-key="${s.key}" ${services[s.key] ? 'checked' : ''} style="accent-color:#003A40;">
               <span class="font-body">${s.label}</span>
@@ -1002,15 +1052,20 @@ function editBeach(index) {
       </div>
 
       <div class="flex gap-3 pb-8">
-        <button onclick="saveBeach(${index})" class="admin-btn admin-btn-success">Guardar Praia</button>
-        <button onclick="renderSection()" class="admin-btn bg-praia-sand-200 text-praia-sand-700">Cancelar</button>
+        <button onclick="saveBeach(${index})" class="admin-btn admin-btn-success">Guardar Alterações</button>
+        <button onclick="cancelBeachEdit()" class="admin-btn bg-praia-sand-200 text-praia-sand-700">Cancelar</button>
         ${index !== null ? `<button onclick="deleteItem('beaches', ${index}); renderSection();" class="admin-btn admin-btn-danger ml-auto">Eliminar</button>` : ''}
       </div>
     </div>`;
 
   renderPhotoGallery();
+  renderThumbnailPreview();
   setupPhotoDragDrop('photo-drop-zone', 'photo-file-input');
-  setTimeout(() => initQuillEditor('b-description-editor', b.description || '', { minimal: true }), 0);
+  setupThumbDragDrop();
+  setTimeout(() => {
+    initQuillEditor('b-description-editor', b.description || '', { minimal: true });
+    state.beachFormSnapshot = getBeachFormSnapshot();
+  }, 50);
 
   // Drop zone hover style
   const zone = document.getElementById('photo-drop-zone');
@@ -1019,6 +1074,27 @@ function editBeach(index) {
     zone.addEventListener('dragleave', () => { zone.style.borderColor = '#C4B898'; zone.style.background = '#FAF8F5'; });
     zone.addEventListener('drop', () => { zone.style.borderColor = '#C4B898'; zone.style.background = '#FAF8F5'; });
   }
+}
+
+function getBeachFormSnapshot() {
+  const inputIds = ['b-name', 'b-id', 'b-municipality', 'b-freguesia', 'b-district', 'b-type', 'b-river', 'b-waterQuality', 'b-lat', 'b-lng'];
+  const values = inputIds.map(id => document.getElementById(id)?.value || '');
+  const checks = [document.getElementById('b-featured')?.checked, document.getElementById('b-passportStamp')?.checked];
+  const services = [];
+  document.querySelectorAll('.b-service').forEach(cb => services.push(cb.checked));
+  return JSON.stringify({ values, checks, services, thumb: state.editingThumbnail || '', photos: state.editingPhotos.map(p => p.src), desc: getQuillHTML('b-description-editor') || '' });
+}
+
+function hasBeachChanges() {
+  if (!state.beachFormSnapshot) return false;
+  return getBeachFormSnapshot() !== state.beachFormSnapshot;
+}
+
+function cancelBeachEdit() {
+  if (hasBeachChanges()) {
+    if (!confirm('Existem alterações por guardar. Deseja sair sem guardar?')) return;
+  }
+  renderSection();
 }
 
 function saveBeach(index) {
@@ -1041,7 +1117,7 @@ function saveBeach(index) {
       lng: parseFloat(document.getElementById('b-lng').value) || 0,
     },
     description: getQuillHTML('b-description-editor') || '',
-    thumbnail: document.getElementById('b-thumbnail').value.trim(),
+    thumbnail: state.editingThumbnail || '',
     photos: state.editingPhotos.map(p => p.src),
     video360: null,
     services,
@@ -1054,6 +1130,7 @@ function saveBeach(index) {
   else state.data.beaches.push(beach);
 
   state.editingPhotos = [];
+  state.editingThumbnail = '';
   markDirty('beaches');
   toast('Praia guardada com sucesso!', 'success');
   renderSection();
@@ -2213,7 +2290,7 @@ async function renderComentarios(content) {
           <p id="com-modal-text" class="text-sm text-praia-sand-700 leading-relaxed"></p>
           <p id="com-modal-meta" class="text-xs text-praia-sand-400 mt-1"></p>
         </div>
-        <p class="text-sm text-praia-sand-600 mb-5">O comentário ficará visível na comunidade como <em>"Este comentário foi removido pelo administrador."</em></p>
+        <p class="text-sm text-praia-sand-600 mb-5">O comentário ficará visível na comunidade como <em>"Este comentário foi removido por um administrador."</em></p>
         <div class="flex gap-3 justify-end">
           <button onclick="comModalClose()" class="px-4 py-2 text-sm font-display font-semibold text-praia-sand-500 hover:text-praia-teal-800 border border-praia-sand-200 rounded-xl transition-colors">
             Cancelar
