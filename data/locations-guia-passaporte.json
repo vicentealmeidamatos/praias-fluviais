@@ -5120,8 +5120,8 @@
     "address": "Largo Alberto Leitão, 3360-341 Penacova",
     "type": "guia_passaporte",
     "coordinates": {
-      "lat": 40.2693328,
-      "lng": -8.2732355
+      "lat": 40.2702364,
+      "lng": -8.2808135
     }
   },
   {
@@ -6003,8 +6003,8 @@
     "address": "Avenida da Ponte, 3660-484 São Pedro do Sul",
     "type": "guia",
     "coordinates": {
-      "lat": 40.739202,
-      "lng": -8.092957799999999
+      "lat": 40.7597561,
+      "lng": -8.0596976
     }
   },
   {
@@ -6033,8 +6033,8 @@
     "address": "Praia Fluvial do Trabulo, 3560-030 Decermilo (Sátão)",
     "type": "guia",
     "coordinates": {
-      "lat": 40.7423572,
-      "lng": -7.732120099999999
+      "lat": 40.7215,
+      "lng": -7.8185
     },
     "seasonal": true
   },
