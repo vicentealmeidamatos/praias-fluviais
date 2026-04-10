@@ -187,7 +187,7 @@ const ALL_BADGES = [
   { id: 'aventureiro',       name: 'Aventureiro',           desc: 'Visitou 15 praias fluviais',                     icon: 'mountain',       tier: 'prata',    type: 'stamps',             threshold: 15 },
   { id: 'filho-norte',       name: 'Filho do Norte',        desc: '5 praias na região Norte',                       icon: 'navigation',     tier: 'prata',    type: 'region',  region: 'norte',  threshold: 5  },
   { id: 'coracao-centro',    name: 'Coração do Centro',     desc: '5 praias na região Centro',                      icon: 'heart',          tier: 'prata',    type: 'region',  region: 'centro', threshold: 5  },
-  { id: 'alma-sul',          name: 'Alma do Sul',           desc: '3 praias no Alentejo ou Algarve',                icon: 'sun',            tier: 'prata',    type: 'regions', regions: ['alentejo','algarve'], threshold: 3 },
+  { id: 'alma-sul',          name: 'Alma do Sul',           desc: '3 praias na região Sul',                         icon: 'sun',            tier: 'prata',    type: 'region',  region: 'sul',    threshold: 3 },
   { id: 'velocista',         name: 'Velocista',             desc: '5 carimbos no mesmo mês',                        icon: 'zap',            tier: 'prata',    type: 'speed'                             },
   { id: 'critico-elite',     name: 'Crítico de Elite',      desc: '5 comentários com fotografias',                  icon: 'camera',         tier: 'prata',    type: 'reviews_photos',     threshold: 5  },
   // ── Ouro ─────────────────────────────────────────────────────────────────
@@ -219,9 +219,9 @@ function badgesCompute({ stamps, reviews, voted, beaches }) {
     'Aveiro': 'centro', 'Viseu': 'centro', 'Guarda': 'centro',
     'Coimbra': 'centro', 'Castelo Branco': 'centro', 'Leiria': 'centro',
     'Santarém': 'centro',
-    'Lisboa': 'lisboa', 'Setúbal': 'alentejo',
-    'Portalegre': 'alentejo', 'Évora': 'alentejo', 'Beja': 'alentejo',
-    'Faro': 'algarve',
+    'Lisboa': 'sul', 'Setúbal': 'sul',
+    'Portalegre': 'sul', 'Évora': 'sul', 'Beja': 'sul',
+    'Faro': 'sul',
   };
   function getRegion(beach) {
     return beach.region || districtToRegion[beach.district] || '';
