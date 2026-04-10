@@ -219,7 +219,7 @@ function badgesCompute({ stamps, reviews, voted, beaches }) {
     'Aveiro': 'centro', 'Viseu': 'centro', 'Guarda': 'centro',
     'Coimbra': 'centro', 'Castelo Branco': 'centro', 'Leiria': 'centro',
     'Santarém': 'centro',
-    'Lisboa': 'lisboa', 'Setúbal': 'lisboa',
+    'Lisboa': 'lisboa', 'Setúbal': 'alentejo',
     'Portalegre': 'alentejo', 'Évora': 'alentejo', 'Beja': 'alentejo',
     'Faro': 'algarve',
   };
