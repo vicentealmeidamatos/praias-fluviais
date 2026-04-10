@@ -1145,6 +1145,9 @@ function saveBeach(index) {
   if (index !== null) state.data.beaches[index] = beach;
   else state.data.beaches.push(beach);
 
+  // Sincronizar com settings.featuredBeaches
+  syncBeachFeatured(beach.id, beach.featured);
+
   state.editingPhotos = [];
   state.editingThumbnail = '';
   markDirty('beaches');
@@ -1288,6 +1291,9 @@ function saveArticle(index) {
 
   if (index !== null) state.data.articles[index] = article;
   else state.data.articles.push(article);
+
+  // Sincronizar com settings.featuredArticles
+  syncArticleFeatured(article.slug, article.featured);
 
   state.editingArticleImage = null;
   markDirty('articles');
@@ -1884,6 +1890,25 @@ function renderSettings(container) {
   });
 }
 
+// ─── Sincronização Destaques ↔ Settings ───
+function syncBeachFeatured(id, featured) {
+  const s = state.data.settings = state.data.settings || {};
+  s.featuredBeaches = s.featuredBeaches || [];
+  const inList = s.featuredBeaches.includes(id);
+  if (featured && !inList) s.featuredBeaches.push(id);
+  if (!featured && inList) s.featuredBeaches = s.featuredBeaches.filter(b => b !== id);
+  markDirty('settings');
+}
+
+function syncArticleFeatured(slug, featured) {
+  const s = state.data.settings = state.data.settings || {};
+  s.featuredArticles = s.featuredArticles || [];
+  const inList = s.featuredArticles.includes(slug);
+  if (featured && !inList) s.featuredArticles.push(slug);
+  if (!featured && inList) s.featuredArticles = s.featuredArticles.filter(a => a !== slug);
+  markDirty('settings');
+}
+
 function addFeaturedBeach() {
   const sel = document.getElementById('s-add-beach');
   const id = sel?.value;
@@ -1891,6 +1916,10 @@ function addFeaturedBeach() {
   const s = state.data.settings || {};
   s.featuredBeaches = [...(s.featuredBeaches || []), id];
   state.data.settings = s;
+  // Sincronizar flag na praia
+  const beach = (state.data.beaches || []).find(b => b.id === id);
+  if (beach) { beach.featured = true; markDirty('beaches'); }
+  markDirty('settings');
   renderSettings(document.getElementById('admin-content'));
 }
 
@@ -1898,6 +1927,10 @@ function removeFeaturedBeach(id) {
   const s = state.data.settings || {};
   s.featuredBeaches = (s.featuredBeaches || []).filter(b => b !== id);
   state.data.settings = s;
+  // Sincronizar flag na praia
+  const beach = (state.data.beaches || []).find(b => b.id === id);
+  if (beach) { beach.featured = false; markDirty('beaches'); }
+  markDirty('settings');
   renderSettings(document.getElementById('admin-content'));
 }
 
@@ -1908,6 +1941,10 @@ function addFeaturedArticle() {
   const s = state.data.settings || {};
   s.featuredArticles = [...(s.featuredArticles || []), slug];
   state.data.settings = s;
+  // Sincronizar flag no artigo
+  const article = (state.data.articles || []).find(a => a.slug === slug);
+  if (article) { article.featured = true; markDirty('articles'); }
+  markDirty('settings');
   renderSettings(document.getElementById('admin-content'));
 }
 
@@ -1915,6 +1952,10 @@ function removeFeaturedArticle(slug) {
   const s = state.data.settings || {};
   s.featuredArticles = (s.featuredArticles || []).filter(a => a !== slug);
   state.data.settings = s;
+  // Sincronizar flag no artigo
+  const article = (state.data.articles || []).find(a => a.slug === slug);
+  if (article) { article.featured = false; markDirty('articles'); }
+  markDirty('settings');
   renderSettings(document.getElementById('admin-content'));
 }
 
