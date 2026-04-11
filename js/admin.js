@@ -2064,8 +2064,11 @@ function toggleItemVisibility(section, index) {
   if (!item) return;
   if (!item.hidden) {
     if (!confirm('Este item será ocultado do site público e deixará de ser visível para os visitantes. Os dados não serão apagados.\n\nDeseja continuar?')) return;
+    item.hidden = true;
+  } else {
+    // Remover o campo em vez de definir false — evita diferenças fantasma no sync
+    delete item.hidden;
   }
-  item.hidden = !item.hidden;
   markDirty(section);
   toast(item.hidden ? 'Item ocultado do site público.' : 'Item visível novamente no site público.', 'success');
   renderSection();
