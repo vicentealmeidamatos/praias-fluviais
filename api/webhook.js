@@ -128,6 +128,19 @@ async function handleCheckoutComplete(session, supabase, stripe) {
 
     console.log('[webhook] Encomenda guardada:', session.id);
 
+    // Notificar admin por email (Resend)
+    if (process.env.RESEND_API_KEY && process.env.ORDER_NOTIFICATION_EMAIL) {
+      try {
+        await sendOrderNotificationEmail({
+          email, items, shippingAddress, shippingZone, shippingPrice, subtotal, total,
+          sessionId: session.id,
+          customerName: shippingAddress.name || session.customer_details?.name || 'Cliente',
+        });
+      } catch (mailErr) {
+        console.error('[webhook] Erro ao enviar email de notificação:', mailErr);
+      }
+    }
+
     // Criar fatura no InvoiceXpress (se configurado)
     if (process.env.INVOICEXPRESS_ACCOUNT && process.env.INVOICEXPRESS_API_KEY) {
       try {
@@ -379,4 +392,177 @@ async function createInvoiceXpressInvoice({ email, customerName, taxId, billingA
       }),
     });
   }
+}
+
+// ─── Notificação de nova encomenda por email (Resend) ────────────────────────
+
+async function sendOrderNotificationEmail({ email, items, shippingAddress, shippingZone, shippingPrice, subtotal, total, sessionId, customerName }) {
+  function fmtPrice(cents) { return (cents / 100).toFixed(2).replace('.', ',') + '€'; }
+
+  const addr = shippingAddress || {};
+  const addrParts = [addr.line1, addr.line2, [addr.postal_code, addr.city].filter(Boolean).join(' ')].filter(Boolean);
+  const zone = shippingZone === 'ilhas' ? 'Açores / Madeira' : 'Portugal Continental';
+  const date = new Date().toLocaleDateString('pt-PT', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  const totalItems = (items || []).reduce((s, i) => s + i.quantity, 0);
+
+  const itemsHtml = (items || []).map(i =>
+    `<tr>
+      <td style="padding:14px 16px;border-bottom:1px solid #E8E4DE;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-size:14px;color:#2D2820;">
+        ${i.name}${i.variant && i.variant !== 'sem-variante' ? `<br><span style="font-size:12px;color:#8B8578;">${i.variant}</span>` : ''}
+      </td>
+      <td style="padding:14px 16px;border-bottom:1px solid #E8E4DE;text-align:center;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-size:14px;color:#2D2820;font-weight:600;">${i.quantity}</td>
+      <td style="padding:14px 16px;border-bottom:1px solid #E8E4DE;text-align:right;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-size:14px;color:#003A40;font-weight:700;">${i.price === 0 ? 'Grátis' : fmtPrice(i.price * i.quantity)}</td>
+    </tr>`
+  ).join('');
+
+  const html = `
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
+<body style="margin:0;padding:0;background-color:#F0EDE8;">
+  <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background-color:#F0EDE8;">
+    <tr><td style="padding:32px 16px;">
+      <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="max-width:580px;margin:0 auto;">
+
+        <!-- Header -->
+        <tr><td style="background:#003A40;padding:32px 36px;border-radius:16px 16px 0 0;">
+          <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+              <td>
+                <p style="margin:0;font-family:'Poppins',Helvetica,Arial,sans-serif;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,0.5);">Nova encomenda</p>
+                <h1 style="margin:6px 0 0;font-family:'Poppins',Helvetica,Arial,sans-serif;font-size:26px;font-weight:800;color:#FFEB3B;line-height:1.2;">
+                  ${fmtPrice(total)}
+                </h1>
+                <p style="margin:8px 0 0;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-size:13px;color:rgba(255,255,255,0.6);">${date}</p>
+              </td>
+              <td style="text-align:right;vertical-align:top;">
+                <div style="display:inline-block;background:#FFEB3B;color:#003A40;font-family:'Poppins',Helvetica,Arial,sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:6px 14px;border-radius:20px;">
+                  ${totalItems} ${totalItems === 1 ? 'item' : 'itens'}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </td></tr>
+
+        <!-- Body -->
+        <tr><td style="background:#FFFFFF;padding:0;">
+
+          <!-- Customer & Address -->
+          <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-bottom:1px solid #E8E4DE;">
+            <tr>
+              <!-- Cliente -->
+              <td style="padding:28px 36px;width:50%;vertical-align:top;border-right:1px solid #E8E4DE;">
+                <p style="margin:0 0 6px;font-family:'Poppins',Helvetica,Arial,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#8B8578;">Cliente</p>
+                <p style="margin:0;font-family:'Poppins',Helvetica,Arial,sans-serif;font-size:15px;font-weight:700;color:#003A40;">${customerName}</p>
+                <p style="margin:4px 0 0;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-size:13px;color:#5A5548;">
+                  <a href="mailto:${email}" style="color:#0288D1;text-decoration:none;">${email}</a>
+                </p>
+              </td>
+              <!-- Morada -->
+              <td style="padding:28px 36px;width:50%;vertical-align:top;">
+                <p style="margin:0 0 6px;font-family:'Poppins',Helvetica,Arial,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#8B8578;">Envio</p>
+                <p style="margin:0;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-size:13px;color:#2D2820;line-height:1.6;">
+                  ${addr.name ? `<strong>${addr.name}</strong><br>` : ''}${addrParts.join('<br>')}${addr.country ? `<br>${addr.country}` : ''}
+                </p>
+                <p style="margin:8px 0 0;">
+                  <span style="display:inline-block;background:${shippingZone === 'ilhas' ? '#E3F2FD' : '#E8F5E9'};color:${shippingZone === 'ilhas' ? '#0288D1' : '#43A047'};font-family:'Poppins',Helvetica,Arial,sans-serif;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;padding:3px 10px;border-radius:10px;">
+                    ${zone}
+                  </span>
+                </p>
+              </td>
+            </tr>
+          </table>
+
+          <!-- Items -->
+          <div style="padding:0 36px 28px;">
+            <p style="margin:28px 0 14px;font-family:'Poppins',Helvetica,Arial,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#8B8578;">Detalhes da encomenda</p>
+            <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;">
+              <thead>
+                <tr>
+                  <th style="padding:10px 16px;text-align:left;font-family:'Poppins',Helvetica,Arial,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#8B8578;background:#FAF8F5;border-radius:8px 0 0 8px;">Produto</th>
+                  <th style="padding:10px 16px;text-align:center;font-family:'Poppins',Helvetica,Arial,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#8B8578;background:#FAF8F5;">Qtd</th>
+                  <th style="padding:10px 16px;text-align:right;font-family:'Poppins',Helvetica,Arial,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#8B8578;background:#FAF8F5;border-radius:0 8px 8px 0;">Preço</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${itemsHtml}
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Totals -->
+          <div style="margin:0 36px 28px;background:#FAF8F5;border-radius:12px;padding:20px 24px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="font-family:'Open Sans',Helvetica,Arial,sans-serif;font-size:14px;">
+              <tr>
+                <td style="padding:4px 0;color:#5A5548;">Subtotal</td>
+                <td style="padding:4px 0;text-align:right;color:#2D2820;font-weight:600;">${fmtPrice(subtotal)}</td>
+              </tr>
+              <tr>
+                <td style="padding:4px 0;color:#5A5548;">Envio</td>
+                <td style="padding:4px 0;text-align:right;color:#2D2820;font-weight:600;">${shippingPrice === 0 ? '<span style="color:#43A047;">Grátis</span>' : fmtPrice(shippingPrice)}</td>
+              </tr>
+              <tr>
+                <td colspan="2" style="padding:12px 0 0;">
+                  <div style="border-top:2px solid #003A40;padding-top:12px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+                      <tr>
+                        <td style="font-family:'Poppins',Helvetica,Arial,sans-serif;font-size:16px;font-weight:700;color:#003A40;">Total</td>
+                        <td style="text-align:right;font-family:'Poppins',Helvetica,Arial,sans-serif;font-size:22px;font-weight:800;color:#003A40;">${fmtPrice(total)}</td>
+                      </tr>
+                    </table>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <!-- CTA -->
+          <div style="padding:0 36px 32px;text-align:center;">
+            <a href="https://praiasfluviais.pt/admin.html" style="display:inline-block;background:#003A40;color:#FFFFFF;font-family:'Poppins',Helvetica,Arial,sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;text-decoration:none;padding:14px 32px;border-radius:12px;">
+              Gerir no painel admin →
+            </a>
+          </div>
+
+        </td></tr>
+
+        <!-- Footer -->
+        <tr><td style="background:#003A40;padding:20px 36px;border-radius:0 0 16px 16px;">
+          <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+              <td style="font-family:'Open Sans',Helvetica,Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.4);">
+                Guia das Praias Fluviais — praiasfluviais.pt
+              </td>
+              <td style="text-align:right;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-size:10px;color:rgba(255,255,255,0.25);">
+                ${sessionId ? sessionId.slice(0, 24) + '…' : ''}
+              </td>
+            </tr>
+          </table>
+        </td></tr>
+
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`;
+
+  const resp = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      from: 'Praias Fluviais <noreply@praiasfluviais.pt>',
+      to: [process.env.ORDER_NOTIFICATION_EMAIL],
+      subject: `Nova encomenda — ${fmtPrice(total)} — ${customerName}`,
+      html,
+    }),
+  });
+
+  if (!resp.ok) {
+    const err = await resp.text();
+    throw new Error(`Resend ${resp.status}: ${err}`);
+  }
+
+  console.log('[webhook] Email de notificação enviado para:', process.env.ORDER_NOTIFICATION_EMAIL);
 }
