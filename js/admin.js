@@ -873,7 +873,7 @@ function renderBeaches(container) {
       <div class="flex items-center justify-between mb-6">
         <div>
           <h1 class="font-display text-2xl font-bold text-praia-teal-800">Praias</h1>
-          <p class="text-sm text-praia-sand-500">${beaches.length} praias registadas</p>
+          <p class="text-sm text-praia-sand-500">${beaches.length} praias registadas${beaches.filter(b => b.hidden).length ? ` · <span style="color:#C62828;font-weight:600;">${beaches.filter(b => b.hidden).length} oculta(s)</span>` : ''}</p>
         </div>
         <div class="flex gap-2">
           <button onclick="saveSectionNow('beaches')" class="admin-btn admin-btn-export">Gravar alterações</button>
@@ -881,8 +881,13 @@ function renderBeaches(container) {
         </div>
       </div>
       <div class="bg-white rounded-xl shadow-layered overflow-hidden">
-        <div class="p-4 border-b border-praia-sand-100">
-          <input type="text" placeholder="Pesquisar praias..." oninput="filterAdminTable(this.value)" class="w-full px-4 py-2 rounded-lg bg-praia-sand-50 border border-praia-sand-200 text-sm">
+        <div class="p-4 border-b border-praia-sand-100 flex gap-3 items-center">
+          <input type="text" placeholder="Pesquisar praias..." oninput="filterAdminTable(this.value)" class="flex-1 px-4 py-2 rounded-lg bg-praia-sand-50 border border-praia-sand-200 text-sm">
+          <select id="beaches-visibility-filter" onchange="filterAdminTable(document.querySelector('input[placeholder*=Pesquisar]').value)" style="padding:6px 10px;border-radius:8px;border:1px solid #E2D9C6;background:#FAF8F5;font-size:13px;font-weight:600;color:#003A40;cursor:pointer;">
+            <option value="all">Todas</option>
+            <option value="visible">Visíveis</option>
+            <option value="hidden">Ocultas</option>
+          </select>
         </div>
         <div class="overflow-x-auto">
           <table class="admin-table w-full text-sm">
@@ -901,7 +906,7 @@ function renderBeaches(container) {
                 const isBalnear = b.type === 'zona_balnear';
                 const activeServices = ALL_SERVICES.filter(s => b.services?.[s.key]).map(s => s.label).join(', ') || '—';
                 return `
-                <tr class="border-t border-praia-sand-100 hover:bg-praia-sand-50 admin-table-row${b.hidden ? ' opacity-50' : ''}" data-search="${(b.name + ' ' + b.municipality + ' ' + (b.freguesia||'') + ' ' + (b.district||'')).toLowerCase()}" style="${b.hidden ? 'background:repeating-linear-gradient(135deg,transparent,transparent 10px,rgba(0,0,0,.02) 10px,rgba(0,0,0,.02) 20px);' : ''}">
+                <tr class="border-t border-praia-sand-100 hover:bg-praia-sand-50 admin-table-row${b.hidden ? ' opacity-50' : ''}" data-search="${(b.name + ' ' + b.municipality + ' ' + (b.freguesia||'') + ' ' + (b.district||'')).toLowerCase()}" data-hidden="${b.hidden ? '1' : '0'}" style="${b.hidden ? 'background:repeating-linear-gradient(135deg,transparent,transparent 10px,rgba(0,0,0,.02) 10px,rgba(0,0,0,.02) 20px);' : ''}">
                   <td class="px-4 py-3 font-semibold text-praia-teal-800" style="display:flex;align-items:center;gap:8px;">
                     ${b.hidden ? '<span style="display:inline-flex;align-items:center;padding:1px 6px;border-radius:6px;font-size:9px;font-weight:700;background:#f1f1f1;color:#999;border:1px solid #ddd;margin-right:2px;">OCULTO</span>' : ''}
                     ${b.thumbnail ? `<img src="${escHtml(b.thumbnail)}" style="width:36px;height:24px;object-fit:cover;border-radius:4px;flex-shrink:0;">` : ''}
@@ -2076,8 +2081,13 @@ function toggleItemVisibility(section, index) {
 
 function filterAdminTable(query) {
   const q = query.toLowerCase();
+  const visFilter = document.getElementById('beaches-visibility-filter')?.value || 'all';
   document.querySelectorAll('.admin-table-row').forEach(row => {
-    row.style.display = row.dataset.search?.includes(q) ? '' : 'none';
+    const matchesSearch = !q || row.dataset.search?.includes(q);
+    let matchesVisibility = true;
+    if (visFilter === 'hidden') matchesVisibility = row.dataset.hidden === '1';
+    else if (visFilter === 'visible') matchesVisibility = row.dataset.hidden !== '1';
+    row.style.display = matchesSearch && matchesVisibility ? '' : 'none';
   });
 }
 
