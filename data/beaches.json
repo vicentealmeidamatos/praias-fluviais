@@ -4287,44 +4287,6 @@
     "passportStamp": true
   },
   {
-    "id": "praia-fluvial-de-ratoeira",
-    "name": "Zona Balnear da Ratoeira",
-    "type": "praia_fluvial",
-    "river": "Rio Mondego",
-    "photos": [
-      "https://placehold.co/800x600/003A40/FFEB3B?text=Ratoeira"
-    ],
-    "district": "Guarda",
-    "featured": false,
-    "services": {
-      "wc": false,
-      "bar": false,
-      "grills": false,
-      "camping": false,
-      "parking": false,
-      "blueFlag": false,
-      "lifeguard": false,
-      "nacional2": false,
-      "accessible": false,
-      "boatRental": false,
-      "picnicArea": false,
-      "playground": false,
-      "goldQuality": false,
-      "petFriendly": false
-    },
-    "video360": null,
-    "freguesia": "",
-    "thumbnail": "brand_assets/fotos/FOTOS PRAIA DO ANO/Ratoeira CELORICO DA BEIRA.jpg",
-    "coordinates": {
-      "lat": 40.655093,
-      "lng": -7.341505
-    },
-    "description": "Descubra esta praia fluvial no concelho de Celorico da Beira. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Celorico da Beira",
-    "waterQuality": "",
-    "passportStamp": true
-  },
-  {
     "id": "praia-fluvial-de-sabugal-devesa",
     "name": "Praia Fluvial de Sabugal  (Devesa)",
     "type": "praia_fluvial",
@@ -6601,6 +6563,44 @@
     "passportStamp": true
   },
   {
+    "id": "praia-fluvial-de-ratoeira",
+    "name": "Zona Balnear da Ratoeira",
+    "type": "praia_fluvial",
+    "river": "Rio Mondego",
+    "photos": [
+      "https://placehold.co/800x600/003A40/FFEB3B?text=Ratoeira"
+    ],
+    "district": "Guarda",
+    "featured": false,
+    "services": {
+      "wc": false,
+      "bar": false,
+      "grills": false,
+      "camping": false,
+      "parking": false,
+      "blueFlag": false,
+      "lifeguard": false,
+      "nacional2": false,
+      "accessible": false,
+      "boatRental": false,
+      "picnicArea": false,
+      "playground": false,
+      "goldQuality": false,
+      "petFriendly": false
+    },
+    "video360": null,
+    "freguesia": "",
+    "thumbnail": "brand_assets/fotos/FOTOS PRAIA DO ANO/Ratoeira CELORICO DA BEIRA.jpg",
+    "coordinates": {
+      "lat": 40.655093,
+      "lng": -7.341505
+    },
+    "description": "Descubra esta praia fluvial no concelho de Celorico da Beira. Informações, serviços e localização disponíveis em breve.",
+    "municipality": "Celorico da Beira",
+    "waterQuality": "",
+    "passportStamp": true
+  },
+  {
     "id": "zona-balnear-de-ribeira-da-venda",
     "name": "Zona Balnear da Ribeira da Venda",
     "type": "zona_balnear",
@@ -8586,5 +8586,38 @@
     "municipality": "Penamacor",
     "waterQuality": "",
     "passportStamp": true
+  },
+  {
+    "id": "zona-de-lazer-de-sejaes",
+    "name": "Zona de Lazer de Sejães",
+    "type": "zona_balnear",
+    "river": "Rio Vouga",
+    "photos": [
+      "https://placehold.co/800x600/003A40/FFEB3B?text=Seja%CC%83es"
+    ],
+    "district": "Viseu",
+    "featured": false,
+    "services": {
+      "wc": false,
+      "bar": false,
+      "grills": false,
+      "camping": false,
+      "parking": false,
+      "picnicArea": false,
+      "sportsFields": false,
+      "naturalShade": false,
+      "accessiblePath": false
+    },
+    "video360": "",
+    "freguesia": "",
+    "thumbnail": "https://placehold.co/400x300/003A40/FFEB3B?text=Seja%CC%83es",
+    "coordinates": {
+      "lat": 40.743500000000004,
+      "lng": -8.203944444444444
+    },
+    "description": "",
+    "municipality": "Oliveira de Frades",
+    "waterQuality": "",
+    "passportStamp": false
   }
 ]
