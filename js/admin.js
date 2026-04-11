@@ -3159,24 +3159,30 @@ async function saveOrderChanges() {
   if (!ids.length) { toast('Não existem alterações por gravar.', 'info'); return; }
   if (!confirm(`Gravar ${ids.length} alteraç${ids.length === 1 ? 'ão' : 'ões'} de estado? As alterações serão visíveis para os utilizadores.`)) return;
 
-  const sb = getAdminSb();
-  if (!sb) { toast('Supabase não configurado.', 'error'); return; }
+  const updates = ids.map(id => ({ id, status: changes[id] }));
 
-  let errors = 0;
-  for (const id of ids) {
-    const { error } = await sb.from('orders').update({ status: changes[id] }).eq('id', id);
-    if (error) { errors++; console.error('Erro ao gravar encomenda', id, error); }
-  }
+  try {
+    const resp = await fetch('/api/update-order-status', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ updates }),
+    });
+    const result = await resp.json();
 
-  if (errors) {
-    toast(`${errors} erro(s) ao gravar. Verifique a consola.`, 'error');
-  } else {
-    // Update originals and clear pending
-    ids.forEach(id => { window._ordersOriginalStatus[id] = changes[id]; });
-    window._ordersPendingChanges = {};
-    _updateOrderButtons();
-    renderEncomendasContent();
-    toast(`${ids.length} encomenda${ids.length !== 1 ? 's' : ''} atualizada${ids.length !== 1 ? 's' : ''} com sucesso.`, 'success');
+    if (!resp.ok || result.errors > 0) {
+      const failCount = result.errors || ids.length;
+      toast(`${failCount} erro(s) ao gravar. Verifique a consola.`, 'error');
+      console.error('Erros ao gravar encomendas:', result.results);
+    } else {
+      ids.forEach(id => { window._ordersOriginalStatus[id] = changes[id]; });
+      window._ordersPendingChanges = {};
+      _updateOrderButtons();
+      renderEncomendasContent();
+      toast(`${ids.length} encomenda${ids.length !== 1 ? 's' : ''} atualizada${ids.length !== 1 ? 's' : ''} com sucesso.`, 'success');
+    }
+  } catch (err) {
+    toast('Erro de rede ao gravar: ' + err.message, 'error');
+    console.error(err);
   }
 }
 

@@ -46,13 +46,13 @@ export default async function handler(req, res) {
   // Processar evento
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
-    await handleCheckoutComplete(session, supabase);
+    await handleCheckoutComplete(session, supabase, stripe);
   }
 
   return res.status(200).json({ received: true });
 }
 
-async function handleCheckoutComplete(session, supabase) {
+async function handleCheckoutComplete(session, supabase, stripe) {
   try {
     const metadata = session.metadata || {};
     const userId = metadata.user_id || null;
@@ -72,8 +72,17 @@ async function handleCheckoutComplete(session, supabase) {
       items = [];
     }
 
-    // Endereço de envio
-    const shippingDetails = session.shipping_details || {};
+    // Endereço de envio — o evento webhook pode não incluir shipping_details
+    // completo, por isso fazemos retrieve da session se estiver em falta
+    let shippingDetails = session.shipping_details || {};
+    if (!shippingDetails.address?.line1 && stripe) {
+      try {
+        const fullSession = await stripe.checkout.sessions.retrieve(session.id);
+        shippingDetails = fullSession.shipping_details || shippingDetails;
+      } catch (e) {
+        console.warn('[webhook] Não foi possível obter shipping_details completos:', e.message);
+      }
+    }
     const shippingAddress = {
       name: shippingDetails.name || session.customer_details?.name || '',
       line1: shippingDetails.address?.line1 || '',

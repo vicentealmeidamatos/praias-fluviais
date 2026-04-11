@@ -692,6 +692,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.querySelector('[data-tab="orders"]')?.addEventListener('click', () => {
       if (!_ordersLoaded) { _ordersLoaded = true; renderOrders(); }
     });
+
+    // Hash-based: abrir tab encomendas se URL tiver #orders
+    if (window.location.hash === '#orders') {
+      switchTab('orders');
+      if (!_ordersLoaded) { _ordersLoaded = true; renderOrders(); }
+    }
+  }
+
+  // ── Hash-based tab switch para outros tabs ─────────────────────────────
+  const hashTab = window.location.hash.replace('#', '');
+  if (hashTab && hashTab !== 'orders' && document.querySelector(`[data-tab="${hashTab}"]`)) {
+    switchTab(hashTab);
   }
 
   // ── Show hidden sections ───────────────────────────────────────────────────
