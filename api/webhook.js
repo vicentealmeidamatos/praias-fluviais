@@ -72,25 +72,39 @@ async function handleCheckoutComplete(session, supabase, stripe) {
       items = [];
     }
 
-    // Endereço de envio — o evento webhook pode não incluir shipping_details
-    // completo, por isso fazemos retrieve da session se estiver em falta
-    let shippingDetails = session.shipping_details || {};
+    // Endereço de envio — tentar múltiplos caminhos do Stripe
+    // O campo varia conforme a versão da API: shipping_details, shipping, ou customer_details.address
+    let shippingDetails = session.shipping_details || session.shipping || {};
+    console.log('[webhook] shipping_details do evento:', JSON.stringify(shippingDetails));
+    console.log('[webhook] customer_details:', JSON.stringify(session.customer_details));
+
+    // Se o endereço não veio no evento, fazer retrieve com expand
     if (!shippingDetails.address?.line1 && stripe) {
       try {
-        const fullSession = await stripe.checkout.sessions.retrieve(session.id);
-        shippingDetails = fullSession.shipping_details || shippingDetails;
+        const fullSession = await stripe.checkout.sessions.retrieve(session.id, {
+          expand: ['shipping_details', 'customer_details'],
+        });
+        console.log('[webhook] retrieve shipping_details:', JSON.stringify(fullSession.shipping_details));
+        console.log('[webhook] retrieve shipping:', JSON.stringify(fullSession.shipping));
+        console.log('[webhook] retrieve customer_details.address:', JSON.stringify(fullSession.customer_details?.address));
+        shippingDetails = fullSession.shipping_details || fullSession.shipping || shippingDetails;
       } catch (e) {
         console.warn('[webhook] Não foi possível obter shipping_details completos:', e.message);
       }
     }
+
+    // Fallback: usar customer_details.address (billing) se shipping estiver vazio
+    const addr = shippingDetails.address || {};
+    const fallbackAddr = session.customer_details?.address || {};
     const shippingAddress = {
       name: shippingDetails.name || session.customer_details?.name || '',
-      line1: shippingDetails.address?.line1 || '',
-      line2: shippingDetails.address?.line2 || '',
-      city: shippingDetails.address?.city || '',
-      postal_code: shippingDetails.address?.postal_code || '',
-      country: shippingDetails.address?.country || 'PT',
+      line1: addr.line1 || fallbackAddr.line1 || '',
+      line2: addr.line2 || fallbackAddr.line2 || '',
+      city: addr.city || fallbackAddr.city || '',
+      postal_code: addr.postal_code || fallbackAddr.postal_code || '',
+      country: addr.country || fallbackAddr.country || 'PT',
     };
+    console.log('[webhook] shippingAddress final:', JSON.stringify(shippingAddress));
 
     const email = session.customer_details?.email || session.customer_email || '';
 
