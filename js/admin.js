@@ -594,12 +594,32 @@ function renderSection() {
 }
 
 // ─── Image Upload ───
+// Compress/resize image client-side before upload (max 1200px, JPEG 80%)
+function compressImage(file, maxW = 1200, quality = 0.8) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      let w = img.width, h = img.height;
+      if (w > maxW) { h = Math.round(h * maxW / w); w = maxW; }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      canvas.toBlob(blob => {
+        resolve(blob || file);
+      }, 'image/jpeg', quality);
+    };
+    img.onerror = () => resolve(file);
+    img.src = URL.createObjectURL(file);
+  });
+}
+
 async function uploadImageFile(file, folder = 'misc') {
+  const compressed = await compressImage(file);
   try {
     const res = await fetch('/api/upload', {
       method: 'POST',
-      headers: { 'Content-Type': file.type, 'X-Filename': file.name, 'X-Folder': folder },
-      body: file,
+      headers: { 'Content-Type': 'image/jpeg', 'X-Filename': file.name.replace(/\.\w+$/, '.jpg'), 'X-Folder': folder },
+      body: compressed,
     });
     if (!res.ok) throw new Error('Servidor não disponível');
     const json = await res.json();
@@ -609,7 +629,7 @@ async function uploadImageFile(file, folder = 'misc') {
     const src = await new Promise(resolve => {
       const reader = new FileReader();
       reader.onload = e => resolve(e.target.result);
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(compressed);
     });
     return { src, name: file.name };
   }
