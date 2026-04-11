@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 
-const VALID_STATUSES = ['pendente', 'processado', 'enviado', 'entregue'];
+const VALID_STATUSES = ['pendente', 'processado', 'enviado', 'entregue', 'cancelado'];
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');

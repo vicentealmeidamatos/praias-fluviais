@@ -2942,6 +2942,7 @@ async function renderEncomendas(container) {
             <option value="processado">Em processamento</option>
             <option value="enviado">Enviado</option>
             <option value="entregue">Entregue</option>
+            <option value="cancelado">Cancelado</option>
           </select>
         </div>
         <div class="flex items-center gap-2">
@@ -3033,6 +3034,7 @@ function renderEncomendasContent() {
     processado: 'bg-praia-teal-50 text-praia-teal-700',
     enviado:    'bg-blue-50 text-blue-700',
     entregue:   'bg-praia-green-500/10 text-praia-green-600',
+    cancelado:  'bg-red-50 text-red-600',
   };
 
   function fmtPrice(cents) {
@@ -3080,6 +3082,7 @@ function renderEncomendasContent() {
                   <option value="processado" ${currentStatus === 'processado' ? 'selected' : ''}>Em processamento</option>
                   <option value="enviado" ${currentStatus === 'enviado' ? 'selected' : ''}>Enviado</option>
                   <option value="entregue" ${currentStatus === 'entregue' ? 'selected' : ''}>Entregue</option>
+                  <option value="cancelado" ${currentStatus === 'cancelado' ? 'selected' : ''}>Cancelado</option>
                 </select>
                 <button onclick="toggleOrderExpand('${o.id}')" class="admin-btn py-1 px-3 text-xs" id="order-toggle-${o.id}">▼ Detalhes</button>
               </div>

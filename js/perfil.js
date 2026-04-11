@@ -624,12 +624,14 @@ document.addEventListener('DOMContentLoaded', async () => {
           processado:  'bg-praia-teal-50 text-praia-teal-700',
           enviado:     'bg-blue-50 text-blue-700',
           entregue:    'bg-praia-green-500/10 text-praia-green-600',
+          cancelado:   'bg-red-50 text-red-600',
         };
         const statusLabels = {
           pendente:   'Pendente',
           processado: 'Em processamento',
           enviado:    'Enviado',
           entregue:   'Entregue',
+          cancelado:  'Cancelado',
         };
 
         function fmtPrice(cents) {
