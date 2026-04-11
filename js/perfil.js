@@ -610,7 +610,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           container.innerHTML = `
             <div class="text-center py-12">
               <i data-lucide="package" class="w-12 h-12 mx-auto text-praia-sand-300 mb-3"></i>
-              <p class="font-display text-sm font-semibold text-praia-sand-400">Ainda não fizeste nenhuma encomenda</p>
+              <p class="font-display text-sm font-semibold text-praia-sand-400">Ainda não fez nenhuma encomenda</p>
               <a href="loja.html" class="inline-flex items-center gap-2 mt-4 bg-praia-teal-800 text-white font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-xl hover:bg-praia-teal-700 transition-colors">
                 <i data-lucide="shopping-bag" class="w-4 h-4"></i> Ver loja
               </a>

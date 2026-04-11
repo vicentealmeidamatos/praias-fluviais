@@ -2910,12 +2910,49 @@ function deleteProduct(productId) {
 
 // ─── Encomendas (leitura do Supabase) ────────────────────────────────────────
 
+// Pending status changes: { orderId: newStatus }
+window._ordersPendingChanges = {};
+window._ordersOriginalStatus = {};
+window._ordersFilterStatus = 'all';
+window._ordersSortOrder = 'newest';
+
 async function renderEncomendas(container) {
   container.innerHTML = `
     <div class="p-6">
       <div class="flex items-center justify-between mb-6">
         <h2 class="font-display text-xl font-bold text-praia-teal-800">Encomendas</h2>
-        <button onclick="renderEncomendas(document.getElementById('admin-content'))" class="admin-btn px-4 py-2">↺ Atualizar</button>
+        <div class="flex items-center gap-2">
+          <button id="orders-save-btn" onclick="saveOrderChanges()" class="hidden admin-btn px-4 py-2 !bg-praia-green-500 !text-white hover:!bg-praia-green-600" style="background:#43A047;color:#fff;">
+            Gravar alterações <span id="orders-pending-count"></span>
+          </button>
+          <button onclick="discardOrderChanges()" id="orders-discard-btn" class="hidden admin-btn px-4 py-2 !text-red-600 !border-red-200 hover:!bg-red-50" style="color:#dc2626;border-color:#fecaca;">
+            Descartar
+          </button>
+          <button onclick="renderEncomendas(document.getElementById('admin-content'))" class="admin-btn px-4 py-2">↺ Atualizar</button>
+        </div>
+      </div>
+      <!-- Filters -->
+      <div class="flex flex-wrap items-center gap-3 mb-4">
+        <div class="flex items-center gap-2">
+          <label class="font-display text-xs font-semibold text-praia-sand-500 uppercase tracking-wider">Estado:</label>
+          <select id="orders-filter-status" onchange="window._ordersFilterStatus=this.value;renderEncomendasContent()"
+            class="font-display text-xs px-3 py-1.5 rounded-lg border border-praia-sand-200 bg-white">
+            <option value="all">Todos</option>
+            <option value="pendente">Pendente</option>
+            <option value="processado">Em processamento</option>
+            <option value="enviado">Enviado</option>
+            <option value="entregue">Entregue</option>
+          </select>
+        </div>
+        <div class="flex items-center gap-2">
+          <label class="font-display text-xs font-semibold text-praia-sand-500 uppercase tracking-wider">Ordenar:</label>
+          <select id="orders-sort-order" onchange="window._ordersSortOrder=this.value;renderEncomendasContent()"
+            class="font-display text-xs px-3 py-1.5 rounded-lg border border-praia-sand-200 bg-white">
+            <option value="newest">Mais recentes</option>
+            <option value="oldest">Mais antigas</option>
+          </select>
+        </div>
+        <span id="orders-count-label" class="font-display text-xs text-praia-sand-400 ml-auto"></span>
       </div>
       <div id="orders-admin-content">
         <div class="flex items-center justify-center py-20">
@@ -2941,13 +2978,55 @@ async function renderEncomendas(container) {
   }
 
   window._adminOrders = orders || [];
+  window._ordersPendingChanges = {};
+  window._ordersOriginalStatus = {};
+  (orders || []).forEach(o => { window._ordersOriginalStatus[o.id] = o.status; });
+
+  // Restore filter state
+  const filterEl = document.getElementById('orders-filter-status');
+  const sortEl = document.getElementById('orders-sort-order');
+  if (filterEl) filterEl.value = window._ordersFilterStatus;
+  if (sortEl) sortEl.value = window._ordersSortOrder;
+
   renderEncomendasContent();
 }
 
+function _getFilteredOrders() {
+  let orders = [...(window._adminOrders || [])];
+  // Apply status filter
+  if (window._ordersFilterStatus !== 'all') {
+    orders = orders.filter(o => {
+      const currentStatus = window._ordersPendingChanges[o.id] ?? o.status;
+      return currentStatus === window._ordersFilterStatus;
+    });
+  }
+  // Apply sort
+  orders.sort((a, b) => {
+    const da = new Date(a.created_at).getTime();
+    const db = new Date(b.created_at).getTime();
+    return window._ordersSortOrder === 'oldest' ? da - db : db - da;
+  });
+  return orders;
+}
+
+function _updateOrderButtons() {
+  const pending = Object.keys(window._ordersPendingChanges).length;
+  const saveBtn = document.getElementById('orders-save-btn');
+  const discardBtn = document.getElementById('orders-discard-btn');
+  const countEl = document.getElementById('orders-pending-count');
+  if (saveBtn) saveBtn.classList.toggle('hidden', pending === 0);
+  if (discardBtn) discardBtn.classList.toggle('hidden', pending === 0);
+  if (countEl) countEl.textContent = pending > 0 ? `(${pending})` : '';
+}
+
 function renderEncomendasContent() {
-  const orders = window._adminOrders || [];
+  const orders = _getFilteredOrders();
+  const allOrders = window._adminOrders || [];
   const container = document.getElementById('orders-admin-content');
   if (!container) return;
+
+  const countLabel = document.getElementById('orders-count-label');
+  if (countLabel) countLabel.textContent = `${orders.length} de ${allOrders.length} encomenda${allOrders.length !== 1 ? 's' : ''}`;
 
   const statusColors = {
     pendente:   'bg-praia-sand-100 text-praia-sand-700',
@@ -2963,122 +3042,155 @@ function renderEncomendasContent() {
     return new Date(dt).toLocaleString('pt-PT', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
   }
 
-  if (!orders.length) {
+  if (!allOrders.length) {
     container.innerHTML = `<div class="text-center py-20 text-praia-sand-400 font-display">Ainda não há encomendas.</div>`;
     return;
   }
 
-  container.innerHTML = `
-    <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-praia-sand-100">
-      <table class="w-full text-sm">
-        <thead>
-          <tr class="bg-praia-teal-800 text-white">
-            <th class="text-left px-4 py-3 font-display text-xs uppercase tracking-wider font-semibold">ID</th>
-            <th class="text-left px-4 py-3 font-display text-xs uppercase tracking-wider font-semibold">Email</th>
-            <th class="text-left px-4 py-3 font-display text-xs uppercase tracking-wider font-semibold">Data</th>
-            <th class="text-left px-4 py-3 font-display text-xs uppercase tracking-wider font-semibold">Total</th>
-            <th class="text-left px-4 py-3 font-display text-xs uppercase tracking-wider font-semibold">Estado</th>
-            <th class="text-left px-4 py-3 font-display text-xs uppercase tracking-wider font-semibold">Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${orders.map((o, i) => `
-            <tr class="${i % 2 === 0 ? 'bg-white' : 'bg-praia-sand-50'} border-b border-praia-sand-100" id="order-row-${o.id}">
-              <td class="px-4 py-3">
-                <span class="font-display font-bold text-praia-teal-800 text-xs">#${o.id.slice(0, 8).toUpperCase()}</span>
-              </td>
-              <td class="px-4 py-3 text-praia-sand-600 font-display text-xs">${o.email || '—'}</td>
-              <td class="px-4 py-3 text-praia-sand-500 font-display text-xs">${fmtDate(o.created_at)}</td>
-              <td class="px-4 py-3 font-display font-bold text-praia-teal-800">${fmtPrice(o.total)}</td>
-              <td class="px-4 py-3">
-                <select onchange="updateOrderStatus('${o.id}', this.value)"
-                  class="font-display text-xs px-2 py-1 rounded-lg border border-praia-sand-200 ${statusColors[o.status] || ''}">
-                  <option value="pendente" ${o.status === 'pendente' ? 'selected' : ''}>Pendente</option>
-                  <option value="processado" ${o.status === 'processado' ? 'selected' : ''}>Em processamento</option>
-                  <option value="enviado" ${o.status === 'enviado' ? 'selected' : ''}>Enviado</option>
-                  <option value="entregue" ${o.status === 'entregue' ? 'selected' : ''}>Entregue</option>
-                </select>
-              </td>
-              <td class="px-4 py-3">
-                <button onclick="viewOrderDetails('${o.id}')" class="admin-btn py-1 px-3 text-xs">Ver detalhes</button>
-              </td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    </div>
+  if (!orders.length) {
+    container.innerHTML = `<div class="text-center py-12 text-praia-sand-400 font-display text-sm">Nenhuma encomenda corresponde aos filtros selecionados.</div>`;
+    return;
+  }
 
-    <!-- Order detail modal -->
-    <div id="order-detail-modal" class="hidden fixed inset-0 z-[3000] flex items-center justify-center px-4 bg-black/50 backdrop-blur-sm">
-      <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6">
-        <div class="flex items-center justify-between mb-4">
-          <h3 class="font-display font-bold text-lg text-praia-teal-800" id="order-detail-title">Detalhes</h3>
-          <button onclick="document.getElementById('order-detail-modal').classList.add('hidden')" class="text-praia-sand-400 hover:text-praia-sand-600 text-xl font-bold">×</button>
-        </div>
-        <div id="order-detail-body"></div>
-      </div>
+  container.innerHTML = `
+    <div class="space-y-3">
+      ${orders.map(o => {
+        const currentStatus = window._ordersPendingChanges[o.id] ?? o.status;
+        const isPending = o.id in window._ordersPendingChanges;
+        const items = Array.isArray(o.items) ? o.items : [];
+        const addr = o.shipping_address || {};
+        const addrParts = [addr.name, addr.line1, addr.line2, [addr.postal_code, addr.city].filter(Boolean).join(' '), addr.country || 'PT'].filter(Boolean);
+
+        return `
+          <div class="bg-white rounded-2xl border ${isPending ? 'border-praia-green-500 ring-2 ring-praia-green-500/20' : 'border-praia-sand-100'} shadow-sm overflow-hidden" id="order-card-${o.id}">
+            <!-- Header -->
+            <div class="flex items-center justify-between px-5 py-4 border-b border-praia-sand-100 bg-praia-sand-50/50">
+              <div class="flex items-center gap-4">
+                <div>
+                  <span class="font-display font-bold text-praia-teal-800 text-sm">#${o.id.slice(0, 8).toUpperCase()}</span>
+                  <p class="font-display text-xs text-praia-sand-400 mt-0.5">${fmtDate(o.created_at)}</p>
+                </div>
+                <span class="font-display font-bold text-praia-teal-800 text-base">${fmtPrice(o.total)}</span>
+              </div>
+              <div class="flex items-center gap-3">
+                ${isPending ? '<span class="font-display text-[10px] uppercase tracking-wider font-bold text-praia-green-600">alterado</span>' : ''}
+                <select onchange="updateOrderStatus('${o.id}', this.value)"
+                  class="font-display text-xs px-3 py-1.5 rounded-lg border border-praia-sand-200 ${statusColors[currentStatus] || ''}">
+                  <option value="pendente" ${currentStatus === 'pendente' ? 'selected' : ''}>Pendente</option>
+                  <option value="processado" ${currentStatus === 'processado' ? 'selected' : ''}>Em processamento</option>
+                  <option value="enviado" ${currentStatus === 'enviado' ? 'selected' : ''}>Enviado</option>
+                  <option value="entregue" ${currentStatus === 'entregue' ? 'selected' : ''}>Entregue</option>
+                </select>
+                <button onclick="toggleOrderExpand('${o.id}')" class="admin-btn py-1 px-3 text-xs" id="order-toggle-${o.id}">▼ Detalhes</button>
+              </div>
+            </div>
+            <!-- Quick info row -->
+            <div class="px-5 py-2.5 flex flex-wrap items-center gap-x-6 gap-y-1 text-xs font-display border-b border-praia-sand-50">
+              <span class="text-praia-sand-500"><strong class="text-praia-teal-800">Email:</strong> ${o.email || '—'}</span>
+              <span class="text-praia-sand-500"><strong class="text-praia-teal-800">Envio:</strong> ${o.shipping_zone === 'ilhas' ? 'Açores/Madeira' : 'Continental'} ${o.shipping_price === 0 ? '(grátis)' : fmtPrice(o.shipping_price)}</span>
+              <span class="text-praia-sand-500"><strong class="text-praia-teal-800">Itens:</strong> ${items.reduce((s, i) => s + i.quantity, 0)}</span>
+            </div>
+            <!-- Expandable details -->
+            <div id="order-expand-${o.id}" class="hidden">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 px-5 py-4">
+                <!-- Morada de envio -->
+                <div>
+                  <p class="text-[10px] uppercase tracking-wider text-praia-sand-400 mb-1.5 font-display font-semibold">Morada de envio</p>
+                  <div class="text-sm text-praia-teal-800 font-display space-y-0.5">
+                    ${addrParts.map(p => `<p>${p}</p>`).join('')}
+                  </div>
+                </div>
+                <!-- Itens -->
+                <div>
+                  <p class="text-[10px] uppercase tracking-wider text-praia-sand-400 mb-1.5 font-display font-semibold">Itens</p>
+                  <div class="space-y-1">
+                    ${items.map(item => `
+                      <div class="flex justify-between text-sm font-display">
+                        <span class="text-praia-sand-600">${item.name}${item.variant && item.variant !== 'sem-variante' ? ` <span class="text-praia-sand-400 text-xs">(${item.variant})</span>` : ''} × ${item.quantity}</span>
+                        <span class="font-semibold text-praia-teal-800">${item.price === 0 ? 'Grátis' : fmtPrice(item.price * item.quantity)}</span>
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+              </div>
+              <!-- Totals -->
+              <div class="px-5 py-3 bg-praia-sand-50 border-t border-praia-sand-100">
+                <div class="flex flex-wrap gap-x-6 gap-y-1 text-xs font-display">
+                  <span class="text-praia-sand-500">Subtotal: <strong class="text-praia-teal-800">${fmtPrice(o.subtotal)}</strong></span>
+                  <span class="text-praia-sand-500">Envio: <strong class="text-praia-teal-800">${o.shipping_price === 0 ? 'Grátis' : fmtPrice(o.shipping_price)}</strong></span>
+                  <span class="text-praia-sand-500">Total: <strong class="text-praia-teal-800 text-sm">${fmtPrice(o.total)}</strong></span>
+                  <span class="text-praia-sand-400 ml-auto">Stripe: ${o.stripe_session_id ? o.stripe_session_id.slice(0, 20) + '…' : '—'}</span>
+                </div>
+              </div>
+            </div>
+          </div>`;
+      }).join('')}
     </div>`;
+
+  _updateOrderButtons();
 }
 
-async function updateOrderStatus(orderId, newStatus) {
-  const sb = getAdminSb();
-  if (!sb) return;
-  const { error } = await sb.from('orders').update({ status: newStatus }).eq('id', orderId);
-  if (error) { toast('Erro ao atualizar: ' + error.message, 'error'); return; }
+function toggleOrderExpand(orderId) {
+  const el = document.getElementById('order-expand-' + orderId);
+  const btn = document.getElementById('order-toggle-' + orderId);
+  if (!el) return;
+  const isHidden = el.classList.contains('hidden');
+  el.classList.toggle('hidden');
+  if (btn) btn.textContent = isHidden ? '▲ Fechar' : '▼ Detalhes';
+}
+
+function updateOrderStatus(orderId, newStatus) {
+  const original = window._ordersOriginalStatus[orderId];
+  if (newStatus === original) {
+    delete window._ordersPendingChanges[orderId];
+  } else {
+    window._ordersPendingChanges[orderId] = newStatus;
+  }
+  // Update local data too
   const order = (window._adminOrders || []).find(o => o.id === orderId);
   if (order) order.status = newStatus;
-  toast('Estado atualizado.', 'success');
+  // Re-render to update card border + buttons
+  renderEncomendasContent();
 }
 
-function viewOrderDetails(orderId) {
-  const order = (window._adminOrders || []).find(o => o.id === orderId);
-  if (!order) return;
+async function saveOrderChanges() {
+  const changes = window._ordersPendingChanges;
+  const ids = Object.keys(changes);
+  if (!ids.length) { toast('Não existem alterações por gravar.', 'info'); return; }
+  if (!confirm(`Gravar ${ids.length} alteraç${ids.length === 1 ? 'ão' : 'ões'} de estado? As alterações serão visíveis para os utilizadores.`)) return;
 
-  function fmtPrice(cents) { return (cents / 100).toFixed(2).replace('.', ',') + '€'; }
-  const items = Array.isArray(order.items) ? order.items : [];
-  const addr  = order.shipping_address || {};
+  const sb = getAdminSb();
+  if (!sb) { toast('Supabase não configurado.', 'error'); return; }
 
-  document.getElementById('order-detail-title').textContent = `#${order.id.slice(0, 8).toUpperCase()}`;
-  document.getElementById('order-detail-body').innerHTML = `
-    <div class="space-y-4 text-sm font-display">
-      <div>
-        <p class="text-[10px] uppercase tracking-wider text-praia-sand-400 mb-1">Email</p>
-        <p class="text-praia-teal-800 font-semibold">${order.email}</p>
-      </div>
-      <div>
-        <p class="text-[10px] uppercase tracking-wider text-praia-sand-400 mb-1">Morada</p>
-        <p class="text-praia-teal-800">${addr.name || ''}<br>${addr.line1 || ''}${addr.line2 ? ', ' + addr.line2 : ''}<br>${addr.postal_code || ''} ${addr.city || ''}<br>${addr.country || 'PT'}</p>
-      </div>
-      <div>
-        <p class="text-[10px] uppercase tracking-wider text-praia-sand-400 mb-2">Itens</p>
-        <div class="space-y-1">
-          ${items.map(item => `
-            <div class="flex justify-between">
-              <span class="text-praia-sand-600">${item.name}${item.variant && item.variant !== 'sem-variante' ? ` (${item.variant})` : ''} × ${item.quantity}</span>
-              <span class="font-semibold text-praia-teal-800">${item.price === 0 ? 'Grátis' : fmtPrice(item.price * item.quantity)}</span>
-            </div>
-          `).join('')}
-        </div>
-      </div>
-      <div class="border-t border-praia-sand-100 pt-3 space-y-1">
-        <div class="flex justify-between text-praia-sand-500">
-          <span>Subtotal</span><span>${fmtPrice(order.subtotal)}</span>
-        </div>
-        <div class="flex justify-between text-praia-sand-500">
-          <span>Envio (${order.shipping_zone === 'ilhas' ? 'Açores/Madeira' : 'Continental'})</span>
-          <span>${order.shipping_price === 0 ? 'Grátis' : fmtPrice(order.shipping_price)}</span>
-        </div>
-        <div class="flex justify-between font-bold text-praia-teal-800 text-base">
-          <span>Total</span><span>${fmtPrice(order.total)}</span>
-        </div>
-      </div>
-      <div>
-        <p class="text-[10px] uppercase tracking-wider text-praia-sand-400 mb-1">Stripe Session</p>
-        <p class="text-praia-sand-500 text-xs break-all">${order.stripe_session_id}</p>
-      </div>
-    </div>`;
+  let errors = 0;
+  for (const id of ids) {
+    const { error } = await sb.from('orders').update({ status: changes[id] }).eq('id', id);
+    if (error) { errors++; console.error('Erro ao gravar encomenda', id, error); }
+  }
 
-  document.getElementById('order-detail-modal').classList.remove('hidden');
+  if (errors) {
+    toast(`${errors} erro(s) ao gravar. Verifique a consola.`, 'error');
+  } else {
+    // Update originals and clear pending
+    ids.forEach(id => { window._ordersOriginalStatus[id] = changes[id]; });
+    window._ordersPendingChanges = {};
+    _updateOrderButtons();
+    renderEncomendasContent();
+    toast(`${ids.length} encomenda${ids.length !== 1 ? 's' : ''} atualizada${ids.length !== 1 ? 's' : ''} com sucesso.`, 'success');
+  }
+}
+
+function discardOrderChanges() {
+  const ids = Object.keys(window._ordersPendingChanges);
+  if (!ids.length) return;
+  // Revert local data
+  ids.forEach(id => {
+    const order = (window._adminOrders || []).find(o => o.id === id);
+    if (order) order.status = window._ordersOriginalStatus[id];
+  });
+  window._ordersPendingChanges = {};
+  renderEncomendasContent();
+  toast('Alterações descartadas.', 'info');
 }
 
 // ─── Editor Visual — Editor Visual Inline ───
