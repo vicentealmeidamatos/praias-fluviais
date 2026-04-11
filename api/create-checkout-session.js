@@ -29,8 +29,11 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Carrinho vazio.' });
     }
 
-    // Ler produtos do ficheiro (server-authoritative)
+    // Ler produtos e praias do ficheiro (server-authoritative)
     const products = JSON.parse(readFileSync(join(process.cwd(), 'data', 'products.json'), 'utf8'));
+    let beaches = [];
+    try { beaches = JSON.parse(readFileSync(join(process.cwd(), 'data', 'beaches.json'), 'utf8')); } catch {}
+    const getBeachName = (id) => { const b = beaches.find(b => b.id === id); return b ? b.name : id; };
 
     const lineItems = [];
     let subtotal = 0;
@@ -52,6 +55,7 @@ export default async function handler(req, res) {
       const qty = Math.max(1, Math.min(99, parseInt(item.quantity) || 1));
       const unitPrice = product.price;
       const variantLabel = item.variant && item.variant !== 'sem-variante' ? ` (${item.variant})` : '';
+      const beachLabel = item.beach ? ` — ${getBeachName(item.beach)}` : '';
 
       subtotal += unitPrice * qty;
 
@@ -60,7 +64,7 @@ export default async function handler(req, res) {
         price_data: {
           currency: 'eur',
           product_data: {
-            name: `${product.name}${variantLabel}`,
+            name: `${product.name}${beachLabel}${variantLabel}`,
             images: (() => {
               const img = product.images?.[0];
               if (!img) return [];
@@ -80,12 +84,14 @@ export default async function handler(req, res) {
       subtotal: String(subtotal),
       items_json: JSON.stringify(items.map(item => {
         const p = products.find(pr => pr.id === item.product_id);
+        const beachName = item.beach ? getBeachName(item.beach) : null;
         return {
           product_id: item.product_id,
           variant: item.variant || 'sem-variante',
           quantity: item.quantity,
           price: p?.price ?? 0,
-          name: p?.name ?? item.product_id,
+          name: beachName ? `${p?.name ?? item.product_id} — ${beachName}` : (p?.name ?? item.product_id),
+          beach: item.beach || null,
         };
       })),
     };

@@ -2,11 +2,12 @@
 
 let _cartItems = [];
 let _products = [];
+let _beaches = [];
 
 // ─── Inicialização ────────────────────────────────────────────────────────────
 
 async function initCarrinho() {
-  await loadProducts();
+  await Promise.all([loadProducts(), loadBeaches()]);
 
   const user = await authGetUser();
   if (!user) {
@@ -26,6 +27,19 @@ async function loadProducts() {
     const res = await fetch('data/products.json');
     _products = (await res.json()).filter(p => !p.hidden);
   } catch { _products = []; }
+}
+
+async function loadBeaches() {
+  try {
+    const res = await fetch('data/beaches.json');
+    _beaches = await res.json();
+  } catch { _beaches = []; }
+}
+
+function getBeachName(beachId) {
+  if (!beachId) return null;
+  const b = _beaches.find(b => b.id === beachId);
+  return b ? b.name : beachId;
 }
 
 async function loadCartItems(userId) {
@@ -133,6 +147,7 @@ function renderCartItem(item) {
       <div class="flex-1 min-w-0">
         <h3 class="font-display font-bold text-praia-teal-800 text-sm leading-snug">${product.name}</h3>
         ${variantDisplay ? `<p class="text-praia-sand-400 text-xs font-display mt-0.5">Tamanho: <span class="font-semibold">${variantDisplay}</span></p>` : ''}
+        ${item.beach ? `<p class="text-praia-sand-400 text-xs font-display mt-0.5">Praia: <span class="font-semibold text-praia-teal-700">${getBeachName(item.beach)}</span></p>` : ''}
         <div class="flex items-center justify-between mt-3">
           <div class="flex items-center gap-2">
             <button onclick="changeQty('${item.id}', -1)" class="w-7 h-7 rounded-lg bg-praia-sand-100 hover:bg-praia-sand-200 flex items-center justify-center text-praia-sand-600 font-bold text-sm transition-colors">−</button>
@@ -269,6 +284,7 @@ async function proceedToCheckout() {
         product_id: item.product_id,
         variant: item.variant,
         quantity: item.quantity,
+        beach: item.beach || null,
       })),
       user_id: user?.id ?? null,
     };
