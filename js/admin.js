@@ -3107,12 +3107,19 @@ function renderEncomendasContent() {
                 <div>
                   <p class="text-[10px] uppercase tracking-wider text-praia-sand-400 mb-1.5 font-display font-semibold">Itens</p>
                   <div class="space-y-1">
-                    ${items.map(item => `
-                      <div class="flex justify-between text-sm font-display">
-                        <span class="text-praia-sand-600">${item.name}${item.variant && item.variant !== 'sem-variante' ? ` <span class="text-praia-sand-400 text-xs">(${item.variant})</span>` : ''} × ${item.quantity}</span>
-                        <span class="font-semibold text-praia-teal-800">${item.price === 0 ? 'Grátis' : fmtPrice(item.price * item.quantity)}</span>
-                      </div>
-                    `).join('')}
+                    ${items.map(item => {
+                      const details = [];
+                      if (item.variant && item.variant !== 'sem-variante') details.push(`Tamanho: ${item.variant}`);
+                      if (item.beach) details.push(`Praia: ${item.beach}`);
+                      return `
+                      <div class="flex justify-between text-sm font-display items-start gap-4">
+                        <div>
+                          <span class="text-praia-sand-600">${item.name} × ${item.quantity}</span>
+                          ${details.length ? `<div class="text-[11px] text-praia-teal-600 mt-0.5">${details.join(' · ')}</div>` : ''}
+                        </div>
+                        <span class="font-semibold text-praia-teal-800 flex-shrink-0">${item.price === 0 ? 'Grátis' : fmtPrice(item.price * item.quantity)}</span>
+                      </div>`;
+                    }).join('')}
                   </div>
                 </div>
               </div>
