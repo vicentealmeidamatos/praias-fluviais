@@ -886,9 +886,7 @@
     "services": {
       "wc": false,
       "bar": false,
-      "grills": false,
       "camping": false,
-      "parking": false,
       "blueFlag": false,
       "lifeguard": false,
       "nacional2": false,
@@ -903,12 +901,12 @@
     "freguesia": "",
     "thumbnail": "brand_assets/fotos/FOTOS PRAIA DO ANO/Alverangel TOMAR.jpg",
     "coordinates": {
-      "lat": 39.6015,
-      "lng": -8.4145
+      "lat": 39.54858,
+      "lng": -8.301562
     },
-    "description": "Descubra esta praia fluvial no concelho de Tomar. Informações, serviços e localização disponíveis em breve.",
+    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Tomar.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
     "municipality": "Tomar",
-    "waterQuality": "",
+    "waterQuality": "excelente",
     "passportStamp": true
   },
   {
@@ -2005,8 +2003,8 @@
     "freguesia": "",
     "thumbnail": "brand_assets/fotos/FOTOS PRAIA DO ANO/Cavadinho BRAGA.jpg",
     "coordinates": {
-      "lat": 41.59375,
-      "lng": -8.4655
+      "lat": 41.616639,
+      "lng": -8.356556
     },
     "description": "Descubra esta praia fluvial no concelho de Braga. Informações, serviços e localização disponíveis em breve.",
     "municipality": "Braga",
@@ -3449,8 +3447,8 @@
     "freguesia": "",
     "thumbnail": "brand_assets/fotos/FOTOS PRAIA DO ANO/Merelim - São Paio BRAGA.jpg",
     "coordinates": {
-      "lat": 41.616639,
-      "lng": -8.356556
+      "lat": 41.59375,
+      "lng": -8.4655
     },
     "description": "Descubra esta praia fluvial no concelho de Braga. Informações, serviços e localização disponíveis em breve.",
     "municipality": "Braga",
@@ -4181,7 +4179,7 @@
   },
   {
     "id": "praia-fluvial-de-peneda-pego-escuro",
-    "name": "Praia Fluvial da Peneda-Pêgo Escuro",
+    "name": "Praia Fluvial da Peneda - Pego Escuro",
     "type": "praia_fluvial",
     "river": "Rio Ceira",
     "photos": [
@@ -4192,9 +4190,7 @@
     "services": {
       "wc": false,
       "bar": false,
-      "grills": false,
       "camping": false,
-      "parking": false,
       "blueFlag": false,
       "lifeguard": false,
       "nacional2": false,
@@ -4212,9 +4208,9 @@
       "lat": 40.154333,
       "lng": -8.112139
     },
-    "description": "Descubra esta praia fluvial no concelho de Góis. Informações, serviços e localização disponíveis em breve.",
+    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Góis.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
     "municipality": "Góis",
-    "waterQuality": "",
+    "waterQuality": "excelente",
     "passportStamp": true
   },
   {
@@ -6269,7 +6265,7 @@
   },
   {
     "id": "praia-fluvial-de-vale-das-eguas-insua",
-    "name": "Praia Fluvial de Vale das Éguas",
+    "name": "Praia Fluvial de Vale das Éguas (Ínsua)",
     "type": "praia_fluvial",
     "river": "Rio Côa",
     "photos": [
@@ -6280,9 +6276,7 @@
     "services": {
       "wc": false,
       "bar": false,
-      "grills": false,
       "camping": false,
-      "parking": false,
       "blueFlag": false,
       "lifeguard": false,
       "nacional2": false,
@@ -6300,9 +6294,9 @@
       "lat": 40.435855,
       "lng": -7.024325
     },
-    "description": "Descubra esta praia fluvial no concelho de Sabugal. Informações, serviços e localização disponíveis em breve.",
+    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Sabugal.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
     "municipality": "Sabugal",
-    "waterQuality": "",
+    "waterQuality": "excelente",
     "passportStamp": true
   },
   {
