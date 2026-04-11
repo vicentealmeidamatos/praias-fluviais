@@ -20,7 +20,7 @@ async function initLoja() {
 async function loadProducts() {
   try {
     const res = await fetch('data/products.json');
-    _products = await res.json();
+    _products = (await res.json()).filter(p => !p.hidden);
   } catch (e) {
     _products = [];
   }
@@ -29,7 +29,7 @@ async function loadProducts() {
 async function loadBeaches() {
   try {
     const res = await fetch('data/beaches.json');
-    const data = await res.json();
+    const data = (await res.json()).filter(b => !b.hidden);
     _beaches = data.map(b => ({ id: b.id, name: b.name })).sort((a, b) => a.name.localeCompare(b.name, 'pt'));
   } catch (e) {
     _beaches = [];

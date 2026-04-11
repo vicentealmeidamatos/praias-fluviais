@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // dataset 'beaches' do admin via data-content-bind="beaches:<idx>.<campo>"
   const beachIdx = beaches.findIndex(b => b.id === beachId);
   const beach = beachIdx >= 0 ? beaches[beachIdx] : null;
-  if (!beach) {
+  if (!beach || beach.hidden) {
     mainContent.innerHTML = '<div class="text-center py-20"><h2 class="font-display text-2xl font-bold text-praia-teal-800 mb-4">Praia não encontrada</h2><a href="rede.html" class="btn-primary inline-flex items-center gap-2 bg-praia-teal-800 text-praia-yellow-400 px-6 py-3 rounded-full font-display font-bold text-sm uppercase tracking-wider">Ver Mapa</a></div>';
     return;
   }

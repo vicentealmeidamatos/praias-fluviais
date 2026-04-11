@@ -610,7 +610,7 @@
         <div class="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12">
           <!-- Col 1 — Brand -->
           <div>
-            <img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-8 mb-6">
+            <img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-14 mb-6 -ml-1">
             <p class="text-white/40 text-sm leading-relaxed mb-6">Guia das Praias Fluviais — Zonas Balneares e de Lazer de Portugal desde 2001.</p>
 
           </div>
@@ -706,7 +706,7 @@
     let _beachesLookup = null;
     async function getBeachLink(name) {
       if (!_beachesLookup) {
-        try { _beachesLookup = await (await fetch('data/beaches.json')).json(); } catch(e) { _beachesLookup = []; }
+        try { _beachesLookup = (await (await fetch('data/beaches.json')).json()).filter(b => !b.hidden); } catch(e) { _beachesLookup = []; }
       }
       const norm = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
       const match = _beachesLookup.find(b => norm(b.name) === norm(name))

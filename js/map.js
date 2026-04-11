@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   let beaches = [];
   try {
     const res = await fetch('data/beaches.json');
-    beaches = await res.json();
+    beaches = (await res.json()).filter(b => !b.hidden);
   } catch {
     mapEl.innerHTML = '<p class="p-8 text-center text-praia-sand-500">Erro ao carregar dados das praias.</p>';
     return;

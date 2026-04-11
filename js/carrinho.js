@@ -24,7 +24,7 @@ async function initCarrinho() {
 async function loadProducts() {
   try {
     const res = await fetch('data/products.json');
-    _products = await res.json();
+    _products = (await res.json()).filter(p => !p.hidden);
   } catch { _products = []; }
 }
 

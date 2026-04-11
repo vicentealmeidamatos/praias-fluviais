@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   let beaches = [];
   try {
     const r = await fetch('data/beaches.json');
-    beaches = await r.json();
+    beaches = (await r.json()).filter(b => !b.hidden);
   } catch {
     console.error('Failed to load beaches.json');
     return;

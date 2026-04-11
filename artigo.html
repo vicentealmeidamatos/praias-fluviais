@@ -197,7 +197,7 @@
         <div class="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12">
           <!-- Col 1 — Brand -->
           <div>
-            <img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-8 mb-6">
+            <img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-14 mb-6 -ml-1">
             <p class="text-white/40 text-sm leading-relaxed mb-6">Guia das Praias Fluviais — Zonas Balneares e de Lazer de Portugal desde 2001.</p>
 
           </div>
@@ -272,7 +272,7 @@
       }
 
       const res = await fetch('data/articles.json');
-      const articles = await res.json();
+      const articles = (await res.json()).filter(a => !a.hidden);
       const articleIdx = articles.findIndex(a => a.slug === slug);
       const article = articleIdx >= 0 ? articles[articleIdx] : null;
 

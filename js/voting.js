@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   let beaches = [];
   try {
-    beaches = await (await fetch('data/beaches.json')).json();
+    beaches = (await (await fetch('data/beaches.json')).json()).filter(b => !b.hidden);
   } catch {
     grid.innerHTML = '<p class="col-span-full text-center text-praia-sand-500 py-10">Erro ao carregar praias.</p>';
     return;

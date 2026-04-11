@@ -901,8 +901,9 @@ function renderBeaches(container) {
                 const isBalnear = b.type === 'zona_balnear';
                 const activeServices = ALL_SERVICES.filter(s => b.services?.[s.key]).map(s => s.label).join(', ') || '—';
                 return `
-                <tr class="border-t border-praia-sand-100 hover:bg-praia-sand-50 admin-table-row" data-search="${(b.name + ' ' + b.municipality + ' ' + (b.freguesia||'') + ' ' + (b.district||'')).toLowerCase()}">
+                <tr class="border-t border-praia-sand-100 hover:bg-praia-sand-50 admin-table-row${b.hidden ? ' opacity-50' : ''}" data-search="${(b.name + ' ' + b.municipality + ' ' + (b.freguesia||'') + ' ' + (b.district||'')).toLowerCase()}" style="${b.hidden ? 'background:repeating-linear-gradient(135deg,transparent,transparent 10px,rgba(0,0,0,.02) 10px,rgba(0,0,0,.02) 20px);' : ''}">
                   <td class="px-4 py-3 font-semibold text-praia-teal-800" style="display:flex;align-items:center;gap:8px;">
+                    ${b.hidden ? '<span style="display:inline-flex;align-items:center;padding:1px 6px;border-radius:6px;font-size:9px;font-weight:700;background:#f1f1f1;color:#999;border:1px solid #ddd;margin-right:2px;">OCULTO</span>' : ''}
                     ${b.thumbnail ? `<img src="${escHtml(b.thumbnail)}" style="width:36px;height:24px;object-fit:cover;border-radius:4px;flex-shrink:0;">` : ''}
                     ${b.name}
                   </td>
@@ -915,6 +916,7 @@ function renderBeaches(container) {
                   </td>
                   <td class="px-4 py-3 text-praia-sand-500 text-xs" style="max-width:200px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">${activeServices}</td>
                   <td class="px-4 py-3 text-right">
+                    <button onclick="toggleItemVisibility('beaches', ${i})" class="text-praia-sand-400 hover:text-praia-sand-600 text-xs font-semibold mr-2" title="${b.hidden ? 'Tornar visível' : 'Ocultar do site'}">${b.hidden ? 'Mostrar' : 'Ocultar'}</button>
                     <button onclick="editBeach(${i})" class="text-praia-teal-600 hover:text-praia-teal-800 text-xs font-semibold mr-2">Editar</button>
                     <button onclick="deleteItem('beaches', ${i})" class="text-red-400 hover:text-red-600 text-xs font-semibold">Eliminar</button>
                   </td>
@@ -1169,13 +1171,15 @@ function renderArticles(container) {
       </div>
       <div class="grid gap-4">
         ${articles.map((a, i) => `
-          <div class="bg-white rounded-xl shadow-layered p-4 flex items-center gap-4">
+          <div class="bg-white rounded-xl shadow-layered p-4 flex items-center gap-4${a.hidden ? ' opacity-50' : ''}" style="${a.hidden ? 'background:repeating-linear-gradient(135deg,transparent,transparent 10px,rgba(0,0,0,.02) 10px,rgba(0,0,0,.02) 20px);' : ''}">
+            ${a.hidden ? '<span style="display:inline-flex;align-items:center;padding:1px 6px;border-radius:6px;font-size:9px;font-weight:700;background:#f1f1f1;color:#999;border:1px solid #ddd;flex-shrink:0;">OCULTO</span>' : ''}
             <img src="${a.image}" alt="" class="w-20 h-14 object-cover rounded-lg flex-shrink-0" onerror="this.style.display='none'">
             <div class="flex-1 min-w-0">
               <h3 class="font-display text-sm font-bold text-praia-teal-800 truncate">${escHtml(a.title)}</h3>
               <p class="text-xs text-praia-sand-500">${a.date} · ${a.category} · ${a.status}</p>
             </div>
             <div class="flex gap-2 flex-shrink-0">
+              <button onclick="toggleItemVisibility('articles', ${i})" class="text-praia-sand-400 hover:text-praia-sand-600 text-xs font-semibold" title="${a.hidden ? 'Tornar visível' : 'Ocultar do site'}">${a.hidden ? 'Mostrar' : 'Ocultar'}</button>
               <button onclick="editArticle(${i})" class="text-praia-teal-600 text-xs font-semibold">Editar</button>
               <button onclick="deleteItem('articles', ${i})" class="text-red-400 text-xs font-semibold">Eliminar</button>
             </div>
@@ -1348,12 +1352,13 @@ function renderLocationsGuia(container) {
               const label = GUIA_TYPE_LABELS[l.type] || l.type;
               const badge = `<span style="display:inline-block;padding:1px 7px;border-radius:10px;font-size:10px;font-weight:700;font-family:'Poppins',sans-serif;background:${color}22;color:${color};border:1px solid ${color}44;">${label}</span>`;
               return `
-              <tr class="border-t border-praia-sand-100 hover:bg-praia-sand-50" data-name="${escHtml(l.name.toLowerCase())}" data-municipality="${escHtml(l.municipality.toLowerCase())}" data-type="${l.type}">
-                <td class="px-4 py-3 font-semibold text-praia-teal-800">${escHtml(l.name)}</td>
+              <tr class="border-t border-praia-sand-100 hover:bg-praia-sand-50${l.hidden ? ' opacity-50' : ''}" data-name="${escHtml(l.name.toLowerCase())}" data-municipality="${escHtml(l.municipality.toLowerCase())}" data-type="${l.type}" style="${l.hidden ? 'background:repeating-linear-gradient(135deg,transparent,transparent 10px,rgba(0,0,0,.02) 10px,rgba(0,0,0,.02) 20px);' : ''}">
+                <td class="px-4 py-3 font-semibold text-praia-teal-800">${l.hidden ? '<span style="display:inline-flex;align-items:center;padding:1px 6px;border-radius:6px;font-size:9px;font-weight:700;background:#f1f1f1;color:#999;border:1px solid #ddd;margin-right:4px;">OCULTO</span>' : ''}${escHtml(l.name)}</td>
                 <td class="px-4 py-3 text-praia-sand-600">${escHtml(l.municipality)}</td>
                 <td class="px-4 py-3">${badge}</td>
                 <td class="px-4 py-3 text-xs">${l.seasonal ? '<span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-semibold text-[10px] border border-amber-300">Só época</span>' : '<span class="text-praia-sand-300">Todo o ano</span>'}</td>
                 <td class="px-4 py-3 text-right">
+                  <button onclick="toggleItemVisibility('locations-guia-passaporte', ${i})" class="text-praia-sand-400 hover:text-praia-sand-600 text-xs font-semibold mr-2" title="${l.hidden ? 'Tornar visível' : 'Ocultar do site'}">${l.hidden ? 'Mostrar' : 'Ocultar'}</button>
                   <button onclick="editLocationGuia(${i})" class="text-praia-teal-600 text-xs font-semibold mr-2">Editar</button>
                   <button onclick="deleteItem('locations-guia-passaporte', ${i})" class="text-red-400 text-xs font-semibold">Eliminar</button>
                 </td>
@@ -1486,15 +1491,17 @@ function renderLocationsPassaporte(container) {
             ${items.map((l, i) => {
               const beachesStr = (l.beaches || []).join(' ').toLowerCase();
               return `
-              <tr class="border-t border-praia-sand-100 hover:bg-praia-sand-50"
+              <tr class="border-t border-praia-sand-100 hover:bg-praia-sand-50${l.hidden ? ' opacity-50' : ''}"
                 data-name="${escHtml(l.name.toLowerCase())}"
                 data-municipality="${escHtml(l.municipality.toLowerCase())}"
-                data-beaches="${escHtml(beachesStr)}">
-                <td class="px-4 py-3 font-semibold text-praia-teal-800">${escHtml(l.name)}</td>
+                data-beaches="${escHtml(beachesStr)}"
+                style="${l.hidden ? 'background:repeating-linear-gradient(135deg,transparent,transparent 10px,rgba(0,0,0,.02) 10px,rgba(0,0,0,.02) 20px);' : ''}">
+                <td class="px-4 py-3 font-semibold text-praia-teal-800">${l.hidden ? '<span style="display:inline-flex;align-items:center;padding:1px 6px;border-radius:6px;font-size:9px;font-weight:700;background:#f1f1f1;color:#999;border:1px solid #ddd;margin-right:4px;">OCULTO</span>' : ''}${escHtml(l.name)}</td>
                 <td class="px-4 py-3 text-praia-sand-600">${escHtml(l.municipality)}</td>
                 <td class="px-4 py-3 text-praia-sand-500 text-xs">${(l.beaches || []).length > 0 ? `${(l.beaches||[]).length} praia${(l.beaches||[]).length > 1 ? 's' : ''}` : '<span class="text-praia-sand-300">—</span>'}</td>
                 <td class="px-4 py-3 text-xs">${l.seasonal ? '<span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-semibold text-[10px] border border-amber-300">Só época</span>' : '<span class="text-praia-sand-300">Todo o ano</span>'}</td>
                 <td class="px-4 py-3 text-right">
+                  <button onclick="toggleItemVisibility('locations-carimbos', ${i})" class="text-praia-sand-400 hover:text-praia-sand-600 text-xs font-semibold mr-2" title="${l.hidden ? 'Tornar visível' : 'Ocultar do site'}">${l.hidden ? 'Mostrar' : 'Ocultar'}</button>
                   <button onclick="editLocationPassaporte(${i})" class="text-praia-teal-600 text-xs font-semibold mr-2">Editar</button>
                   <button onclick="deleteItem('locations-carimbos', ${i})" class="text-red-400 text-xs font-semibold">Eliminar</button>
                 </td>
@@ -1614,12 +1621,16 @@ function renderDescontos(container) {
       </div>
       <div class="grid gap-4">
         ${items.map((d, i) => `
-          <div class="bg-white rounded-xl shadow-layered p-4 flex items-center justify-between">
-            <div>
-              <h3 class="font-display text-sm font-bold text-praia-teal-800">${escHtml(d.name)}</h3>
-              <p class="text-xs text-praia-sand-500">${escHtml(d.description)}</p>
+          <div class="bg-white rounded-xl shadow-layered p-4 flex items-center justify-between${d.hidden ? ' opacity-50' : ''}" style="${d.hidden ? 'background:repeating-linear-gradient(135deg,transparent,transparent 10px,rgba(0,0,0,.02) 10px,rgba(0,0,0,.02) 20px);' : ''}">
+            <div class="flex items-center gap-2">
+              ${d.hidden ? '<span style="display:inline-flex;align-items:center;padding:1px 6px;border-radius:6px;font-size:9px;font-weight:700;background:#f1f1f1;color:#999;border:1px solid #ddd;flex-shrink:0;">OCULTO</span>' : ''}
+              <div>
+                <h3 class="font-display text-sm font-bold text-praia-teal-800">${escHtml(d.name)}</h3>
+                <p class="text-xs text-praia-sand-500">${escHtml(d.description)}</p>
+              </div>
             </div>
             <div class="flex gap-2 flex-shrink-0">
+              <button onclick="toggleItemVisibility('descontos', ${i})" class="text-praia-sand-400 hover:text-praia-sand-600 text-xs font-semibold" title="${d.hidden ? 'Tornar visível' : 'Ocultar do site'}">${d.hidden ? 'Mostrar' : 'Ocultar'}</button>
               <button onclick="editDesconto(${i})" class="text-praia-teal-600 text-xs font-semibold">Editar</button>
               <button onclick="deleteItem('descontos', ${i})" class="text-red-400 text-xs font-semibold">Eliminar</button>
             </div>
@@ -2045,6 +2056,18 @@ function deleteItem(section, index) {
   state.data[section].splice(index, 1);
   markDirty(section);
   toast('Item eliminado.', 'success');
+  renderSection();
+}
+
+function toggleItemVisibility(section, index) {
+  const item = state.data[section]?.[index];
+  if (!item) return;
+  if (!item.hidden) {
+    if (!confirm('Este item será ocultado do site público e deixará de ser visível para os visitantes. Os dados não serão apagados.\n\nDeseja continuar?')) return;
+  }
+  item.hidden = !item.hidden;
+  markDirty(section);
+  toast(item.hidden ? 'Item ocultado do site público.' : 'Item visível novamente no site público.', 'success');
   renderSection();
 }
 
@@ -2592,9 +2615,10 @@ function renderProdutos(container) {
           </thead>
           <tbody id="products-tbody">
             ${products.map((p, i) => `
-              <tr class="${i % 2 === 0 ? 'bg-white' : 'bg-praia-sand-50'} border-b border-praia-sand-100">
+              <tr class="${i % 2 === 0 ? 'bg-white' : 'bg-praia-sand-50'} border-b border-praia-sand-100${p.hidden ? ' opacity-50' : ''}" style="${p.hidden ? 'background:repeating-linear-gradient(135deg,transparent,transparent 10px,rgba(0,0,0,.02) 10px,rgba(0,0,0,.02) 20px);' : ''}">
                 <td class="px-4 py-3">
                   <div class="flex items-center gap-3">
+                    ${p.hidden ? '<span style="display:inline-flex;align-items:center;padding:1px 6px;border-radius:6px;font-size:9px;font-weight:700;background:#f1f1f1;color:#999;border:1px solid #ddd;flex-shrink:0;">OCULTO</span>' : ''}
                     ${p.images && p.images[0] ? `<img src="${p.images[0]}" class="w-10 h-10 rounded-lg object-cover border border-praia-sand-100" onerror="this.style.display='none'">` : '<div class="w-10 h-10 rounded-lg bg-praia-sand-100 flex items-center justify-center text-praia-sand-400 text-lg">📦</div>'}
                     <div>
                       <div class="font-display font-semibold text-praia-teal-800">${p.name}</div>
@@ -2612,6 +2636,7 @@ function renderProdutos(container) {
                 <td class="px-4 py-3">
                   <div class="flex gap-2">
                     <button onclick="editProduct('${p.id}')" class="admin-btn py-1 px-3 text-xs">Editar</button>
+                    <button onclick="toggleProductVisibility('${p.id}')" class="admin-btn py-1 px-3 text-xs ${p.hidden ? 'bg-praia-green-500/10 text-praia-green-600' : 'bg-praia-sand-100 text-praia-sand-600'}" title="${p.hidden ? 'Tornar visível' : 'Ocultar do site'}">${p.hidden ? 'Mostrar' : 'Ocultar'}</button>
                     <button onclick="toggleProductAvailability('${p.id}')" class="admin-btn py-1 px-3 text-xs ${p.available ? 'bg-praia-sand-100 text-praia-sand-600' : 'bg-praia-green-500/10 text-praia-green-600'}">${p.available ? 'Esgotar' : 'Disponibilizar'}</button>
                     <button onclick="deleteProduct('${p.id}')" class="admin-btn admin-btn-danger py-1 px-3 text-xs">Remover</button>
                   </div>
@@ -2827,6 +2852,19 @@ function toggleProductAvailability(productId) {
   const products = state.data['produtos'] || [];
   const p = products.find(p => p.id === productId);
   if (p) { p.available = !p.available; markDirty('produtos'); renderDashboard(); }
+}
+
+function toggleProductVisibility(productId) {
+  const products = state.data['produtos'] || [];
+  const p = products.find(p => p.id === productId);
+  if (!p) return;
+  if (!p.hidden) {
+    if (!confirm('Este produto será ocultado do site público e deixará de ser visível para os visitantes. Os dados não serão apagados.\n\nDeseja continuar?')) return;
+  }
+  p.hidden = !p.hidden;
+  markDirty('produtos');
+  toast(p.hidden ? 'Produto ocultado do site público.' : 'Produto visível novamente no site público.', 'success');
+  renderDashboard();
 }
 
 function deleteProduct(productId) {
@@ -3164,24 +3202,50 @@ function _getByPath(obj, path) {
 }
 
 function _updateSaveBtn() {
-  const btn = document.getElementById('content-save-btn');
-  if (!btn) return;
-  if (_content.dirty) {
-    btn.disabled = false;
-    btn.style.background = '#43A047';
-    btn.style.cursor = 'pointer';
-    btn.style.opacity = '1';
-    btn.style.boxShadow = '0 6px 18px rgba(67,160,71,.32)';
-    btn.onmouseover = () => { btn.style.transform = 'translateY(-1px)'; btn.style.boxShadow = '0 10px 24px rgba(67,160,71,.42)'; };
-    btn.onmouseout  = () => { btn.style.transform = ''; btn.style.boxShadow = '0 6px 18px rgba(67,160,71,.32)'; };
-  } else {
-    btn.disabled = true;
-    btn.style.background = '#C4B898';
-    btn.style.cursor = 'not-allowed';
-    btn.style.opacity = '.55';
-    btn.style.boxShadow = '';
-    btn.onmouseover = null;
-    btn.onmouseout = null;
+  const localBtn = document.getElementById('content-save-local-btn');
+  const pubBtn   = document.getElementById('content-save-btn');
+  const dirty    = _content.dirty;
+
+  // Estilo partilhado para estado desativado
+  const disabledStyle = (b) => {
+    b.disabled = true;
+    b.style.background = '#C4B898';
+    b.style.cursor = 'not-allowed';
+    b.style.opacity = '.45';
+    b.style.boxShadow = 'inset 0 1px 2px rgba(0,0,0,.06)';
+    b.style.filter = 'grayscale(.3)';
+    b.onmouseover = null;
+    b.onmouseout = null;
+  };
+
+  if (localBtn) {
+    if (dirty) {
+      localBtn.disabled = false;
+      localBtn.style.background = '#0288D1';
+      localBtn.style.cursor = 'pointer';
+      localBtn.style.opacity = '1';
+      localBtn.style.boxShadow = '0 6px 18px rgba(2,136,209,.28)';
+      localBtn.style.filter = '';
+      localBtn.onmouseover = () => { localBtn.style.transform = 'translateY(-1px)'; localBtn.style.boxShadow = '0 10px 24px rgba(2,136,209,.38)'; };
+      localBtn.onmouseout  = () => { localBtn.style.transform = ''; localBtn.style.boxShadow = '0 6px 18px rgba(2,136,209,.28)'; };
+    } else {
+      disabledStyle(localBtn);
+    }
+  }
+
+  if (pubBtn) {
+    if (dirty) {
+      pubBtn.disabled = false;
+      pubBtn.style.background = '#43A047';
+      pubBtn.style.cursor = 'pointer';
+      pubBtn.style.opacity = '1';
+      pubBtn.style.boxShadow = '0 6px 18px rgba(67,160,71,.32)';
+      pubBtn.style.filter = '';
+      pubBtn.onmouseover = () => { pubBtn.style.transform = 'translateY(-1px)'; pubBtn.style.boxShadow = '0 10px 24px rgba(67,160,71,.42)'; };
+      pubBtn.onmouseout  = () => { pubBtn.style.transform = ''; pubBtn.style.boxShadow = '0 6px 18px rgba(67,160,71,.32)'; };
+    } else {
+      disabledStyle(pubBtn);
+    }
   }
 }
 function _markUnsaved() {
@@ -3291,7 +3355,7 @@ function renderConteudo(container) {
 
         <span id="content-dirty-badge"
           class="ml-auto items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold"
-          style="display:none;background:#FFF3CD;color:#8A6D00;border:1px solid #FFE69C;">● alterações por gravar</span>
+          style="display:none;background:#FFF3CD;color:#8A6D00;border:1px solid #FFE69C;">● alterações por publicar</span>
 
         <button onclick="discardAndReload()" title="Recarregar página e descartar alterações não guardadas"
           style="${tbBtn}" ${tbBtnH}>
@@ -3304,10 +3368,15 @@ function renderConteudo(container) {
           Histórico
         </button>
 
-        <button onclick="contentSave()" id="content-save-btn" disabled
-          style="display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 18px;border-radius:10px;border:0;background:#C4B898;color:#fff;font:700 12.5px 'Poppins',system-ui,sans-serif;letter-spacing:.02em;cursor:not-allowed;opacity:.55;transition:transform .15s cubic-bezier(.34,1.56,.64,1),box-shadow .15s,background .15s,opacity .15s;">
+        <button onclick="contentSaveLocal()" id="content-save-local-btn" disabled
+          style="display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 16px;border-radius:10px;border:0;background:#C4B898;color:#fff;font:700 12.5px 'Poppins',system-ui,sans-serif;letter-spacing:.02em;cursor:not-allowed;opacity:.45;transition:transform .15s cubic-bezier(.34,1.56,.64,1),box-shadow .15s,background .15s,opacity .15s;">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-          GRAVAR
+          GUARDAR RASCUNHO
+        </button>
+        <button onclick="contentSave()" id="content-save-btn" disabled
+          style="display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 16px;border-radius:10px;border:0;background:#C4B898;color:#fff;font:700 12.5px 'Poppins',system-ui,sans-serif;letter-spacing:.02em;cursor:not-allowed;opacity:.45;transition:transform .15s cubic-bezier(.34,1.56,.64,1),box-shadow .15s,background .15s,opacity .15s;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
+          PUBLICAR
         </button>
       </div>
 
@@ -3571,14 +3640,32 @@ function contentRedo() {
   _recomputeDirty();
 }
 
+function contentSaveLocal() {
+  if (!_content.dirty) { toast('Não existem alterações por guardar.', 'info'); return; }
+  _writeContentDraft();
+  // Guardar também snapshots dos datasets editáveis
+  for (const ds of _SNAPSHOT_DATASETS) {
+    if (state.data[ds] != null) {
+      try { localStorage.setItem('_datasetDraft:' + ds, JSON.stringify(state.data[ds])); } catch {}
+      try { sessionStorage.setItem('_datasetDraft:' + ds, JSON.stringify(state.data[ds])); } catch {}
+    }
+  }
+  toast('Rascunho guardado localmente. As alterações serão preservadas se mudar de página no editor.', 'success');
+}
+
 async function contentSave() {
+  if (!_content.dirty) { toast('Não existem alterações por publicar.', 'info'); return; }
+
+  // Confirmação antes de publicar (semelhante às outras secções)
+  if (!confirm('As alterações serão publicadas no site em produção e ficarão imediatamente visíveis para todos os visitantes.\n\nDeseja continuar?')) return;
+
   // Validações soft
   const warnings = [];
   const seoTitle = _getByPath(_content.current, 'seo.homepageTitle') || '';
   if (seoTitle.length > 60) warnings.push(`Título SEO tem ${seoTitle.length} caracteres (recomendado ≤ 60).`);
   const seoDesc = _getByPath(_content.current, 'seo.homepageDescription') || '';
   if (seoDesc.length > 160) warnings.push(`Descrição SEO tem ${seoDesc.length} caracteres (recomendado ≤ 160).`);
-  if (warnings.length && !confirm('Avisos:\n\n' + warnings.join('\n') + '\n\nGravar mesmo assim?')) return;
+  if (warnings.length && !confirm('Avisos:\n\n' + warnings.join('\n') + '\n\nPublicar mesmo assim?')) return;
 
   try {
     const res = await fetch('/api/save-content', {
@@ -3596,10 +3683,10 @@ async function contentSave() {
     // Limpar do publish-bar
     _autoSave.pending.delete('conteudo');
     try { _renderPublishBar(); } catch {}
-    toast('Conteúdo gravado com sucesso! O site público já reflete as alterações.', 'success');
+    toast('Conteúdo publicado com sucesso! O site público já reflete as alterações.', 'success');
     document.getElementById('content-iframe').src = _contentIframeSrc();
   } catch (e) {
-    toast('Erro ao gravar: ' + e.message, 'error');
+    toast('Erro ao publicar: ' + e.message, 'error');
   }
 }
 
@@ -3720,7 +3807,7 @@ function contentOpenPageSettings() {
     <div class="fixed inset-0 bg-black/40 z-50 flex items-center justify-center" onclick="if(event.target===this)this.remove()">
       <div class="bg-white rounded-2xl p-6 max-w-md w-full mx-4 max-h-[85vh] overflow-y-auto">
         <h2 class="font-display text-xl font-bold text-praia-teal-800 mb-1">Definições da página</h2>
-        <p class="text-sm text-praia-sand-500 mb-4">SEO, partilhas e imagens globais. Lembre-se de gravar.</p>
+        <p class="text-sm text-praia-sand-500 mb-4">SEO, partilhas e imagens globais. Lembre-se de publicar.</p>
         ${fieldHtml}
         <div class="mt-6 flex justify-end">
           <button onclick="this.closest('.fixed').remove()" class="admin-btn admin-btn-primary" style="margin:0;">Fechar</button>
@@ -3757,7 +3844,7 @@ document.addEventListener('keydown', (e) => {
   if (state.currentSection !== 'conteudo') return;
   if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) { e.preventDefault(); contentUndo(); }
   else if ((e.ctrlKey || e.metaKey) && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) { e.preventDefault(); contentRedo(); }
-  else if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); contentSave(); }
+  else if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); contentSaveLocal(); }
   else if (e.key === 'F' && !e.ctrlKey && !e.metaKey && !e.target.matches('input,textarea,select')) {
     e.preventDefault(); contentToggleFullscreen();
   }

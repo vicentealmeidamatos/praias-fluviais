@@ -275,7 +275,7 @@
         <div class="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12">
           <!-- Col 1 — Brand -->
           <div>
-            <img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-8 mb-6">
+            <img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="h-14 mb-6 -ml-1">
             <p class="text-white/40 text-sm leading-relaxed mb-6">Guia das Praias Fluviais — Zonas Balneares e de Lazer de Portugal desde 2001.</p>
 
           </div>
@@ -342,7 +342,7 @@
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
       const res = await fetch('data/descontos.json');
-      const descontos = await res.json();
+      const descontos = (await res.json()).filter(d => !d.hidden);
 
       const categoryLabels = {
         alojamento: 'Alojamento',
