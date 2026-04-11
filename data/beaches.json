@@ -7618,7 +7618,7 @@
     "id": "zona-balnear-de-pombal",
     "name": "Zona Balnear de Pombal",
     "type": "zona_balnear",
-    "river": "",
+    "river": "Rio Anços",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Pombal"
     ],
@@ -7644,8 +7644,8 @@
     "freguesia": "",
     "thumbnail": "brand_assets/fotos/FOTOS PRAIA DO ANO/Pombal (NC) VIEIRA DO MINHO.jpg",
     "coordinates": {
-      "lat": 41.634,
-      "lng": -8.1348
+      "lat": 41.575339,
+      "lng": -8.108621
     },
     "description": "Descubra esta zona balnear no concelho de Vieira do Minho. Informações, serviços e localização disponíveis em breve.",
     "municipality": "Vieira do Minho",
