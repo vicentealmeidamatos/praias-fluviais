@@ -5,35 +5,30 @@ let _beaches = [];
 let _activeCategory = 'todos';
 let _cartCount = 0;
 
+// ─── Pré-carregamento (inicia imediatamente, sem esperar pelo DOM) ───────────
+const _productsEarly = window.DataLoader
+  ? DataLoader.loadDataset('products')
+  : fetch('data/products.json').then(r => r.json()).catch(() => []);
+const _beachesEarly = window.DataLoader
+  ? DataLoader.loadDataset('beaches')
+  : fetch('data/beaches.json').then(r => r.json()).catch(() => []);
+
 // ─── Inicialização ────────────────────────────────────────────────────────────
 
 async function initLoja() {
-  await Promise.all([loadProducts(), loadBeaches()]);
-  renderCategories();
-  renderProducts();
-  await syncCartBadge();
-  setupScrollReveal();
-}
-
-// ─── Produtos ─────────────────────────────────────────────────────────────────
-
-async function loadProducts() {
   try {
-    const res = await fetch('data/products.json');
-    _products = (await res.json()).filter(p => !p.hidden);
-  } catch (e) {
+    const [pData, bData] = await Promise.all([_productsEarly, _beachesEarly]);
+    _products = (pData || []).filter(p => !p.hidden);
+    const raw = (bData || []).filter(b => !b.hidden);
+    _beaches = raw.map(b => ({ id: b.id, name: b.name })).sort((a, b) => a.name.localeCompare(b.name, 'pt'));
+  } catch {
     _products = [];
-  }
-}
-
-async function loadBeaches() {
-  try {
-    const res = await fetch('data/beaches.json');
-    const data = (await res.json()).filter(b => !b.hidden);
-    _beaches = data.map(b => ({ id: b.id, name: b.name })).sort((a, b) => a.name.localeCompare(b.name, 'pt'));
-  } catch (e) {
     _beaches = [];
   }
+  renderCategories();
+  renderProducts();
+  syncCartBadge(); // background — não bloqueia o render
+  setupScrollReveal();
 }
 
 function getCategories() {

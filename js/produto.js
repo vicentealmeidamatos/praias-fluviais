@@ -7,12 +7,30 @@ let _beaches = [];
 let _activeImage = 0;
 let _settings = null;
 
+// Pré-carregamento imediato (sem esperar pelo DOM)
+const _prodEarly = window.DataLoader
+  ? DataLoader.loadDataset('products')
+  : fetch('data/products.json').then(r => r.json()).catch(() => []);
+const _settingsEarly = window.DataLoader
+  ? DataLoader.loadDataset('settings')
+  : fetch('data/settings.json').then(r => r.json()).catch(() => null);
+const _beachesEarlyP = window.DataLoader
+  ? DataLoader.loadDataset('beaches')
+  : fetch('data/beaches.json').then(r => r.json()).catch(() => []);
+
 async function initProduto() {
   const params = new URLSearchParams(window.location.search);
   const id = params.get('id');
   if (!id) { window.location.href = 'loja.html'; return; }
 
-  await Promise.all([loadProducts(), loadSettings(), loadBeachesProduto()]);
+  try {
+    const [pData, sData, bData] = await Promise.all([_prodEarly, _settingsEarly, _beachesEarlyP]);
+    _products = (pData || []).filter(p => !p.hidden);
+    _settings = sData || null;
+    _beaches = (bData || []).map(b => ({ id: b.id, name: b.name })).sort((a, b) => a.name.localeCompare(b.name, 'pt'));
+  } catch {
+    _products = []; _settings = null; _beaches = [];
+  }
 
   _productIdx = _products.findIndex(p => p.id === id);
   _product = _productIdx >= 0 ? _products[_productIdx] : null;
@@ -22,29 +40,7 @@ async function initProduto() {
 
   renderProduct();
   renderRelated();
-  await syncCartBadge();
-}
-
-async function loadProducts() {
-  try {
-    const res = await fetch('data/products.json');
-    _products = (await res.json()).filter(p => !p.hidden);
-  } catch { _products = []; }
-}
-
-async function loadSettings() {
-  try {
-    const res = await fetch('data/settings.json');
-    _settings = await res.json();
-  } catch { _settings = null; }
-}
-
-async function loadBeachesProduto() {
-  try {
-    const res = await fetch('data/beaches.json');
-    const data = await res.json();
-    _beaches = data.map(b => ({ id: b.id, name: b.name })).sort((a, b) => a.name.localeCompare(b.name, 'pt'));
-  } catch { _beaches = []; }
+  syncCartBadge(); // background
 }
 
 // ─── Render ───────────────────────────────────────────────────────────────────

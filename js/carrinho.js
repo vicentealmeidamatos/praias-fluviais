@@ -4,10 +4,24 @@ let _cartItems = [];
 let _products = [];
 let _beaches = [];
 
+// Pré-carregamento imediato (sem esperar pelo DOM)
+const _prodEarlyC = window.DataLoader
+  ? DataLoader.loadDataset('products')
+  : fetch('data/products.json').then(r => r.json()).catch(() => []);
+const _beachesEarlyC = window.DataLoader
+  ? DataLoader.loadDataset('beaches')
+  : fetch('data/beaches.json').then(r => r.json()).catch(() => []);
+
 // ─── Inicialização ────────────────────────────────────────────────────────────
 
 async function initCarrinho() {
-  await Promise.all([loadProducts(), loadBeaches()]);
+  try {
+    const [pData, bData] = await Promise.all([_prodEarlyC, _beachesEarlyC]);
+    _products = (pData || []).filter(p => !p.hidden);
+    _beaches = bData || [];
+  } catch {
+    _products = []; _beaches = [];
+  }
 
   const user = await authGetUser();
   if (!user) {
@@ -18,22 +32,6 @@ async function initCarrinho() {
   await loadCartItems(user.id);
   renderCart();
   updateCartBadge();
-}
-
-// ─── Dados ────────────────────────────────────────────────────────────────────
-
-async function loadProducts() {
-  try {
-    const res = await fetch('data/products.json');
-    _products = (await res.json()).filter(p => !p.hidden);
-  } catch { _products = []; }
-}
-
-async function loadBeaches() {
-  try {
-    const res = await fetch('data/beaches.json');
-    _beaches = await res.json();
-  } catch { _beaches = []; }
 }
 
 function getBeachName(beachId) {
