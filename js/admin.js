@@ -1,4 +1,5 @@
 // ─── Admin Panel — JSON Visual Editor ───
+const _norm = s => (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
 const SECTIONS = ['beaches', 'articles', 'locations-guia-passaporte', 'locations-carimbos', 'descontos', 'produtos', 'encomendas', 'utilizadores', 'comentarios', 'conteudo', 'settings'];
 
 // ─── Auto-save: section → dataset name (Supabase via /api/save-data) ───
@@ -926,7 +927,7 @@ function renderBeaches(container) {
                 const isBalnear = b.type === 'zona_balnear';
                 const activeServices = ALL_SERVICES.filter(s => b.services?.[s.key]).map(s => s.label).join(', ') || '—';
                 return `
-                <tr class="border-t border-praia-sand-100 hover:bg-praia-sand-50 admin-table-row${b.hidden ? ' opacity-50' : ''}" data-search="${(b.name + ' ' + b.municipality + ' ' + (b.freguesia||'') + ' ' + (b.district||'')).toLowerCase()}" data-hidden="${b.hidden ? '1' : '0'}" style="${b.hidden ? 'background:repeating-linear-gradient(135deg,transparent,transparent 10px,rgba(0,0,0,.02) 10px,rgba(0,0,0,.02) 20px);' : ''}">
+                <tr class="border-t border-praia-sand-100 hover:bg-praia-sand-50 admin-table-row${b.hidden ? ' opacity-50' : ''}" data-search="${_norm(b.name + ' ' + b.municipality + ' ' + (b.freguesia||'') + ' ' + (b.district||''))}" data-hidden="${b.hidden ? '1' : '0'}" style="${b.hidden ? 'background:repeating-linear-gradient(135deg,transparent,transparent 10px,rgba(0,0,0,.02) 10px,rgba(0,0,0,.02) 20px);' : ''}">
                   <td class="px-4 py-3 font-semibold text-praia-teal-800" style="display:flex;align-items:center;gap:8px;">
                     ${b.hidden ? '<span style="display:inline-flex;align-items:center;padding:1px 6px;border-radius:6px;font-size:9px;font-weight:700;background:#f1f1f1;color:#999;border:1px solid #ddd;margin-right:2px;">OCULTO</span>' : ''}
                     ${b.thumbnail ? `<img src="${escHtml(b.thumbnail)}" style="width:36px;height:24px;object-fit:cover;border-radius:4px;flex-shrink:0;">` : ''}
@@ -1378,7 +1379,7 @@ function renderLocationsGuia(container) {
               const label = GUIA_TYPE_LABELS[l.type] || l.type;
               const badge = `<span style="display:inline-block;padding:1px 7px;border-radius:10px;font-size:10px;font-weight:700;font-family:'Poppins',sans-serif;background:${color}22;color:${color};border:1px solid ${color}44;">${label}</span>`;
               return `
-              <tr class="border-t border-praia-sand-100 hover:bg-praia-sand-50${l.hidden ? ' opacity-50' : ''}" data-name="${escHtml(l.name.toLowerCase())}" data-municipality="${escHtml(l.municipality.toLowerCase())}" data-type="${l.type}" style="${l.hidden ? 'background:repeating-linear-gradient(135deg,transparent,transparent 10px,rgba(0,0,0,.02) 10px,rgba(0,0,0,.02) 20px);' : ''}">
+              <tr class="border-t border-praia-sand-100 hover:bg-praia-sand-50${l.hidden ? ' opacity-50' : ''}" data-name="${escHtml(_norm(l.name))}" data-municipality="${escHtml(_norm(l.municipality))}" data-type="${l.type}" style="${l.hidden ? 'background:repeating-linear-gradient(135deg,transparent,transparent 10px,rgba(0,0,0,.02) 10px,rgba(0,0,0,.02) 20px);' : ''}">
                 <td class="px-4 py-3 font-semibold text-praia-teal-800">${l.hidden ? '<span style="display:inline-flex;align-items:center;padding:1px 6px;border-radius:6px;font-size:9px;font-weight:700;background:#f1f1f1;color:#999;border:1px solid #ddd;margin-right:4px;">OCULTO</span>' : ''}${escHtml(l.name)}</td>
                 <td class="px-4 py-3 text-praia-sand-600">${escHtml(l.municipality)}</td>
                 <td class="px-4 py-3">${badge}</td>
@@ -1398,7 +1399,7 @@ function renderLocationsGuia(container) {
 }
 
 function filterLocationsGuia() {
-  const q     = (document.getElementById('guia-search')?.value || '').toLowerCase();
+  const q     = _norm(document.getElementById('guia-search')?.value || '');
   const type  = document.getElementById('guia-type-filter')?.value || '';
   const rows  = document.querySelectorAll('#guia-tbody tr');
   let visible = 0;
@@ -1515,11 +1516,11 @@ function renderLocationsPassaporte(container) {
           </tr></thead>
           <tbody id="passaporte-tbody">
             ${items.map((l, i) => {
-              const beachesStr = (l.beaches || []).join(' ').toLowerCase();
+              const beachesStr = _norm((l.beaches || []).join(' '));
               return `
               <tr class="border-t border-praia-sand-100 hover:bg-praia-sand-50${l.hidden ? ' opacity-50' : ''}"
-                data-name="${escHtml(l.name.toLowerCase())}"
-                data-municipality="${escHtml(l.municipality.toLowerCase())}"
+                data-name="${escHtml(_norm(l.name))}"
+                data-municipality="${escHtml(_norm(l.municipality))}"
                 data-beaches="${escHtml(beachesStr)}"
                 style="${l.hidden ? 'background:repeating-linear-gradient(135deg,transparent,transparent 10px,rgba(0,0,0,.02) 10px,rgba(0,0,0,.02) 20px);' : ''}">
                 <td class="px-4 py-3 font-semibold text-praia-teal-800">${l.hidden ? '<span style="display:inline-flex;align-items:center;padding:1px 6px;border-radius:6px;font-size:9px;font-weight:700;background:#f1f1f1;color:#999;border:1px solid #ddd;margin-right:4px;">OCULTO</span>' : ''}${escHtml(l.name)}</td>
@@ -1541,7 +1542,7 @@ function renderLocationsPassaporte(container) {
 }
 
 function filterLocationsPassaporte() {
-  const q    = (document.getElementById('passaporte-search')?.value || '').toLowerCase();
+  const q    = _norm(document.getElementById('passaporte-search')?.value || '');
   const rows = document.querySelectorAll('#passaporte-tbody tr');
   let visible = 0;
   rows.forEach(row => {
@@ -2101,7 +2102,7 @@ function toggleItemVisibility(section, index) {
 }
 
 function filterAdminTable(query) {
-  const q = query.toLowerCase();
+  const q = _norm(query);
   const visFilter = document.getElementById('beaches-visibility-filter')?.value || 'all';
   document.querySelectorAll('.admin-table-row').forEach(row => {
     const matchesSearch = !q || row.dataset.search?.includes(q);
@@ -2479,7 +2480,7 @@ function renderComentariosContent() {
 
   const reviews = window._adminReviews || [];
   const beaches = window._adminBeaches || [];
-  const query   = (document.getElementById('com-search')?.value || '').toLowerCase().trim();
+  const query   = _norm(document.getElementById('com-search')?.value || '');
   const beach   = document.getElementById('com-filter-beach')?.value || '';
   const estado  = document.getElementById('com-filter-estado')?.value || 'todos';
 
@@ -2488,9 +2489,9 @@ function renderComentariosContent() {
   if (estado === 'apagados') filtered = filtered.filter(r => !!r.deleted_by_admin);
   if (beach) filtered = filtered.filter(r => r.beach_id === beach);
   if (query) filtered = filtered.filter(r => {
-    const beachName = (beaches.find(b => b.id === r.beach_id)?.name || beaches.find(b => b.id === r.beach_id)?.nome || r.beach_id || '').toLowerCase();
-    return (r.text || '').toLowerCase().includes(query) ||
-      (r.profiles?.username || '').toLowerCase().includes(query) ||
+    const beachName = _norm(beaches.find(b => b.id === r.beach_id)?.name || beaches.find(b => b.id === r.beach_id)?.nome || r.beach_id || '');
+    return _norm(r.text || '').includes(query) ||
+      _norm(r.profiles?.username || '').includes(query) ||
       beachName.includes(query);
   });
 
