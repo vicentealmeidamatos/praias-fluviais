@@ -7056,8 +7056,8 @@
   {
     "id": "praia-fluvial-de-folques",
     "name": "Zona Balnear de Folques",
-    "type": "praia_fluvial",
-    "river": "Rio Ceira",
+    "type": "zona_balnear",
+    "river": "Ribeira de Folques",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Folques"
     ],
@@ -7066,9 +7066,7 @@
     "services": {
       "wc": false,
       "bar": false,
-      "grills": false,
       "camping": false,
-      "parking": false,
       "blueFlag": false,
       "lifeguard": false,
       "nacional2": false,
@@ -7086,9 +7084,9 @@
       "lat": 40.221475,
       "lng": -8.014688
     },
-    "description": "Descubra esta praia fluvial no concelho de Arganil. Informações, serviços e localização disponíveis em breve.",
+    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Arganil.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
     "municipality": "Arganil",
-    "waterQuality": "",
+    "waterQuality": "excelente",
     "passportStamp": true
   },
   {

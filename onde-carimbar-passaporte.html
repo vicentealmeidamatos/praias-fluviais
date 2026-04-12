@@ -253,6 +253,23 @@
         </div>
       </div>
     </section>
+
+    <!-- CTA Parceiro -->
+    <section class="max-w-3xl mx-auto px-6 pb-12 md:pb-16">
+      <div class="relative bg-praia-sand-50 border border-praia-sand-200 rounded-2xl px-6 py-6 md:px-8 md:py-7 flex flex-col sm:flex-row items-start sm:items-center gap-4 reveal-on-scroll" data-reveal-delay="50">
+        <div class="flex-1">
+          <p class="font-body text-sm md:text-[0.95rem] text-praia-teal-700 leading-relaxed">
+            Tem um estabelecimento perto de uma praia fluvial e quer torná-lo um <strong class="font-semibold text-praia-teal-800">posto de carimbo</strong> do Passaporte Turístico? Contacte-nos e torne-se parceiro!
+          </p>
+        </div>
+        <a href="contactos.html"
+           class="inline-flex items-center gap-2 bg-praia-teal-600 hover:bg-praia-teal-700 focus-visible:ring-2 focus-visible:ring-praia-teal-400 focus-visible:ring-offset-2 active:scale-[0.97] text-white font-display text-xs font-semibold uppercase tracking-wider px-5 py-2.5 rounded-full transition-colors whitespace-nowrap"
+           style="transition: background-color 0.2s ease, transform 0.15s ease;">
+          Contactar
+          <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+        </a>
+      </div>
+    </section>
   </main>
 
 
@@ -480,9 +497,9 @@
             </span>`
           : '';
 
-        const beachesData = (loc.beaches || []).join(' ').toLowerCase();
+        const beachesData = (loc.beaches || []).join(' ').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
         const locIdx = allLocations.indexOf(loc);
-        html += `<div class="loc-card location-card bg-white rounded-xl border border-praia-sand-100 shadow-layered p-5${loc.seasonal ? ' border-l-4 border-l-amber-400' : ''}" data-name="${loc.name.toLowerCase()}" data-municipality="${loc.municipality.toLowerCase()}" data-beaches="${beachesData}" data-seasonal="${!!loc.seasonal}">
+        html += `<div class="loc-card location-card bg-white rounded-xl border border-praia-sand-100 shadow-layered p-5${loc.seasonal ? ' border-l-4 border-l-amber-400' : ''}" data-name="${loc.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()}" data-municipality="${loc.municipality.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()}" data-beaches="${beachesData}" data-seasonal="${!!loc.seasonal}">
           <div class="flex items-start gap-3">
             <div class="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style="background:${STAMP_COLOR}18;">
               <i data-lucide="stamp" class="w-5 h-5" style="color:${STAMP_COLOR};"></i>
@@ -531,7 +548,7 @@
 
     // ─── List filter ───
     window.filterList = function() {
-      const q     = (document.getElementById('list-search')?.value || '').toLowerCase();
+      const q     = (document.getElementById('list-search')?.value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
       const epoca = document.getElementById('list-epoca-filter')?.value || '';
       let total = 0;
 

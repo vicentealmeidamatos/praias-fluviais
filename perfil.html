@@ -83,6 +83,14 @@
     }
     .edit-input::placeholder { color: rgba(255,255,255,0.35); }
     .edit-input:focus { outline: none; border-color: #FFEB3B; box-shadow: 0 0 0 3px rgba(255,235,59,0.15); }
+    .pw-wrap { position: relative; }
+    .pw-wrap input { padding-right: 44px; }
+    .pw-toggle {
+      position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer; padding: 6px;
+      color: rgba(255,255,255,0.35); transition: color 0.2s;
+    }
+    .pw-toggle:hover { color: rgba(255,255,255,0.7); }
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(20px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -123,10 +131,10 @@
           </a>
         </div>
         <div class="hidden md:flex items-center gap-1.5 ml-2">
-          <a href="onde-encontrar-guia.html" class="inline-flex items-center gap-1.5 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-[11px] uppercase tracking-wider px-2.5 py-1.5 rounded-full btn-primary shadow-layered-yellow whitespace-nowrap">
+          <a href="onde-encontrar.html" class="inline-flex items-center gap-1.5 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-[11px] uppercase tracking-wider px-2.5 py-1.5 rounded-full btn-primary shadow-layered-yellow whitespace-nowrap">
             <i data-lucide="book-open" class="w-3.5 h-3.5"></i> Onde Encontrar
           </a>
-          <a href="onde-encontrar-passaporte.html" class="inline-flex items-center gap-1.5 bg-white/10 border border-white/30 text-white hover:bg-white/20 font-display font-bold text-[11px] uppercase tracking-wider px-2.5 py-1.5 rounded-full transition-all duration-200 whitespace-nowrap">
+          <a href="onde-carimbar-passaporte.html" class="inline-flex items-center gap-1.5 bg-white/10 border border-white/30 text-white hover:bg-white/20 font-display font-bold text-[11px] uppercase tracking-wider px-2.5 py-1.5 rounded-full transition-all duration-200 whitespace-nowrap">
             <i data-lucide="stamp" class="w-3.5 h-3.5"></i> Onde Carimbar
           </a>
           <div id="header-auth-slot" class="flex items-center"></div>
@@ -390,13 +398,22 @@
         <div id="edit-password-wrap">
           <div class="border-t border-white/10 pt-4 mt-2">
             <label class="block text-xs text-white/50 font-display mb-1.5">Palavra-passe atual</label>
-            <input type="password" id="edit-current-password"
-                   class="edit-input w-full px-4 py-3 rounded-xl text-sm font-body mb-2" placeholder="Introduza a palavra-passe atual">
+            <div class="pw-wrap mb-2">
+              <input type="password" id="edit-current-password"
+                     class="edit-input w-full px-4 py-3 rounded-xl text-sm font-body" placeholder="Introduza a palavra-passe atual">
+              <button type="button" class="pw-toggle" onclick="togglePw(this)" aria-label="Mostrar palavra-passe"><i data-lucide="eye" class="w-4 h-4"></i></button>
+            </div>
             <label class="block text-xs text-white/50 font-display mb-1.5">Nova palavra-passe</label>
-            <input type="password" id="edit-new-password"
-                   class="edit-input w-full px-4 py-3 rounded-xl text-sm font-body mb-2" placeholder="Mínimo 6 caracteres">
-            <input type="password" id="edit-confirm-password"
-                   class="edit-input w-full px-4 py-3 rounded-xl text-sm font-body mb-2" placeholder="Confirmar palavra-passe">
+            <div class="pw-wrap mb-2">
+              <input type="password" id="edit-new-password"
+                     class="edit-input w-full px-4 py-3 rounded-xl text-sm font-body" placeholder="Mínimo 6 caracteres">
+              <button type="button" class="pw-toggle" onclick="togglePw(this)" aria-label="Mostrar palavra-passe"><i data-lucide="eye" class="w-4 h-4"></i></button>
+            </div>
+            <div class="pw-wrap mb-2">
+              <input type="password" id="edit-confirm-password"
+                     class="edit-input w-full px-4 py-3 rounded-xl text-sm font-body" placeholder="Confirmar palavra-passe">
+              <button type="button" class="pw-toggle" onclick="togglePw(this)" aria-label="Mostrar palavra-passe"><i data-lucide="eye" class="w-4 h-4"></i></button>
+            </div>
             <button id="edit-password-btn" onclick="saveProfilePassword()"
                     class="w-full btn-primary bg-white/10 hover:bg-white/20 text-white font-display font-bold text-xs uppercase tracking-wider py-2.5 rounded-xl border border-white/20 transition-colors">
               Alterar Palavra-passe
@@ -475,6 +492,15 @@
   <script src="js/auth.js"></script>
   <script src="js/perfil.js"></script>
   <script>
+    function togglePw(btn) {
+      const input = btn.parentElement.querySelector('input');
+      if (!input) return;
+      const isPassword = input.type === 'password';
+      input.type = isPassword ? 'text' : 'password';
+      const icon = btn.querySelector('i');
+      if (icon) icon.setAttribute('data-lucide', isPassword ? 'eye-off' : 'eye');
+      lucide.createIcons();
+    }
     lucide.createIcons();
     document.addEventListener('DOMContentLoaded', () => {
       AuthUtils.initHeaderAuth();

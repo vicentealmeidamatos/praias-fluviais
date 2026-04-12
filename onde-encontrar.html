@@ -522,7 +522,7 @@
 
     // ─── List filter (independent of map) ───
     function filterList() {
-      const q     = (document.getElementById('list-search')?.value || '').toLowerCase();
+      const q     = (document.getElementById('list-search')?.value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
       const type  = document.getElementById('list-type-filter')?.value || '';
       const epoca = document.getElementById('list-epoca-filter')?.value || '';
       let total = 0;
@@ -589,7 +589,7 @@
             </span>`
           : '';
 
-        html += `<div class="loc-card location-card bg-white rounded-xl border border-praia-sand-100 shadow-layered p-5${loc.seasonal ? ' border-l-4 border-l-amber-400' : ''}" data-type="${loc.type}" data-name="${loc.name.toLowerCase()}" data-municipality="${loc.municipality.toLowerCase()}" data-seasonal="${!!loc.seasonal}">
+        html += `<div class="loc-card location-card bg-white rounded-xl border border-praia-sand-100 shadow-layered p-5${loc.seasonal ? ' border-l-4 border-l-amber-400' : ''}" data-type="${loc.type}" data-name="${loc.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()}" data-municipality="${loc.municipality.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()}" data-seasonal="${!!loc.seasonal}">
           <div class="flex items-start gap-3">
             <div class="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center" style="background:${typeInfo.color}18;">
               <i data-lucide="${typeInfo.icon}" class="w-5 h-5" style="color:${typeInfo.color};"></i>

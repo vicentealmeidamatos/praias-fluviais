@@ -20,21 +20,17 @@ document.addEventListener('DOMContentLoaded', async () => {
   const targetUserId = viewUserId || currentUser?.id;
   if (!targetUserId) { window.location.href = 'index.html'; return; }
 
-  // ── Load data in parallel ───────────────────────────────────────────────────
-  let beaches = [];
-  try {
-    const r = await fetch('data/beaches.json');
-    beaches = await r.json();
-  } catch {}
-
-  const [profile, stamps, reviews] = await Promise.all([
+  // ── Load ALL data in parallel ──────────────────────────────────────────────
+  const currentYear = new Date().getFullYear();
+  const [beachesRaw, profile, stamps, reviews, voteData] = await Promise.all([
+    getBeaches().catch(() => []),
     profileGet(targetUserId),
     stampsGetAll(targetUserId),
     reviewsGetForUser(targetUserId),
+    voteGetFull ? voteGetFull(targetUserId, currentYear) : voteGet(targetUserId, currentYear).then(v => v ? { beach_id: v, is_public: true } : null),
   ]);
 
-  const currentYear = new Date().getFullYear();
-  const voteData    = await (voteGetFull ? voteGetFull(targetUserId, currentYear) : voteGet(targetUserId, currentYear).then(v => v ? { beach_id: v, is_public: true } : null));
+  const beaches = beachesRaw;
   const votedBeachId = voteData?.beach_id || null;
   const voteIsPublic = voteData?.is_public !== false; // default true
   let _currentVotePublic = voteIsPublic;
@@ -229,6 +225,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             <span class="font-display text-xs font-bold text-praia-yellow-700 uppercase tracking-wider">Voto confirmado — obrigado!</span>
           </div>
           ${isOwnProfile ? `
+            <div class="mt-4">
+              <button onclick="shareProfileVote('${(beach?.name || votedBeachId).replace(/'/g, "\\'")}')" class="inline-flex items-center gap-2 btn-primary bg-praia-teal-800 text-white font-display text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full">
+                <i data-lucide="share-2" class="w-4 h-4"></i> Partilhar Voto
+              </button>
+            </div>
+          ` : ''}
+          ${isOwnProfile ? `
             <div class="mt-6 p-4 rounded-xl bg-praia-sand-100 border border-praia-sand-200 text-left">
               <p class="text-xs font-display font-semibold text-praia-sand-500 uppercase tracking-wider mb-3">Privacidade do voto</p>
               <div class="flex gap-2">
@@ -355,16 +358,33 @@ document.addEventListener('DOMContentLoaded', async () => {
       alert('Por favor selecione uma foto.');
       return;
     }
+    if (avatarFile.size > 8 * 1024 * 1024) {
+      alert('A imagem deve ter menos de 8MB.');
+      return;
+    }
     const btn = document.getElementById('edit-photo-btn');
-    btn.textContent = 'A guardar…';
+    const origLabel = btn.textContent;
+    btn.textContent = 'A guardar foto…';
     btn.disabled = true;
 
-    const url = await profileUploadAvatar(currentUser.id, avatarFile);
-    if (url) {
-      await profileUpsert(currentUser.id, { avatar_url: url });
-      window.location.reload();
-    } else {
-      btn.textContent = 'Guardar Foto';
+    try {
+      const url = await profileUploadAvatar(currentUser.id, avatarFile);
+      if (url) {
+        await profileUpsert(currentUser.id, { avatar_url: url });
+        // Invalidate nav cache
+        try {
+          const cache = JSON.parse(localStorage.getItem('gpf_nav_v1') || 'null');
+          if (cache) { cache.avatar = url; localStorage.setItem('gpf_nav_v1', JSON.stringify(cache)); }
+        } catch {}
+        window.location.reload();
+      } else {
+        btn.textContent = origLabel;
+        btn.disabled = false;
+        alert('Erro ao carregar a foto. Verifique o formato (JPEG, PNG, WebP) e tente novamente.');
+      }
+    } catch (err) {
+      console.error('[saveProfilePhoto]', err);
+      btn.textContent = origLabel;
       btn.disabled = false;
       alert('Erro ao guardar a foto. Tente novamente.');
     }
@@ -469,24 +489,32 @@ document.addEventListener('DOMContentLoaded', async () => {
     errEl.classList.add('hidden');
     btn.textContent = 'A enviar…';
     btn.disabled = true;
-    const { error } = await _sb.auth.updateUser({
-      email: newEmail,
-      options: { emailRedirectTo: `${location.origin}/perfil.html` },
-    });
-    btn.textContent = 'Alterar Email';
-    btn.disabled = false;
-    if (error) {
-      errEl.textContent = 'Erro: ' + (error.message || 'Tente novamente.');
+    try {
+      const { error } = await _sb.auth.updateUser({
+        email: newEmail,
+        options: { emailRedirectTo: `${location.origin}/perfil.html` },
+      });
+      btn.textContent = 'Alterar Email';
+      btn.disabled = false;
+      if (error) {
+        errEl.textContent = 'Erro: ' + (error.message || 'Tente novamente.');
+        errEl.classList.remove('hidden');
+      } else {
+        _pendingNewEmail = newEmail;
+        localStorage.setItem('gpf_email_change_to', newEmail);
+        localStorage.setItem('gpf_email_change_ts', Date.now().toString());
+        document.getElementById('edit-email-form').classList.add('hidden');
+        document.getElementById('edit-email-sent-to').textContent = newEmail;
+        document.getElementById('edit-email-success').classList.remove('hidden');
+        startEmailResendCountdown(60);
+        lucide.createIcons();
+      }
+    } catch (err) {
+      console.error('[saveProfileEmail]', err);
+      btn.textContent = 'Alterar Email';
+      btn.disabled = false;
+      errEl.textContent = 'Erro de ligação. Verifique a sua internet e tente novamente.';
       errEl.classList.remove('hidden');
-    } else {
-      _pendingNewEmail = newEmail;
-      localStorage.setItem('gpf_email_change_to', newEmail);
-      localStorage.setItem('gpf_email_change_ts', Date.now().toString());
-      document.getElementById('edit-email-form').classList.add('hidden');
-      document.getElementById('edit-email-sent-to').textContent = newEmail;
-      document.getElementById('edit-email-success').classList.remove('hidden');
-      startEmailResendCountdown(60);
-      lucide.createIcons();
     }
   };
 
@@ -521,35 +549,44 @@ document.addEventListener('DOMContentLoaded', async () => {
       msg.classList.remove('hidden');
       return;
     }
-    btn.textContent = 'A guardar…';
+    btn.textContent = 'A alterar…';
     btn.disabled = true;
-    // Verify current password by re-authenticating
-    const { error: signInErr } = await _sb.auth.signInWithPassword({
-      email: currentUser.email,
-      password: currentPw,
-    });
-    if (signInErr) {
+    try {
+      // Verify current password by re-authenticating
+      const { error: signInErr } = await _sb.auth.signInWithPassword({
+        email: currentUser.email,
+        password: currentPw,
+      });
+      if (signInErr) {
+        btn.textContent = 'Alterar Palavra-passe';
+        btn.disabled = false;
+        msg.textContent = 'Palavra-passe atual incorreta.';
+        msg.className = 'text-[11px] text-red-400 mt-2';
+        msg.classList.remove('hidden');
+        return;
+      }
+      const { error } = await _sb.auth.updateUser({ password: newPw });
       btn.textContent = 'Alterar Palavra-passe';
       btn.disabled = false;
-      msg.textContent = 'Palavra-passe atual incorreta.';
+      if (error) {
+        msg.textContent = 'Erro: ' + (error.message || 'Tente novamente.');
+        msg.className = 'text-[11px] text-red-400 mt-2';
+      } else {
+        msg.textContent = 'Palavra-passe alterada com sucesso.';
+        msg.className = 'text-[11px] text-green-400 mt-2';
+        document.getElementById('edit-current-password').value = '';
+        document.getElementById('edit-new-password').value = '';
+        document.getElementById('edit-confirm-password').value = '';
+      }
+      msg.classList.remove('hidden');
+    } catch (err) {
+      console.error('[saveProfilePassword]', err);
+      btn.textContent = 'Alterar Palavra-passe';
+      btn.disabled = false;
+      msg.textContent = 'Erro de ligação. Verifique a sua internet e tente novamente.';
       msg.className = 'text-[11px] text-red-400 mt-2';
       msg.classList.remove('hidden');
-      return;
     }
-    const { error } = await _sb.auth.updateUser({ password: newPw });
-    btn.textContent = 'Alterar Palavra-passe';
-    btn.disabled = false;
-    if (error) {
-      msg.textContent = 'Erro: ' + (error.message || 'Tente novamente.');
-      msg.className = 'text-[11px] text-red-400 mt-2';
-    } else {
-      msg.textContent = 'Palavra-passe alterada com sucesso.';
-      msg.className = 'text-[11px] text-green-400 mt-2';
-      document.getElementById('edit-current-password').value = '';
-      document.getElementById('edit-new-password').value = '';
-      document.getElementById('edit-confirm-password').value = '';
-    }
-    msg.classList.remove('hidden');
   };
 
   let _editPreviewFile = null;
@@ -733,6 +770,30 @@ document.addEventListener('DOMContentLoaded', async () => {
     setTimeout(() => t.remove(), 5000);
   }
 });
+
+// ── Share vote ───────────────────────────────────────────────────────────────
+window.shareProfileVote = async function(beachName) {
+  const text = `Votei na ${beachName} para Praia Fluvial do Ano ${new Date().getFullYear()}! Vota também: ${window.location.origin}/votar.html`;
+  if (navigator.share) {
+    try { await navigator.share({ title: `Voto Praia do Ano ${new Date().getFullYear()}`, text }); return; } catch {}
+  }
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;opacity:0;';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    ta.remove();
+  }
+  const t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999;background:#003A40;color:#FFEB3B;font-family:\'Poppins\',sans-serif;font-size:13px;font-weight:600;padding:12px 24px;border-radius:12px;box-shadow:0 8px 32px rgba(0,58,64,0.4);max-width:90vw;text-align:center;';
+  t.textContent = 'Texto copiado para partilhar!';
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3500);
+};
 
 // ── Image viewer ──────────────────────────────────────────────────────────────
 window.openImageViewer = function(src) {

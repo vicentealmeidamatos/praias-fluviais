@@ -65,6 +65,14 @@
       border-color: rgba(239,68,68,0.7) !important;
       box-shadow: 0 0 0 3px rgba(239,68,68,0.15) !important;
     }
+    .pw-wrap { position: relative; }
+    .pw-wrap input { padding-right: 44px; }
+    .pw-toggle {
+      position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer; padding: 6px;
+      color: rgba(255,255,255,0.35); transition: color 0.2s;
+    }
+    .pw-toggle:hover { color: rgba(255,255,255,0.7); }
     .tab-btn.active {
       background: #FFEB3B;
       color: #003A40;
@@ -233,15 +241,21 @@
           </div>
           <div>
             <label class="text-[11px] font-display font-semibold uppercase tracking-wider text-white/50 block mb-1.5">Palavra-passe</label>
-            <input type="password" id="reg-password" required minlength="6"
-                   placeholder="Mínimo 6 caracteres"
-                   class="auth-input w-full px-4 py-3 rounded-xl text-sm font-body">
+            <div class="pw-wrap">
+              <input type="password" id="reg-password" required minlength="6"
+                     placeholder="Mínimo 6 caracteres"
+                     class="auth-input w-full px-4 py-3 rounded-xl text-sm font-body">
+              <button type="button" class="pw-toggle" onclick="togglePw(this)" aria-label="Mostrar palavra-passe"><i data-lucide="eye" class="w-4 h-4"></i></button>
+            </div>
           </div>
           <div>
             <label class="text-[11px] font-display font-semibold uppercase tracking-wider text-white/50 block mb-1.5">Confirmar palavra-passe</label>
-            <input type="password" id="reg-password-confirm" required
-                   placeholder="Repita a palavra-passe"
-                   class="auth-input w-full px-4 py-3 rounded-xl text-sm font-body">
+            <div class="pw-wrap">
+              <input type="password" id="reg-password-confirm" required
+                     placeholder="Repita a palavra-passe"
+                     class="auth-input w-full px-4 py-3 rounded-xl text-sm font-body">
+              <button type="button" class="pw-toggle" onclick="togglePw(this)" aria-label="Mostrar palavra-passe"><i data-lucide="eye" class="w-4 h-4"></i></button>
+            </div>
           </div>
         </div>
 
@@ -300,9 +314,12 @@
                 Esqueceu?
               </button>
             </div>
-            <input type="password" id="login-password" required placeholder="••••••••"
-                   class="auth-input w-full px-4 py-3 rounded-xl text-sm font-body"
-                   autocomplete="current-password">
+            <div class="pw-wrap">
+              <input type="password" id="login-password" required placeholder="••••••••"
+                     class="auth-input w-full px-4 py-3 rounded-xl text-sm font-body"
+                     autocomplete="current-password">
+              <button type="button" class="pw-toggle" onclick="togglePw(this)" aria-label="Mostrar palavra-passe"><i data-lucide="eye" class="w-4 h-4"></i></button>
+            </div>
           </div>
         </div>
 
@@ -388,15 +405,21 @@
         <div class="flex flex-col gap-3">
           <div>
             <label class="text-[11px] font-display font-semibold uppercase tracking-wider text-white/50 block mb-1.5">Nova palavra-passe</label>
-            <input type="password" id="reset-password" required minlength="6"
-                   placeholder="Mínimo 6 caracteres"
-                   class="auth-input w-full px-4 py-3 rounded-xl text-sm font-body">
+            <div class="pw-wrap">
+              <input type="password" id="reset-password" required minlength="6"
+                     placeholder="Mínimo 6 caracteres"
+                     class="auth-input w-full px-4 py-3 rounded-xl text-sm font-body">
+              <button type="button" class="pw-toggle" onclick="togglePw(this)" aria-label="Mostrar palavra-passe"><i data-lucide="eye" class="w-4 h-4"></i></button>
+            </div>
           </div>
           <div>
             <label class="text-[11px] font-display font-semibold uppercase tracking-wider text-white/50 block mb-1.5">Confirmar palavra-passe</label>
-            <input type="password" id="reset-password-confirm" required
-                   placeholder="Repita a palavra-passe"
-                   class="auth-input w-full px-4 py-3 rounded-xl text-sm font-body">
+            <div class="pw-wrap">
+              <input type="password" id="reset-password-confirm" required
+                     placeholder="Repita a palavra-passe"
+                     class="auth-input w-full px-4 py-3 rounded-xl text-sm font-body">
+              <button type="button" class="pw-toggle" onclick="togglePw(this)" aria-label="Mostrar palavra-passe"><i data-lucide="eye" class="w-4 h-4"></i></button>
+            </div>
           </div>
         </div>
 
@@ -493,6 +516,16 @@
 
 <script>
   lucide.createIcons();
+
+  function togglePw(btn) {
+    const input = btn.parentElement.querySelector('input');
+    if (!input) return;
+    const isPassword = input.type === 'password';
+    input.type = isPassword ? 'text' : 'password';
+    const icon = btn.querySelector('i');
+    if (icon) icon.setAttribute('data-lucide', isPassword ? 'eye-off' : 'eye');
+    lucide.createIcons();
+  }
 
   // Redirect param
   const redirectTo = new URLSearchParams(location.search).get('redirect') || 'index.html';
@@ -678,78 +711,76 @@
 
     setLoading('reg-submit', true);
 
-    // Pre-check username and email availability in parallel
-    const [usernameTaken, emailTaken] = await Promise.all([
-      AuthUtils.checkUsernameExists(username),
-      AuthUtils.checkEmailExists(email),
-    ]);
-    if (usernameTaken || emailTaken) {
-      setLoading('reg-submit', false);
-      if (usernameTaken && emailTaken) {
-        // Highlight both fields, show combined message
-        const uInp = document.getElementById('reg-username');
-        const eInp = document.getElementById('reg-email');
-        if (uInp) { uInp.classList.add('input-error'); uInp.addEventListener('input', () => uInp.classList.remove('input-error'), { once: true }); }
-        if (eInp) { eInp.classList.add('input-error'); eInp.addEventListener('input', () => eInp.classList.remove('input-error'), { once: true }); }
-        return showError('reg', 'Este email e este nome de utilizador já estão em uso. Escolha outros.');
+    try {
+      // Pre-check username and email availability in parallel
+      const [usernameTaken, emailTaken] = await Promise.all([
+        AuthUtils.checkUsernameExists(username),
+        AuthUtils.checkEmailExists(email),
+      ]);
+      if (usernameTaken || emailTaken) {
+        setLoading('reg-submit', false);
+        if (usernameTaken && emailTaken) {
+          const uInp = document.getElementById('reg-username');
+          const eInp = document.getElementById('reg-email');
+          if (uInp) { uInp.classList.add('input-error'); uInp.addEventListener('input', () => uInp.classList.remove('input-error'), { once: true }); }
+          if (eInp) { eInp.classList.add('input-error'); eInp.addEventListener('input', () => eInp.classList.remove('input-error'), { once: true }); }
+          return showError('reg', 'Este email e este nome de utilizador já estão em uso. Escolha outros.');
+        }
+        if (emailTaken)    return showError('reg', 'Este email já está registado. Inicie sessão ou recupere a sua palavra-passe.', 'reg-email');
+        if (usernameTaken) return showError('reg', 'Este nome de utilizador já está em uso. Escolha outro.', 'reg-username');
       }
-      if (emailTaken)    return showError('reg', 'Este email já está registado. Inicie sessão ou recupere a sua palavra-passe.', 'reg-email');
-      if (usernameTaken) return showError('reg', 'Este nome de utilizador já está em uso. Escolha outro.', 'reg-username');
-    }
 
-    const { data, error } = await AuthUtils.supabase.auth.signUp({
-      email,
-      password: pass,
-      options: {
-        emailRedirectTo: `${location.origin}/auth.html?redirect=${encodeURIComponent(redirectTo)}`,
-      },
-    });
+      const { data, error } = await AuthUtils.supabase.auth.signUp({
+        email,
+        password: pass,
+        options: {
+          emailRedirectTo: `${location.origin}/auth.html?redirect=${encodeURIComponent(redirectTo)}`,
+        },
+      });
 
-    if (error) {
-      setLoading('reg-submit', false);
-      return showError('reg', translateError(error.message));
-    }
-
-    // Detect email already registered but unconfirmed (Supabase returns success silently)
-    if (data.user && data.user.identities && data.user.identities.length === 0) {
-      setLoading('reg-submit', false);
-      return showError('reg', 'Este email já está registado mas ainda não foi confirmado. Verifique a sua caixa de entrada ou recupere a palavra-passe.', 'reg-email');
-    }
-
-    const user = data.user;
-    if (user) {
-      // Save profile with username and email — wrapped in try/catch because
-      // when email confirmation is required the user isn't authenticated yet
-      // and Supabase RLS may reject the upsert; the profile will be saved on
-      // first confirmed login via onAuthStateChange.
-      try {
-        await AuthUtils.profileUpsert(user.id, { username, email });
-      } catch (_profileErr) {
-        console.warn('[register] profile upsert deferred (will retry on login):', _profileErr?.message);
+      if (error) {
+        setLoading('reg-submit', false);
+        return showError('reg', translateError(error.message));
       }
-    }
 
-    _pendingEmail    = email;
-    _pendingUsername = username;
+      // Detect email already registered but unconfirmed (Supabase returns success silently)
+      if (data.user && data.user.identities && data.user.identities.length === 0) {
+        setLoading('reg-submit', false);
+        return showError('reg', 'Este email já está registado mas ainda não foi confirmado. Verifique a sua caixa de entrada ou recupere a palavra-passe.', 'reg-email');
+      }
 
-    setLoading('reg-submit', false);
+      const user = data.user;
+      if (user) {
+        try {
+          await AuthUtils.profileUpsert(user.id, { username, email });
+        } catch (_profileErr) {
+          console.warn('[register] profile upsert deferred (will retry on login):', _profileErr?.message);
+        }
+      }
 
-    // If Supabase returns an active session immediately (email confirmation disabled)
-    if (data.session) {
-      window._pendingUserId   = user.id;
-      window._pendingRedirect = redirectTo;
-      showAvatarModal();
-    } else {
-      // Persist username so we can retry profile upsert after email confirmation redirect
-      sessionStorage.setItem('gpf_pending_username', username);
-      sessionStorage.setItem('gpf_pending_email', email);
-      // Email confirmation required — show check-email screen
-      document.getElementById('auth-tabs')?.classList.add('hidden');
-      document.getElementById('email-sent-desc').textContent =
-        `Enviámos um link de confirmação para ${email}. Clique no link para ativar a sua conta.`;
-      document.getElementById('resend-btn').onclick = () => resendEmail(email);
-      showPanel('email-sent');
-      startResendCountdown('resend-btn', 'resend-btn-label', 60);
+      _pendingEmail    = email;
+      _pendingUsername = username;
+
+      setLoading('reg-submit', false);
+
+      if (data.session) {
+        window._pendingUserId   = user.id;
+        window._pendingRedirect = redirectTo;
+        showAvatarModal();
+      } else {
+        sessionStorage.setItem('gpf_pending_username', username);
+        sessionStorage.setItem('gpf_pending_email', email);
+        document.getElementById('auth-tabs')?.classList.add('hidden');
+        document.getElementById('email-sent-desc').textContent =
+          `Enviámos um link de confirmação para ${email}. Clique no link para ativar a sua conta.`;
+        document.getElementById('resend-btn').onclick = () => resendEmail(email);
+        showPanel('email-sent');
+        startResendCountdown('resend-btn', 'resend-btn-label', 60);
+      }
+    } catch (err) {
+      console.error('[handleRegister]', err);
+      setLoading('reg-submit', false);
+      showError('reg', 'Ocorreu um erro de ligação. Verifique a sua internet e tente novamente.');
     }
   }
 
@@ -807,30 +838,35 @@
 
     setLoading('login-submit', true);
 
-    // Resolve username to email if needed
-    let email = identifier;
-    if (!identifier.includes('@')) {
-      const resolved = await AuthUtils.getEmailByUsername(identifier);
-      if (!resolved) {
-        setLoading('login-submit', false);
-        return showError('login', 'Nome de utilizador não encontrado. Verifique e tente novamente.', 'login-identifier');
+    try {
+      // Resolve username to email if needed
+      let email = identifier;
+      if (!identifier.includes('@')) {
+        const resolved = await AuthUtils.getEmailByUsername(identifier);
+        if (!resolved) {
+          setLoading('login-submit', false);
+          return showError('login', 'Nome de utilizador não encontrado. Verifique e tente novamente.', 'login-identifier');
+        }
+        email = resolved;
       }
-      email = resolved;
-    }
 
-    const { error } = await AuthUtils.supabase.auth.signInWithPassword({ email, password: pass });
-    setLoading('login-submit', false);
+      const { error } = await AuthUtils.supabase.auth.signInWithPassword({ email, password: pass });
+      setLoading('login-submit', false);
 
-    if (error) {
-      // Distinguish between unregistered email and wrong password
-      if (error.message.includes('Invalid login credentials') && identifier.includes('@')) {
-        const exists = await AuthUtils.checkEmailExists(email);
-        if (!exists) return showError('login', 'Este email não está registado. Crie uma conta primeiro.', 'login-identifier');
+      if (error) {
+        if (error.message.includes('Invalid login credentials') && identifier.includes('@')) {
+          const exists = await AuthUtils.checkEmailExists(email);
+          if (!exists) return showError('login', 'Este email não está registado. Crie uma conta primeiro.', 'login-identifier');
+        }
+        return showError('login', translateError(error.message));
       }
-      return showError('login', translateError(error.message));
-    }
 
-    window.location.href = redirectTo;
+      window.location.href = redirectTo;
+    } catch (err) {
+      console.error('[handleLogin]', err);
+      setLoading('login-submit', false);
+      showError('login', 'Ocorreu um erro de ligação. Verifique a sua internet e tente novamente.');
+    }
   }
 
   // ── Forgot Password ──────────────────────────────────────────────────────────
@@ -843,25 +879,31 @@
 
     setLoading('forgot-submit', true);
 
-    const emailExists = await AuthUtils.checkEmailExists(email);
-    if (!emailExists) {
+    try {
+      const emailExists = await AuthUtils.checkEmailExists(email);
+      if (!emailExists) {
+        setLoading('forgot-submit', false);
+        return showError('forgot', 'Este email não está registado. Verifique o endereço ou crie uma conta.', 'forgot-email');
+      }
+
+      const { error } = await AuthUtils.supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${location.origin}/auth.html?type=recovery&redirect=${encodeURIComponent(redirectTo)}`,
+      });
+
       setLoading('forgot-submit', false);
-      return showError('forgot', 'Este email não está registado. Verifique o endereço ou crie uma conta.', 'forgot-email');
+
+      if (error) return showError('forgot', translateError(error.message));
+
+      document.getElementById('forgot-form').classList.add('hidden');
+      document.getElementById('forgot-success').classList.remove('hidden');
+      const forgotResendBtn = document.getElementById('forgot-resend-btn');
+      if (forgotResendBtn) forgotResendBtn.onclick = () => resendForgotEmail(email);
+      startResendCountdown('forgot-resend-btn', 'forgot-resend-label', 60);
+    } catch (err) {
+      console.error('[handleForgotPassword]', err);
+      setLoading('forgot-submit', false);
+      showError('forgot', 'Ocorreu um erro de ligação. Verifique a sua internet e tente novamente.');
     }
-
-    const { error } = await AuthUtils.supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${location.origin}/auth.html?type=recovery&redirect=${encodeURIComponent(redirectTo)}`,
-    });
-
-    setLoading('forgot-submit', false);
-
-    if (error) return showError('forgot', translateError(error.message));
-
-    document.getElementById('forgot-form').classList.add('hidden');
-    document.getElementById('forgot-success').classList.remove('hidden');
-    const forgotResendBtn = document.getElementById('forgot-resend-btn');
-    if (forgotResendBtn) forgotResendBtn.onclick = () => resendForgotEmail(email);
-    startResendCountdown('forgot-resend-btn', 'forgot-resend-label', 60);
   }
 
   // ── Reset Password ───────────────────────────────────────────────────────────
@@ -879,28 +921,33 @@
 
     setLoading('reset-submit', true);
 
-    const { error } = await AuthUtils.supabase.auth.updateUser({ password: pass });
-    setLoading('reset-submit', false);
+    try {
+      const { error } = await AuthUtils.supabase.auth.updateUser({ password: pass });
+      setLoading('reset-submit', false);
 
-    if (error) return showError('reset', translateError(error.message));
+      if (error) return showError('reset', translateError(error.message));
 
-    // Password updated successfully, redirect to login
-    sessionStorage.removeItem('gpf_recovery');
-    await AuthUtils.supabase.auth.signOut();
-    document.getElementById('auth-tabs')?.classList.remove('hidden');
-    switchTab('login');
-    // Show a success message briefly in the login form
-    const loginEl = document.getElementById('login-error');
-    if (loginEl) {
-      document.getElementById('login-error-text').textContent = 'Palavra-passe atualizada! Inicie sessão com a nova palavra-passe.';
-      loginEl.querySelector('.flex').style.background = 'rgba(67,160,71,0.15)';
-      loginEl.querySelector('.flex').style.borderColor = 'rgba(67,160,71,0.45)';
-      loginEl.querySelector('i').setAttribute('data-lucide', 'check-circle');
-      loginEl.querySelector('.text-xs.font-bold').textContent = 'Sucesso';
-      loginEl.querySelector('.text-xs.font-bold').style.color = 'rgba(134,239,172,1)';
-      loginEl.querySelector('.text-sm').style.color = 'rgba(187,247,208,1)';
-      loginEl.classList.remove('hidden');
-      lucide.createIcons();
+      // Password updated successfully, redirect to login
+      sessionStorage.removeItem('gpf_recovery');
+      await AuthUtils.supabase.auth.signOut();
+      document.getElementById('auth-tabs')?.classList.remove('hidden');
+      switchTab('login');
+      const loginEl = document.getElementById('login-error');
+      if (loginEl) {
+        document.getElementById('login-error-text').textContent = 'Palavra-passe atualizada! Inicie sessão com a nova palavra-passe.';
+        loginEl.querySelector('.flex').style.background = 'rgba(67,160,71,0.15)';
+        loginEl.querySelector('.flex').style.borderColor = 'rgba(67,160,71,0.45)';
+        loginEl.querySelector('i').setAttribute('data-lucide', 'check-circle');
+        loginEl.querySelector('.text-xs.font-bold').textContent = 'Sucesso';
+        loginEl.querySelector('.text-xs.font-bold').style.color = 'rgba(134,239,172,1)';
+        loginEl.querySelector('.text-sm').style.color = 'rgba(187,247,208,1)';
+        loginEl.classList.remove('hidden');
+        lucide.createIcons();
+      }
+    } catch (err) {
+      console.error('[handleResetPassword]', err);
+      setLoading('reset-submit', false);
+      showError('reset', 'Ocorreu um erro de ligação. Verifique a sua internet e tente novamente.');
     }
   }
 
@@ -1006,13 +1053,20 @@
     document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
   }
 
+  const LOADING_LABELS = {
+    'reg-submit':    'A criar conta…',
+    'login-submit':  'A iniciar sessão…',
+    'forgot-submit': 'A enviar…',
+    'reset-submit':  'A atualizar…',
+  };
+
   function setLoading(btnId, loading) {
     const btn = document.getElementById(btnId);
     if (!btn) return;
     btn.disabled = loading;
     if (loading) {
       if (!btn.dataset.label) btn.dataset.label = btn.textContent;
-      btn.textContent = 'Um momento…';
+      btn.textContent = LOADING_LABELS[btnId] || 'A processar…';
     } else {
       btn.textContent = btn.dataset.label || btn.textContent;
     }

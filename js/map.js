@@ -3,12 +3,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   const mapEl = document.getElementById('map-main');
   if (!mapEl) return;
 
-  // Load beach data
+  // Load beach data (uses global cache)
   let beaches = [];
   try {
-    const res = await fetch('data/beaches.json');
-    beaches = (await res.json()).filter(b => !b.hidden);
-  } catch {
+    beaches = (await getBeaches()).filter(b => !b.hidden);
+  } catch {}
+  if (!beaches.length) {
     mapEl.innerHTML = '<p class="p-8 text-center text-praia-sand-500">Erro ao carregar dados das praias.</p>';
     return;
   }
@@ -38,6 +38,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     maxClusterRadius: 50,
     spiderfyOnMaxZoom: true,
     showCoverageOnHover: false,
+    chunkedLoading: true,
+    chunkInterval: 100,
+    chunkDelay: 10,
     iconCreateFunction: (cluster) => {
       const count = cluster.getChildCount();
       return L.divIcon({
@@ -56,46 +59,45 @@ document.addEventListener('DOMContentLoaded', async () => {
     wc: 'WC', picnicArea: 'Piquenique', camping: 'Campismo',
   };
 
-  // Create markers
+  // Create markers (popup content generated lazily by Leaflet on open)
   const allMarkers = [];
   beaches.forEach(beach => {
     const isBalnear = beach.type === 'zona_balnear';
     let color = isBalnear ? '#0288D1' : '#003A40';
     if (beach.services.blueFlag) color = '#0288D1';
     if (beach.services.goldQuality) color = '#F5B800';
-    const border = isBalnear ? '#fff' : 'white';
 
     const icon = L.divIcon({
       className: '',
-      html: `<div style="width:14px;height:14px;border-radius:50%;background:${color};border:2.5px solid ${border};box-shadow:0 2px 8px rgba(0,0,0,0.3);cursor:pointer;"></div>`,
+      html: `<div style="width:14px;height:14px;border-radius:50%;background:${color};border:2.5px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.3);cursor:pointer;"></div>`,
       iconSize: [14, 14],
       iconAnchor: [7, 7],
     });
 
-    const activeServices = Object.entries(beach.services)
-      .filter(([, v]) => v)
-      .map(([k]) => serviceLabels[k])
-      .join(' · ');
-
     const marker = L.marker([beach.coordinates.lat, beach.coordinates.lng], { icon });
 
-    marker.bindPopup(`
-      <div style="min-width:220px;font-family:'Open Sans',sans-serif;">
-        <img src="${beach.thumbnail || beach.photos[0]}" alt="${beach.name}" style="width:100%;height:120px;object-fit:cover;border-radius:8px 8px 0 0;" loading="lazy">
-        <div style="padding:12px;">
-          <h3 style="font-family:Poppins,sans-serif;font-weight:700;font-size:14px;color:#003A40;margin:0 0 4px;">${beach.name}</h3>
-          <p style="font-size:12px;color:#8A7D60;margin:0 0 8px;">${beach.municipality} · ${beach.river}</p>
-          <p style="font-size:11px;color:#A89A78;margin:0 0 10px;">${activeServices}</p>
-          <a href="praia.html?id=${beach.id}" style="display:inline-flex;align-items:center;gap:6px;background:#003A40;color:#FFEB3B;padding:6px 14px;border-radius:20px;font-family:Poppins,sans-serif;font-size:11px;font-weight:600;text-decoration:none;text-transform:uppercase;letter-spacing:0.05em;">Ver Praia →</a>
-        </div>
-      </div>
-    `, { maxWidth: 280, className: 'custom-popup' });
+    // Leaflet calls the function only when popup opens — no upfront HTML cost
+    marker.bindPopup(() => {
+      const activeServices = Object.entries(beach.services)
+        .filter(([, v]) => v)
+        .map(([k]) => serviceLabels[k])
+        .join(' · ');
+      return `<div style="min-width:220px;font-family:'Open Sans',sans-serif;">
+          <img src="${beach.thumbnail || beach.photos[0]}" alt="${beach.name}" style="width:100%;height:120px;object-fit:cover;border-radius:8px 8px 0 0;" loading="lazy">
+          <div style="padding:12px;">
+            <h3 style="font-family:Poppins,sans-serif;font-weight:700;font-size:14px;color:#003A40;margin:0 0 4px;">${beach.name}</h3>
+            <p style="font-size:12px;color:#8A7D60;margin:0 0 8px;">${beach.municipality} · ${beach.river}</p>
+            ${activeServices ? `<p style="font-size:11px;color:#A89A78;margin:0 0 10px;">${activeServices}</p>` : ''}
+            <a href="praia.html?id=${beach.id}" style="display:inline-flex;align-items:center;gap:6px;background:#003A40;color:#FFEB3B;padding:6px 14px;border-radius:20px;font-family:Poppins,sans-serif;font-size:11px;font-weight:600;text-decoration:none;text-transform:uppercase;letter-spacing:0.05em;">Ver Praia →</a>
+          </div>
+        </div>`;
+    }, { maxWidth: 280, className: 'custom-popup' });
 
     marker._beachData = beach;
-    markers.addLayer(marker);
     allMarkers.push(marker);
   });
 
+  markers.addLayers(allMarkers);
   map.addLayer(markers);
 
   // ─── Filters ───
@@ -105,8 +107,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   const nearMeBtn = document.getElementById('btn-near-me');
   const resultCount = document.getElementById('result-count');
 
+  const _norm = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+
   function applyFilters() {
-    const search = (searchInput?.value || '').toLowerCase().trim();
+    const search = _norm(searchInput?.value || '');
     const region = regionSelect?.value || '';
     const activeServices = [];
     serviceCheckboxes.forEach(cb => { if (cb.checked) activeServices.push(cb.value); });
@@ -116,7 +120,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     allMarkers.forEach(marker => {
       const b = marker._beachData;
-      if (search && !b.name.toLowerCase().includes(search) && !b.municipality.toLowerCase().includes(search) && !b.river.toLowerCase().includes(search)) return;
+      if (search && !_norm(b.name).includes(search) && !_norm(b.municipality).includes(search) && !_norm(b.river).includes(search)) return;
       if (region && b.region !== region) return;
       if (activeServices.length > 0 && !activeServices.every(s => b.services[s])) return;
 

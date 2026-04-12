@@ -1,3 +1,17 @@
+// ─── Global beaches cache (avoids redundant fetches) ─────────────────────────
+window._beachesCache = window._beachesCache || null;
+window._beachesCachePromise = window._beachesCachePromise || null;
+window.getBeaches = function () {
+  if (window._beachesCache) return Promise.resolve(window._beachesCache);
+  if (!window._beachesCachePromise) {
+    window._beachesCachePromise = fetch('data/beaches.json')
+      .then(r => r.json())
+      .then(data => { window._beachesCache = data; return data; })
+      .catch(() => { window._beachesCachePromise = null; return []; });
+  }
+  return window._beachesCachePromise;
+};
+
 // Tailwind configuration — must load after Tailwind CDN script
 tailwind.config = {
   theme: {

@@ -47,10 +47,14 @@ async function profileUpsert(userId, fields) {
 async function profileUploadAvatar(userId, file) {
   const ext  = file.name.split('.').pop().toLowerCase();
   const path = `${userId}/avatar.${ext}`;
+  const contentType = file.type || 'image/' + (ext === 'jpg' ? 'jpeg' : ext);
   const { error } = await _sb.storage
     .from('avatars')
-    .upload(path, file, { upsert: true, contentType: file.type });
-  if (error) return null;
+    .upload(path, file, { upsert: true, contentType });
+  if (error) {
+    console.error('[profileUploadAvatar] upload error:', error.message);
+    return null;
+  }
   const { data } = _sb.storage.from('avatars').getPublicUrl(path);
   // Bust browser cache with timestamp
   return data.publicUrl + '?t=' + Date.now();

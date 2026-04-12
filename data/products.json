@@ -2,81 +2,143 @@
   {
     "id": "tshirt-pampilhosa",
     "name": "T-Shirt Personalizada — Design A",
-    "description": "T-shirt oficial das Praias Fluviais com o design exclusivo da praia que escolheres. 100% algodão orgânico, corte descontraído. Lavagem a 30°C.",
-    "customizable": true,
     "price": 2500,
     "images": [
       "brand_assets/itens_loja/t-shirt-A.jpg"
     ],
     "category": "vestuario",
     "variants": [
-      { "id": "S",   "label": "S",   "available": true },
-      { "id": "M",   "label": "M",   "available": true },
-      { "id": "L",   "label": "L",   "available": true },
-      { "id": "XL",  "label": "XL",  "available": true },
-      { "id": "XXL", "label": "XXL", "available": true }
+      {
+        "id": "S",
+        "label": "S",
+        "available": true
+      },
+      {
+        "id": "M",
+        "label": "M",
+        "available": true
+      },
+      {
+        "id": "L",
+        "label": "L",
+        "available": true
+      },
+      {
+        "id": "XL",
+        "label": "XL",
+        "available": true
+      },
+      {
+        "id": "XXL",
+        "label": "XXL",
+        "available": true
+      }
     ],
-    "shippingRequired": true,
-    "available": true
+    "available": true,
+    "description": "T-shirt oficial das Praias Fluviais com o design exclusivo da praia que escolheres. 100% algodão orgânico, corte descontraído. Lavagem a 30°C.",
+    "customizable": true,
+    "shippingRequired": true
   },
   {
     "id": "tshirt-praias-fluviais",
     "name": "T-Shirt Praias Fluviais",
-    "description": "T-shirt oficial das Praias Fluviais com o design stamp do Guia Turístico do Interior de Portugal. 100% algodão orgânico, corte descontraído. Lavagem a 30°C.",
     "price": 2500,
     "images": [
       "brand_assets/itens_loja/t-shirt-B.jpg"
     ],
     "category": "vestuario",
     "variants": [
-      { "id": "S",   "label": "S",   "available": true },
-      { "id": "M",   "label": "M",   "available": true },
-      { "id": "L",   "label": "L",   "available": true },
-      { "id": "XL",  "label": "XL",  "available": true },
-      { "id": "XXL", "label": "XXL", "available": true }
+      {
+        "id": "S",
+        "label": "S",
+        "available": true
+      },
+      {
+        "id": "M",
+        "label": "M",
+        "available": true
+      },
+      {
+        "id": "L",
+        "label": "L",
+        "available": true
+      },
+      {
+        "id": "XL",
+        "label": "XL",
+        "available": true
+      },
+      {
+        "id": "XXL",
+        "label": "XXL",
+        "available": true
+      }
     ],
-    "shippingRequired": true,
-    "available": true
+    "available": true,
+    "description": "T-shirt oficial das Praias Fluviais com o design stamp do Guia Turístico do Interior de Portugal. 100% algodão orgânico, corte descontraído. Lavagem a 30°C.",
+    "shippingRequired": true
   },
   {
     "id": "tshirt-figueiro",
     "name": "T-Shirt Personalizada — Design B",
-    "description": "T-shirt oficial das Praias Fluviais com o design exclusivo da praia que escolheres. 100% algodão orgânico, corte descontraído. Lavagem a 30°C.",
-    "customizable": true,
     "price": 2500,
     "images": [
       "brand_assets/itens_loja/t-shirt-C.jpg"
     ],
     "category": "vestuario",
     "variants": [
-      { "id": "S",   "label": "S",   "available": true },
-      { "id": "M",   "label": "M",   "available": true },
-      { "id": "L",   "label": "L",   "available": true },
-      { "id": "XL",  "label": "XL",  "available": true },
-      { "id": "XXL", "label": "XXL", "available": true }
+      {
+        "id": "S",
+        "label": "S",
+        "available": true
+      },
+      {
+        "id": "M",
+        "label": "M",
+        "available": true
+      },
+      {
+        "id": "L",
+        "label": "L",
+        "available": true
+      },
+      {
+        "id": "XL",
+        "label": "XL",
+        "available": true
+      },
+      {
+        "id": "XXL",
+        "label": "XXL",
+        "available": true
+      }
     ],
-    "shippingRequired": true,
-    "available": true
+    "available": true,
+    "description": "T-shirt oficial das Praias Fluviais com o design exclusivo da praia que escolheres. 100% algodão orgânico, corte descontraído. Lavagem a 30°C.",
+    "customizable": true,
+    "shippingRequired": true
   },
   {
     "id": "guia-2026",
     "name": "Guia das Praias Fluviais 2026",
-    "description": "A edição completa do Guia das Praias Fluviais 2026 — mais de 200 praias fluviais portuguesas com mapas, serviços, qualidade da água e muito mais.",
-    "highlights": ["200+ praias fluviais", "Mapas e coordenadas GPS", "Qualidade da água certificada"],
     "price": 0,
     "images": [
       "brand_assets/itens_loja/guia/guia.png"
     ],
     "category": "publicacao",
     "variants": [],
-    "shippingRequired": true,
-    "available": true
+    "available": true,
+    "highlights": [
+      "200+ praias fluviais",
+      "Mapas e coordenadas GPS",
+      "Qualidade da água certificada"
+    ],
+    "description": "A edição completa do Guia das Praias Fluviais 2026 — mais de 200 praias fluviais portuguesas com mapas, serviços, qualidade da água e muito mais.",
+    "shippingRequired": true
   },
   {
     "id": "passaporte-2026",
-    "name": "Passaporte das Praias Fluviais 2026",
-    "description": "O passaporte físico oficial para colecionar os carimbos das praias fluviais em Portugal. Reúne todas as praias da rede e tem espaço para registar as suas visitas.",
-    "highlights": ["Carimbos em 200+ praias", "Registo das suas visitas", "Edição coleccionável 2026"],
+    "name": "Passaporte Turístico da Rede de Praias Fluviais de Portugal",
     "price": 0,
     "images": [
       "brand_assets/itens_loja/passaporte/passaporte_capa.png",
@@ -84,7 +146,8 @@
     ],
     "category": "publicacao",
     "variants": [],
-    "shippingRequired": true,
-    "available": true
+    "available": true,
+    "description": "<p>O&nbsp;passaporte&nbsp;físico&nbsp;oficial&nbsp;da&nbsp;Rede&nbsp;de&nbsp;Praias&nbsp;Fluviais&nbsp;de&nbsp;Portugal&nbsp;permite&nbsp;colecionar&nbsp;os&nbsp;carimbos&nbsp;de&nbsp;todas&nbsp;as&nbsp;praias&nbsp;fluviais&nbsp;classificadas&nbsp;de&nbsp;Portugal&nbsp;e&nbsp;de&nbsp;algumas&nbsp;das&nbsp;melhores&nbsp;zonas&nbsp;balneares&nbsp;interiores&nbsp;de&nbsp;norte&nbsp;a&nbsp;sul&nbsp;do&nbsp;país.&nbsp;</p>",
+    "shippingRequired": true
   }
 ]

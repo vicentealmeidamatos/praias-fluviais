@@ -1,43 +1,112 @@
 {
-  "votingDeadline": "2026-10-31T23:59:59",
-  "currentYear": 2026,
-  "featuredBeaches": ["praia-fluvial-de-loriga", "praia-fluvial-de-avo", "albufeira-do-azibo", "praia-fluvial-de-geres"],
-  "featuredArticles": ["melhores-praias-centro", "cascatas-portugal", "alcoutim-nova-praia"],
-  "announcement": {
-    "enabled": false,
-    "text": ""
-  },
-  "shippingPriceContinent": 390,
-  "shippingPriceIslands": 490,
-  "freeShippingThreshold": 3000,
-  "socialMedia": {
-    "facebook": "https://www.facebook.com/praiasfluviais",
-    "instagram": "https://www.instagram.com/guiadaspraiasfluviais"
-  },
   "contact": {
     "email": "info@praiasfluviais.pt",
     "website": "https://praiasfluviais.pt"
   },
+  "currentYear": 2026,
+  "socialMedia": {
+    "facebook": "https://www.facebook.com/praiasfluviais",
+    "instagram": "https://www.instagram.com/guiadaspraiasfluviais"
+  },
+  "announcement": {
+    "text": "",
+    "enabled": false
+  },
+  "votingDeadline": "2026-10-31T23:59:00",
+  "featuredBeaches": [
+    "praia-fluvial-de-loriga",
+    "praia-fluvial-de-avo",
+    "albufeira-do-azibo",
+    "praia-fluvial-de-geres"
+  ],
   "previousWinners": [
-    { "year": 2025, "winner": "Praia Fluvial de Carriça", "second": "", "third": "", "revelations": [] },
-    { "year": 2024, "winner": "Praia Fluvial de Avô", "second": "Praia Fluvial de Ucha", "third": "Praia Fluvial de Carriça",
+    {
+      "year": 2025,
+      "third": "Praia Fluvial de Avô - Oliveira do Hospital",
+      "second": "Praia Fluvial de Santa Luzia - Pampilhosa da Serra",
+      "winner": "Praia Fluvial da Carriça - Oliveira de Frades",
       "revelations": [
-        { "label": "Norte", "name": "Praia Fluvial de Sabugal - Devesa" },
-        { "label": "Centro", "name": "Praia Fluvial de Corga" },
-        { "label": "Sul", "name": "Praia Fluvial de Praia do Lago" }
+        {
+          "name": "Praia Fluvial do Cavadinho - Braga",
+          "label": "Norte"
+        },
+        {
+          "name": "Praia Fluvial do Cornicovo - Penacova",
+          "label": "Centro"
+        },
+        {
+          "name": "Praia Fluvial de Oriola - Portel",
+          "label": "Sul"
+        }
       ]
     },
-    { "year": 2023, "winner": "Praia Fluvial de Vimieiro", "second": "Praia Fluvial de Reconquinho", "third": "",
+    {
+      "year": 2024,
+      "third": "Praia Fluvial da Carriça",
+      "second": "Praia Fluvial da Ucha",
+      "winner": "Praia Fluvial de Avô - Oliveira do Hospital",
       "revelations": [
-        { "label": "1.º", "name": "Praia Fluvial de Sorraia" },
-        { "label": "2.º", "name": "Praia Fluvial de Constância" }
+        {
+          "name": "Praia Fluvial de Sabugal/Devesa - Sabugal",
+          "label": "Norte"
+        },
+        {
+          "name": "Praia Fluvial de Corga - Castanheira de Pera",
+          "label": "Centro"
+        },
+        {
+          "name": "Praia Fluvial de Praia do Lago - Moura",
+          "label": "Sul"
+        }
       ]
     },
-    { "year": "2021-2022", "winner": "Praia Fluvial de Videmonte - Quinta da Taberna", "second": "Praia Fluvial de Santa Luzia", "third": "Praia Fluvial de Aldeia Viçosa",
-      "revelations": [{ "label": "", "name": "Praia Fluvial de Alqueva" }]
+    {
+      "year": 2023,
+      "third": "",
+      "second": "Praia Fluvial de Reconquinho - Penacova",
+      "winner": "Praia Fluvial de Vimieiro - Penacova",
+      "revelations": [
+        {
+          "name": "Praia Fluvial de Sorraia - Coruche",
+          "label": "1.º"
+        },
+        {
+          "name": "Praia Fluvial de Constância - Constância",
+          "label": "2.º"
+        }
+      ]
     },
-    { "year": 2020, "winner": "Praia Fluvial de Santa Luzia", "second": "Praia Fluvial de Fontes", "third": "Praia Fluvial de Troviscal",
-      "revelations": [{ "label": "", "name": "Praia Fluvial de Amieira" }]
+    {
+      "year": "2021-2022",
+      "third": "Praia Fluvial de Aldeia Viçosa - Guarda",
+      "second": "Praia Fluvial de Santa Luzia - Pampilhosa da Serra",
+      "winner": "Praia Fluvial de Videmonte - Quinta da Taberna - Guarda",
+      "revelations": [
+        {
+          "name": "Praia Fluvial de Alqueva - Portel",
+          "label": ""
+        }
+      ]
+    },
+    {
+      "year": 2020,
+      "third": "Praia Fluvial de Troviscal - Sertã",
+      "second": "Praia Fluvial de Fontes - Abrantes",
+      "winner": "Praia Fluvial de Santa Luzia - Pampilhosa da Serra",
+      "revelations": [
+        {
+          "name": "Praia Fluvial de Amieira - Portel",
+          "label": ""
+        }
+      ]
     }
-  ]
+  ],
+  "featuredArticles": [
+    "melhores-praias-centro",
+    "cascatas-portugal",
+    "alcoutim-nova-praia"
+  ],
+  "shippingPriceIslands": 490,
+  "freeShippingThreshold": 3000,
+  "shippingPriceContinent": 390
 }

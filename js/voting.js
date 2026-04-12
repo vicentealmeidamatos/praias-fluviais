@@ -17,31 +17,25 @@ document.addEventListener('DOMContentLoaded', async () => {
   const { authGetUser, profileGet, voteGet, voteSubmit, celebrateBadge,
           badgesCompute, stampsGetAll, reviewsGetForUser, ALL_BADGES } = AuthUtils;
 
-  // ── Auth & data ─────────────────────────────────────────────────────────────
-  const user        = await authGetUser();
-  const currentYear = new Date().getFullYear();
-  let   userVote    = null; // beach_id the user voted for (or null)
+  // ── 1) Load beaches + settings (no auth needed) ───────────────────────────
+  // Auth runs in parallel but we don't wait for it to render
+  const beachesPromise = (window._beachesPrefetch || getBeaches()).then(d => d.length ? d : null);
+  const settingsPromise = fetch('data/settings.json').then(r => r.json()).catch(() => ({}));
+  const authPromise = authGetUser().catch(() => null);
 
-  if (user) {
-    userVote = await voteGet(user.id, currentYear);
-  }
+  const [beachesRaw, settingsRaw] = await Promise.all([beachesPromise, settingsPromise]);
 
-  // ── Load settings & beaches ─────────────────────────────────────────────────
-  let settings = {};
-  try {
-    settings = await (await fetch('data/settings.json')).json();
-    // Re-init countdown if settings has a different deadline
-    if (settings.votingDeadline && settings.votingDeadline !== '2026-10-31T23:59:59') {
-      initCountdown(settings.votingDeadline);
-    }
-  } catch {}
-
-  let beaches = [];
-  try {
-    beaches = (await (await fetch('data/beaches.json')).json()).filter(b => !b.hidden);
-  } catch {
+  if (!beachesRaw) {
     grid.innerHTML = '<p class="col-span-full text-center text-praia-sand-500 py-10">Erro ao carregar praias.</p>';
     return;
+  }
+
+  let beaches = beachesRaw.filter(b => !b.hidden);
+  let settings = settingsRaw || {};
+  let userVote = null;
+
+  if (settings.votingDeadline && settings.votingDeadline !== '2026-10-31T23:59:59') {
+    initCountdown(settings.votingDeadline);
   }
 
   // Populate district filter
@@ -111,11 +105,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     lucide.createIcons();
   }
 
+  const _norm = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+
   function filterBeaches() {
-    const search   = (searchInput?.value || '').toLowerCase().trim();
+    const search   = _norm(searchInput?.value || '');
     const district = districtSel?.value || '';
     currentBeaches = beaches.filter(b => {
-      if (search && !b.name.toLowerCase().includes(search) && !b.municipality?.toLowerCase().includes(search)) return false;
+      if (search && !_norm(b.name).includes(search) && !_norm(b.municipality || '').includes(search)) return false;
       if (district && b.district !== district) return false;
       return true;
     });
@@ -144,10 +140,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // Initial render
+  // ── 2) Render grid IMMEDIATELY (all beaches with vote buttons) ──────────────
   renderCards(beaches);
 
-  // Preselect
+  // ── 3) Resolve auth in background, then update vote state if needed ────────
+  const currentYear = new Date().getFullYear();
+  const user = await authPromise;
+  if (user) {
+    userVote = await voteGet(user.id, currentYear);
+    if (userVote) {
+      // Re-render to show "O Seu Voto" / "Já votou" states
+      renderCards(currentBeaches.length === beaches.length ? beaches : currentBeaches);
+    }
+  }
+
+  // Preselect (after auth resolved)
   if (preselect && !userVote) {
     const beach = beaches.find(b => b.id === preselect);
     if (beach) setTimeout(() => openVoteModal(beach.id, beach.name), 500);
@@ -284,50 +291,62 @@ async function confirmVote(beachId, beachName) {
   const btn = document.getElementById('vote-confirm-btn');
   if (btn) { btn.disabled = true; btn.textContent = 'A registar…'; }
 
-  const user = await AuthUtils.authGetUser();
-  if (!user) { closeVoteModal(); showVoteAuthPrompt(beachId, beachName); return; }
-
-  const year = new Date().getFullYear();
-  const ok   = await AuthUtils.voteSubmit(user.id, beachId, year, _voteIsPublic);
-
-  if (!ok) {
-    if (btn) { btn.disabled = false; btn.textContent = 'Confirmar Voto Definitivo'; }
-    alert('Erro ao registar o voto. Pode já ter votado este ano.');
-    return;
-  }
-
-  // Check if "Eleitor" badge was just earned
   try {
-    const beaches = await (await fetch('data/beaches.json')).json();
-    const stamps  = await AuthUtils.stampsGetAll(user.id);
-    const reviews = await AuthUtils.reviewsGetForUser(user.id);
-    const badges  = AuthUtils.badgesCompute({ stamps, reviews, voted: true, beaches });
-    const eleitor = badges.find(b => b.id === 'eleitor' && b.earned);
-    if (eleitor) setTimeout(() => AuthUtils.celebrateBadge(eleitor), 2000);
-  } catch {}
+    const user = await AuthUtils.authGetUser();
+    if (!user) { closeVoteModal(); showVoteAuthPrompt(beachId, beachName); return; }
 
-  // Show success
-  const inner = document.getElementById('vote-modal-inner');
-  if (inner) {
-    inner.innerHTML = `
-      <div class="text-center py-4">
-        <div class="w-16 h-16 bg-praia-green-400/10 rounded-full flex items-center justify-center mx-auto mb-5">
-          <i data-lucide="check-circle" class="w-8 h-8 text-praia-green-500"></i>
-        </div>
-        <h3 class="font-display text-xl font-bold text-praia-teal-800 mb-2">Obrigado pelo seu voto!</h3>
-        <p class="text-praia-sand-500 text-sm mb-6">Votou em <strong>${beachName}</strong></p>
-        <div class="flex gap-2 justify-center mb-6">
-          <button onclick="shareVote('${beachName}')" class="btn-primary inline-flex items-center gap-2 bg-praia-teal-800 text-white font-display text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full">
-            <i data-lucide="share-2" class="w-4 h-4"></i> Partilhar
-          </button>
-        </div>
-        <button onclick="closeVoteModal(); location.reload();" class="text-praia-sand-500 text-sm hover:text-praia-teal-700 transition-colors duration-300">Fechar</button>
-      </div>`;
-    lucide.createIcons();
+    const year = new Date().getFullYear();
+    const ok   = await AuthUtils.voteSubmit(user.id, beachId, year, _voteIsPublic);
+
+    if (!ok) {
+      if (btn) { btn.disabled = false; btn.textContent = 'Confirmar Voto Definitivo'; }
+      alert('Erro ao registar o voto. Pode já ter votado este ano.');
+      return;
+    }
+
+    // Check if "Eleitor" badge was just earned
+    try {
+      const beaches = await (await fetch('data/beaches.json')).json();
+      const stamps  = await AuthUtils.stampsGetAll(user.id);
+      const reviews = await AuthUtils.reviewsGetForUser(user.id);
+      const badges  = AuthUtils.badgesCompute({ stamps, reviews, voted: true, beaches });
+      const eleitor = badges.find(b => b.id === 'eleitor' && b.earned);
+      if (eleitor) setTimeout(() => AuthUtils.celebrateBadge(eleitor), 2000);
+    } catch {}
+
+    // Show success
+    const inner = document.getElementById('vote-modal-inner');
+    if (inner) {
+      inner.innerHTML = `
+        <div class="text-center py-4">
+          <div class="w-16 h-16 bg-praia-green-400/10 rounded-full flex items-center justify-center mx-auto mb-5">
+            <i data-lucide="check-circle" class="w-8 h-8 text-praia-green-500"></i>
+          </div>
+          <h3 class="font-display text-xl font-bold text-praia-teal-800 mb-2">Obrigado pelo seu voto!</h3>
+          <p class="text-praia-sand-500 text-sm mb-6">Votou em <strong>${beachName}</strong></p>
+          <div class="flex gap-2 justify-center mb-6">
+            <button onclick="shareVote('${beachName}')" class="btn-primary inline-flex items-center gap-2 bg-praia-teal-800 text-white font-display text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full">
+              <i data-lucide="share-2" class="w-4 h-4"></i> Partilhar
+            </button>
+          </div>
+          <button onclick="closeVoteModal(); location.reload();" class="text-praia-sand-500 text-sm hover:text-praia-teal-700 transition-colors duration-300">Fechar</button>
+        </div>`;
+      lucide.createIcons();
+    }
+  } catch (err) {
+    console.error('[confirmVote]', err);
+    if (btn) { btn.disabled = false; btn.textContent = 'Confirmar Voto Definitivo'; }
+    alert('Erro de ligação. Verifique a sua internet e tente novamente.');
   }
 }
 
 function showVoteAuthPrompt(beachId, beachName) {
+  // Determine redirect: if on beach page, redirect back here; else to votar.html
+  const isBeachPage = window.location.pathname.includes('praia.html');
+  const redirectUrl = isBeachPage
+    ? encodeURIComponent(window.location.href)
+    : `votar.html%3Fpreselect%3D${beachId}`;
+
   const el = document.createElement('div');
   el.id = 'vote-auth-prompt';
   el.className = 'fixed inset-0 z-[2000] flex items-center justify-center p-4';
@@ -343,11 +362,11 @@ function showVoteAuthPrompt(beachId, beachName) {
       <h3 class="font-display text-xl font-bold text-praia-teal-800 mb-2">Conta necessária para votar</h3>
       <p class="text-praia-sand-500 text-sm mb-6">Crie uma conta gratuita para votar em <strong>${beachName}</strong>.</p>
       <div class="flex flex-col gap-2">
-        <a href="auth.html?redirect=votar.html%3Fpreselect%3D${beachId}"
+        <a href="auth.html?redirect=${redirectUrl}"
            class="btn-primary block w-full bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider py-3 rounded-xl shadow-layered-yellow">
           Criar Conta e Votar
         </a>
-        <a href="auth.html?tab=login&redirect=votar.html%3Fpreselect%3D${beachId}"
+        <a href="auth.html?tab=login&redirect=${redirectUrl}"
            class="text-praia-sand-500 text-sm font-display font-semibold hover:text-praia-teal-700 transition-colors py-2">
           Já tenho conta — Entrar
         </a>
