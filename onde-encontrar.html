@@ -392,7 +392,7 @@
     };
 
     // ─── Load data ───
-    const allLocations = (await fetch('data/locations-guia-passaporte.json').then(r => r.json())).filter(l => !l.hidden);
+    const allLocations = ((await loadData('locationsGuia')) || []).filter(l => !l.hidden);
 
     // ─── Map ───
     const PT_BOUNDS = [[36.8, -9.6], [42.2, -6.1]];

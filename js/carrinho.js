@@ -5,12 +5,8 @@ let _products = [];
 let _beaches = [];
 
 // Pré-carregamento imediato (sem esperar pelo DOM)
-const _prodEarlyC = window.DataLoader
-  ? DataLoader.loadDataset('products')
-  : fetch('data/products.json').then(r => r.json()).catch(() => []);
-const _beachesEarlyC = window.DataLoader
-  ? DataLoader.loadDataset('beaches')
-  : fetch('data/beaches.json').then(r => r.json()).catch(() => []);
+const _prodEarlyC = loadData('products').then(d => d || []);
+const _beachesEarlyC = loadData('beaches').then(d => d || []);
 
 // ─── Inicialização ────────────────────────────────────────────────────────────
 

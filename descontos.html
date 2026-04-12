@@ -341,8 +341,7 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
-      const res = await fetch('data/descontos.json');
-      const descontos = (await res.json()).filter(d => !d.hidden);
+      const descontos = ((await loadData('descontos')) || []).filter(d => !d.hidden);
 
       const categoryLabels = {
         alojamento: 'Alojamento',

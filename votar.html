@@ -439,7 +439,7 @@
     let _beachesLookup = null;
     async function getBeachesLookup() {
       if (!_beachesLookup) {
-        try { _beachesLookup = (await (await fetch('data/beaches.json')).json()).filter(b => !b.hidden); } catch(e) { _beachesLookup = []; }
+        try { _beachesLookup = ((await loadData('beaches')) || []).filter(b => !b.hidden); } catch(e) { _beachesLookup = []; }
       }
       return _beachesLookup;
     }
@@ -462,8 +462,7 @@
     // ─── Render winners from settings.json ───
     (async function initWinners() {
       try {
-        const res = await fetch('data/settings.json');
-        const settings = await res.json();
+        const settings = (await loadData('settings')) || {};
         const winners = (settings.previousWinners || [])
           .slice()
           .sort((a, b) => String(b.year).localeCompare(String(a.year), undefined, { numeric: true }));

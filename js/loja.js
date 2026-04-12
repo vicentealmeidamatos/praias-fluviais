@@ -6,12 +6,8 @@ let _activeCategory = 'todos';
 let _cartCount = 0;
 
 // ─── Pré-carregamento (inicia imediatamente, sem esperar pelo DOM) ───────────
-const _productsEarly = window.DataLoader
-  ? DataLoader.loadDataset('products')
-  : fetch('data/products.json').then(r => r.json()).catch(() => []);
-const _beachesEarly = window.DataLoader
-  ? DataLoader.loadDataset('beaches')
-  : fetch('data/beaches.json').then(r => r.json()).catch(() => []);
+const _productsEarly = loadData('products').then(d => d || []);
+const _beachesEarly = loadData('beaches').then(d => d || []);
 
 // ─── Inicialização ────────────────────────────────────────────────────────────
 

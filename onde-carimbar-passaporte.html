@@ -362,7 +362,7 @@
     const STAMP_COLOR = '#FF7043';
 
     // ─── Load data ───
-    const allLocations = (await fetch('data/locations-carimbos.json').then(r => r.json())).filter(l => !l.hidden);
+    const allLocations = ((await loadData('locationsCarimbo')) || []).filter(l => !l.hidden);
 
     // ─── Map ───
     const PT_BOUNDS = [[36.8, -9.6], [42.2, -6.1]];

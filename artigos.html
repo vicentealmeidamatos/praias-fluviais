@@ -345,8 +345,7 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
-      const res = await fetch('data/articles.json');
-      const articles = (await res.json()).filter(a => !a.hidden);
+      const articles = ((await loadData('articles')) || []).filter(a => !a.hidden);
 
       const categoryLabels = {
         roteiros: 'Roteiros',

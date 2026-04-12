@@ -1,13 +1,30 @@
+// ─── Unified data loader (Supabase-first, JSON fallback) ─────────────────────
+// Garante que TODAS as páginas leem os mesmos dados que o admin grava.
+window._datasetFiles = {
+  beaches: 'data/beaches.json', articles: 'data/articles.json',
+  locationsGuia: 'data/locations-guia-passaporte.json',
+  locationsCarimbo: 'data/locations-carimbos.json',
+  descontos: 'data/descontos.json', products: 'data/products.json',
+  settings: 'data/settings.json',
+};
+window.loadData = function (dataset) {
+  var file = window._datasetFiles[dataset];
+  return (
+    window.DataLoader && window.DataLoader.loadDataset
+      ? window.DataLoader.loadDataset(dataset).then(function (d) { return d || null; })
+      : file ? fetch(file).then(function (r) { return r.json(); }) : Promise.resolve(null)
+  ).catch(function () { return null; });
+};
+
 // ─── Global beaches cache (avoids redundant fetches) ─────────────────────────
 window._beachesCache = window._beachesCache || null;
 window._beachesCachePromise = window._beachesCachePromise || null;
 window.getBeaches = function () {
   if (window._beachesCache) return Promise.resolve(window._beachesCache);
   if (!window._beachesCachePromise) {
-    window._beachesCachePromise = fetch('data/beaches.json')
-      .then(r => r.json())
-      .then(data => { window._beachesCache = data; return data; })
-      .catch(() => { window._beachesCachePromise = null; return []; });
+    window._beachesCachePromise = window.loadData('beaches')
+      .then(function (data) { window._beachesCache = data || []; return window._beachesCache; })
+      .catch(function () { window._beachesCachePromise = null; return []; });
   }
   return window._beachesCachePromise;
 };

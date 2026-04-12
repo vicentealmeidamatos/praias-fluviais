@@ -1,6 +1,25 @@
+// ─── Pré-carregamento imediato (sem esperar pelo DOM) ───
+const _beachId = new URLSearchParams(window.location.search).get('id');
+const _beachesEarlyBP = _beachId ? getBeaches() : null;
+
+// Preload hero image o mais cedo possível
+if (_beachId && _beachesEarlyBP) {
+  _beachesEarlyBP.then(list => {
+    const b = list.find(x => x.id === _beachId);
+    if (b && b.photos && b.photos[0]) {
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = b.photos[0];
+      link.fetchPriority = 'high';
+      document.head.appendChild(link);
+    }
+  }).catch(() => {});
+}
+
 // ─── Individual Beach Page ───
 document.addEventListener('DOMContentLoaded', async () => {
-  const beachId = new URLSearchParams(window.location.search).get('id');
+  const beachId = _beachId;
   const mainContent = document.getElementById('beach-content');
   if (!beachId || !mainContent) return;
 
@@ -9,7 +28,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   let beaches = [];
   try {
-    beaches = await getBeaches();
+    beaches = await (_beachesEarlyBP || getBeaches());
   } catch {}
   if (!beaches.length) {
     mainContent.innerHTML = '<div class="text-center py-20"><p class="text-praia-sand-500">Erro ao carregar dados.</p></div>';
@@ -82,7 +101,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const photoCount = beach.photos.length;
   const carouselSlides = beach.photos.map((p, i) => `
     <div class="carousel-slide absolute inset-0 transition-opacity duration-500 ease-in-out ${i === 0 ? 'opacity-100' : 'opacity-0'}">
-      <img src="${p}" alt="${beach.name} - foto ${i + 1}" class="w-full h-full object-cover" loading="${i === 0 ? 'eager' : 'lazy'}">
+      <img src="${p}" alt="${beach.name} - foto ${i + 1}" class="w-full h-full object-cover" loading="${i === 0 ? 'eager' : 'lazy'}"${i === 0 ? ' fetchpriority="high"' : ' decoding="async"'}>
     </div>
   `).join('');
 
@@ -202,13 +221,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     </div>
   `;
 
+  document.title = `${beach.name} | Praias Fluviais`;
+  // Update OG meta tags
+  const ogTitle = document.querySelector('meta[property="og:title"]');
+  const ogDesc  = document.querySelector('meta[property="og:description"]');
+  const ogImg   = document.querySelector('meta[property="og:image"]');
+  const metaDesc = document.querySelector('meta[name="description"]');
+  if (ogTitle) ogTitle.content = `${beach.name} | Praias Fluviais`;
+  if (ogDesc)  ogDesc.content = beach.description || `Descubra ${beach.name} — ${beach.municipality}, ${beach.river}.`;
+  if (ogImg)   ogImg.content = beach.thumbnail || beach.photos[0];
+  if (metaDesc) metaDesc.content = beach.description || `Descubra ${beach.name} — ${beach.municipality}, ${beach.river}.`;
+
   lucide.createIcons();
   initCarousel(photoCount);
 
   // ── Winner medals from settings.json ──────────────────────────────────────
   try {
-    const settingsRes = await fetch('data/settings.json');
-    const settings = await settingsRes.json();
+    const settings = (await loadData('settings')) || {};
     const winnerAwards = [];
     const norm = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
     const beachNorm = norm(beach.name);
@@ -285,8 +314,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   const currentProfile = currentUser ? await AuthUtils.profileGet(currentUser.id) : null;
   await loadReviews(beach.id, currentUser, beaches);
   renderReviewForm(beach.id, currentUser, currentProfile, beaches);
-
-  document.title = `${beach.name} | Praias Fluviais`;
 
   // Inject JSON-LD structured data
   const jsonLd = document.createElement('script');
@@ -611,7 +638,7 @@ async function submitReply(parentId, beachId) {
   if (!ok) { alert('Erro ao publicar resposta. Tente novamente.'); return; }
 
   let beaches = [];
-  try { beaches = await (await fetch('data/beaches.json')).json(); } catch {}
+  try { beaches = (await loadData('beaches')) || []; } catch {}
   await loadReviews(beachId, user, beaches);
   renderReviewForm(beachId, user, await AuthUtils.profileGet(user.id), beaches);
 }
@@ -730,7 +757,7 @@ async function submitReview(beachId) {
 
   const profile = await AuthUtils.profileGet(user.id);
   let beaches = [];
-  try { beaches = await (await fetch('data/beaches.json')).json(); } catch {}
+  try { beaches = (await loadData('beaches')) || []; } catch {}
   await loadReviews(beachId, user, beaches);
 
   // Badge check with localStorage fix
@@ -756,7 +783,7 @@ async function deleteReview(reviewId, beachId) {
   const ok = await AuthUtils.reviewDelete(reviewId, user.id);
   if (ok) {
     let beaches = [];
-    try { beaches = await (await fetch('data/beaches.json')).json(); } catch {}
+    try { beaches = (await loadData('beaches')) || []; } catch {}
     await loadReviews(beachId, user, beaches);
   }
 }

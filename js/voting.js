@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // ── 1) Load beaches + settings (no auth needed) ───────────────────────────
   // Auth runs in parallel but we don't wait for it to render
   const beachesPromise = (window._beachesPrefetch || getBeaches()).then(d => d.length ? d : null);
-  const settingsPromise = fetch('data/settings.json').then(r => r.json()).catch(() => ({}));
+  const settingsPromise = loadData('settings').then(d => d || {});
   const authPromise = authGetUser().catch(() => null);
 
   const [beachesRaw, settingsRaw] = await Promise.all([beachesPromise, settingsPromise]);
@@ -306,7 +306,7 @@ async function confirmVote(beachId, beachName) {
 
     // Check if "Eleitor" badge was just earned
     try {
-      const beaches = await (await fetch('data/beaches.json')).json();
+      const beaches = (await loadData('beaches')) || [];
       const stamps  = await AuthUtils.stampsGetAll(user.id);
       const reviews = await AuthUtils.reviewsGetForUser(user.id);
       const badges  = AuthUtils.badgesCompute({ stamps, reviews, voted: true, beaches });

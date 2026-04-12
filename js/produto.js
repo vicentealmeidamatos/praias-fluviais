@@ -8,15 +8,9 @@ let _activeImage = 0;
 let _settings = null;
 
 // Pré-carregamento imediato (sem esperar pelo DOM)
-const _prodEarly = window.DataLoader
-  ? DataLoader.loadDataset('products')
-  : fetch('data/products.json').then(r => r.json()).catch(() => []);
-const _settingsEarly = window.DataLoader
-  ? DataLoader.loadDataset('settings')
-  : fetch('data/settings.json').then(r => r.json()).catch(() => null);
-const _beachesEarlyP = window.DataLoader
-  ? DataLoader.loadDataset('beaches')
-  : fetch('data/beaches.json').then(r => r.json()).catch(() => []);
+const _prodEarly = loadData('products').then(d => d || []);
+const _settingsEarly = loadData('settings');
+const _beachesEarlyP = loadData('beaches').then(d => d || []);
 
 async function initProduto() {
   const params = new URLSearchParams(window.location.search);
