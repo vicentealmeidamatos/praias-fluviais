@@ -345,15 +345,15 @@
           <!-- Stats -->
           <div class="flex flex-wrap justify-center gap-8 md:gap-16 mb-12">
             <div class="text-center reveal-on-scroll" data-reveal-delay="300">
-              <div class="font-display text-4xl md:text-5xl font-bold text-praia-yellow-400 tracking-tight" data-counter="200" data-suffix="+">0</div>
+              <div class="font-display text-4xl md:text-5xl font-bold text-praia-yellow-400 tracking-tight" data-counter="200" data-suffix="+">200+</div>
               <div class="font-display text-xs uppercase tracking-widest text-white/50 mt-1" data-content="homepage.stat1Label">Praias</div>
             </div>
             <div class="text-center reveal-on-scroll" data-reveal-delay="400">
-              <div class="font-display text-4xl md:text-5xl font-bold text-praia-yellow-400 tracking-tight" data-counter="120" data-suffix="k">0</div>
+              <div class="font-display text-4xl md:text-5xl font-bold text-praia-yellow-400 tracking-tight" data-counter="120" data-suffix="k">120k</div>
               <div class="font-display text-xs uppercase tracking-widest text-white/50 mt-1" data-content="homepage.stat2Label">Guias Distribuídos</div>
             </div>
             <div class="text-center reveal-on-scroll" data-reveal-delay="500">
-              <div class="font-display text-4xl md:text-5xl font-bold text-praia-yellow-400 tracking-tight" data-counter="250" data-prefix="+" data-suffix="">0</div>
+              <div class="font-display text-4xl md:text-5xl font-bold text-praia-yellow-400 tracking-tight" data-counter="250" data-prefix="+" data-suffix="">+250</div>
               <div class="font-display text-xs uppercase tracking-widest text-white/50 mt-1" data-content="homepage.stat3Label">Descontos</div>
             </div>
           </div>
@@ -923,28 +923,40 @@
       const counters = document.querySelectorAll('[data-counter]');
       if (!counters.length) return;
 
+      // Set final values immediately as fallback (visible if animation never runs)
+      counters.forEach(el => {
+        const target = parseInt(el.dataset.counter, 10);
+        const prefix = el.dataset.prefix || '';
+        const suffix = el.dataset.suffix || '';
+        el.textContent = prefix + target.toLocaleString('pt-PT') + suffix;
+      });
+
+      // Only animate on first visit (not on tab-switch back)
+      let hasAnimated = false;
+
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-          if (!entry.isIntersecting) return;
-          observer.unobserve(entry.target);
-          animateCounter(entry.target);
+          if (!entry.isIntersecting || hasAnimated) return;
+          hasAnimated = true;
+          counters.forEach(el => animateCounter(el));
         });
       }, { threshold: 0.5 });
 
       counters.forEach(el => observer.observe(el));
+
+      function easeInOutCubic(t) {
+        return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      }
 
       function animateCounter(el) {
         const target = parseInt(el.dataset.counter, 10);
         const prefix = el.dataset.prefix || '';
         const suffix = el.dataset.suffix || '';
         const duration = 2800;
-
-        // Delay start to match the reveal-on-scroll fade-in of the parent element
         const revealDelay = parseInt(el.closest('[data-reveal-delay]')?.dataset.revealDelay || 0);
 
-        function easeInOutCubic(t) {
-          return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-        }
+        // Start from 0 for the animation
+        el.textContent = prefix + '0' + suffix;
 
         setTimeout(() => {
           const startTime = performance.now();
