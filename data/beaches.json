@@ -910,9 +910,9 @@
     "passportStamp": true
   },
   {
-    "id": "zona-balnear-de-ortiga",
+    "id": "praia-fluvial-de-ortiga",
     "name": "Praia Fluvial da Ortiga",
-    "type": "zona_balnear",
+    "type": "praia_fluvial",
     "river": "Rio Tejo",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Ortiga"
@@ -3872,9 +3872,9 @@
     "passportStamp": true
   },
   {
-    "id": "zona-balnear-de-ponte-da-ranca",
+    "id": "praia-fluvial-de-ponte-da-ranca",
     "name": "Praia Fluvial de Ponte da Ranca",
-    "type": "zona_balnear",
+    "type": "praia_fluvial",
     "river": "Rio Tuela",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Ponte%2Bda%2BRanca"
@@ -6338,9 +6338,9 @@
     "passportStamp": true
   },
   {
-    "id": "praia-fluvial-de-cascata-da-cabreia",
+    "id": "zona-balnear-de-cascata-da-cabreia",
     "name": "Zona Balnear da Cascata da Cabreia",
-    "type": "praia_fluvial",
+    "type": "zona_balnear",
     "river": "Rio Mau",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Cascata%2Bda%2BCabreia"
@@ -6414,9 +6414,9 @@
     "passportStamp": true
   },
   {
-    "id": "praia-fluvial-de-maravilha",
+    "id": "zona-balnear-de-maravilha",
     "name": "Zona Balnear da Maravilha",
-    "type": "praia_fluvial",
+    "type": "zona_balnear",
     "river": "Rio Tua",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Maravilha"
@@ -6528,9 +6528,9 @@
     "passportStamp": true
   },
   {
-    "id": "praia-fluvial-de-portagem",
+    "id": "zona-balnear-de-portagem",
     "name": "Zona Balnear da Portagem",
-    "type": "praia_fluvial",
+    "type": "zona_balnear",
     "river": "Rio Sever",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Portagem"
@@ -6566,9 +6566,9 @@
     "passportStamp": true
   },
   {
-    "id": "praia-fluvial-de-ratoeira",
+    "id": "zona-balnear-de-ratoeira",
     "name": "Zona Balnear da Ratoeira",
-    "type": "praia_fluvial",
+    "type": "zona_balnear",
     "river": "Rio Mondego",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Ratoeira"
@@ -6680,9 +6680,9 @@
     "passportStamp": true
   },
   {
-    "id": "praia-fluvial-de-albergaria-da-serra",
+    "id": "zona-balnear-de-albergaria-da-serra",
     "name": "Zona Balnear de Albergaria da Serra",
-    "type": "praia_fluvial",
+    "type": "zona_balnear",
     "river": "Rio Caima",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Albergaria%2Bda%2BSerra"
@@ -6718,9 +6718,9 @@
     "passportStamp": true
   },
   {
-    "id": "praia-fluvial-de-alverangel",
+    "id": "zona-balnear-de-alverangel",
     "name": "Zona Balnear de Alverangel",
-    "type": "praia_fluvial",
+    "type": "zona_balnear",
     "river": "Rio Zêzere - Albufeira de Castelo de Bode",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Alverangel"
@@ -7016,9 +7016,9 @@
     "passportStamp": true
   },
   {
-    "id": "praia-fluvial-de-espiunca",
+    "id": "zona-balnear-de-espiunca",
     "name": "Zona Balnear de Espiunca",
-    "type": "praia_fluvial",
+    "type": "zona_balnear",
     "river": "Rio Paiva",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Espiunca"
@@ -7054,7 +7054,7 @@
     "passportStamp": true
   },
   {
-    "id": "praia-fluvial-de-folques",
+    "id": "zona-balnear-de-folques",
     "name": "Zona Balnear de Folques",
     "type": "zona_balnear",
     "river": "Ribeira de Folques",
@@ -7090,9 +7090,9 @@
     "passportStamp": true
   },
   {
-    "id": "praia-fluvial-de-foz-d-egua",
+    "id": "zona-balnear-de-foz-d-egua",
     "name": "Zona Balnear de Foz d´Égua",
-    "type": "praia_fluvial",
+    "type": "zona_balnear",
     "river": "Ribeira de Piódão / Ribeira de Chãs d'Égua",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Foz%2Bd%C2%B4%C3%89gua"
@@ -7582,9 +7582,9 @@
     "passportStamp": true
   },
   {
-    "id": "praia-fluvial-de-peneda-talhada",
+    "id": "zona-balnear-de-peneda-talhada",
     "name": "Zona Balnear de Peneda - Talhada",
-    "type": "praia_fluvial",
+    "type": "zona_balnear",
     "river": "Rio Alva",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Peneda%2B-%2BTalhada"
@@ -7694,9 +7694,9 @@
     "passportStamp": true
   },
   {
-    "id": "praia-fluvial-de-rio-torto",
+    "id": "zona-balnear-de-rio-torto",
     "name": "Zona Balnear de Rio Torto",
-    "type": "praia_fluvial",
+    "type": "zona_balnear",
     "river": "Rio Rabaçal",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Rio%2BTorto"
@@ -7732,9 +7732,9 @@
     "passportStamp": true
   },
   {
-    "id": "praia-fluvial-de-sabugueiro",
+    "id": "zona-balnear-de-sabugueiro",
     "name": "Zona Balnear de Sabugueiro",
-    "type": "praia_fluvial",
+    "type": "zona_balnear",
     "river": "Ribeira da Fervença",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Sabugueiro"
@@ -7770,9 +7770,9 @@
     "passportStamp": true
   },
   {
-    "id": "praia-fluvial-de-sao-joao-do-monte",
+    "id": "zona-balnear-de-sao-joao-do-monte",
     "name": "Zona Balnear de São João do Monte",
-    "type": "praia_fluvial",
+    "type": "zona_balnear",
     "river": "Rio Águeda",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=S%C3%A3o%2BJo%C3%A3o%2Bdo%2BMonte"
@@ -7846,9 +7846,9 @@
     "passportStamp": true
   },
   {
-    "id": "praia-fluvial-de-seixo-do-coa",
+    "id": "zona-balnear-de-seixo-do-coa",
     "name": "Zona Balnear de Seixo do Côa",
-    "type": "praia_fluvial",
+    "type": "zona_balnear",
     "river": "Rio Côa",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Seixo%2Bdo%2BC%C3%B4a"
@@ -7998,9 +7998,9 @@
     "passportStamp": true
   },
   {
-    "id": "praia-fluvial-de-urtigal",
+    "id": "zona-balnear-de-urtigal",
     "name": "Zona Balnear de Urtigal",
-    "type": "praia_fluvial",
+    "type": "zona_balnear",
     "river": "Rio Alva",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Urtigal"
@@ -8224,9 +8224,9 @@
     "passportStamp": true
   },
   {
-    "id": "praia-fluvial-de-areinho",
+    "id": "zona-balnear-de-areinho",
     "name": "Zona Balnear do Areinho",
-    "type": "praia_fluvial",
+    "type": "zona_balnear",
     "river": "Rio Paiva",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Areinho"
@@ -8412,9 +8412,9 @@
     "passportStamp": false
   },
   {
-    "id": "praia-fluvial-de-poco-do-lagar",
+    "id": "zona-balnear-de-poco-do-lagar",
     "name": "Zona Balnear do Poço do Lagar",
-    "type": "praia_fluvial",
+    "type": "zona_balnear",
     "river": "Ribeira de Alvoco",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Po%C3%A7o%2Bdo%2BLagar"
@@ -8524,9 +8524,9 @@
     "passportStamp": true
   },
   {
-    "id": "praia-fluvial-de-dr-pedro-n-sra-do-desterro",
+    "id": "zona-balnear-de-dr-pedro-n-sra-do-desterro",
     "name": "Zona Balnear Dr. Pedro - Sra. do Desterro",
-    "type": "praia_fluvial",
+    "type": "zona_balnear",
     "river": "Rio Alva",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Dr.%2BPedro%2B-%2BN.%C2%AA%2BSra%2Bdo%2BDesterro"
@@ -8562,9 +8562,9 @@
     "passportStamp": true
   },
   {
-    "id": "praia-fluvial-de-o-moinho-benquerenca",
+    "id": "zona-balnear-de-o-moinho-benquerenca",
     "name": "Zona Balnear O Moinho - Benquerença",
-    "type": "praia_fluvial",
+    "type": "zona_balnear",
     "river": "Ribeira de Benquerença",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=O%2BMoinho%2B-%2BBenqueren%C3%A7a"

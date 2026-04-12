@@ -987,9 +987,8 @@ function editBeach(index) {
       <!-- Identificação -->
       <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100">
         <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4">Identificação</h3>
-        <div class="grid grid-cols-2 gap-4 mb-4">
+        <div class="mb-4">
           <div><label>Nome</label><input type="text" id="b-name" value="${escHtml(b.name)}"></div>
-          <div><label>ID (slug)</label><input type="text" id="b-id" value="${escHtml(b.id)}" placeholder="auto-gerado se vazio"></div>
         </div>
         <div class="grid grid-cols-4 gap-4 mb-4">
           <div>
@@ -1147,13 +1146,15 @@ function saveBeach(index) {
   const services = {};
   document.querySelectorAll('.b-service').forEach(cb => { services[cb.dataset.key] = cb.checked; });
 
+  const type = document.getElementById('b-type').value;
+  const existingId = index !== null ? state.data.beaches[index].id : null;
   const beach = {
-    id: document.getElementById('b-id').value.trim() || slugify(name),
+    id: existingId || generateBeachId(type, name),
+    type,
     name,
     municipality: document.getElementById('b-municipality').value.trim(),
     freguesia: document.getElementById('b-freguesia').value.trim(),
     district: document.getElementById('b-district').value,
-    type: document.getElementById('b-type').value,
     river: document.getElementById('b-river').value.trim(),
     coordinates: {
       lat: parseFloat(document.getElementById('b-lat').value) || 0,
@@ -2178,6 +2179,17 @@ function slugify(str) {
     .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
     .replace(/[^a-z0-9\s-]/g, '')
     .trim().replace(/\s+/g, '-');
+}
+
+function generateBeachId(type, name) {
+  const prefixMap = { praia_fluvial: 'praia-fluvial', zona_balnear: 'zona-balnear' };
+  const prefix = prefixMap[type] || 'praia-fluvial';
+  // Strip common name prefixes to avoid duplication (e.g. "Praia Fluvial da Lenta" → "Lenta")
+  const stripped = name
+    .replace(/^(praia\s+fluvial|zona\s+balnear|praia|areal|parque\s+fluvial|zona\s+de\s+lazer)\s+(d[aoe]s?|)\s*/i, '')
+    .trim();
+  const slug = slugify(stripped || name);
+  return `${prefix}-de-${slug}`;
 }
 
 function escHtml(str) {
