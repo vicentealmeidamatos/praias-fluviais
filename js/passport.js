@@ -2,6 +2,10 @@
 // Stamps stored in Supabase. Falls back to localStorage for anonymous users.
 // ─────────────────────────────────────────────────────────────────────────────
 
+// ── Pré-carregamento imediato (sem esperar pelo DOM) ───
+const _authEarlyPassport = window.AuthUtils ? AuthUtils.authGetUser() : null;
+const _beachesEarlyPassport = window.getBeaches ? getBeaches().catch(() => null) : null;
+
 document.addEventListener('DOMContentLoaded', async () => {
   const {
     authGetUser, profileGet, stampsGetAll, stampAdd, stampRemove,
@@ -9,59 +13,48 @@ document.addEventListener('DOMContentLoaded', async () => {
     badgeCardHTML, celebrateBadge, voteGet,
   } = AuthUtils;
 
-  // Load beaches
-  let beaches = [];
-  try {
-    beaches = ((await loadData('beaches')) || []).filter(b => !b.hidden);
-  } catch {
-    console.error('Failed to load beaches.json');
-    return;
-  }
+  // ── Parallel: load beaches + auth (pre-started before DOM) ──────────────────
+  const [beachesRaw, user] = await Promise.all([
+    _beachesEarlyPassport || loadData('beaches').catch(() => null),
+    _authEarlyPassport || authGetUser(),
+  ]);
+
+  let beaches = (beachesRaw || []).filter(b => !b.hidden);
+  if (!beaches.length) { console.error('Failed to load beaches.json'); return; }
 
   const stampBeaches   = beaches.filter(b => b.passportStamp);
   const totalAvailable = stampBeaches.length;
 
-  // ── Auth state ──────────────────────────────────────────────────────────────
-  const user    = await authGetUser();
-  const profile = user ? await profileGet(user.id) : null;
+  // ── Parallel: profile + stamps + reviews + voted ────────────────────────────
+  let stampMap = {};
+  let reviews  = [];
+  let voted    = false;
+  let profile  = null;
 
-  // ── Stamp state ─────────────────────────────────────────────────────────────
-  let stampMap = {}; // { [beachId]: stamped_at }
-
-  async function loadStamps() {
-    if (user) {
-      const rows = await stampsGetAll(user.id);
-      stampMap = Object.fromEntries(rows.map(r => [r.beach_id, r.stamped_at]));
-    } else {
-      // Fallback localStorage for guests (cannot save)
-      try {
-        const saved = JSON.parse(localStorage.getItem('passport_stamps') || '{}');
-        stampMap = Object.fromEntries(
-          Object.entries(saved).map(([k, v]) => [k, v.date || ''])
-        );
-      } catch { stampMap = {}; }
-    }
-  }
-
-  await loadStamps();
-
-  // ── Badge context ──────────────────────────────────────────────────────────
-  let reviews = [];
-  let voted   = false;
   if (user) {
+    const [profileRes, stampsRes, reviewsRes, votedRes] = await Promise.all([
+      profileGet(user.id),
+      stampsGetAll(user.id),
+      AuthUtils.supabase.from('reviews').select('images').eq('user_id', user.id).then(r => r.data || []).catch(() => []),
+      voteGet(user.id, new Date().getFullYear()).then(v => !!v).catch(() => false),
+    ]);
+    profile  = profileRes;
+    stampMap  = Object.fromEntries(stampsRes.map(r => [r.beach_id, r.stamped_at]));
+    reviews  = reviewsRes;
+    voted    = votedRes;
+  } else {
+    // Fallback localStorage for guests
     try {
-      const { data } = await AuthUtils.supabase
-        .from('reviews').select('images').eq('user_id', user.id);
-      reviews = data || [];
-      const votedId = await voteGet(user.id, new Date().getFullYear());
-      voted = !!votedId;
-    } catch {}
+      const saved = JSON.parse(localStorage.getItem('passport_stamps') || '{}');
+      stampMap = Object.fromEntries(
+        Object.entries(saved).map(([k, v]) => [k, v.date || ''])
+      );
+    } catch { stampMap = {}; }
   }
 
   // ── Previous badge state (localStorage persists across sessions) ─────────────
   const storageKey  = user ? `badges_${user.id}` : 'badges_guest';
   const _storedRaw  = localStorage.getItem(storageKey);
-  // isFirstPageLoad: if no localStorage entry exists yet, don't auto-celebrate on load
   let   isFirstPageLoad = _storedRaw === null;
   let   prevEarned = new Set(JSON.parse(_storedRaw || '[]'));
 
@@ -79,11 +72,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderStats();
     renderGrid();
     renderBadges();
+    lucide.createIcons();
   }
 
   function renderStats() {
-    const count = Object.keys(stampMap).length;
-    const pct   = totalAvailable > 0 ? Math.round((count / totalAvailable) * 100) : 0;
+    const validIds = new Set(stampBeaches.map(b => b.id));
+    const count = Object.keys(stampMap).filter(id => validIds.has(id)).length;
+    const pct   = totalAvailable > 0 ? Math.min(Math.round((count / totalAvailable) * 100), 100) : 0;
 
     const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
     setEl('stat-collected',  count);
@@ -131,8 +126,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         </div>`;
     }).join('');
 
-    lucide.createIcons();
-
     // Interaction handlers
     container.querySelectorAll('.stamp-slot').forEach(el => {
       const go = () => toggleStamp(el.dataset.beachId);
@@ -155,12 +148,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     grid.innerHTML = sorted.map(b => badgeCardHTML(b)).join('');
-    lucide.createIcons();
 
     // Badge unlock celebrations — only for genuinely new badges, never on first page load
     const earnedNow = new Set(computed.filter(b => b.earned).map(b => b.id));
     const newBadges = isFirstPageLoad
-      ? [] // Suppress celebrations on very first load to avoid showing all at once
+      ? []
       : computed.filter(b => b.earned && !prevEarned.has(b.id));
 
     if (newBadges.length > 0) {
@@ -243,7 +235,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           </a>
           <a href="auth.html?tab=login&redirect=passaporte.html"
              class="text-white/50 text-sm font-display font-semibold hover:text-white/80 transition-colors py-2">
-            Já tenho conta — Entrar
+            Já tenho conta? Entrar
           </a>
         </div>
       </div>`;

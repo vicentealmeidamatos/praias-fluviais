@@ -1,6 +1,19 @@
 // ─── Pré-carregamento imediato (sem esperar pelo DOM) ───
 const _beachId = new URLSearchParams(window.location.search).get('id');
 const _beachesEarlyBP = _beachId ? getBeaches() : null;
+const _settingsEarlyBP = _beachId ? loadData('settings') : null;
+const _authEarlyBP = _beachId && window.AuthUtils ? AuthUtils.authGetUser() : null;
+const _reviewsEarlyBP = _beachId && window.AuthUtils ? AuthUtils.reviewsGetForBeach(_beachId) : null;
+// Pre-start badge fetching as soon as reviews + beaches resolve
+const _badgesEarlyBP = (_reviewsEarlyBP && _beachesEarlyBP)
+  ? Promise.all([_reviewsEarlyBP, _beachesEarlyBP]).then(([reviews, beaches]) => {
+      const uids = [...new Set(reviews.map(r => r.user_id).filter(Boolean))];
+      const map = {};
+      return Promise.all(uids.map(uid =>
+        AuthUtils.badgesGetForUser(uid, beaches).then(b => { map[uid] = b; }).catch(() => { map[uid] = []; })
+      )).then(() => map);
+    }).catch(() => ({}))
+  : null;
 
 // Preload hero image o mais cedo possível
 if (_beachId && _beachesEarlyBP) {
@@ -50,15 +63,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   const serviceIcons = {
     blueFlag:    { icon: 'flag',          label: 'Bandeira Azul' },
     goldQuality: { icon: 'award',         label: 'Qualidade de Ouro' },
-    accessible:  { icon: 'accessibility', label: 'Praia Acessível' },
+    accessible:  { icon: 'accessibility', label: 'Acessibilidades' },
     lifeguard:   { icon: 'life-buoy',     label: 'Nadador-Salvador' },
     bar:         { icon: 'utensils',      label: 'Bar/Restaurante' },
     picnicArea:  { icon: 'trees',         label: 'Parque Merendas' },
     petFriendly: { icon: 'paw-print',     label: 'Pet-friendly' },
-    playground:  { icon: 'baby',          label: 'Parque Infantil' },
+    playground:  { icon: null, svg: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.11 104.11 0 0 0 128 24m81.7 71.3a199.8 199.8 0 0 0-40.94-8.06a199.8 199.8 0 0 0-8.06-40.94a88.57 88.57 0 0 1 49 49M216 128a87.8 87.8 0 0 1-4.28 27.12a200.3 200.3 0 0 0-29.16-49.93a183 183 0 0 1 32.31 8.75A88 88 0 0 1 216 128m-73.94-86.87a183 183 0 0 1 8.75 32.31a200.3 200.3 0 0 0-49.93-29.16a88.05 88.05 0 0 1 41.18-3.15M80.44 54a183.9 183.9 0 0 1 61.25 32.64A200.2 200.2 0 0 0 40.41 119.5A88.11 88.11 0 0 1 80.44 54m-39.77 84.86a184.08 184.08 0 0 1 112.88-36.41a184.08 184.08 0 0 1-36.41 112.88a88.18 88.18 0 0 1-76.47-76.47m95.83 76.73a200.2 200.2 0 0 0 32.87-101.28A183.9 183.9 0 0 1 202 175.56a88.11 88.11 0 0 1-65.5 40.03"/></svg>', label: 'Parque Infantil' },
     boatRental:  { icon: 'sailboat',      label: 'Embarcações' },
-    camping:     { icon: 'tent',          label: 'Alojamento' },
-    wc:          { icon: 'bath',          label: 'Instal. Sanitárias' },
+    camping:     { icon: 'bed-double',     label: 'Alojamento' },
+    wc:          { icon: null, svg: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 640 512" fill="currentColor"><path d="M80 48a48 48 0 1 1 96 0a48 48 0 1 1-96 0m40 304v128c0 17.7-14.3 32-32 32s-32-14.3-32-32V325.2c-8.1 9.2-21.1 13.2-33.5 9.4c-16.9-5.3-26.3-23.2-21-40.1l30.9-99.1C44.9 155.3 82 128 124 128h8c42 0 79.1 27.3 91.6 67.4l30.9 99.1c5.3 16.9-4.1 34.8-21 40.1c-12.4 3.9-25.4-.2-33.5-9.4V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V352zM320 0c13.3 0 24 10.7 24 24v464c0 13.3-10.7 24-24 24s-24-10.7-24-24V24c0-13.3 10.7-24 24-24m144 48a48 48 0 1 1 96 0a48 48 0 1 1-96 0m-24 432v-96h-17.8c-10.9 0-18.6-10.7-15.2-21.1l9-26.9c-3.2 0-6.4-.5-9.5-1.5c-16.9-5.3-26.3-23.2-21-40.1l29.7-95.2c13.2-42.3 52.4-71.2 96.8-71.2s83.6 28.9 96.8 71.2l29.7 95.2c5.3 16.9-4.1 34.8-21 40.1c-3.2 1-6.4 1.5-9.5 1.5l9 26.9c3.5 10.4-4.3 21.1-15.2 21.1H584v96c0 17.7-14.3 32-32 32s-32-14.3-32-32v-96h-16v96c0 17.7-14.3 32-32 32s-32-14.3-32-32"/></svg>', label: 'Instal. Sanitárias' },
     nacional2:   { icon: 'signpost',      label: 'Estrada Nacional 2' },
   };
 
@@ -68,7 +81,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const s = serviceIcons[k];
       return `<div class="flex flex-col items-center gap-1.5 group" title="${s.label}">
         <div class="w-12 h-12 rounded-xl bg-praia-teal-800/5 flex items-center justify-center group-hover:bg-praia-yellow-400/20 transition-colors duration-300">
-          <i data-lucide="${s.icon}" class="w-5 h-5 text-praia-teal-700"></i>
+          ${s.svg ? s.svg : `<i data-lucide="${s.icon}" class="w-5 h-5 text-praia-teal-700"></i>`}
         </div>
         <span class="text-[10px] font-display font-semibold uppercase tracking-wider text-praia-sand-500 text-center leading-tight">${s.label}</span>
       </div>`;
@@ -76,8 +89,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const badges = [];
   if (beach.services.blueFlag) badges.push('<span class="badge badge-blue-flag"><i data-lucide="flag" class="w-3 h-3"></i> Bandeira Azul</span>');
-  if (beach.services.goldQuality) badges.push('<span class="badge badge-gold"><i data-lucide="sparkles" class="w-3 h-3"></i> Qualidade Ouro</span>');
-  if (beach.services.accessible) badges.push('<span class="badge badge-accessible"><i data-lucide="accessibility" class="w-3 h-3"></i> Acessível</span>');
+  if (beach.services.goldQuality) badges.push('<span class="badge badge-gold"><i data-lucide="award" class="w-3 h-3"></i> Qualidade Ouro</span>');
+  if (beach.services.accessible) badges.push('<span class="badge badge-accessible"><i data-lucide="accessibility" class="w-3 h-3"></i> Acessibilidades</span>');
 
   const nearby = beaches
     .filter(b => b.id !== beach.id)
@@ -175,8 +188,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         </div>
       </section>
 
-      <!-- Vote -->
-      <section class="mb-12 bg-praia-teal-800 rounded-2xl p-8 md:p-10 text-center noise-overlay relative overflow-hidden" id="beach-vote-section">
+      <!-- Vote (hidden until we confirm user hasn't voted) -->
+      <section class="mb-12 bg-praia-teal-800 rounded-2xl p-8 md:p-10 text-center noise-overlay relative overflow-hidden hidden" id="beach-vote-section">
         <div class="relative z-10">
           <i data-lucide="trophy" class="w-10 h-10 text-praia-yellow-400 mx-auto mb-4"></i>
           <h2 class="font-display text-xl md:text-2xl font-bold text-white mb-3">Vote nesta praia fluvial para Praia do Ano 2026</h2>
@@ -194,10 +207,10 @@ document.addEventListener('DOMContentLoaded', async () => {
           <button onclick="shareBeach()" class="btn-primary inline-flex items-center gap-2 bg-praia-sand-100 text-praia-teal-700 font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full border border-praia-sand-200">
             <i data-lucide="share-2" class="w-4 h-4"></i> Partilhar
           </button>
-          <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}" target="_blank" rel="noopener" class="btn-primary inline-flex items-center gap-2 font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full text-white" style="background:#1877F2;">
+          <button onclick="shareBeach('facebook')" class="btn-primary inline-flex items-center gap-2 font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full text-white" style="background:#1877F2;">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg> Facebook
-          </a>
-          <button onclick="shareInstagram()" class="btn-primary inline-flex items-center gap-2 font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full text-white" style="background:linear-gradient(135deg,#f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);">
+          </button>
+          <button onclick="shareBeach('instagram')" class="btn-primary inline-flex items-center gap-2 font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full text-white" style="background:linear-gradient(135deg,#f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg> Instagram
           </button>
         </div>
@@ -221,6 +234,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     </div>
   `;
 
+  window._currentBeachName = beach.name;
+  window._currentBeachSubtitle = `${beach.municipality} · ${beach.river}`;
+  window._currentBeachMunicipality = beach.municipality || '';
+  window._currentBeachRiver = beach.river || '';
+  window._currentBeachType = beach.type || 'praia_fluvial';
+  window._currentBeachPhoto = beach.thumbnail || (beach.photos && beach.photos[0]) || '';
   document.title = `${beach.name} | Praias Fluviais`;
   // Update OG meta tags
   const ogTitle = document.querySelector('meta[property="og:title"]');
@@ -228,16 +247,28 @@ document.addEventListener('DOMContentLoaded', async () => {
   const ogImg   = document.querySelector('meta[property="og:image"]');
   const metaDesc = document.querySelector('meta[name="description"]');
   if (ogTitle) ogTitle.content = `${beach.name} | Praias Fluviais`;
-  if (ogDesc)  ogDesc.content = beach.description || `Descubra ${beach.name} — ${beach.municipality}, ${beach.river}.`;
+  if (ogDesc)  ogDesc.content = beach.description || `Descubra ${beach.name}: ${beach.municipality}, ${beach.river}.`;
   if (ogImg)   ogImg.content = beach.thumbnail || beach.photos[0];
-  if (metaDesc) metaDesc.content = beach.description || `Descubra ${beach.name} — ${beach.municipality}, ${beach.river}.`;
+  if (metaDesc) metaDesc.content = beach.description || `Descubra ${beach.name}: ${beach.municipality}, ${beach.river}.`;
 
   lucide.createIcons();
   initCarousel(photoCount);
 
-  // ── Winner medals from settings.json ──────────────────────────────────────
+  // ── Fire weather independently (never blocks anything) ──────────────────────
+  const weatherWidget = document.getElementById('weather-widget');
+  if (weatherWidget) {
+    fetchWeather(beach.coordinates.lat, beach.coordinates.lng)
+      .then(w => { renderWeatherWidget(weatherWidget, w); lucide.createIcons(); });
+  }
+
+  // ── Settings + auth + reviews all in parallel ─────────────────────────────
+  const [settings, currentUser] = await Promise.all([
+    (_settingsEarlyBP || loadData('settings')).then(s => s || {}).catch(() => ({})),
+    _authEarlyBP || AuthUtils.authGetUser(),
+  ]);
+
+  // ── Winner medals (sync) ──────────────────────────────────────────────────
   try {
-    const settings = (await loadData('settings')) || {};
     const winnerAwards = [];
     const norm = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
     const beachNorm = norm(beach.name);
@@ -267,7 +298,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
     });
 
-    // Sort: highest position first (1st > 2nd > 3rd > revelação), then by year desc
     winnerAwards.sort((a, b) => a.rank !== b.rank ? a.rank - b.rank : String(b.year).localeCompare(String(a.year), undefined, { numeric: true }));
 
     if (winnerAwards.length > 0) {
@@ -290,7 +320,6 @@ document.addEventListener('DOMContentLoaded', async () => {
               </a>
             `).join('')}
           </div>`;
-        // Insert after services section (first section)
         const firstSection = badgesSection.querySelector('section');
         if (firstSection) {
           firstSection.parentNode.insertBefore(medalContainer, firstSection.nextSibling);
@@ -302,17 +331,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.warn('[beach-page] winner medals error:', e);
   }
 
-  // Load weather
-  const weatherWidget = document.getElementById('weather-widget');
-  if (weatherWidget) {
-    const weather = await fetchWeather(beach.coordinates.lat, beach.coordinates.lng);
-    renderWeatherWidget(weatherWidget, weather);
+  // ── Show vote CTA only if user hasn't voted yet ────────────────────────────
+  const voteSection = document.getElementById('beach-vote-section');
+  if (voteSection) {
+    const currentYear = new Date().getFullYear();
+    if (!currentUser) {
+      // Guest — show CTA (will redirect to auth on click)
+      voteSection.classList.remove('hidden');
+    } else {
+      AuthUtils.voteGet(currentUser.id, currentYear).then(votedId => {
+        if (!votedId) voteSection.classList.remove('hidden');
+      }).catch(() => { voteSection.classList.remove('hidden'); });
+    }
   }
 
-  // Auth state + reviews
-  const currentUser    = await AuthUtils.authGetUser();
-  const currentProfile = currentUser ? await AuthUtils.profileGet(currentUser.id) : null;
-  await loadReviews(beach.id, currentUser, beaches);
+  // ── Reviews + profile in parallel (reviews fetch pre-started) ─────────────
+  const [currentProfile] = await Promise.all([
+    currentUser ? AuthUtils.profileGet(currentUser.id) : Promise.resolve(null),
+    loadReviews(beach.id, currentUser, beaches),
+  ]);
   renderReviewForm(beach.id, currentUser, currentProfile, beaches);
 
   // Inject JSON-LD structured data
@@ -349,37 +386,24 @@ function medalDisplayHTML(topBadges) {
   const tierRank = { mitico: 5, diamante: 4, ouro: 3, prata: 2, bronze: 1 };
   const sorted = [...topBadges].sort((a, b) => (tierRank[b.tier] || 0) - (tierRank[a.tier] || 0));
 
+  // Cores de texto/borda por tier (igual à legenda de raridades)
+  const tierColors = {
+    bronze:   { bg: '#CD7F3222', color: '#CD7F32', border: '#CD7F3244' },
+    prata:    { bg: '#A8B8C822', color: '#A8B8C8', border: '#A8B8C844' },
+    ouro:     { bg: '#FFD70022', color: '#FFD700', border: '#FFD70044' },
+    diamante: { bg: '#B9F2FF33', color: '#2E9BB5', border: '#2E9BB560' },
+    mitico:   { bg: '#90E2F033', color: '#1E8FAA', border: '#1E8FAA60' },
+  };
+
   return `<div class="flex items-center gap-1.5 flex-wrap mt-1.5">
     ${sorted.map(b => {
-      const tier = TIER_META[b.tier] || {};
-      const isMitico  = b.tier === 'mitico';
-      const isDiamond = b.tier === 'diamante';
+      const tc = tierColors[b.tier] || tierColors.bronze;
+      const isMitico = b.tier === 'mitico';
 
-      if (isMitico) {
-        // Mítico — bg pastel claro + hue-rotate cicla em tons pastéis (nunca escuro)
-        return `<span class="medal-badge-legendary inline-flex items-center gap-1.5 rounded-full font-display font-bold cursor-default whitespace-nowrap"
-          title="${b.name} — ${b.desc}"
-          style="font-size:10px;padding:3px 9px 3px 7px;background:${tier.hex}70;color:#003A40;border:2px solid ${tier.hex};">
-          <i data-lucide="${b.icon}" style="width:13px;height:13px;flex-shrink:0;color:#003A40;"></i>
-          ${b.name}
-        </span>`;
-      }
-
-      if (isDiamond) {
-        // Diamante — ice blue claro com texto escuro, glow sutil
-        return `<span class="inline-flex items-center gap-1.5 rounded-full font-display font-bold cursor-default whitespace-nowrap"
-          title="${b.name} — ${b.desc}"
-          style="font-size:10px;padding:3px 9px 3px 7px;background:${tier.hex}70;color:#003A40;border:2px solid ${tier.hex};box-shadow:0 0 8px ${tier.glow};">
-          <i data-lucide="${b.icon}" style="width:13px;height:13px;flex-shrink:0;color:#003A40;"></i>
-          ${b.name}
-        </span>`;
-      }
-
-      // Bronze / Prata / Ouro — dark teal base, tier color accent (brand rule: light colors on dark bg)
-      return `<span class="inline-flex items-center gap-1.5 rounded-full font-display font-bold cursor-default whitespace-nowrap"
-        title="${b.name} — ${b.desc}"
-        style="font-size:10px;padding:3px 9px 3px 7px;background:#003A40;color:${tier.hex};border:1.5px solid ${tier.hex}70;">
-        <i data-lucide="${b.icon}" style="width:13px;height:13px;flex-shrink:0;color:${tier.hex};"></i>
+      return `<span class="${isMitico ? 'medal-badge-legendary ' : ''}inline-flex items-center gap-1.5 rounded-full font-display font-bold cursor-default whitespace-nowrap"
+        title="${b.name}: ${b.desc}"
+        style="font-size:10px;padding:3px 9px 3px 7px;background:${tc.bg};color:${tc.color};border:1.5px solid ${tc.border};">
+        <i data-lucide="${b.icon}" style="width:13px;height:13px;flex-shrink:0;color:${tc.color};"></i>
         ${b.name}
       </span>`;
     }).join('')}
@@ -392,7 +416,12 @@ async function loadReviews(beachId, currentUser, beaches) {
   const container = document.getElementById('reviews-container');
   if (!container) return;
 
-  const allReviews = await AuthUtils.reviewsGetForBeach(beachId);
+  // Use pre-fetched reviews + badges when available (first load)
+  const isFirstLoad = beachId === _beachId;
+  const [allReviews, preFetchedMedals] = await Promise.all([
+    isFirstLoad && _reviewsEarlyBP ? _reviewsEarlyBP : AuthUtils.reviewsGetForBeach(beachId),
+    isFirstLoad && _badgesEarlyBP  ? _badgesEarlyBP  : Promise.resolve(null),
+  ]);
 
   if (allReviews.length === 0) {
     container.innerHTML = `
@@ -409,15 +438,16 @@ async function loadReviews(beachId, currentUser, beaches) {
   const topLevel = allReviews.filter(r => !r.parent_id);
   const replies  = allReviews.filter(r => !!r.parent_id);
 
-  // Fetch medals for all unique reviewers in parallel
-  const uniqueUserIds = [...new Set(allReviews.map(r => r.user_id).filter(Boolean))];
-  const medalMap = {};
-  await Promise.all(uniqueUserIds.map(async uid => {
-    try { medalMap[uid] = await AuthUtils.badgesGetForUser(uid, beaches); } catch { medalMap[uid] = []; }
-  }));
+  // Fetch medals if not pre-fetched (e.g. after submit/delete refresh)
+  let medalMap = preFetchedMedals || {};
+  if (!preFetchedMedals) {
+    const uniqueUserIds = [...new Set(allReviews.map(r => r.user_id).filter(Boolean))];
+    await Promise.all(uniqueUserIds.map(async uid => {
+      try { medalMap[uid] = await AuthUtils.badgesGetForUser(uid, beaches); } catch { medalMap[uid] = []; }
+    }));
+  }
 
   function reviewCardHTML(r, isReply = false) {
-    // Tombstone for admin-deleted comments
     if (r.deleted_by_admin) {
       const commentReplies = replies.filter(reply => reply.parent_id === r.id);
       const repliesHtml = commentReplies.length > 0
@@ -456,10 +486,8 @@ async function loadReviews(beachId, currentUser, beaches) {
     const hasMitico   = topMedals.some(b => b.tier === 'mitico');
     const hasDiamante = !hasMitico && topMedals.some(b => b.tier === 'diamante');
 
-    // Build medal display
     const medalHtml = hasMedals ? medalDisplayHTML(topMedals) : '';
 
-    // Card border: animated rainbow for Mítico, static diamond glow for Diamante
     const miticoCardClass   = hasMitico   && !isReply ? 'mitico-card'   : '';
     const diamanteCardClass = hasDiamante && !isReply ? 'diamante-card' : '';
 
@@ -470,7 +498,6 @@ async function loadReviews(beachId, currentUser, beaches) {
          </button>`
       : '';
 
-    // Replies for this comment
     const commentReplies = replies.filter(reply => reply.parent_id === r.id);
     const repliesHtml = commentReplies.length > 0
       ? `<div class="mt-3 space-y-2 border-l-2 border-praia-sand-200 pl-4">
@@ -479,7 +506,7 @@ async function loadReviews(beachId, currentUser, beaches) {
       : '';
 
     return `
-      <div class="bg-white rounded-xl p-4 shadow-layered ${miticoCardClass} ${diamanteCardClass} ${isReply ? 'shadow-none border border-praia-sand-100 rounded-lg' : ''}" data-review-id="${r.id}">
+      <div class="bg-white rounded-xl p-4 shadow-layered ${miticoCardClass} ${diamanteCardClass} ${isReply ? 'shadow-none border border-praia-sand-100 rounded-lg' : ''}" data-review-id="${r.id}" data-user-id="${userId}">
         <div class="flex items-start gap-3">
           ${avatarHtml}
           <div class="flex-1 min-w-0">
@@ -511,7 +538,6 @@ async function loadReviews(beachId, currentUser, beaches) {
     const style = document.createElement('style');
     style.id = 'medal-anim-style';
     style.textContent = `
-      /* ── Mítico badge chip — hue-rotate idêntico ao passaporte ── */
       @keyframes badgeCommentRainbow {
         from { filter: hue-rotate(0deg) brightness(1.1); }
         to   { filter: hue-rotate(360deg) brightness(1.1); }
@@ -519,8 +545,6 @@ async function loadReviews(beachId, currentUser, beaches) {
       .medal-badge-legendary {
         animation: badgeCommentRainbow 4s linear infinite;
       }
-
-      /* ── Mítico card border — cicla pelas mesmas cores hue-rotated ── */
       @keyframes miticoBorder {
         0%   { border-color: #90E2F0; box-shadow: 0 4px 16px rgba(0,0,0,0.07), 0 0 18px rgba(144,226,240,0.5); }
         17%  { border-color: #9090F0; box-shadow: 0 4px 16px rgba(0,0,0,0.07), 0 0 18px rgba(144,144,240,0.5); }
@@ -823,96 +847,18 @@ function openImageViewer(src) {
 
 // ─── Share ────────────────────────────────────────────────────────────────────
 
-async function shareBeach() {
-  const url = window.location.href;
-  const title = document.title;
-
-  if (navigator.share) {
-    try { await navigator.share({ title, url }); return; } catch {}
-  }
-
-  // Fallback: show share menu
-  const existing = document.getElementById('share-menu-overlay');
-  if (existing) existing.remove();
-
-  const overlay = document.createElement('div');
-  overlay.id = 'share-menu-overlay';
-  overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);display:flex;align-items:flex-end;justify-content:center;padding:16px;';
-
-  const encodedUrl = encodeURIComponent(url);
-  const encodedTitle = encodeURIComponent(title);
-
-  overlay.innerHTML = `
-    <div style="background:white;border-radius:20px 20px 16px 16px;max-width:400px;width:100%;padding:24px 20px 16px;box-shadow:0 -8px 40px rgba(0,0,0,0.2);transform:translateY(20px);opacity:0;transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1),opacity 0.2s;" id="share-menu-inner">
-      <p style="font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;color:#003A40;margin:0 0 16px;text-align:center;">Partilhar</p>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px;">
-        <a href="https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}" target="_blank" rel="noopener" style="display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;">
-          <div style="width:48px;height:48px;border-radius:14px;background:#1877F2;display:flex;align-items:center;justify-content:center;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-          </div>
-          <span style="font-family:'Poppins',sans-serif;font-size:10px;font-weight:600;color:#003A40;">Facebook</span>
-        </a>
-        <a href="https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}" target="_blank" rel="noopener" style="display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;">
-          <div style="width:48px;height:48px;border-radius:14px;background:#000;display:flex;align-items:center;justify-content:center;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-          </div>
-          <span style="font-family:'Poppins',sans-serif;font-size:10px;font-weight:600;color:#003A40;">X</span>
-        </a>
-        <a href="https://wa.me/?text=${encodedTitle}%20${encodedUrl}" target="_blank" rel="noopener" style="display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;">
-          <div style="width:48px;height:48px;border-radius:14px;background:#25D366;display:flex;align-items:center;justify-content:center;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          </div>
-          <span style="font-family:'Poppins',sans-serif;font-size:10px;font-weight:600;color:#003A40;">WhatsApp</span>
-        </a>
-        <button onclick="copyShareLink()" style="display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:none;cursor:pointer;padding:0;">
-          <div style="width:48px;height:48px;border-radius:14px;background:#003A40;display:flex;align-items:center;justify-content:center;">
-            <i data-lucide="link" style="width:20px;height:20px;color:#FFEB3B;"></i>
-          </div>
-          <span style="font-family:'Poppins',sans-serif;font-size:10px;font-weight:600;color:#003A40;">Copiar Link</span>
-        </button>
-      </div>
-      <button onclick="document.getElementById('share-menu-overlay').remove()" style="width:100%;padding:12px;border:none;background:#f5f3ef;border-radius:12px;font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;color:#003A40;cursor:pointer;">Cancelar</button>
-    </div>`;
-
-  document.body.appendChild(overlay);
-  lucide.createIcons();
-  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
-  requestAnimationFrame(() => {
-    const inner = document.getElementById('share-menu-inner');
-    if (inner) { inner.style.transform = 'translateY(0)'; inner.style.opacity = '1'; }
+async function shareBeach(platform) {
+  openShareSheet({
+    type: 'beach',
+    title: window._currentBeachName || document.title,
+    subtitle: window._currentBeachSubtitle || '',
+    municipality: window._currentBeachMunicipality || '',
+    river: window._currentBeachRiver || '',
+    beachType: window._currentBeachType || 'praia_fluvial',
+    photo: window._currentBeachPhoto || '',
+    url: window.location.href,
+    highlight: platform || null,
   });
-}
-
-async function copyShareLink() {
-  try {
-    await navigator.clipboard.writeText(window.location.href);
-  } catch {
-    // Fallback for older browsers
-    const ta = document.createElement('textarea');
-    ta.value = window.location.href;
-    ta.style.cssText = 'position:fixed;opacity:0;';
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    ta.remove();
-  }
-  document.getElementById('share-menu-overlay')?.remove();
-  showToast('Link copiado!');
-}
-
-async function shareInstagram() {
-  try {
-    await navigator.clipboard.writeText(window.location.href);
-  } catch {
-    const ta = document.createElement('textarea');
-    ta.value = window.location.href;
-    ta.style.cssText = 'position:fixed;opacity:0;';
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    ta.remove();
-  }
-  showToast('Link copiado! Cole-o numa publicação ou story do Instagram.');
 }
 
 function showToast(msg) {

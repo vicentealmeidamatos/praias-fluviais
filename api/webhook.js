@@ -400,7 +400,7 @@ async function createInvoiceXpressInvoice({ email, customerName, taxId, billingA
       body: JSON.stringify({
         message: {
           client: { email, save: '0' },
-          subject: 'A sua fatura — Guia das Praias Fluviais',
+          subject: 'A sua fatura | Guia das Praias Fluviais',
           body: 'Obrigado pela sua encomenda! Em anexo segue a fatura.',
         },
       }),
@@ -544,7 +544,7 @@ async function sendOrderNotificationEmail({ email, items, shippingAddress, shipp
           <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
             <tr>
               <td style="font-family:'Open Sans',Helvetica,Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.4);">
-                Guia das Praias Fluviais — praiasfluviais.pt
+                Guia das Praias Fluviais · praiasfluviais.pt
               </td>
               <td style="text-align:right;font-family:'Open Sans',Helvetica,Arial,sans-serif;font-size:10px;color:rgba(255,255,255,0.25);">
                 ${sessionId ? sessionId.slice(0, 24) + '…' : ''}
@@ -568,7 +568,7 @@ async function sendOrderNotificationEmail({ email, items, shippingAddress, shipp
     body: JSON.stringify({
       from: 'Praias Fluviais <noreply@praiasfluviais.pt>',
       to: [process.env.ORDER_NOTIFICATION_EMAIL],
-      subject: `Nova encomenda — ${fmtPrice(total)} — ${customerName}`,
+      subject: `Nova encomenda: ${fmtPrice(total)} | ${customerName}`,
       html,
     }),
   });

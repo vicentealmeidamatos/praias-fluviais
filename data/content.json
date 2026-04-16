@@ -42,7 +42,7 @@
       {
         "id": "rede",
         "href": "rede.html",
-        "icon": "network",
+        "icon": "map-pinned",
         "label": "Rede"
       },
       {
@@ -66,7 +66,7 @@
       {
         "id": "descontos",
         "href": "descontos.html",
-        "icon": "percent",
+        "icon": "ticket-percent",
         "label": "Descontos"
       },
       {
@@ -199,8 +199,8 @@
   },
   "onde_guia": {
     "label": "Rede de Distribuição",
-    "title": "Onde Encontrar o Guia",
-    "description": "Encontre o Guia das Praias Fluviais nos pontos de distribuição por todo o país — livrarias, postos de turismo, câmaras municipais e parceiros oficiais.",
+    "title": "Onde Encontrar o Guia das Praias Fluviais e o Passaporte Turístico",
+    "description": "Encontre o Guia das Praias Fluviais nos pontos de distribuição por todo o país: livrarias, postos de turismo, câmaras municipais e parceiros oficiais.",
     "heroImageUrl": "",
     "searchPlaceholder": "Pesquisar por localidade ou nome..."
   },
@@ -233,16 +233,16 @@
         "text": "Explore mais de 200 praias fluviais e zonas balneares no mapa interativo. Filtre por serviços, bandeira azul, acessibilidade e encontre a praia perfeita com um clique."
       },
       "div.magazine-container:nth-of-type(2) > section.magazine-page.relative:nth-of-type(5) > div.relative.z-10:nth-of-type(17) > div.max-w-7xl.mx-auto > div.grid.gap-12 > div:nth-of-type(1) > div.space-y-4.mb-10:nth-of-type(2) > div.flex.items-center:nth-of-type(1) > span.text-white\\/80.font-body": {
-        "html": "Geolocalização — encontre praias perto de si em tempo real",
-        "text": "Geolocalização — encontre praias perto de si em tempo real"
+        "html": "Geolocalização: encontre praias perto de si em tempo real",
+        "text": "Geolocalização: encontre praias perto de si em tempo real"
       },
       "div.magazine-container:nth-of-type(2) > section.magazine-page.relative:nth-of-type(5) > div.relative.z-10:nth-of-type(17) > div.max-w-7xl.mx-auto > div.grid.gap-12 > div:nth-of-type(1) > div.space-y-4.mb-10:nth-of-type(2) > div.flex.items-center:nth-of-type(2) > span.text-white\\/80.font-body": {
-        "html": "Filtros avançados — bar, grelhadores, nadador-salvador...",
-        "text": "Filtros avançados — bar, grelhadores, nadador-salvador..."
+        "html": "Filtros avançados: bar, grelhadores, nadador-salvador...",
+        "text": "Filtros avançados: bar, grelhadores, nadador-salvador..."
       },
       "div.magazine-container:nth-of-type(2) > section.magazine-page.relative:nth-of-type(5) > div.relative.z-10:nth-of-type(17) > div.max-w-7xl.mx-auto > div.grid.gap-12 > div:nth-of-type(1) > div.space-y-4.mb-10:nth-of-type(2) > div.flex.items-center:nth-of-type(3) > span.text-white\\/80.font-body": {
-        "html": "Direções — abra o Google Maps ou o Waze com um toque",
-        "text": "Direções — abra o Google Maps ou o Waze com um toque"
+        "html": "Direções: abra o Google Maps ou o Waze com um toque",
+        "text": "Direções: abra o Google Maps ou o Waze com um toque"
       }
     },
     "votar": {

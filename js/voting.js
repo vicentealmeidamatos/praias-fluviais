@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const isVoted  = userVote === b.id;
       const badgesHtml = [];
       if (b.services?.blueFlag)  badgesHtml.push('<span class="badge badge-blue-flag text-[10px]">Bandeira Azul</span>');
-      if (b.services?.accessible) badgesHtml.push('<span class="badge badge-accessible text-[10px]">Acessível</span>');
+      if (b.services?.accessible) badgesHtml.push('<span class="badge badge-accessible text-[10px]">Acessibilidades</span>');
 
       return `
         <div class="card-interactive rounded-2xl overflow-hidden bg-white shadow-layered group flex flex-col h-full ${isVoted ? 'ring-2 ring-praia-yellow-400' : ''}">
@@ -304,15 +304,25 @@ async function confirmVote(beachId, beachName) {
       return;
     }
 
-    // Check if "Eleitor" badge was just earned
+    // Check if "Eleitor" badge was just earned + get beach details for share
+    let voteBeachMunicipality = '';
+    let voteBeachPhoto = '';
     try {
       const beaches = (await loadData('beaches')) || [];
+      const vb = beaches.find(b => b.id === beachId);
+      if (vb) {
+        voteBeachMunicipality = vb.municipality || '';
+        voteBeachPhoto = vb.thumbnail || (vb.photos && vb.photos[0]) || '';
+      }
       const stamps  = await AuthUtils.stampsGetAll(user.id);
       const reviews = await AuthUtils.reviewsGetForUser(user.id);
       const badges  = AuthUtils.badgesCompute({ stamps, reviews, voted: true, beaches });
       const eleitor = badges.find(b => b.id === 'eleitor' && b.earned);
       if (eleitor) setTimeout(() => AuthUtils.celebrateBadge(eleitor), 2000);
     } catch {}
+
+    // Store for shareVote
+    window._lastVoteShare = { municipality: voteBeachMunicipality, photo: voteBeachPhoto };
 
     // Show success
     const inner = document.getElementById('vote-modal-inner');
@@ -325,7 +335,7 @@ async function confirmVote(beachId, beachName) {
           <h3 class="font-display text-xl font-bold text-praia-teal-800 mb-2">Obrigado pelo seu voto!</h3>
           <p class="text-praia-sand-500 text-sm mb-6">Votou em <strong>${beachName}</strong></p>
           <div class="flex gap-2 justify-center mb-6">
-            <button onclick="shareVote('${beachName}')" class="btn-primary inline-flex items-center gap-2 bg-praia-teal-800 text-white font-display text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full">
+            <button onclick="shareVote('${beachName}','${beachId}')" class="btn-primary inline-flex items-center gap-2 bg-praia-teal-800 text-white font-display text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full">
               <i data-lucide="share-2" class="w-4 h-4"></i> Partilhar
             </button>
           </div>
@@ -368,7 +378,7 @@ function showVoteAuthPrompt(beachId, beachName) {
         </a>
         <a href="auth.html?tab=login&redirect=${redirectUrl}"
            class="text-praia-sand-500 text-sm font-display font-semibold hover:text-praia-teal-700 transition-colors py-2">
-          Já tenho conta — Entrar
+          Já tenho conta? Entrar
         </a>
       </div>
     </div>`;
@@ -377,12 +387,26 @@ function showVoteAuthPrompt(beachId, beachName) {
   el.addEventListener('click', e => { if (e.target === el) el.remove(); });
 }
 
-async function shareVote(beachName) {
-  const text = `Votei na ${beachName} para Praia Fluvial do Ano 2026! Vota também: ${window.location.origin}/votar.html`;
-  if (navigator.share) {
-    try { await navigator.share({ title: 'Voto Praia do Ano 2026', text }); } catch {}
-  } else {
-    await navigator.clipboard.writeText(text);
-    alert('Texto copiado para partilhar!');
+async function shareVote(beachName, beachId) {
+  // Use cached data from confirmVote if available, otherwise re-fetch
+  var cached = window._lastVoteShare || {};
+  var photo = cached.photo || '';
+  var municipality = cached.municipality || '';
+  if (beachId && !municipality) {
+    try {
+      var beaches = await window.getBeaches();
+      var b = beaches.find(function(x) { return x.id === beachId; });
+      if (b) {
+        photo = photo || b.thumbnail || (b.photos && b.photos[0]) || '';
+        municipality = b.municipality || '';
+      }
+    } catch(e) {}
   }
+  openShareSheet({
+    type: 'vote',
+    title: beachName,
+    municipality: municipality,
+    photo: photo,
+    url: `${window.location.origin}/votar.html`,
+  });
 }

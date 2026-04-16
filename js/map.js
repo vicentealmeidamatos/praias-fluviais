@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const serviceLabels = {
     bar: 'Bar', grills: 'Grelhadores', lifeguard: 'Nadador-salvador',
     blueFlag: 'Bandeira Azul', goldQuality: 'Qualidade Ouro',
-    accessible: 'Acessível', parking: 'Estacionamento',
+    accessible: 'Acessibilidades', parking: 'Estacionamento',
     wc: 'WC', picnicArea: 'Piquenique', camping: 'Campismo',
   };
 

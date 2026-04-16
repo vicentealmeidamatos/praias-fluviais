@@ -172,7 +172,7 @@ async function discardAndReload() {
   const iframe = document.getElementById('content-iframe');
   if (iframe) iframe.src = _contentIframeSrc();
 
-  toast('Preview recarregado — alterações não guardadas descartadas.', 'success');
+  toast('Preview recarregado. Alterações não guardadas descartadas.', 'success');
 }
 
 async function publishPendingChanges() {
@@ -326,7 +326,7 @@ const DISTRICTS = [
 const ALL_SERVICES = [
   { key: 'blueFlag',    label: 'Bandeira Azul' },
   { key: 'goldQuality', label: 'Qualidade de Ouro' },
-  { key: 'accessible',  label: 'Praia Acessível' },
+  { key: 'accessible',  label: 'Acessibilidades' },
   { key: 'lifeguard',   label: 'Nadador-Salvador' },
   { key: 'bar',         label: 'Bar/Restaurante' },
   { key: 'picnicArea',  label: 'Parque de Merendas' },
@@ -534,8 +534,8 @@ function renderDashboard() {
     'locations-guia-passaporte': { icon: '📗', label: 'Guia & Passaporte' },
     'locations-carimbos':        { icon: '🔖', label: 'Carimbo' },
     descontos:             { icon: '🏷️', label: 'Descontos' },
-    produtos:              { icon: '🛍️', label: 'Loja — Produtos' },
-    encomendas:            { icon: '📦', label: 'Loja — Encomendas' },
+    produtos:              { icon: '🛍️', label: 'Loja · Produtos' },
+    encomendas:            { icon: '📦', label: 'Loja · Encomendas' },
     utilizadores:          { icon: '👥', label: 'Dados' },
     comentarios:           { icon: '💬', label: 'Comentários' },
     conteudo:              { icon: '✏️', label: 'Editor Visual' },
@@ -925,7 +925,7 @@ function renderBeaches(container) {
             <tbody id="beaches-tbody">
               ${beaches.map((b, i) => {
                 const isBalnear = b.type === 'zona_balnear';
-                const activeServices = ALL_SERVICES.filter(s => b.services?.[s.key]).map(s => s.label).join(', ') || '—';
+                const activeServices = ALL_SERVICES.filter(s => b.services?.[s.key]).map(s => s.label).join(', ') || '-';
                 return `
                 <tr class="border-t border-praia-sand-100 hover:bg-praia-sand-50 admin-table-row${b.hidden ? ' opacity-50' : ''}" data-search="${_norm(b.name + ' ' + b.municipality + ' ' + (b.freguesia||'') + ' ' + (b.district||''))}" data-hidden="${b.hidden ? '1' : '0'}" style="${b.hidden ? 'background:repeating-linear-gradient(135deg,transparent,transparent 10px,rgba(0,0,0,.02) 10px,rgba(0,0,0,.02) 20px);' : ''}">
                   <td class="px-4 py-3 font-semibold text-praia-teal-800" style="display:flex;align-items:center;gap:8px;">
@@ -934,7 +934,7 @@ function renderBeaches(container) {
                     ${b.name}
                   </td>
                   <td class="px-4 py-3 text-praia-sand-600">${b.municipality}</td>
-                  <td class="px-4 py-3 text-praia-sand-600">${b.district || '—'}</td>
+                  <td class="px-4 py-3 text-praia-sand-600">${b.district || '-'}</td>
                   <td class="px-4 py-3">
                     <span class="badge" style="background:${isBalnear ? 'rgba(2,136,209,0.1)' : 'rgba(67,160,71,0.1)'};color:${isBalnear ? '#0288D1' : '#43A047'};">
                       ${isBalnear ? 'Balnear' : 'Fluvial'}
@@ -1004,7 +1004,7 @@ function editBeach(index) {
           <div>
             <label>Distrito</label>
             <select id="b-district">
-              <option value="">— selecionar —</option>
+              <option value="">- selecionar -</option>
               ${districtOptions}
             </select>
           </div>
@@ -1345,7 +1345,7 @@ function renderLocationsGuia(container) {
   container.innerHTML = `
     <div class="p-6">
       <div class="flex items-center justify-between mb-2">
-        <h1 class="font-display text-2xl font-bold text-praia-teal-800">Pontos — Guia &amp; Passaporte (${items.length})</h1>
+        <h1 class="font-display text-2xl font-bold text-praia-teal-800">Pontos: Guia &amp; Passaporte (${items.length})</h1>
         <div class="flex gap-2">
           <a href="../onde-encontrar.html" target="_blank" class="admin-btn bg-praia-sand-200 text-praia-teal-700 text-xs">Ver no site ↗</a>
           <button onclick="saveSectionNow('locations-guia-passaporte')" class="admin-btn admin-btn-export">Gravar alterações</button>
@@ -1430,7 +1430,7 @@ function editLocationGuia(index) {
   container.innerHTML = `
     <div class="p-6 max-w-2xl admin-form">
       <button onclick="renderSection()" class="text-praia-teal-600 text-sm font-semibold mb-4">← Voltar</button>
-      <h2 class="font-display text-xl font-bold text-praia-teal-800 mb-6">${index !== null ? 'Editar' : 'Adicionar'} Ponto — Guia &amp; Passaporte</h2>
+      <h2 class="font-display text-xl font-bold text-praia-teal-800 mb-6">${index !== null ? 'Editar' : 'Adicionar'} Ponto: Guia &amp; Passaporte</h2>
       <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100 admin-form">
         <div class="mb-4"><label>Nome</label><input type="text" id="l-name" value="${escHtml(l.name)}"></div>
         <div class="mb-4"><label>Concelho</label><input type="text" id="l-municipality" value="${escHtml(l.municipality)}"></div>
@@ -1525,7 +1525,7 @@ function renderLocationsPassaporte(container) {
                 style="${l.hidden ? 'background:repeating-linear-gradient(135deg,transparent,transparent 10px,rgba(0,0,0,.02) 10px,rgba(0,0,0,.02) 20px);' : ''}">
                 <td class="px-4 py-3 font-semibold text-praia-teal-800">${l.hidden ? '<span style="display:inline-flex;align-items:center;padding:1px 6px;border-radius:6px;font-size:9px;font-weight:700;background:#f1f1f1;color:#999;border:1px solid #ddd;margin-right:4px;">OCULTO</span>' : ''}${escHtml(l.name)}</td>
                 <td class="px-4 py-3 text-praia-sand-600">${escHtml(l.municipality)}</td>
-                <td class="px-4 py-3 text-praia-sand-500 text-xs">${(l.beaches || []).length > 0 ? `${(l.beaches||[]).length} praia${(l.beaches||[]).length > 1 ? 's' : ''}` : '<span class="text-praia-sand-300">—</span>'}</td>
+                <td class="px-4 py-3 text-praia-sand-500 text-xs">${(l.beaches || []).length > 0 ? `${(l.beaches||[]).length} praia${(l.beaches||[]).length > 1 ? 's' : ''}` : '<span class="text-praia-sand-300">-</span>'}</td>
                 <td class="px-4 py-3 text-xs">${l.seasonal ? '<span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-semibold text-[10px] border border-amber-300">Só época</span>' : '<span class="text-praia-sand-300">Todo o ano</span>'}</td>
                 <td class="px-4 py-3 text-right">
                   <button onclick="toggleItemVisibility('locations-carimbos', ${i})" class="text-praia-sand-400 hover:text-praia-sand-600 text-xs font-semibold mr-2" title="${l.hidden ? 'Tornar visível' : 'Ocultar do site'}">${l.hidden ? 'Mostrar' : 'Ocultar'}</button>
@@ -1591,7 +1591,7 @@ function editLocationPassaporte(index) {
           <label for="l-seasonal" class="cursor-pointer select-none">Só aberto durante a época balnear <span class="font-normal text-amber-600 text-xs">(mostra aviso no site)</span></label>
         </div>
         <div id="seasonal-note-row" class="mb-4" style="display:${l.seasonal ? '' : 'none'}">
-          <label>Nota de época <span class="font-normal text-praia-sand-400">(opcional — ex: "1 Jun–15 Set, 10h–19h")</span></label>
+          <label>Nota de época <span class="font-normal text-praia-sand-400">(opcional, ex: "1 Jun–15 Set, 10h–19h")</span></label>
           <input type="text" id="l-seasonal-note" value="${escHtml(l.seasonal_note || '')}" placeholder="Deixar vazio para mostrar 'Só época balnear'">
         </div>
         <div class="grid grid-cols-2 gap-4 mb-4">
@@ -1800,7 +1800,7 @@ function renderSettings(container) {
 
       <!-- Loja -->
       <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100">
-        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4">Loja — Portes de Envio</h3>
+        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4">Loja · Portes de Envio</h3>
         <div class="grid grid-cols-3 gap-4">
           <div><label>Portes Continental (€)</label><input type="number" step="0.01" id="s-shipping-cont" value="${((s.shippingPriceContinent || 350) / 100).toFixed(2)}"></div>
           <div><label>Portes Ilhas (€)</label><input type="number" step="0.01" id="s-shipping-ilhas" value="${((s.shippingPriceIslands || 600) / 100).toFixed(2)}"></div>
@@ -1823,7 +1823,7 @@ function renderSettings(container) {
         </div>
         <div style="display:flex;gap:8px;align-items:center;">
           <select id="s-add-beach" class="flex-1 px-3 py-2 text-sm border border-praia-sand-200 rounded-lg bg-white">
-            <option value="">— Adicionar praia —</option>
+            <option value="">- Adicionar praia -</option>
             ${beaches.filter(b => !featuredBeaches.includes(b.id)).map(b => `<option value="${b.id}">${escHtml(b.name)}</option>`).join('')}
           </select>
           <button onclick="addFeaturedBeach()" class="admin-btn admin-btn-primary" style="white-space:nowrap;">+ Adicionar</button>
@@ -1845,7 +1845,7 @@ function renderSettings(container) {
         </div>
         <div style="display:flex;gap:8px;align-items:center;">
           <select id="s-add-article" class="flex-1 px-3 py-2 text-sm border border-praia-sand-200 rounded-lg bg-white">
-            <option value="">— Adicionar artigo —</option>
+            <option value="">- Adicionar artigo -</option>
             ${articles.filter(a => !featuredArticles.includes(a.slug)).map(a => `<option value="${a.slug}">${escHtml(a.title)}</option>`).join('')}
           </select>
           <button onclick="addFeaturedArticle()" class="admin-btn admin-btn-primary" style="white-space:nowrap;">+ Adicionar</button>
@@ -1855,7 +1855,7 @@ function renderSettings(container) {
       <!-- Vencedores Anteriores -->
       <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100">
         <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-1">Vencedores Anteriores</h3>
-        <p style="font-size:12px;color:#8A7D60;margin-bottom:14px;">Pode adicionar múltiplas Praias Revelação — use o campo "Label" para indicar zona (Norte, Centro, Sul) ou posição (1.º, 2.º) ou deixar em branco.</p>
+        <p style="font-size:12px;color:#8A7D60;margin-bottom:14px;">Pode adicionar múltiplas Praias Revelação. Use o campo "Label" para indicar zona (Norte, Centro, Sul) ou posição (1.º, 2.º) ou deixar em branco.</p>
         <div id="winners-list" style="display:flex;flex-direction:column;gap:12px;margin-bottom:12px;">
           ${prevWinners.map((w, i) => {
             const revs = w.revelations || [];
@@ -2252,10 +2252,10 @@ async function renderUtilizadores(content) {
       <!-- Stats Grid -->
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
         ${[
-          { label: 'Utilizadores', value: totalUsers ?? '—', icon: '👤' },
-          { label: `Votos ${year}`, value: totalVotes ?? '—', icon: '🗳️' },
-          { label: 'Comentários', value: totalReviews ?? '—', icon: '💬' },
-          { label: 'Carimbos', value: totalStamps ?? '—', icon: '🔖' },
+          { label: 'Utilizadores', value: totalUsers ?? '-', icon: '👤' },
+          { label: `Votos ${year}`, value: totalVotes ?? '-', icon: '🗳️' },
+          { label: 'Comentários', value: totalReviews ?? '-', icon: '💬' },
+          { label: 'Carimbos', value: totalStamps ?? '-', icon: '🔖' },
         ].map(s => `
           <div class="bg-white rounded-xl p-5 shadow-sm border border-praia-sand-200">
             <div class="text-2xl mb-2">${s.icon}</div>
@@ -2528,7 +2528,7 @@ function renderComentariosContent() {
         <tbody>
           ${filtered.map(r => {
             const beach    = beaches.find(b => b.id === r.beach_id);
-            const username = r.profiles?.username || '—';
+            const username = r.profiles?.username || '-';
             const avatar   = r.profiles?.avatar_url;
             const date     = r.created_at ? new Date(r.created_at).toLocaleDateString('pt-PT') : '';
             const isDeleted = !!r.deleted_by_admin;
@@ -2546,7 +2546,7 @@ function renderComentariosContent() {
                   <span class="font-medium text-praia-teal-800 text-xs">${escHtml(username)}</span>
                 </div>
               </td>
-              <td class="px-4 py-3 text-praia-sand-500 text-xs">${escHtml(beach?.name || beach?.nome || r.beach_id || '—')}</td>
+              <td class="px-4 py-3 text-praia-sand-500 text-xs">${escHtml(beach?.name || beach?.nome || r.beach_id || '-')}</td>
               <td class="px-4 py-3">
                 ${isDeleted
                   ? `<span class="italic text-praia-sand-400 text-xs">Removido pelo administrador</span>`
@@ -2672,7 +2672,7 @@ function renderProdutos(container) {
                     </div>
                   </div>
                 </td>
-                <td class="px-4 py-3 font-display text-praia-sand-600 capitalize">${p.category || '—'}</td>
+                <td class="px-4 py-3 font-display text-praia-sand-600 capitalize">${p.category || '-'}</td>
                 <td class="px-4 py-3 font-display font-semibold text-praia-teal-800">${fmtPrice(p.price)}</td>
                 <td class="px-4 py-3">
                   <span class="inline-flex items-center gap-1 font-display text-xs font-semibold px-2 py-0.5 rounded-full ${p.available ? 'bg-praia-green-500/10 text-praia-green-600' : 'bg-red-50 text-red-500'}">
@@ -2745,7 +2745,7 @@ function productFormHTML(p) {
 
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <label>Preço (cêntimos — 0 = Grátis)</label>
+          <label>Preço (cêntimos, 0 = Grátis)</label>
           <input id="p-price" type="number" min="0" value="${p.price ?? 0}" placeholder="2500">
         </div>
         <div class="flex flex-col justify-center gap-2.5 pt-1">
@@ -2771,7 +2771,7 @@ function productFormHTML(p) {
       </div>
 
       <div>
-        <label>Tamanhos — separados por vírgula (vazio = sem variantes)</label>
+        <label>Tamanhos, separados por vírgula (vazio = sem variantes)</label>
         <input id="p-variants" type="text" value="${variants.map(v => v.id).join(',')}" placeholder="XS,S,M,L,XL,XXL">
       </div>
 
@@ -3102,7 +3102,7 @@ function renderEncomendasContent() {
             </div>
             <!-- Quick info row -->
             <div class="px-5 py-2.5 flex flex-wrap items-center gap-x-6 gap-y-1 text-xs font-display border-b border-praia-sand-50">
-              <span class="text-praia-sand-500"><strong class="text-praia-teal-800">Email:</strong> ${o.email || '—'}</span>
+              <span class="text-praia-sand-500"><strong class="text-praia-teal-800">Email:</strong> ${o.email || '-'}</span>
               <span class="text-praia-sand-500"><strong class="text-praia-teal-800">Envio:</strong> ${o.shipping_zone === 'ilhas' ? 'Açores/Madeira' : 'Continental'} ${o.shipping_price === 0 ? '(grátis)' : fmtPrice(o.shipping_price)}</span>
               <span class="text-praia-sand-500"><strong class="text-praia-teal-800">Itens:</strong> ${items.reduce((s, i) => s + i.quantity, 0)}</span>
             </div>
@@ -3142,7 +3142,7 @@ function renderEncomendasContent() {
                   <span class="text-praia-sand-500">Subtotal: <strong class="text-praia-teal-800">${fmtPrice(o.subtotal)}</strong></span>
                   <span class="text-praia-sand-500">Envio: <strong class="text-praia-teal-800">${o.shipping_price === 0 ? 'Grátis' : fmtPrice(o.shipping_price)}</strong></span>
                   <span class="text-praia-sand-500">Total: <strong class="text-praia-teal-800 text-sm">${fmtPrice(o.total)}</strong></span>
-                  <span class="text-praia-sand-400 ml-auto">Stripe: ${o.stripe_session_id ? o.stripe_session_id.slice(0, 20) + '…' : '—'}</span>
+                  <span class="text-praia-sand-400 ml-auto">Stripe: ${o.stripe_session_id ? o.stripe_session_id.slice(0, 20) + '…' : '-'}</span>
                 </div>
               </div>
             </div>
@@ -3609,7 +3609,7 @@ function _contentIframeSrc(opts) {
 
 function _renderDynOptions() {
   const kind = _content.dynKind;
-  if (!kind) return '<option value="">— escolher —</option>';
+  if (!kind) return '<option value="">- escolher -</option>';
   let items = [];
   if (kind === 'praia') {
     items = (state.data['beaches'] || []).map(b => ({ id: b.id, label: b.name }));
@@ -3618,7 +3618,7 @@ function _renderDynOptions() {
   } else if (kind === 'produto') {
     items = (state.data['produtos'] || []).map(p => ({ id: p.id, label: p.name }));
   }
-  return ['<option value="">— escolher —</option>']
+  return ['<option value="">- escolher -</option>']
     .concat(items.map(it => `<option value="${escHtml(it.id)}" ${_content.dynItem===it.id?'selected':''}>${escHtml(it.label)}</option>`))
     .join('');
 }
@@ -4144,7 +4144,7 @@ function renderConteudoTab(tabId) {
         ${field('global.social.instagram', 'Instagram URL', g.social?.instagram)}
         ${field('global.social.youtube', 'YouTube URL', g.social?.youtube)}
         ${field('global.social.tiktok', 'TikTok URL', g.social?.tiktok)}
-        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4 mt-6">Navegação — Labels do Menu</h3>
+        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4 mt-6">Navegação · Labels do Menu</h3>
         ${field('global.nav.rede', 'Rede de Praias', g.nav?.rede)}
         ${field('global.nav.votar', 'Votar', g.nav?.votar)}
         ${field('global.nav.passaporte', 'Passaporte', g.nav?.passaporte)}
@@ -4158,12 +4158,12 @@ function renderConteudoTab(tabId) {
       <div class="bg-white rounded-xl p-5 shadow-sm border border-praia-sand-100 admin-form">
         <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4">Estatísticas Hero</h3>
         <div class="grid grid-cols-2 gap-4">
-          ${field('homepage.stat1Label', 'Estatística 1 — Label', h.stat1Label)}
-          ${field('homepage.stat1Value', 'Estatística 1 — Valor', h.stat1Value)}
-          ${field('homepage.stat2Label', 'Estatística 2 — Label', h.stat2Label)}
-          ${field('homepage.stat2Value', 'Estatística 2 — Valor', h.stat2Value)}
-          ${field('homepage.stat3Label', 'Estatística 3 — Label', h.stat3Label)}
-          ${field('homepage.stat3Value', 'Estatística 3 — Valor', h.stat3Value)}
+          ${field('homepage.stat1Label', 'Estatística 1 · Label', h.stat1Label)}
+          ${field('homepage.stat1Value', 'Estatística 1 · Valor', h.stat1Value)}
+          ${field('homepage.stat2Label', 'Estatística 2 · Label', h.stat2Label)}
+          ${field('homepage.stat2Value', 'Estatística 2 · Valor', h.stat2Value)}
+          ${field('homepage.stat3Label', 'Estatística 3 · Label', h.stat3Label)}
+          ${field('homepage.stat3Value', 'Estatística 3 · Valor', h.stat3Value)}
         </div>
         <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4 mt-6">CTAs</h3>
         ${field('homepage.heroCtaPrimary', 'CTA Primário', h.heroCtaPrimary)}
@@ -4182,10 +4182,10 @@ function renderConteudoTab(tabId) {
         ${field('votar.hallOfFameLabel', 'Label Hall da Fama', v.hallOfFameLabel)}
         ${field('votar.hallOfFameTitle', 'Título Hall da Fama', v.hallOfFameTitle)}
         <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4 mt-4">Cards Informativos</h3>
-        ${field('votar.card1Title', 'Card 1 — Título', v.card1Title)}
-        ${textarea('votar.card1Text', 'Card 1 — Texto', v.card1Text, 3)}
-        ${field('votar.card2Title', 'Card 2 — Título', v.card2Title)}
-        ${textarea('votar.card2Text', 'Card 2 — Texto', v.card2Text, 3)}
+        ${field('votar.card1Title', 'Card 1 · Título', v.card1Title)}
+        ${textarea('votar.card1Text', 'Card 1 · Texto', v.card1Text, 3)}
+        ${field('votar.card2Title', 'Card 2 · Título', v.card2Title)}
+        ${textarea('votar.card2Text', 'Card 2 · Texto', v.card2Text, 3)}
       </div>`,
     artigos: `
       <div class="bg-white rounded-xl p-5 shadow-sm border border-praia-sand-100 admin-form">

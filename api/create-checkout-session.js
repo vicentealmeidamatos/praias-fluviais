@@ -55,7 +55,7 @@ export default async function handler(req, res) {
       const qty = Math.max(1, Math.min(99, parseInt(item.quantity) || 1));
       const unitPrice = product.price;
       const variantLabel = item.variant && item.variant !== 'sem-variante' ? ` (${item.variant})` : '';
-      const beachLabel = item.beach ? ` — ${getBeachName(item.beach)}` : '';
+      const beachLabel = item.beach ? ` - ${getBeachName(item.beach)}` : '';
 
       subtotal += unitPrice * qty;
 
@@ -90,7 +90,7 @@ export default async function handler(req, res) {
           variant: item.variant || 'sem-variante',
           quantity: item.quantity,
           price: p?.price ?? 0,
-          name: beachName ? `${p?.name ?? item.product_id} — ${beachName}` : (p?.name ?? item.product_id),
+          name: beachName ? `${p?.name ?? item.product_id} - ${beachName}` : (p?.name ?? item.product_id),
           beach: item.beach || null,
         };
       })),

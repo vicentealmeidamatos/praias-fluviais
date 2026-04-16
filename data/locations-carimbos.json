@@ -26,7 +26,7 @@
     }
   },
   {
-    "name": "Welcome Center de Abrantes — Posto de Turismo de Abrantes",
+    "name": "Welcome Center de Abrantes - Posto de Turismo de Abrantes",
     "municipality": "Abrantes",
     "address": "Rua Luís de Camões 20A, 2200-201 Abrantes",
     "beaches": [
@@ -108,7 +108,7 @@
   {
     "name": "Posto de Turismo de Arganil",
     "municipality": "Arganil",
-    "address": "Casa Municipal da Cultura — Edifício do Museu, Av. das Forças Armadas, 3300-011 Arganil",
+    "address": "Casa Municipal da Cultura - Edifício do Museu, Av. das Forças Armadas, 3300-011 Arganil",
     "beaches": [
       "Praia Fluvial de Agroal",
       "Praia Fluvial de Benfeita",
@@ -212,7 +212,7 @@
     }
   },
   {
-    "name": "Posto de Turismo de Caminha — Loja Interativa de Turismo",
+    "name": "Posto de Turismo de Caminha - Loja Interativa de Turismo",
     "municipality": "Caminha",
     "address": "Praça Conselheiro Silva Torres, 4910-122 Caminha",
     "beaches": [
@@ -241,7 +241,7 @@
     }
   },
   {
-    "name": "Posto de Turismo de Castanheira de Pera — Casa do Tempo",
+    "name": "Posto de Turismo de Castanheira de Pera - Casa do Tempo",
     "municipality": "Castanheira de Pera",
     "address": "Rua Dr. José Fernandes de Carvalho, 3280-039 Castanheira de Pera",
     "beaches": [
@@ -322,7 +322,7 @@
     }
   },
   {
-    "name": "Posto de Turismo de Castro Daire — Welcome Center",
+    "name": "Posto de Turismo de Castro Daire - Welcome Center",
     "municipality": "Castro Daire",
     "address": "Rua Dr. Pio de Figueiredo nº 42, 3600-214 Castro Daire",
     "beaches": [
@@ -362,7 +362,7 @@
     }
   },
   {
-    "name": "Posto de Turismo Municipal de Coimbra — Antiga Estação Coimbra A",
+    "name": "Posto de Turismo Municipal de Coimbra - Antiga Estação Coimbra A",
     "municipality": "Coimbra",
     "address": "Rua António Granjo Nº6, 3000-429 Coimbra",
     "beaches": [
@@ -389,7 +389,7 @@
     }
   },
   {
-    "name": "Bar da Praia Fluvial do Sorraia — Sunset Beach Bar",
+    "name": "Bar da Praia Fluvial do Sorraia - Sunset Beach Bar",
     "municipality": "Coruche",
     "address": "Praia Fluvial do Sorraia, 2100-101 Coruche",
     "beaches": [
@@ -489,7 +489,7 @@
     }
   },
   {
-    "name": "Nadadores Salvadores — Praia Fluvial do Lago Azul",
+    "name": "Nadadores Salvadores - Praia Fluvial do Lago Azul",
     "municipality": "Ferreira do Zêzere",
     "address": "Praia Fluvial do Lago Azul, Ferreira do Zêzere",
     "beaches": [
@@ -502,7 +502,7 @@
     }
   },
   {
-    "name": "Nadadores Salvadores — Praia Fluvial da Bairrada/Bairradinha",
+    "name": "Nadadores Salvadores - Praia Fluvial da Bairrada/Bairradinha",
     "municipality": "Ferreira do Zêzere",
     "address": "Praia Fluvial da Bairrada/Bairradinha, Ferreira do Zêzere",
     "beaches": [
@@ -557,7 +557,7 @@
   {
     "name": "Posto de Turismo de Fornos de Algodres",
     "municipality": "Fornos de Algodres",
-    "address": "CIFA — Piso intermédio do Palácio da Justiça, Urbanização Zona Sul, 6370-147 Fornos de Algodres",
+    "address": "CIFA - Piso intermédio do Palácio da Justiça, Urbanização Zona Sul, 6370-147 Fornos de Algodres",
     "beaches": [
       "Praia Fluvial de Ponte de Juncais"
     ],
@@ -787,11 +787,11 @@
     }
   },
   {
-    "name": "Bar da Praia Fluvial da Quinta da Taberna — Videmonte",
+    "name": "Bar da Praia Fluvial da Quinta da Taberna - Videmonte",
     "municipality": "Guarda",
-    "address": "Praia Fluvial da Quinta da Taberna — Videmonte, Guarda",
+    "address": "Praia Fluvial da Quinta da Taberna - Videmonte, Guarda",
     "beaches": [
-      "Praia Fluvial da Quinta da Taberna — Videmonte"
+      "Praia Fluvial da Quinta da Taberna - Videmonte"
     ],
     "seasonal": true,
     "coordinates": {
@@ -813,7 +813,7 @@
     }
   },
   {
-    "name": "Nadadores Salvadores — Praia Fluvial de Valhelhas",
+    "name": "Nadadores Salvadores - Praia Fluvial de Valhelhas",
     "municipality": "Guarda",
     "address": "Praia Fluvial de Valhelhas, Guarda",
     "beaches": [
@@ -826,13 +826,13 @@
     }
   },
   {
-    "name": "Welcome Center da Guarda — Posto de Turismo da Guarda",
+    "name": "Welcome Center da Guarda - Posto de Turismo da Guarda",
     "municipality": "Guarda",
     "address": "Praça Luís de Camões, 6300-725 Guarda",
     "beaches": [
       "Praia Fluvial de Aldeia Viçosa",
       "Praia Fluvial da Barragem do Caldeirão",
-      "Praia Fluvial da Quinta da Taberna — Videmonte",
+      "Praia Fluvial da Quinta da Taberna - Videmonte",
       "Praia Fluvial de Vale do Mondego",
       "Praia Fluvial de Valhelhas"
     ],
@@ -895,7 +895,7 @@
     }
   },
   {
-    "name": "EPAL — Atendimento ao Público",
+    "name": "EPAL - Atendimento ao Público",
     "municipality": "Lisboa",
     "address": "Av. da Liberdade n.º 24, 1250-144 Lisboa",
     "beaches": [
@@ -948,7 +948,7 @@
     }
   },
   {
-    "name": "Posto de Turismo da Lousã — Museu Etnográfico Dr. Louzã Henriques",
+    "name": "Posto de Turismo da Lousã - Museu Etnográfico Dr. Louzã Henriques",
     "municipality": "Lousã",
     "address": "Rua Dr. João Luso, 3200-114 Lousã",
     "beaches": [
@@ -1097,9 +1097,9 @@
     }
   },
   {
-    "name": "Posto de Turismo de Mirandela — Ecoteca",
+    "name": "Posto de Turismo de Mirandela - Ecoteca",
     "municipality": "Mirandela",
-    "address": "Ecoteca de Mirandela — Centro Interpretativo do Território, Travessa da Ponte Romana, 5370-489 Mirandela",
+    "address": "Ecoteca de Mirandela - Centro Interpretativo do Território, Travessa da Ponte Romana, 5370-489 Mirandela",
     "beaches": [
       "Praia Fluvial Albino Mendo",
       "Zona Balnear de Maravilha",
@@ -1132,7 +1132,7 @@
   {
     "name": "Posto de Turismo de Montemor-o-Velho",
     "municipality": "Montemor-o-Velho",
-    "address": "Paço das Infantas — Castelo de Montemor-o-Velho, 3140-262 Montemor-o-Velho",
+    "address": "Paço das Infantas - Castelo de Montemor-o-Velho, 3140-262 Montemor-o-Velho",
     "beaches": [
       "Praia Fluvial de Ereira"
     ],
@@ -1370,7 +1370,7 @@
     }
   },
   {
-    "name": "Posto de Turismo de Fátima — Welcome Center",
+    "name": "Posto de Turismo de Fátima - Welcome Center",
     "municipality": "Ourém",
     "address": "Av. de Dom José Alves Correia da Silva 213, 2495-402 Fátima",
     "beaches": [
@@ -1385,7 +1385,7 @@
   {
     "name": "Posto de Turismo de Ourém",
     "municipality": "Ourém",
-    "address": "Largo do Pelourinho — Castelo — Vila Medieval, 2490-472 Ourém",
+    "address": "Largo do Pelourinho - Castelo - Vila Medieval, 2490-472 Ourém",
     "beaches": [
       "Praia Fluvial do Agroal"
     ],
@@ -1516,9 +1516,9 @@
     }
   },
   {
-    "name": "Posto de Turismo de Pedrógão Grande — CIT",
+    "name": "Posto de Turismo de Pedrógão Grande - CIT",
     "municipality": "Pedrógão Grande",
-    "address": "CIT — Centro de Interpretação Turística, Valbom, 3274-909 Pedrógão Grande",
+    "address": "CIT - Centro de Interpretação Turística, Valbom, 3274-909 Pedrógão Grande",
     "beaches": [
       "Praia Fluvial do Cabril",
       "Praia Fluvial de Mega",
@@ -1641,7 +1641,7 @@
     }
   },
   {
-    "name": "Bar da Zona Balnear O Moinho — Benquerença",
+    "name": "Bar da Zona Balnear O Moinho - Benquerença",
     "municipality": "Penamacor",
     "address": "Zona Balnear O Moinho, Benquerença, Penamacor",
     "beaches": [
@@ -1654,7 +1654,7 @@
     }
   },
   {
-    "name": "Posto de Turismo de Penamacor — Museu Municipal",
+    "name": "Posto de Turismo de Penamacor - Museu Municipal",
     "municipality": "Penamacor",
     "address": "Largo Tenente Coronel Júlio Rodrigues da Silva s/n, 6090-545 Penamacor",
     "beaches": [
@@ -1896,7 +1896,7 @@
     }
   },
   {
-    "name": "Bar/Restaurante Sem Fim — Praia Fluvial de Monsaraz",
+    "name": "Bar/Restaurante Sem Fim - Praia Fluvial de Monsaraz",
     "municipality": "Reguengos de Monsaraz",
     "address": "Praia Fluvial de Monsaraz, Reguengos de Monsaraz",
     "beaches": [
@@ -2039,7 +2039,7 @@
     }
   },
   {
-    "name": "Posto de Turismo do Sabugal — Museu do Sabugal",
+    "name": "Posto de Turismo do Sabugal - Museu do Sabugal",
     "municipality": "Sabugal",
     "address": "Rua de São Tiago, 6320-409 Sabugal",
     "beaches": [
@@ -2113,7 +2113,7 @@
     }
   },
   {
-    "name": "Posto de Turismo de Sátão — Casa da Cultura",
+    "name": "Posto de Turismo de Sátão - Casa da Cultura",
     "municipality": "Sátão",
     "address": "Rua da Travessa do Clube, 3560 Sátão",
     "beaches": [
@@ -2196,7 +2196,7 @@
     }
   },
   {
-    "name": "Posto de Turismo de Sernancelhe — Centro das Artes",
+    "name": "Posto de Turismo de Sernancelhe - Centro das Artes",
     "municipality": "Sernancelhe",
     "address": "Av. Dr. Oliveira Serrão, 3640-420 Sernancelhe",
     "beaches": [
@@ -2304,7 +2304,7 @@
     }
   },
   {
-    "name": "Posto de Turismo de Sever do Vouga — Casa do Artesão",
+    "name": "Posto de Turismo de Sever do Vouga - Casa do Artesão",
     "municipality": "Sever do Vouga",
     "address": "Casa do Artesão de Sever do Vouga, Rua do Jardim 92, 3740-273 Sever do Vouga",
     "beaches": [
@@ -2373,7 +2373,7 @@
     }
   },
   {
-    "name": "Posto de Turismo de Tondela — Museu Terras de Besteiros",
+    "name": "Posto de Turismo de Tondela - Museu Terras de Besteiros",
     "municipality": "Tondela",
     "address": "Museu Terras de Besteiros, Rua Dr. Simões Ferraz de Carvalho, 3460-588 Tondela",
     "beaches": [
@@ -2553,7 +2553,7 @@
     }
   },
   {
-    "name": "ZAB LIVING — Praia Fluvial da Zaboeira",
+    "name": "ZAB LIVING - Praia Fluvial da Zaboeira",
     "municipality": "Vila de Rei",
     "address": "Largo da Capela N1, Zaboeira, 6110-169 Zaboeira",
     "beaches": [
@@ -2637,7 +2637,7 @@
     }
   },
   {
-    "name": "Restaurante Pelgo — Praia Fluvial de Ponte Soeira",
+    "name": "Restaurante Pelgo - Praia Fluvial de Ponte Soeira",
     "municipality": "Vinhais",
     "address": "Praia Fluvial de Ponte Soeira, Vinhais",
     "beaches": [
@@ -2650,7 +2650,7 @@
     }
   },
   {
-    "name": "Bar Beira Rio — Praia Fluvial de Ponte Soeira",
+    "name": "Bar Beira Rio - Praia Fluvial de Ponte Soeira",
     "municipality": "Vinhais",
     "address": "Praia Fluvial de Ponte Soeira, Vinhais",
     "beaches": [

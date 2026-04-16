@@ -10,9 +10,12 @@ const _sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ─── Auth State ───────────────────────────────────────────────────────────────
 
+let _authUserPromise = null;
 async function authGetUser() {
-  const { data: { user } } = await _sb.auth.getUser();
-  return user;
+  if (!_authUserPromise) {
+    _authUserPromise = _sb.auth.getUser().then(({ data: { user } }) => user);
+  }
+  return _authUserPromise;
 }
 
 async function authGetSession() {
@@ -21,6 +24,7 @@ async function authGetSession() {
 }
 
 async function authSignOut() {
+  _authUserPromise = null;
   await _sb.auth.signOut();
   window.location.href = 'index.html';
 }
@@ -203,7 +207,7 @@ const ALL_BADGES = [
   // ── Diamante ─────────────────────────────────────────────────────────────
   { id: 'mestre-praias',     name: 'Mestre das Praias',     desc: 'Visitou 50 praias fluviais',                     icon: 'shield',         tier: 'diamante', type: 'stamps',             threshold: 50 },
   { id: 'elite-fluvial',     name: 'Elite Fluvial',         desc: 'Visitou 75 praias fluviais',                     icon: 'award',          tier: 'diamante', type: 'stamps',             threshold: 75 },
-  { id: 'passaportista',     name: 'Passaportista Supremo', desc: '50 carimbos + 10 comentários + voto',            icon: 'bookmark',       tier: 'diamante', type: 'combo_all',          stampsMin: 50, reviewsMin: 10 },
+  { id: 'passaportista',     name: 'Passaportista Supremo', desc: '50 carimbos + 10 comentários + voto',            icon: 'badge-check',    tier: 'diamante', type: 'combo_all',          stampsMin: 50, reviewsMin: 10 },
   // ── Mítico ───────────────────────────────────────────────────────────────
   { id: 'lenda-aguas',       name: 'Lenda das Águas',       desc: 'Carimbou 100 praias fluviais',                   icon: 'trophy',         tier: 'mitico',   type: 'stamps',             threshold: 100 },
   { id: 'lenda-fluvial',     name: 'Lenda Fluvial',         desc: '100 carimbos + 15 comentários + voto',           icon: 'gem',            tier: 'mitico',   type: 'combo_legend',       stampsMin: 100, reviewsMin: 15 },
@@ -310,8 +314,10 @@ function badgesTopEarned(computedBadges, n = 3) {
     .slice(0, n);
 }
 
-// Fetches all needed data for a user and returns their top N earned badges
+// Fetches all needed data for a user and returns their top N earned badges (cached per session)
+const _badgesCache = {};
 async function badgesGetForUser(userId, beaches) {
+  if (_badgesCache[userId]) return _badgesCache[userId];
   const year = new Date().getFullYear();
   const [stamps, reviews, vote] = await Promise.all([
     stampsGetAll(userId),
@@ -319,7 +325,9 @@ async function badgesGetForUser(userId, beaches) {
     voteGet(userId, year),
   ]);
   const computed = badgesCompute({ stamps, reviews, voted: !!vote, beaches });
-  return badgesTopEarned(computed, 3);
+  const result = badgesTopEarned(computed, 3);
+  _badgesCache[userId] = result;
+  return result;
 }
 
 // ─── Username → Email Lookup (requires email column in profiles table) ────────
@@ -375,7 +383,7 @@ function badgePillHTML(badge) {
     : '';
   const glowStyle = isRare ? `box-shadow: 0 0 8px ${tier.glow};` : '';
   return `<span class="medal-chip inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-display font-bold whitespace-nowrap"
-    title="${badge.name} — ${badge.desc}"
+    title="${badge.name}: ${badge.desc}"
     style="background:${tier.hex}22;color:${tier.hex};border:1.5px solid ${tier.hex}55;${glowStyle}${shimmerStyle}">
     <i data-lucide="${badge.icon}" style="width:11px;height:11px;flex-shrink:0;"></i>
     ${badge.name}

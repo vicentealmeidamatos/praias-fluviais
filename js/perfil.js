@@ -1,3 +1,7 @@
+// ─── Pré-carregamento imediato (sem esperar pelo DOM) ───
+const _authEarlyPerfil = window.AuthUtils ? AuthUtils.authGetUser() : null;
+const _beachesEarlyPerfil = window.getBeaches ? getBeaches().catch(() => []) : null;
+
 // ─── Página de Perfil ─────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', async () => {
   const { authGetUser, profileGet, profileUpsert, profileUploadAvatar,
@@ -10,8 +14,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   const viewUserId    = searchParams.get('user'); // null = own profile
   const isOwnProfile  = !viewUserId;
 
-  // ── Auth guard (only for own profile) ──────────────────────────────────────
-  const currentUser = await authGetUser();
+  // ── Auth + beaches in parallel (pre-started before DOM) ────────────────────
+  const beachesPromise = _beachesEarlyPerfil || getBeaches().catch(() => []);
+  const currentUser = await (_authEarlyPerfil || authGetUser());
   if (isOwnProfile && !currentUser) {
     window.location.href = 'auth.html?redirect=perfil.html';
     return;
@@ -23,7 +28,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // ── Load ALL data in parallel ──────────────────────────────────────────────
   const currentYear = new Date().getFullYear();
   const [beachesRaw, profile, stamps, reviews, voteData] = await Promise.all([
-    getBeaches().catch(() => []),
+    beachesPromise,
     profileGet(targetUserId),
     stampsGetAll(targetUserId),
     reviewsGetForUser(targetUserId),
@@ -56,7 +61,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('stat-stamps').textContent  = stamps.length;
   document.getElementById('stat-medals').textContent  = earnedBadges.length;
   document.getElementById('stat-reviews').textContent = reviews.length;
-  document.getElementById('stat-voted').textContent   = votedBeachId ? '✓' : '—';
+  document.getElementById('stat-voted').textContent   = votedBeachId ? '✓' : '-';
 
   // Badge tier breakdown in hero
   const tierCounts = {};
@@ -108,7 +113,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     grid.innerHTML = sorted.map(b => badgeCardHTML(b)).join('');
-    lucide.createIcons();
   }
   renderBadges();
 
@@ -131,7 +135,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             <i data-lucide="map" class="w-4 h-4"></i> Ver Rede de Praias
           </a>` : ''}
         </div>`;
-      lucide.createIcons();
       return;
     }
 
@@ -150,8 +153,6 @@ document.addEventListener('DOMContentLoaded', async () => {
           <div class="text-[10px] text-praia-teal-500 font-display font-semibold mt-1">${stampMap[b.id] || ''}</div>
         </div>
       </a>`).join('');
-
-    lucide.createIcons();
   }
   renderStamps();
 
@@ -167,7 +168,6 @@ document.addEventListener('DOMContentLoaded', async () => {
           <p class="font-display text-sm font-semibold text-praia-sand-400">Ainda sem comentários</p>
           <p class="text-xs text-praia-sand-300 mt-1">${isOwnProfile ? 'Visite uma praia e partilhe a sua experiência!' : 'Este utilizador ainda não comentou.'}</p>
         </div>`;
-      lucide.createIcons();
       return;
     }
 
@@ -187,7 +187,6 @@ document.addEventListener('DOMContentLoaded', async () => {
           ${r.images?.length ? `<div class="flex gap-2 mt-3 flex-wrap">${r.images.map(img => `<img src="${img}" class="w-16 h-16 object-cover rounded-lg border border-praia-sand-100 cursor-pointer hover:opacity-90 transition-opacity" onclick="openImageViewer(this.src)">`).join('')}</div>` : ''}
         </div>`;
     }).join('');
-    lucide.createIcons();
   }
   renderReviews();
 
@@ -209,7 +208,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             <p class="font-display text-sm font-semibold text-praia-sand-400">Voto privado</p>
             <p class="text-xs text-praia-sand-300 mt-1">Este utilizador mantém o seu voto privado.</p>
           </div>`;
-        lucide.createIcons();
         return;
       }
 
@@ -222,11 +220,11 @@ document.addEventListener('DOMContentLoaded', async () => {
           <h3 class="font-display text-xl font-bold text-praia-teal-800 mb-1">${beach?.name || votedBeachId}</h3>
           <p class="text-xs text-praia-sand-400">${beach?.municipality || ''}</p>
           <div class="mt-6 px-4 py-2.5 rounded-xl inline-block" style="background:rgba(255,235,59,0.1);">
-            <span class="font-display text-xs font-bold text-praia-yellow-700 uppercase tracking-wider">Voto confirmado — obrigado!</span>
+            <span class="font-display text-xs font-bold text-praia-yellow-700 uppercase tracking-wider">Voto confirmado, obrigado!</span>
           </div>
           ${isOwnProfile ? `
             <div class="mt-4">
-              <button onclick="shareProfileVote('${(beach?.name || votedBeachId).replace(/'/g, "\\'")}')" class="inline-flex items-center gap-2 btn-primary bg-praia-teal-800 text-white font-display text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full">
+              <button onclick="shareProfileVote('${(beach?.name || votedBeachId).replace(/'/g, "\\'")}','${votedBeachId}')" class="inline-flex items-center gap-2 btn-primary bg-praia-teal-800 text-white font-display text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-full">
                 <i data-lucide="share-2" class="w-4 h-4"></i> Partilhar Voto
               </button>
             </div>
@@ -259,7 +257,6 @@ document.addEventListener('DOMContentLoaded', async () => {
           </a>` : ''}
         </div>`;
     }
-    lucide.createIcons();
   }
   renderVote();
 
@@ -270,7 +267,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     el.innerHTML = `
       <button id="hero-vote-privacy-btn"
               class="inline-flex items-center justify-center gap-0.5 text-[9px] font-display font-semibold uppercase tracking-wider transition-all duration-200 ${isPublic ? 'text-white/25 hover:text-white/50' : 'text-praia-yellow-400/60 hover:text-praia-yellow-400'}"
-              title="${isPublic ? 'Voto público — clique para tornar privado' : 'Voto privado — clique para tornar público'}">
+              title="${isPublic ? 'Voto público: clique para tornar privado' : 'Voto privado: clique para tornar público'}">
         <i data-lucide="${isPublic ? 'globe' : 'lock'}" class="w-2.5 h-2.5"></i>
         <span>${isPublic ? 'Público' : 'Privado'}</span>
       </button>`;
@@ -289,7 +286,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
       lucide.createIcons();
     });
-    lucide.createIcons();
   }
   renderHeroVotePrivacy(_currentVotePublic);
 
@@ -715,7 +711,7 @@ document.addEventListener('DOMContentLoaded', async () => {
               ` : ''}
               <div class="px-5 py-3 bg-praia-sand-50 flex items-center gap-2 text-xs text-praia-sand-400 font-display">
                 <i data-lucide="truck" class="w-3.5 h-3.5"></i>
-                ${order.shipping_zone === 'ilhas' ? 'Açores / Madeira' : 'Portugal Continental'} —
+                ${order.shipping_zone === 'ilhas' ? 'Açores / Madeira' : 'Portugal Continental'},
                 ${order.shipping_price === 0 ? 'Envio grátis' : `Envio ${fmtPrice(order.shipping_price)}`}
               </div>
             </div>`;
@@ -752,6 +748,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     switchTab(hashTab);
   }
 
+  // ── Single lucide pass after all renders ────────────────────────────────────
+  lucide.createIcons();
+
   // ── Show hidden sections ───────────────────────────────────────────────────
   document.getElementById('profile-loading')?.classList.add('hidden');
   document.getElementById('profile-content')?.classList.remove('hidden');
@@ -772,27 +771,26 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 // ── Share vote ───────────────────────────────────────────────────────────────
-window.shareProfileVote = async function(beachName) {
-  const text = `Votei na ${beachName} para Praia Fluvial do Ano ${new Date().getFullYear()}! Vota também: ${window.location.origin}/votar.html`;
-  if (navigator.share) {
-    try { await navigator.share({ title: `Voto Praia do Ano ${new Date().getFullYear()}`, text }); return; } catch {}
+window.shareProfileVote = async function(beachName, beachId) {
+  var photo = '';
+  var municipality = '';
+  if (beachId) {
+    try {
+      var beaches = await window.getBeaches();
+      var b = beaches.find(function(x) { return x.id === beachId; });
+      if (b) {
+        photo = b.thumbnail || (b.photos && b.photos[0]) || '';
+        municipality = b.municipality || '';
+      }
+    } catch(e) {}
   }
-  try {
-    await navigator.clipboard.writeText(text);
-  } catch {
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.cssText = 'position:fixed;opacity:0;';
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    ta.remove();
-  }
-  const t = document.createElement('div');
-  t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999;background:#003A40;color:#FFEB3B;font-family:\'Poppins\',sans-serif;font-size:13px;font-weight:600;padding:12px 24px;border-radius:12px;box-shadow:0 8px 32px rgba(0,58,64,0.4);max-width:90vw;text-align:center;';
-  t.textContent = 'Texto copiado para partilhar!';
-  document.body.appendChild(t);
-  setTimeout(() => t.remove(), 3500);
+  openShareSheet({
+    type: 'vote',
+    title: beachName,
+    municipality: municipality,
+    photo: photo,
+    url: `${window.location.origin}/votar.html`,
+  });
 };
 
 // ── Image viewer ──────────────────────────────────────────────────────────────

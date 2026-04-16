@@ -1,7 +1,7 @@
 [
   {
     "id": "tshirt-pampilhosa",
-    "name": "T-Shirt Personalizada — Design A",
+    "name": "T-Shirt Personalizada | Design A",
     "price": 2500,
     "images": [
       "brand_assets/itens_loja/t-shirt-A.jpg"
@@ -80,7 +80,7 @@
   },
   {
     "id": "tshirt-figueiro",
-    "name": "T-Shirt Personalizada — Design B",
+    "name": "T-Shirt Personalizada | Design B",
     "price": 2500,
     "images": [
       "brand_assets/itens_loja/t-shirt-C.jpg"
@@ -133,7 +133,7 @@
       "Mapas e coordenadas GPS",
       "Qualidade da água certificada"
     ],
-    "description": "A edição completa do Guia das Praias Fluviais 2026 — mais de 200 praias fluviais portuguesas com mapas, serviços, qualidade da água e muito mais.",
+    "description": "A edição completa do Guia das Praias Fluviais 2026, com mais de 200 praias fluviais portuguesas com mapas, serviços, qualidade da água e muito mais.",
     "shippingRequired": true
   },
   {

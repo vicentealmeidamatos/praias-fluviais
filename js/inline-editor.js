@@ -667,9 +667,9 @@
     const modal = createModal(`
       <h3>Editar ligação</h3>
       <label>Página interna</label>
-      <select id="__ie-page"><option value="">— escolher —</option></select>
+      <select id="__ie-page"><option value="">- escolher -</option></select>
       <label>Ou rede social / contacto</label>
-      <select id="__ie-social"><option value="">— escolher —</option>${SOCIAL_PRESETS.map(s => `<option value="${s.url}">${s.label}</option>`).join('')}</select>
+      <select id="__ie-social"><option value="">- escolher -</option>${SOCIAL_PRESETS.map(s => `<option value="${s.url}">${s.label}</option>`).join('')}</select>
       <label>Ou URL externo</label>
       <input type="url" id="__ie-url" placeholder="https://..." value="${currentUrl || ''}">
       <label style="display:flex;align-items:center;gap:8px;text-transform:none;font-size:13px;font-weight:500;">
@@ -1137,7 +1137,7 @@
 
     const modal = createModal(`
       <h3>Escolher ícone</h3>
-      <p style="font-size:12px;color:#5C5340;margin:0 0 6px;">Ícone actual: <strong>${current || '—'}</strong> · Seleccionado: <strong id="__ie-icon-sel">—</strong></p>
+      <p style="font-size:12px;color:#5C5340;margin:0 0 6px;">Ícone actual: <strong>${current || '-'}</strong> · Seleccionado: <strong id="__ie-icon-sel">-</strong></p>
       <input type="text" id="__ie-icon-q" placeholder="Procurar ícone (ex: map, sun, leaf)…" style="width:100%;padding:8px 12px;border:1px solid #E2D9C6;border-radius:8px;font-size:13px;">
       <div id="__ie-icon-count" style="font-size:11px;color:#8A7D60;margin-top:6px;"></div>
       <div id="__ie-icon-grid" style="margin-top:10px;max-height:380px;overflow-y:auto;display:grid;grid-template-columns:repeat(8,1fr);gap:6px;background:#FAF8F5;padding:10px;border-radius:10px;border:1px solid #E2D9C6;"></div>
@@ -1222,7 +1222,7 @@
       const matched = f ? all : all.slice(0, 600);
       countLabel.textContent = f
         ? `${all.length} ${all.length === 1 ? 'resultado' : 'resultados'}`
-        : `A mostrar ${matched.length} de ${all.length} — pesquise para filtrar`;
+        : `A mostrar ${matched.length} de ${all.length}. Pesquise para filtrar`;
       grid.innerHTML = matched.map(n => {
         const isBrand = n.startsWith('brand:');
         const label = isBrand ? n.slice(6) : n;
@@ -1240,7 +1240,7 @@
     }
     function setSelected(name) {
       selected = name;
-      selLabel.textContent = name || '—';
+      selLabel.textContent = name || '-';
       applyBtn.disabled = !name;
       applyBtn.style.opacity = name ? '1' : '.5';
       applyBtn.style.cursor = name ? 'pointer' : 'not-allowed';

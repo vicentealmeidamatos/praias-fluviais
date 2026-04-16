@@ -30,7 +30,7 @@ async function initProduto() {
   _product = _productIdx >= 0 ? _products[_productIdx] : null;
   if (!_product) { window.location.href = 'loja.html'; return; }
 
-  document.title = `${_product.name} — Guia das Praias Fluviais`;
+  document.title = `${_product.name} | Guia das Praias Fluviais`;
 
   renderProduct();
   renderRelated();
