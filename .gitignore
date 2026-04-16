@@ -15,6 +15,13 @@ screenshot.mjs
 # Scripts de migração / uso único
 fix-beach-bar-coords.mjs
 supabase-migration.sql
+remove-white-bg.mjs
+normalize-icons.mjs
+inspect-icons.mjs
+
+# Backups internos de processamento de ícones
+brand_assets/icones/_original/
+brand_assets/icones/_pre-normalize/
 
 # Temporários
 temporary screenshots/

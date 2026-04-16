@@ -48,17 +48,22 @@
     .filter-panel { scrollbar-width: thin; scrollbar-color: #C4B898 transparent; }
 
     .service-chip {
-      display: flex; align-items: center; justify-content: flex-start; gap: 5px; padding: 5px 8px;
+      display: flex; align-items: center; justify-content: flex-start; gap: 4px; padding: 0 6px;
       border-radius: 8px; border: 1.5px solid #E2D9C6; cursor: pointer;
-      font-family: 'Poppins', sans-serif; font-size: 10px; font-weight: 600;
+      font-family: 'Poppins', sans-serif; font-size: 9.5px; font-weight: 600;
+      letter-spacing: -0.01em;
       color: #5A4E3C; transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
       user-select: none; background: #FAF8F5; width: 100%; text-align: left;
-      min-height: 30px;
+      height: 36px; box-sizing: border-box; overflow: hidden;
     }
     .service-chip:hover { border-color: #003A40; color: #003A40; background: #EEF5F5; }
     .service-chip.active { background: #003A40; color: #FFEB3B; border-color: #003A40; }
     .service-chip svg { width: 13px; height: 13px; flex-shrink: 0; }
-    .service-chip span { white-space: nowrap; }
+    .service-chip img { width: 20px; height: 20px; object-fit: contain; flex-shrink: 0; }
+    .service-chip img[data-key="nacional2"],
+    .service-chip img[data-key="petFriendly"] { transform: scale(0.8); }
+    .service-chip.active img { filter: brightness(0) invert(1); }
+    .service-chip span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; flex: 1; }
 
     .type-btn {
       font-family: 'Poppins', sans-serif; font-size: 10px; font-weight: 700;
@@ -439,18 +444,18 @@
   <script>
   // ─── Services Definition ───
   const SERVICES = [
-    { key: 'blueFlag',    label: 'Bandeira Azul',       icon: 'flag' },
-    { key: 'goldQuality', label: 'Qualidade de Ouro',   icon: 'award' },
-    { key: 'accessible',  label: 'Acessibilidades',      icon: 'accessibility' },
-    { key: 'lifeguard',   label: 'Nadador-Salvador',    icon: 'life-buoy' },
-    { key: 'bar',         label: 'Bar/Restaurante',     icon: 'utensils' },
-    { key: 'picnicArea',  label: 'Parque Merendas',     icon: 'trees' },
-    { key: 'petFriendly', label: 'Pet-friendly',        icon: 'paw-print' },
-    { key: 'playground',  label: 'Parque Infantil',     icon: null, svg: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.11 104.11 0 0 0 128 24m81.7 71.3a199.8 199.8 0 0 0-40.94-8.06a199.8 199.8 0 0 0-8.06-40.94a88.57 88.57 0 0 1 49 49M216 128a87.8 87.8 0 0 1-4.28 27.12a200.3 200.3 0 0 0-29.16-49.93a183 183 0 0 1 32.31 8.75A88 88 0 0 1 216 128m-73.94-86.87a183 183 0 0 1 8.75 32.31a200.3 200.3 0 0 0-49.93-29.16a88.05 88.05 0 0 1 41.18-3.15M80.44 54a183.9 183.9 0 0 1 61.25 32.64A200.2 200.2 0 0 0 40.41 119.5A88.11 88.11 0 0 1 80.44 54m-39.77 84.86a184.08 184.08 0 0 1 112.88-36.41a184.08 184.08 0 0 1-36.41 112.88a88.18 88.18 0 0 1-76.47-76.47m95.83 76.73a200.2 200.2 0 0 0 32.87-101.28A183.9 183.9 0 0 1 202 175.56a88.11 88.11 0 0 1-65.5 40.03"/></svg>' },
-    { key: 'boatRental',  label: 'Embarcações',         icon: 'sailboat' },
-    { key: 'camping',     label: 'Alojamento',          icon: 'bed-double' },
-    { key: 'wc',          label: 'Instal. Sanitárias',  icon: null, svg: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 640 512" fill="currentColor"><path d="M80 48a48 48 0 1 1 96 0a48 48 0 1 1-96 0m40 304v128c0 17.7-14.3 32-32 32s-32-14.3-32-32V325.2c-8.1 9.2-21.1 13.2-33.5 9.4c-16.9-5.3-26.3-23.2-21-40.1l30.9-99.1C44.9 155.3 82 128 124 128h8c42 0 79.1 27.3 91.6 67.4l30.9 99.1c5.3 16.9-4.1 34.8-21 40.1c-12.4 3.9-25.4-.2-33.5-9.4V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V352zM320 0c13.3 0 24 10.7 24 24v464c0 13.3-10.7 24-24 24s-24-10.7-24-24V24c0-13.3 10.7-24 24-24m144 48a48 48 0 1 1 96 0a48 48 0 1 1-96 0m-24 432v-96h-17.8c-10.9 0-18.6-10.7-15.2-21.1l9-26.9c-3.2 0-6.4-.5-9.5-1.5c-16.9-5.3-26.3-23.2-21-40.1l29.7-95.2c13.2-42.3 52.4-71.2 96.8-71.2s83.6 28.9 96.8 71.2l29.7 95.2c5.3 16.9-4.1 34.8-21 40.1c-3.2 1-6.4 1.5-9.5 1.5l9 26.9c3.5 10.4-4.3 21.1-15.2 21.1H584v96c0 17.7-14.3 32-32 32s-32-14.3-32-32v-96h-16v96c0 17.7-14.3 32-32 32s-32-14.3-32-32"/></svg>' },
-    { key: 'nacional2',   label: 'Estrada Nacional 2',  icon: 'signpost' },
+    { key: 'blueFlag',    label: 'Bandeira Azul',       img: 'brand_assets/icones/bandeiraazul.png' },
+    { key: 'goldQuality', label: 'Qualidade de Ouro',   img: 'brand_assets/icones/qualidadeouro.png' },
+    { key: 'accessible',  label: 'Acessibilidades',     img: 'brand_assets/icones/acessibilidades.png' },
+    { key: 'lifeguard',   label: 'Nadador-Salvador',    img: 'brand_assets/icones/socorrista.png' },
+    { key: 'bar',         label: 'Bar/Restaurante',     img: 'brand_assets/icones/bar.png' },
+    { key: 'picnicArea',  label: 'Parque Merendas',     img: 'brand_assets/icones/parquedemerendas.png' },
+    { key: 'petFriendly', label: 'Pet-friendly',        img: 'brand_assets/icones/cao.png' },
+    { key: 'playground',  label: 'Parque Infantil',     img: 'brand_assets/icones/bola.png' },
+    { key: 'boatRental',  label: 'Embarcações',         img: 'brand_assets/icones/embarcacoes.png' },
+    { key: 'camping',     label: 'Alojamento',          img: 'brand_assets/icones/alojamento.png' },
+    { key: 'wc',          label: 'Instal. Sanitárias',  img: 'brand_assets/icones/wc.png' },
+    { key: 'nacional2',   label: 'Estrada Nacional 2',  img: 'brand_assets/icones/EN2.png' },
   ];
 
   // ─── District Zoom Views ───
@@ -537,7 +542,9 @@
     const el = document.getElementById(gridId);
     if (!el) return;
     el.innerHTML = SERVICES.map(s => {
-      const iconHtml = s.svg ? s.svg : `<i data-lucide="${s.icon}"></i>`;
+      const iconHtml = s.img
+        ? `<img src="${s.img}" alt="" data-key="${s.key}" loading="lazy">`
+        : (s.svg ? s.svg : `<i data-lucide="${s.icon}"></i>`);
       return `<button class="service-chip${state.services.has(s.key) ? ' active' : ''}" data-key="${s.key}" aria-pressed="${state.services.has(s.key)}">
         ${iconHtml}
         <span>${s.label}</span>
