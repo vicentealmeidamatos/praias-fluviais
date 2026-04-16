@@ -443,10 +443,42 @@
       }
       return _beachesLookup;
     }
+    // Tolerante a variações típicas (prefixos repetidos, pontuação, concelho no
+    // sufixo): normaliza, tenta correspondência exacta, depois filtra por
+    // concelho e escolhe o candidato com mais tokens distintivos em comum.
     function findBeachByName(name, beaches) {
-      const norm = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-      return beaches.find(b => norm(b.name) === norm(name))
-        || beaches.find(b => norm(b.name).includes(norm(name.replace(/^Praia Fluvial d[eao]\s/i,'').replace(/^Praia Fluvial da\s/i,'').replace(/^Praia Fluvial do\s/i,'').replace(/ - .+$/, ''))));
+      if (!name || !beaches || !beaches.length) return null;
+      const STOP = new Set(['praia','fluvial','zona','balnear','albufeira','de','da','do','das','dos','a','o','e']);
+      const norm = s => (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+      const clean = s => norm(s).replace(/[^a-z0-9\s]+/g, ' ').replace(/\s+/g, ' ').trim();
+      const tokens = s => clean(s).split(' ').filter(t => t && !STOP.has(t));
+
+      // 1) Correspondência exacta (normalizada)
+      const target = clean(name);
+      const exact = beaches.find(b => clean(b.name) === target);
+      if (exact) return exact;
+
+      // 2) Extrair concelho do sufixo " - Concelho" e filtrar candidatos
+      const mun = (name.match(/\s-\s*([^-]+)\s*$/) || [])[1];
+      const munKey = mun ? clean(mun) : null;
+      let candidates = beaches;
+      if (munKey) {
+        const byMun = beaches.filter(b => clean(b.municipality || '') === munKey);
+        if (byMun.length) candidates = byMun;
+      }
+
+      // 3) Pontuar por tokens distintivos partilhados (remove prefixo + sufixo)
+      const core = name.replace(/\s-\s*[^-]+\s*$/, '');
+      const wanted = tokens(core);
+      if (!wanted.length) return null;
+      let best = null, bestScore = 0;
+      for (const b of candidates) {
+        const set = new Set(tokens(b.name));
+        let score = 0;
+        for (const t of wanted) if (set.has(t)) score++;
+        if (score > bestScore) { bestScore = score; best = b; }
+      }
+      return bestScore > 0 ? best : null;
     }
     async function getBeachLink(name) {
       const beaches = await getBeachesLookup();
