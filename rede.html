@@ -60,8 +60,12 @@
     .service-chip.active { background: #003A40; color: #FFEB3B; border-color: #003A40; }
     .service-chip svg { width: 13px; height: 13px; flex-shrink: 0; }
     .service-chip img { width: 20px; height: 20px; object-fit: contain; flex-shrink: 0; }
-    .service-chip img[data-key="nacional2"],
-    .service-chip img[data-key="petFriendly"] { transform: scale(0.8); }
+    /* Per-icon scale balancing: shapes that fill their bbox tightly rendered smaller */
+    .service-chip img[data-key="accessible"],
+    .service-chip img[data-key="bar"],
+    .service-chip img[data-key="playground"],
+    .service-chip img[data-key="wc"] { transform: scale(0.82); }
+    .service-chip img[data-key="petFriendly"] { transform: scale(0.82); }
     .service-chip.active img { filter: brightness(0) invert(1); }
     .service-chip span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; flex: 1; }
 
