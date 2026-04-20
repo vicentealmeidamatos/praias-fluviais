@@ -955,6 +955,7 @@ function slugify(text) {
     var head = document.head;
     if (!head) return;
 
+    var v = '?v=2';
     var tags = [
       { tag: 'link', attrs: { rel: 'manifest', href: '/manifest.json' } },
       { tag: 'meta', attrs: { name: 'theme-color', content: '#003A40' } },
@@ -962,9 +963,10 @@ function slugify(text) {
       { tag: 'meta', attrs: { name: 'mobile-web-app-capable', content: 'yes' } },
       { tag: 'meta', attrs: { name: 'apple-mobile-web-app-title', content: 'Praias Fluviais' } },
       { tag: 'meta', attrs: { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' } },
-      { tag: 'link', attrs: { rel: 'apple-touch-icon', href: '/brand_assets/apple-touch-icon.png' } },
-      { tag: 'link', attrs: { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/brand_assets/favicon-32.png' } },
-      { tag: 'link', attrs: { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/brand_assets/favicon-16.png' } },
+      { tag: 'link', attrs: { rel: 'apple-touch-icon', href: '/brand_assets/apple-touch-icon.png' + v } },
+      { tag: 'link', attrs: { rel: 'icon', type: 'image/png', sizes: '64x64', href: '/brand_assets/favicon-64.png' + v } },
+      { tag: 'link', attrs: { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/brand_assets/favicon-32.png' + v } },
+      { tag: 'link', attrs: { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/brand_assets/favicon-16.png' + v } },
     ];
 
     tags.forEach(function (t) {
