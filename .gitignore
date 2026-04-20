@@ -1,5 +1,6 @@
 # Private / dev-only files
 CLAUDE.md
+CODEXMASTER.md
 .env*
 
 # Documentos confidenciais (PDFs do guia, mapas, etc.)
@@ -32,6 +33,8 @@ img/uploads/
 .vscode/
 .claude/
 .mcp.json
+.agents/
+skills-lock.json
 
 # OS files
 .DS_Store

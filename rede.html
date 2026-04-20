@@ -59,14 +59,13 @@
     .service-chip:hover { border-color: #003A40; color: #003A40; background: #EEF5F5; }
     .service-chip.active { background: #003A40; color: #FFEB3B; border-color: #003A40; }
     .service-chip svg { width: 13px; height: 13px; flex-shrink: 0; }
-    .service-chip img { width: 20px; height: 20px; object-fit: contain; flex-shrink: 0; }
+    .service-chip img { width: 20px; height: 20px; object-fit: contain; flex-shrink: 0; pointer-events: none; user-select: none; -webkit-user-drag: none; -webkit-touch-callout: none; }
     /* Per-icon scale balancing: shapes that fill their bbox tightly rendered smaller */
-    .service-chip img[data-key="accessible"],
-    .service-chip img[data-key="bar"],
     .service-chip img[data-key="playground"],
-    .service-chip img[data-key="wc"] { transform: scale(0.82); }
     .service-chip img[data-key="petFriendly"] { transform: scale(0.82); }
     .service-chip.active img { filter: brightness(0) invert(1); }
+    /* Gold Quality: colored asset — keep natural colors on active state */
+    .service-chip.active img[data-key="goldQuality"] { filter: none; }
     .service-chip span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; flex: 1; }
 
     .type-btn {
@@ -547,7 +546,7 @@
     if (!el) return;
     el.innerHTML = SERVICES.map(s => {
       const iconHtml = s.img
-        ? `<img src="${s.img}" alt="" data-key="${s.key}" loading="lazy">`
+        ? `<img src="${s.img}" alt="" data-key="${s.key}" loading="lazy" draggable="false" oncontextmenu="return false">`
         : (s.svg ? s.svg : `<i data-lucide="${s.icon}"></i>`);
       return `<button class="service-chip${state.services.has(s.key) ? ' active' : ''}" data-key="${s.key}" aria-pressed="${state.services.has(s.key)}">
         ${iconHtml}
