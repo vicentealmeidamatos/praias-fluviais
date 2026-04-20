@@ -1,0 +1,63 @@
+{
+  "name": "Guia das Praias Fluviais",
+  "short_name": "Praias Fluviais",
+  "description": "Descubra mais de 200 praias fluviais e zonas balneares de Portugal. Mapa interativo, votação Praia do Ano, passaporte digital e muito mais.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FAF8F5",
+  "theme_color": "#003A40",
+  "lang": "pt-PT",
+  "dir": "ltr",
+  "categories": ["travel", "lifestyle", "navigation"],
+  "icons": [
+    {
+      "src": "/brand_assets/pwa-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/brand_assets/pwa-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/brand_assets/pwa-icon-192-maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/brand_assets/pwa-icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Passaporte",
+      "short_name": "Passaporte",
+      "description": "Ver os seus carimbos e badges",
+      "url": "/passaporte.html",
+      "icons": [{ "src": "/brand_assets/pwa-icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Rede de Praias",
+      "short_name": "Rede",
+      "description": "Ver mapa e rede de praias",
+      "url": "/rede.html",
+      "icons": [{ "src": "/brand_assets/pwa-icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Onde Carimbar",
+      "short_name": "Carimbar",
+      "description": "Locais de carimbar o passaporte",
+      "url": "/onde-carimbar-passaporte.html",
+      "icons": [{ "src": "/brand_assets/pwa-icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

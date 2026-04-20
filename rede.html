@@ -107,7 +107,7 @@
   </style>
 </head>
 
-<body class="bg-praia-sand-50 font-body text-praia-sand-900 antialiased overflow-hidden">
+<body class="bg-praia-sand-50 font-body text-praia-sand-900 antialiased">
   <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:bg-praia-yellow-400 focus:text-praia-teal-800 focus:px-4 focus:py-2 focus:rounded-lg focus:font-display focus:font-semibold">
     Saltar para o conteúdo
   </a>
@@ -658,7 +658,16 @@
 
     // Cluster group
     const clusterGroup = L.markerClusterGroup({
-      maxClusterRadius: 50,
+      maxClusterRadius: zoom => {
+        if (zoom <= 7) return 46;
+        if (zoom === 8) return 28;
+        if (zoom === 9) return 14;
+        return 1;
+      },
+      disableClusteringAtZoom: 10,
+      spiderfyOnMaxZoom: false,
+      animate: true,
+      animateAddingMarkers: false,
       showCoverageOnHover: false,
       chunkedLoading: true,
       chunkInterval: 100,

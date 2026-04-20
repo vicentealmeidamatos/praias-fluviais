@@ -914,3 +914,284 @@ function slugify(text) {
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
 }
+
+// ─── Mobile App Experience ───────────────────────────────────────────────────
+// Injeta meta-tags PWA, bottom-nav unificada, back-button em páginas de detalhe,
+// e robustez no menu lateral. Segue a regra: markup mínimo nas páginas HTML;
+// tudo o que é "shell" mobile é renderizado aqui.
+
+(function () {
+  // Páginas onde a bottom-nav não deve aparecer (ex.: admin)
+  var NO_BOTTOM_NAV = ['admin.html'];
+
+  // Mapa: página → item ativo na bottom-nav
+  var ACTIVE_MAP = {
+    'index.html': 'home',
+    '': 'home',
+    '/': 'home',
+    'rede.html': 'rede',
+    'passaporte.html': 'passaporte',
+    'loja.html': 'loja',
+    'carrinho.html': 'loja',
+    'produto.html': 'loja',
+    'confirmacao-pedido.html': 'loja',
+  };
+
+  // Mapa: páginas de detalhe → destino do back-button
+  var DETAIL_BACK = {
+    'praia.html': 'rede.html',
+    'artigo.html': 'artigos.html',
+    'produto.html': 'loja.html',
+    'confirmacao-pedido.html': 'index.html',
+  };
+
+  function currentPage() {
+    var path = window.location.pathname.split('/').pop();
+    return path || 'index.html';
+  }
+
+  // ─── 1. PWA meta tags + favicons ──────────────────────────────────────────
+  function injectPwaMeta() {
+    var head = document.head;
+    if (!head) return;
+
+    var tags = [
+      { tag: 'link', attrs: { rel: 'manifest', href: '/manifest.json' } },
+      { tag: 'meta', attrs: { name: 'theme-color', content: '#003A40' } },
+      { tag: 'meta', attrs: { name: 'apple-mobile-web-app-capable', content: 'yes' } },
+      { tag: 'meta', attrs: { name: 'mobile-web-app-capable', content: 'yes' } },
+      { tag: 'meta', attrs: { name: 'apple-mobile-web-app-title', content: 'Praias Fluviais' } },
+      { tag: 'meta', attrs: { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' } },
+      { tag: 'link', attrs: { rel: 'apple-touch-icon', href: '/brand_assets/apple-touch-icon.png' } },
+      { tag: 'link', attrs: { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/brand_assets/favicon-32.png' } },
+      { tag: 'link', attrs: { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/brand_assets/favicon-16.png' } },
+    ];
+
+    tags.forEach(function (t) {
+      var selectorAttr = t.attrs.rel ? 'rel' : 'name';
+      var selectorVal = t.attrs[selectorAttr];
+      var selector = t.tag + '[' + selectorAttr + '="' + selectorVal + '"]';
+      if (t.attrs.sizes) selector += '[sizes="' + t.attrs.sizes + '"]';
+      if (document.querySelector(selector)) return;
+      var el = document.createElement(t.tag);
+      Object.keys(t.attrs).forEach(function (k) { el.setAttribute(k, t.attrs[k]); });
+      head.appendChild(el);
+    });
+
+    // Viewport: garantir viewport-fit=cover para safe-area-inset funcionar
+    var vp = document.querySelector('meta[name="viewport"]');
+    if (vp) {
+      var content = vp.getAttribute('content') || '';
+      if (content.indexOf('viewport-fit') === -1) {
+        vp.setAttribute('content', content.replace(/\s*$/, '') + ', viewport-fit=cover');
+      }
+    }
+  }
+
+  // ─── 2. Bottom-nav unificada ──────────────────────────────────────────────
+  function bottomNavHTML(activeKey, cartCount) {
+    function item(key, href, icon, label) {
+      var activeClass = key === activeKey ? 'active' : '';
+      var colorClass = key === activeKey ? 'text-praia-yellow-400' : 'text-white/60';
+      return (
+        '<a href="' + href + '" data-page="' + key + '" class="flex-1 flex flex-col items-center justify-center gap-0.5 ' + colorClass + ' ' + activeClass + '" aria-label="' + label + '">' +
+          '<i data-lucide="' + icon + '" class="w-5 h-5"></i>' +
+          '<span class="font-display text-[10px] uppercase tracking-wider font-semibold">' + label + '</span>' +
+        '</a>'
+      );
+    }
+
+    var lojaBadge = cartCount > 0
+      ? '<span id="bottom-nav-cart-count" class="absolute -top-1 right-3 bg-praia-yellow-400 text-praia-teal-800 text-[10px] font-bold rounded-full min-w-[16px] h-4 px-1 flex items-center justify-center">' + (cartCount > 99 ? '99+' : cartCount) + '</span>'
+      : '';
+
+    return (
+      '<div class="bottom-nav-inner flex items-stretch h-16 relative">' +
+        item('home', 'index.html', 'home', 'Início') +
+        item('rede', 'rede.html', 'map-pinned', 'Rede') +
+        item('passaporte', 'passaporte.html', 'stamp', 'Passaporte') +
+        '<a href="loja.html" data-page="loja" class="flex-1 flex flex-col items-center justify-center gap-0.5 ' + (activeKey === 'loja' ? 'text-praia-yellow-400 active' : 'text-white/60') + ' relative" aria-label="Loja">' +
+          '<i data-lucide="shopping-bag" class="w-5 h-5"></i>' +
+          '<span class="font-display text-[10px] uppercase tracking-wider font-semibold">Loja</span>' +
+          lojaBadge +
+        '</a>' +
+        '<button type="button" id="bottom-nav-more-btn" data-page="mais" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-white/60" aria-label="Mais opções" aria-haspopup="dialog">' +
+          '<i data-lucide="menu" class="w-5 h-5"></i>' +
+          '<span class="font-display text-[10px] uppercase tracking-wider font-semibold">Mais</span>' +
+        '</button>' +
+      '</div>'
+    );
+  }
+
+  function moreSheetHTML() {
+    var links = [
+      { href: 'votar.html', icon: 'vote', label: 'Votar Praia do Ano' },
+      { href: 'onde-carimbar-passaporte.html', icon: 'stamp', label: 'Onde Carimbar' },
+      { href: 'onde-encontrar.html', icon: 'book-open', label: 'Onde Encontrar o Guia' },
+      { href: 'descontos.html', icon: 'tag', label: 'Descontos' },
+      { href: 'artigos.html', icon: 'newspaper', label: 'Novidades' },
+      { href: 'carrinho.html', icon: 'shopping-cart', label: 'Carrinho' },
+      { href: 'contactos.html', icon: 'mail', label: 'Contactos' },
+      { href: 'perfil.html', icon: 'user', label: 'A minha conta' },
+    ];
+    var items = links.map(function (l) {
+      return (
+        '<a href="' + l.href + '">' +
+          '<i data-lucide="' + l.icon + '" class="w-5 h-5"></i>' +
+          '<span>' + l.label + '</span>' +
+        '</a>'
+      );
+    }).join('');
+    return (
+      '<div class="more-sheet-handle"></div>' +
+      '<p class="font-display text-[11px] uppercase tracking-wider text-white/50 px-2 mb-2">Mais opções</p>' +
+      '<div class="grid gap-1">' + items + '</div>'
+    );
+  }
+
+  function renderSiteBottomNav() {
+    var page = currentPage();
+    if (NO_BOTTOM_NAV.indexOf(page) !== -1) return;
+
+    // Remover bottom-navs inline existentes para evitar duplicação
+    document.querySelectorAll('nav.bottom-nav').forEach(function (n) { n.remove(); });
+
+    var activeKey = ACTIVE_MAP[page] !== undefined ? ACTIVE_MAP[page] : '';
+
+    var nav = document.createElement('nav');
+    nav.className = 'bottom-nav lg:hidden bg-praia-teal-800/95 backdrop-blur-md border-t border-white/10';
+    nav.setAttribute('aria-label', 'Navegação principal');
+    nav.innerHTML = bottomNavHTML(activeKey, 0);
+    document.body.appendChild(nav);
+
+    document.body.classList.add('has-bottom-nav');
+
+    // "Mais" sheet
+    var backdrop = document.createElement('div');
+    backdrop.className = 'more-sheet-backdrop';
+    document.body.appendChild(backdrop);
+
+    var sheet = document.createElement('div');
+    sheet.className = 'more-sheet lg:hidden';
+    sheet.setAttribute('role', 'dialog');
+    sheet.setAttribute('aria-label', 'Mais opções');
+    sheet.innerHTML = moreSheetHTML();
+    document.body.appendChild(sheet);
+
+    function openSheet() {
+      backdrop.classList.add('open');
+      sheet.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeSheet() {
+      backdrop.classList.remove('open');
+      sheet.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    var moreBtn = document.getElementById('bottom-nav-more-btn');
+    if (moreBtn) moreBtn.addEventListener('click', openSheet);
+    backdrop.addEventListener('click', closeSheet);
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && sheet.classList.contains('open')) closeSheet();
+    });
+
+    if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+  }
+
+  // ─── 3. Back-button em páginas de detalhe ─────────────────────────────────
+  function renderBackButton() {
+    var page = currentPage();
+    var explicit = document.body.getAttribute('data-back-to');
+    var back = explicit || DETAIL_BACK[page];
+    if (!back) return;
+
+    var header = document.getElementById('main-header');
+    if (!header) return;
+    var inner = header.querySelector('.max-w-\\[1440px\\], .max-w-\\[1440px\\].mx-auto, div.max-w-\\[1440px\\]') || header.querySelector('div');
+    if (!inner) return;
+    var flexRow = inner.querySelector('.flex.items-center') || inner.firstElementChild;
+    if (!flexRow) return;
+    if (flexRow.querySelector('.site-back-btn')) return;
+
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'site-back-btn lg:hidden mr-2 flex-shrink-0';
+    btn.setAttribute('aria-label', 'Voltar');
+    btn.innerHTML = '<i data-lucide="chevron-left" class="w-5 h-5"></i>';
+    btn.addEventListener('click', function () {
+      if (document.referrer && document.referrer.indexOf(location.host) !== -1) {
+        history.back();
+      } else {
+        window.location.href = back;
+      }
+    });
+    flexRow.insertBefore(btn, flexRow.firstChild);
+    if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+  }
+
+  // ─── 4. Robustez do menu lateral ──────────────────────────────────────────
+  // (além do listener existente) fechar com Esc, fechar ao clicar num link,
+  // e fazer o X funcionar mesmo que tenha o mesmo ID que o hamburger (bug legacy)
+  function hardenSideMenu() {
+    var menu = document.getElementById('mobile-menu');
+    if (!menu) return;
+    var overlay = document.getElementById('menu-overlay');
+
+    function close() {
+      menu.classList.remove('translate-x-0');
+      menu.classList.add('translate-x-full');
+      if (overlay) {
+        overlay.classList.add('opacity-0', 'pointer-events-none');
+        overlay.classList.remove('opacity-100');
+      }
+      document.body.style.overflow = '';
+    }
+
+    // Fechar ao clicar em qualquer link do menu (evita o menu ficar aberto em history.back)
+    menu.querySelectorAll('a[href]').forEach(function (a) {
+      a.addEventListener('click', function () { close(); });
+    });
+
+    // Se existir um botão dentro do menu (o X de fechar), ligá-lo
+    // Atualmente o X tem id="nav-hamburger" duplicado (inválido); usar query mais específica.
+    var closeBtn = menu.querySelector('button[aria-label="Fechar menu"]');
+    if (closeBtn) closeBtn.addEventListener('click', close);
+
+    // Esc fecha
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && menu.classList.contains('translate-x-0')) close();
+    });
+  }
+
+  // ─── 5. Atualizar badge do carrinho na bottom-nav ─────────────────────────
+  var originalUpdateCart = window._updateCartBadge;
+  window._updateCartBadge = function (count) {
+    if (typeof originalUpdateCart === 'function') originalUpdateCart(count);
+    // Também atualizar o novo ícone da bottom-nav
+    var lojaItem = document.querySelector('.bottom-nav a[data-page="loja"]');
+    if (!lojaItem) return;
+    var existing = lojaItem.querySelector('#bottom-nav-cart-count');
+    if (count > 0) {
+      if (existing) {
+        existing.textContent = count > 99 ? '99+' : count;
+      } else {
+        var badge = document.createElement('span');
+        badge.id = 'bottom-nav-cart-count';
+        badge.className = 'absolute -top-1 right-3 bg-praia-yellow-400 text-praia-teal-800 text-[10px] font-bold rounded-full min-w-[16px] h-4 px-1 flex items-center justify-center';
+        badge.textContent = count > 99 ? '99+' : count;
+        lojaItem.appendChild(badge);
+      }
+    } else if (existing) {
+      existing.remove();
+    }
+  };
+
+  // ─── Bootstrap ────────────────────────────────────────────────────────────
+  injectPwaMeta();
+
+  document.addEventListener('DOMContentLoaded', function () {
+    renderSiteBottomNav();
+    renderBackButton();
+    hardenSideMenu();
+  });
+})();
