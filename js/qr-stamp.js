@@ -311,15 +311,6 @@
         primaryHref: 'mapa.html',
       });
     }
-    if (beach.passportStamp === false) {
-      return renderError({
-        eyebrow: 'SEM PASSAPORTE',
-        title: 'Esta praia não faz parte do passaporte',
-        body: 'Só as praias elegíveis têm carimbo digital. Explore outras no guia.',
-        primaryLabel: 'Ver mapa de praias',
-        primaryHref: 'mapa.html',
-      });
-    }
     if (!beach.coordinates || typeof beach.coordinates.lat !== 'number' || typeof beach.coordinates.lng !== 'number') {
       return renderError({
         eyebrow: 'PRAIA INCOMPLETA',
@@ -422,7 +413,7 @@
     }
 
     // 12. Show the beach unlock card
-    const stampsAvailable = beaches.filter(b => b.passportStamp).length;
+    const stampsAvailable = beaches.length;
     renderSuccess({
       beach,
       stampsTotal: stampsAfter.length,

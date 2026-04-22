@@ -238,7 +238,9 @@ function badgesCompute({ stamps, reviews, voted, beaches }) {
   const total      = stampIds.length;
   const totalRev   = reviews.length;
   const revPhotos  = reviews.filter(r => r.images && r.images.length > 0).length;
-  const available  = beaches.filter(b => b.passportStamp).length;
+  // Passaporte digital inclui todas as praias visíveis (o campo `passportStamp`
+  // refere apenas à versão física do guia).
+  const available  = beaches.length;
 
   // Map district → region (NUTS II)
   const districtToRegion = {

@@ -943,7 +943,7 @@ function renderBeaches(container) {
                   </td>
                   <td class="px-4 py-3 text-praia-sand-500 text-xs" style="max-width:200px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">${activeServices}</td>
                   <td class="px-4 py-3 text-right">
-                    ${b.passportStamp !== false ? `<button onclick="downloadBeachQR(${i})" class="text-praia-yellow-600 hover:text-praia-yellow-700 text-xs font-semibold mr-2" title="Baixar QR code para carimbar esta praia">QR</button>` : ''}
+                    ${b.id ? `<button onclick="downloadBeachQR(${i})" class="text-praia-yellow-600 hover:text-praia-yellow-700 text-xs font-semibold mr-2" title="Baixar QR code para carimbar esta praia">QR</button>` : ''}
                     <button onclick="toggleItemVisibility('beaches', ${i})" class="text-praia-sand-400 hover:text-praia-sand-600 text-xs font-semibold mr-2" title="${b.hidden ? 'Tornar visível' : 'Ocultar do site'}">${b.hidden ? 'Mostrar' : 'Ocultar'}</button>
                     <button onclick="editBeach(${i})" class="text-praia-teal-600 hover:text-praia-teal-800 text-xs font-semibold mr-2">Editar</button>
                     <button onclick="deleteItem('beaches', ${i})" class="text-red-400 hover:text-red-600 text-xs font-semibold">Eliminar</button>
@@ -1089,9 +1089,9 @@ function editBeach(index) {
             <input type="checkbox" id="b-featured" ${b.featured ? 'checked' : ''} style="accent-color:#003A40;">
             Destaque na Homepage
           </label>
-          <label class="flex items-center gap-2 cursor-pointer text-sm">
+          <label class="flex items-center gap-2 cursor-pointer text-sm" title="Marca se esta praia aparece no passaporte impresso do guia. No passaporte digital, todas as praias visíveis aparecem sempre.">
             <input type="checkbox" id="b-passportStamp" ${b.passportStamp ? 'checked' : ''} style="accent-color:#003A40;">
-            Carimbo no Passaporte
+            No passaporte impresso
           </label>
         </div>
       </div>
@@ -4360,7 +4360,7 @@ async function downloadBeachQR(index) {
 }
 
 async function downloadAllBeachQRsZip() {
-  const beaches = (state.data.beaches || []).filter(b => b.passportStamp !== false && b.id);
+  const beaches = (state.data.beaches || []).filter(b => b.id && !b.hidden);
   if (!beaches.length) return toast('Nenhuma praia elegível para carimbagem.', 'error');
   if (!window.JSZip) return toast('Biblioteca ZIP não carregou. Atualize a página.', 'error');
 

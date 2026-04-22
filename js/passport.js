@@ -22,7 +22,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   let beaches = (beachesRaw || []).filter(b => !b.hidden);
   if (!beaches.length) { console.error('Failed to load beaches.json'); return; }
 
-  const stampBeaches   = beaches.filter(b => b.passportStamp);
+  // O álbum digital inclui todas as praias visíveis, mesmo as que não estão no
+  // passaporte físico (`passportStamp: false`). O campo fica preservado para
+  // efeitos editoriais do guia impresso, mas a experiência digital é universal.
+  const stampBeaches   = beaches;
   const totalAvailable = stampBeaches.length;
 
   // Toast pós-migração de carimbos guest (fluxo QR). Disparado por auth.html
