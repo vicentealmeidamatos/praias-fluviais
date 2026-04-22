@@ -151,7 +151,7 @@
   },
   {
     "id": "praia-fluvial-de-rocas",
-    "name": "Praia das Rocas",
+    "name": "Praia Fluvial das Rocas",
     "type": "praia_fluvial",
     "river": "Ribeira de Pera",
     "photos": [
@@ -162,9 +162,7 @@
     "services": {
       "wc": false,
       "bar": false,
-      "grills": false,
       "camping": false,
-      "parking": false,
       "blueFlag": false,
       "lifeguard": false,
       "nacional2": false,
@@ -182,9 +180,9 @@
       "lat": 40.004994,
       "lng": -8.205742
     },
-    "description": "Descubra esta praia fluvial no concelho de Castanheira de Pera. Informações, serviços e localização disponíveis em breve.",
+    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Castanheira&nbsp;de&nbsp;Pera.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
     "municipality": "Castanheira de Pera",
-    "waterQuality": "",
+    "waterQuality": "excelente",
     "passportStamp": true
   },
   {
@@ -912,7 +910,7 @@
   {
     "id": "zona-balnear-de-ortiga",
     "name": "Praia Fluvial da Ortiga",
-    "type": "zona_balnear",
+    "type": "praia_fluvial",
     "river": "Rio Tejo",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Ortiga"
@@ -922,9 +920,7 @@
     "services": {
       "wc": false,
       "bar": false,
-      "grills": false,
       "camping": false,
-      "parking": false,
       "blueFlag": false,
       "lifeguard": false,
       "nacional2": false,
@@ -942,9 +938,9 @@
       "lat": 39.483139,
       "lng": -8.001833
     },
-    "description": "Descubra esta zona balnear no concelho de Mação. Informações, serviços e localização disponíveis em breve.",
+    "description": "<p>Descubra&nbsp;esta&nbsp;zona&nbsp;balnear&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Mação.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
     "municipality": "Mação",
-    "waterQuality": "",
+    "waterQuality": "excelente",
     "passportStamp": true
   },
   {
@@ -3872,7 +3868,7 @@
   {
     "id": "zona-balnear-de-ponte-da-ranca",
     "name": "Praia Fluvial de Ponte da Ranca",
-    "type": "zona_balnear",
+    "type": "praia_fluvial",
     "river": "Rio Tuela",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Ponte%2Bda%2BRanca"
@@ -3882,9 +3878,7 @@
     "services": {
       "wc": false,
       "bar": false,
-      "grills": false,
       "camping": false,
-      "parking": false,
       "blueFlag": false,
       "lifeguard": false,
       "nacional2": false,
@@ -3902,9 +3896,9 @@
       "lat": 41.810167,
       "lng": -6.996556
     },
-    "description": "Descubra esta zona balnear no concelho de Vinhais. Informações, serviços e localização disponíveis em breve.",
+    "description": "<p>Descubra&nbsp;esta&nbsp;zona&nbsp;balnear&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Vinhais.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
     "municipality": "Vinhais",
-    "waterQuality": "",
+    "waterQuality": "excelente",
     "passportStamp": true
   },
   {
@@ -6185,7 +6179,7 @@
   },
   {
     "id": "praia-fluvial-de-ucha",
-    "name": "Praia Fluvial Ucha",
+    "name": "Praia Fluvial da Ucha",
     "type": "praia_fluvial",
     "river": "Rio Água Fria / Rio Degracia",
     "photos": [
@@ -6196,9 +6190,7 @@
     "services": {
       "wc": false,
       "bar": false,
-      "grills": false,
       "camping": false,
-      "parking": false,
       "blueFlag": false,
       "lifeguard": false,
       "nacional2": false,
@@ -6216,9 +6208,9 @@
       "lat": 40.820889,
       "lng": -8.012389
     },
-    "description": "Descubra esta praia fluvial no concelho de São Pedro do Sul. Informações, serviços e localização disponíveis em breve.",
+    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;São&nbsp;Pedro&nbsp;do&nbsp;Sul.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
     "municipality": "São Pedro do Sul",
-    "waterQuality": "",
+    "waterQuality": "excelente",
     "passportStamp": true
   },
   {
@@ -6338,7 +6330,7 @@
   {
     "id": "praia-fluvial-de-cascata-da-cabreia",
     "name": "Zona Balnear da Cascata da Cabreia",
-    "type": "praia_fluvial",
+    "type": "zona_balnear",
     "river": "Rio Mau",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Cascata%2Bda%2BCabreia"
@@ -6348,9 +6340,7 @@
     "services": {
       "wc": false,
       "bar": false,
-      "grills": false,
       "camping": false,
-      "parking": false,
       "blueFlag": false,
       "lifeguard": false,
       "nacional2": false,
@@ -6368,9 +6358,9 @@
       "lat": 40.753479,
       "lng": -8.391401
     },
-    "description": "Descubra esta praia fluvial no concelho de Sever do Vouga. Informações, serviços e localização disponíveis em breve.",
+    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Sever&nbsp;do&nbsp;Vouga.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
     "municipality": "Sever do Vouga",
-    "waterQuality": "",
+    "waterQuality": "excelente",
     "passportStamp": true
   },
   {
@@ -6414,7 +6404,7 @@
   {
     "id": "praia-fluvial-de-maravilha",
     "name": "Zona Balnear da Maravilha",
-    "type": "praia_fluvial",
+    "type": "zona_balnear",
     "river": "Rio Tua",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Maravilha"
@@ -6424,9 +6414,7 @@
     "services": {
       "wc": false,
       "bar": false,
-      "grills": false,
       "camping": false,
-      "parking": false,
       "blueFlag": false,
       "lifeguard": false,
       "nacional2": false,
@@ -6444,9 +6432,9 @@
       "lat": 41.50525,
       "lng": -7.196583
     },
-    "description": "Descubra esta praia fluvial no concelho de Mirandela. Informações, serviços e localização disponíveis em breve.",
+    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Mirandela.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
     "municipality": "Mirandela",
-    "waterQuality": "",
+    "waterQuality": "excelente",
     "passportStamp": true
   },
   {
@@ -6528,7 +6516,7 @@
   {
     "id": "praia-fluvial-de-portagem",
     "name": "Zona Balnear da Portagem",
-    "type": "praia_fluvial",
+    "type": "zona_balnear",
     "river": "Rio Sever",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Portagem"
@@ -6538,9 +6526,7 @@
     "services": {
       "wc": false,
       "bar": false,
-      "grills": false,
       "camping": false,
-      "parking": false,
       "blueFlag": false,
       "lifeguard": false,
       "nacional2": false,
@@ -6558,15 +6544,15 @@
       "lat": 39.382882,
       "lng": -7.381737
     },
-    "description": "Descubra esta praia fluvial no concelho de Marvão. Informações, serviços e localização disponíveis em breve.",
+    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Marvão.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
     "municipality": "Marvão",
-    "waterQuality": "",
+    "waterQuality": "excelente",
     "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-ratoeira",
     "name": "Zona Balnear da Ratoeira",
-    "type": "praia_fluvial",
+    "type": "zona_balnear",
     "river": "Rio Mondego",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Ratoeira"
@@ -6576,9 +6562,7 @@
     "services": {
       "wc": false,
       "bar": false,
-      "grills": false,
       "camping": false,
-      "parking": false,
       "blueFlag": false,
       "lifeguard": false,
       "nacional2": false,
@@ -6596,9 +6580,9 @@
       "lat": 40.655093,
       "lng": -7.341505
     },
-    "description": "Descubra esta praia fluvial no concelho de Celorico da Beira. Informações, serviços e localização disponíveis em breve.",
+    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Celorico&nbsp;da&nbsp;Beira.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
     "municipality": "Celorico da Beira",
-    "waterQuality": "",
+    "waterQuality": "excelente",
     "passportStamp": true
   },
   {
@@ -6680,7 +6664,7 @@
   {
     "id": "praia-fluvial-de-albergaria-da-serra",
     "name": "Zona Balnear de Albergaria da Serra",
-    "type": "praia_fluvial",
+    "type": "zona_balnear",
     "river": "Rio Caima",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Albergaria%2Bda%2BSerra"
@@ -6690,9 +6674,7 @@
     "services": {
       "wc": false,
       "bar": false,
-      "grills": false,
       "camping": false,
-      "parking": false,
       "blueFlag": false,
       "lifeguard": false,
       "nacional2": false,
@@ -6710,15 +6692,15 @@
       "lat": 40.865571,
       "lng": -8.277262
     },
-    "description": "Descubra esta praia fluvial no concelho de Arouca. Informações, serviços e localização disponíveis em breve.",
+    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Arouca.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
     "municipality": "Arouca",
-    "waterQuality": "",
+    "waterQuality": "excelente",
     "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-alverangel",
     "name": "Zona Balnear de Alverangel",
-    "type": "praia_fluvial",
+    "type": "zona_balnear",
     "river": "Rio Zêzere - Albufeira de Castelo de Bode",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Alverangel"
@@ -7016,7 +6998,7 @@
   {
     "id": "praia-fluvial-de-espiunca",
     "name": "Zona Balnear de Espiunca",
-    "type": "praia_fluvial",
+    "type": "zona_balnear",
     "river": "Rio Paiva",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Espiunca"
@@ -7026,9 +7008,7 @@
     "services": {
       "wc": false,
       "bar": false,
-      "grills": false,
       "camping": false,
-      "parking": false,
       "blueFlag": false,
       "lifeguard": false,
       "nacional2": false,
@@ -7046,9 +7026,9 @@
       "lat": 40.993437,
       "lng": -8.213075
     },
-    "description": "Descubra esta praia fluvial no concelho de Arouca. Informações, serviços e localização disponíveis em breve.",
+    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Arouca.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
     "municipality": "Arouca",
-    "waterQuality": "",
+    "waterQuality": "excelente",
     "passportStamp": true
   },
   {
@@ -7090,7 +7070,7 @@
   {
     "id": "praia-fluvial-de-foz-d-egua",
     "name": "Zona Balnear de Foz d´Égua",
-    "type": "praia_fluvial",
+    "type": "zona_balnear",
     "river": "Ribeira de Piódão / Ribeira de Chãs d'Égua",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Foz%2Bd%C2%B4%C3%89gua"
@@ -7100,9 +7080,7 @@
     "services": {
       "wc": false,
       "bar": false,
-      "grills": false,
       "camping": false,
-      "parking": false,
       "blueFlag": false,
       "lifeguard": false,
       "nacional2": false,
@@ -7120,9 +7098,9 @@
       "lat": 40.247285,
       "lng": -7.812722
     },
-    "description": "Descubra esta praia fluvial no concelho de Arganil. Informações, serviços e localização disponíveis em breve.",
+    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Arganil.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
     "municipality": "Arganil",
-    "waterQuality": "",
+    "waterQuality": "excelente",
     "passportStamp": true
   },
   {
@@ -7582,7 +7560,7 @@
   {
     "id": "praia-fluvial-de-peneda-talhada",
     "name": "Zona Balnear de Peneda - Talhada",
-    "type": "praia_fluvial",
+    "type": "zona_balnear",
     "river": "Rio Alva",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Peneda%2B-%2BTalhada"
@@ -7592,9 +7570,7 @@
     "services": {
       "wc": false,
       "bar": false,
-      "grills": false,
       "camping": false,
-      "parking": false,
       "blueFlag": false,
       "lifeguard": false,
       "nacional2": false,
@@ -7612,9 +7588,9 @@
       "lat": 40.235978,
       "lng": -8.051188
     },
-    "description": "Descubra esta praia fluvial no concelho de Arganil. Informações, serviços e localização disponíveis em breve.",
+    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Arganil.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
     "municipality": "Arganil",
-    "waterQuality": "",
+    "waterQuality": "excelente",
     "passportStamp": true
   },
   {
@@ -7694,7 +7670,7 @@
   {
     "id": "praia-fluvial-de-rio-torto",
     "name": "Zona Balnear de Rio Torto",
-    "type": "praia_fluvial",
+    "type": "zona_balnear",
     "river": "Rio Rabaçal",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Rio%2BTorto"
@@ -7704,9 +7680,7 @@
     "services": {
       "wc": false,
       "bar": false,
-      "grills": false,
       "camping": false,
-      "parking": false,
       "blueFlag": false,
       "lifeguard": false,
       "nacional2": false,
@@ -7724,15 +7698,15 @@
       "lat": 41.56777,
       "lng": -7.259883
     },
-    "description": "Descubra esta praia fluvial no concelho de Valpaços. Informações, serviços e localização disponíveis em breve.",
+    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Valpaços.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
     "municipality": "Valpaços",
-    "waterQuality": "",
+    "waterQuality": "excelente",
     "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-sabugueiro",
     "name": "Zona Balnear de Sabugueiro",
-    "type": "praia_fluvial",
+    "type": "zona_balnear",
     "river": "Ribeira da Fervença",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Sabugueiro"
@@ -7742,9 +7716,7 @@
     "services": {
       "wc": false,
       "bar": false,
-      "grills": false,
       "camping": false,
-      "parking": false,
       "blueFlag": false,
       "lifeguard": false,
       "nacional2": false,
@@ -7762,15 +7734,15 @@
       "lat": 40.400694,
       "lng": -7.640472
     },
-    "description": "Descubra esta praia fluvial no concelho de Seia. Informações, serviços e localização disponíveis em breve.",
+    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Seia.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
     "municipality": "Seia",
-    "waterQuality": "",
+    "waterQuality": "excelente",
     "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-sao-joao-do-monte",
     "name": "Zona Balnear de São João do Monte",
-    "type": "praia_fluvial",
+    "type": "zona_balnear",
     "river": "Rio Águeda",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=S%C3%A3o%2BJo%C3%A3o%2Bdo%2BMonte"
@@ -7780,9 +7752,7 @@
     "services": {
       "wc": false,
       "bar": false,
-      "grills": false,
       "camping": false,
-      "parking": false,
       "blueFlag": false,
       "lifeguard": false,
       "nacional2": false,
@@ -7800,9 +7770,9 @@
       "lat": 40.596278,
       "lng": -8.236388
     },
-    "description": "Descubra esta praia fluvial no concelho de Tondela. Informações, serviços e localização disponíveis em breve.",
+    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Tondela.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
     "municipality": "Tondela",
-    "waterQuality": "",
+    "waterQuality": "excelente",
     "passportStamp": true
   },
   {
@@ -7846,7 +7816,7 @@
   {
     "id": "praia-fluvial-de-seixo-do-coa",
     "name": "Zona Balnear de Seixo do Côa",
-    "type": "praia_fluvial",
+    "type": "zona_balnear",
     "river": "Rio Côa",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Seixo%2Bdo%2BC%C3%B4a"
@@ -7856,9 +7826,7 @@
     "services": {
       "wc": false,
       "bar": false,
-      "grills": false,
       "camping": false,
-      "parking": false,
       "blueFlag": false,
       "lifeguard": false,
       "nacional2": false,
@@ -7876,9 +7844,9 @@
       "lat": 40.46388,
       "lng": -7.017467
     },
-    "description": "Descubra esta praia fluvial no concelho de Sabugal. Informações, serviços e localização disponíveis em breve.",
+    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Sabugal.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
     "municipality": "Sabugal",
-    "waterQuality": "",
+    "waterQuality": "excelente",
     "passportStamp": true
   },
   {
@@ -7998,7 +7966,7 @@
   {
     "id": "praia-fluvial-de-urtigal",
     "name": "Zona Balnear de Urtigal",
-    "type": "praia_fluvial",
+    "type": "zona_balnear",
     "river": "Rio Alva",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Urtigal"
@@ -8008,9 +7976,7 @@
     "services": {
       "wc": false,
       "bar": false,
-      "grills": false,
       "camping": false,
-      "parking": false,
       "blueFlag": false,
       "lifeguard": false,
       "nacional2": false,
@@ -8028,9 +7994,9 @@
       "lat": 40.295069,
       "lng": -7.959148
     },
-    "description": "Descubra esta praia fluvial no concelho de Arganil. Informações, serviços e localização disponíveis em breve.",
+    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Arganil.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
     "municipality": "Arganil",
-    "waterQuality": "",
+    "waterQuality": "excelente",
     "passportStamp": true
   },
   {
@@ -8224,7 +8190,7 @@
   {
     "id": "praia-fluvial-de-areinho",
     "name": "Zona Balnear do Areinho",
-    "type": "praia_fluvial",
+    "type": "zona_balnear",
     "river": "Rio Paiva",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Areinho"
@@ -8234,9 +8200,7 @@
     "services": {
       "wc": false,
       "bar": false,
-      "grills": false,
       "camping": false,
-      "parking": false,
       "blueFlag": false,
       "lifeguard": false,
       "nacional2": false,
@@ -8254,9 +8218,9 @@
       "lat": 40.952992,
       "lng": -8.177201
     },
-    "description": "Descubra esta praia fluvial no concelho de Arouca. Informações, serviços e localização disponíveis em breve.",
+    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Arouca.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
     "municipality": "Arouca",
-    "waterQuality": "",
+    "waterQuality": "excelente",
     "passportStamp": true
   },
   {
@@ -8412,7 +8376,7 @@
   {
     "id": "praia-fluvial-de-poco-do-lagar",
     "name": "Zona Balnear do Poço do Lagar",
-    "type": "praia_fluvial",
+    "type": "zona_balnear",
     "river": "Ribeira de Alvoco",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Po%C3%A7o%2Bdo%2BLagar"
@@ -8422,9 +8386,7 @@
     "services": {
       "wc": false,
       "bar": false,
-      "grills": false,
       "camping": false,
-      "parking": false,
       "blueFlag": false,
       "lifeguard": false,
       "nacional2": false,
@@ -8442,9 +8404,9 @@
       "lat": 40.28775,
       "lng": -7.709444
     },
-    "description": "Descubra esta praia fluvial no concelho de Seia. Informações, serviços e localização disponíveis em breve.",
+    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Seia.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
     "municipality": "Seia",
-    "waterQuality": "",
+    "waterQuality": "excelente",
     "passportStamp": true
   },
   {
@@ -8524,7 +8486,7 @@
   {
     "id": "praia-fluvial-de-dr-pedro-n-sra-do-desterro",
     "name": "Zona Balnear Dr. Pedro - Sra. do Desterro",
-    "type": "praia_fluvial",
+    "type": "zona_balnear",
     "river": "Rio Alva",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Dr.%2BPedro%2B-%2BN.%C2%AA%2BSra%2Bdo%2BDesterro"
@@ -8534,9 +8496,7 @@
     "services": {
       "wc": false,
       "bar": false,
-      "grills": false,
       "camping": false,
-      "parking": false,
       "blueFlag": false,
       "lifeguard": false,
       "nacional2": false,
@@ -8554,15 +8514,15 @@
       "lat": 40.397583,
       "lng": -7.687639
     },
-    "description": "Descubra esta praia fluvial no concelho de Seia. Informações, serviços e localização disponíveis em breve.",
+    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Seia.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
     "municipality": "Seia",
-    "waterQuality": "",
+    "waterQuality": "excelente",
     "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-o-moinho-benquerenca",
     "name": "Zona Balnear O Moinho - Benquerença",
-    "type": "praia_fluvial",
+    "type": "zona_balnear",
     "river": "Ribeira de Benquerença",
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=O%2BMoinho%2B-%2BBenqueren%C3%A7a"
@@ -8572,9 +8532,7 @@
     "services": {
       "wc": false,
       "bar": false,
-      "grills": false,
       "camping": false,
-      "parking": false,
       "blueFlag": false,
       "lifeguard": false,
       "nacional2": false,
@@ -8592,9 +8550,9 @@
       "lat": 40.229083,
       "lng": -7.221639
     },
-    "description": "Descubra esta praia fluvial no concelho de Penamacor. Informações, serviços e localização disponíveis em breve.",
+    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Penamacor.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
     "municipality": "Penamacor",
-    "waterQuality": "",
+    "waterQuality": "excelente",
     "passportStamp": true
   },
   {
