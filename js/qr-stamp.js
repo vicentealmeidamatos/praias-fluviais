@@ -9,6 +9,10 @@
   const GPS_TIMEOUT_MS  = 15000;
   const GUEST_STORAGE_KEY = 'passport_stamps';
 
+  // TESTE: praias que dispensam validação GPS (ainda precisam de permissão).
+  // Remover antes de produção.
+  const BYPASS_GPS_IDS = new Set(['praia-fluvial-de-loriga']);
+
   const root = () => document.getElementById('carimbar-state');
 
   // ── Utilities ──────────────────────────────────────────────────────────────
@@ -321,33 +325,35 @@
       });
     }
 
-    // 3. GPS
-    renderLoading('A validar a sua localização…', 'Confirme a permissão de GPS no seu telemóvel, por favor.');
-    let pos;
-    try {
-      pos = await getPosition();
-    } catch (err) {
-      return renderError(gpsErrorState(err));
-    }
+    // 3. GPS (dispensado para praias em BYPASS_GPS_IDS — modo de teste)
+    if (!BYPASS_GPS_IDS.has(beach.id)) {
+      renderLoading('A validar a sua localização…', 'Confirme a permissão de GPS no seu telemóvel, por favor.');
+      let pos;
+      try {
+        pos = await getPosition();
+      } catch (err) {
+        return renderError(gpsErrorState(err));
+      }
 
-    // 4. Distance check (uses haversineDistance from shared.js)
-    const distKm = haversineDistance(
-      pos.lat, pos.lng,
-      beach.coordinates.lat, beach.coordinates.lng,
-    );
-    if (distKm > MAX_DISTANCE_KM) {
-      const distStr = distKm < 10
-        ? `${distKm.toFixed(1)} km`
-        : `${Math.round(distKm)} km`;
-      return renderError({
-        eyebrow: 'FORA DO ALCANCE',
-        title: `Está a ${distStr} de ${beach.name}`,
-        body: `Para registar a visita precisa de estar a menos de ${MAX_DISTANCE_KM} km da praia. Aproxime-se e tente novamente.`,
-        primaryLabel: 'Tentar de novo',
-        primaryAction: 'reload',
-        secondaryLabel: 'Ver a praia no mapa',
-        secondaryHref: `praia.html?id=${encodeURIComponent(beach.id)}`,
-      });
+      // 4. Distance check (uses haversineDistance from shared.js)
+      const distKm = haversineDistance(
+        pos.lat, pos.lng,
+        beach.coordinates.lat, beach.coordinates.lng,
+      );
+      if (distKm > MAX_DISTANCE_KM) {
+        const distStr = distKm < 10
+          ? `${distKm.toFixed(1)} km`
+          : `${Math.round(distKm)} km`;
+        return renderError({
+          eyebrow: 'FORA DO ALCANCE',
+          title: `Está a ${distStr} de ${beach.name}`,
+          body: `Para registar a visita precisa de estar a menos de ${MAX_DISTANCE_KM} km da praia. Aproxime-se e tente novamente.`,
+          primaryLabel: 'Tentar de novo',
+          primaryAction: 'reload',
+          secondaryLabel: 'Ver a praia no mapa',
+          secondaryHref: `praia.html?id=${encodeURIComponent(beach.id)}`,
+        });
+      }
     }
 
     // 5. Load side data for badge computation
