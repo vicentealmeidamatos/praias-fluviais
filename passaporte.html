@@ -287,7 +287,7 @@
 
       <!-- QR Code CTA -->
       <div class="max-w-4xl mx-auto px-6 pt-10 pb-4 flex justify-center">
-        <button onclick="alert('Funcionalidade disponível nas praias')" class="qr-btn flex flex-col items-center justify-center gap-4 bg-praia-teal-800 text-praia-yellow-400 font-display font-bold uppercase tracking-wider rounded-2xl border-2 border-praia-teal-600" style="width:200px;height:200px;box-shadow:0 8px 32px rgba(0,58,64,0.22);">
+        <button onclick="openQRScanner()" class="qr-btn flex flex-col items-center justify-center gap-4 bg-praia-teal-800 text-praia-yellow-400 font-display font-bold uppercase tracking-wider rounded-2xl border-2 border-praia-teal-600" style="width:200px;height:200px;box-shadow:0 8px 32px rgba(0,58,64,0.22);">
           <i data-lucide="scan-line" class="w-14 h-14"></i>
           <span class="text-sm leading-tight text-center px-2">Carimbar<br>Praia</span>
         </button>
@@ -715,6 +715,7 @@
   </nav>
 
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/passport.js"></script>
 
@@ -762,7 +763,228 @@
       // Scroll to just below header
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+
+    // ── QR Scanner (câmara ao vivo) ────────────────────────────────────────
+    let _qrScanner = null;
+
+    async function openQRScanner() {
+      const modal = document.getElementById('qr-scanner-modal');
+      if (!modal) return;
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+
+      // Lucide refresh para o ícone do botão de fechar
+      if (window.lucide) lucide.createIcons();
+
+      if (!window.Html5Qrcode) {
+        return _qrScannerError('Leitor de QR não carregou. Verifique a sua ligação e tente novamente.');
+      }
+
+      try {
+        _qrScanner = new Html5Qrcode('qr-scanner-reader', /* verbose */ false);
+        const config = {
+          fps: 10,
+          qrbox: (w, h) => {
+            const size = Math.floor(Math.min(w, h) * 0.72);
+            return { width: size, height: size };
+          },
+          aspectRatio: 1.3333,
+          disableFlip: false,
+        };
+        await _qrScanner.start(
+          { facingMode: 'environment' },
+          config,
+          (decoded) => _handleQRDecoded(decoded),
+          /* on failure */ () => { /* silencioso — avisa só por frame */ },
+        );
+        document.getElementById('qr-scanner-status').textContent = 'Aponte a câmara para o QR code da praia.';
+      } catch (err) {
+        console.error('[qr-scanner] start failed:', err);
+        const msg = (err && err.name === 'NotAllowedError')
+          ? 'Permita o acesso à câmara nas definições do seu browser e tente de novo.'
+          : 'Não foi possível aceder à câmara. Verifique as permissões e tente de novo.';
+        _qrScannerError(msg);
+      }
+    }
+
+    async function closeQRScanner() {
+      const modal = document.getElementById('qr-scanner-modal');
+      if (!modal) return;
+      if (_qrScanner) {
+        try { await _qrScanner.stop(); } catch {}
+        try { _qrScanner.clear(); } catch {}
+        _qrScanner = null;
+      }
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+      document.getElementById('qr-scanner-error').classList.add('hidden');
+      document.getElementById('qr-scanner-status').textContent = 'A preparar a câmara…';
+    }
+
+    function _qrScannerError(msg) {
+      const el = document.getElementById('qr-scanner-error');
+      el.querySelector('[data-text]').textContent = msg;
+      el.classList.remove('hidden');
+    }
+
+    function _handleQRDecoded(raw) {
+      if (!raw) return;
+      // Aceita URL completa ou id à solta. Procura ?id= ou toma o último segmento como fallback.
+      let beachId = null;
+      try {
+        const u = new URL(raw, window.location.origin);
+        beachId = u.searchParams.get('id');
+      } catch {
+        // Não é URL válida — pode ser só o id
+        if (/^[a-z0-9-]+$/i.test(raw.trim())) beachId = raw.trim();
+      }
+      if (!beachId) {
+        _qrScannerError('QR code não reconhecido. Certifique-se de que está a ler um QR oficial das praias fluviais.');
+        return;
+      }
+      // Evitar disparos múltiplos durante o fade do stop
+      if (_qrScanner) {
+        _qrScanner.stop().catch(() => {}).finally(() => {
+          window.location.href = 'carimbar.html?id=' + encodeURIComponent(beachId);
+        });
+      } else {
+        window.location.href = 'carimbar.html?id=' + encodeURIComponent(beachId);
+      }
+    }
   </script>
+
+  <!-- QR Scanner Modal -->
+  <style>
+    #qr-scanner-modal {
+      position: fixed; inset: 0; z-index: 100000;
+      background: #001418;
+    }
+    #qr-scanner-modal::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: url('img/noise-texture.svg');
+      background-size: 180px;
+      opacity: 0.06;
+      mix-blend-mode: overlay;
+      pointer-events: none;
+    }
+    #qr-scanner-reader {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      background: #000;
+    }
+    #qr-scanner-reader video {
+      width: 100% !important; height: 100% !important;
+      object-fit: cover !important;
+    }
+    #qr-scanner-reader__dashboard,
+    #qr-scanner-reader__scan_region img { display: none !important; }
+    #qr-scanner-reader__header_message { display: none !important; }
+
+    .qr-scanner-topbar {
+      position: absolute; top: 0; left: 0; right: 0; z-index: 5;
+      padding: 16px 18px calc(16px + env(safe-area-inset-top, 0px));
+      display: flex; align-items: center; justify-content: space-between;
+      background: linear-gradient(180deg, rgba(0,20,24,0.85) 0%, rgba(0,20,24,0) 100%);
+    }
+    .qr-scanner-topbar .brand-mark {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700; font-size: 11px;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: #FFEB3B;
+    }
+    .qr-scanner-close {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      width: 42px; height: 42px; border-radius: 50%;
+      color: #fff; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      backdrop-filter: blur(6px);
+      transition: background 0.25s ease;
+    }
+    .qr-scanner-close:hover { background: rgba(255,255,255,0.2); }
+
+    /* Scan frame overlay */
+    .qr-scanner-frame {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(72vw, 360px); height: min(72vw, 360px);
+      z-index: 4;
+      pointer-events: none;
+    }
+    .qr-scanner-frame::before,
+    .qr-scanner-frame::after,
+    .qr-scanner-frame > span::before,
+    .qr-scanner-frame > span::after {
+      content: '';
+      position: absolute;
+      width: 34px; height: 34px;
+      border: 3px solid #FFEB3B;
+      border-radius: 4px;
+    }
+    .qr-scanner-frame::before { top: 0; left: 0; border-right: none; border-bottom: none; }
+    .qr-scanner-frame::after  { top: 0; right: 0; border-left:  none; border-bottom: none; }
+    .qr-scanner-frame > span::before { bottom: 0; left: 0; border-right: none; border-top: none; }
+    .qr-scanner-frame > span::after  { bottom: 0; right: 0; border-left:  none; border-top: none; }
+
+    /* Subtle darkening of the area outside the frame */
+    .qr-scanner-vignette {
+      position: absolute; inset: 0; z-index: 2; pointer-events: none;
+      background: radial-gradient(ellipse 45% 40% at 50% 50%, rgba(0,0,0,0) 60%, rgba(0,0,0,0.55) 100%);
+    }
+
+    .qr-scanner-bottom {
+      position: absolute; left: 0; right: 0; bottom: 0;
+      z-index: 3;
+      padding: 28px 24px 36px;
+      background: linear-gradient(0deg, rgba(0,20,24,0.92) 0%, rgba(0,20,24,0.3) 80%, rgba(0,20,24,0) 100%);
+      text-align: center;
+    }
+    .qr-scanner-bottom .eyebrow {
+      font-family: 'Poppins', sans-serif;
+      font-size: 10px; letter-spacing: 0.24em;
+      color: #FFEB3B; font-weight: 700; text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    #qr-scanner-status {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 14px; color: rgba(232,223,208,0.85);
+      line-height: 1.55; max-width: 340px; margin: 0 auto;
+    }
+    #qr-scanner-error {
+      background: rgba(211,47,47,0.15);
+      border: 1px solid rgba(244,143,117,0.4);
+      color: #F4BFA8;
+      padding: 12px 14px; border-radius: 12px;
+      font-family: 'Open Sans', sans-serif; font-size: 13px;
+      max-width: 360px; margin: 12px auto 0;
+    }
+  </style>
+
+  <div id="qr-scanner-modal" class="hidden" role="dialog" aria-modal="true" aria-label="Digitalizar QR code da praia">
+    <!-- Live camera feed -->
+    <div id="qr-scanner-reader"></div>
+    <div class="qr-scanner-vignette" aria-hidden="true"></div>
+
+    <!-- Scan frame (yellow corners) -->
+    <div class="qr-scanner-frame" aria-hidden="true"><span></span></div>
+
+    <!-- Top bar -->
+    <div class="qr-scanner-topbar">
+      <span class="brand-mark">Passaporte Digital</span>
+      <button type="button" class="qr-scanner-close" onclick="closeQRScanner()" aria-label="Fechar scanner">
+        <i data-lucide="x" style="width:20px;height:20px;"></i>
+      </button>
+    </div>
+
+    <!-- Bottom instructions + error -->
+    <div class="qr-scanner-bottom">
+      <div class="eyebrow">· Carimbar praia ·</div>
+      <p id="qr-scanner-status">A preparar a câmara…</p>
+      <div id="qr-scanner-error" class="hidden" role="alert"><span data-text></span></div>
+    </div>
+  </div>
 <!-- Prize photo lightbox -->
 <div id="prize-lightbox" onclick="document.getElementById('prize-lightbox').style.display='none'" style="display:none; position:fixed; inset:0; z-index:99999; background:rgba(0,0,0,0.92); cursor:zoom-out; flex-direction:column; align-items:center; justify-content:center;">
   <img id="prize-lightbox-img" src="" alt="" style="max-width:90vw; max-height:85vh; object-fit:contain; border-radius:12px;" onclick="event.stopPropagation();">
