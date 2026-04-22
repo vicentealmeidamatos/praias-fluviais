@@ -4311,8 +4311,8 @@ function exportContentJSON() {
 // Gera QR codes apontando para carimbar.html, um por praia. O scan numa praia
 // valida GPS (≤2km) e carimba o passaporte digital do utilizador.
 //
-// Produção: altere QR_PUBLIC_BASE se o domínio final for outro.
-const QR_PUBLIC_BASE = 'https://praias-fluviais.pt';
+// Produção: altere QR_PUBLIC_BASE para o domínio final quando for lançado.
+const QR_PUBLIC_BASE = 'https://praias-fluviais.vercel.app';
 
 function _beachQRUrl(beach) {
   return `${QR_PUBLIC_BASE}/carimbar.html?id=${encodeURIComponent(beach.id)}`;
