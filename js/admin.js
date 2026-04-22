@@ -4336,7 +4336,7 @@ async function _generateQRDataURL(url, size = 1024) {
     width: size,
     margin: 2,
     errorCorrectionLevel: 'M',
-    color: { dark: '#003A40', light: '#FFFFFF' },
+    color: { dark: '#000000', light: '#FFFFFF' },
   });
 }
 
