@@ -921,8 +921,8 @@ function slugify(text) {
 // tudo o que é "shell" mobile é renderizado aqui.
 
 (function () {
-  // Páginas onde a bottom-nav não deve aparecer (ex.: admin)
-  var NO_BOTTOM_NAV = ['admin.html'];
+  // Páginas onde a bottom-nav não deve aparecer (ex.: admin, carimbar)
+  var NO_BOTTOM_NAV = ['admin.html', 'carimbar.html'];
 
   // Mapa: página → item ativo na bottom-nav
   var ACTIVE_MAP = {

@@ -93,6 +93,26 @@ async function stampRemove(userId, beachId) {
   return !error;
 }
 
+// Migra carimbos guardados em localStorage (fluxo guest do QR) para a conta Supabase.
+// Chamado após qualquer login/registo bem-sucedido em auth.html.
+async function stampsSyncFromLocal(userId) {
+  if (!userId) return { migrated: 0, total: 0 };
+  let local;
+  try {
+    local = JSON.parse(localStorage.getItem('passport_stamps') || '{}');
+  } catch {
+    localStorage.removeItem('passport_stamps');
+    return { migrated: 0, total: 0 };
+  }
+  const ids = Object.keys(local || {});
+  if (!ids.length) return { migrated: 0, total: 0 };
+
+  const results = await Promise.all(ids.map(id => stampAdd(userId, id)));
+  const migrated = results.filter(Boolean).length;
+  if (migrated === ids.length) localStorage.removeItem('passport_stamps');
+  return { migrated, total: ids.length };
+}
+
 // ─── Votes ────────────────────────────────────────────────────────────────────
 
 async function voteGet(userId, year) {
@@ -863,6 +883,7 @@ window.AuthUtils = {
   stampsGetAll,
   stampAdd,
   stampRemove,
+  stampsSyncFromLocal,
   voteGet,
   voteGetFull,
   voteSubmit,

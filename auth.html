@@ -560,6 +560,20 @@
   // Redirect param
   const redirectTo = new URLSearchParams(location.search).get('redirect') || 'index.html';
 
+  // Migração de carimbos locais (fluxo QR guest → conta). Corre antes de qualquer
+  // redirect pós-autenticação: login, registo, OAuth callback, skip-avatar.
+  async function _postAuthSync(user) {
+    if (!user?.id) return;
+    try {
+      const res = await AuthUtils.stampsSyncFromLocal(user.id);
+      if (res.migrated > 0) {
+        sessionStorage.setItem('stamps_just_migrated', String(res.migrated));
+      }
+    } catch (err) {
+      console.warn('[postAuthSync] stamps sync failed:', err?.message);
+    }
+  }
+
   // ── Auth callback & initial check ──────────────────────────────────────────
   (async () => {
     const hash         = window.location.hash;
@@ -590,6 +604,7 @@
           window._pendingRedirect = redirectTo;
           showAvatarModal();
         } else {
+          await _postAuthSync(oauthUser);
           window.location.href = redirectTo;
         }
         return;
@@ -657,6 +672,7 @@
     // If user is already authenticated, redirect (but not during recovery)
     const user = await AuthUtils.authGetUser();
     if (user) {
+      await _postAuthSync(user);
       window.location.href = redirectTo;
       return;
     }
@@ -898,6 +914,9 @@
         return showError('login', translateError(error.message));
       }
 
+      // authGetUser() memoiza o primeiro resultado (null, antes do login) — usar Supabase direto
+      const { data: { user: loggedUser } } = await AuthUtils.supabase.auth.getUser();
+      await _postAuthSync(loggedUser);
       window.location.href = redirectTo;
     } catch (err) {
       console.error('[handleLogin]', err);
@@ -1045,10 +1064,14 @@
       return;
     }
 
+    const { data: { user: regUser } } = await AuthUtils.supabase.auth.getUser();
+    await _postAuthSync(regUser);
     window.location.href = window._pendingRedirect || 'index.html';
   }
 
-  function skipAvatar() {
+  async function skipAvatar() {
+    const { data: { user: regUser } } = await AuthUtils.supabase.auth.getUser();
+    await _postAuthSync(regUser);
     window.location.href = window._pendingRedirect || 'index.html';
   }
 

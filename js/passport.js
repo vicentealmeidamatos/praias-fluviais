@@ -25,6 +25,20 @@ document.addEventListener('DOMContentLoaded', async () => {
   const stampBeaches   = beaches.filter(b => b.passportStamp);
   const totalAvailable = stampBeaches.length;
 
+  // Toast pós-migração de carimbos guest (fluxo QR). Disparado por auth.html
+  // após _postAuthSync gravar a flag em sessionStorage.
+  const _migratedRaw = sessionStorage.getItem('stamps_just_migrated');
+  if (_migratedRaw && window._shareSheetToast) {
+    const n = parseInt(_migratedRaw, 10) || 0;
+    if (n > 0) {
+      const plural = n === 1 ? 'carimbo guardado' : 'carimbos guardados';
+      setTimeout(() => {
+        window._shareSheetToast(`${n} ${plural} no seu passaporte!`);
+      }, 600);
+    }
+    sessionStorage.removeItem('stamps_just_migrated');
+  }
+
   // ── Parallel: profile + stamps + reviews + voted ────────────────────────────
   let stampMap = {};
   let reviews  = [];

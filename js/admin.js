@@ -897,6 +897,7 @@ function renderBeaches(container) {
           <p class="text-sm text-praia-sand-500">${beaches.length} praias registadas${beaches.filter(b => b.hidden).length ? ` · <span style="color:#C62828;font-weight:600;">${beaches.filter(b => b.hidden).length} oculta(s)</span>` : ''}</p>
         </div>
         <div class="flex gap-2">
+          <button onclick="downloadAllBeachQRsZip()" class="admin-btn admin-btn-secondary" title="Baixar todos os QR codes das praias num único ficheiro ZIP">QR codes (ZIP)</button>
           <button onclick="saveSectionNow('beaches')" class="admin-btn admin-btn-export">Gravar alterações</button>
           <button onclick="editBeach(null)" class="admin-btn admin-btn-primary">+ Adicionar Praia</button>
         </div>
@@ -942,6 +943,7 @@ function renderBeaches(container) {
                   </td>
                   <td class="px-4 py-3 text-praia-sand-500 text-xs" style="max-width:200px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">${activeServices}</td>
                   <td class="px-4 py-3 text-right">
+                    ${b.passportStamp !== false ? `<button onclick="downloadBeachQR(${i})" class="text-praia-yellow-600 hover:text-praia-yellow-700 text-xs font-semibold mr-2" title="Baixar QR code para carimbar esta praia">QR</button>` : ''}
                     <button onclick="toggleItemVisibility('beaches', ${i})" class="text-praia-sand-400 hover:text-praia-sand-600 text-xs font-semibold mr-2" title="${b.hidden ? 'Tornar visível' : 'Ocultar do site'}">${b.hidden ? 'Mostrar' : 'Ocultar'}</button>
                     <button onclick="editBeach(${i})" class="text-praia-teal-600 hover:text-praia-teal-800 text-xs font-semibold mr-2">Editar</button>
                     <button onclick="deleteItem('beaches', ${i})" class="text-red-400 hover:text-red-600 text-xs font-semibold">Eliminar</button>
@@ -4303,6 +4305,94 @@ function exportContentJSON() {
   const a = document.createElement('a'); a.href = url; a.download = 'content.json'; a.click();
   URL.revokeObjectURL(url);
   toast('content.json exportado! Substitua o ficheiro em data/content.json', 'success');
+}
+
+// ─── QR Codes das praias ───
+// Gera QR codes apontando para carimbar.html, um por praia. O scan numa praia
+// valida GPS (≤2km) e carimba o passaporte digital do utilizador.
+//
+// Produção: altere QR_PUBLIC_BASE se o domínio final for outro.
+const QR_PUBLIC_BASE = 'https://praias-fluviais.pt';
+
+function _beachQRUrl(beach) {
+  return `${QR_PUBLIC_BASE}/carimbar.html?id=${encodeURIComponent(beach.id)}`;
+}
+
+// "Praia Fluvial de Loriga" → "Praia-Fluvial-de-Loriga"
+function _sanitizeFilename(name) {
+  return String(name || 'praia')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-zA-Z0-9\s-]/g, '')
+    .trim().replace(/\s+/g, '-')
+    .slice(0, 80) || 'praia';
+}
+
+async function _generateQRDataURL(url, size = 1024) {
+  if (!window.QRCode || !QRCode.toDataURL) {
+    toast('Biblioteca de QR não carregou. Atualize a página.', 'error');
+    throw new Error('QRCode library not available');
+  }
+  return QRCode.toDataURL(url, {
+    width: size,
+    margin: 2,
+    errorCorrectionLevel: 'M',
+    color: { dark: '#003A40', light: '#FFFFFF' },
+  });
+}
+
+async function downloadBeachQR(index) {
+  const beach = state.data.beaches?.[index];
+  if (!beach) return toast('Praia não encontrada.', 'error');
+  if (!beach.id) return toast('Esta praia não tem id — grave primeiro.', 'error');
+  try {
+    const dataUrl = await _generateQRDataURL(_beachQRUrl(beach));
+    const a = document.createElement('a');
+    a.href = dataUrl;
+    a.download = `${_sanitizeFilename(beach.name)}.png`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    toast(`QR de "${beach.name}" baixado.`, 'success');
+  } catch (err) {
+    console.error('[downloadBeachQR]', err);
+    toast('Falha ao gerar QR code.', 'error');
+  }
+}
+
+async function downloadAllBeachQRsZip() {
+  const beaches = (state.data.beaches || []).filter(b => b.passportStamp !== false && b.id);
+  if (!beaches.length) return toast('Nenhuma praia elegível para carimbagem.', 'error');
+  if (!window.JSZip) return toast('Biblioteca ZIP não carregou. Atualize a página.', 'error');
+
+  toast(`A gerar ${beaches.length} QR codes…`, 'info');
+  try {
+    const zip = new JSZip();
+    // Evita colisões de nome (ex: duas praias com mesmo nome).
+    const seen = new Map();
+    for (const b of beaches) {
+      const base = _sanitizeFilename(b.name);
+      const n = (seen.get(base) || 0) + 1;
+      seen.set(base, n);
+      const fname = n === 1 ? `${base}.png` : `${base}-${n}.png`;
+
+      const dataUrl = await _generateQRDataURL(_beachQRUrl(b));
+      const base64 = dataUrl.split(',')[1];
+      zip.file(fname, base64, { base64: true });
+    }
+    const blob = await zip.generateAsync({ type: 'blob' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `qr-codes-praias-${new Date().toISOString().split('T')[0]}.zip`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    toast(`${beaches.length} QR codes exportados.`, 'success');
+  } catch (err) {
+    console.error('[downloadAllBeachQRsZip]', err);
+    toast('Falha ao gerar ZIP de QR codes.', 'error');
+  }
 }
 
 // ─── Init ───
