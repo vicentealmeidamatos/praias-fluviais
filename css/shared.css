@@ -52,9 +52,10 @@ body {
   background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.18), rgba(255,255,255,0.04));
   border: 1px solid rgba(255,255,255,0.08);
   opacity: 0;
-  animation: bubble-rise var(--dur, 8s) ease-in-out infinite;
+  animation: bubble-rise var(--dur, 11s) linear infinite;
   animation-delay: var(--delay, 0s);
   pointer-events: none;
+  will-change: transform, opacity;
 }
 .bubble-sideways {
   position: absolute;
@@ -62,22 +63,32 @@ body {
   background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15), rgba(255,255,255,0.03));
   border: 1px solid rgba(255,255,255,0.07);
   opacity: 0;
-  animation: bubble-sideways var(--dur, 9s) ease-in-out infinite;
+  animation: bubble-sideways var(--dur, 12s) linear infinite;
   animation-delay: var(--delay, 0s);
   pointer-events: none;
+  will-change: transform, opacity;
 }
+/* Tamanho ligeiramente maior mantendo as classes Tailwind originais */
+.bubble.w-1, .bubble-sideways.w-1 { width: 5px; height: 5px; }
+.bubble.w-1\.5, .bubble-sideways.w-1\.5 { width: 7px; height: 7px; }
+.bubble.w-2, .bubble-sideways.w-2 { width: 9px; height: 9px; }
+.bubble.w-2\.5, .bubble-sideways.w-2\.5 { width: 10px; height: 10px; }
+.bubble.w-3, .bubble-sideways.w-3 { width: 11px; height: 11px; }
+
 @keyframes bubble-rise {
-  0%   { opacity: 0; transform: translateY(15px) scale(0.3); }
-  8%   { opacity: 0.65; }
-  40%  { opacity: 0.5; transform: translateY(-40px) scale(0.85) translateX(var(--drift, 10px)); }
-  70%  { opacity: 0.3; transform: translateY(-90px) scale(0.95) translateX(calc(var(--drift, 10px) * -0.5)); }
-  100% { opacity: 0; transform: translateY(-130px) scale(1) translateX(var(--drift, 10px)); }
+  0%   { opacity: 0; transform: translateY(25px) scale(0.4); }
+  5%   { opacity: 0.5; }
+  30%  { opacity: 0.5; transform: translateY(-55px) scale(0.8) translateX(var(--drift, 10px)); }
+  65%  { opacity: 0.45; transform: translateY(-125px) scale(0.95) translateX(calc(var(--drift, 10px) * -0.35)); }
+  94%  { opacity: 0.12; }
+  100% { opacity: 0; transform: translateY(-190px) scale(1.05) translateX(var(--drift, 10px)); }
 }
 @keyframes bubble-sideways {
   0%   { opacity: 0; transform: translate(0, 0) scale(0.4); }
-  10%  { opacity: 0.5; }
-  50%  { opacity: 0.4; transform: translate(var(--dx, 45px), var(--dy, -25px)) scale(0.85); }
-  100% { opacity: 0; transform: translate(calc(var(--dx, 45px) * 1.7), calc(var(--dy, -25px) * 0.6)) scale(1); }
+  7%   { opacity: 0.45; }
+  50%  { opacity: 0.45; transform: translate(var(--dx, 45px), var(--dy, -25px)) scale(0.85); }
+  93%  { opacity: 0.18; }
+  100% { opacity: 0; transform: translate(calc(var(--dx, 45px) * 1.9), calc(var(--dy, -25px) * 0.85)) scale(1.05); }
 }
 
 /* ─── Layered Shadows ─── */
@@ -273,7 +284,6 @@ body {
   transform: none !important;
   will-change: auto;
   z-index: 1000;
-  padding-bottom: env(safe-area-inset-bottom);
   box-shadow:
     0 -2px 4px rgba(0, 58, 64, 0.06),
     0 -8px 16px rgba(0, 58, 64, 0.08);
@@ -281,6 +291,14 @@ body {
 .bottom-nav .bottom-nav-inner {
   padding-left: env(safe-area-inset-left);
   padding-right: env(safe-area-inset-right);
+}
+/* Só aplicar padding-bottom para o home-indicator em modo PWA instalado.
+   No browser (com a toolbar do Safari por cima), o padding extra aparece
+   como faixa de teal "vazia" acima da toolbar. */
+@media (display-mode: standalone) {
+  .bottom-nav {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
 }
 .bottom-nav a {
   min-height: 44px;
@@ -297,9 +315,18 @@ body {
 /* ─── Page padding when bottom nav present ─── */
 @media (max-width: 1023px) {
   body.has-bottom-nav {
-    padding-bottom: calc(64px + env(safe-area-inset-bottom));
+    padding-bottom: 64px;
   }
   /* Guest-banner (passaporte) deve ficar acima da bottom-nav em mobile */
+  body.has-bottom-nav #guest-banner:not(.hidden) {
+    bottom: 64px !important;
+  }
+}
+/* Em PWA instalado, reservar também espaço do safe-area (home indicator) */
+@media (max-width: 1023px) and (display-mode: standalone) {
+  body.has-bottom-nav {
+    padding-bottom: calc(64px + env(safe-area-inset-bottom));
+  }
   body.has-bottom-nav #guest-banner:not(.hidden) {
     bottom: calc(64px + env(safe-area-inset-bottom)) !important;
   }

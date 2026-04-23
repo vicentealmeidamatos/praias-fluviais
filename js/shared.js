@@ -980,12 +980,18 @@ function slugify(text) {
       head.appendChild(el);
     });
 
-    // Viewport: garantir viewport-fit=cover para safe-area-inset funcionar
-    var vp = document.querySelector('meta[name="viewport"]');
-    if (vp) {
-      var content = vp.getAttribute('content') || '';
-      if (content.indexOf('viewport-fit') === -1) {
-        vp.setAttribute('content', content.replace(/\s*$/, '') + ', viewport-fit=cover');
+    // Viewport: só garantir viewport-fit=cover em PWA standalone.
+    // Em browser, viewport-fit=cover faz env(safe-area-inset-bottom) reportar
+    // a altura da toolbar do Safari, criando faixa teal "vazia" debaixo da
+    // bottom-nav. Sem viewport-fit=cover, env() = 0 no browser (comportamento
+    // pretendido).
+    if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) {
+      var vp = document.querySelector('meta[name="viewport"]');
+      if (vp) {
+        var content = vp.getAttribute('content') || '';
+        if (content.indexOf('viewport-fit') === -1) {
+          vp.setAttribute('content', content.replace(/\s*$/, '') + ', viewport-fit=cover');
+        }
       }
     }
   }
@@ -1195,5 +1201,60 @@ function slugify(text) {
     renderSiteBottomNav();
     renderBackButton();
     hardenSideMenu();
+    boostHeroBubbles();
   });
 })();
+
+// ─── Hero Bubble Density Booster ──────────────────────────────────────────────
+// Injeta bolinhas extra (tamanhos, posições e ritmos aleatórios) em qualquer
+// hero que já use .bubble / .bubble-sideways, para ter densidade contínua e
+// movimento mais fluido sem editar cada página.
+function boostHeroBubbles() {
+  const existing = document.querySelectorAll('.bubble, .bubble-sideways');
+  if (!existing.length) return;
+
+  const parents = new Set();
+  existing.forEach(b => { if (b.parentElement) parents.add(b.parentElement); });
+
+  const rand = (min, max) => Math.random() * (max - min) + min;
+  const SIZES = [
+    { cls: 'w-1 h-1', px: 6 },
+    { cls: 'w-1.5 h-1.5', px: 9 },
+    { cls: 'w-2 h-2', px: 12 },
+    { cls: 'w-2.5 h-2.5', px: 14 },
+    { cls: 'w-3 h-3', px: 16 }
+  ];
+
+  parents.forEach(parent => {
+    const baseCount = parent.querySelectorAll('.bubble, .bubble-sideways').length;
+    // Acrescentar ~110% da densidade original (dobra o número total)
+    const extra = Math.max(20, Math.round(baseCount * 1.1));
+
+    const frag = document.createDocumentFragment();
+    for (let i = 0; i < extra; i++) {
+      const sideways = Math.random() < 0.25;
+      const size = SIZES[Math.floor(Math.random() * SIZES.length)];
+      const b = document.createElement('div');
+      b.className = (sideways ? 'bubble-sideways ' : 'bubble ') + size.cls;
+      b.style.left = rand(0, 100).toFixed(2) + '%';
+      b.style.top = rand(0, 100).toFixed(2) + '%';
+      // Delay negativo distribui o início dentro da primeira volta → sem "esperar"
+      b.style.setProperty('--delay', '-' + rand(0, 12).toFixed(2) + 's');
+      if (sideways) {
+        b.style.setProperty('--dur', rand(10, 16).toFixed(1) + 's');
+        b.style.setProperty('--dx', (rand(-60, 60)).toFixed(1) + 'px');
+        b.style.setProperty('--dy', (rand(-35, 15)).toFixed(1) + 'px');
+      } else {
+        b.style.setProperty('--dur', rand(9, 15).toFixed(1) + 's');
+        b.style.setProperty('--drift', (rand(-16, 16)).toFixed(1) + 'px');
+      }
+      frag.appendChild(b);
+    }
+    parent.appendChild(frag);
+  });
+
+  // Redistribui também os delays dos originais para evitar "comboios" iniciais
+  existing.forEach(b => {
+    b.style.setProperty('--delay', '-' + (Math.random() * 12).toFixed(2) + 's');
+  });
+}
