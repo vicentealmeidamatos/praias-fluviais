@@ -315,13 +315,17 @@ body {
   .bottom-nav span {
     font-size: 12.5px !important;
   }
-  /* Conteúdo alinhado ao fundo com uma pequena margem do home-indicator */
+  /* Conteúdo centrado verticalmente no inner (que já inclui safe-area),
+     para os ícones ficarem no meio da nav com espaço equilibrado dos
+     dois lados em vez de colado a um extremo. */
   .bottom-nav a,
   .bottom-nav button {
-    justify-content: flex-end !important;
+    justify-content: center !important;
     gap: 6px !important;
-    padding-top: 10px !important;
-    padding-bottom: max(calc(env(safe-area-inset-bottom) - 22px), 6px) !important;
+    padding-top: 4px !important;
+    /* Pequeno padding-bottom para que o centro visual do conteúdo não
+       fique exatamente sobre o home-indicator (balança o peso visual). */
+    padding-bottom: max(calc(env(safe-area-inset-bottom) / 2), 6px) !important;
   }
 }
 .bottom-nav a,
