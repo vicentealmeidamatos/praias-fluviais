@@ -1002,32 +1002,50 @@ function slugify(text) {
       var activeClass = key === activeKey ? 'active' : '';
       var colorClass = key === activeKey ? 'text-praia-yellow-400' : 'text-white/60';
       return (
-        '<a href="' + href + '" data-page="' + key + '" class="flex-1 flex flex-col items-center justify-center gap-0.5 ' + colorClass + ' ' + activeClass + '" aria-label="' + label + '">' +
-          '<i data-lucide="' + icon + '" class="w-5 h-5"></i>' +
-          '<span class="font-display text-[10px] uppercase tracking-wider font-semibold">' + label + '</span>' +
+        '<a href="' + href + '" data-page="' + key + '" class="flex-1 flex flex-col items-center justify-center ' + colorClass + ' ' + activeClass + '" aria-label="' + label + '">' +
+          '<i data-lucide="' + icon + '"></i>' +
+          '<span class="font-display uppercase tracking-wider font-semibold">' + label + '</span>' +
         '</a>'
       );
     }
 
     var lojaBadge = cartCount > 0
-      ? '<span id="bottom-nav-cart-count" class="absolute -top-1 right-3 bg-praia-yellow-400 text-praia-teal-800 text-[10px] font-bold rounded-full min-w-[16px] h-4 px-1 flex items-center justify-center">' + (cartCount > 99 ? '99+' : cartCount) + '</span>'
+      ? '<span id="bottom-nav-cart-count" class="absolute top-1 right-4 bg-praia-yellow-400 text-praia-teal-800 text-[10px] font-bold rounded-full min-w-[16px] h-4 px-1 flex items-center justify-center">' + (cartCount > 99 ? '99+' : cartCount) + '</span>'
       : '';
 
     return (
-      '<div class="bottom-nav-inner flex items-stretch h-16 relative">' +
+      '<div class="bottom-nav-inner flex items-stretch relative">' +
         item('home', 'index.html', 'home', 'Início') +
         item('rede', 'rede.html', 'map-pinned', 'Rede') +
         item('passaporte', 'passaporte.html', 'stamp', 'Passaporte') +
-        '<a href="loja.html" data-page="loja" class="flex-1 flex flex-col items-center justify-center gap-0.5 ' + (activeKey === 'loja' ? 'text-praia-yellow-400 active' : 'text-white/60') + ' relative" aria-label="Loja">' +
-          '<i data-lucide="shopping-bag" class="w-5 h-5"></i>' +
-          '<span class="font-display text-[10px] uppercase tracking-wider font-semibold">Loja</span>' +
+        '<a href="loja.html" data-page="loja" class="flex-1 flex flex-col items-center justify-center ' + (activeKey === 'loja' ? 'text-praia-yellow-400 active' : 'text-white/60') + ' relative" aria-label="Loja">' +
+          '<i data-lucide="shopping-bag"></i>' +
+          '<span class="font-display uppercase tracking-wider font-semibold">Loja</span>' +
           lojaBadge +
         '</a>' +
-        '<button type="button" id="bottom-nav-more-btn" data-page="mais" class="flex-1 flex flex-col items-center justify-center gap-0.5 text-white/60" aria-label="Mais opções" aria-haspopup="dialog">' +
-          '<i data-lucide="menu" class="w-5 h-5"></i>' +
-          '<span class="font-display text-[10px] uppercase tracking-wider font-semibold">Mais</span>' +
+        '<button type="button" id="bottom-nav-more-btn" data-page="mais" class="flex-1 flex flex-col items-center justify-center text-white/60" aria-label="Mais opções" aria-haspopup="dialog">' +
+          '<i data-lucide="menu"></i>' +
+          '<span class="font-display uppercase tracking-wider font-semibold">Mais</span>' +
         '</button>' +
       '</div>'
+    );
+  }
+
+  // Marker para o item de conta — atualizado dinamicamente conforme auth state
+  function accountLinkHTML(isLoggedIn) {
+    if (isLoggedIn) {
+      return (
+        '<a href="perfil.html" data-account-item="1">' +
+          '<i data-lucide="user"></i>' +
+          '<span>A minha conta</span>' +
+        '</a>'
+      );
+    }
+    return (
+      '<a href="auth.html" data-account-item="1">' +
+        '<i data-lucide="log-in"></i>' +
+        '<span>Iniciar sessão</span>' +
+      '</a>'
     );
   }
 
@@ -1040,21 +1058,35 @@ function slugify(text) {
       { href: 'artigos.html', icon: 'newspaper', label: 'Novidades' },
       { href: 'carrinho.html', icon: 'shopping-cart', label: 'Carrinho' },
       { href: 'contactos.html', icon: 'mail', label: 'Contactos' },
-      { href: 'perfil.html', icon: 'user', label: 'A minha conta' },
     ];
     var items = links.map(function (l) {
       return (
         '<a href="' + l.href + '">' +
-          '<i data-lucide="' + l.icon + '" class="w-5 h-5"></i>' +
+          '<i data-lucide="' + l.icon + '"></i>' +
           '<span>' + l.label + '</span>' +
         '</a>'
       );
     }).join('');
+    // Item de conta por defeito assume deslogado — será atualizado quando
+    // a sessão for resolvida (via updateMoreSheetAuth).
     return (
       '<div class="more-sheet-handle"></div>' +
       '<p class="font-display text-[11px] uppercase tracking-wider text-white/50 px-2 mb-2">Mais opções</p>' +
-      '<div class="grid gap-1">' + items + '</div>'
+      '<div class="grid gap-1" id="more-sheet-items">' + items + accountLinkHTML(false) + '</div>'
     );
+  }
+
+  // Atualiza o último item do sheet consoante estado de autenticação
+  function updateMoreSheetAuth() {
+    var container = document.getElementById('more-sheet-items');
+    if (!container) return;
+    var check = typeof window.authGetUser === 'function' ? window.authGetUser() : null;
+    Promise.resolve(check).then(function (user) {
+      var existing = container.querySelector('[data-account-item]');
+      if (existing) existing.remove();
+      container.insertAdjacentHTML('beforeend', accountLinkHTML(!!user));
+      if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+    }).catch(function () { /* silent */ });
   }
 
   function renderSiteBottomNav() {
@@ -1087,8 +1119,15 @@ function slugify(text) {
     document.body.appendChild(sheet);
 
     function openSheet() {
+      // Atualizar item de conta antes de mostrar (pode ter mudado entretanto)
+      updateMoreSheetAuth();
+      // Retirar foco de qualquer elemento para evitar :focus persistente em iOS
+      if (document.activeElement && typeof document.activeElement.blur === 'function') {
+        document.activeElement.blur();
+      }
       backdrop.classList.add('open');
       sheet.classList.add('open');
+      sheet.scrollTop = 0;
       document.body.style.overflow = 'hidden';
     }
     function closeSheet() {
@@ -1099,9 +1138,17 @@ function slugify(text) {
     var moreBtn = document.getElementById('bottom-nav-more-btn');
     if (moreBtn) moreBtn.addEventListener('click', openSheet);
     backdrop.addEventListener('click', closeSheet);
+    // Fechar ao clicar num link do sheet (para o link navegar sem deixar o sheet aberto)
+    sheet.addEventListener('click', function (e) {
+      var a = e.target.closest('a[href]');
+      if (a) closeSheet();
+    });
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && sheet.classList.contains('open')) closeSheet();
     });
+
+    // Resolver estado de auth inicial assim que auth.js carregar
+    setTimeout(updateMoreSheetAuth, 400);
 
     if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
   }
