@@ -293,16 +293,35 @@ body {
   padding-right: env(safe-area-inset-right);
   height: 72px;
 }
-/* Só aplicar padding-bottom para o home-indicator em modo PWA instalado.
-   No browser (com a toolbar do Safari por cima), o padding extra aparece
-   como faixa de teal "vazia" acima da toolbar. */
+/* Em PWA instalado: a nav ocupa toda a zona do fundo (content + safe-area)
+   e o conteúdo é alinhado ao fundo com pequena respiração para o
+   home-indicator. Isto elimina a sensação de grande espaço teal vazio
+   sobre o home-indicator — ícones e labels ficam junto ao fundo visível. */
 @media (display-mode: standalone) {
   .bottom-nav {
-    padding-bottom: env(safe-area-inset-bottom);
+    /* Sem padding-bottom — o safe-area é absorvido no inner */
+    padding-bottom: 0;
   }
-  /* Em PWA instalado, a nav pode ser ligeiramente mais alta (sensação nativa) */
   .bottom-nav .bottom-nav-inner {
-    height: 76px;
+    /* Inner cobre toda a zona: content (76px) + safe-area do home-indicator */
+    height: calc(76px + env(safe-area-inset-bottom));
+  }
+  /* Ícones e labels maiores (sensação nativa) */
+  .bottom-nav [data-lucide],
+  .bottom-nav svg {
+    width: 30px !important;
+    height: 30px !important;
+  }
+  .bottom-nav span {
+    font-size: 12.5px !important;
+  }
+  /* Conteúdo alinhado ao fundo com uma pequena margem do home-indicator */
+  .bottom-nav a,
+  .bottom-nav button {
+    justify-content: flex-end !important;
+    gap: 6px !important;
+    padding-top: 10px !important;
+    padding-bottom: max(calc(env(safe-area-inset-bottom) - 22px), 6px) !important;
   }
 }
 .bottom-nav a,
@@ -339,7 +358,8 @@ body {
     bottom: 72px !important;
   }
 }
-/* Em PWA instalado, reservar também espaço do safe-area (home indicator) */
+/* Em PWA instalado, reservar espaço correspondente à altura total da nav
+   (76px de content + safe-area do home-indicator) */
 @media (max-width: 1023px) and (display-mode: standalone) {
   body.has-bottom-nav {
     padding-bottom: calc(76px + env(safe-area-inset-bottom));
@@ -524,8 +544,9 @@ html {
     border-top: 1px solid rgba(255, 255, 255, 0.08);
   }
   /* Redes sociais: transformar em chips circulares só de ícone */
-  #mobile-menu > div:last-child > .flex.gap-2 > a {
+  #mobile-menu > div:last-child > .flex > a {
     flex: 0 0 auto !important;
+    gap: 0 !important;
     width: 48px;
     height: 48px;
     padding: 0 !important;
@@ -533,13 +554,27 @@ html {
     font-size: 0;
     line-height: 0;
   }
-  #mobile-menu > div:last-child > .flex.gap-2 > a svg {
+  #mobile-menu > div:last-child > .flex > a svg {
     width: 20px !important;
     height: 20px !important;
   }
   /* Botões CTA inferiores mais altos */
   #mobile-menu > div:last-child > a[href],
   #mobile-menu > div:last-child > button {
+    min-height: 48px;
+  }
+
+  /* Auth slot movido para o topo do menu (fora da secção inferior) */
+  #mobile-menu > #mobile-auth-slot {
+    padding: 14px 20px 16px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    flex-shrink: 0;
+  }
+  #mobile-menu > #mobile-auth-slot > a,
+  #mobile-menu > #mobile-auth-slot > button {
+    margin-top: 0 !important;
+  }
+  #mobile-menu > #mobile-auth-slot > a {
     min-height: 48px;
   }
 }

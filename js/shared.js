@@ -1202,6 +1202,15 @@ function slugify(text) {
       document.body.style.overflow = '';
     }
 
+    // Mover #mobile-auth-slot para o topo do menu (afasta-o dos CTAs
+    // "Onde Encontrar"/"Carrinho" com os quais se confundia)
+    var authSlot = document.getElementById('mobile-auth-slot');
+    var header = menu.firstElementChild; // div com logo + X
+    if (authSlot && header && authSlot.parentElement !== menu) {
+      // Inserir como filho direto do menu, logo após o header
+      header.insertAdjacentElement('afterend', authSlot);
+    }
+
     // Fechar ao clicar em qualquer link do menu (evita o menu ficar aberto em history.back)
     menu.querySelectorAll('a[href]').forEach(function (a) {
       a.addEventListener('click', function () { close(); });
