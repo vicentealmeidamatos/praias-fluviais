@@ -1217,35 +1217,35 @@ function boostHeroBubbles() {
   existing.forEach(b => { if (b.parentElement) parents.add(b.parentElement); });
 
   const rand = (min, max) => Math.random() * (max - min) + min;
-  const SIZES = [
-    { cls: 'w-1 h-1', px: 6 },
-    { cls: 'w-1.5 h-1.5', px: 9 },
-    { cls: 'w-2 h-2', px: 12 },
-    { cls: 'w-2.5 h-2.5', px: 14 },
-    { cls: 'w-3 h-3', px: 16 }
+  // Distribuição enviesada para tamanhos pequenos (evitar bolinhas gigantes)
+  const SIZE_POOL = [
+    'w-1 h-1', 'w-1 h-1', 'w-1 h-1', 'w-1 h-1',
+    'w-1.5 h-1.5', 'w-1.5 h-1.5', 'w-1.5 h-1.5',
+    'w-2 h-2', 'w-2 h-2',
+    'w-2.5 h-2.5'
   ];
 
   parents.forEach(parent => {
     const baseCount = parent.querySelectorAll('.bubble, .bubble-sideways').length;
-    // Acrescentar ~110% da densidade original (dobra o número total)
-    const extra = Math.max(20, Math.round(baseCount * 1.1));
+    // Acrescentar ~12% da densidade original — só um bocadinho mais que antes
+    const extra = Math.max(5, Math.round(baseCount * 0.12));
 
     const frag = document.createDocumentFragment();
     for (let i = 0; i < extra; i++) {
       const sideways = Math.random() < 0.25;
-      const size = SIZES[Math.floor(Math.random() * SIZES.length)];
+      const sizeCls = SIZE_POOL[Math.floor(Math.random() * SIZE_POOL.length)];
       const b = document.createElement('div');
-      b.className = (sideways ? 'bubble-sideways ' : 'bubble ') + size.cls;
+      b.className = (sideways ? 'bubble-sideways ' : 'bubble ') + sizeCls;
       b.style.left = rand(0, 100).toFixed(2) + '%';
       b.style.top = rand(0, 100).toFixed(2) + '%';
       // Delay negativo distribui o início dentro da primeira volta → sem "esperar"
-      b.style.setProperty('--delay', '-' + rand(0, 12).toFixed(2) + 's');
+      b.style.setProperty('--delay', '-' + rand(0, 20).toFixed(2) + 's');
       if (sideways) {
-        b.style.setProperty('--dur', rand(10, 16).toFixed(1) + 's');
+        b.style.setProperty('--dur', rand(18, 26).toFixed(1) + 's');
         b.style.setProperty('--dx', (rand(-60, 60)).toFixed(1) + 'px');
         b.style.setProperty('--dy', (rand(-35, 15)).toFixed(1) + 'px');
       } else {
-        b.style.setProperty('--dur', rand(9, 15).toFixed(1) + 's');
+        b.style.setProperty('--dur', rand(16, 24).toFixed(1) + 's');
         b.style.setProperty('--drift', (rand(-16, 16)).toFixed(1) + 'px');
       }
       frag.appendChild(b);
@@ -1253,8 +1253,15 @@ function boostHeroBubbles() {
     parent.appendChild(frag);
   });
 
-  // Redistribui também os delays dos originais para evitar "comboios" iniciais
+  // Abranda as bolinhas originais (multiplica o seu --dur inline por ~2.2x)
+  // e redistribui delays para evitar "comboios" sincronizados.
   existing.forEach(b => {
-    b.style.setProperty('--delay', '-' + (Math.random() * 12).toFixed(2) + 's');
+    const inlineDur = b.style.getPropertyValue('--dur').trim();
+    const m = inlineDur.match(/^([\d.]+)s$/);
+    if (m) {
+      const slower = (parseFloat(m[1]) * 2.2).toFixed(1) + 's';
+      b.style.setProperty('--dur', slower);
+    }
+    b.style.setProperty('--delay', '-' + (Math.random() * 20).toFixed(2) + 's');
   });
 }
