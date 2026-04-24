@@ -955,7 +955,7 @@ function slugify(text) {
     var head = document.head;
     if (!head) return;
 
-    var v = '?v=2';
+    var v = '?v=3';
     var tags = [
       { tag: 'link', attrs: { rel: 'manifest', href: '/manifest.json' } },
       { tag: 'meta', attrs: { name: 'theme-color', content: '#003A40' } },
