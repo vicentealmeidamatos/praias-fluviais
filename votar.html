@@ -272,6 +272,11 @@
     <!-- Filters + Grid -->
     <section id="voting-section" class="py-12 md:py-16">
       <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-10 reveal-on-scroll">
+          <span class="font-display text-xs uppercase tracking-[0.15em] text-praia-teal-500 font-semibold block mb-2">Campanha 2026</span>
+          <h2 class="heading-underline-yellow centered font-display text-2xl md:text-3xl font-bold text-praia-teal-800 tracking-tight inline-block">Escolha a sua praia favorita</h2>
+          <p class="text-praia-sand-600 mt-4 text-sm max-w-xl mx-auto">Procure a sua praia, filtre por distrito e vote. Pode votar uma vez por praia.</p>
+        </div>
         <!-- Filters bar -->
         <div class="flex flex-col sm:flex-row gap-3 mb-8 sticky top-16 md:top-[70px] z-50 bg-praia-sand-50 py-4 -mx-6 px-6 border-b border-praia-sand-200">
           <div class="relative flex-1">
@@ -282,8 +287,8 @@
             <option value="">Todos os distritos</option>
           </select>
           <select id="vote-sort" class="px-4 py-2.5 rounded-xl bg-white border border-praia-sand-200 text-sm focus:outline-none focus:border-praia-teal-400 min-w-[180px]">
+            <option value="az-concelho" selected>A-Z (Nome do Concelho)</option>
             <option value="az-nome">A-Z (Nome da Praia)</option>
-            <option value="az-concelho">A-Z (Nome do Concelho)</option>
             <option value="distance" hidden>Perto de Mim</option>
           </select>
           <button id="vote-near-me" class="btn-primary inline-flex items-center justify-center gap-2 bg-praia-teal-800 text-praia-yellow-400 font-display text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-xl whitespace-nowrap">
@@ -316,11 +321,7 @@
       <div class="relative z-10 max-w-6xl mx-auto px-6">
 
         <div class="text-center mb-12">
-          <div class="inline-flex items-center gap-2 bg-praia-yellow-400/10 border border-praia-yellow-400/20 rounded-full px-4 py-1.5 mb-5">
-            <i data-lucide="award" class="w-4 h-4 text-praia-yellow-400"></i>
-            <span class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-semibold" data-content="votar.hallOfFameLabel">Hall da Fama</span>
-          </div>
-          <h2 class="font-display text-3xl md:text-4xl font-bold text-white" data-content="votar.hallOfFameTitle">Vencedores dos Anos Anteriores</h2>
+          <h2 class="heading-underline-yellow centered font-display text-3xl md:text-4xl font-bold text-white inline-block" data-content="votar.hallOfFameTitle">Vencedores dos Anos Anteriores</h2>
         </div>
 
         <!-- Year selector tabs — gerado dinamicamente de settings.json -->

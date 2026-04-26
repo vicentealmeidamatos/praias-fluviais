@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const preselect = new URLSearchParams(window.location.search).get('preselect');
 
   let currentBeaches = [...beaches];
-  let sortMode = 'az-nome';
+  let sortMode = 'az-concelho';
 
   function applySort(list) {
     if (sortMode === 'az-nome')     return [...list].sort((a, b) => a.name.localeCompare(b.name, 'pt'));
@@ -65,6 +65,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const sorted = applySort(list);
     if (sorted.length === 0) {
       grid.innerHTML = '<p class="col-span-full text-center text-praia-sand-500 py-10">Nenhuma praia encontrada.</p>';
+      if (countEl) countEl.textContent = '0 praias';
       return;
     }
 

@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Rede de Praias Fluviais | Praias Fluviais</title>
   <meta name="description" content="Explore a rede completa de praias fluviais e zonas balneares de Portugal. Mapa interativo com filtros por distrito, serviços e tipo de praia.">
   <meta property="og:title" content="Rede de Praias Fluviais | Praias Fluviais">
@@ -104,6 +104,28 @@
     }
 
     .sidebar-header-stat { font-family: 'Poppins', sans-serif; }
+
+    /* ── Mobile-only map controls ─────────────────────────────────────── */
+    @media (max-width: 1023px) {
+      /* Esconder zoom +/- do Leaflet em mobile (já temos pinch + filtros) */
+      .leaflet-control-zoom,
+      .leaflet-control-attribution { display: none !important; }
+      /* FAB de filtros: posicionado acima da bottom-nav respeitando safe-area */
+      #filter-open-btn {
+        bottom: calc(80px + env(safe-area-inset-bottom)) !important;
+        z-index: 1001 !important;
+      }
+    }
+    @media (max-width: 1023px) and (display-mode: standalone) {
+      #filter-open-btn {
+        bottom: calc(92px + env(safe-area-inset-bottom)) !important;
+      }
+    }
+
+    /* ── Filter drawer header respeita o notch (safe-area-top) ───────── */
+    #filter-drawer > .bg-praia-teal-800 {
+      padding-top: calc(20px + env(safe-area-inset-top));
+    }
   </style>
 </head>
 
@@ -340,6 +362,11 @@
         </div>
       </div>
       <div class="p-4 border-b border-praia-sand-100">
+        <button id="btn-near-me-mobile" class="w-full flex items-center justify-center gap-2 bg-praia-teal-800 text-praia-yellow-400 font-display text-xs font-bold uppercase tracking-wider px-4 py-2.5 rounded-xl hover:opacity-90 active:scale-[0.98] transition-all duration-200">
+          <i data-lucide="navigation" class="w-4 h-4"></i> Perto de Mim
+        </button>
+      </div>
+      <div class="p-4 border-b border-praia-sand-100">
         <label class="font-display text-[10px] font-semibold uppercase tracking-[0.12em] text-praia-teal-700 block mb-2">Distrito</label>
         <select id="filter-district-mobile" class="w-full px-3 py-2.5 rounded-xl bg-praia-sand-50 border border-praia-sand-200 text-sm focus:outline-none focus:border-praia-teal-400 font-body">
           <option value="">Todos os distritos</option>
@@ -363,9 +390,28 @@
           <option value="Viseu">Viseu</option>
         </select>
       </div>
-      <div class="p-4">
+      <div class="p-4 border-b border-praia-sand-100">
         <label class="font-display text-[10px] font-semibold uppercase tracking-[0.12em] text-praia-teal-700 block mb-2.5">Serviços</label>
         <div id="services-grid-mobile" class="grid grid-cols-2 gap-1.5"></div>
+      </div>
+      <div class="p-4 bg-praia-sand-50" style="padding-bottom: calc(20px + env(safe-area-inset-bottom));">
+        <p class="font-display text-[10px] font-semibold uppercase tracking-[0.12em] text-praia-teal-700 mb-2.5">Legenda</p>
+        <div class="space-y-2">
+          <div class="flex items-center gap-2.5">
+            <div class="w-6 h-6 rounded-full bg-praia-yellow-400 border-2 border-praia-teal-800 flex-shrink-0 flex items-center justify-center font-display font-bold text-[9px] text-praia-teal-800">1</div>
+            <span class="text-xs text-praia-sand-600">Praia Fluvial (classificada pela APA)</span>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <div class="w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center font-display font-bold text-[9px] text-white" style="background:#0288D1;border:2px solid #fff;">2</div>
+            <span class="text-xs text-praia-sand-600">Zona Balnear</span>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <div class="w-6 h-6 rounded-full bg-praia-teal-800 border-2 border-praia-yellow-400 flex-shrink-0 flex items-center justify-center">
+              <span class="font-display font-bold text-praia-yellow-400 text-xs leading-none">+</span>
+            </div>
+            <span class="text-xs text-praia-sand-600">Grupo de praias (toque para expandir)</span>
+          </div>
+        </div>
       </div>
     </div>
   </main>
@@ -604,7 +650,12 @@
     const sortedDistricts = Object.keys(_districtGroups).sort((a, b) => a.localeCompare(b, 'pt'));
     let html = '';
     sortedDistricts.forEach(district => {
-      const items = _districtGroups[district].filter(b => visibleIds.has(b.id));
+      const items = _districtGroups[district]
+        .filter(b => visibleIds.has(b.id))
+        .sort((a, b) => {
+          const muni = (a.municipality || '').localeCompare(b.municipality || '', 'pt');
+          return muni !== 0 ? muni : (a.name || '').localeCompare(b.name || '', 'pt');
+        });
       if (!items.length) return;
       html += `<div class="district-header">${district} <span style="font-weight:400;color:#C4B898;">(${items.length})</span></div>`;
       items.forEach(b => {
@@ -734,27 +785,35 @@
       _districtGroups[d].push({ ...b, _num: i + 1 });
     });
 
-    // ─── Near Me ───
-    const nearMeBtn = document.getElementById('btn-near-me');
-    nearMeBtn?.addEventListener('click', async () => {
-      nearMeBtn.disabled = true;
-      nearMeBtn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> A localizar...';
-      if (typeof lucide !== 'undefined') lucide.createIcons();
-      try {
-        const pos = await getUserLocation();
-        map.flyTo([pos.lat, pos.lng], 10, { duration: 1.5 });
-        const sorted = sortByDistance(beaches, pos.lat, pos.lng);
-        if (sorted.length > 0) {
-          const nearestMarker = _allMarkers.find(m => m._beachData.id === sorted[0].id);
-          if (nearestMarker) nearestMarker.openPopup();
-        }
-      } catch (err) {
-        alert(err.message);
-      } finally {
-        nearMeBtn.disabled = false;
-        nearMeBtn.innerHTML = '<i data-lucide="navigation" class="w-4 h-4"></i> Perto de Mim';
+    // ─── Near Me (desktop + mobile) ───
+    const nearMeButtons = [document.getElementById('btn-near-me'), document.getElementById('btn-near-me-mobile')].filter(Boolean);
+    nearMeButtons.forEach(btn => {
+      btn.addEventListener('click', async () => {
+        nearMeButtons.forEach(b => {
+          b.disabled = true;
+          b.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> A localizar...';
+        });
         if (typeof lucide !== 'undefined') lucide.createIcons();
-      }
+        try {
+          const pos = await getUserLocation();
+          // Fechar drawer mobile (se aberto) para o utilizador ver o mapa
+          document.getElementById('filter-drawer')?.classList.replace('translate-x-0', 'translate-x-full');
+          map.flyTo([pos.lat, pos.lng], 10, { duration: 1.5 });
+          const sorted = sortByDistance(beaches, pos.lat, pos.lng);
+          if (sorted.length > 0) {
+            const nearestMarker = _allMarkers.find(m => m._beachData.id === sorted[0].id);
+            if (nearestMarker) nearestMarker.openPopup();
+          }
+        } catch (err) {
+          alert(err.message);
+        } finally {
+          nearMeButtons.forEach(b => {
+            b.disabled = false;
+            b.innerHTML = '<i data-lucide="navigation" class="w-4 h-4"></i> Perto de Mim';
+          });
+          if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+      });
     });
 
     // ─── Initial render ───

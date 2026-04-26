@@ -926,15 +926,17 @@ function slugify(text) {
 
   // Mapa: página → item ativo na bottom-nav
   var ACTIVE_MAP = {
-    'index.html': 'home',
-    '': 'home',
-    '/': 'home',
+    'index.html': '',
+    '': '',
+    '/': '',
     'rede.html': 'rede',
     'passaporte.html': 'passaporte',
     'loja.html': 'loja',
     'carrinho.html': 'loja',
     'produto.html': 'loja',
     'confirmacao-pedido.html': 'loja',
+    'perfil.html': 'perfil',
+    'auth.html': 'perfil',
   };
 
   // Mapa: páginas de detalhe → destino do back-button
@@ -1013,9 +1015,17 @@ function slugify(text) {
       ? '<span id="bottom-nav-cart-count" class="absolute top-1 right-4 bg-praia-yellow-400 text-praia-teal-800 text-[10px] font-bold rounded-full min-w-[16px] h-4 px-1 flex items-center justify-center">' + (cartCount > 99 ? '99+' : cartCount) + '</span>'
       : '';
 
+    // Item de perfil (placeholder — auth.js preenche o avatar quando sessão estiver resolvida)
+    var perfilActive = activeKey === 'perfil';
+    var perfilColor = perfilActive ? 'text-praia-yellow-400 active' : 'text-white/60';
+    var perfilItem =
+      '<a href="auth.html" data-page="perfil" id="bottom-nav-perfil" class="flex-1 flex flex-col items-center justify-center ' + perfilColor + '" aria-label="Perfil">' +
+        '<span id="bottom-nav-perfil-icon" class="flex items-center justify-center"><i data-lucide="user"></i></span>' +
+        '<span class="font-display uppercase tracking-wider font-semibold">Perfil</span>' +
+      '</a>';
+
     return (
       '<div class="bottom-nav-inner flex items-stretch relative">' +
-        item('home', 'index.html', 'home', 'Início') +
         item('rede', 'rede.html', 'map-pinned', 'Rede') +
         item('passaporte', 'passaporte.html', 'stamp', 'Passaporte') +
         '<a href="loja.html" data-page="loja" class="flex-1 flex flex-col items-center justify-center ' + (activeKey === 'loja' ? 'text-praia-yellow-400 active' : 'text-white/60') + ' relative" aria-label="Loja">' +
@@ -1027,6 +1037,7 @@ function slugify(text) {
           '<i data-lucide="menu"></i>' +
           '<span class="font-display uppercase tracking-wider font-semibold">Mais</span>' +
         '</button>' +
+        perfilItem +
       '</div>'
     );
   }
@@ -1051,6 +1062,7 @@ function slugify(text) {
 
   function moreSheetHTML() {
     var links = [
+      { href: 'index.html', icon: 'home', label: 'Início' },
       { href: 'votar.html', icon: 'vote', label: 'Votar Praia do Ano' },
       { href: 'onde-carimbar-passaporte.html', icon: 'stamp', label: 'Onde Carimbar' },
       { href: 'onde-encontrar.html', icon: 'book-open', label: 'Onde Encontrar o Guia' },
@@ -1067,27 +1079,16 @@ function slugify(text) {
         '</a>'
       );
     }).join('');
-    // Item de conta por defeito assume deslogado — será atualizado quando
-    // a sessão for resolvida (via updateMoreSheetAuth).
+    // Conta dedicada agora vive na bolinha de perfil da bottom-nav. Não duplicamos aqui.
     return (
       '<div class="more-sheet-handle"></div>' +
       '<p class="font-display text-[11px] uppercase tracking-wider text-white/50 px-2 mb-2">Mais opções</p>' +
-      '<div class="grid gap-1" id="more-sheet-items">' + items + accountLinkHTML(false) + '</div>'
+      '<div class="grid gap-1" id="more-sheet-items">' + items + '</div>'
     );
   }
 
-  // Atualiza o último item do sheet consoante estado de autenticação
-  function updateMoreSheetAuth() {
-    var container = document.getElementById('more-sheet-items');
-    if (!container) return;
-    var check = typeof window.authGetUser === 'function' ? window.authGetUser() : null;
-    Promise.resolve(check).then(function (user) {
-      var existing = container.querySelector('[data-account-item]');
-      if (existing) existing.remove();
-      container.insertAdjacentHTML('beforeend', accountLinkHTML(!!user));
-      if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
-    }).catch(function () { /* silent */ });
-  }
+  // No-op: a conta vive agora na bolinha de perfil; este hook é mantido para retrocompatibilidade
+  function updateMoreSheetAuth() { /* deprecated */ }
 
   function renderSiteBottomNav() {
     var page = currentPage();
@@ -1147,8 +1148,15 @@ function slugify(text) {
       if (e.key === 'Escape' && sheet.classList.contains('open')) closeSheet();
     });
 
-    // Resolver estado de auth inicial assim que auth.js carregar
-    setTimeout(updateMoreSheetAuth, 400);
+    // Bolinha de perfil — assim que AuthUtils estiver disponível
+    function pollProfileInit(retries) {
+      if (window.AuthUtils && typeof window.AuthUtils.initBottomNavProfile === 'function') {
+        window.AuthUtils.initBottomNavProfile();
+      } else if (retries > 0) {
+        setTimeout(function () { pollProfileInit(retries - 1); }, 200);
+      }
+    }
+    pollProfileInit(20);
 
     if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
   }
@@ -1185,13 +1193,30 @@ function slugify(text) {
   }
 
   // ─── 4. Robustez do menu lateral ──────────────────────────────────────────
-  // (além do listener existente) fechar com Esc, fechar ao clicar num link,
-  // e fazer o X funcionar mesmo que tenha o mesmo ID que o hamburger (bug legacy)
+  // Garante: abrir/fechar fiável (open binding global em vez de cada página
+  // ligar à mão), tecla Esc fecha, click num link fecha, e substituição do
+  // logo no header do drawer por um botão "Início" (já que o logo aparece
+  // no header principal, evitamos duplicação).
   function hardenSideMenu() {
     var menu = document.getElementById('mobile-menu');
     if (!menu) return;
     var overlay = document.getElementById('menu-overlay');
 
+    function open() {
+      // Fechar overlay/sheet de Mais se estiver aberto
+      var moreSheet = document.querySelector('.more-sheet.open');
+      if (moreSheet) moreSheet.classList.remove('open');
+      var moreBackdrop = document.querySelector('.more-sheet-backdrop.open');
+      if (moreBackdrop) moreBackdrop.classList.remove('open');
+
+      menu.classList.remove('translate-x-full');
+      menu.classList.add('translate-x-0');
+      if (overlay) {
+        overlay.classList.remove('opacity-0', 'pointer-events-none');
+        overlay.classList.add('opacity-100');
+      }
+      document.body.style.overflow = 'hidden';
+    }
     function close() {
       menu.classList.remove('translate-x-0');
       menu.classList.add('translate-x-full');
@@ -1202,29 +1227,54 @@ function slugify(text) {
       document.body.style.overflow = '';
     }
 
-    // Mover #mobile-auth-slot para o topo do menu (afasta-o dos CTAs
-    // "Onde Encontrar"/"Carrinho" com os quais se confundia)
-    var authSlot = document.getElementById('mobile-auth-slot');
-    var header = menu.firstElementChild; // div com logo + X
-    if (authSlot && header && authSlot.parentElement !== menu) {
-      // Inserir como filho direto do menu, logo após o header
-      header.insertAdjacentElement('afterend', authSlot);
+    // Substituir logo do drawer por botão "Início" + manter close X.
+    // O selector é defensivo: encontra o primeiro div header do drawer.
+    var drawerHeader = menu.firstElementChild;
+    if (drawerHeader && !drawerHeader.dataset.replaced) {
+      drawerHeader.dataset.replaced = '1';
+      drawerHeader.className = 'flex items-center justify-between px-5 py-4 border-b border-white/10 flex-shrink-0';
+      drawerHeader.innerHTML =
+        '<a href="index.html" class="flex items-center gap-2 text-white/80 hover:text-white transition-colors">' +
+          '<span class="w-9 h-9 rounded-full bg-praia-yellow-400/15 flex items-center justify-center"><i data-lucide="home" class="w-4 h-4 text-praia-yellow-400"></i></span>' +
+          '<span class="font-display text-xs font-bold uppercase tracking-wider">Início</span>' +
+        '</a>' +
+        '<button type="button" class="text-white/70 hover:text-white p-1" aria-label="Fechar menu"><i data-lucide="x" class="w-6 h-6"></i></button>';
     }
+
+    // Mover #mobile-auth-slot para imediatamente após o header (topo do menu)
+    var authSlot = document.getElementById('mobile-auth-slot');
+    if (authSlot && drawerHeader && authSlot.parentElement !== menu) {
+      drawerHeader.insertAdjacentElement('afterend', authSlot);
+    }
+
+    // Bind global do botão hamburger (selector robusto: aria-label + lg:hidden no header)
+    document.querySelectorAll('header button[aria-label="Abrir menu"], header button[aria-label="Menu"]').forEach(function (btn) {
+      if (btn.dataset.bound) return;
+      btn.dataset.bound = '1';
+      btn.addEventListener('click', function (e) { e.preventDefault(); open(); });
+    });
 
     // Fechar ao clicar em qualquer link do menu (evita o menu ficar aberto em history.back)
     menu.querySelectorAll('a[href]').forEach(function (a) {
       a.addEventListener('click', function () { close(); });
     });
 
-    // Se existir um botão dentro do menu (o X de fechar), ligá-lo
-    // Atualmente o X tem id="nav-hamburger" duplicado (inválido); usar query mais específica.
-    var closeBtn = menu.querySelector('button[aria-label="Fechar menu"]');
-    if (closeBtn) closeBtn.addEventListener('click', close);
+    // Bind do X de fechar dentro do drawer (cobre legacy id="nav-hamburger" duplicado)
+    menu.querySelectorAll('button[aria-label="Fechar menu"]').forEach(function (btn) {
+      btn.addEventListener('click', close);
+    });
+
+    // Bind do overlay (clique fora = fechar)
+    if (overlay) {
+      overlay.addEventListener('click', close);
+    }
 
     // Esc fecha
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && menu.classList.contains('translate-x-0')) close();
     });
+
+    if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
   }
 
   // ─── 5. Atualizar badge do carrinho na bottom-nav ─────────────────────────

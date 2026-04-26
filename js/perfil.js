@@ -123,7 +123,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const stampedIds = stamps.map(s => s.beach_id);
     const stampMap   = Object.fromEntries(stamps.map(s => [s.beach_id, s.stamped_at]));
-    const stamped    = beaches.filter(b => stampedIds.includes(b.id));
+    const stamped    = beaches
+      .filter(b => stampedIds.includes(b.id))
+      .sort((a, b) => {
+        const muni = (a.municipality || '').localeCompare(b.municipality || '', 'pt');
+        return muni !== 0 ? muni : (a.name || '').localeCompare(b.name || '', 'pt');
+      });
 
     if (stamped.length === 0) {
       container.innerHTML = `

@@ -144,6 +144,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       <div class="absolute inset-0 bg-gradient-to-t from-praia-teal-800/80 via-transparent to-transparent pointer-events-none z-10"></div>
       <div class="absolute bottom-0 left-0 right-0 p-6 md:p-10 z-20">
         <div class="flex flex-wrap gap-2 mb-3">${badges.join('')}</div>
+        <span class="kicker-yellow block mb-2">${beach.type === 'zona_balnear' ? 'Zona Balnear' : 'Praia Fluvial'}</span>
         <h1 data-content-bind="beaches:${beachIdx}.name" class="font-display text-2xl md:text-4xl lg:text-5xl font-bold text-white tracking-tightest mb-2">${beach.name}</h1>
         <p class="text-white/60 font-body text-sm md:text-base"><span data-content-bind="beaches:${beachIdx}.municipality">${beach.municipality}</span>${beach.freguesia ? `, <span data-content-bind="beaches:${beachIdx}.freguesia">${beach.freguesia}</span>` : `, <span data-content-bind="beaches:${beachIdx}.district">${beach.district}</span>`} · <span data-content-bind="beaches:${beachIdx}.river">${beach.river}</span></p>
       </div>

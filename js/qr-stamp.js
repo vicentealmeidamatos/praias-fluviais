@@ -117,13 +117,11 @@
     if (reloadBtn) reloadBtn.addEventListener('click', () => location.reload());
   }
 
-  function buildStampDiscHTML(dateStr, wasAlready) {
-    const midLine = wasAlready ? 'REVISITA' : 'CARIMBADA';
+  function buildStampEmblemHTML(dateStr) {
     return `
-      <div class="stamp-disc" aria-hidden="true">
-        <span class="stamp-top">Passaporte</span>
-        <span class="stamp-mid">${midLine}</span>
-        <span class="stamp-bot">${esc(dateStr)}</span>
+      <div class="stamp-emblem-wrap" aria-hidden="true">
+        <img class="stamp-emblem" src="brand_assets/selo_passaporte.png" alt="">
+        <span class="stamp-date">${esc(dateStr)}</span>
       </div>`;
   }
 
@@ -133,13 +131,22 @@
     const pct = Math.max(3, Math.round((stampsTotal / Math.max(1, stampsAvailable)) * 100));
     const eyebrow = wasAlready ? 'VISITA REGISTADA' : 'PRAIA DESBLOQUEADA';
 
+    // CTA principal e mensagem variam consoante haja sessão. Sem sessão, o
+    // carimbo fica gravado só neste dispositivo até o utilizador entrar.
+    const primaryCta = isGuest
+      ? `<a class="btn btn-primary" href="auth.html?redirect=passaporte.html">Registe-se para guardar</a>`
+      : `<a class="btn btn-primary" href="passaporte.html">Ver o meu passaporte</a>`;
+    const secondaryCta = isGuest
+      ? `<a class="btn btn-ghost" href="rede.html">Explorar mais praias</a>`
+      : `<a class="btn btn-ghost" href="rede.html">Explorar mais praias</a>`;
+
     const el = root();
     el.innerHTML = `
       <div class="hero">
         ${photo ? `<div class="hero-photo" style="background-image:url('${esc(photo)}')"></div>` : ''}
         <div class="hero-overlay"></div>
         <div class="hero-grain"></div>
-        ${buildStampDiscHTML(formatDatePT(new Date()), wasAlready)}
+        ${buildStampEmblemHTML(formatDatePT(new Date()))}
         <div class="hero-eyebrow">${eyebrow}</div>
       </div>
       <div class="body-pad">
@@ -157,8 +164,8 @@
         </div>
 
         <div class="actions">
-          <a class="btn btn-primary" href="passaporte.html">Ver o meu passaporte</a>
-          <a class="btn btn-ghost" href="mapa.html">Explorar mais praias</a>
+          ${primaryCta}
+          ${secondaryCta}
         </div>
 
         ${isGuest ? `
@@ -389,9 +396,12 @@
       });
     }
 
-    // 8. Compute stamps AFTER (merge in the new one)
+    // 8. Compute stamps AFTER (merge in the new one). Filtramos IDs que já
+    // não existem no dataset atual (cruft de localStorage de testes antigos
+    // pode inflacionar o contador — ex.: 242/228 quando só 228 praias existem).
+    const validIds = new Set(beaches.map(b => b.id));
     const stampsAfter = [
-      ...stampsBefore.filter(s => s.beach_id !== beachId),
+      ...stampsBefore.filter(s => s.beach_id !== beachId && validIds.has(s.beach_id)),
       { beach_id: beachId, stamped_at: todayISO() },
     ];
 

@@ -69,12 +69,15 @@
     }
 
     .brand-bar {
-      padding: 20px 20px 0;
+      padding: calc(20px + env(safe-area-inset-top)) 20px 4px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
-    .brand-bar img { height: 34px; width: auto; opacity: 0.95; }
+    .brand-bar img { height: 64px; width: auto; opacity: 1; }
+    @media (max-width: 380px) {
+      .brand-bar img { height: 56px; }
+    }
 
     .card-wrap {
       flex: 1;
@@ -234,58 +237,49 @@
       pointer-events: none;
     }
 
-    /* The rubber-stamp disc */
-    .stamp-disc {
+    /* Emblema: imagem do selo do passaporte + data por baixo */
+    .stamp-emblem-wrap {
       position: absolute;
-      top: 22px; right: 22px;
-      width: 112px; height: 112px;
-      border-radius: 50%;
-      border: 3px solid #FFEB3B;
-      background: rgba(0,42,46,0.25);
-      backdrop-filter: blur(2px);
-      display: flex; align-items: center; justify-content: center;
-      color: #FFEB3B;
-      font-family: 'Poppins', sans-serif;
-      text-align: center;
-      line-height: 1.1;
-      letter-spacing: 0.04em;
-      transform: rotate(18deg) scale(1.8);
+      top: 16px; right: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      transform: rotate(0deg) scale(1.6);
       opacity: 0;
-      box-shadow: 0 0 0 3px rgba(255,235,59,0.12), 0 18px 40px -12px rgba(0,0,0,0.55);
-      animation: stampSlam 0.9s var(--spring) 0.45s forwards;
+      animation: stampSlam 0.9s var(--spring) 0.4s forwards;
+      transform-origin: 70% 30%;
+      filter: drop-shadow(0 18px 28px rgba(0,0,0,0.5));
+    }
+    .stamp-emblem {
+      width: 124px;
+      height: auto;
+      display: block;
+      transform: rotate(-8deg);
+    }
+    @media (max-width: 380px) {
+      .stamp-emblem { width: 102px; }
+    }
+    .stamp-date {
+      display: inline-block;
+      padding: 4px 10px;
+      background: rgba(0,42,46,0.7);
+      border: 1px solid rgba(255,235,59,0.35);
+      border-radius: 999px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 10.5px;
+      color: #FFEB3B;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      transform: rotate(-4deg);
+      backdrop-filter: blur(4px);
     }
     @keyframes stampSlam {
-      0%   { transform: rotate(24deg) scale(2.3); opacity: 0; }
-      55%  { transform: rotate(-14deg) scale(0.92); opacity: 1; }
-      80%  { transform: rotate(-6deg) scale(1.04); }
-      100% { transform: rotate(-9deg) scale(1); opacity: 1; }
-    }
-    .stamp-disc::before {
-      /* Inner textured ring */
-      content: '';
-      position: absolute;
-      inset: 8px;
-      border-radius: 50%;
-      border: 1.5px dashed rgba(255,235,59,0.55);
-    }
-    .stamp-disc .stamp-top {
-      position: absolute; top: 16px; left: 0; right: 0;
-      font-size: 9px; font-weight: 700;
-      letter-spacing: 0.26em;
-      text-transform: uppercase;
-    }
-    .stamp-disc .stamp-mid {
-      font-size: 22px;
-      font-weight: 800;
-      letter-spacing: 0;
-      line-height: 1;
-      text-transform: uppercase;
-    }
-    .stamp-disc .stamp-bot {
-      position: absolute; bottom: 16px; left: 0; right: 0;
-      font-size: 9px; font-weight: 700;
-      letter-spacing: 0.18em;
-      color: rgba(255,235,59,0.85);
+      0%   { transform: rotate(8deg) scale(2.1); opacity: 0; }
+      55%  { transform: rotate(-5deg) scale(0.95); opacity: 1; }
+      80%  { transform: rotate(-1deg) scale(1.04); }
+      100% { transform: rotate(0deg) scale(1); opacity: 1; }
     }
 
     /* Content below hero */

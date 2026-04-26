@@ -182,7 +182,7 @@
     <section id="related-section" class="hidden border-t border-praia-sand-200 bg-white">
       <div class="max-w-5xl mx-auto px-6 py-12 md:py-16">
         <span class="font-display text-xs uppercase tracking-[0.15em] text-praia-teal-500 font-semibold block mb-2 reveal-on-scroll">Leia Também</span>
-        <h2 class="font-display text-xl md:text-2xl font-bold text-praia-teal-800 tracking-tight mb-8 reveal-on-scroll" data-reveal-delay="100">Novidades Relacionadas</h2>
+        <h2 class="heading-underline-yellow font-display text-xl md:text-2xl font-bold text-praia-teal-800 tracking-tight mb-8 inline-block reveal-on-scroll" data-reveal-delay="100">Novidades Relacionadas</h2>
         <div id="related-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
       </div>
     </section>
@@ -325,7 +325,7 @@
             <span class="cat-badge cat-${article.category}">${categoryLabels[article.category] || article.category}</span>
             <span class="text-sm text-praia-sand-400">${formatDate(article.date)}</span>
           </div>
-          <h1 data-content-bind="articles:${articleIdx}.title" class="font-display text-2xl md:text-3xl lg:text-4xl font-bold text-praia-teal-800 tracking-tight leading-tight mb-8">
+          <h1 data-content-bind="articles:${articleIdx}.title" class="heading-underline-yellow font-display text-2xl md:text-3xl lg:text-4xl font-bold text-praia-teal-800 tracking-tight leading-tight mb-8 inline-block">
             ${article.title}
           </h1>
           <div data-content-bind="articles:${articleIdx}.content" class="article-content font-body text-base">

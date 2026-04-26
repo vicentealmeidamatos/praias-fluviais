@@ -77,7 +77,7 @@ function renderEmptyCart(notLoggedIn = false) {
         </div>
         <h2 style="font-family:'Poppins',sans-serif;font-weight:700;font-size:1.5rem;color:#003A40;margin-bottom:0.75rem;">Inicie sessão para ver o seu carrinho</h2>
         <p style="color:#a89880;font-size:0.95rem;margin-bottom:0.5rem;line-height:1.6;">O carrinho fica guardado na sua conta.</p>
-        <p style="color:#bfae9a;font-size:0.85rem;margin-bottom:2rem;line-height:1.6;">Para comprar sem conta, usa o botão <strong style="color:#003A40;">Comprar Já</strong> em cada produto na loja.</p>
+        <p style="color:#bfae9a;font-size:0.85rem;margin-bottom:2rem;line-height:1.6;">Para comprar sem conta, use o botão <strong style="color:#003A40;">Comprar Já</strong> em cada produto na loja.</p>
         <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;">
           <a href="auth.html" style="display:inline-flex;align-items:center;gap:8px;background:#003A40;color:white;font-family:'Poppins',sans-serif;font-weight:700;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.08em;padding:12px 24px;border-radius:12px;text-decoration:none;">
             <i data-lucide="log-in" style="width:16px;height:16px;"></i> Entrar / Registar

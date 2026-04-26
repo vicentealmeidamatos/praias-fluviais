@@ -792,27 +792,81 @@ async function initMobileMenuAuth() {
   const user = await authGetUser();
 
   if (!user) {
+    // Card com Registar-se (CTA primário) e Iniciar sessão (CTA secundário)
     slot.innerHTML = `
-      <a href="auth.html"
-         class="flex items-center justify-center gap-2 border border-white/30 text-white font-display font-bold text-sm uppercase tracking-wider py-3 rounded-full w-full mt-2 transition-colors hover:bg-white/10">
-        <i data-lucide="user-plus" class="w-4 h-4"></i> Registar-se
-      </a>`;
+      <div class="rounded-2xl bg-white/5 border border-white/10 p-3 space-y-2">
+        <p class="font-display text-[10px] uppercase tracking-[0.14em] text-white/45 px-1">Conta</p>
+        <a href="auth.html"
+           class="flex items-center justify-center gap-2 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-xs uppercase tracking-wider py-3 rounded-full transition-transform active:scale-[0.98]">
+          <i data-lucide="user-plus" class="w-4 h-4"></i> Criar conta
+        </a>
+        <a href="auth.html?tab=login"
+           class="flex items-center justify-center gap-2 border border-white/25 text-white font-display font-bold text-xs uppercase tracking-wider py-2.5 rounded-full transition-colors hover:bg-white/10">
+          <i data-lucide="log-in" class="w-4 h-4"></i> Iniciar sessão
+        </a>
+      </div>`;
     lucide.createIcons();
     return;
   }
 
   const profile = await profileGet(user.id);
   const name    = profile?.username || user.email?.split('@')[0] || 'U';
+  const email   = user.email || '';
 
+  // Chip de perfil (sem botão de Terminar Sessão — esse vive dentro de perfil.html)
   slot.innerHTML = `
-    <a href="perfil.html" class="flex items-center gap-3 border border-white/30 text-white font-display font-bold text-sm uppercase tracking-wider px-4 py-3 rounded-full w-full mt-2 transition-colors hover:bg-white/10">
-      ${avatarHTML(profile, 28)}
-      <span class="truncate">${name}</span>
-    </a>
-    <button onclick="authSignOut()" class="text-red-400 text-xs font-display font-semibold mt-2 w-full text-center py-1.5 hover:text-red-300 transition-colors">
-      Terminar Sessão
-    </button>`;
+    <a href="perfil.html"
+       class="flex items-center gap-3 bg-white/5 border border-white/10 hover:bg-white/10 transition-colors rounded-2xl px-3 py-2.5">
+      ${avatarHTML(profile, 36)}
+      <span class="flex-1 min-w-0">
+        <span class="block font-display text-sm font-bold text-white truncate">${name}</span>
+        <span class="block text-[11px] text-white/45 truncate">${email}</span>
+      </span>
+      <i data-lucide="chevron-right" class="w-4 h-4 text-white/40 flex-shrink-0"></i>
+    </a>`;
   lucide.createIcons();
+}
+
+// ─── Bottom-nav perfil bubble ────────────────────────────────────────────────
+// Quando há sessão, substitui o ícone de "user" pela avatar do utilizador e
+// passa o link da bolinha a apontar para perfil.html. Mantém-se "user" + link
+// para auth.html quando o utilizador é convidado.
+async function initBottomNavProfile() {
+  const link = document.getElementById('bottom-nav-perfil');
+  const iconWrap = document.getElementById('bottom-nav-perfil-icon');
+  if (!link || !iconWrap) return;
+
+  // Tentativa rápida via cache (instant): zero await, zero rede
+  try {
+    const cache = JSON.parse(localStorage.getItem(_NAV_CACHE_KEY) || 'null');
+    if (cache && cache.username) {
+      link.setAttribute('href', 'perfil.html');
+      iconWrap.innerHTML = _bottomNavAvatarHTML({ avatar_url: cache.avatar_url, username: cache.username });
+    }
+  } catch {}
+
+  const user = await authGetUser();
+  if (!user) {
+    link.setAttribute('href', 'auth.html');
+    iconWrap.innerHTML = '<i data-lucide="user"></i>';
+    if (window.lucide) lucide.createIcons();
+    return;
+  }
+  const profile = await profileGet(user.id);
+  link.setAttribute('href', 'perfil.html');
+  iconWrap.innerHTML = _bottomNavAvatarHTML({
+    avatar_url: profile?.avatar_url || null,
+    username: profile?.username || user.email?.split('@')[0] || 'U',
+  });
+  if (window.lucide) lucide.createIcons();
+}
+
+function _bottomNavAvatarHTML({ avatar_url, username }) {
+  const initial = (username || 'U').charAt(0).toUpperCase();
+  if (avatar_url) {
+    return `<span class="block w-7 h-7 rounded-full overflow-hidden border-2 border-white/30"><img src="${avatar_url}" alt="${username}" class="w-full h-full object-cover"></span>`;
+  }
+  return `<span class="block w-7 h-7 rounded-full overflow-hidden border-2 border-white/30 bg-praia-teal-700 flex items-center justify-center"><span class="font-display font-bold text-[12px] text-praia-yellow-400">${initial}</span></span>`;
 }
 
 // ─── Render static icons + instant avatar from cache (zero network, zero await) ─
@@ -906,4 +960,5 @@ window.AuthUtils = {
   celebrateBadge,
   initHeaderAuth,
   initMobileMenuAuth,
+  initBottomNavProfile,
 };

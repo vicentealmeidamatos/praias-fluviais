@@ -225,7 +225,11 @@ const server = createServer(async (req, res) => {
     const contentType = MIME_TYPES[ext] || 'application/octet-stream';
     const data = await readFile(filePath);
 
-    res.writeHead(200, { 'Content-Type': contentType, 'Cache-Control': 'no-cache', ...CORS });
+    const noCacheExts = new Set(['.html', '.js', '.mjs', '.css', '.json']);
+    const cacheHeader = noCacheExts.has(ext)
+      ? 'no-store, no-cache, must-revalidate, max-age=0'
+      : 'no-cache';
+    res.writeHead(200, { 'Content-Type': contentType, 'Cache-Control': cacheHeader, Pragma: 'no-cache', Expires: '0', ...CORS });
     res.end(data);
   } catch {
     res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });

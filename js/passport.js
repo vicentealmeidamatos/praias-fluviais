@@ -8,7 +8,7 @@ const _beachesEarlyPassport = window.getBeaches ? getBeaches().catch(() => null)
 
 document.addEventListener('DOMContentLoaded', async () => {
   const {
-    authGetUser, profileGet, stampsGetAll, stampAdd, stampRemove,
+    authGetUser, profileGet, stampsGetAll,
     badgesCompute, badgesTopEarned, ALL_BADGES, BADGE_TIERS,
     badgeCardHTML, celebrateBadge, voteGet,
   } = AuthUtils;
@@ -25,7 +25,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   // O álbum digital inclui todas as praias visíveis, mesmo as que não estão no
   // passaporte físico (`passportStamp: false`). O campo fica preservado para
   // efeitos editoriais do guia impresso, mas a experiência digital é universal.
-  const stampBeaches   = beaches;
+  const stampBeaches = [...beaches].sort((a, b) => {
+    const muni = (a.municipality || '').localeCompare(b.municipality || '', 'pt');
+    return muni !== 0 ? muni : (a.name || '').localeCompare(b.name || '', 'pt');
+  });
   const totalAvailable = stampBeaches.length;
 
   // Toast pós-migração de carimbos guest (fluxo QR). Disparado por auth.html
@@ -126,7 +129,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                : 'bg-praia-sand-100 border-praia-sand-200 hover:border-praia-sand-300'}"
              data-beach-id="${beach.id}"
              role="button" tabindex="0"
-             aria-pressed="${stamped}">
+             aria-label="${beach.name}${stamped ? ' — visitada' : ' — por visitar'}">
           <div class="mb-2">
             ${stamped
               ? '<i data-lucide="check-circle-2" class="w-8 h-8 mx-auto text-praia-teal-700 transition-transform duration-300 group-hover:scale-110"></i>'
@@ -143,9 +146,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         </div>`;
     }).join('');
 
-    // Interaction handlers
+    // Click → mostrar data de visita ou hint para carimbar via QR
     container.querySelectorAll('.stamp-slot').forEach(el => {
-      const go = () => toggleStamp(el.dataset.beachId);
+      const beachId = el.dataset.beachId;
+      const beach = stampBeaches.find(b => b.id === beachId);
+      const go = () => showVisitInfo(beach);
       el.addEventListener('click', go);
       el.addEventListener('keydown', e => {
         if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); }
@@ -184,43 +189,87 @@ document.addEventListener('DOMContentLoaded', async () => {
     isFirstPageLoad = false;
   }
 
-  // ── Toggle Stamp ─────────────────────────────────────────────────────────────
+  // ── Visit Info Modal ────────────────────────────────────────────────────────
+  // O carimbo ocorre apenas via QR Code na praia. Aqui só mostramos a
+  // informação de visita: data registada, ou um lembrete de como carimbar.
 
-  let stampBusy = false;
+  function formatStampDate(iso) {
+    if (!iso) return '';
+    const months = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+    const d = new Date(iso);
+    if (isNaN(d.getTime())) return iso;
+    return `${d.getDate()} de ${months[d.getMonth()]} de ${d.getFullYear()}`;
+  }
 
-  async function toggleStamp(beachId) {
-    if (stampBusy) return;
-    if (!user) {
-      showAuthPrompt();
-      return;
-    }
+  function showVisitInfo(beach) {
+    if (!beach) return;
+    const stamped = !!stampMap[beach.id];
+    const dateIso = stampMap[beach.id] || '';
+    const photo = beach.thumbnail || (beach.photos && beach.photos[0]) || '';
+    const existing = document.getElementById('visit-info-overlay');
+    if (existing) existing.remove();
 
-    stampBusy = true;
-    const wasStamped = !!stampMap[beachId];
+    const el = document.createElement('div');
+    el.id = 'visit-info-overlay';
+    el.className = 'fixed inset-0 z-[2000] flex items-end sm:items-center justify-center p-0 sm:p-4';
+    el.style.cssText = 'background:rgba(0,20,24,0.65);backdrop-filter:blur(6px);';
 
-    // Optimistic update
-    if (wasStamped) {
-      delete stampMap[beachId];
+    const close = () => el.remove();
+
+    if (stamped) {
+      el.innerHTML = `
+        <div class="relative w-full sm:max-w-sm bg-white rounded-t-3xl sm:rounded-3xl overflow-hidden shadow-2xl"
+             style="box-shadow:0 30px 80px rgba(0,0,0,0.45);">
+          <button id="visit-info-close" class="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-black/45 text-white flex items-center justify-center hover:bg-black/60 transition-colors" aria-label="Fechar">
+            <i data-lucide="x" style="width:14px;height:14px;"></i>
+          </button>
+          ${photo ? `<div class="h-32 sm:h-40 bg-cover bg-center" style="background-image:url('${photo}')"></div>` : ''}
+          <div class="p-5 text-center">
+            <div class="inline-flex items-center gap-1.5 mb-3 px-3 py-1 rounded-full bg-praia-teal-800 text-praia-yellow-400 font-display text-[10px] font-bold uppercase tracking-wider">
+              <i data-lucide="check-circle-2" style="width:13px;height:13px;"></i> Visita registada
+            </div>
+            <h3 class="font-display text-xl font-bold text-praia-teal-800 leading-tight">${beach.name}</h3>
+            <p class="text-xs text-praia-sand-500 mt-1">${beach.municipality || ''} ${beach.river ? '· ' + beach.river : ''}</p>
+            <div class="mt-5 pt-5 border-t border-praia-sand-200">
+              <p class="font-display text-[10px] uppercase tracking-[0.14em] text-praia-sand-400 mb-1">Data da visita</p>
+              <p class="font-display text-base font-bold text-praia-teal-800">${formatStampDate(dateIso)}</p>
+            </div>
+            <a href="praia.html?id=${beach.id}" class="mt-5 inline-flex items-center justify-center gap-1.5 w-full bg-praia-teal-800 text-praia-yellow-400 font-display font-bold text-xs uppercase tracking-wider px-4 py-3 rounded-full hover:opacity-90 active:scale-[0.98] transition-all">
+              Ver página da praia <i data-lucide="arrow-right" style="width:14px;height:14px;"></i>
+            </a>
+          </div>
+        </div>`;
     } else {
-      stampMap[beachId] = new Date().toISOString().split('T')[0];
+      el.innerHTML = `
+        <div class="relative w-full sm:max-w-sm bg-white rounded-t-3xl sm:rounded-3xl overflow-hidden shadow-2xl"
+             style="box-shadow:0 30px 80px rgba(0,0,0,0.45);">
+          <button id="visit-info-close" class="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-black/40 text-white/90 flex items-center justify-center hover:bg-black/60 transition-colors" aria-label="Fechar">
+            <i data-lucide="x" style="width:14px;height:14px;"></i>
+          </button>
+          ${photo ? `<div class="h-32 sm:h-40 bg-cover bg-center" style="background-image:url('${photo}');filter:grayscale(0.4) brightness(0.85)"></div>` : ''}
+          <div class="p-5 text-center">
+            <div class="w-12 h-12 mx-auto rounded-2xl bg-praia-sand-100 flex items-center justify-center mb-3">
+              <i data-lucide="qr-code" class="w-6 h-6 text-praia-teal-700"></i>
+            </div>
+            <h3 class="font-display text-lg font-bold text-praia-teal-800 leading-tight">${beach.name}</h3>
+            <p class="text-xs text-praia-sand-500 mt-1">${beach.municipality || ''} ${beach.river ? '· ' + beach.river : ''}</p>
+            <p class="text-sm text-praia-sand-600 mt-4 leading-relaxed">
+              Ainda não tem este carimbo. Visite a praia e digitalize o <strong>QR Code</strong> no local para carimbar.
+            </p>
+            <a href="praia.html?id=${beach.id}" class="mt-5 inline-flex items-center justify-center gap-1.5 w-full bg-praia-teal-800 text-praia-yellow-400 font-display font-bold text-xs uppercase tracking-wider px-4 py-3 rounded-full hover:opacity-90 active:scale-[0.98] transition-all">
+              Ver página da praia <i data-lucide="arrow-right" style="width:14px;height:14px;"></i>
+            </a>
+          </div>
+        </div>`;
     }
-    renderAll();
 
-    try {
-      // Sync to Supabase
-      const ok = wasStamped
-        ? await stampRemove(user.id, beachId)
-        : await stampAdd(user.id, beachId);
-
-      if (!ok) {
-        // Rollback
-        if (wasStamped) stampMap[beachId] = new Date().toISOString().split('T')[0];
-        else delete stampMap[beachId];
-        renderAll();
-      }
-    } finally {
-      stampBusy = false;
-    }
+    document.body.appendChild(el);
+    lucide.createIcons();
+    el.addEventListener('click', e => { if (e.target === el) close(); });
+    el.querySelector('#visit-info-close')?.addEventListener('click', close);
+    document.addEventListener('keydown', function escHandler(e) {
+      if (e.key === 'Escape') { close(); document.removeEventListener('keydown', escHandler); }
+    });
   }
 
   // ── Auth Prompt ──────────────────────────────────────────────────────────────

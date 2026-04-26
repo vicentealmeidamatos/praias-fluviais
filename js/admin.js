@@ -4181,8 +4181,7 @@ function renderConteudoTab(tabId) {
         ${field('votar.label', 'Label (badge)', v.label)}
         ${field('votar.title', 'Título da Página', v.title)}
         ${textarea('votar.description', 'Descrição', v.description, 3)}
-        ${field('votar.hallOfFameLabel', 'Label Hall da Fama', v.hallOfFameLabel)}
-        ${field('votar.hallOfFameTitle', 'Título Hall da Fama', v.hallOfFameTitle)}
+        ${field('votar.hallOfFameTitle', 'Título Vencedores Anteriores', v.hallOfFameTitle)}
         <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4 mt-4">Cards Informativos</h3>
         ${field('votar.card1Title', 'Card 1 · Título', v.card1Title)}
         ${textarea('votar.card1Text', 'Card 1 · Texto', v.card1Text, 3)}
