@@ -71,14 +71,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     tierBar.innerHTML = Object.entries(BADGE_TIERS).map(([key, t]) => {
       const c = tierCounts[key] || 0;
       if (!c) return '';
-      if (key === 'mitico') {
-        return `<span class="badge-rainbow inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-display font-bold" style="background:#003A40;color:${t.hex};border:1px solid ${t.hex}80;">
-          ${c}× ${t.label}
-        </span>`;
-      }
-      return `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-display font-bold" style="background:${t.hex}22;color:${t.hex};border:1px solid ${t.hex}44;">
-        ${c}× ${t.label}
-      </span>`;
+      const isMitico = key === 'mitico';
+      const cls = 'tier-pill' + (isMitico ? ' badge-rainbow' : '');
+      const bg = isMitico ? '#003A4080' : `${t.hex}20`;
+      const border = isMitico ? `${t.hex}80` : `${t.hex}55`;
+      return `<span class="${cls}" style="--tier-color:${t.hex};background:${bg};color:${t.hex};border:1px solid ${border};">${c}× ${t.label}</span>`;
     }).join('');
   }
 

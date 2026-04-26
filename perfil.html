@@ -226,7 +226,7 @@
               <p id="profile-email" class="text-white/40 text-sm mb-1"></p>
               <p id="profile-since" class="text-white/30 text-xs mb-4"></p>
               <!-- Tier badges -->
-              <div id="tier-bar" class="flex flex-wrap gap-2 justify-center sm:justify-start mb-4"></div>
+              <div id="tier-bar" class="tier-legend mb-4"></div>
               <button id="edit-profile-btn"
                       class="inline-flex items-center gap-2 border border-white/25 text-white/70 hover:text-white hover:border-white/50 font-display font-semibold text-xs uppercase tracking-wider px-4 py-2 rounded-full transition-all duration-200">
                 <i data-lucide="pencil" class="w-3.5 h-3.5"></i> Editar Perfil
@@ -235,7 +235,7 @@
           </div>
 
           <!-- Stats -->
-          <div class="grid grid-cols-4 gap-3 mt-8">
+          <div class="profile-stats-grid mt-8">
             <div class="stat-card text-center py-4 px-2">
               <div id="stat-stamps" class="font-display text-2xl font-bold text-praia-yellow-400">0</div>
               <div class="text-[10px] font-display font-semibold uppercase tracking-wider text-white/40 mt-1">Carimbos</div>
@@ -276,13 +276,12 @@
         <!-- BADGES PANEL -->
         <div id="panel-badges" class="profile-panel">
           <!-- Legend -->
-          <div class="flex flex-wrap gap-2 mb-6">
-            <span class="text-[11px] font-display font-semibold text-praia-sand-400 uppercase tracking-wider mr-1 self-center">Categorias:</span>
-            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-display font-bold" style="background:#CD7F3222;color:#CD7F32;border:1px solid #CD7F3244;">● Bronze</span>
-            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-display font-bold" style="background:#A8B8C822;color:#A8B8C8;border:1px solid #A8B8C844;">● Prata</span>
-            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-display font-bold" style="background:#FFD70022;color:#FFD700;border:1px solid #FFD70044;">● Ouro</span>
-            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-display font-bold" style="background:#B9F2FF33;color:#2E9BB5;border:1px solid #2E9BB560;">● Diamante</span>
-            <span class="badge-rainbow inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-display font-bold" style="background:#90E2F033;color:#1E8FAA;border:1px solid #1E8FAA60;">● Mítico</span>
+          <div class="tier-legend mb-6">
+            <span class="tier-pill" style="--tier-color:#CD7F32;background:#CD7F3220;color:#CD7F32;border:1px solid #CD7F3244;">Bronze</span>
+            <span class="tier-pill" style="--tier-color:#A8B8C8;background:#A8B8C820;color:#7A8B9E;border:1px solid #A8B8C844;">Prata</span>
+            <span class="tier-pill" style="--tier-color:#E5BB00;background:#FFD70020;color:#B89A0E;border:1px solid #FFD70055;">Ouro</span>
+            <span class="tier-pill" style="--tier-color:#2E9BB5;background:#B9F2FF33;color:#2E9BB5;border:1px solid #2E9BB560;">Diamante</span>
+            <span class="tier-pill badge-rainbow" style="--tier-color:#1E8FAA;background:#90E2F033;color:#1E8FAA;border:1px solid #1E8FAA60;">Mítico</span>
           </div>
           <div id="badges-grid" class="badges-grid"></div>
         </div>

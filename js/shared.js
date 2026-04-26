@@ -935,8 +935,8 @@ function slugify(text) {
     'carrinho.html': 'loja',
     'produto.html': 'loja',
     'confirmacao-pedido.html': 'loja',
-    'perfil.html': 'perfil',
-    'auth.html': 'perfil',
+    'perfil.html': 'auth',
+    'auth.html': 'auth',
   };
 
   // Mapa: páginas de detalhe → destino do back-button
@@ -1015,13 +1015,15 @@ function slugify(text) {
       ? '<span id="bottom-nav-cart-count" class="absolute top-1 right-4 bg-praia-yellow-400 text-praia-teal-800 text-[10px] font-bold rounded-full min-w-[16px] h-4 px-1 flex items-center justify-center">' + (cartCount > 99 ? '99+' : cartCount) + '</span>'
       : '';
 
-    // Item de perfil (placeholder — auth.js preenche o avatar quando sessão estiver resolvida)
-    var perfilActive = activeKey === 'perfil';
-    var perfilColor = perfilActive ? 'text-praia-yellow-400 active' : 'text-white/60';
-    var perfilItem =
-      '<a href="auth.html" data-page="perfil" id="bottom-nav-perfil" class="flex-1 flex flex-col items-center justify-center ' + perfilColor + '" aria-label="Perfil">' +
-        '<span id="bottom-nav-perfil-icon" class="flex items-center justify-center"><i data-lucide="user"></i></span>' +
-        '<span class="font-display uppercase tracking-wider font-semibold">Perfil</span>' +
+    // Slot de Auth (Entrar quando deslogado, Perfil + avatar quando logado).
+    // O default é "Entrar" — auth.js (initBottomNavProfile) sobrescreve para
+    // Perfil quando há sessão.
+    var authActive = activeKey === 'auth';
+    var authColor = authActive ? 'text-praia-yellow-400 active' : 'text-white/60';
+    var authItem =
+      '<a href="auth.html" data-page="auth" id="bottom-nav-auth" class="flex-1 flex flex-col items-center justify-center ' + authColor + '" aria-label="Entrar">' +
+        '<i data-lucide="log-in"></i>' +
+        '<span class="font-display uppercase tracking-wider font-semibold">Entrar</span>' +
       '</a>';
 
     return (
@@ -1033,11 +1035,11 @@ function slugify(text) {
           '<span class="font-display uppercase tracking-wider font-semibold">Loja</span>' +
           lojaBadge +
         '</a>' +
+        authItem +
         '<button type="button" id="bottom-nav-more-btn" data-page="mais" class="flex-1 flex flex-col items-center justify-center text-white/60" aria-label="Mais opções" aria-haspopup="dialog">' +
           '<i data-lucide="menu"></i>' +
           '<span class="font-display uppercase tracking-wider font-semibold">Mais</span>' +
         '</button>' +
-        perfilItem +
       '</div>'
     );
   }
@@ -1064,10 +1066,10 @@ function slugify(text) {
     var links = [
       { href: 'index.html', icon: 'home', label: 'Início' },
       { href: 'votar.html', icon: 'vote', label: 'Votar Praia do Ano' },
-      { href: 'onde-carimbar-passaporte.html', icon: 'stamp', label: 'Onde Carimbar' },
-      { href: 'onde-encontrar.html', icon: 'book-open', label: 'Onde Encontrar o Guia' },
-      { href: 'descontos.html', icon: 'tag', label: 'Descontos' },
       { href: 'artigos.html', icon: 'newspaper', label: 'Novidades' },
+      { href: 'onde-encontrar.html', icon: 'book-open', label: 'Onde Encontrar o Guia' },
+      { href: 'onde-carimbar-passaporte.html', icon: 'stamp', label: 'Onde Carimbar' },
+      { href: 'descontos.html', icon: 'tag', label: 'Descontos' },
       { href: 'carrinho.html', icon: 'shopping-cart', label: 'Carrinho' },
       { href: 'contactos.html', icon: 'mail', label: 'Contactos' },
     ];
@@ -1227,17 +1229,21 @@ function slugify(text) {
       document.body.style.overflow = '';
     }
 
-    // Substituir logo do drawer por botão "Início" + manter close X.
+    // Substituir conteúdo do header do drawer: ícones sociais (FB+IG) + close X.
     // O selector é defensivo: encontra o primeiro div header do drawer.
     var drawerHeader = menu.firstElementChild;
     if (drawerHeader && !drawerHeader.dataset.replaced) {
       drawerHeader.dataset.replaced = '1';
       drawerHeader.className = 'flex items-center justify-between px-5 py-4 border-b border-white/10 flex-shrink-0';
       drawerHeader.innerHTML =
-        '<a href="index.html" class="flex items-center gap-2 text-white/80 hover:text-white transition-colors">' +
-          '<span class="w-9 h-9 rounded-full bg-praia-yellow-400/15 flex items-center justify-center"><i data-lucide="home" class="w-4 h-4 text-praia-yellow-400"></i></span>' +
-          '<span class="font-display text-xs font-bold uppercase tracking-wider">Início</span>' +
-        '</a>' +
+        '<div class="flex items-center gap-2">' +
+          '<a href="https://www.facebook.com/praiasfluviais" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-white/8 flex items-center justify-center text-white/75 hover:bg-praia-yellow-400 hover:text-praia-teal-800 transition-colors" aria-label="Facebook">' +
+            '<svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>' +
+          '</a>' +
+          '<a href="https://www.instagram.com/guiadaspraiasfluviais" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-white/8 flex items-center justify-center text-white/75 hover:bg-praia-yellow-400 hover:text-praia-teal-800 transition-colors" aria-label="Instagram">' +
+            '<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>' +
+          '</a>' +
+        '</div>' +
         '<button type="button" class="text-white/70 hover:text-white p-1" aria-label="Fechar menu"><i data-lucide="x" class="w-6 h-6"></i></button>';
     }
 
@@ -1245,6 +1251,43 @@ function slugify(text) {
     var authSlot = document.getElementById('mobile-auth-slot');
     if (authSlot && drawerHeader && authSlot.parentElement !== menu) {
       drawerHeader.insertAdjacentElement('afterend', authSlot);
+    }
+
+    // Reorganizar lista de páginas: prepender Início; mover Carrinho do
+    // footer para a lista (antes de Contactos) — assim o carrinho deixa de
+    // ter destaque dedicado e fica como mais um link.
+    var navList = menu.querySelector('div.flex-1');
+    if (navList && !navList.dataset.augmented) {
+      navList.dataset.augmented = '1';
+      var page = currentPage();
+
+      // Helper: cria um <a> com o estilo dos restantes itens
+      function buildNavLink(href, icon, label, isActive) {
+        var classes = 'flex items-center gap-3 px-6 py-3.5 font-display font-semibold text-sm uppercase tracking-wider' +
+          (isActive ? ' text-praia-yellow-400' : ' text-white/80 hover:text-white');
+        return '<a href="' + href + '" class="' + classes + '">' +
+                 '<i data-lucide="' + icon + '" class="w-5 h-5"></i> ' + label +
+               '</a>';
+      }
+
+      // 1. Prepender "Início" no topo
+      var inicioActive = page === 'index.html' || page === '' || page === '/';
+      navList.insertAdjacentHTML('afterbegin', buildNavLink('index.html', 'home', 'Início', inicioActive));
+
+      // 2. Mover/adicionar "Carrinho" antes do "Contactos"
+      // Remover Carrinho existente (se estiver no footer ou na lista)
+      menu.querySelectorAll('a[href*="carrinho"]').forEach(function (a) {
+        if (a.id === 'mobile-cart-badge') return; // ignorar elementos não-link
+        a.remove();
+      });
+      var carrinhoActive = page === 'carrinho.html';
+      var contactosLink = navList.querySelector('a[href*="contactos"]');
+      var carrinhoHTML = buildNavLink('carrinho.html', 'shopping-cart', 'Carrinho', carrinhoActive);
+      if (contactosLink) {
+        contactosLink.insertAdjacentHTML('beforebegin', carrinhoHTML);
+      } else {
+        navList.insertAdjacentHTML('beforeend', carrinhoHTML);
+      }
     }
 
     // Bind global do botão hamburger (selector robusto: aria-label + lg:hidden no header)

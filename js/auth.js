@@ -792,19 +792,13 @@ async function initMobileMenuAuth() {
   const user = await authGetUser();
 
   if (!user) {
-    // Card com Registar-se (CTA primário) e Iniciar sessão (CTA secundário)
+    // Apenas "Criar conta". O acesso a "Iniciar sessão" vive na bolinha
+    // "Entrar" da bottom-nav e nas tabs internas da página de auth.
     slot.innerHTML = `
-      <div class="rounded-2xl bg-white/5 border border-white/10 p-3 space-y-2">
-        <p class="font-display text-[10px] uppercase tracking-[0.14em] text-white/45 px-1">Conta</p>
-        <a href="auth.html"
-           class="flex items-center justify-center gap-2 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-xs uppercase tracking-wider py-3 rounded-full transition-transform active:scale-[0.98]">
-          <i data-lucide="user-plus" class="w-4 h-4"></i> Criar conta
-        </a>
-        <a href="auth.html?tab=login"
-           class="flex items-center justify-center gap-2 border border-white/25 text-white font-display font-bold text-xs uppercase tracking-wider py-2.5 rounded-full transition-colors hover:bg-white/10">
-          <i data-lucide="log-in" class="w-4 h-4"></i> Iniciar sessão
-        </a>
-      </div>`;
+      <a href="auth.html"
+         class="flex items-center justify-center gap-2 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-xs uppercase tracking-wider py-3 rounded-full transition-transform active:scale-[0.98]">
+        <i data-lucide="user-plus" class="w-4 h-4"></i> Criar conta
+      </a>`;
     lucide.createIcons();
     return;
   }
@@ -827,46 +821,58 @@ async function initMobileMenuAuth() {
   lucide.createIcons();
 }
 
-// ─── Bottom-nav perfil bubble ────────────────────────────────────────────────
-// Quando há sessão, substitui o ícone de "user" pela avatar do utilizador e
-// passa o link da bolinha a apontar para perfil.html. Mantém-se "user" + link
-// para auth.html quando o utilizador é convidado.
+// ─── Bottom-nav auth/perfil bubble ────────────────────────────────────────────
+// Default vem com "Entrar" (icone log-in). Quando há sessão, substitui pelo
+// avatar do utilizador e passa o link/etiqueta para "Perfil" → perfil.html.
 async function initBottomNavProfile() {
-  const link = document.getElementById('bottom-nav-perfil');
-  const iconWrap = document.getElementById('bottom-nav-perfil-icon');
-  if (!link || !iconWrap) return;
+  const link = document.getElementById('bottom-nav-auth');
+  if (!link) return;
 
-  // Tentativa rápida via cache (instant): zero await, zero rede
+  function renderGuest() {
+    link.setAttribute('href', 'auth.html');
+    link.setAttribute('aria-label', 'Entrar');
+    link.innerHTML =
+      '<i data-lucide="log-in"></i>' +
+      '<span class="font-display uppercase tracking-wider font-semibold">Entrar</span>';
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function renderUser({ avatar_url, username }) {
+    link.setAttribute('href', 'perfil.html');
+    link.setAttribute('aria-label', 'Perfil');
+    link.innerHTML =
+      _bottomNavAvatarHTML({ avatar_url, username }) +
+      '<span class="font-display uppercase tracking-wider font-semibold">Perfil</span>';
+    if (window.lucide) lucide.createIcons();
+  }
+
+  // Render imediato a partir da cache (sem await, sem rede)
   try {
     const cache = JSON.parse(localStorage.getItem(_NAV_CACHE_KEY) || 'null');
     if (cache && cache.username) {
-      link.setAttribute('href', 'perfil.html');
-      iconWrap.innerHTML = _bottomNavAvatarHTML({ avatar_url: cache.avatar_url, username: cache.username });
+      renderUser({ avatar_url: cache.avatar_url, username: cache.username });
     }
   } catch {}
 
+  // Verificação real
   const user = await authGetUser();
   if (!user) {
-    link.setAttribute('href', 'auth.html');
-    iconWrap.innerHTML = '<i data-lucide="user"></i>';
-    if (window.lucide) lucide.createIcons();
+    renderGuest();
     return;
   }
   const profile = await profileGet(user.id);
-  link.setAttribute('href', 'perfil.html');
-  iconWrap.innerHTML = _bottomNavAvatarHTML({
+  renderUser({
     avatar_url: profile?.avatar_url || null,
     username: profile?.username || user.email?.split('@')[0] || 'U',
   });
-  if (window.lucide) lucide.createIcons();
 }
 
 function _bottomNavAvatarHTML({ avatar_url, username }) {
   const initial = (username || 'U').charAt(0).toUpperCase();
   if (avatar_url) {
-    return `<span class="block w-7 h-7 rounded-full overflow-hidden border-2 border-white/30"><img src="${avatar_url}" alt="${username}" class="w-full h-full object-cover"></span>`;
+    return `<span class="bottom-nav-avatar"><img src="${avatar_url}" alt="${username}"></span>`;
   }
-  return `<span class="block w-7 h-7 rounded-full overflow-hidden border-2 border-white/30 bg-praia-teal-700 flex items-center justify-center"><span class="font-display font-bold text-[12px] text-praia-yellow-400">${initial}</span></span>`;
+  return `<span class="bottom-nav-avatar"><span class="initial">${initial}</span></span>`;
 }
 
 // ─── Render static icons + instant avatar from cache (zero network, zero await) ─
