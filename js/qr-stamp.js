@@ -120,9 +120,9 @@
   function buildStampEmblemHTML(dateStr) {
     return `
       <div class="stamp-emblem-wrap" aria-hidden="true">
-        <img class="stamp-emblem" src="brand_assets/selo_passaporte.png" alt="">
-        <span class="stamp-date">${esc(dateStr)}</span>
-      </div>`;
+        <img class="stamp-emblem" src="brand_assets/selo_passaporte_alpha.png" alt="">
+      </div>
+      <span class="stamp-date">${esc(dateStr)}</span>`;
   }
 
   function renderSuccess({ beach, stampsTotal, stampsAvailable, isGuest, wasAlready }) {

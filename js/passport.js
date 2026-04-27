@@ -1,10 +1,24 @@
 // ─── Passaporte Digital ────────────────────────────────────────────────────────
 // Stamps stored in Supabase. Falls back to localStorage for anonymous users.
+//
+// Render strategy (perf):
+//  1. Pre-start beaches + auth fetches before DOM is ready.
+//  2. As soon as beaches resolve, render the album/badges/progress instantly
+//     using cached data from localStorage (per-user cache for logged-in users,
+//     `passport_stamps` for guests).
+//  3. Fetch fresh data from Supabase in background; re-render on arrival and
+//     refresh the localStorage cache so next visit is again instant.
+//  4. Stamp slots use inline SVGs (lucide.createIcons() on 200+ icons was
+//     dominating render time).
 // ─────────────────────────────────────────────────────────────────────────────
 
 // ── Pré-carregamento imediato (sem esperar pelo DOM) ───
 const _authEarlyPassport = window.AuthUtils ? AuthUtils.authGetUser() : null;
 const _beachesEarlyPassport = window.getBeaches ? getBeaches().catch(() => null) : null;
+
+// ── Inline SVGs: evitam a chamada cara ao lucide.createIcons() para 200+ slots
+const SVG_CHECK_CIRCLE = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 mx-auto text-praia-teal-700 transition-transform duration-300 group-hover:scale-110"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>';
+const SVG_LOCK = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 mx-auto text-praia-sand-300"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
 
 document.addEventListener('DOMContentLoaded', async () => {
   const {
@@ -13,12 +27,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     badgeCardHTML, celebrateBadge, voteGet,
   } = AuthUtils;
 
-  // ── Parallel: load beaches + auth (pre-started before DOM) ──────────────────
-  const [beachesRaw, user] = await Promise.all([
-    _beachesEarlyPassport || loadData('beaches').catch(() => null),
-    _authEarlyPassport || authGetUser(),
-  ]);
-
+  // ── Wait only for beaches: that's the only blocking dependency for the
+  // initial paint. Auth + Supabase queries run in background afterwards.
+  const beachesRaw = await (_beachesEarlyPassport || loadData('beaches').catch(() => null));
   let beaches = (beachesRaw || []).filter(b => !b.hidden);
   if (!beaches.length) { console.error('Failed to load beaches.json'); return; }
 
@@ -45,25 +56,36 @@ document.addEventListener('DOMContentLoaded', async () => {
     sessionStorage.removeItem('stamps_just_migrated');
   }
 
-  // ── Parallel: profile + stamps + reviews + voted ────────────────────────────
+  // ── Resolve user (already pre-fetched) ──────────────────────────────────────
+  const user = await (_authEarlyPassport || authGetUser());
+
+  // ── Cache helpers ───────────────────────────────────────────────────────────
+  const cacheKey = user ? `passport_cache_${user.id}` : null;
+
+  function readCachedState() {
+    if (!cacheKey) return null;
+    try { return JSON.parse(localStorage.getItem(cacheKey) || 'null'); }
+    catch { return null; }
+  }
+  function writeCachedState(state) {
+    if (!cacheKey) return;
+    try { localStorage.setItem(cacheKey, JSON.stringify(state)); } catch {}
+  }
+
+  // ── Initial state from cache (for instant first paint) ──────────────────────
   let stampMap = {};
   let reviews  = [];
   let voted    = false;
   let profile  = null;
 
   if (user) {
-    const [profileRes, stampsRes, reviewsRes, votedRes] = await Promise.all([
-      profileGet(user.id),
-      stampsGetAll(user.id),
-      AuthUtils.supabase.from('reviews').select('images').eq('user_id', user.id).then(r => r.data || []).catch(() => []),
-      voteGet(user.id, new Date().getFullYear()).then(v => !!v).catch(() => false),
-    ]);
-    profile  = profileRes;
-    stampMap  = Object.fromEntries(stampsRes.map(r => [r.beach_id, r.stamped_at]));
-    reviews  = reviewsRes;
-    voted    = votedRes;
+    const cached = readCachedState();
+    if (cached) {
+      stampMap = cached.stampMap || {};
+      reviews  = cached.reviews  || [];
+      voted    = !!cached.voted;
+    }
   } else {
-    // Fallback localStorage for guests
     try {
       const saved = JSON.parse(localStorage.getItem('passport_stamps') || '{}');
       stampMap = Object.fromEntries(
@@ -119,11 +141,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // ── Render ──────────────────────────────────────────────────────────────────
 
-  function renderAll() {
+  function renderAll(opts = {}) {
     renderStats();
     renderGrid();
-    renderBadges();
-    lucide.createIcons();
+    renderBadges(opts);
+    if (window.lucide) lucide.createIcons();
   }
 
   function renderStats() {
@@ -137,7 +159,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     setEl('stat-percentage', pct + '%');
 
     const bar = document.getElementById('progress-bar');
-    if (bar) setTimeout(() => { bar.style.width = pct + '%'; }, 150);
+    if (bar) bar.style.width = pct + '%';
   }
 
   function renderGrid() {
@@ -162,9 +184,7 @@ document.addEventListener('DOMContentLoaded', async () => {
              role="button" tabindex="0"
              aria-label="${beach.name}${stamped ? ' — visitada' : ' — por visitar'}">
           <div class="mb-2">
-            ${stamped
-              ? '<i data-lucide="check-circle-2" class="w-8 h-8 mx-auto text-praia-teal-700 transition-transform duration-300 group-hover:scale-110"></i>'
-              : '<i data-lucide="lock" class="w-8 h-8 mx-auto text-praia-sand-300"></i>'}
+            ${stamped ? SVG_CHECK_CIRCLE : SVG_LOCK}
           </div>
           <div class="font-display text-xs font-semibold leading-tight truncate
                ${stamped ? 'text-praia-teal-800' : 'text-praia-sand-400'}" title="${beach.name}">
@@ -189,7 +209,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  function renderBadges() {
+  function renderBadges({ persist = true } = {}) {
     const grid = document.getElementById('badges-grid');
     if (!grid) return;
 
@@ -214,10 +234,14 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
     }
 
-    // Persist to localStorage and update in-memory state for next call
-    localStorage.setItem(storageKey, JSON.stringify([...earnedNow]));
-    prevEarned = earnedNow;
-    isFirstPageLoad = false;
+    // Persist to localStorage and update in-memory state. Skipped for the
+    // initial cached render to avoid overwriting the authoritative state
+    // written by qr-stamp.js (would otherwise cause double-celebrations).
+    if (persist) {
+      localStorage.setItem(storageKey, JSON.stringify([...earnedNow]));
+      prevEarned = earnedNow;
+      isFirstPageLoad = false;
+    }
   }
 
   // ── Visit Info Modal ────────────────────────────────────────────────────────
@@ -397,11 +421,34 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!user) {
     const banner = document.getElementById('guest-banner');
     if (banner) banner.classList.remove('hidden');
-  } else {
-    const userNameEl = document.getElementById('passport-username');
-    if (userNameEl) userNameEl.textContent = profile?.username || user.email?.split('@')[0] || '';
   }
 
-  // ── Initial render ────────────────────────────────────────────────────────
-  renderAll();
+  // ── Initial render — instant from cache (or empty state) ────────────────────
+  // Persist=false on the badges render so we don't overwrite the authoritative
+  // badge state (e.g. set by qr-stamp.js after a fresh stamp) with stale cache.
+  renderAll({ persist: !user });
+
+  // ── Background: fetch fresh data and re-render once it arrives ──────────────
+  if (user) {
+    Promise.all([
+      profileGet(user.id),
+      stampsGetAll(user.id),
+      AuthUtils.supabase.from('reviews').select('images').eq('user_id', user.id).then(r => r.data || []).catch(() => []),
+      voteGet(user.id, new Date().getFullYear()).then(v => !!v).catch(() => false),
+    ]).then(([profileRes, stampsRes, reviewsRes, votedRes]) => {
+      profile  = profileRes;
+      stampMap = Object.fromEntries(stampsRes.map(r => [r.beach_id, r.stamped_at]));
+      reviews  = reviewsRes;
+      voted    = votedRes;
+
+      // Refresh cache for next visit
+      writeCachedState({ stampMap, reviews, voted });
+
+      // Re-render with fresh data; persist badges cache now (authoritative).
+      renderAll({ persist: true });
+
+      const userNameEl = document.getElementById('passport-username');
+      if (userNameEl) userNameEl.textContent = profile?.username || user.email?.split('@')[0] || '';
+    }).catch(err => console.warn('[passport] fresh data fetch failed:', err));
+  }
 });

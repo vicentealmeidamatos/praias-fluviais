@@ -237,37 +237,37 @@
       pointer-events: none;
     }
 
-    /* Emblema: imagem do selo do passaporte + data por baixo */
+    /* Selo no canto superior-direito (PNG já transparente). Tinta forçada a
+       branco via filter; rotação positiva => topo inclina para a direita,
+       criando a abertura à direita pedida. */
     .stamp-emblem-wrap {
       position: absolute;
-      top: 16px; right: 16px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
+      top: 14px; right: 14px;
       transform: rotate(0deg) scale(1.6);
       opacity: 0;
       animation: stampSlam 0.9s var(--spring) 0.4s forwards;
       transform-origin: 70% 30%;
-      filter: drop-shadow(0 14px 22px rgba(0,0,0,0.55)) drop-shadow(0 0 14px rgba(255,235,59,0.25));
+      filter: drop-shadow(0 14px 22px rgba(0,0,0,0.55)) drop-shadow(0 0 16px rgba(255,235,59,0.22));
     }
     .stamp-emblem {
-      width: 124px;
+      width: 152px;
       height: auto;
       display: block;
-      transform: rotate(-14deg);
-      /* Drop white background and turn ink into a bright cream so it reads on the teal hero */
-      filter: invert(1) brightness(1.08) contrast(1.05) sepia(0.18) saturate(1.4) hue-rotate(-8deg);
-      mix-blend-mode: screen;
+      transform: rotate(12deg);
+      filter: brightness(0) invert(1);
     }
     @media (max-width: 380px) {
-      .stamp-emblem { width: 102px; }
+      .stamp-emblem { width: 128px; }
     }
+    /* Data como pílula independente no canto superior-esquerdo, horizontal */
     .stamp-date {
-      display: inline-block;
-      padding: 4px 10px;
-      background: rgba(0,42,46,0.7);
-      border: 1px solid rgba(255,235,59,0.35);
+      position: absolute;
+      top: 16px; left: 16px;
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 12px;
+      background: rgba(0,42,46,0.78);
+      border: 1px solid rgba(255,235,59,0.4);
       border-radius: 999px;
       font-family: 'Poppins', sans-serif;
       font-weight: 700;
@@ -275,14 +275,20 @@
       color: #FFEB3B;
       letter-spacing: 0.16em;
       text-transform: uppercase;
-      transform: rotate(-4deg);
       backdrop-filter: blur(4px);
+      box-shadow: 0 6px 18px -6px rgba(0,0,0,0.5);
+      opacity: 0;
+      animation: dateFadeIn 0.5s var(--smooth) 0.85s forwards;
     }
     @keyframes stampSlam {
-      0%   { transform: rotate(8deg) scale(2.1); opacity: 0; }
-      55%  { transform: rotate(-5deg) scale(0.95); opacity: 1; }
-      80%  { transform: rotate(-1deg) scale(1.04); }
+      0%   { transform: rotate(-6deg) scale(2.1); opacity: 0; }
+      55%  { transform: rotate(4deg) scale(0.95); opacity: 1; }
+      80%  { transform: rotate(1deg) scale(1.04); }
       100% { transform: rotate(0deg) scale(1); opacity: 1; }
+    }
+    @keyframes dateFadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
     /* Content below hero */
