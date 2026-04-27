@@ -2233,6 +2233,7 @@ async function renderUtilizadores(content) {
       { count: totalVotes },
       { count: totalReviews },
       { count: totalStamps },
+      { count: totalVisits },
       { data: votesData },
       { data: recentReviews },
     ] = await Promise.all([
@@ -2240,6 +2241,7 @@ async function renderUtilizadores(content) {
       sb.from('votes').select('*', { count: 'exact', head: true }),
       sb.from('reviews').select('*', { count: 'exact', head: true }),
       sb.from('stamps').select('*', { count: 'exact', head: true }),
+      sb.from('stamp_visits').select('*', { count: 'exact', head: true }),
       sb.from('votes').select('beach_id').eq('year', year),
       sb.from('reviews').select('text, beach_id, created_at, profiles(username, avatar_url)').order('created_at', { ascending: false }).limit(10),
     ]);
@@ -2252,12 +2254,13 @@ async function renderUtilizadores(content) {
     const utilContent = document.getElementById('util-content');
     utilContent.innerHTML = `
       <!-- Stats Grid -->
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
         ${[
           { label: 'Utilizadores', value: totalUsers ?? '-', icon: '👤' },
           { label: `Votos ${year}`, value: totalVotes ?? '-', icon: '🗳️' },
           { label: 'Comentários', value: totalReviews ?? '-', icon: '💬' },
           { label: 'Carimbos', value: totalStamps ?? '-', icon: '🔖' },
+          { label: 'Visitas', value: totalVisits ?? '-', icon: '📍' },
         ].map(s => `
           <div class="bg-white rounded-xl p-5 shadow-sm border border-praia-sand-200">
             <div class="text-2xl mb-2">${s.icon}</div>

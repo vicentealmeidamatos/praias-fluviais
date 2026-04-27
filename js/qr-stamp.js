@@ -211,15 +211,31 @@
   }
 
   // ── Stamp writers ──────────────────────────────────────────────────────────
+  // O `stamps` (uma linha por user/praia) é upserted para badges/contagens; em
+  // paralelo, cada digitalização insere também uma linha em `stamp_visits` para
+  // construir o histórico de visitas exibido no álbum.
   async function stampForUser(userId, beachId) {
-    return window.AuthUtils.stampAdd(userId, beachId);
+    const today = todayISO();
+    const [stampOk] = await Promise.all([
+      window.AuthUtils.stampAdd(userId, beachId),
+      window.AuthUtils.visitAdd(userId, beachId, today).catch(() => false),
+    ]);
+    return stampOk;
   }
 
   function stampForGuest(beachId) {
     try {
       const raw = localStorage.getItem(GUEST_STORAGE_KEY);
       const current = raw ? JSON.parse(raw) : {};
-      current[beachId] = { date: todayISO() };
+      const today = todayISO();
+      const prev = current[beachId] || {};
+      const prevVisits = Array.isArray(prev.visits)
+        ? prev.visits
+        : (prev.date ? [prev.date] : []);
+      current[beachId] = {
+        date: today,
+        visits: [...prevVisits, today],
+      };
       localStorage.setItem(GUEST_STORAGE_KEY, JSON.stringify(current));
       return true;
     } catch (err) {

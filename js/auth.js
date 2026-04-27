@@ -93,8 +93,38 @@ async function stampRemove(userId, beachId) {
   return !error;
 }
 
+// ─── Visit history (append-only) ─────────────────────────────────────────────
+// Cada digitalização de QR insere uma linha em `stamp_visits`, mesmo que a
+// praia já tenha sido carimbada. A tabela `stamps` permanece como "praia
+// desbloqueada" (uma linha por user/praia) para badges e contagens.
+
+async function visitAdd(userId, beachId, visitedAt) {
+  if (!userId || !beachId) return false;
+  const row = { user_id: userId, beach_id: beachId };
+  if (visitedAt) row.visited_at = visitedAt;
+  const { error } = await _sb.from('stamp_visits').insert(row);
+  if (error) console.error('[visitAdd] Supabase error:', error);
+  return !error;
+}
+
+async function visitsGetForBeach(userId, beachId) {
+  if (!userId || !beachId) return [];
+  const { data } = await _sb
+    .from('stamp_visits')
+    .select('visited_at, created_at')
+    .eq('user_id', userId)
+    .eq('beach_id', beachId)
+    .order('visited_at', { ascending: false })
+    .order('created_at', { ascending: false });
+  return data || [];
+}
+
 // Migra carimbos guardados em localStorage (fluxo guest do QR) para a conta Supabase.
 // Chamado após qualquer login/registo bem-sucedido em auth.html.
+//
+// Shape do localStorage (`passport_stamps[beachId]`):
+//   { date: "2025-07-12", visits: ["2025-07-12", "2025-08-03"] }
+// `visits` pode estar ausente (entradas antigas) — nesse caso, usa `[date]`.
 async function stampsSyncFromLocal(userId) {
   if (!userId) return { migrated: 0, total: 0 };
   let local;
@@ -107,8 +137,25 @@ async function stampsSyncFromLocal(userId) {
   const ids = Object.keys(local || {});
   if (!ids.length) return { migrated: 0, total: 0 };
 
-  const results = await Promise.all(ids.map(id => stampAdd(userId, id)));
-  const migrated = results.filter(Boolean).length;
+  const stampResults = await Promise.all(ids.map(id => stampAdd(userId, id)));
+  const migrated = stampResults.filter(Boolean).length;
+
+  // Migrar histórico de visitas (uma linha por data por praia).
+  const visitRows = [];
+  ids.forEach(id => {
+    const entry = local[id] || {};
+    const list = Array.isArray(entry.visits) && entry.visits.length
+      ? entry.visits
+      : (entry.date ? [entry.date] : []);
+    list.forEach(d => {
+      if (typeof d === 'string' && d) visitRows.push({ user_id: userId, beach_id: id, visited_at: d });
+    });
+  });
+  if (visitRows.length) {
+    const { error } = await _sb.from('stamp_visits').insert(visitRows);
+    if (error) console.error('[stampsSyncFromLocal] visit insert error:', error);
+  }
+
   if (migrated === ids.length) localStorage.removeItem('passport_stamps');
   return { migrated, total: ids.length };
 }
@@ -946,6 +993,8 @@ window.AuthUtils = {
   stampAdd,
   stampRemove,
   stampsSyncFromLocal,
+  visitAdd,
+  visitsGetForBeach,
   voteGet,
   voteGetFull,
   voteSubmit,

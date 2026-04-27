@@ -72,6 +72,37 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch { stampMap = {}; }
   }
 
+  // ── Visit history ────────────────────────────────────────────────────────
+  // Devolve a lista de datas (ISO, mais recente primeiro) para uma praia.
+  // Para utilizadores autenticados consulta `stamp_visits`; para guests lê
+  // do localStorage. Se não houver histórico mas existir carimbo (legado),
+  // devolve essa data como entrada única.
+  async function getVisitHistory(beach) {
+    if (!beach) return [];
+    if (user) {
+      try {
+        const rows = await AuthUtils.visitsGetForBeach(user.id, beach.id);
+        const list = (rows || []).map(r => r.visited_at).filter(Boolean);
+        if (list.length) return list;
+      } catch (err) {
+        console.warn('[getVisitHistory] supabase error:', err);
+      }
+      const fallback = stampMap[beach.id];
+      return fallback ? [fallback] : [];
+    }
+    try {
+      const saved = JSON.parse(localStorage.getItem('passport_stamps') || '{}');
+      const entry = saved[beach.id];
+      if (!entry) return [];
+      const list = Array.isArray(entry.visits) && entry.visits.length
+        ? entry.visits
+        : (entry.date ? [entry.date] : []);
+      return [...list].sort((a, b) => b.localeCompare(a));
+    } catch {
+      return [];
+    }
+  }
+
   // ── Previous badge state (localStorage persists across sessions) ─────────────
   const storageKey  = user ? `badges_${user.id}` : 'badges_guest';
   const _storedRaw  = localStorage.getItem(storageKey);
@@ -201,10 +232,54 @@ document.addEventListener('DOMContentLoaded', async () => {
     return `${d.getDate()} de ${months[d.getMonth()]} de ${d.getFullYear()}`;
   }
 
-  function showVisitInfo(beach) {
+  function formatStampDateShort(iso) {
+    if (!iso) return '';
+    const months = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+    const d = new Date(iso);
+    if (isNaN(d.getTime())) return iso;
+    return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+  }
+
+  function visitHistoryHTML(visits) {
+    if (!visits.length) return '';
+
+    if (visits.length === 1) {
+      return `
+        <div class="mt-5 pt-5 border-t border-praia-sand-200">
+          <p class="font-display text-[10px] uppercase tracking-[0.14em] text-praia-sand-400 mb-1">Data da visita</p>
+          <p class="font-display text-base font-bold text-praia-teal-800">${formatStampDate(visits[0])}</p>
+        </div>`;
+    }
+
+    const [latest, ...older] = visits;
+    const olderHtml = older.map((d, i) => {
+      const ordinal = visits.length - 1 - i;
+      return `
+        <li class="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-praia-sand-50 transition-colors">
+          <span class="font-display text-sm font-semibold text-praia-teal-800">${formatStampDateShort(d)}</span>
+          <span class="font-display text-[10px] uppercase tracking-wider text-praia-sand-400">${ordinal}.ª visita</span>
+        </li>`;
+    }).join('');
+
+    return `
+      <div class="mt-5 pt-5 border-t border-praia-sand-200 text-left">
+        <div class="flex items-center justify-between mb-3">
+          <p class="font-display text-[10px] uppercase tracking-[0.14em] text-praia-sand-400">Histórico de visitas</p>
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-praia-teal-800 text-praia-yellow-400 font-display text-[10px] font-bold uppercase tracking-wider">
+            ${visits.length} visitas
+          </span>
+        </div>
+        <div class="rounded-xl bg-praia-yellow-50 border border-praia-yellow-200 p-3 mb-2">
+          <p class="font-display text-[10px] uppercase tracking-[0.14em] text-praia-teal-600 mb-0.5">Última visita</p>
+          <p class="font-display text-base font-bold text-praia-teal-800">${formatStampDate(latest)}</p>
+        </div>
+        <ul class="space-y-0.5">${olderHtml}</ul>
+      </div>`;
+  }
+
+  async function showVisitInfo(beach) {
     if (!beach) return;
     const stamped = !!stampMap[beach.id];
-    const dateIso = stampMap[beach.id] || '';
     const photo = beach.thumbnail || (beach.photos && beach.photos[0]) || '';
     const existing = document.getElementById('visit-info-overlay');
     if (existing) existing.remove();
@@ -217,6 +292,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const close = () => el.remove();
 
     if (stamped) {
+      const initialDate = stampMap[beach.id] || '';
+      const initialHistory = initialDate ? visitHistoryHTML([initialDate]) : '';
       el.innerHTML = `
         <div class="relative w-full sm:max-w-sm bg-white rounded-t-3xl sm:rounded-3xl overflow-hidden shadow-2xl"
              style="box-shadow:0 30px 80px rgba(0,0,0,0.45);">
@@ -230,15 +307,21 @@ document.addEventListener('DOMContentLoaded', async () => {
             </div>
             <h3 class="font-display text-xl font-bold text-praia-teal-800 leading-tight">${beach.name}</h3>
             <p class="text-xs text-praia-sand-500 mt-1">${beach.municipality || ''} ${beach.river ? '· ' + beach.river : ''}</p>
-            <div class="mt-5 pt-5 border-t border-praia-sand-200">
-              <p class="font-display text-[10px] uppercase tracking-[0.14em] text-praia-sand-400 mb-1">Data da visita</p>
-              <p class="font-display text-base font-bold text-praia-teal-800">${formatStampDate(dateIso)}</p>
-            </div>
+            <div id="visit-history-slot">${initialHistory}</div>
             <a href="praia.html?id=${beach.id}" class="mt-5 inline-flex items-center justify-center gap-1.5 w-full bg-praia-teal-800 text-praia-yellow-400 font-display font-bold text-xs uppercase tracking-wider px-4 py-3 rounded-full hover:opacity-90 active:scale-[0.98] transition-all">
               Ver página da praia <i data-lucide="arrow-right" style="width:14px;height:14px;"></i>
             </a>
           </div>
         </div>`;
+      // Carregar histórico completo (pode trazer mais visitas que o stampMap)
+      getVisitHistory(beach).then(visits => {
+        const slot = el.querySelector('#visit-history-slot');
+        if (!slot) return;
+        if (visits.length) {
+          slot.innerHTML = visitHistoryHTML(visits);
+          lucide.createIcons();
+        }
+      }).catch(() => {});
     } else {
       el.innerHTML = `
         <div class="relative w-full sm:max-w-sm bg-white rounded-t-3xl sm:rounded-3xl overflow-hidden shadow-2xl"

@@ -277,12 +277,19 @@ body {
 
 /* ─── Mobile Bottom Nav ─── */
 /* Safety net: força position fixed e elimina transform herdado que o iOS Safari
-   usa como containing block, fazendo a nav "saltar" para o meio do ecrã. */
+   usa como containing block, fazendo a nav "saltar" para o meio do ecrã.
+   Valores explícitos em vez de `inset:` shorthand (mais robusto em WebKit
+   antigos) e `bottom` sem !important para o handler de visualViewport poder
+   reanchorar a nav quando a barra de URL do iOS Safari encolhe/expande. */
 .bottom-nav {
   position: fixed !important;
-  inset: auto 0 0 0 !important;
+  top: auto !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0;
   transform: none !important;
   will-change: auto;
+  contain: layout style;
   z-index: 1000;
   box-shadow:
     0 -2px 4px rgba(0, 58, 64, 0.06),
@@ -346,14 +353,24 @@ body {
 .bottom-nav a.active::after {
   content: '';
   position: absolute;
-  bottom: 4px;
+  bottom: 6px;
   left: 50%;
   transform: translateX(-50%);
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
   background: var(--praia-yellow);
-  box-shadow: 0 0 8px rgba(255, 235, 59, 0.6);
+  box-shadow:
+    0 0 0 1px rgba(0, 58, 64, 0.3),
+    0 0 10px rgba(255, 235, 59, 0.85),
+    0 0 18px rgba(255, 235, 59, 0.4);
+}
+@media (display-mode: standalone) {
+  .bottom-nav a.active::after {
+    width: 7px;
+    height: 7px;
+    bottom: 8px;
+  }
 }
 .bottom-nav [data-lucide],
 .bottom-nav svg {
@@ -383,6 +400,45 @@ body {
   }
   body.has-bottom-nav #guest-banner:not(.hidden) {
     bottom: calc(76px + env(safe-area-inset-bottom)) !important;
+  }
+}
+
+/* ─── Bottom-sheet modals: respeitar bottom-nav em mobile ───
+   Modais que abrem em "items-end" (bottom-sheet) sobrepõem-se à bottom-nav.
+   Em viewports < 640px, adicionar padding-bottom ao overlay para que o cartão
+   interior pare ACIMA da nav, mantendo o CTA inferior totalmente visível.
+   Aplica-se ao modal de detalhes de carimbo no Passaporte. */
+@media (max-width: 639px) {
+  body.has-bottom-nav #visit-info-overlay {
+    padding-bottom: calc(72px + env(safe-area-inset-bottom)) !important;
+  }
+  body.has-bottom-nav #visit-info-overlay > div {
+    max-height: calc(100dvh - 72px - env(safe-area-inset-bottom) - 16px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+}
+@media (max-width: 639px) and (display-mode: standalone) {
+  body.has-bottom-nav #visit-info-overlay {
+    padding-bottom: calc(76px + env(safe-area-inset-bottom)) !important;
+  }
+  body.has-bottom-nav #visit-info-overlay > div {
+    max-height: calc(100dvh - 76px - env(safe-area-inset-bottom) - 16px);
+  }
+}
+
+/* ─── Toasts: levantar acima da bottom-nav em mobile ───
+   Os toasts (loja, produto, carrinho) usam `fixed bottom-6 left-1/2 z-[3000]`.
+   Em mobile com bottom-nav, `bottom: 1.5rem` deixa-os escondidos por baixo da
+   nav. Subimos para que o toast respire ~16px acima da nav. */
+@media (max-width: 1023px) {
+  body.has-bottom-nav .fixed.bottom-6 {
+    bottom: calc(72px + 1rem) !important;
+  }
+}
+@media (max-width: 1023px) and (display-mode: standalone) {
+  body.has-bottom-nav .fixed.bottom-6 {
+    bottom: calc(76px + env(safe-area-inset-bottom) + 1rem) !important;
   }
 }
 

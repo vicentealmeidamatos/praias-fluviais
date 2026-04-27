@@ -245,6 +245,10 @@
       }
     },
     "votar": {
+      "main.pt-16.pb-0 > section.py-12:nth-of-type(3) > div.max-w-7xl.mx-auto > div.text-center.mb-10:nth-of-type(1) > p.text-praia-sand-600.mt-4": {
+        "html": "Procure a sua praia, filtre por distrito ou concelho e vote. Só pode votar uma vez.",
+        "text": "Procure a sua praia, filtre por distrito ou concelho e vote. Só pode votar uma vez."
+      },
       "section.relative.py-16:nth-of-type(4) > div.relative.z-10:nth-of-type(2) > div:nth-of-type(3) > div.winners-panel:nth-of-type(5) > div > div:nth-of-type(2) > div > div:nth-of-type(2) > h3": {
         "html": "Zona de Fruição Ribeirinha da Carriça",
         "text": "Zona de Fruição Ribeirinha da Carriça"

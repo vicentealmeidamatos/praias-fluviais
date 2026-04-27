@@ -1109,6 +1109,39 @@ function slugify(text) {
 
     document.body.classList.add('has-bottom-nav');
 
+    // Anchor da bottom-nav ao bottom da visual viewport. Em iOS Safari, quando
+    // a barra de URL encolhe ao fazer scroll, o layout viewport mantém-se mas
+    // o visual viewport fica MAIOR. Isso pode deixar a nav (fixed bottom: 0)
+    // ancorada num "bottom" antigo e a flutuar a meio do ecrã com um vão por
+    // baixo. Aqui calculamos a diferença e ajustamos `bottom` em tempo real.
+    if (window.visualViewport) {
+      var vv = window.visualViewport;
+      var raf = 0;
+      function syncNavBottom() {
+        if (raf) cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(function () {
+          // Posição vertical do bottom da visual viewport relativa ao top do
+          // layout viewport. Se for INFERIOR a layoutH, há área visível abaixo
+          // dela (URL bar a desaparecer): subimos a nav por essa diferença.
+          var layoutH = document.documentElement.clientHeight || window.innerHeight;
+          var visualBottom = vv.height + vv.offsetTop;
+          var gap = Math.max(0, layoutH - visualBottom);
+          // Limitar para evitar saltos exagerados se algo estiver corrompido
+          if (gap > layoutH * 0.5) gap = 0;
+          if (gap > 0) {
+            nav.style.setProperty('bottom', gap + 'px', 'important');
+          } else {
+            nav.style.removeProperty('bottom');
+          }
+        });
+      }
+      vv.addEventListener('resize', syncNavBottom);
+      vv.addEventListener('scroll', syncNavBottom);
+      window.addEventListener('orientationchange', syncNavBottom);
+      // Sync inicial após próximo paint
+      requestAnimationFrame(syncNavBottom);
+    }
+
     // "Mais" sheet
     var backdrop = document.createElement('div');
     backdrop.className = 'more-sheet-backdrop';
