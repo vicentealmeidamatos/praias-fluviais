@@ -40,28 +40,68 @@ async function profileGet(userId) {
   return data || null;
 }
 
+// Atualiza um perfil existente; se ainda não existir, cria-o com defaults
+// derivados da sessão. Evita o erro NOT NULL em `username` quando se chama
+// profileUpsert(id, { avatar_url }) num utilizador sem linha de profile.
 async function profileUpsert(userId, fields) {
-  const { error } = await _sb
+  const { data: updated, error: updateErr } = await _sb
     .from('profiles')
-    .upsert({ id: userId, ...fields }, { onConflict: 'id' });
-  if (error) throw error;
+    .update(fields)
+    .eq('id', userId)
+    .select('id');
+  if (updateErr) throw updateErr;
+  if (updated && updated.length > 0) return true;
+
+  const { data: { user } } = await _sb.auth.getUser();
+  const fallbackUsername =
+    user?.user_metadata?.username
+    || user?.user_metadata?.full_name?.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_.-]/g, '').slice(0, 24)
+    || user?.email?.split('@')[0]
+    || `user_${userId.slice(0, 8)}`;
+
+  const insertRow = {
+    id: userId,
+    username: fallbackUsername,
+    email: user?.email || null,
+    ...fields,
+  };
+  const { error: insertErr } = await _sb.from('profiles').insert(insertRow);
+  if (insertErr) throw insertErr;
   return true;
 }
 
-async function profileUploadAvatar(userId, file) {
-  const ext  = file.name.split('.').pop().toLowerCase();
+async function profileUploadAvatar(userId, fileOrBlob, fileName) {
+  // Aceita File (do <input>) ou Blob (do cropper). Quando é Blob,
+  // forçamos JPEG por ser o output do canvas no fluxo de crop.
+  const isBlob = fileOrBlob instanceof Blob && !(fileOrBlob instanceof File);
+  const name = fileName || fileOrBlob.name || 'avatar.jpg';
+  const ext = isBlob ? 'jpg' : (name.split('.').pop() || 'jpg').toLowerCase();
   const path = `${userId}/avatar.${ext}`;
-  const contentType = file.type || 'image/' + (ext === 'jpg' ? 'jpeg' : ext);
+  const contentType = fileOrBlob.type || 'image/' + (ext === 'jpg' ? 'jpeg' : ext);
   const { error } = await _sb.storage
     .from('avatars')
-    .upload(path, file, { upsert: true, contentType });
+    .upload(path, fileOrBlob, { upsert: true, contentType });
   if (error) {
     console.error('[profileUploadAvatar] upload error:', error.message);
     return null;
   }
   const { data } = _sb.storage.from('avatars').getPublicUrl(path);
-  // Bust browser cache with timestamp
   return data.publicUrl + '?t=' + Date.now();
+}
+
+// Remove a foto de perfil: limpa avatar_url e apaga ficheiros conhecidos
+// no bucket. As remoções no storage são best-effort — o que importa para a
+// UI é o avatar_url ficar null para o helper voltar à inicial do nome.
+async function profileRemoveAvatar(userId) {
+  const { error } = await _sb
+    .from('profiles')
+    .update({ avatar_url: null })
+    .eq('id', userId);
+  if (error) throw error;
+  const candidates = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'heic', 'heif']
+    .map(ext => `${userId}/avatar.${ext}`);
+  try { await _sb.storage.from('avatars').remove(candidates); } catch {}
+  return true;
 }
 
 // ─── Stamps ───────────────────────────────────────────────────────────────────
@@ -1008,6 +1048,7 @@ window.AuthUtils = {
   profileGet,
   profileUpsert,
   profileUploadAvatar,
+  profileRemoveAvatar,
   getEmailByUsername,
   checkEmailExists,
   checkUsernameExists,

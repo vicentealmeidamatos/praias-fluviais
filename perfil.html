@@ -96,6 +96,138 @@
       to   { opacity: 1; transform: translateY(0); }
     }
     .profile-content { animation: fadeUp 0.4s ease both; }
+
+    /* Avatar hover (somente perfil próprio) */
+    .avatar-edit-trigger {
+      position: relative;
+      cursor: pointer;
+      display: inline-block;
+      border-radius: 50%;
+      isolation: isolate;
+    }
+    .avatar-edit-trigger .avatar-edit-overlay {
+      position: absolute; inset: 6px; border-radius: 50%;
+      background: rgba(0, 32, 36, 0.55);
+      backdrop-filter: blur(2px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity 0.25s ease;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .avatar-edit-trigger .avatar-edit-overlay svg {
+      color: #FFEB3B;
+      width: 28px; height: 28px;
+      transform: translateY(4px) scale(0.85);
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .avatar-edit-trigger:hover .avatar-edit-overlay,
+    .avatar-edit-trigger:focus-within .avatar-edit-overlay,
+    .avatar-edit-trigger.is-open .avatar-edit-overlay {
+      opacity: 1;
+    }
+    .avatar-edit-trigger:hover .avatar-edit-overlay svg,
+    .avatar-edit-trigger.is-open .avatar-edit-overlay svg {
+      transform: translateY(0) scale(1);
+    }
+
+    /* Popover de acções */
+    #avatar-actions-pop {
+      position: absolute;
+      top: calc(100% + 12px); left: 50%; transform: translateX(-50%) translateY(-6px);
+      background: linear-gradient(155deg, #003A40, #005D56);
+      border: 1px solid rgba(255,255,255,0.14);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.45);
+      border-radius: 16px; padding: 6px; min-width: 220px;
+      opacity: 0; pointer-events: none; transition: opacity 0.2s ease, transform 0.2s ease;
+      z-index: 30;
+    }
+    #avatar-actions-pop::before {
+      content: ''; position: absolute; top: -7px; left: 50%; width: 14px; height: 14px;
+      transform: translateX(-50%) rotate(45deg);
+      background: linear-gradient(155deg, #003A40, #003A40);
+      border-left: 1px solid rgba(255,255,255,0.14);
+      border-top: 1px solid rgba(255,255,255,0.14);
+    }
+    #avatar-actions-pop.is-open {
+      opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0);
+    }
+    #avatar-actions-pop button {
+      display: flex; align-items: center; gap: 10px; width: 100%;
+      padding: 10px 14px; border-radius: 10px;
+      font-family: 'Poppins', sans-serif; font-weight: 600;
+      font-size: 12px; letter-spacing: 0.04em;
+      color: rgba(255,255,255,0.85); background: transparent; border: 0; text-align: left; cursor: pointer;
+      transition: background 0.18s ease, color 0.18s ease;
+    }
+    #avatar-actions-pop button:hover { background: rgba(255,235,59,0.10); color: #FFEB3B; }
+    #avatar-actions-pop button.is-danger { color: #FCA5A5; }
+    #avatar-actions-pop button.is-danger:hover { background: rgba(248,113,113,0.12); color: #FECACA; }
+    #avatar-actions-pop button[disabled] { opacity: 0.35; cursor: not-allowed; }
+    #avatar-actions-pop .divider { height: 1px; background: rgba(255,255,255,0.08); margin: 4px 6px; }
+
+    /* Crop overlay */
+    .crop-overlay {
+      position: fixed; inset: 0; z-index: 3000;
+      background: rgba(0,0,0,0.78); backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center; padding: 20px;
+    }
+    .crop-shell {
+      width: min(420px, 100%);
+      background: linear-gradient(155deg, #003A40, #005D56);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.55);
+      border-radius: 24px; padding: 24px;
+      animation: cropPop 0.35s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    @keyframes cropPop {
+      from { opacity: 0; transform: scale(0.92) translateY(10px); }
+      to   { opacity: 1; transform: scale(1)   translateY(0); }
+    }
+    .crop-stage {
+      width: 100%; aspect-ratio: 1 / 1;
+      background: rgba(0,0,0,0.4); border-radius: 18px;
+      position: relative; overflow: hidden;
+      touch-action: none; cursor: grab; user-select: none;
+    }
+    .crop-stage:active { cursor: grabbing; }
+    .crop-stage img {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      will-change: transform; pointer-events: none; max-width: none;
+    }
+    .crop-mask {
+      position: absolute; inset: 0; pointer-events: none;
+      background:
+        radial-gradient(circle at 50% 50%,
+          transparent 0,
+          transparent calc(50% - 1px),
+          rgba(0,32,36,0.65) calc(50% + 0px),
+          rgba(0,32,36,0.85) 100%);
+    }
+    .crop-mask::after {
+      content: ''; position: absolute; inset: 0;
+      border-radius: 50%; box-shadow: 0 0 0 2px rgba(255,235,59,0.55) inset;
+      mask: radial-gradient(circle at 50% 50%, transparent calc(50% - 2px), #000 calc(50% - 1px));
+      -webkit-mask: radial-gradient(circle at 50% 50%, transparent calc(50% - 2px), #000 calc(50% - 1px));
+    }
+    .crop-zoom-wrap {
+      display: flex; align-items: center; gap: 12px; margin-top: 18px;
+    }
+    .crop-zoom-wrap input[type="range"] {
+      flex: 1; appearance: none; height: 4px; border-radius: 4px;
+      background: linear-gradient(to right, #FFEB3B 0%, #FFEB3B var(--val, 0%), rgba(255,255,255,0.18) var(--val, 0%));
+      outline: none;
+    }
+    .crop-zoom-wrap input[type="range"]::-webkit-slider-thumb {
+      appearance: none; width: 18px; height: 18px; border-radius: 50%;
+      background: #FFEB3B; cursor: pointer; border: 2px solid #003A40;
+      box-shadow: 0 4px 10px rgba(255,235,59,0.35);
+    }
+    .crop-zoom-wrap input[type="range"]::-moz-range-thumb {
+      width: 18px; height: 18px; border-radius: 50%;
+      background: #FFEB3B; cursor: pointer; border: 2px solid #003A40;
+    }
+    .crop-zoom-wrap svg { color: rgba(255,255,255,0.55); width: 16px; height: 16px; flex-shrink: 0; }
+    .crop-actions { display: flex; gap: 10px; margin-top: 18px; }
   </style>
 </head>
 
@@ -213,11 +345,29 @@
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-6">
           <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6">
             <!-- Avatar -->
-            <div class="flex-shrink-0">
-              <div class="avatar-ring inline-block">
-                <div class="bg-praia-teal-800 rounded-full p-0.5">
-                  <div id="profile-avatar-wrap" class="w-24 h-24 rounded-full overflow-hidden"></div>
+            <div class="flex-shrink-0 relative">
+              <div id="avatar-edit-trigger" class="avatar-edit-trigger" role="button" tabindex="0" aria-label="Editar foto de perfil" aria-haspopup="menu" aria-expanded="false">
+                <div class="avatar-ring inline-block">
+                  <div class="bg-praia-teal-800 rounded-full p-0.5">
+                    <div id="profile-avatar-wrap" class="w-24 h-24 rounded-full overflow-hidden"></div>
+                  </div>
                 </div>
+                <div class="avatar-edit-overlay" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                </div>
+              </div>
+
+              <!-- Popover de acções (alterar/remover) -->
+              <div id="avatar-actions-pop" role="menu" aria-label="Acções da foto de perfil">
+                <button type="button" id="avatar-action-change" role="menuitem">
+                  <i data-lucide="image-up" class="w-4 h-4"></i>
+                  <span>Alterar foto de perfil</span>
+                </button>
+                <div class="divider"></div>
+                <button type="button" id="avatar-action-remove" class="is-danger" role="menuitem">
+                  <i data-lucide="trash-2" class="w-4 h-4"></i>
+                  <span>Remover foto de perfil</span>
+                </button>
               </div>
             </div>
             <!-- Info -->
@@ -420,6 +570,33 @@
             <p id="edit-password-msg" class="text-[11px] text-white/40 mt-2 hidden"></p>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Crop Overlay (ajuste circular pré-upload) ─── -->
+  <div id="crop-overlay" class="crop-overlay hidden" aria-hidden="true">
+    <div class="crop-shell" role="dialog" aria-modal="true" aria-label="Ajustar foto de perfil">
+      <h3 class="font-display text-base font-bold text-white mb-1">Ajuste a foto</h3>
+      <p class="text-[12px] text-white/55 mb-4">Arraste para enquadrar e use o zoom para escolher como ficará no círculo.</p>
+      <div id="crop-stage" class="crop-stage">
+        <img id="crop-img" alt="" draggable="false">
+        <div class="crop-mask"></div>
+      </div>
+      <div class="crop-zoom-wrap">
+        <i data-lucide="image" style="opacity:0.5;"></i>
+        <input id="crop-zoom" type="range" min="1" max="4" step="0.01" value="1" aria-label="Zoom">
+        <i data-lucide="zoom-in"></i>
+      </div>
+      <div class="crop-actions">
+        <button type="button" id="crop-cancel"
+                class="flex-1 border border-white/20 text-white/75 hover:text-white hover:border-white/40 font-display font-bold text-xs uppercase tracking-wider py-3 rounded-xl transition-colors">
+          Cancelar
+        </button>
+        <button type="button" id="crop-confirm"
+                class="flex-1 btn-primary bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-xs uppercase tracking-wider py-3 rounded-xl shadow-layered-yellow">
+          Aplicar
+        </button>
       </div>
     </div>
   </div>
