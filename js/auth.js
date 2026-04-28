@@ -548,16 +548,50 @@ function badgesTopEarned(computedBadges, n = 3) {
 const _badgesCache = {};
 async function badgesGetForUser(userId, beaches) {
   if (_badgesCache[userId]) return _badgesCache[userId];
+  const map = await badgesGetForUsers([userId], beaches);
+  return map[userId] || [];
+}
+
+// Batched version: fetches stamps/reviews/votes for many users in 3 queries total
+// instead of 3 queries × N users. Used by beach page comments to avoid N×3 round-trips.
+async function badgesGetForUsers(userIds, beaches) {
+  const out = {};
+  if (!userIds || !userIds.length) return out;
+
+  const missing = [];
+  userIds.forEach(uid => {
+    if (_badgesCache[uid]) out[uid] = _badgesCache[uid];
+    else missing.push(uid);
+  });
+  if (!missing.length) return out;
+
   const year = new Date().getFullYear();
-  const [stamps, reviews, vote] = await Promise.all([
-    stampsGetAll(userId),
-    reviewsGetForUser(userId),
-    voteGet(userId, year),
+  const [stampsRes, reviewsRes, votesRes] = await Promise.all([
+    _sb.from('stamps').select('user_id, beach_id, stamped_at').in('user_id', missing),
+    _sb.from('reviews').select('user_id, images, beach_id').in('user_id', missing),
+    _sb.from('votes').select('user_id').in('user_id', missing).eq('year', year),
   ]);
-  const computed = badgesCompute({ stamps, reviews, voted: !!vote, beaches });
-  const result = badgesTopEarned(computed, 3);
-  _badgesCache[userId] = result;
-  return result;
+  const allStamps = stampsRes.data || [];
+  const allReviews = reviewsRes.data || [];
+  const votedSet = new Set((votesRes.data || []).map(v => v.user_id));
+
+  const stampsByUser = {};
+  allStamps.forEach(s => { (stampsByUser[s.user_id] = stampsByUser[s.user_id] || []).push(s); });
+  const reviewsByUser = {};
+  allReviews.forEach(r => { (reviewsByUser[r.user_id] = reviewsByUser[r.user_id] || []).push(r); });
+
+  missing.forEach(uid => {
+    const computed = badgesCompute({
+      stamps: stampsByUser[uid] || [],
+      reviews: reviewsByUser[uid] || [],
+      voted: votedSet.has(uid),
+      beaches,
+    });
+    const top = badgesTopEarned(computed, 3);
+    _badgesCache[uid] = top;
+    out[uid] = top;
+  });
+  return out;
 }
 
 // ─── Username → Email Lookup (requires email column in profiles table) ────────
@@ -1177,6 +1211,7 @@ window.AuthUtils = {
   badgesCompute,
   badgesTopEarned,
   badgesGetForUser,
+  badgesGetForUsers,
   ALL_BADGES,
   BADGE_TIERS,
   avatarHTML,

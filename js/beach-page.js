@@ -4,14 +4,13 @@ const _beachesEarlyBP = _beachId ? getBeaches() : null;
 const _settingsEarlyBP = _beachId ? loadData('settings') : null;
 const _authEarlyBP = _beachId && window.AuthUtils ? AuthUtils.authGetUser() : null;
 let _reviewsEarlyBP = _beachId && window.AuthUtils ? AuthUtils.reviewsGetForBeach(_beachId) : null;
-// Pre-start badge fetching as soon as reviews + beaches resolve
+// Pre-start batched badge fetch as soon as reviews + beaches resolve.
+// One call → 3 Supabase queries total, regardless of commenter count.
 let _badgesEarlyBP = (_reviewsEarlyBP && _beachesEarlyBP)
   ? Promise.all([_reviewsEarlyBP, _beachesEarlyBP]).then(([reviews, beaches]) => {
       const uids = [...new Set(reviews.map(r => r.user_id).filter(Boolean))];
-      const map = {};
-      return Promise.all(uids.map(uid =>
-        AuthUtils.badgesGetForUser(uid, beaches).then(b => { map[uid] = b; }).catch(() => { map[uid] = []; })
-      )).then(() => map);
+      if (!uids.length) return {};
+      return AuthUtils.badgesGetForUsers(uids, beaches).catch(() => ({}));
     }).catch(() => ({}))
   : null;
 
@@ -421,10 +420,11 @@ async function loadReviews(beachId, currentUser, beaches) {
   const useEarlyReviews = beachId === _beachId && _reviewsEarlyBP;
   const useEarlyBadges  = beachId === _beachId && _badgesEarlyBP;
   const reviewsPromise = useEarlyReviews ? _reviewsEarlyBP : AuthUtils.reviewsGetForBeach(beachId);
-  const badgesPromise  = useEarlyBadges  ? _badgesEarlyBP  : Promise.resolve(null);
+  let badgesPromise    = useEarlyBadges  ? _badgesEarlyBP  : null;
   if (useEarlyReviews) _reviewsEarlyBP = null;
   if (useEarlyBadges)  _badgesEarlyBP  = null;
-  const [allReviews, preFetchedMedals] = await Promise.all([reviewsPromise, badgesPromise]);
+
+  const allReviews = await reviewsPromise;
 
   if (allReviews.length === 0) {
     container.innerHTML = `
@@ -441,14 +441,8 @@ async function loadReviews(beachId, currentUser, beaches) {
   const topLevel = allReviews.filter(r => !r.parent_id);
   const replies  = allReviews.filter(r => !!r.parent_id);
 
-  // Fetch medals if not pre-fetched (e.g. after submit/delete refresh)
-  let medalMap = preFetchedMedals || {};
-  if (!preFetchedMedals) {
-    const uniqueUserIds = [...new Set(allReviews.map(r => r.user_id).filter(Boolean))];
-    await Promise.all(uniqueUserIds.map(async uid => {
-      try { medalMap[uid] = await AuthUtils.badgesGetForUser(uid, beaches); } catch { medalMap[uid] = []; }
-    }));
-  }
+  // Medals are an enhancement: render comments now, fill medals when ready.
+  let medalMap = {};
 
   function reviewCardHTML(r, isReply = false) {
     if (r.deleted_by_admin) {
@@ -533,8 +527,27 @@ async function loadReviews(beachId, currentUser, beaches) {
       </div>`;
   }
 
-  container.innerHTML = topLevel.map(r => reviewCardHTML(r, false)).join('');
-  lucide.createIcons();
+  function renderAll() {
+    container.innerHTML = topLevel.map(r => reviewCardHTML(r, false)).join('');
+    lucide.createIcons();
+  }
+
+  renderAll();
+
+  // Enhance with medals once batched fetch resolves (non-blocking).
+  const medalsReady = badgesPromise || (
+    allReviews.length
+      ? AuthUtils.badgesGetForUsers(
+          [...new Set(allReviews.map(r => r.user_id).filter(Boolean))],
+          beaches
+        ).catch(() => ({}))
+      : Promise.resolve({})
+  );
+  medalsReady.then(map => {
+    if (!map || !Object.keys(map).length) return;
+    medalMap = map;
+    renderAll();
+  });
 
   // Inject medal CSS animations once
   if (!document.getElementById('medal-anim-style')) {
