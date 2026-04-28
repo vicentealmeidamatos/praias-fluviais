@@ -194,20 +194,20 @@
       position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
       will-change: transform; pointer-events: none; max-width: none;
     }
+    /* Vinheta escura cobre os cantos do stage; o círculo inscrito fica limpo */
     .crop-mask {
       position: absolute; inset: 0; pointer-events: none;
-      background:
-        radial-gradient(circle at 50% 50%,
-          transparent 0,
-          transparent calc(50% - 1px),
-          rgba(0,32,36,0.65) calc(50% + 0px),
-          rgba(0,32,36,0.85) 100%);
+      background: rgba(0, 22, 26, 0.72);
+      -webkit-mask: radial-gradient(circle closest-side at 50% 50%, transparent calc(100% - 0.5px), #000 100%);
+              mask: radial-gradient(circle closest-side at 50% 50%, transparent calc(100% - 0.5px), #000 100%);
     }
+    /* Anel amarelo único, encostado à borda da vinheta — guia visual do crop */
     .crop-mask::after {
       content: ''; position: absolute; inset: 0;
-      border-radius: 50%; box-shadow: 0 0 0 2px rgba(255,235,59,0.55) inset;
-      mask: radial-gradient(circle at 50% 50%, transparent calc(50% - 2px), #000 calc(50% - 1px));
-      -webkit-mask: radial-gradient(circle at 50% 50%, transparent calc(50% - 2px), #000 calc(50% - 1px));
+      border-radius: 50%;
+      border: 2px solid rgba(255, 235, 59, 0.8);
+      box-sizing: border-box;
+      box-shadow: 0 0 22px rgba(255, 235, 59, 0.16);
     }
     .crop-zoom-wrap {
       display: flex; align-items: center; gap: 12px; margin-top: 18px;

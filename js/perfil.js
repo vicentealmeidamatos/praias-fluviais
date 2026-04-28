@@ -321,6 +321,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     modal.classList.remove('hidden');
     // Limpa estado de upload anterior para nova selecção começar do zero
     _croppedBlob = null;
+    _directUpload = false;
     const fileInput = document.getElementById('edit-avatar');
     if (fileInput) fileInput.value = '';
     // Prefill current values
@@ -615,8 +616,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // ── Avatar cropper + edit/remove menu ─────────────────────────────────────
   // _croppedBlob é o JPEG 512×512 que sai do cropper; saveProfilePhoto usa-o.
+  // _directUpload=true (vindo do "Alterar foto" do hover) salta o modal de
+  // Editar Perfil e faz upload imediato após o crop.
   let _croppedBlob = null;
   let _cropObjectUrl = null;
+  let _directUpload = false;
 
   document.getElementById('edit-avatar')?.addEventListener('change', e => {
     const file = e.target.files[0];
@@ -782,6 +786,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       document.getElementById('edit-avatar-preview').innerHTML =
         `<img src="${previewUrl}" alt="Preview" class="w-20 h-20 rounded-full object-cover border-2 border-praia-yellow-400">`;
       close();
+      // Fluxo directo (a partir do lápis no hover): upload imediato,
+      // sem passar pelo modal de Editar Perfil.
+      if (_directUpload) {
+        _directUpload = false;
+        window.saveProfilePhoto();
+      }
     };
   }
 
@@ -844,9 +854,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     btnChange?.addEventListener('click', () => {
       window.closeAvatarMenu();
-      openEditModal();
-      // Abre logo o seletor de ficheiros
-      setTimeout(() => document.getElementById('edit-avatar')?.click(), 250);
+      _directUpload = true;
+      _croppedBlob = null;
+      const input = document.getElementById('edit-avatar');
+      if (input) { input.value = ''; input.click(); }
     });
     btnRemove?.addEventListener('click', () => {
       window.closeAvatarMenu();
