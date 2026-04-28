@@ -20,8 +20,6 @@
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
   })[ch]);
 
-  const wait = (ms) => new Promise(r => setTimeout(r, ms));
-
   function formatDatePT(d) {
     const months = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun',
                     'jul', 'ago', 'set', 'out', 'nov', 'dez'];
@@ -283,24 +281,6 @@
     return getGuestStamps();
   }
 
-  // ── Badge celebration sequencer ────────────────────────────────────────────
-  // celebrateBadge cria um overlay fixed fullscreen que auto-dismiss em 4000ms
-  // (7000ms para mitico) + 400ms de fade. Estratégia: dispara todas as medalhas
-  // com stagger de 1800ms (cadência igual ao passaporte.js), aguarda um beat
-  // curto para a primeira aterrar, e devolve o controlo. O card da praia é
-  // depois renderizado por baixo dos overlays — à medida que estes fade out,
-  // o card emerge naturalmente.
-  async function celebrateBadgesSequentially(newBadges) {
-    const { celebrateBadge } = window.AuthUtils || {};
-    if (!celebrateBadge || !newBadges.length) return;
-    const toCelebrate = newBadges.slice(0, 3);
-    toCelebrate.forEach((badge, i) => {
-      setTimeout(() => celebrateBadge(badge), i * 1800);
-    });
-    // Deixa a primeira medalha aterrar antes de pintar o card por baixo.
-    await wait(500);
-  }
-
   // ── Main flow ──────────────────────────────────────────────────────────────
   async function main() {
     // 1. Parse beach id
@@ -432,19 +412,21 @@
       console.warn('[qr-stamp] badgesCompute after failed:', err);
     }
 
-    // 10. Persist badge state so passaporte.html não re-celebra
+    // 10. Persist badge state (afterEarnedIds) e, se houver medalhas novas,
+    // guardar a lista pendente para celebração diferida em passaporte.html.
+    // Não celebramos aqui em carimbar.html para não sobrepor o card de
+    // confirmação do carimbo — a medalha aparece depois, quando o utilizador
+    // sai desta página e abre o passaporte.
     try {
       const storageKey = user ? `badges_${user.id}` : 'badges_guest';
       localStorage.setItem(storageKey, JSON.stringify(afterEarnedIds));
+      if (newlyEarned.length > 0) {
+        const pendingKey = user ? `badges_pending_${user.id}` : 'badges_pending_guest';
+        localStorage.setItem(pendingKey, JSON.stringify(newlyEarned.map(b => b.id)));
+      }
     } catch {}
 
-    // 11. Celebrate medals FIRST if any were earned (priority rule)
-    if (newlyEarned.length > 0) {
-      renderLoading('Desbloqueou uma nova medalha!', 'Aguarde um instante…');
-      await celebrateBadgesSequentially(newlyEarned);
-    }
-
-    // 12. Show the beach unlock card
+    // 11. Show the beach unlock card
     const stampsAvailable = beaches.length;
     renderSuccess({
       beach,

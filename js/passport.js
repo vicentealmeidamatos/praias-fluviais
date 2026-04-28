@@ -222,16 +222,47 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     grid.innerHTML = sorted.map(b => badgeCardHTML(b)).join('');
 
-    // Badge unlock celebrations — only for genuinely new badges, never on first page load
+    // ── Celebrations ───────────────────────────────────────────────────────
+    // Disparamos só no render autoritativo (persist:true) para evitar
+    // celebrar com base em cache desatualizada. Duas fontes são unidas:
+    //  (a) `badges_pending_*` — IDs gravados por qr-stamp.js após um carimbo
+    //      via QR. A celebração é diferida para esta página para não cobrir
+    //      o card de confirmação na carimbar.html.
+    //  (b) Diff contra a última snapshot conhecida (cobre outros caminhos).
     const earnedNow = new Set(computed.filter(b => b.earned).map(b => b.id));
-    const newBadges = isFirstPageLoad
-      ? []
-      : computed.filter(b => b.earned && !prevEarned.has(b.id));
 
-    if (newBadges.length > 0) {
-      newBadges.slice(0, 3).forEach((badge, i) => {
-        setTimeout(() => celebrateBadge(badge), i * 1800 + 600);
-      });
+    if (persist) {
+      const pendingKey = user ? `badges_pending_${user.id}` : 'badges_pending_guest';
+      let pendingIds = [];
+      try { pendingIds = JSON.parse(localStorage.getItem(pendingKey) || '[]') || []; }
+      catch {}
+
+      const diffBadges = isFirstPageLoad
+        ? []
+        : computed.filter(b => b.earned && !prevEarned.has(b.id));
+
+      const seen = new Set();
+      const toCelebrate = [];
+      for (const id of pendingIds) {
+        if (seen.has(id)) continue;
+        const b = computed.find(x => x.id === id && x.earned);
+        if (b) { seen.add(id); toCelebrate.push(b); }
+      }
+      for (const b of diffBadges) {
+        if (seen.has(b.id)) continue;
+        seen.add(b.id);
+        toCelebrate.push(b);
+      }
+
+      if (toCelebrate.length > 0) {
+        toCelebrate.slice(0, 3).forEach((badge, i) => {
+          setTimeout(() => celebrateBadge(badge), i * 1800 + 600);
+        });
+      }
+
+      if (pendingIds.length > 0) {
+        try { localStorage.removeItem(pendingKey); } catch {}
+      }
     }
 
     // Persist to localStorage and update in-memory state. Skipped for the
