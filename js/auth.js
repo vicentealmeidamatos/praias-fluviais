@@ -127,6 +127,28 @@ async function visitsGetForBeach(userId, beachId) {
 // `visits` pode estar ausente (entradas antigas) — nesse caso, usa `[date]`.
 async function stampsSyncFromLocal(userId) {
   if (!userId) return { migrated: 0, total: 0 };
+
+  // Migrar estado das medalhas (guest → user). Independente da migração de
+  // carimbos: garante que a celebração diferida (gravada em
+  // `badges_pending_guest` pelo qr-stamp.js) seja emitida na passaporte.html
+  // depois do registo/login. Sem isto, o utilizador acabado de se registar
+  // perdia o overlay da medalha conquistada antes de criar conta.
+  try {
+    const guestPending = JSON.parse(localStorage.getItem('badges_pending_guest') || '[]') || [];
+    if (guestPending.length) {
+      const userPendingKey = `badges_pending_${userId}`;
+      const userPending = JSON.parse(localStorage.getItem(userPendingKey) || '[]') || [];
+      const merged = Array.from(new Set([...userPending, ...guestPending]));
+      localStorage.setItem(userPendingKey, JSON.stringify(merged));
+      localStorage.removeItem('badges_pending_guest');
+    }
+    // O snapshot guest deixa de ser relevante e poderia induzir em erro caso
+    // o utilizador fizesse logout depois.
+    localStorage.removeItem('badges_guest');
+  } catch (err) {
+    console.warn('[stampsSyncFromLocal] badge migration failed:', err);
+  }
+
   let local;
   try {
     local = JSON.parse(localStorage.getItem('passport_stamps') || '{}');
