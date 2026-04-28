@@ -311,48 +311,47 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   };
 
-  // ── Edit Profile Modal ─────────────────────────────────────────────────────
+  // ── Tab Configurações (apenas perfil próprio) ──────────────────────────
   if (isOwnProfile) {
-    document.getElementById('edit-profile-btn')?.addEventListener('click', openEditModal);
-  }
+    // Mostrar tab e fazer prefill dos campos com os valores actuais
+    const tabSettings = document.getElementById('tab-settings');
+    if (tabSettings) tabSettings.classList.remove('hidden');
 
-  function openEditModal() {
-    const modal = document.getElementById('edit-modal');
-    modal.classList.remove('hidden');
-    // Limpa estado de upload anterior para nova selecção começar do zero
-    _croppedBlob = null;
-    _directUpload = false;
-    const fileInput = document.getElementById('edit-avatar');
-    if (fileInput) fileInput.value = '';
-    // Prefill current values
-    document.getElementById('edit-username').value = profile?.username || '';
-    // Show current avatar (or initial letter if no photo set)
+    // Preencher avatar e nome de utilizador
     const avatarWrap = document.getElementById('edit-avatar-preview');
-    if (avatarWrap) {
-      avatarWrap.innerHTML = avatarHTML(profileWithName, 80);
-    }
-    // Clear password fields
-    document.getElementById('edit-current-password').value = '';
-    document.getElementById('edit-new-password').value = '';
-    document.getElementById('edit-confirm-password').value = '';
-    document.getElementById('edit-password-msg')?.classList.add('hidden');
-    // Hide password section for OAuth-only users (Google login)
+    if (avatarWrap) avatarWrap.innerHTML = avatarHTML(profileWithName, 80);
+    const usernameInput = document.getElementById('edit-username');
+    if (usernameInput) usernameInput.value = profile?.username || '';
+
+    // Esconder bloco de palavra-passe para utilizadores OAuth (Google, etc.)
     const provider = currentUser?.app_metadata?.provider;
     const isOAuthOnly = provider === 'google' || provider === 'github';
     const pwWrap = document.getElementById('edit-password-wrap');
     if (pwWrap) pwWrap.classList.toggle('hidden', isOAuthOnly);
 
-    lucide.createIcons();
-    requestAnimationFrame(() => {
-      const inner = document.getElementById('edit-modal-inner');
-      inner.style.transform = 'scale(1) translateY(0)';
-      inner.style.opacity = '1';
+    // Botão "Editar Perfil" no hero → abre a tab Configurações com scroll suave
+    document.getElementById('edit-profile-btn')?.addEventListener('click', () => {
+      switchTab('settings');
+      const tabBar = document.querySelector('.profile-tab')?.closest('.border-t');
+      if (tabBar) tabBar.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    // Botão Terminar Sessão
+    document.getElementById('sign-out-btn')?.addEventListener('click', async () => {
+      const btn = document.getElementById('sign-out-btn');
+      btn.disabled = true;
+      const label = btn.querySelector('span');
+      if (label) label.textContent = 'A terminar…';
+      try {
+        await AuthUtils.authSignOut(); // já redirecciona para index.html
+      } catch (err) {
+        console.error('[signOut]', err);
+        btn.disabled = false;
+        if (label) label.textContent = 'Terminar Sessão';
+        alert('Não foi possível terminar a sessão. Tente novamente.');
+      }
     });
   }
-
-  window.closeEditModal = function () {
-    document.getElementById('edit-modal').classList.add('hidden');
-  };
 
   // Save ONLY photo (usa o blob recortado pelo cropper, ou o ficheiro original
   // se o utilizador saltou o ajuste — ex.: imagem já quadrada)
