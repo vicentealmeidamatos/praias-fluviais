@@ -1100,6 +1100,14 @@ function slugify(text) {
     document.querySelectorAll('nav.bottom-nav').forEach(function (n) { n.remove(); });
 
     var activeKey = ACTIVE_MAP[page] !== undefined ? ACTIVE_MAP[page] : '';
+    // Em perfil.html?user=xxx (perfil de outro utilizador) não destacar o slot
+    // de Perfil — esse botão é apenas atalho para o perfil próprio.
+    if (page === 'perfil.html') {
+      try {
+        var qsUser = new URLSearchParams(window.location.search).get('user');
+        if (qsUser) activeKey = '';
+      } catch (e) {}
+    }
 
     var nav = document.createElement('nav');
     nav.className = 'bottom-nav lg:hidden bg-praia-teal-800/95 backdrop-blur-md border-t border-white/10';
@@ -1270,10 +1278,10 @@ function slugify(text) {
       drawerHeader.className = 'flex items-center justify-between px-5 py-4 border-b border-white/10 flex-shrink-0';
       drawerHeader.innerHTML =
         '<div class="flex items-center gap-2">' +
-          '<a href="https://www.facebook.com/praiasfluviais" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-white/8 flex items-center justify-center text-white/75 hover:bg-praia-yellow-400 hover:text-praia-teal-800 transition-colors" aria-label="Facebook">' +
+          '<a href="https://www.facebook.com/praiasfluviais" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:bg-praia-yellow-400 hover:text-praia-teal-800 transition-colors duration-300" aria-label="Facebook">' +
             '<svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>' +
           '</a>' +
-          '<a href="https://www.instagram.com/guiadaspraiasfluviais" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-white/8 flex items-center justify-center text-white/75 hover:bg-praia-yellow-400 hover:text-praia-teal-800 transition-colors" aria-label="Instagram">' +
+          '<a href="https://www.instagram.com/guiadaspraiasfluviais" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:bg-praia-yellow-400 hover:text-praia-teal-800 transition-colors duration-300" aria-label="Instagram">' +
             '<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>' +
           '</a>' +
         '</div>' +
@@ -1321,6 +1329,19 @@ function slugify(text) {
       } else {
         navList.insertAdjacentHTML('beforeend', carrinhoHTML);
       }
+    }
+
+    // Adicionar CTA secundária "Onde Carimbar" debaixo da CTA "Onde Encontrar"
+    // do footer do drawer. Espelha o duo de CTAs do header desktop.
+    var primaryCta = menu.querySelector('a[href="onde-encontrar.html"].btn-primary');
+    if (primaryCta && !primaryCta.dataset.carimbarAugmented) {
+      primaryCta.dataset.carimbarAugmented = '1';
+      var carimbarHTML =
+        '<a href="onde-carimbar-passaporte.html" class="flex items-center justify-center gap-2 bg-white/10 border border-white/30 text-white hover:bg-white/20 font-display font-bold text-sm uppercase tracking-wider px-5 py-3 rounded-full w-full transition-colors duration-200 mt-2">' +
+          '<i data-lucide="stamp" class="w-4 h-4"></i>' +
+          'Onde Carimbar' +
+        '</a>';
+      primaryCta.insertAdjacentHTML('afterend', carimbarHTML);
     }
 
     // Bind global do botão hamburger (selector robusto: aria-label + lg:hidden no header)
