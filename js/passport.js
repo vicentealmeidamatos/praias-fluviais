@@ -162,11 +162,75 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (bar) bar.style.width = pct + '%';
   }
 
+  // ── Album filters (search + district + stamp status) ───────────────────────
+  const albumFilters = { q: '', district: '', status: 'all' };
+
+  function populateAlbumDistrictOptions() {
+    const sel = document.getElementById('album-district');
+    if (!sel || sel.dataset.populated === '1') return;
+    const districts = [...new Set(stampBeaches.map(b => b.district).filter(Boolean))]
+      .sort((a, b) => a.localeCompare(b, 'pt'));
+    sel.insertAdjacentHTML('beforeend',
+      districts.map(d => `<option value="${d}">${d}</option>`).join('')
+    );
+    sel.dataset.populated = '1';
+  }
+
+  function bindAlbumFilters() {
+    const s = document.getElementById('album-search');
+    const d = document.getElementById('album-district');
+    const t = document.getElementById('album-status');
+    if (s && !s.dataset.bound) {
+      s.addEventListener('input', e => { albumFilters.q = e.target.value; renderGrid(); });
+      s.dataset.bound = '1';
+    }
+    if (d && !d.dataset.bound) {
+      d.addEventListener('change', e => { albumFilters.district = e.target.value; renderGrid(); });
+      d.dataset.bound = '1';
+    }
+    if (t && !t.dataset.bound) {
+      t.addEventListener('change', e => { albumFilters.status = e.target.value; renderGrid(); });
+      t.dataset.bound = '1';
+    }
+  }
+
+  function getFilteredAlbumBeaches() {
+    const q = albumFilters.q.trim().toLowerCase();
+    return stampBeaches.filter(b => {
+      if (albumFilters.district && b.district !== albumFilters.district) return false;
+      const stamped = !!stampMap[b.id];
+      if (albumFilters.status === 'stamped' && !stamped) return false;
+      if (albumFilters.status === 'missing' && stamped) return false;
+      if (q) {
+        const hay = `${b.name} ${b.municipality || ''}`.toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      return true;
+    });
+  }
+
   function renderGrid() {
     const container = document.getElementById('stamps-grid');
     if (!container) return;
 
-    container.innerHTML = stampBeaches.map(beach => {
+    populateAlbumDistrictOptions();
+    bindAlbumFilters();
+
+    const list = getFilteredAlbumBeaches();
+
+    if (!list.length) {
+      container.innerHTML = `
+        <div class="col-span-full py-12 text-center">
+          <div class="w-12 h-12 mx-auto rounded-2xl bg-praia-sand-100 flex items-center justify-center mb-3">
+            <i data-lucide="search-x" class="w-6 h-6 text-praia-sand-400"></i>
+          </div>
+          <p class="font-display text-sm text-praia-sand-500">Nenhuma praia corresponde aos filtros.</p>
+        </div>`;
+      if (window.lucide) lucide.createIcons();
+      return;
+    }
+
+    container.innerHTML = list.map(beach => {
       const stamped   = !!stampMap[beach.id];
       const date      = stampMap[beach.id] || '';
       const shortName = beach.name

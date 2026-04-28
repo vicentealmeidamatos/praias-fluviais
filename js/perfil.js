@@ -323,11 +323,36 @@ document.addEventListener('DOMContentLoaded', async () => {
     const usernameInput = document.getElementById('edit-username');
     if (usernameInput) usernameInput.value = profile?.username || '';
 
-    // Esconder bloco de palavra-passe para utilizadores OAuth (Google, etc.)
-    const provider = currentUser?.app_metadata?.provider;
-    const isOAuthOnly = provider === 'google' || provider === 'github';
+    // Bloco de palavra-passe: sempre visível. Para utilizadores OAuth-only
+    // (sem provider 'email'), a "palavra-passe atual" é escondida e o título/botão
+    // mudam para "Definir palavra-passe".
     const pwWrap = document.getElementById('edit-password-wrap');
-    if (pwWrap) pwWrap.classList.toggle('hidden', isOAuthOnly);
+    if (pwWrap) pwWrap.classList.remove('hidden');
+
+    // Determinar se o utilizador já tem palavra-passe definida:
+    //  • signup com email → providers inclui 'email'
+    //  • signup com Google e depois definiu palavra-passe → flag user_metadata.has_password
+    //  • identidade local com provider 'email' (algumas instalações do Supabase)
+    const providers = currentUser?.app_metadata?.providers || [currentUser?.app_metadata?.provider].filter(Boolean);
+    const hasEmailIdentity = Array.isArray(currentUser?.identities)
+      && currentUser.identities.some(i => i?.provider === 'email');
+    const hasPassword = providers.includes('email')
+      || hasEmailIdentity
+      || currentUser?.user_metadata?.has_password === true;
+    if (!hasPassword) {
+      const currentPwLabel = pwWrap?.querySelector('label.settings-label');
+      const currentPwWrap  = document.getElementById('edit-current-password')?.closest('.pw-wrap');
+      if (currentPwLabel && currentPwLabel.textContent.toLowerCase().includes('atual')) {
+        currentPwLabel.classList.add('hidden');
+      }
+      if (currentPwWrap) currentPwWrap.classList.add('hidden');
+      const pwTitle = pwWrap?.querySelector('.settings-card-subtitle');
+      const pwDesc  = pwWrap?.querySelector('.settings-card-subtitle-desc');
+      const pwBtn   = document.getElementById('edit-password-btn');
+      if (pwTitle) pwTitle.textContent = 'Definir palavra-passe';
+      if (pwDesc)  pwDesc.textContent  = 'Defina uma palavra-passe para também poder iniciar sessão por email.';
+      if (pwBtn)   pwBtn.textContent   = 'Definir Palavra-passe';
+    }
 
     // Botão "Editar Perfil" no hero → abre a tab Configurações com scroll suave
     document.getElementById('edit-profile-btn')?.addEventListener('click', () => {
@@ -336,8 +361,27 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (tabBar) tabBar.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 
-    // Botão Terminar Sessão
+    // Botão Remover foto (no cartão Foto de Perfil)
+    const removeFotoBtn = document.getElementById('edit-photo-remove-btn');
+    if (removeFotoBtn) {
+      removeFotoBtn.disabled = !profile?.avatar_url;
+      removeFotoBtn.addEventListener('click', () => {
+        if (removeFotoBtn.disabled) return;
+        window.removeProfilePhoto();
+      });
+    }
+
+    // Botão Terminar Sessão (com aviso de confirmação)
     document.getElementById('sign-out-btn')?.addEventListener('click', async () => {
+      const ok = await openConfirmModal({
+        title: 'Terminar sessão?',
+        message: 'Vai sair da sua conta neste dispositivo. Pode iniciar sessão novamente em qualquer altura.',
+        confirmLabel: 'Terminar sessão',
+        icon: 'log-out',
+        danger: true,
+      });
+      if (!ok) return;
+
       const btn = document.getElementById('sign-out-btn');
       btn.disabled = true;
       const label = btn.querySelector('span');
@@ -351,6 +395,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         alert('Não foi possível terminar a sessão. Tente novamente.');
       }
     });
+
   }
 
   // Save ONLY photo (usa o blob recortado pelo cropper, ou o ficheiro original
@@ -396,10 +441,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Remover foto (volta ao avatar gerado a partir da inicial)
   window.removeProfilePhoto = async function () {
     if (!profile?.avatar_url) {
-      closeAvatarMenu();
+      if (typeof closeAvatarMenu === 'function') closeAvatarMenu();
       return;
     }
-    const ok = confirm('Remover a foto de perfil? Voltará a aparecer a inicial do seu nome.');
+    const ok = await openConfirmModal({
+      title: 'Remover foto de perfil?',
+      message: 'Tem a certeza que pretende remover a foto de perfil? Esta ação não pode ser anulada.',
+      confirmLabel: 'Remover',
+      icon: 'image-off',
+      danger: true,
+    });
     if (!ok) return;
     try {
       await profileRemoveAvatar(currentUser.id);
@@ -414,17 +465,45 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   };
 
-  // Save ONLY username
+  // Save ONLY username (com confirmação)
   window.saveProfileUsername = async function () {
-    const newUsername = document.getElementById('edit-username').value.trim();
+    const newUsername     = document.getElementById('edit-username').value.trim();
+    const confirmUsername = document.getElementById('edit-username-confirm').value.trim();
+    const msgEl           = document.getElementById('edit-username-msg');
+    const currentUsername = (profile?.username || '').trim();
+
+    function showErr(text) {
+      if (msgEl) {
+        msgEl.textContent = text;
+        msgEl.className = 'text-[11px] text-red-500 mb-3';
+        msgEl.classList.remove('hidden');
+      } else {
+        alert(text);
+      }
+    }
+    if (msgEl) msgEl.classList.add('hidden');
+
     if (newUsername.length < 3) {
-      alert('O nome deve ter pelo menos 3 caracteres.');
+      showErr('O nome deve ter pelo menos 3 caracteres.');
       return;
     }
     if (!/^[a-z0-9_.-]+$/i.test(newUsername)) {
-      alert('O nome só pode conter letras, números, pontos, hifens e underscores.');
+      showErr('O nome só pode conter letras, números, pontos, hifens e underscores.');
       return;
     }
+    if (newUsername === currentUsername) {
+      showErr('Indique um nome diferente do atual para fazer a alteração.');
+      return;
+    }
+    if (!confirmUsername) {
+      showErr('Volte a inserir o novo nome no campo de confirmação.');
+      return;
+    }
+    if (newUsername !== confirmUsername) {
+      showErr('Os nomes não coincidem. Confirme o mesmo nome nos dois campos.');
+      return;
+    }
+
     const btn = document.getElementById('edit-username-btn');
     btn.textContent = 'A guardar…';
     btn.disabled = true;
@@ -445,9 +524,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       btn.disabled = false;
       const msg = err?.message || '';
       if (msg.includes('unique') || msg.includes('duplicate') || msg.includes('profiles_username_key')) {
-        alert('Este nome de utilizador já está em uso. Escolha outro.');
+        showErr('Este nome de utilizador já está em uso. Escolha outro.');
       } else {
-        alert('Erro ao guardar o nome. Tente novamente.');
+        showErr('Erro ao guardar o nome. Tente novamente.');
       }
     }
   };
@@ -544,12 +623,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Save password
   window.saveProfilePassword = async function () {
-    const currentPw = document.getElementById('edit-current-password').value;
+    const currentPwInput = document.getElementById('edit-current-password');
+    const skipCurrentPw  = currentPwInput?.closest('.pw-wrap')?.classList.contains('hidden');
+    const currentPw = currentPwInput?.value || '';
     const newPw     = document.getElementById('edit-new-password').value;
     const confPw    = document.getElementById('edit-confirm-password').value;
     const msg = document.getElementById('edit-password-msg');
     const btn = document.getElementById('edit-password-btn');
-    if (!currentPw) {
+    const defaultBtnLabel = skipCurrentPw ? 'Definir Palavra-passe' : 'Alterar Palavra-passe';
+    if (!skipCurrentPw && !currentPw) {
       msg.textContent = 'Introduza a sua palavra-passe atual.';
       msg.className = 'text-[11px] text-red-400 mt-2';
       msg.classList.remove('hidden');
@@ -561,7 +643,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       msg.classList.remove('hidden');
       return;
     }
-    if (currentPw === newPw) {
+    if (!skipCurrentPw && currentPw === newPw) {
       msg.textContent = 'A nova palavra-passe não pode ser igual à atual.';
       msg.className = 'text-[11px] text-red-400 mt-2';
       msg.classList.remove('hidden');
@@ -573,39 +655,44 @@ document.addEventListener('DOMContentLoaded', async () => {
       msg.classList.remove('hidden');
       return;
     }
-    btn.textContent = 'A alterar…';
+    btn.textContent = skipCurrentPw ? 'A definir…' : 'A alterar…';
     btn.disabled = true;
     try {
-      // Verify current password by re-authenticating
-      const { error: signInErr } = await _sb.auth.signInWithPassword({
-        email: currentUser.email,
-        password: currentPw,
-      });
-      if (signInErr) {
-        btn.textContent = 'Alterar Palavra-passe';
-        btn.disabled = false;
-        msg.textContent = 'Palavra-passe atual incorreta.';
-        msg.className = 'text-[11px] text-red-400 mt-2';
-        msg.classList.remove('hidden');
-        return;
+      if (!skipCurrentPw) {
+        // Verify current password by re-authenticating
+        const { error: signInErr } = await _sb.auth.signInWithPassword({
+          email: currentUser.email,
+          password: currentPw,
+        });
+        if (signInErr) {
+          btn.textContent = defaultBtnLabel;
+          btn.disabled = false;
+          msg.textContent = 'Palavra-passe atual incorreta.';
+          msg.className = 'text-[11px] text-red-400 mt-2';
+          msg.classList.remove('hidden');
+          return;
+        }
       }
-      const { error } = await _sb.auth.updateUser({ password: newPw });
-      btn.textContent = 'Alterar Palavra-passe';
+      const { error } = await _sb.auth.updateUser({
+        password: newPw,
+        data: { ...(currentUser?.user_metadata || {}), has_password: true },
+      });
+      btn.textContent = defaultBtnLabel;
       btn.disabled = false;
       if (error) {
         msg.textContent = 'Erro: ' + (error.message || 'Tente novamente.');
         msg.className = 'text-[11px] text-red-400 mt-2';
       } else {
-        msg.textContent = 'Palavra-passe alterada com sucesso.';
+        msg.textContent = skipCurrentPw ? 'Palavra-passe definida com sucesso.' : 'Palavra-passe alterada com sucesso.';
         msg.className = 'text-[11px] text-green-400 mt-2';
-        document.getElementById('edit-current-password').value = '';
+        if (currentPwInput) currentPwInput.value = '';
         document.getElementById('edit-new-password').value = '';
         document.getElementById('edit-confirm-password').value = '';
       }
       msg.classList.remove('hidden');
     } catch (err) {
       console.error('[saveProfilePassword]', err);
-      btn.textContent = 'Alterar Palavra-passe';
+      btn.textContent = defaultBtnLabel;
       btn.disabled = false;
       msg.textContent = 'Erro de ligação. Verifique a sua internet e tente novamente.';
       msg.className = 'text-[11px] text-red-400 mt-2';
@@ -922,11 +1009,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (!orders || orders.length === 0) {
           container.innerHTML = `
-            <div class="text-center py-12">
-              <i data-lucide="package" class="w-12 h-12 mx-auto text-praia-sand-300 mb-3"></i>
-              <p class="font-display text-sm font-semibold text-praia-sand-400">Ainda não fez nenhuma encomenda</p>
-              <a href="loja.html" class="inline-flex items-center gap-2 mt-4 bg-praia-teal-800 text-white font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-xl hover:bg-praia-teal-700 transition-colors">
-                <i data-lucide="shopping-bag" class="w-4 h-4"></i> Ver loja
+            <div class="flex flex-col items-center justify-center text-center py-14 px-6">
+              <div class="relative w-20 h-20 mb-5">
+                <div class="absolute inset-0 rounded-full bg-praia-yellow-400/20 blur-xl"></div>
+                <div class="relative w-20 h-20 rounded-full bg-praia-teal-800 flex items-center justify-center shadow-layered">
+                  <i data-lucide="shopping-bag" class="w-9 h-9 text-praia-yellow-400"></i>
+                </div>
+              </div>
+              <h3 class="font-display text-lg font-bold text-praia-teal-800 mb-1.5">Ainda não fez nenhuma encomenda</h3>
+              <p class="text-sm text-praia-sand-500 max-w-xs mb-6">Descubra a loja oficial e leve consigo um pedacinho das praias fluviais.</p>
+              <a href="loja.html" class="inline-flex items-center gap-2 bg-praia-teal-800 text-praia-yellow-400 font-display font-bold text-sm uppercase tracking-wider px-7 py-3.5 rounded-full shadow-layered hover:bg-praia-teal-700 transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0">
+                <i data-lucide="store" class="w-4 h-4"></i> Visitar Loja
               </a>
             </div>`;
           lucide.createIcons();
@@ -1028,6 +1121,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (hashTab && hashTab !== 'orders' && document.querySelector(`[data-tab="${hashTab}"]`)) {
     switchTab(hashTab);
   }
+
+  // Reagir a mudanças de hash (ex: dropdown do header já estando em perfil.html)
+  window.addEventListener('hashchange', () => {
+    const h = window.location.hash.replace('#', '');
+    if (!h) return;
+    const tabBtn = document.querySelector(`[data-tab="${h}"]`);
+    if (!tabBtn) return;
+    if (h === 'orders') tabBtn.click(); else switchTab(h);
+  });
 
   // ── Single lucide pass after all renders ────────────────────────────────────
   lucide.createIcons();

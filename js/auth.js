@@ -29,6 +29,105 @@ async function authSignOut() {
   window.location.href = 'index.html';
 }
 
+// ─── Modal de confirmação reutilizável (global) ───
+// Devolve uma Promise<boolean>: true se o utilizador confirmou.
+function _ensureConfirmModal() {
+  let overlay = document.getElementById('confirm-modal');
+  if (overlay) return overlay;
+  overlay = document.createElement('div');
+  overlay.id = 'confirm-modal';
+  overlay.className = 'confirm-overlay';
+  overlay.setAttribute('aria-hidden', 'true');
+  overlay.innerHTML = `
+    <div class="confirm-shell" role="dialog" aria-modal="true" aria-labelledby="confirm-modal-title" aria-describedby="confirm-modal-message">
+      <div id="confirm-modal-icon" class="confirm-icon is-danger">
+        <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+      </div>
+      <h3 id="confirm-modal-title" class="confirm-title">Confirmar ação</h3>
+      <p id="confirm-modal-message" class="confirm-message">Tem a certeza que pretende continuar?</p>
+      <div class="confirm-actions">
+        <button type="button" id="confirm-modal-cancel" class="confirm-btn-cancel">Cancelar</button>
+        <button type="button" id="confirm-modal-ok" class="confirm-btn-confirm is-danger">Confirmar</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  return overlay;
+}
+
+window.openConfirmModal = function ({
+  title = 'Confirmar ação',
+  message = 'Tem a certeza que pretende continuar?',
+  confirmLabel = 'Confirmar',
+  cancelLabel = 'Cancelar',
+  icon = 'alert-triangle',
+  danger = true,
+} = {}) {
+  return new Promise((resolve) => {
+    const overlay   = _ensureConfirmModal();
+    const titleEl   = document.getElementById('confirm-modal-title');
+    const msgEl     = document.getElementById('confirm-modal-message');
+    const okBtn     = document.getElementById('confirm-modal-ok');
+    const cancelBtn = document.getElementById('confirm-modal-cancel');
+    const iconWrap  = document.getElementById('confirm-modal-icon');
+
+    if (!overlay || !okBtn || !cancelBtn) {
+      resolve(window.confirm(message));
+      return;
+    }
+
+    titleEl.textContent   = title;
+    msgEl.textContent     = message;
+    okBtn.textContent     = confirmLabel;
+    cancelBtn.textContent = cancelLabel;
+    okBtn.className       = 'confirm-btn-confirm' + (danger ? ' is-danger' : '');
+    iconWrap.className    = 'confirm-icon ' + (danger ? 'is-danger' : 'is-warning');
+    iconWrap.innerHTML    = `<i data-lucide="${icon}" class="w-5 h-5"></i>`;
+    if (window.lucide) lucide.createIcons();
+
+    overlay.classList.add('is-open');
+    overlay.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+
+    function cleanup(result) {
+      overlay.classList.remove('is-open');
+      overlay.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      okBtn.removeEventListener('click', onOk);
+      cancelBtn.removeEventListener('click', onCancel);
+      overlay.removeEventListener('click', onBackdrop);
+      document.removeEventListener('keydown', onKey);
+      resolve(result);
+    }
+    function onOk()       { cleanup(true); }
+    function onCancel()   { cleanup(false); }
+    function onBackdrop(e){ if (e.target === overlay) cleanup(false); }
+    function onKey(e)     {
+      if (e.key === 'Escape') { e.preventDefault(); cleanup(false); }
+      else if (e.key === 'Enter') { e.preventDefault(); cleanup(true); }
+    }
+
+    okBtn.addEventListener('click', onOk);
+    cancelBtn.addEventListener('click', onCancel);
+    overlay.addEventListener('click', onBackdrop);
+    document.addEventListener('keydown', onKey);
+    setTimeout(() => okBtn.focus(), 60);
+  });
+};
+
+// Sign-out com aviso de confirmação (usado pelo dropdown do header e perfil)
+async function authSignOutConfirm() {
+  const ok = await window.openConfirmModal({
+    title: 'Terminar sessão?',
+    message: 'Vai sair da sua conta neste dispositivo. Pode iniciar sessão novamente em qualquer altura.',
+    confirmLabel: 'Terminar sessão',
+    icon: 'log-out',
+    danger: true,
+  });
+  if (!ok) return;
+  await authSignOut();
+}
+window.authSignOutConfirm = authSignOutConfirm;
+
 // ─── Profile ──────────────────────────────────────────────────────────────────
 
 async function profileGet(userId) {
@@ -806,14 +905,14 @@ function _buildHeaderUserHTML(name, email, avatarUrl) {
         <a href="perfil.html" class="flex items-center gap-2.5 px-4 py-2.5 text-xs text-white/75 hover:bg-white/8 hover:text-white transition-colors">
           <i data-lucide="user-circle" class="w-3.5 h-3.5 flex-shrink-0"></i> O meu Perfil
         </a>
-        <a href="passaporte.html" class="flex items-center gap-2.5 px-4 py-2.5 text-xs text-white/75 hover:bg-white/8 hover:text-white transition-colors">
+        <a href="perfil.html#stamps" class="flex items-center gap-2.5 px-4 py-2.5 text-xs text-white/75 hover:bg-white/8 hover:text-white transition-colors">
           <i data-lucide="stamp" class="w-3.5 h-3.5 flex-shrink-0"></i> Passaporte
         </a>
-        <a href="votar.html" class="flex items-center gap-2.5 px-4 py-2.5 text-xs text-white/75 hover:bg-white/8 hover:text-white transition-colors">
-          <i data-lucide="vote" class="w-3.5 h-3.5 flex-shrink-0"></i> Votar 2026
+        <a href="perfil.html#settings" class="flex items-center gap-2.5 px-4 py-2.5 text-xs text-white/75 hover:bg-white/8 hover:text-white transition-colors">
+          <i data-lucide="settings" class="w-3.5 h-3.5 flex-shrink-0"></i> Configurações
         </a>
         <div class="border-t border-white/10 mt-1"></div>
-        <button onclick="authSignOut()" class="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors">
+        <button onclick="authSignOutConfirm()" class="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors">
           <i data-lucide="log-out" class="w-3.5 h-3.5 flex-shrink-0"></i> Terminar Sessão
         </button>
       </div>
@@ -956,9 +1055,11 @@ async function initBottomNavProfile() {
   }
 
   // Render imediato a partir da cache (sem await, sem rede)
+  let hadCache = false;
   try {
     const cache = JSON.parse(localStorage.getItem(_NAV_CACHE_KEY) || 'null');
     if (cache && cache.username) {
+      hadCache = true;
       renderUser({ avatar_url: cache.avatar_url, username: cache.username });
     }
   } catch {}
@@ -966,7 +1067,12 @@ async function initBottomNavProfile() {
   // Verificação real
   const user = await authGetUser();
   if (!user) {
-    renderGuest();
+    // Só voltar a "Entrar" se não havia cache de sessão. Caso a cache existisse
+    // e a verificação falhar (rede lenta, JWT a expirar), mantemos o link como
+    // "Perfil" para evitar que o utilizador clique no botão e seja levado a
+    // auth.html — provoca o flash da página de registo antes de regressar a
+    // perfil.html. A próxima visita ou o initHeaderAuth() reconcilia o estado.
+    if (!hadCache) renderGuest();
     return;
   }
   const profile = await profileGet(user.id);
@@ -1045,6 +1151,7 @@ window.AuthUtils = {
   authGetUser,
   authGetSession,
   authSignOut,
+  authSignOutConfirm,
   profileGet,
   profileUpsert,
   profileUploadAvatar,

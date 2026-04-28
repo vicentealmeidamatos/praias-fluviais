@@ -201,6 +201,39 @@
     }
     .settings-danger-btn:active { transform: scale(0.97); }
     .settings-danger-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .settings-btn-remove {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      background: transparent;
+      color: #B91C1C;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      padding: 10px 18px;
+      border-radius: 12px;
+      border: 1px solid rgba(220,38,38,0.22);
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.2s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .settings-btn-remove:hover { background: rgba(220,38,38,0.06); border-color: rgba(220,38,38,0.42); color: #991B1B; }
+    .settings-btn-remove:active { transform: scale(0.97); }
+    .settings-btn-remove:disabled { opacity: 0.4; cursor: not-allowed; }
+    .settings-card-subtitle {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #003A40;
+      margin: 0;
+    }
+    .settings-card-subtitle-desc {
+      font-size: 12px;
+      color: rgba(0,58,64,0.55);
+      margin-top: 4px;
+      line-height: 1.45;
+    }
     .pw-wrap { position: relative; }
     .pw-wrap input { padding-right: 44px; }
     .settings-card .pw-toggle {
@@ -607,6 +640,9 @@
                   <button id="edit-photo-btn" type="button" onclick="saveProfilePhoto()" class="settings-btn-primary">
                     Guardar Foto
                   </button>
+                  <button id="edit-photo-remove-btn" type="button" class="settings-btn-remove" disabled>
+                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Remover foto
+                  </button>
                 </div>
               </div>
             </div>
@@ -620,7 +656,11 @@
                   <p class="settings-card-desc">Identifica-o publicamente nos comentários e medalhas.</p>
                 </div>
               </div>
-              <input type="text" id="edit-username" minlength="3" maxlength="24" class="settings-input mb-3" placeholder="nome_utilizador">
+              <label for="edit-username" class="settings-label">Novo nome</label>
+              <input type="text" id="edit-username" minlength="3" maxlength="24" class="settings-input mb-3" placeholder="nome_utilizador" autocomplete="off">
+              <label for="edit-username-confirm" class="settings-label">Confirmar novo nome</label>
+              <input type="text" id="edit-username-confirm" minlength="3" maxlength="24" class="settings-input mb-2" placeholder="Volte a escrever o novo nome" autocomplete="off">
+              <p id="edit-username-msg" class="text-[11px] text-red-500 mb-3 hidden"></p>
               <div class="flex justify-end">
                 <button id="edit-username-btn" type="button" onclick="saveProfileUsername()" class="settings-btn-primary">
                   Guardar Nome
@@ -673,6 +713,10 @@
               <!-- Palavra-passe (oculta para OAuth) -->
               <div id="edit-password-wrap">
                 <div class="border-t border-praia-sand-200 pt-5 mt-5">
+                  <div class="mb-4">
+                    <h4 class="settings-card-subtitle">Alterar palavra-passe</h4>
+                    <p class="settings-card-subtitle-desc">Atualize a sua palavra-passe sempre que precisar de reforçar a segurança da conta.</p>
+                  </div>
                   <label class="settings-label">Palavra-passe atual</label>
                   <div class="pw-wrap mb-3">
                     <input type="password" id="edit-current-password" class="settings-input" placeholder="Introduza a palavra-passe atual">

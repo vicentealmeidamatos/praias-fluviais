@@ -1016,15 +1016,33 @@ function slugify(text) {
       : '';
 
     // Slot de Auth (Entrar quando deslogado, Perfil + avatar quando logado).
-    // O default é "Entrar" — auth.js (initBottomNavProfile) sobrescreve para
-    // Perfil quando há sessão.
+    // Lê a cache de sessão (gpf_nav_v1) sincronamente para que o link saia já
+    // como "Perfil" → perfil.html quando há sessão. Sem isto, há uma janela
+    // entre o render do nav e o initBottomNavProfile() em que clicar no
+    // botão envia para auth.html e provoca um flash da página de registo
+    // antes de redirecionar para perfil.
     var authActive = activeKey === 'auth';
     var authColor = authActive ? 'text-praia-yellow-400 active' : 'text-white/60';
-    var authItem =
-      '<a href="auth.html" data-page="auth" id="bottom-nav-auth" class="flex-1 flex flex-col items-center justify-center ' + authColor + '" aria-label="Entrar">' +
-        '<i data-lucide="log-in"></i>' +
-        '<span class="font-display uppercase tracking-wider font-semibold">Entrar</span>' +
-      '</a>';
+    var navCache = null;
+    try { navCache = JSON.parse(localStorage.getItem('gpf_nav_v1') || 'null'); } catch (e) {}
+    var authItem;
+    if (navCache && navCache.username) {
+      var initial = String(navCache.username).charAt(0).toUpperCase();
+      var avatarInner = navCache.avatar_url
+        ? '<img src="' + navCache.avatar_url + '" alt="' + navCache.username + '">'
+        : '<span class="initial">' + initial + '</span>';
+      authItem =
+        '<a href="perfil.html" data-page="auth" id="bottom-nav-auth" class="flex-1 flex flex-col items-center justify-center ' + authColor + '" aria-label="Perfil">' +
+          '<span class="bottom-nav-avatar">' + avatarInner + '</span>' +
+          '<span class="font-display uppercase tracking-wider font-semibold">Perfil</span>' +
+        '</a>';
+    } else {
+      authItem =
+        '<a href="auth.html" data-page="auth" id="bottom-nav-auth" class="flex-1 flex flex-col items-center justify-center ' + authColor + '" aria-label="Entrar">' +
+          '<i data-lucide="log-in"></i>' +
+          '<span class="font-display uppercase tracking-wider font-semibold">Entrar</span>' +
+        '</a>';
+    }
 
     return (
       '<div class="bottom-nav-inner flex items-stretch relative">' +
@@ -1200,6 +1218,38 @@ function slugify(text) {
       }
     }
     pollProfileInit(20);
+
+    // Esconder a nav quando o teclado virtual abre. Em mobile, ao focar uma
+    // input/textarea o teclado sobe e a nav (fixed bottom) ficaria por cima
+    // dele, ocupando espaço vertical já escasso. Toggle de body.kb-open via
+    // focusin/focusout — o CSS trata do display.
+    function isKeyboardField(el) {
+      if (!el || el === document.body) return false;
+      if (el.isContentEditable) return true;
+      var tag = el.tagName;
+      if (tag === 'TEXTAREA' || tag === 'SELECT') return true;
+      if (tag === 'INPUT') {
+        var t = (el.type || 'text').toLowerCase();
+        return ['button','submit','reset','checkbox','radio','file','image','color','range','hidden'].indexOf(t) === -1;
+      }
+      return false;
+    }
+    var kbBlurT = 0;
+    document.addEventListener('focusin', function (e) {
+      if (!isKeyboardField(e.target)) return;
+      if (kbBlurT) { clearTimeout(kbBlurT); kbBlurT = 0; }
+      document.body.classList.add('kb-open');
+    });
+    document.addEventListener('focusout', function (e) {
+      if (!isKeyboardField(e.target)) return;
+      if (kbBlurT) clearTimeout(kbBlurT);
+      // Pequeno delay para evitar flicker quando o utilizador salta entre campos
+      kbBlurT = setTimeout(function () {
+        if (!isKeyboardField(document.activeElement)) {
+          document.body.classList.remove('kb-open');
+        }
+      }, 100);
+    });
 
     if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
   }

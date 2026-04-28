@@ -3,9 +3,9 @@ const _beachId = new URLSearchParams(window.location.search).get('id');
 const _beachesEarlyBP = _beachId ? getBeaches() : null;
 const _settingsEarlyBP = _beachId ? loadData('settings') : null;
 const _authEarlyBP = _beachId && window.AuthUtils ? AuthUtils.authGetUser() : null;
-const _reviewsEarlyBP = _beachId && window.AuthUtils ? AuthUtils.reviewsGetForBeach(_beachId) : null;
+let _reviewsEarlyBP = _beachId && window.AuthUtils ? AuthUtils.reviewsGetForBeach(_beachId) : null;
 // Pre-start badge fetching as soon as reviews + beaches resolve
-const _badgesEarlyBP = (_reviewsEarlyBP && _beachesEarlyBP)
+let _badgesEarlyBP = (_reviewsEarlyBP && _beachesEarlyBP)
   ? Promise.all([_reviewsEarlyBP, _beachesEarlyBP]).then(([reviews, beaches]) => {
       const uids = [...new Set(reviews.map(r => r.user_id).filter(Boolean))];
       const map = {};
@@ -417,12 +417,14 @@ async function loadReviews(beachId, currentUser, beaches) {
   const container = document.getElementById('reviews-container');
   if (!container) return;
 
-  // Use pre-fetched reviews + badges when available (first load)
-  const isFirstLoad = beachId === _beachId;
-  const [allReviews, preFetchedMedals] = await Promise.all([
-    isFirstLoad && _reviewsEarlyBP ? _reviewsEarlyBP : AuthUtils.reviewsGetForBeach(beachId),
-    isFirstLoad && _badgesEarlyBP  ? _badgesEarlyBP  : Promise.resolve(null),
-  ]);
+  // Use pre-fetched reviews + badges when available (first load only — consume once)
+  const useEarlyReviews = beachId === _beachId && _reviewsEarlyBP;
+  const useEarlyBadges  = beachId === _beachId && _badgesEarlyBP;
+  const reviewsPromise = useEarlyReviews ? _reviewsEarlyBP : AuthUtils.reviewsGetForBeach(beachId);
+  const badgesPromise  = useEarlyBadges  ? _badgesEarlyBP  : Promise.resolve(null);
+  if (useEarlyReviews) _reviewsEarlyBP = null;
+  if (useEarlyBadges)  _badgesEarlyBP  = null;
+  const [allReviews, preFetchedMedals] = await Promise.all([reviewsPromise, badgesPromise]);
 
   if (allReviews.length === 0) {
     container.innerHTML = `
@@ -620,22 +622,46 @@ async function toggleReplyForm(parentId, beachId) {
   document.getElementById(`reply-text-${parentId}`)?.focus();
 }
 
+function _renderImagePreview(input, preview, thumbClass) {
+  if (!input || !preview) return;
+  preview.innerHTML = '';
+  Array.from(input.files).forEach((file, index) => {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'relative';
+
+    const img = document.createElement('img');
+    img.className = `${thumbClass} object-cover rounded-lg border border-praia-sand-200 cursor-pointer`;
+    img.onclick = () => openImageViewer(img.src);
+    const reader = new FileReader();
+    reader.onload = e => { img.src = e.target.result; };
+    reader.readAsDataURL(file);
+
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.title = 'Remover anexo';
+    removeBtn.setAttribute('aria-label', 'Remover anexo');
+    removeBtn.style.cssText = 'position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:9999px;background:#003A40;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;line-height:1;border:2px solid #fff;box-shadow:0 2px 4px rgba(0,0,0,0.15);cursor:pointer;padding:0;';
+    removeBtn.innerHTML = '&times;';
+    removeBtn.onmouseenter = () => { removeBtn.style.background = '#dc2626'; };
+    removeBtn.onmouseleave = () => { removeBtn.style.background = '#003A40'; };
+    removeBtn.onclick = (e) => {
+      e.stopPropagation();
+      const dt = new DataTransfer();
+      Array.from(input.files).forEach((f, i) => { if (i !== index) dt.items.add(f); });
+      input.files = dt.files;
+      _renderImagePreview(input, preview, thumbClass);
+    };
+
+    wrapper.appendChild(img);
+    wrapper.appendChild(removeBtn);
+    preview.appendChild(wrapper);
+  });
+}
+
 function previewReplyImages(parentId) {
   const input   = document.getElementById(`reply-images-${parentId}`);
   const preview = document.getElementById(`reply-preview-${parentId}`);
-  if (!input || !preview) return;
-  preview.innerHTML = '';
-  Array.from(input.files).forEach(file => {
-    const reader = new FileReader();
-    reader.onload = e => {
-      const img = document.createElement('img');
-      img.src = e.target.result;
-      img.className = 'w-14 h-14 object-cover rounded-lg border border-praia-sand-200 cursor-pointer';
-      img.onclick = () => openImageViewer(img.src);
-      preview.appendChild(img);
-    };
-    reader.readAsDataURL(file);
-  });
+  _renderImagePreview(input, preview, 'w-14 h-14');
 }
 
 async function submitReply(parentId, beachId) {
@@ -725,19 +751,7 @@ function renderReviewForm(beachId, user, profile, beaches) {
 
   document.getElementById('review-images')?.addEventListener('change', function () {
     const preview = document.getElementById('review-image-preview');
-    if (!preview) return;
-    preview.innerHTML = '';
-    Array.from(this.files).forEach(file => {
-      const reader = new FileReader();
-      reader.onload = e => {
-        const img = document.createElement('img');
-        img.src = e.target.result;
-        img.className = 'w-16 h-16 object-cover rounded-lg border border-praia-sand-200 cursor-pointer';
-        img.onclick = () => openImageViewer(img.src);
-        preview.appendChild(img);
-      };
-      reader.readAsDataURL(file);
-    });
+    _renderImagePreview(this, preview, 'w-16 h-16');
   });
 
   lucide.createIcons();
