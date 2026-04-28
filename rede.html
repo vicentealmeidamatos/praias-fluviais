@@ -59,13 +59,13 @@
     .service-chip:hover { border-color: #003A40; color: #003A40; background: #EEF5F5; }
     .service-chip.active { background: #003A40; color: #FFEB3B; border-color: #003A40; }
     .service-chip svg { width: 13px; height: 13px; flex-shrink: 0; }
-    .service-chip img { width: 20px; height: 20px; object-fit: contain; flex-shrink: 0; pointer-events: none; user-select: none; -webkit-user-drag: none; -webkit-touch-callout: none; }
+    .service-chip canvas { width: 20px; height: 20px; flex-shrink: 0; pointer-events: none; user-select: none; -webkit-user-drag: none; -webkit-touch-callout: none; }
     /* Per-icon scale balancing: shapes that fill their bbox tightly rendered smaller */
-    .service-chip img[data-key="playground"],
-    .service-chip img[data-key="petFriendly"] { transform: scale(0.82); }
-    .service-chip.active img { filter: brightness(0) invert(1); }
+    .service-chip canvas[data-key="playground"],
+    .service-chip canvas[data-key="petFriendly"] { transform: scale(0.82); }
+    .service-chip.active canvas { filter: brightness(0) invert(1); }
     /* Gold Quality: colored asset — keep natural colors on active state */
-    .service-chip.active img[data-key="goldQuality"] { filter: none; }
+    .service-chip.active canvas[data-key="goldQuality"] { filter: none; }
     .service-chip span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; flex: 1; }
 
     .type-btn {
@@ -588,19 +588,68 @@
   document.getElementById('filter-search')?.addEventListener('input', e => onSearchInput(e.target.value));
   document.getElementById('filter-search-mobile')?.addEventListener('input', e => onSearchInput(e.target.value));
 
+  // ─── Icon loader: paints PNGs into <canvas> via fetch() so that
+  //     "Save Page As Complete" cannot grab the icon files (canvas pixels
+  //     are not serialized; fetch() blobs are not tracked as page assets).
+  const _iconBitmapCache = new Map();
+  function _getIconBitmap(src) {
+    if (_iconBitmapCache.has(src)) return _iconBitmapCache.get(src);
+    const p = fetch(src, { credentials: 'same-origin' })
+      .then(r => r.ok ? r.blob() : Promise.reject(new Error('fetch failed')))
+      .then(blob => {
+        if ('createImageBitmap' in window) return createImageBitmap(blob);
+        return new Promise((resolve, reject) => {
+          const url = URL.createObjectURL(blob);
+          const img = new Image();
+          img.onload = () => { URL.revokeObjectURL(url); resolve(img); };
+          img.onerror = (e) => { URL.revokeObjectURL(url); reject(e); };
+          img.src = url;
+        });
+      });
+    _iconBitmapCache.set(src, p);
+    return p;
+  }
+  async function _paintIconCanvas(canvas, src) {
+    try {
+      const bitmap = await _getIconBitmap(src);
+      const dpr = Math.max(1, window.devicePixelRatio || 1);
+      const cssW = 20, cssH = 20;
+      canvas.width = cssW * dpr;
+      canvas.height = cssH * dpr;
+      const ctx = canvas.getContext('2d');
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, cssW, cssH);
+      // Letterbox into bbox preserving aspect (mimics object-fit: contain)
+      const bw = bitmap.width || cssW;
+      const bh = bitmap.height || cssH;
+      const scale = Math.min(cssW / bw, cssH / bh);
+      const dw = bw * scale, dh = bh * scale;
+      const dx = (cssW - dw) / 2, dy = (cssH - dh) / 2;
+      ctx.drawImage(bitmap, dx, dy, dw, dh);
+    } catch (e) { /* silently ignore — chip still functional with text */ }
+  }
+
   // ─── Render Service Chips ───
   function renderServiceChips(gridId) {
     const el = document.getElementById(gridId);
     if (!el) return;
     el.innerHTML = SERVICES.map(s => {
       const iconHtml = s.img
-        ? `<img src="${s.img}" alt="" data-key="${s.key}" loading="lazy" draggable="false" oncontextmenu="return false">`
+        ? `<canvas data-key="${s.key}" width="20" height="20" aria-hidden="true"></canvas>`
         : (s.svg ? s.svg : `<i data-lucide="${s.icon}"></i>`);
       return `<button class="service-chip${state.services.has(s.key) ? ' active' : ''}" data-key="${s.key}" aria-pressed="${state.services.has(s.key)}">
         ${iconHtml}
         <span>${s.label}</span>
       </button>`;
     }).join('');
+    // Paint canvases (resources fetched at runtime — not embedded in DOM/CSS).
+    el.querySelectorAll('canvas[data-key]').forEach(canvas => {
+      const key = canvas.getAttribute('data-key');
+      const svc = SERVICES.find(s => s.key === key);
+      if (svc && svc.img) _paintIconCanvas(canvas, svc.img);
+    });
     el.querySelectorAll('.service-chip').forEach(chip => {
       chip.addEventListener('click', () => {
         const key = chip.dataset.key;
