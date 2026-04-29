@@ -9,7 +9,7 @@ import {
 // ── normalizeBeachName ────────────────────────────────────────────────────
 test('normalizeBeachName remove acentos e baixa caixa', () => {
   assert.equal(normalizeBeachName('Praia Fluvial de Alqueva'), 'alqueva');
-  assert.equal(normalizeBeachName('Açude do Pinto'), 'acude pinto');
+  assert.equal(normalizeBeachName('Açude do Pinto'), 'acude do pinto');
 });
 
 test('normalizeBeachName remove prefixos "Praia Fluvial", "Zona Balnear", "Parque Fluvial", "Areal"', () => {
