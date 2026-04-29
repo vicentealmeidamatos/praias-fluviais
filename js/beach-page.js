@@ -4,6 +4,9 @@ const _beachesEarlyBP = _beachId ? getBeaches() : null;
 const _settingsEarlyBP = _beachId ? loadData('settings') : null;
 const _authEarlyBP = _beachId && window.AuthUtils ? AuthUtils.authGetUser() : null;
 let _reviewsEarlyBP = _beachId && window.AuthUtils ? AuthUtils.reviewsGetForBeach(_beachId) : null;
+const _waterQualityEarlyBP = _beachId
+  ? (window.loadData ? window.loadData('waterQuality').catch(() => null) : null)
+  : null;
 // Pre-start batched badge fetch as soon as reviews + beaches resolve.
 // One call → 3 Supabase queries total, regardless of commenter count.
 let _badgesEarlyBP = (_reviewsEarlyBP && _beachesEarlyBP)
@@ -27,6 +30,105 @@ if (_beachId && _beachesEarlyBP) {
       document.head.appendChild(link);
     }
   }).catch(() => {});
+}
+
+// ─── Qualidade da Água (APA) ──────────────────────────────────────────────
+const WQ_CLASS_MAP = {
+  'Excelente':   { mod: 'is-excelente', stars: 4 },
+  'Boa':         { mod: 'is-boa',       stars: 3 },
+  'Aceitável':   { mod: 'is-aceitavel', stars: 2 },
+  'Aceitavel':   { mod: 'is-aceitavel', stars: 2 }, // tolerar variação sem acento
+  'Má':          { mod: 'is-ma',        stars: 1 },
+  'Ma':          { mod: 'is-ma',        stars: 1 },
+};
+
+function _wqStars(filled) {
+  const total = 4;
+  const star  = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2z"/></svg>';
+  const empty = '<svg viewBox="0 0 24 24" aria-hidden="true" class="empty"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2z"/></svg>';
+  return Array.from({ length: total }, (_, i) => (i < filled ? star : empty)).join('');
+}
+
+function _wqStateText(entry) {
+  if (entry.previousYearDsc == null) return 'Primeira época monitorizada';
+  const now = Date.now();
+  const start = entry.seasonStart ? Date.parse(entry.seasonStart + 'T00:00:00Z') : null;
+  const end   = entry.seasonEnd   ? Date.parse(entry.seasonEnd   + 'T23:59:59Z') : null;
+  if (start && now < start) return 'Aguardando início da época balnear';
+  if (end && now > end)     return 'Época balnear terminada';
+  if (entry.interdictionReason) return `Banhos desaconselhados · ${entry.interdictionReason}`;
+  return 'Sem alertas activos';
+}
+
+function _wqFormatRange(start, end) {
+  if (!start || !end) return '—';
+  const months = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+  const fmt = (iso) => {
+    const [, m, d] = iso.split('-').map(Number);
+    return `${d} ${months[m-1]}`;
+  };
+  const yEnd = end.split('-')[0];
+  return `${fmt(start)} · ${fmt(end)} ${yEnd}`;
+}
+
+function _wqFormatUpdated(iso) {
+  if (!iso) return '';
+  const months = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return '';
+  return `${d.getUTCDate()} ${months[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
+}
+
+function renderWaterQualitySection(beachId, waterQualityJson) {
+  if (!waterQualityJson || !waterQualityJson.beaches) return '';
+  const entry = waterQualityJson.beaches[beachId];
+  if (!entry) return '';
+
+  const dsc = entry.previousYearDsc;
+  let mod, stars;
+  if (dsc == null && entry.currentSeasonStatus) {
+    mod = 'is-nova-epoca'; stars = 4;
+  } else if (dsc == null) {
+    mod = 'is-sem-classificacao'; stars = 4;
+  } else {
+    const m = WQ_CLASS_MAP[dsc];
+    if (!m) { mod = 'is-sem-classificacao'; stars = 4; }
+    else    { mod = m.mod; stars = m.stars; }
+  }
+
+  const title =
+    mod === 'is-nova-epoca' ? 'Identificada apenas<br>nesta época balnear'
+    : mod === 'is-sem-classificacao' ? 'Sem Classificação'
+    : dsc;
+
+  const dropSvg = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5C8.5 7 5 11 5 14.5a7 7 0 1014 0C19 11 15.5 7 12 2.5z"/></svg>';
+  const ariaLabel =
+    mod === 'is-nova-epoca' || mod === 'is-sem-classificacao'
+      ? `Qualidade da água: ${(title || '').replace('<br>', ' ')}`
+      : `Qualidade da água: ${dsc}, ${stars} em 4 estrelas`;
+
+  const stateText = _wqStateText(entry);
+  const seasonRange = _wqFormatRange(entry.seasonStart, entry.seasonEnd);
+  const updated = _wqFormatUpdated(waterQualityJson.lastUpdated);
+  const sourceLine = `Fonte · <strong>APA</strong> · ${entry.apaCode}${updated ? ` · actualizado a ${updated}` : ''}`;
+
+  return `
+      <section class="mb-12">
+        <h2 class="font-display text-xs uppercase tracking-[0.2em] text-praia-teal-500 font-semibold mb-5">Qualidade da Água</h2>
+        <div class="wq-card ${mod}" role="group" aria-label="${ariaLabel}">
+          <div class="wq-drop">${dropSvg}</div>
+          <div class="wq-headline">
+            <div class="wq-class">${title}</div>
+            <div class="wq-stars" role="img" aria-hidden="true">${_wqStars(stars)}</div>
+          </div>
+          <div class="wq-meta">
+            <div class="wq-meta-row"><span class="wq-meta-label">Estado</span>${stateText}</div>
+            <div class="wq-meta-row"><span class="wq-meta-label">Época Balnear</span>${seasonRange}</div>
+          </div>
+          ${entry.snirhUrl ? `<a href="${entry.snirhUrl}" target="_blank" rel="noopener" class="wq-link">SNIRH ↗</a>` : ''}
+        </div>
+        <div class="wq-source">${sourceLine}</div>
+      </section>`;
 }
 
 // ─── Individual Beach Page ───
@@ -162,6 +264,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         <p data-content-bind="beaches:${beachIdx}.description" class="text-praia-sand-700 leading-relaxed-plus text-base md:text-lg">${beach.description}</p>
       </section>
 
+      <!-- Water Quality (APA) — populated async (omitida se sem dados) -->
+      <div id="water-quality-slot"></div>
+
       <!-- Weather -->
       <section class="mb-12">
         <h2 class="font-display text-xs uppercase tracking-[0.2em] text-praia-teal-500 font-semibold mb-5">Tempo Atual</h2>
@@ -259,6 +364,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (weatherWidget) {
     fetchWeather(beach.coordinates.lat, beach.coordinates.lng)
       .then(w => { renderWeatherWidget(weatherWidget, w); lucide.createIcons(); });
+  }
+
+  // ── Qualidade da água (APA) — não bloqueia ──────────────────────────────
+  const wqSlot = document.getElementById('water-quality-slot');
+  if (wqSlot && _waterQualityEarlyBP) {
+    _waterQualityEarlyBP.then((wq) => {
+      const html = renderWaterQualitySection(beach.id, wq);
+      if (html) wqSlot.outerHTML = html;
+      else wqSlot.remove();
+    }).catch(() => { wqSlot.remove(); });
+  } else if (wqSlot) {
+    wqSlot.remove();
   }
 
   // ── Settings + auth + reviews all in parallel ─────────────────────────────

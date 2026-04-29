@@ -22,6 +22,7 @@
     descontos:        'data/descontos.json',
     products:         'data/products.json',
     settings:         'data/settings.json',
+    waterQuality:     'data/water-quality.json',
     layout:           null, // não há ficheiro: começa vazio
   };
 
