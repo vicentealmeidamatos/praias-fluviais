@@ -1051,13 +1051,11 @@ html {
 .wq-source strong { color: #003A40; font-weight: 600; }
 
 /* ── Modificadores por classificação (cores oficiais APA) ── */
-.wq-card.is-excelente .wq-drop,
-.wq-card.is-excelente .wq-stars { background: #1976D2; color: #1976D2; }
-.wq-card.is-excelente .wq-drop { color: #fff; }
+.wq-card.is-excelente .wq-drop  { background: #1976D2; color: #fff; }
+.wq-card.is-excelente .wq-stars { color: #1976D2; }
 
-.wq-card.is-boa .wq-drop,
-.wq-card.is-boa .wq-stars { background: #43A047; color: #43A047; }
-.wq-card.is-boa .wq-drop { color: #fff; }
+.wq-card.is-boa .wq-drop  { background: #43A047; color: #fff; }
+.wq-card.is-boa .wq-stars { color: #43A047; }
 
 .wq-card.is-aceitavel .wq-drop {
   background: #FFEB3B;
@@ -1067,9 +1065,8 @@ html {
 .wq-card.is-aceitavel .wq-stars { color: #FFEB3B; }
 .wq-card.is-aceitavel .wq-stars svg { stroke: #003A40; stroke-width: 1.5; paint-order: stroke fill; }
 
-.wq-card.is-ma .wq-drop,
-.wq-card.is-ma .wq-stars { background: #E53935; color: #E53935; }
-.wq-card.is-ma .wq-drop { color: #fff; }
+.wq-card.is-ma .wq-drop  { background: #E53935; color: #fff; }
+.wq-card.is-ma .wq-stars { color: #E53935; }
 
 .wq-card.is-sem-classificacao .wq-drop { background: #9E9E9E; color: #fff; }
 .wq-card.is-sem-classificacao .wq-class { color: #6E5E48; }
