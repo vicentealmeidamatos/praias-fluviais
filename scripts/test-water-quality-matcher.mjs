@@ -83,8 +83,9 @@ test('findApaMatch sinal 2: proximidade ≤ 800m sem nome igual', () => {
 });
 
 test('findApaMatch sinal 3: nome igual + proximidade ≤ 5km (catch costeira river-mouth)', () => {
-  // "Pedras Ruivas" do site a 750m da APA costeira "Pedras Ruivas"
-  const site = { name: 'Praia Fluvial das Pedras Ruivas', coordinates: { lat: 41.8567, lng: -8.85 } };
+  // "Pedras Ruivas" do site a ~2.2km da APA costeira "Pedras Ruivas":
+  // longe demais para sinal 2 (≤800m), mas dentro de 5km com nome igual.
+  const site = { name: 'Praia Fluvial das Pedras Ruivas', coordinates: { lat: 41.87, lng: -8.85 } };
   const m = findApaMatch(site, apaSample);
   assert.equal(m.matched.profile.codigo_agua_balnear, 'PTCQ4X');
   assert.equal(m.matchMethod, 'name+proximity');
