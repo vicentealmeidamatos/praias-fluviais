@@ -34,6 +34,7 @@ img/uploads/
 .claude/
 .mcp.json
 .agents/
+.superpowers/
 skills-lock.json
 
 # OS files
