@@ -76,30 +76,63 @@
     }
     .type-btn.active { background: #003A40; color: #FFEB3B; }
 
-    /* Water Quality chips (mesma família visual de .service-chip, mas com bolinha colorida em vez de ícone) */
-    .wq-chip {
-      display: flex; align-items: center; justify-content: flex-start; gap: 7px; padding: 0 10px;
-      border-radius: 8px; border: 1.5px solid #E2D9C6; cursor: pointer;
-      font-family: 'Poppins', sans-serif; font-size: 10.5px; font-weight: 600;
-      letter-spacing: -0.01em;
-      color: #5A4E3C; transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-      user-select: none; background: #FAF8F5; width: 100%; text-align: left;
-      height: 36px; box-sizing: border-box; overflow: hidden;
+    /* Water Quality dropdown */
+    .wq-dropdown { position: relative; }
+    .wq-dropdown-trigger {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      width: 100%; padding: 10px 12px; border-radius: 12px;
+      background: #FAF8F5; border: 1px solid #E5DED1;
+      font-family: 'Open Sans', sans-serif; font-size: 13px; color: #003A40;
+      cursor: pointer; transition: border-color 0.2s ease;
     }
-    .wq-chip:hover { border-color: #003A40; color: #003A40; background: #EEF5F5; }
-    .wq-chip.active { background: #003A40; color: #FFEB3B; border-color: #003A40; }
-    .wq-chip .wq-dot {
-      display: block;
-      width: 12px; height: 12px; min-width: 12px; border-radius: 50%;
-      flex: 0 0 12px; /* override do .wq-chip span { flex: 1 } abaixo */
-      box-shadow: inset 0 0 0 1px rgba(0,58,64,0.08);
+    .wq-dropdown-trigger:hover,
+    .wq-dropdown-trigger.open { border-color: #003A40; }
+    .wq-trigger-label {
+      display: flex; align-items: center; gap: 6px; min-width: 0; flex: 1;
+      text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
-    .wq-chip[data-key="Excelente"] .wq-dot { background: #1976D2; }
-    .wq-chip[data-key="Boa"]       .wq-dot { background: #43A047; }
-    .wq-chip[data-key="Aceitável"] .wq-dot { background: #FFEB3B; box-shadow: inset 0 0 0 1px rgba(0,58,64,0.18); }
-    .wq-chip[data-key="Má"]        .wq-dot { background: #E53935; }
-    .wq-chip[data-key="sem-dados"] .wq-dot { background: #fff; box-shadow: inset 0 0 0 1.5px #BDBDBD; }
-    .wq-chip span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; flex: 1; }
+    .wq-trigger-label.empty { color: #8A7D60; }
+    .wq-trigger-dots { display: inline-flex; align-items: center; gap: 3px; flex-shrink: 0; }
+    .wq-trigger-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .wq-trigger-chevron {
+      width: 16px; height: 16px; flex-shrink: 0; color: #8A7D60;
+      transition: transform 0.2s ease;
+    }
+    .wq-dropdown-trigger.open .wq-trigger-chevron { transform: rotate(180deg); }
+
+    .wq-dropdown-panel {
+      position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 50;
+      background: #fff; border: 1px solid #E5DED1; border-radius: 12px;
+      box-shadow: 0 8px 24px -8px rgba(0,58,64,0.18), 0 2px 6px rgba(0,58,64,0.06);
+      padding: 6px;
+    }
+    .wq-dropdown-panel[hidden] { display: none; }
+
+    .wq-option {
+      display: flex; align-items: center; gap: 10px; width: 100%;
+      padding: 9px 10px; border-radius: 8px; background: transparent; border: 0;
+      font-family: 'Open Sans', sans-serif; font-size: 13px; color: #003A40;
+      cursor: pointer; text-align: left; transition: background 0.15s ease;
+    }
+    .wq-option:hover { background: #FAF8F5; }
+    .wq-option[aria-selected="true"] { background: #EEF5F5; }
+    .wq-option-label { flex: 1; min-width: 0; }
+    .wq-option-check {
+      width: 16px; height: 16px; flex-shrink: 0; opacity: 0; color: #003A40;
+      transition: opacity 0.15s ease;
+    }
+    .wq-option[aria-selected="true"] .wq-option-check { opacity: 1; }
+
+    /* Dot colors (reusable em trigger + opções) */
+    .wq-dot {
+      display: inline-block; width: 12px; height: 12px; min-width: 12px;
+      border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,58,64,0.08);
+    }
+    .wq-dot[data-color="Excelente"] { background: #1976D2; }
+    .wq-dot[data-color="Boa"]       { background: #43A047; }
+    .wq-dot[data-color="Aceitável"] { background: #FFEB3B; box-shadow: inset 0 0 0 1px rgba(0,58,64,0.18); }
+    .wq-dot[data-color="Má"]        { background: #E53935; }
+    .wq-dot[data-color="sem-dados"] { background: #fff; box-shadow: inset 0 0 0 1.5px #BDBDBD; }
 
     .beach-list-item {
       display: flex; align-items: center; gap: 10px; padding: 10px 16px;
@@ -312,10 +345,16 @@
         </select>
       </div>
 
-      <!-- Water Quality Chips (desktop) -->
+      <!-- Water Quality Dropdown (desktop) -->
       <div class="p-4 border-b border-praia-sand-100 flex-shrink-0">
-        <label class="font-display text-[10px] font-semibold uppercase tracking-[0.12em] text-praia-teal-700 block mb-2.5">Qualidade da Água</label>
-        <div id="water-quality-grid" class="grid grid-cols-2 gap-1.5"></div>
+        <label class="font-display text-[10px] font-semibold uppercase tracking-[0.12em] text-praia-teal-700 block mb-2">Qualidade da Água</label>
+        <div class="wq-dropdown" id="water-quality-dropdown">
+          <button type="button" class="wq-dropdown-trigger" data-wq-trigger aria-haspopup="listbox" aria-expanded="false">
+            <span class="wq-trigger-label" data-wq-trigger-label></span>
+            <svg class="wq-trigger-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="wq-dropdown-panel" data-wq-panel role="listbox" aria-multiselectable="true" hidden></div>
+        </div>
         <p class="text-[10px] text-praia-sand-500 mt-2 leading-snug">Classificação oficial APA · ano anterior</p>
       </div>
 
@@ -423,8 +462,14 @@
         </select>
       </div>
       <div class="p-4 border-b border-praia-sand-100">
-        <label class="font-display text-[10px] font-semibold uppercase tracking-[0.12em] text-praia-teal-700 block mb-2.5">Qualidade da Água</label>
-        <div id="water-quality-grid-mobile" class="grid grid-cols-2 gap-1.5"></div>
+        <label class="font-display text-[10px] font-semibold uppercase tracking-[0.12em] text-praia-teal-700 block mb-2">Qualidade da Água</label>
+        <div class="wq-dropdown" id="water-quality-dropdown-mobile">
+          <button type="button" class="wq-dropdown-trigger" data-wq-trigger aria-haspopup="listbox" aria-expanded="false">
+            <span class="wq-trigger-label" data-wq-trigger-label></span>
+            <svg class="wq-trigger-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="wq-dropdown-panel" data-wq-panel role="listbox" aria-multiselectable="true" hidden></div>
+        </div>
         <p class="text-[10px] text-praia-sand-500 mt-2 leading-snug">Classificação oficial APA · ano anterior</p>
       </div>
       <div class="p-4 border-b border-praia-sand-100">
@@ -678,27 +723,114 @@
     } catch (e) { /* silently ignore — chip still functional with text */ }
   }
 
-  // ─── Render Water Quality Chips ───
-  function renderWaterQualityChips(gridId) {
-    const el = document.getElementById(gridId);
-    if (!el) return;
-    el.innerHTML = WATER_QUALITY_OPTIONS.map(opt => `
-      <button class="wq-chip${state.waterQuality.has(opt.key) ? ' active' : ''}" data-key="${opt.key}" aria-pressed="${state.waterQuality.has(opt.key)}">
-        <span class="wq-dot" aria-hidden="true"></span>
-        <span>${opt.label}</span>
-      </button>
-    `).join('');
-    el.querySelectorAll('.wq-chip').forEach(chip => {
-      chip.addEventListener('click', () => {
-        const key = chip.dataset.key;
-        state.waterQuality.has(key) ? state.waterQuality.delete(key) : state.waterQuality.add(key);
-        // Sync ambas as grids (desktop + mobile)
-        document.querySelectorAll(`.wq-chip[data-key="${CSS.escape(key)}"]`).forEach(c => {
-          c.classList.toggle('active', state.waterQuality.has(key));
-          c.setAttribute('aria-pressed', state.waterQuality.has(key));
-        });
-        applyFilters();
+  // ─── Render Water Quality Dropdown ───
+  function _wqLabelForKey(key) {
+    return WATER_QUALITY_OPTIONS.find(o => o.key === key)?.label || key;
+  }
+
+  function _renderTriggerLabel(rootEl) {
+    const labelEl = rootEl.querySelector('[data-wq-trigger-label]');
+    if (!labelEl) return;
+    if (state.waterQuality.size === 0) {
+      labelEl.classList.add('empty');
+      labelEl.innerHTML = '<span class="wq-trigger-text">Todas as classificações</span>';
+      return;
+    }
+    labelEl.classList.remove('empty');
+    // Mantém ordem fixa do WATER_QUALITY_OPTIONS para consistência visual
+    const selectedOrdered = WATER_QUALITY_OPTIONS
+      .filter(o => state.waterQuality.has(o.key))
+      .map(o => o.key);
+    const dotsHtml = selectedOrdered.map(k => `<span class="wq-dot" data-color="${k}" aria-hidden="true"></span>`).join('');
+    let textPart;
+    if (selectedOrdered.length === 1) {
+      textPart = _wqLabelForKey(selectedOrdered[0]);
+    } else {
+      textPart = `${selectedOrdered.length} selecionadas`;
+    }
+    labelEl.innerHTML = `<span class="wq-trigger-dots">${dotsHtml}</span><span class="wq-trigger-text">${textPart}</span>`;
+  }
+
+  function _renderPanel(rootEl) {
+    const panel = rootEl.querySelector('[data-wq-panel]');
+    if (!panel) return;
+    panel.innerHTML = WATER_QUALITY_OPTIONS.map(opt => {
+      const sel = state.waterQuality.has(opt.key);
+      return `
+        <button type="button" class="wq-option" role="option" data-key="${opt.key}" aria-selected="${sel}">
+          <span class="wq-dot" data-color="${opt.key}" aria-hidden="true"></span>
+          <span class="wq-option-label">${opt.label}</span>
+          <svg class="wq-option-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+        </button>`;
+    }).join('');
+  }
+
+  function _wqRoots() {
+    return [
+      document.getElementById('water-quality-dropdown'),
+      document.getElementById('water-quality-dropdown-mobile'),
+    ].filter(Boolean);
+  }
+
+  function _wqSyncAll() {
+    _wqRoots().forEach(root => {
+      _renderTriggerLabel(root);
+      _renderPanel(root);
+    });
+  }
+
+  function _wqClosePanel(rootEl) {
+    const trig = rootEl.querySelector('[data-wq-trigger]');
+    const panel = rootEl.querySelector('[data-wq-panel]');
+    if (!panel || panel.hidden) return;
+    panel.hidden = true;
+    trig?.classList.remove('open');
+    trig?.setAttribute('aria-expanded', 'false');
+  }
+
+  function _wqOpenPanel(rootEl) {
+    // Fechar todos os outros antes de abrir este
+    _wqRoots().forEach(r => { if (r !== rootEl) _wqClosePanel(r); });
+    const trig = rootEl.querySelector('[data-wq-trigger]');
+    const panel = rootEl.querySelector('[data-wq-panel]');
+    if (!panel) return;
+    panel.hidden = false;
+    trig?.classList.add('open');
+    trig?.setAttribute('aria-expanded', 'true');
+  }
+
+  function _wqWireDropdown(rootEl) {
+    if (!rootEl) return;
+    const trig = rootEl.querySelector('[data-wq-trigger]');
+    const panel = rootEl.querySelector('[data-wq-panel]');
+    if (!trig || !panel) return;
+    trig.addEventListener('click', (e) => {
+      e.stopPropagation();
+      panel.hidden ? _wqOpenPanel(rootEl) : _wqClosePanel(rootEl);
+    });
+    panel.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const opt = e.target.closest('.wq-option');
+      if (!opt) return;
+      const key = opt.dataset.key;
+      state.waterQuality.has(key) ? state.waterQuality.delete(key) : state.waterQuality.add(key);
+      _wqSyncAll();
+      applyFilters();
+    });
+  }
+
+  function initWaterQualityDropdown() {
+    _wqRoots().forEach(root => _wqWireDropdown(root));
+    _wqSyncAll();
+    // Fechar ao clicar fora
+    document.addEventListener('click', (e) => {
+      _wqRoots().forEach(root => {
+        if (!root.contains(e.target)) _wqClosePanel(root);
       });
+    });
+    // Fechar com Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') _wqRoots().forEach(_wqClosePanel);
     });
   }
 
@@ -820,8 +952,7 @@
   document.addEventListener('DOMContentLoaded', async () => {
     renderServiceChips('services-grid');
     renderServiceChips('services-grid-mobile');
-    renderWaterQualityChips('water-quality-grid');
-    renderWaterQualityChips('water-quality-grid-mobile');
+    initWaterQualityDropdown();
 
     // Carregar dataset de qualidade da água (não bloqueia render do mapa)
     if (window.loadData) {
