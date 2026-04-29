@@ -964,3 +964,121 @@ html {
   box-shadow: 0 4px 12px rgba(220,38,38,0.28);
 }
 .confirm-btn-confirm.is-danger:hover { background: #B91C1C; box-shadow: 0 6px 18px rgba(220,38,38,0.4); }
+
+/* ─── Qualidade da Água (APA) ──────────────────────────────────────────── */
+.wq-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+  border-radius: 14px;
+  background: #FAF8F5;
+  border: 1px solid #E5DED1;
+}
+@media (max-width: 640px) {
+  .wq-card { flex-wrap: wrap; gap: 12px; padding: 16px; }
+}
+
+.wq-drop {
+  width: 54px;
+  height: 54px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #fff;
+  box-shadow: 0 6px 14px -6px rgba(0, 0, 0, 0.18);
+}
+.wq-drop svg { width: 26px; height: 26px; fill: currentColor; }
+
+.wq-headline { display: flex; flex-direction: column; gap: 6px; }
+.wq-class {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1;
+  color: #003A40;
+}
+.wq-stars {
+  display: flex;
+  gap: 2px;
+  font-size: 14px;
+}
+.wq-stars svg { width: 1em; height: 1em; fill: currentColor; }
+.wq-stars .empty { opacity: 0.18; }
+
+.wq-meta {
+  flex: 1;
+  font-size: 13px;
+  color: #003A40;
+  line-height: 1.55;
+  min-width: 0;
+}
+.wq-meta-row { display: block; }
+.wq-meta-label {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  color: #928066;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-right: 6px;
+  display: inline-block;
+  min-width: 100px;
+}
+
+.wq-link {
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #054C52;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.wq-link:hover { color: #003A40; }
+
+.wq-source {
+  font-size: 11px;
+  color: #928066;
+  margin-top: 8px;
+}
+.wq-source strong { color: #003A40; font-weight: 600; }
+
+/* ── Modificadores por classificação (cores oficiais APA) ── */
+.wq-card.is-excelente .wq-drop,
+.wq-card.is-excelente .wq-stars { background: #1976D2; color: #1976D2; }
+.wq-card.is-excelente .wq-drop { color: #fff; }
+
+.wq-card.is-boa .wq-drop,
+.wq-card.is-boa .wq-stars { background: #43A047; color: #43A047; }
+.wq-card.is-boa .wq-drop { color: #fff; }
+
+.wq-card.is-aceitavel .wq-drop {
+  background: #FFEB3B;
+  color: #003A40;
+  box-shadow: 0 6px 14px -6px rgba(0, 58, 64, 0.25), inset 0 0 0 2px rgba(0, 58, 64, 0.12);
+}
+.wq-card.is-aceitavel .wq-stars { color: #FFEB3B; }
+.wq-card.is-aceitavel .wq-stars svg { stroke: #003A40; stroke-width: 1.5; paint-order: stroke fill; }
+
+.wq-card.is-ma .wq-drop,
+.wq-card.is-ma .wq-stars { background: #E53935; color: #E53935; }
+.wq-card.is-ma .wq-drop { color: #fff; }
+
+.wq-card.is-sem-classificacao .wq-drop { background: #9E9E9E; color: #fff; }
+.wq-card.is-sem-classificacao .wq-class { color: #6E5E48; }
+.wq-card.is-sem-classificacao .wq-stars { color: #9E9E9E; opacity: 0.4; }
+
+.wq-card.is-nova-epoca .wq-drop {
+  background: #fff;
+  color: #9E9E9E;
+  box-shadow: inset 0 0 0 2px #BDBDBD;
+}
+.wq-card.is-nova-epoca .wq-class { color: #6E5E48; font-size: 16px; line-height: 1.2; }
+.wq-card.is-nova-epoca .wq-stars svg { fill: none; stroke: #BDBDBD; stroke-width: 2; }
