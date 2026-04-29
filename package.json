@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "start": "node serve.mjs",
-    "screenshot": "node screenshot.mjs"
+    "screenshot": "node screenshot.mjs",
+    "test": "node --test scripts/test-water-quality-matcher.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.101.1",
