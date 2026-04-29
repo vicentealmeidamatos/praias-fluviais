@@ -76,6 +76,31 @@
     }
     .type-btn.active { background: #003A40; color: #FFEB3B; }
 
+    /* Water Quality chips (mesma família visual de .service-chip, mas com bolinha colorida em vez de ícone) */
+    .wq-chip {
+      display: flex; align-items: center; justify-content: flex-start; gap: 7px; padding: 0 10px;
+      border-radius: 8px; border: 1.5px solid #E2D9C6; cursor: pointer;
+      font-family: 'Poppins', sans-serif; font-size: 10.5px; font-weight: 600;
+      letter-spacing: -0.01em;
+      color: #5A4E3C; transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      user-select: none; background: #FAF8F5; width: 100%; text-align: left;
+      height: 36px; box-sizing: border-box; overflow: hidden;
+    }
+    .wq-chip:hover { border-color: #003A40; color: #003A40; background: #EEF5F5; }
+    .wq-chip.active { background: #003A40; color: #FFEB3B; border-color: #003A40; }
+    .wq-chip .wq-dot {
+      display: block;
+      width: 12px; height: 12px; min-width: 12px; border-radius: 50%;
+      flex: 0 0 12px; /* override do .wq-chip span { flex: 1 } abaixo */
+      box-shadow: inset 0 0 0 1px rgba(0,58,64,0.08);
+    }
+    .wq-chip[data-key="Excelente"] .wq-dot { background: #1976D2; }
+    .wq-chip[data-key="Boa"]       .wq-dot { background: #43A047; }
+    .wq-chip[data-key="Aceitável"] .wq-dot { background: #FFEB3B; box-shadow: inset 0 0 0 1px rgba(0,58,64,0.18); }
+    .wq-chip[data-key="Má"]        .wq-dot { background: #E53935; }
+    .wq-chip[data-key="sem-dados"] .wq-dot { background: #fff; box-shadow: inset 0 0 0 1.5px #BDBDBD; }
+    .wq-chip span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; flex: 1; }
+
     .beach-list-item {
       display: flex; align-items: center; gap: 10px; padding: 10px 16px;
       border-bottom: 1px solid rgba(226,217,198,0.5);
@@ -287,6 +312,13 @@
         </select>
       </div>
 
+      <!-- Water Quality Chips (desktop) -->
+      <div class="p-4 border-b border-praia-sand-100 flex-shrink-0">
+        <label class="font-display text-[10px] font-semibold uppercase tracking-[0.12em] text-praia-teal-700 block mb-2.5">Qualidade da Água</label>
+        <div id="water-quality-grid" class="grid grid-cols-2 gap-1.5"></div>
+        <p class="text-[10px] text-praia-sand-500 mt-2 leading-snug">Classificação oficial APA · ano anterior</p>
+      </div>
+
       <!-- Services Chips -->
       <div class="p-4 border-b border-praia-sand-100 flex-shrink-0">
         <label class="font-display text-[10px] font-semibold uppercase tracking-[0.12em] text-praia-teal-700 block mb-2.5">Serviços</label>
@@ -389,6 +421,11 @@
           <option value="Vila Real">Vila Real</option>
           <option value="Viseu">Viseu</option>
         </select>
+      </div>
+      <div class="p-4 border-b border-praia-sand-100">
+        <label class="font-display text-[10px] font-semibold uppercase tracking-[0.12em] text-praia-teal-700 block mb-2.5">Qualidade da Água</label>
+        <div id="water-quality-grid-mobile" class="grid grid-cols-2 gap-1.5"></div>
+        <p class="text-[10px] text-praia-sand-500 mt-2 leading-snug">Classificação oficial APA · ano anterior</p>
       </div>
       <div class="p-4 border-b border-praia-sand-100">
         <label class="font-display text-[10px] font-semibold uppercase tracking-[0.12em] text-praia-teal-700 block mb-2.5">Serviços</label>
@@ -530,7 +567,19 @@
   };
 
   // ─── Filter State ───
-  const state = { search: '', type: '', district: '', services: new Set() };
+  const state = { search: '', type: '', district: '', services: new Set(), waterQuality: new Set() };
+
+  // ─── Water Quality categories (cores oficiais APA) ───
+  const WATER_QUALITY_OPTIONS = [
+    { key: 'Excelente', label: 'Excelente' },
+    { key: 'Boa',       label: 'Boa' },
+    { key: 'Aceitável', label: 'Aceitável' },
+    { key: 'Má',        label: 'Má' },
+    { key: 'sem-dados', label: 'Sem dados APA' },
+  ];
+
+  // Lookup do dataset water-quality.json — populado no init
+  let _waterQualityMap = null;
 
   // ─── Mobile hamburger menu ───
   document.getElementById('nav-hamburger')?.addEventListener('click', () => {
@@ -629,6 +678,30 @@
     } catch (e) { /* silently ignore — chip still functional with text */ }
   }
 
+  // ─── Render Water Quality Chips ───
+  function renderWaterQualityChips(gridId) {
+    const el = document.getElementById(gridId);
+    if (!el) return;
+    el.innerHTML = WATER_QUALITY_OPTIONS.map(opt => `
+      <button class="wq-chip${state.waterQuality.has(opt.key) ? ' active' : ''}" data-key="${opt.key}" aria-pressed="${state.waterQuality.has(opt.key)}">
+        <span class="wq-dot" aria-hidden="true"></span>
+        <span>${opt.label}</span>
+      </button>
+    `).join('');
+    el.querySelectorAll('.wq-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        const key = chip.dataset.key;
+        state.waterQuality.has(key) ? state.waterQuality.delete(key) : state.waterQuality.add(key);
+        // Sync ambas as grids (desktop + mobile)
+        document.querySelectorAll(`.wq-chip[data-key="${CSS.escape(key)}"]`).forEach(c => {
+          c.classList.toggle('active', state.waterQuality.has(key));
+          c.setAttribute('aria-pressed', state.waterQuality.has(key));
+        });
+        applyFilters();
+      });
+    });
+  }
+
   // ─── Render Service Chips ───
   function renderServiceChips(gridId) {
     const el = document.getElementById(gridId);
@@ -680,6 +753,16 @@
       if (state.type && (b.type || 'praia_fluvial') !== state.type) return;
       if (state.district && b.district !== state.district) return;
       if (state.services.size > 0 && ![...state.services].every(s => b.services?.[s])) return;
+      if (state.waterQuality.size > 0) {
+        const wqEntry = _waterQualityMap?.[b.id];
+        const dsc = wqEntry?.previousYearDsc || null;
+        // 'sem-dados' = praia sem entrada APA OU com APA mas sem classificação anterior
+        const hasApaData = !!wqEntry && dsc != null;
+        const matches =
+          (!hasApaData && state.waterQuality.has('sem-dados')) ||
+          (hasApaData && state.waterQuality.has(dsc));
+        if (!matches) return;
+      }
       visible.push(marker);
       visibleIds.add(b.id);
     });
@@ -737,6 +820,19 @@
   document.addEventListener('DOMContentLoaded', async () => {
     renderServiceChips('services-grid');
     renderServiceChips('services-grid-mobile');
+    renderWaterQualityChips('water-quality-grid');
+    renderWaterQualityChips('water-quality-grid-mobile');
+
+    // Carregar dataset de qualidade da água (não bloqueia render do mapa)
+    if (window.loadData) {
+      window.loadData('waterQuality').then(wq => {
+        _waterQualityMap = wq?.beaches || {};
+        // Re-aplicar filtros caso o utilizador já tenha carregado um chip antes do dataset chegar
+        if (state.waterQuality.size > 0) applyFilters();
+      }).catch(() => { _waterQualityMap = {}; });
+    } else {
+      _waterQualityMap = {};
+    }
 
     // ─── Init Map FIRST (tiles start downloading immediately) ───
     const PT_BOUNDS = [[36.8, -9.6], [42.2, -6.1]];
