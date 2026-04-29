@@ -507,6 +507,13 @@ async function initDashboard() {
     state.data['conteudo'] = {};
     state.editingContent = {};
   }
+  // Water Quality (APA) — read-only, gerado automaticamente pela GH Action
+  try {
+    const res = await fetch('data/water-quality.json');
+    state.data.waterQuality = await res.json();
+  } catch {
+    state.data.waterQuality = null;
+  }
   // Layout overrides (carregado de Supabase via fetch interceptor que cai para vazio se não existir)
   try {
     if (window.DataLoader) state.data['layout'] = await window.DataLoader.loadDataset('layout') || {};
@@ -965,7 +972,7 @@ function editBeach(index) {
     photos: [],
     video360: null,
     services: { ...DEFAULT_SERVICES },
-    waterQuality: 'boa', featured: false, passportStamp: true
+    apaCode: '', featured: false, passportStamp: true
   };
 
   // Merge any missing service keys
@@ -1011,16 +1018,33 @@ function editBeach(index) {
             </select>
           </div>
         </div>
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 gap-4">
           <div><label>Rio / Albufeira</label><input type="text" id="b-river" value="${escHtml(b.river)}"></div>
-          <div>
-            <label>Qualidade da Água</label>
-            <select id="b-waterQuality">
-              <option value="excelente" ${b.waterQuality==='excelente'?'selected':''}>Excelente</option>
-              <option value="boa" ${b.waterQuality==='boa'?'selected':''}>Boa</option>
-              <option value="aceitavel" ${b.waterQuality==='aceitavel'?'selected':''}>Aceitável</option>
-            </select>
-          </div>
+        </div>
+      </div>
+
+      <!-- Qualidade da Água (APA) — read-only + override -->
+      <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100">
+        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-3">Qualidade da Água (APA)</h3>
+        ${(() => {
+          const wq = state.data.waterQuality?.beaches?.[b.id];
+          if (wq) {
+            return `
+            <div style="font-size:13px;color:#003A40;line-height:1.6;margin-bottom:12px;">
+              <div><strong style="font-family:'Poppins';font-weight:600;color:#928066;font-size:11px;letter-spacing:.06em;text-transform:uppercase;display:inline-block;min-width:140px;">Classificação</strong> ${escHtml(wq.previousYearDsc || 'Sem classificação')}</div>
+              <div><strong style="font-family:'Poppins';font-weight:600;color:#928066;font-size:11px;letter-spacing:.06em;text-transform:uppercase;display:inline-block;min-width:140px;">Código APA</strong> <code>${escHtml(wq.apaCode)}</code></div>
+              <div><strong style="font-family:'Poppins';font-weight:600;color:#928066;font-size:11px;letter-spacing:.06em;text-transform:uppercase;display:inline-block;min-width:140px;">Nome APA</strong> ${escHtml(wq.apaName)}</div>
+              <div><strong style="font-family:'Poppins';font-weight:600;color:#928066;font-size:11px;letter-spacing:.06em;text-transform:uppercase;display:inline-block;min-width:140px;">Concelho APA</strong> ${escHtml(wq.apaConcelho || '—')}</div>
+              <div><strong style="font-family:'Poppins';font-weight:600;color:#928066;font-size:11px;letter-spacing:.06em;text-transform:uppercase;display:inline-block;min-width:140px;">Método de match</strong> ${escHtml(wq.matchMethod)}${wq.matchDistance != null ? ` (${wq.matchDistance} m)` : ''}</div>
+              <div><strong style="font-family:'Poppins';font-weight:600;color:#928066;font-size:11px;letter-spacing:.06em;text-transform:uppercase;display:inline-block;min-width:140px;">Última atualização</strong> ${escHtml(state.data.waterQuality.lastUpdated || '')}</div>
+            </div>`;
+          }
+          return `<p style="font-size:13px;color:#928066;margin-bottom:12px;">Esta praia não foi encontrada na APA. Se a APA tem um registo com nome muito diferente, adicione abaixo o código manual.</p>`;
+        })()}
+        <div>
+          <label>Override manual (apaCode, ex.: PTCQ7M)</label>
+          <input type="text" id="b-apaCode" value="${escHtml(b.apaCode || '')}" placeholder="(deixar vazio para matching automático)">
+          <p style="font-size:11px;color:#928066;margin-top:4px;">A próxima execução do GitHub Action vai usar este código se preenchido. <a href="https://github.com/vicentealmeidamatos/praias-fluviais/actions/workflows/water-quality.yml" target="_blank" rel="noopener" style="color:#054C52;text-decoration:underline;">Forçar atualização agora ↗</a></p>
         </div>
       </div>
 
@@ -1122,7 +1146,7 @@ function editBeach(index) {
 }
 
 function getBeachFormSnapshot() {
-  const inputIds = ['b-name', 'b-id', 'b-municipality', 'b-freguesia', 'b-district', 'b-type', 'b-river', 'b-waterQuality', 'b-lat', 'b-lng'];
+  const inputIds = ['b-name', 'b-id', 'b-municipality', 'b-freguesia', 'b-district', 'b-type', 'b-river', 'b-apaCode', 'b-lat', 'b-lng'];
   const values = inputIds.map(id => document.getElementById(id)?.value || '');
   const checks = [document.getElementById('b-featured')?.checked, document.getElementById('b-passportStamp')?.checked];
   const services = [];
@@ -1168,7 +1192,7 @@ function saveBeach(index) {
     photos: state.editingPhotos.map(p => p.src),
     video360: null,
     services,
-    waterQuality: document.getElementById('b-waterQuality').value,
+    apaCode: document.getElementById('b-apaCode').value.trim() || undefined,
     featured: document.getElementById('b-featured').checked,
     passportStamp: document.getElementById('b-passportStamp').checked,
   };
