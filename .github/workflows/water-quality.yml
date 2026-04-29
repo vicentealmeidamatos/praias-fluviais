@@ -1,0 +1,39 @@
+name: Atualizar Qualidade da Água (APA)
+
+on:
+  schedule:
+    - cron: '17 6 * * *'        # Diário 06:17 UTC (≈07:17/08:17 PT)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: water-quality
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Fetch APA & generate water-quality.json
+        run: node scripts/fetch-water-quality.mjs
+
+      - name: Commit if changed
+        run: |
+          if [[ -n "$(git status --porcelain data/water-quality.json)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add data/water-quality.json
+            git commit -m "data(qualidade-agua): atualização automática APA"
+            git push
+          else
+            echo "Sem alterações em water-quality.json."
+          fi
