@@ -355,7 +355,7 @@
           </button>
           <div class="wq-dropdown-panel" data-wq-panel role="listbox" aria-multiselectable="true" hidden></div>
         </div>
-        <p class="text-[10px] text-praia-sand-500 mt-2 leading-snug">Classificação oficial APA · ano anterior</p>
+        <p class="text-[10px] text-praia-sand-500 mt-2 leading-snug" data-wq-year-hint>Classificação oficial APA</p>
       </div>
 
       <!-- Services Chips -->
@@ -470,7 +470,7 @@
           </button>
           <div class="wq-dropdown-panel" data-wq-panel role="listbox" aria-multiselectable="true" hidden></div>
         </div>
-        <p class="text-[10px] text-praia-sand-500 mt-2 leading-snug">Classificação oficial APA · ano anterior</p>
+        <p class="text-[10px] text-praia-sand-500 mt-2 leading-snug" data-wq-year-hint>Classificação oficial APA</p>
       </div>
       <div class="p-4 border-b border-praia-sand-100">
         <label class="font-display text-[10px] font-semibold uppercase tracking-[0.12em] text-praia-teal-700 block mb-2.5">Serviços</label>
@@ -958,6 +958,16 @@
     if (window.loadData) {
       window.loadData('waterQuality').then(wq => {
         _waterQualityMap = wq?.beaches || {};
+        // Ano apresentado = ano da época balnear vigente (em 2026 mostra 2026, em 2027 mostra 2027, ...)
+        const sample = Object.values(_waterQualityMap).find(e => e.seasonStart);
+        if (sample) {
+          const year = parseInt(sample.seasonStart.slice(0, 4), 10);
+          if (Number.isFinite(year)) {
+            document.querySelectorAll('[data-wq-year-hint]').forEach(el => {
+              el.textContent = `Classificação oficial APA · ${year}`;
+            });
+          }
+        }
         // Re-aplicar filtros caso o utilizador já tenha carregado um chip antes do dataset chegar
         if (state.waterQuality.size > 0) applyFilters();
       }).catch(() => { _waterQualityMap = {}; });
