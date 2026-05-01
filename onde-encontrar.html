@@ -38,6 +38,31 @@
     #locations-map .leaflet-tile-pane {
       filter: saturate(0.6) brightness(0.9);
     }
+    #locations-map.is-fullscreen {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh !important;
+      max-width: none;
+      border-radius: 0 !important;
+      border: none !important;
+      z-index: 9999;
+      box-shadow: none !important;
+    }
+    body.map-fullscreen-active { overflow: hidden; }
+    .map-fullscreen-btn {
+      background: white;
+      width: 34px;
+      height: 34px;
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #003A40;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+    .map-fullscreen-btn:hover { background: #FFEB3B; color: #003A40; }
+    .map-fullscreen-btn svg { width: 16px; height: 16px; display: block; }
     .location-card {
       transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
@@ -268,14 +293,12 @@
               class="w-full pl-9 pr-4 py-2.5 text-sm border border-praia-sand-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-praia-teal-300 font-body"
               oninput="filterList()">
           </div>
-          <select id="list-type-filter" onchange="filterList()"
-            class="px-4 py-2.5 text-sm border border-praia-sand-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-praia-teal-300 font-body font-semibold text-praia-teal-800 min-w-[160px]">
+          <select id="list-type-filter" data-gpf-select onchange="filterList()" class="min-w-[160px]">
             <option value="">Todos os tipos</option>
             <option value="guia">Só Guia</option>
             <option value="guia_passaporte">Guia + Passaporte</option>
           </select>
-          <select id="list-epoca-filter" onchange="filterList()"
-            class="px-4 py-2.5 text-sm border border-praia-sand-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-praia-teal-300 font-body font-semibold text-praia-teal-800 min-w-[160px]">
+          <select id="list-epoca-filter" data-gpf-select onchange="filterList()" class="min-w-[160px]">
             <option value="">Toda a época</option>
             <option value="anual">Aberto todo o ano</option>
             <option value="sazonal">Só época balnear</option>
@@ -407,6 +430,46 @@
       attributionControl: false,
     });
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18 }).addTo(map);
+
+    // ─── Fullscreen control ───
+    const FS_EXPAND = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8V5a2 2 0 0 1 2-2h3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M21 16v3a2 2 0 0 1-2 2h-3"/></svg>';
+    const FS_COLLAPSE = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3M21 8h-3a2 2 0 0 1-2-2V3M3 16h3a2 2 0 0 1 2 2v3M16 21v-3a2 2 0 0 1 2-2h3"/></svg>';
+    const FullscreenControl = L.Control.extend({
+      options: { position: 'topright' },
+      onAdd(mapInstance) {
+        const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
+        const btn = L.DomUtil.create('a', 'map-fullscreen-btn', container);
+        btn.href = '#';
+        btn.role = 'button';
+        btn.title = 'Ecrã inteiro';
+        btn.setAttribute('aria-label', 'Alternar ecrã inteiro');
+        btn.innerHTML = FS_EXPAND;
+        L.DomEvent.disableClickPropagation(container);
+        L.DomEvent.on(btn, 'click', e => {
+          L.DomEvent.preventDefault(e);
+          const mapEl = document.getElementById('locations-map');
+          const goingFs = !mapEl.classList.contains('is-fullscreen');
+          mapEl.classList.toggle('is-fullscreen', goingFs);
+          document.body.classList.toggle('map-fullscreen-active', goingFs);
+          btn.innerHTML = goingFs ? FS_COLLAPSE : FS_EXPAND;
+          btn.title = goingFs ? 'Sair de ecrã inteiro' : 'Ecrã inteiro';
+          btn.setAttribute('aria-label', goingFs ? 'Sair de ecrã inteiro' : 'Alternar ecrã inteiro');
+          setTimeout(() => mapInstance.invalidateSize(), 60);
+        });
+        return container;
+      }
+    });
+    map.addControl(new FullscreenControl());
+    document.addEventListener('keydown', e => {
+      if (e.key !== 'Escape') return;
+      const mapEl = document.getElementById('locations-map');
+      if (!mapEl.classList.contains('is-fullscreen')) return;
+      mapEl.classList.remove('is-fullscreen');
+      document.body.classList.remove('map-fullscreen-active');
+      const btn = mapEl.querySelector('.map-fullscreen-btn');
+      if (btn) { btn.innerHTML = FS_EXPAND; btn.title = 'Ecrã inteiro'; btn.setAttribute('aria-label', 'Alternar ecrã inteiro'); }
+      setTimeout(() => map.invalidateSize(), 60);
+    });
 
     const markersLayer = L.layerGroup().addTo(map);
 
