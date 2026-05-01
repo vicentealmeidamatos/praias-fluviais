@@ -174,6 +174,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       districts.map(d => `<option value="${d}">${d}</option>`).join('')
     );
     sel.dataset.populated = '1';
+    if (typeof window.gpfSelectRefresh === 'function') window.gpfSelectRefresh(sel);
   }
 
   function bindAlbumFilters() {

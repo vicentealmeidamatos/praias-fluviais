@@ -46,6 +46,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       opt.value = d; opt.textContent = d;
       districtSel.appendChild(opt);
     });
+    if (typeof window.gpfSelectRefresh === 'function') window.gpfSelectRefresh(districtSel);
   }
 
   // Check preselect param
@@ -130,7 +131,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       const pos = await getUserLocation();
       currentBeaches = sortByDistance(currentBeaches, pos.lat, pos.lng);
       sortMode = 'distance';
-      if (sortSel) sortSel.value = 'distance';
+      if (sortSel) {
+        sortSel.value = 'distance';
+        if (typeof window.gpfSelectRefresh === 'function') window.gpfSelectRefresh(sortSel);
+      }
       renderCards(currentBeaches);
     } catch (err) {
       alert(err.message);

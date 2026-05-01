@@ -1541,3 +1541,157 @@ function boostHeroBubbles() {
     b.style.setProperty('--delay', '-' + (Math.random() * 20).toFixed(2) + 's');
   });
 }
+
+/* ─── Generic Dropdown Auto-Init ───────────────────────────────────────────
+   Converte qualquer <select data-gpf-select> num dropdown personalizado
+   ao estilo do wq-dropdown da página REDE (qualidade da água).
+   O <select> nativo permanece no DOM (escondido) — todos os listeners
+   `change` existentes continuam a funcionar.
+   API:
+     window.gpfSelectInit(root?)        — inicializa selects dentro de root
+     window.gpfSelectRefresh(selectEl)  — re-renderiza após popular options
+     selectEl._gpfRefresh()             — equivalente da instância
+─────────────────────────────────────────────────────────────────────────── */
+(function () {
+  const CHEVRON_SVG = '<svg class="gpf-select-trigger-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>';
+  const CHECK_SVG = '<svg class="gpf-select-option-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>';
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+  }
+
+  function visibleOptions(selectEl) {
+    return Array.from(selectEl.options).filter(o => !o.hidden);
+  }
+
+  function closeAllPanels(except) {
+    document.querySelectorAll('.gpf-select .gpf-select-panel:not([hidden])').forEach(panel => {
+      if (panel === except) return;
+      panel.hidden = true;
+      const trig = panel.parentNode && panel.parentNode.querySelector('.gpf-select-trigger');
+      if (trig) {
+        trig.classList.remove('open');
+        trig.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  function buildWrapper(selectEl) {
+    if (!selectEl || selectEl.dataset.gpfSelectInit === '1') return;
+    selectEl.dataset.gpfSelectInit = '1';
+
+    // Carry layout/width utility classes from <select> to the wrapper
+    const wrapper = document.createElement('div');
+    wrapper.className = 'gpf-select';
+    if (selectEl.className) {
+      wrapper.classList.add(...selectEl.className.split(/\s+/).filter(Boolean));
+    }
+    selectEl.parentNode.insertBefore(wrapper, selectEl);
+    wrapper.appendChild(selectEl);
+
+    // Strip visual classes from the (now hidden) native select; keep only structural
+    selectEl.className = 'gpf-select-native';
+    selectEl.setAttribute('tabindex', '-1');
+    selectEl.setAttribute('aria-hidden', 'true');
+
+    const trigger = document.createElement('button');
+    trigger.type = 'button';
+    trigger.className = 'gpf-select-trigger';
+    trigger.setAttribute('aria-haspopup', 'listbox');
+    trigger.setAttribute('aria-expanded', 'false');
+    trigger.innerHTML =
+      '<span class="gpf-select-trigger-label" data-gpf-label></span>' + CHEVRON_SVG;
+    wrapper.appendChild(trigger);
+
+    const panel = document.createElement('div');
+    panel.className = 'gpf-select-panel';
+    panel.setAttribute('role', 'listbox');
+    panel.hidden = true;
+    wrapper.appendChild(panel);
+
+    function renderLabel() {
+      const labelEl = trigger.querySelector('[data-gpf-label]');
+      if (!labelEl) return;
+      const opt = selectEl.options[selectEl.selectedIndex];
+      const isPlaceholder = !opt || opt.value === '';
+      labelEl.classList.toggle('empty', !!isPlaceholder);
+      labelEl.textContent = opt ? opt.textContent : '';
+    }
+
+    function renderPanel() {
+      const opts = visibleOptions(selectEl);
+      const currentValue = selectEl.value;
+      panel.innerHTML = opts.map(opt => {
+        const sel = opt.value === currentValue;
+        return '<button type="button" class="gpf-select-option" role="option"'
+             + ' data-value="' + escapeHtml(opt.value) + '"'
+             + ' aria-selected="' + (sel ? 'true' : 'false') + '">'
+             + '<span class="gpf-select-option-label">' + escapeHtml(opt.textContent) + '</span>'
+             + CHECK_SVG
+             + '</button>';
+      }).join('');
+    }
+
+    function open() {
+      closeAllPanels(panel);
+      renderPanel();
+      panel.hidden = false;
+      trigger.classList.add('open');
+      trigger.setAttribute('aria-expanded', 'true');
+    }
+    function close() {
+      panel.hidden = true;
+      trigger.classList.remove('open');
+      trigger.setAttribute('aria-expanded', 'false');
+    }
+
+    trigger.addEventListener('click', e => {
+      e.stopPropagation();
+      panel.hidden ? open() : close();
+    });
+    panel.addEventListener('click', e => {
+      e.stopPropagation();
+      const opt = e.target.closest('.gpf-select-option');
+      if (!opt) return;
+      const value = opt.dataset.value;
+      if (selectEl.value !== value) {
+        selectEl.value = value;
+        selectEl.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+      renderLabel();
+      close();
+    });
+
+    // Quando código externo muda selectEl.value programaticamente, refletir no UI
+    selectEl._gpfRefresh = function () {
+      renderLabel();
+      if (!panel.hidden) renderPanel();
+    };
+
+    renderLabel();
+  }
+
+  function initAll(root) {
+    (root || document).querySelectorAll('select[data-gpf-select]').forEach(buildWrapper);
+  }
+
+  // Fechar ao clicar fora
+  document.addEventListener('click', () => closeAllPanels(null));
+  // Fechar com Escape
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeAllPanels(null);
+  });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => initAll());
+  } else {
+    initAll();
+  }
+
+  window.gpfSelectInit = (root) => initAll(root);
+  window.gpfSelectRefresh = (selectEl) => {
+    if (selectEl && typeof selectEl._gpfRefresh === 'function') selectEl._gpfRefresh();
+  };
+})();

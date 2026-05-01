@@ -78,6 +78,7 @@ function renderProduct() {
     // Populate options from the already-loaded _beaches array (from beaches.json)
     beachSelect.innerHTML = `<option value="">Escolha a sua praia…</option>` +
       _beaches.map(b => `<option value="${b.id}">${b.name}</option>`).join('');
+    if (typeof window.gpfSelectRefresh === 'function') window.gpfSelectRefresh(beachSelect);
     beachSection.classList.remove('hidden');
   } else if (beachSection) {
     beachSection.classList.add('hidden');
