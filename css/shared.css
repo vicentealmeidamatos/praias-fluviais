@@ -16,6 +16,11 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* O fundo do <html> só aparece em zonas onde o <body> não chega — área
+     acima da safe-area no iOS Safari (entre URL bar e início do header),
+     overscroll/rubber-band, e cantos arredondados da viewport. Sem isto,
+     ficava uma linha branca/areia visível por cima do header teal. */
+  background-color: #003A40;
 }
 
 body {
@@ -580,22 +585,32 @@ html {
   #mobile-menu > div:last-child {
     display: flex !important;
     flex-direction: column;
-    gap: 10px;
-    padding: 14px 20px calc(14px + env(safe-area-inset-bottom)) 20px;
+    gap: 8px;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom)) 16px;
     flex-shrink: 0 !important;
   }
   /* Esconder a row de sociais antiga (div com class "flex" que NÃO é um link),
      o auth-slot residual no footer (já foi movido para o topo), e qualquer
      Carrinho que tenha sobrado. Ao usar `div.flex` em vez de `.flex` evitamos
-     apanhar o link "Onde Encontrar" que também tem a class flex. */
+     apanhar o link "Onde Encontrar" que também tem a class flex. O par
+     compacto Encontrar/Carimbar é exposto via #mobile-cta-pair. */
   #mobile-menu > div:last-child > #mobile-auth-slot,
-  #mobile-menu > div:last-child > div.flex,
+  #mobile-menu > div:last-child > div.flex:not(#mobile-cta-pair),
   #mobile-menu > div:last-child > a[href*="carrinho"] {
     display: none !important;
   }
-  #mobile-menu > div:last-child > a[href*="onde-encontrar"] {
-    min-height: 48px;
+  #mobile-menu > div:last-child > #mobile-cta-pair {
     margin-top: 0 !important;
+  }
+  #mobile-menu > div:last-child > #mobile-cta-pair > a {
+    min-height: 40px;
+  }
+  /* Reduzir padding interno de cada item da lista de páginas, para garantir
+     que todos os links cabem na altura visível do drawer sem scroll, em
+     ecrãs mais pequenos. */
+  #mobile-menu > div.flex-1 > a {
+    padding-top: 11px !important;
+    padding-bottom: 11px !important;
   }
 
   /* Auth slot direto no topo do drawer (movido por hardenSideMenu) */

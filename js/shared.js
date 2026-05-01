@@ -1381,17 +1381,26 @@ function slugify(text) {
       }
     }
 
-    // Adicionar CTA secundária "Onde Carimbar" debaixo da CTA "Onde Encontrar"
-    // do footer do drawer. Espelha o duo de CTAs do header desktop.
+    // Compactar o duo de CTAs do footer do drawer: substitui o botão
+    // "Onde Encontrar" full-width por um par lado-a-lado (Encontrar + Carimbar)
+    // mais pequeno, para que a CTA "Criar Conta" no topo continue a ser a mais
+    // evidente e todas as páginas do menu fiquem visíveis sem scroll.
     var primaryCta = menu.querySelector('a[href="onde-encontrar.html"].btn-primary');
     if (primaryCta && !primaryCta.dataset.carimbarAugmented) {
-      primaryCta.dataset.carimbarAugmented = '1';
-      var carimbarHTML =
-        '<a href="onde-carimbar-passaporte.html" class="flex items-center justify-center gap-2 bg-white/10 border border-white/30 text-white hover:bg-white/20 font-display font-bold text-sm uppercase tracking-wider px-5 py-3 rounded-full w-full transition-colors duration-200 mt-2">' +
-          '<i data-lucide="stamp" class="w-4 h-4"></i>' +
-          'Onde Carimbar' +
+      var pairWrapper = document.createElement('div');
+      pairWrapper.id = 'mobile-cta-pair';
+      pairWrapper.className = 'flex gap-2';
+      pairWrapper.dataset.carimbarAugmented = '1';
+      pairWrapper.innerHTML =
+        '<a href="onde-encontrar.html" class="flex-1 flex items-center justify-center gap-1.5 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-[11px] uppercase tracking-wider px-2 py-2.5 rounded-full btn-primary">' +
+          '<i data-lucide="map-pin" class="w-3.5 h-3.5"></i>' +
+          '<span>Encontrar</span>' +
+        '</a>' +
+        '<a href="onde-carimbar-passaporte.html" class="flex-1 flex items-center justify-center gap-1.5 bg-white/10 border border-white/30 text-white hover:bg-white/20 font-display font-bold text-[11px] uppercase tracking-wider px-2 py-2.5 rounded-full transition-colors duration-200">' +
+          '<i data-lucide="stamp" class="w-3.5 h-3.5"></i>' +
+          '<span>Carimbar</span>' +
         '</a>';
-      primaryCta.insertAdjacentHTML('afterend', carimbarHTML);
+      primaryCta.parentNode.replaceChild(pairWrapper, primaryCta);
     }
 
     // Bind global do botão hamburger (selector robusto: aria-label + lg:hidden no header)
@@ -1450,11 +1459,25 @@ function slugify(text) {
   // ─── Bootstrap ────────────────────────────────────────────────────────────
   injectPwaMeta();
 
+  // Garante que o "Criar Conta" / chip de perfil aparece em TODAS as páginas
+  // que tenham #mobile-auth-slot, mesmo quando a página não chama
+  // AuthUtils.initMobileMenuAuth() diretamente (ex.: loja.html, produto.html,
+  // carrinho.html). Espera por AuthUtils com poll curto.
+  function pollMobileMenuAuth(retries) {
+    if (!document.getElementById('mobile-auth-slot')) return;
+    if (window.AuthUtils && typeof window.AuthUtils.initMobileMenuAuth === 'function') {
+      window.AuthUtils.initMobileMenuAuth();
+    } else if (retries > 0) {
+      setTimeout(function () { pollMobileMenuAuth(retries - 1); }, 200);
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     renderSiteBottomNav();
     renderBackButton();
     hardenSideMenu();
     boostHeroBubbles();
+    pollMobileMenuAuth(20);
   });
 })();
 
