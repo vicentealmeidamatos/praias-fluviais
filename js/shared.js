@@ -1547,10 +1547,20 @@ function boostHeroBubbles() {
    ao estilo do wq-dropdown da página REDE (qualidade da água).
    O <select> nativo permanece no DOM (escondido) — todos os listeners
    `change` existentes continuam a funcionar.
+
+   Single-select: <select data-gpf-select>...</select>
+   Multi-select:  <select data-gpf-select multiple data-gpf-multi-label="selecionados">...</select>
+     - clicar numa opção alterna sem fechar o painel
+     - opção placeholder (value="") funciona como "Limpar tudo"
+     - rótulo: 0 → placeholder · 1 → texto da opção · N → "N selecionados"
+     - ler valores selecionados com window.gpfSelectGetValues(sel)
+
    API:
-     window.gpfSelectInit(root?)        — inicializa selects dentro de root
-     window.gpfSelectRefresh(selectEl)  — re-renderiza após popular options
-     selectEl._gpfRefresh()             — equivalente da instância
+     window.gpfSelectInit(root?)            — inicializa selects dentro de root
+     window.gpfSelectRefresh(selectEl)      — re-renderiza após popular options
+     window.gpfSelectGetValues(selectEl)    — array de valores selecionados (sem placeholder)
+     window.gpfSelectSetValues(selectEl, v) — define seleções (multi) e refresca UI
+     selectEl._gpfRefresh()                 — equivalente da instância
 ─────────────────────────────────────────────────────────────────────────── */
 (function () {
   const CHEVRON_SVG = '<svg class="gpf-select-trigger-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>';
@@ -1564,6 +1574,12 @@ function boostHeroBubbles() {
 
   function visibleOptions(selectEl) {
     return Array.from(selectEl.options).filter(o => !o.hidden);
+  }
+
+  function getMultiSelectedValues(selectEl) {
+    return Array.from(selectEl.selectedOptions)
+      .map(o => o.value)
+      .filter(v => v !== '');
   }
 
   function closeAllPanels(except) {
@@ -1581,6 +1597,9 @@ function boostHeroBubbles() {
   function buildWrapper(selectEl) {
     if (!selectEl || selectEl.dataset.gpfSelectInit === '1') return;
     selectEl.dataset.gpfSelectInit = '1';
+
+    const isMulti = selectEl.multiple === true;
+    const multiLabel = selectEl.dataset.gpfMultiLabel || 'selecionados';
 
     // Carry layout/width utility classes from <select> to the wrapper
     const wrapper = document.createElement('div');
@@ -1608,23 +1627,52 @@ function boostHeroBubbles() {
     const panel = document.createElement('div');
     panel.className = 'gpf-select-panel';
     panel.setAttribute('role', 'listbox');
+    if (isMulti) panel.setAttribute('aria-multiselectable', 'true');
     panel.hidden = true;
     wrapper.appendChild(panel);
+
+    function getPlaceholderText() {
+      const p = Array.from(selectEl.options).find(o => o.value === '');
+      return p ? p.textContent : '';
+    }
 
     function renderLabel() {
       const labelEl = trigger.querySelector('[data-gpf-label]');
       if (!labelEl) return;
-      const opt = selectEl.options[selectEl.selectedIndex];
-      const isPlaceholder = !opt || opt.value === '';
-      labelEl.classList.toggle('empty', !!isPlaceholder);
-      labelEl.textContent = opt ? opt.textContent : '';
+      if (isMulti) {
+        const selected = getMultiSelectedValues(selectEl);
+        if (selected.length === 0) {
+          labelEl.classList.add('empty');
+          labelEl.textContent = getPlaceholderText();
+        } else if (selected.length === 1) {
+          labelEl.classList.remove('empty');
+          const opt = Array.from(selectEl.options).find(o => o.value === selected[0]);
+          labelEl.textContent = opt ? opt.textContent : selected[0];
+        } else {
+          labelEl.classList.remove('empty');
+          labelEl.textContent = selected.length + ' ' + multiLabel;
+        }
+      } else {
+        const opt = selectEl.options[selectEl.selectedIndex];
+        const isPlaceholder = !opt || opt.value === '';
+        labelEl.classList.toggle('empty', !!isPlaceholder);
+        labelEl.textContent = opt ? opt.textContent : '';
+      }
     }
 
     function renderPanel() {
       const opts = visibleOptions(selectEl);
-      const currentValue = selectEl.value;
+      const multiSelected = isMulti ? new Set(getMultiSelectedValues(selectEl)) : null;
+      const singleValue = isMulti ? null : selectEl.value;
       panel.innerHTML = opts.map(opt => {
-        const sel = opt.value === currentValue;
+        let sel;
+        if (isMulti) {
+          // Placeholder counts as "selected" only quando nada mais está
+          if (opt.value === '') sel = multiSelected.size === 0;
+          else sel = multiSelected.has(opt.value);
+        } else {
+          sel = opt.value === singleValue;
+        }
         return '<button type="button" class="gpf-select-option" role="option"'
              + ' data-value="' + escapeHtml(opt.value) + '"'
              + ' aria-selected="' + (sel ? 'true' : 'false') + '">'
@@ -1653,18 +1701,32 @@ function boostHeroBubbles() {
     });
     panel.addEventListener('click', e => {
       e.stopPropagation();
-      const opt = e.target.closest('.gpf-select-option');
-      if (!opt) return;
-      const value = opt.dataset.value;
-      if (selectEl.value !== value) {
-        selectEl.value = value;
+      const optBtn = e.target.closest('.gpf-select-option');
+      if (!optBtn) return;
+      const value = optBtn.dataset.value;
+      if (isMulti) {
+        if (value === '') {
+          // Limpar todas as seleções
+          Array.from(selectEl.options).forEach(o => { o.selected = false; });
+        } else {
+          const opt = Array.from(selectEl.options).find(o => o.value === value);
+          if (opt) opt.selected = !opt.selected;
+        }
         selectEl.dispatchEvent(new Event('change', { bubbles: true }));
+        renderLabel();
+        renderPanel();
+        // Painel permanece aberto em multi-select
+      } else {
+        if (selectEl.value !== value) {
+          selectEl.value = value;
+          selectEl.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+        renderLabel();
+        close();
       }
-      renderLabel();
-      close();
     });
 
-    // Quando código externo muda selectEl.value programaticamente, refletir no UI
+    // Quando código externo muda selectEl programaticamente, refletir no UI
     selectEl._gpfRefresh = function () {
       renderLabel();
       if (!panel.hidden) renderPanel();
@@ -1693,5 +1755,21 @@ function boostHeroBubbles() {
   window.gpfSelectInit = (root) => initAll(root);
   window.gpfSelectRefresh = (selectEl) => {
     if (selectEl && typeof selectEl._gpfRefresh === 'function') selectEl._gpfRefresh();
+  };
+  window.gpfSelectGetValues = (selectEl) => {
+    if (!selectEl) return [];
+    if (selectEl.multiple) return getMultiSelectedValues(selectEl);
+    return selectEl.value ? [selectEl.value] : [];
+  };
+  window.gpfSelectSetValues = (selectEl, values) => {
+    if (!selectEl) return;
+    const set = new Set(Array.isArray(values) ? values : [values]);
+    if (selectEl.multiple) {
+      Array.from(selectEl.options).forEach(o => { o.selected = set.has(o.value); });
+    } else {
+      const first = [...set][0] || '';
+      selectEl.value = first;
+    }
+    if (typeof selectEl._gpfRefresh === 'function') selectEl._gpfRefresh();
   };
 })();

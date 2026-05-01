@@ -222,7 +222,7 @@
           </a>
         </div>
         <div class="hidden md:flex items-center gap-1.5 ml-2">
-          <a href="onde-encontrar.html" class="inline-flex items-center gap-1.5 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-[11px] uppercase tracking-wider px-2.5 py-1.5 rounded-full btn-primary shadow-layered-yellow whitespace-nowrap">
+          <a href="onde-encontrar.html" class="inline-flex items-center gap-1.5 bg-white/10 border border-white/30 text-white hover:bg-white/20 font-display font-bold text-[11px] uppercase tracking-wider px-2.5 py-1.5 rounded-full transition-all duration-200 whitespace-nowrap">
             <i data-lucide="book-open" class="w-3.5 h-3.5"></i>
             Onde Encontrar
           </a>
@@ -322,7 +322,7 @@
       <!-- District -->
       <div class="p-4 border-b border-praia-sand-100 flex-shrink-0">
         <label class="font-display text-[10px] font-semibold uppercase tracking-[0.12em] text-praia-teal-700 block mb-2">Distrito</label>
-        <select id="filter-district" data-gpf-select class="w-full">
+        <select id="filter-district" data-gpf-select multiple data-gpf-multi-label="selecionados" class="w-full">
           <option value="">Todos os distritos</option>
           <option value="Aveiro">Aveiro</option>
           <option value="Beja">Beja</option>
@@ -439,7 +439,7 @@
       </div>
       <div class="p-4 border-b border-praia-sand-100">
         <label class="font-display text-[10px] font-semibold uppercase tracking-[0.12em] text-praia-teal-700 block mb-2">Distrito</label>
-        <select id="filter-district-mobile" data-gpf-select class="w-full">
+        <select id="filter-district-mobile" data-gpf-select multiple data-gpf-multi-label="selecionados" class="w-full">
           <option value="">Todos os distritos</option>
           <option value="Aveiro">Aveiro</option>
           <option value="Beja">Beja</option>
@@ -549,7 +549,7 @@
   };
 
   // ─── Filter State ───
-  const state = { search: '', type: '', district: '', services: new Set(), waterQuality: new Set() };
+  const state = { search: '', type: '', district: new Set(), services: new Set(), waterQuality: new Set() };
 
   // ─── Water Quality categories (cores oficiais APA) ───
   const WATER_QUALITY_OPTIONS = [
@@ -592,20 +592,37 @@
     });
   });
 
-  // ─── District zoom ───
-  function onDistrictChange(value) {
-    state.district = value;
-    document.getElementById('filter-district').value = value;
-    document.getElementById('filter-district-mobile').value = value;
-    if (value && DISTRICT_VIEWS[value] && window._map) {
-      window._map.flyTo(DISTRICT_VIEWS[value].center, DISTRICT_VIEWS[value].zoom, { duration: 1.2 });
-    } else if (!value && window._map) {
-      window._map.flyTo([39.5, -8.0], 7, { duration: 1.2 });
+  // ─── District filter (multi-select) ───
+  function _syncDistrictSelects(values) {
+    const arr = [...values];
+    ['filter-district', 'filter-district-mobile'].forEach(id => {
+      const sel = document.getElementById(id);
+      if (sel && typeof window.gpfSelectSetValues === 'function') {
+        window.gpfSelectSetValues(sel, arr);
+      }
+    });
+  }
+  function onDistrictsChange(sourceSel) {
+    const values = window.gpfSelectGetValues
+      ? window.gpfSelectGetValues(sourceSel)
+      : Array.from(sourceSel.selectedOptions).map(o => o.value).filter(Boolean);
+    state.district = new Set(values);
+    _syncDistrictSelects(state.district);
+    // Map fly-to: só se exatamente 1 distrito está selecionado
+    if (window._map) {
+      if (state.district.size === 1) {
+        const only = [...state.district][0];
+        if (DISTRICT_VIEWS[only]) {
+          window._map.flyTo(DISTRICT_VIEWS[only].center, DISTRICT_VIEWS[only].zoom, { duration: 1.2 });
+        }
+      } else if (state.district.size === 0) {
+        window._map.flyTo([39.5, -8.0], 7, { duration: 1.2 });
+      }
     }
     applyFilters();
   }
-  document.getElementById('filter-district')?.addEventListener('change', e => onDistrictChange(e.target.value));
-  document.getElementById('filter-district-mobile')?.addEventListener('change', e => onDistrictChange(e.target.value));
+  document.getElementById('filter-district')?.addEventListener('change', e => onDistrictsChange(e.target));
+  document.getElementById('filter-district-mobile')?.addEventListener('change', e => onDistrictsChange(e.target));
 
   // ─── Search ───
   function onSearchInput(value) {
@@ -820,7 +837,7 @@
       const b = marker._beachData;
       if (search && !marker._searchName.includes(search) && !marker._searchMun.includes(search) && !marker._searchRiver.includes(search)) return;
       if (state.type && (b.type || 'praia_fluvial') !== state.type) return;
-      if (state.district && b.district !== state.district) return;
+      if (state.district.size > 0 && !state.district.has(b.district)) return;
       if (state.services.size > 0 && ![...state.services].every(s => b.services?.[s])) return;
       if (state.waterQuality.size > 0) {
         const wqEntry = _waterQualityMap?.[b.id];
@@ -903,8 +920,8 @@
     }
 
     // ─── Init Map FIRST (tiles start downloading immediately) ───
-    const PT_BOUNDS = [[36.8, -9.6], [42.2, -6.1]];
-    const map = L.map('map-main', { center: [39.5, -8.0], zoom: 7, minZoom: 6, maxZoom: 18, maxBounds: PT_BOUNDS, maxBoundsViscosity: 1.0, zoomControl: false, attributionControl: false });
+    const PT_BOUNDS = [[35.5, -11.5], [43.8, -4.5]];
+    const map = L.map('map-main', { center: [39.5, -8.0], zoom: 7, minZoom: 6, maxZoom: 18, maxBounds: PT_BOUNDS, maxBoundsViscosity: 0.4, zoomControl: false, attributionControl: false });
     window._map = map;
     L.control.zoom({ position: 'bottomright' }).addTo(map);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18 }).addTo(map);

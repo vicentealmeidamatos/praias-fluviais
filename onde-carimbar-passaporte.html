@@ -256,7 +256,7 @@
               class="w-full pl-9 pr-4 py-2.5 text-sm border border-praia-sand-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-praia-teal-300 font-body"
               oninput="filterList()">
           </div>
-          <select id="list-epoca-filter" data-gpf-select onchange="filterList()" class="min-w-[180px]">
+          <select id="list-epoca-filter" data-gpf-select multiple data-gpf-multi-label="selecionadas" onchange="filterList()" class="min-w-[180px]">
             <option value="">Toda a época</option>
             <option value="anual">Aberto todo o ano</option>
             <option value="sazonal">Só época balnear</option>
@@ -389,25 +389,53 @@
     const allLocations = ((await loadData('locationsCarimbo')) || []).filter(l => !l.hidden);
 
     // ─── Map ───
-    const PT_BOUNDS = [[36.8, -9.6], [42.2, -6.1]];
+    const PT_BOUNDS = [[35.5, -11.5], [43.8, -4.5]];
     const map = L.map('locations-map', {
       center: [39.5, -8.0],
       zoom: 6,
       minZoom: 6,
       maxZoom: 18,
       maxBounds: PT_BOUNDS,
-      maxBoundsViscosity: 1.0,
+      maxBoundsViscosity: 0.4,
       zoomControl: true,
       attributionControl: false,
     });
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18 }).addTo(map);
 
     // ─── Fullscreen control ───
+    // Move o mapa para <body> durante o fullscreen para escapar a ancestrais
+    // com `transform` (.reveal-on-scroll), que de outra forma capturam o
+    // position:fixed.
     const FS_EXPAND = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8V5a2 2 0 0 1 2-2h3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M21 16v3a2 2 0 0 1-2 2h-3"/></svg>';
     const FS_COLLAPSE = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3M21 8h-3a2 2 0 0 1-2-2V3M3 16h3a2 2 0 0 1 2 2v3M16 21v-3a2 2 0 0 1 2-2h3"/></svg>';
+    const _fsState = { origParent: null, origNext: null, placeholder: null };
+    function setMapFullscreen(on) {
+      const mapEl = document.getElementById('locations-map');
+      const btn = mapEl.querySelector('.map-fullscreen-btn');
+      if (on && !mapEl.classList.contains('is-fullscreen')) {
+        _fsState.origParent = mapEl.parentNode;
+        _fsState.origNext = mapEl.nextSibling;
+        _fsState.placeholder = document.createComment('locations-map-anchor');
+        _fsState.origParent.insertBefore(_fsState.placeholder, mapEl);
+        document.body.appendChild(mapEl);
+        mapEl.classList.add('is-fullscreen');
+        document.body.classList.add('map-fullscreen-active');
+        if (btn) { btn.innerHTML = FS_COLLAPSE; btn.title = 'Sair de ecrã inteiro'; btn.setAttribute('aria-label', 'Sair de ecrã inteiro'); }
+      } else if (!on && mapEl.classList.contains('is-fullscreen')) {
+        mapEl.classList.remove('is-fullscreen');
+        document.body.classList.remove('map-fullscreen-active');
+        if (_fsState.placeholder && _fsState.placeholder.parentNode) {
+          _fsState.placeholder.parentNode.insertBefore(mapEl, _fsState.placeholder);
+          _fsState.placeholder.remove();
+        }
+        _fsState.origParent = null; _fsState.origNext = null; _fsState.placeholder = null;
+        if (btn) { btn.innerHTML = FS_EXPAND; btn.title = 'Ecrã inteiro'; btn.setAttribute('aria-label', 'Alternar ecrã inteiro'); }
+      }
+      setTimeout(() => map.invalidateSize(), 60);
+    }
     const FullscreenControl = L.Control.extend({
       options: { position: 'topright' },
-      onAdd(mapInstance) {
+      onAdd() {
         const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
         const btn = L.DomUtil.create('a', 'map-fullscreen-btn', container);
         btn.href = '#';
@@ -419,13 +447,7 @@
         L.DomEvent.on(btn, 'click', e => {
           L.DomEvent.preventDefault(e);
           const mapEl = document.getElementById('locations-map');
-          const goingFs = !mapEl.classList.contains('is-fullscreen');
-          mapEl.classList.toggle('is-fullscreen', goingFs);
-          document.body.classList.toggle('map-fullscreen-active', goingFs);
-          btn.innerHTML = goingFs ? FS_COLLAPSE : FS_EXPAND;
-          btn.title = goingFs ? 'Sair de ecrã inteiro' : 'Ecrã inteiro';
-          btn.setAttribute('aria-label', goingFs ? 'Sair de ecrã inteiro' : 'Alternar ecrã inteiro');
-          setTimeout(() => mapInstance.invalidateSize(), 60);
+          setMapFullscreen(!mapEl.classList.contains('is-fullscreen'));
         });
         return container;
       }
@@ -434,12 +456,7 @@
     document.addEventListener('keydown', e => {
       if (e.key !== 'Escape') return;
       const mapEl = document.getElementById('locations-map');
-      if (!mapEl.classList.contains('is-fullscreen')) return;
-      mapEl.classList.remove('is-fullscreen');
-      document.body.classList.remove('map-fullscreen-active');
-      const btn = mapEl.querySelector('.map-fullscreen-btn');
-      if (btn) { btn.innerHTML = FS_EXPAND; btn.title = 'Ecrã inteiro'; btn.setAttribute('aria-label', 'Alternar ecrã inteiro'); }
-      setTimeout(() => map.invalidateSize(), 60);
+      if (mapEl.classList.contains('is-fullscreen')) setMapFullscreen(false);
     });
 
     function makeIcon() {
@@ -612,8 +629,9 @@
 
     // ─── List filter ───
     window.filterList = function() {
-      const q     = (document.getElementById('list-search')?.value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-      const epoca = document.getElementById('list-epoca-filter')?.value || '';
+      const q       = (document.getElementById('list-search')?.value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+      const epoSel  = document.getElementById('list-epoca-filter');
+      const epocas  = (epoSel && window.gpfSelectGetValues) ? window.gpfSelectGetValues(epoSel) : (epoSel?.value ? [epoSel.value] : []);
       let total = 0;
 
       document.querySelectorAll('.loc-card').forEach(card => {
@@ -621,9 +639,9 @@
         const munMatch     = (card.dataset.municipality || '').includes(q);
         const beachMatch   = (card.dataset.beaches || '').includes(q);
         const seasonal     = card.dataset.seasonal === 'true';
-        const epocaMatch   = !epoca
-          || (epoca === 'anual'   && !seasonal)
-          || (epoca === 'sazonal' &&  seasonal);
+        const epocaMatch   = !epocas.length
+          || (epocas.includes('anual')   && !seasonal)
+          || (epocas.includes('sazonal') &&  seasonal);
         const show = (nameMatch || munMatch || beachMatch) && epocaMatch;
         card.style.display = show ? '' : 'none';
         if (show) total++;
@@ -636,7 +654,7 @@
 
       const countEl  = document.getElementById('list-results-count');
       const countNum = document.getElementById('list-count-num');
-      const isFiltering = q || epoca;
+      const isFiltering = q || epocas.length;
       if (countEl)  countEl.classList.toggle('hidden', !isFiltering);
       if (countNum) countNum.textContent = total;
     };

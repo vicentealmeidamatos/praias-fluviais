@@ -91,7 +91,7 @@
           </a>
         </div>
         <div class="hidden md:flex items-center gap-1.5 ml-2">
-          <a href="onde-encontrar.html" class="inline-flex items-center gap-1.5 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-[11px] uppercase tracking-wider px-2.5 py-1.5 rounded-full btn-primary shadow-layered-yellow whitespace-nowrap">
+          <a href="onde-encontrar.html" class="inline-flex items-center gap-1.5 bg-white/10 border border-white/30 text-white hover:bg-white/20 font-display font-bold text-[11px] uppercase tracking-wider px-2.5 py-1.5 rounded-full transition-all duration-200 whitespace-nowrap">
             <i data-lucide="book-open" class="w-3.5 h-3.5"></i>
             Onde Encontrar
           </a>
@@ -237,14 +237,14 @@
       </div>
       <!-- Filters -->
       <div class="flex flex-col sm:flex-row gap-3 mb-8">
-        <select id="filter-region" data-gpf-select class="min-w-[160px]">
+        <select id="filter-region" data-gpf-select multiple data-gpf-multi-label="selecionadas" class="min-w-[160px]">
           <option value="">Todas as regiões</option>
           <option value="norte">Norte</option>
           <option value="centro">Centro</option>
           <option value="alentejo">Alentejo</option>
           <option value="algarve">Algarve</option>
         </select>
-        <select id="filter-category" data-gpf-select class="min-w-[160px]">
+        <select id="filter-category" data-gpf-select multiple data-gpf-multi-label="selecionadas" class="min-w-[160px]">
           <option value="">Todas as categorias</option>
           <option value="alojamento">Alojamento</option>
           <option value="restauracao">Restauração</option>
@@ -373,12 +373,12 @@
       const filterCategory = document.getElementById('filter-category');
 
       function render() {
-        const region = filterRegion.value;
-        const category = filterCategory.value;
+        const regions    = window.gpfSelectGetValues ? window.gpfSelectGetValues(filterRegion)   : (filterRegion.value ? [filterRegion.value] : []);
+        const categories = window.gpfSelectGetValues ? window.gpfSelectGetValues(filterCategory) : (filterCategory.value ? [filterCategory.value] : []);
 
         const filtered = descontos.filter(d => {
-          if (region && d.region !== region) return false;
-          if (category && d.category !== category) return false;
+          if (regions.length    && !regions.includes(d.region))     return false;
+          if (categories.length && !categories.includes(d.category)) return false;
           return true;
         });
 

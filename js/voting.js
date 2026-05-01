@@ -110,11 +110,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   const _norm = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
 
   function filterBeaches() {
-    const search   = _norm(searchInput?.value || '');
-    const district = districtSel?.value || '';
+    const search    = _norm(searchInput?.value || '');
+    const districts = (districtSel && window.gpfSelectGetValues)
+      ? window.gpfSelectGetValues(districtSel)
+      : (districtSel?.value ? [districtSel.value] : []);
     currentBeaches = beaches.filter(b => {
       if (search && !_norm(b.name).includes(search) && !_norm(b.municipality || '').includes(search)) return false;
-      if (district && b.district !== district) return false;
+      if (districts.length && !districts.includes(b.district)) return false;
       return true;
     });
     renderCards(currentBeaches);

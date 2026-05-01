@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   // ── Album filters (search + district + stamp status) ───────────────────────
-  const albumFilters = { q: '', district: '', status: 'all' };
+  const albumFilters = { q: '', district: [], status: 'all' };
 
   function populateAlbumDistrictOptions() {
     const sel = document.getElementById('album-district');
@@ -186,7 +186,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       s.dataset.bound = '1';
     }
     if (d && !d.dataset.bound) {
-      d.addEventListener('change', e => { albumFilters.district = e.target.value; renderGrid(); });
+      d.addEventListener('change', e => {
+        albumFilters.district = window.gpfSelectGetValues
+          ? window.gpfSelectGetValues(e.target)
+          : (e.target.value ? [e.target.value] : []);
+        renderGrid();
+      });
       d.dataset.bound = '1';
     }
     if (t && !t.dataset.bound) {
@@ -198,7 +203,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   function getFilteredAlbumBeaches() {
     const q = albumFilters.q.trim().toLowerCase();
     return stampBeaches.filter(b => {
-      if (albumFilters.district && b.district !== albumFilters.district) return false;
+      if (albumFilters.district.length && !albumFilters.district.includes(b.district)) return false;
       const stamped = !!stampMap[b.id];
       if (albumFilters.status === 'stamped' && !stamped) return false;
       if (albumFilters.status === 'missing' && stamped) return false;

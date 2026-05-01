@@ -140,7 +140,7 @@
           </a>
         </div>
         <div class="hidden md:flex items-center gap-1.5 ml-2">
-          <a href="onde-encontrar.html" class="inline-flex items-center gap-1.5 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-[11px] uppercase tracking-wider px-2.5 py-1.5 rounded-full btn-primary shadow-layered-yellow whitespace-nowrap">
+          <a href="onde-encontrar.html" class="inline-flex items-center gap-1.5 bg-white/10 border border-white/30 text-white hover:bg-white/20 font-display font-bold text-[11px] uppercase tracking-wider px-2.5 py-1.5 rounded-full transition-all duration-200 whitespace-nowrap">
             <i data-lucide="book-open" class="w-3.5 h-3.5"></i>
             Onde Encontrar
           </a>
@@ -293,12 +293,12 @@
               class="w-full pl-9 pr-4 py-2.5 text-sm border border-praia-sand-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-praia-teal-300 font-body"
               oninput="filterList()">
           </div>
-          <select id="list-type-filter" data-gpf-select onchange="filterList()" class="min-w-[160px]">
+          <select id="list-type-filter" data-gpf-select multiple data-gpf-multi-label="selecionados" onchange="filterList()" class="min-w-[160px]">
             <option value="">Todos os tipos</option>
             <option value="guia">Só Guia</option>
             <option value="guia_passaporte">Guia + Passaporte</option>
           </select>
-          <select id="list-epoca-filter" data-gpf-select onchange="filterList()" class="min-w-[160px]">
+          <select id="list-epoca-filter" data-gpf-select multiple data-gpf-multi-label="selecionadas" onchange="filterList()" class="min-w-[160px]">
             <option value="">Toda a época</option>
             <option value="anual">Aberto todo o ano</option>
             <option value="sazonal">Só época balnear</option>
@@ -418,25 +418,51 @@
     const allLocations = ((await loadData('locationsGuia')) || []).filter(l => !l.hidden);
 
     // ─── Map ───
-    const PT_BOUNDS = [[36.8, -9.6], [42.2, -6.1]];
+    const PT_BOUNDS = [[35.5, -11.5], [43.8, -4.5]];
     const map = L.map('locations-map', {
       center: [39.5, -8.0],
       zoom: 6,
       minZoom: 6,
       maxZoom: 18,
       maxBounds: PT_BOUNDS,
-      maxBoundsViscosity: 1.0,
+      maxBoundsViscosity: 0.4,
       zoomControl: true,
       attributionControl: false,
     });
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18 }).addTo(map);
 
     // ─── Fullscreen control ───
+    // Move o mapa para <body> durante o fullscreen para escapar a ancestrais
+    // com `transform` (.reveal-on-scroll), que de outra forma capturam o
+    // position:fixed.
     const FS_EXPAND = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8V5a2 2 0 0 1 2-2h3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M21 16v3a2 2 0 0 1-2 2h-3"/></svg>';
     const FS_COLLAPSE = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3M21 8h-3a2 2 0 0 1-2-2V3M3 16h3a2 2 0 0 1 2 2v3M16 21v-3a2 2 0 0 1 2-2h3"/></svg>';
+    const _fsState = { placeholder: null };
+    function setMapFullscreen(on) {
+      const mapEl = document.getElementById('locations-map');
+      const btn = mapEl.querySelector('.map-fullscreen-btn');
+      if (on && !mapEl.classList.contains('is-fullscreen')) {
+        _fsState.placeholder = document.createComment('locations-map-anchor');
+        mapEl.parentNode.insertBefore(_fsState.placeholder, mapEl);
+        document.body.appendChild(mapEl);
+        mapEl.classList.add('is-fullscreen');
+        document.body.classList.add('map-fullscreen-active');
+        if (btn) { btn.innerHTML = FS_COLLAPSE; btn.title = 'Sair de ecrã inteiro'; btn.setAttribute('aria-label', 'Sair de ecrã inteiro'); }
+      } else if (!on && mapEl.classList.contains('is-fullscreen')) {
+        mapEl.classList.remove('is-fullscreen');
+        document.body.classList.remove('map-fullscreen-active');
+        if (_fsState.placeholder && _fsState.placeholder.parentNode) {
+          _fsState.placeholder.parentNode.insertBefore(mapEl, _fsState.placeholder);
+          _fsState.placeholder.remove();
+        }
+        _fsState.placeholder = null;
+        if (btn) { btn.innerHTML = FS_EXPAND; btn.title = 'Ecrã inteiro'; btn.setAttribute('aria-label', 'Alternar ecrã inteiro'); }
+      }
+      setTimeout(() => map.invalidateSize(), 60);
+    }
     const FullscreenControl = L.Control.extend({
       options: { position: 'topright' },
-      onAdd(mapInstance) {
+      onAdd() {
         const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
         const btn = L.DomUtil.create('a', 'map-fullscreen-btn', container);
         btn.href = '#';
@@ -448,13 +474,7 @@
         L.DomEvent.on(btn, 'click', e => {
           L.DomEvent.preventDefault(e);
           const mapEl = document.getElementById('locations-map');
-          const goingFs = !mapEl.classList.contains('is-fullscreen');
-          mapEl.classList.toggle('is-fullscreen', goingFs);
-          document.body.classList.toggle('map-fullscreen-active', goingFs);
-          btn.innerHTML = goingFs ? FS_COLLAPSE : FS_EXPAND;
-          btn.title = goingFs ? 'Sair de ecrã inteiro' : 'Ecrã inteiro';
-          btn.setAttribute('aria-label', goingFs ? 'Sair de ecrã inteiro' : 'Alternar ecrã inteiro');
-          setTimeout(() => mapInstance.invalidateSize(), 60);
+          setMapFullscreen(!mapEl.classList.contains('is-fullscreen'));
         });
         return container;
       }
@@ -463,12 +483,7 @@
     document.addEventListener('keydown', e => {
       if (e.key !== 'Escape') return;
       const mapEl = document.getElementById('locations-map');
-      if (!mapEl.classList.contains('is-fullscreen')) return;
-      mapEl.classList.remove('is-fullscreen');
-      document.body.classList.remove('map-fullscreen-active');
-      const btn = mapEl.querySelector('.map-fullscreen-btn');
-      if (btn) { btn.innerHTML = FS_EXPAND; btn.title = 'Ecrã inteiro'; btn.setAttribute('aria-label', 'Alternar ecrã inteiro'); }
-      setTimeout(() => map.invalidateSize(), 60);
+      if (mapEl.classList.contains('is-fullscreen')) setMapFullscreen(false);
     });
 
     const markersLayer = L.layerGroup().addTo(map);
@@ -585,19 +600,21 @@
 
     // ─── List filter (independent of map) ───
     function filterList() {
-      const q     = (document.getElementById('list-search')?.value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-      const type  = document.getElementById('list-type-filter')?.value || '';
-      const epoca = document.getElementById('list-epoca-filter')?.value || '';
+      const q       = (document.getElementById('list-search')?.value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+      const typeSel = document.getElementById('list-type-filter');
+      const epoSel  = document.getElementById('list-epoca-filter');
+      const types   = (typeSel && window.gpfSelectGetValues) ? window.gpfSelectGetValues(typeSel) : (typeSel?.value ? [typeSel.value] : []);
+      const epocas  = (epoSel  && window.gpfSelectGetValues) ? window.gpfSelectGetValues(epoSel)  : (epoSel?.value  ? [epoSel.value]  : []);
       let total = 0;
 
       document.querySelectorAll('.loc-card').forEach(card => {
         const nameMatch  = (card.dataset.name || '').includes(q);
         const munMatch   = (card.dataset.municipality || '').includes(q);
-        const typeMatch  = !type  || card.dataset.type === type;
+        const typeMatch  = !types.length || types.includes(card.dataset.type);
         const seasonal   = card.dataset.seasonal === 'true';
-        const epocaMatch = !epoca
-          || (epoca === 'anual'   && !seasonal)
-          || (epoca === 'sazonal' &&  seasonal);
+        const epocaMatch = !epocas.length
+          || (epocas.includes('anual')   && !seasonal)
+          || (epocas.includes('sazonal') &&  seasonal);
         const show = (nameMatch || munMatch) && typeMatch && epocaMatch;
         card.style.display = show ? '' : 'none';
         if (show) total++;
@@ -610,7 +627,7 @@
 
       const countEl = document.getElementById('list-results-count');
       const countNum = document.getElementById('list-count-num');
-      const isFiltering = q || type || epoca;
+      const isFiltering = q || types.length || epocas.length;
       if (countEl) countEl.classList.toggle('hidden', !isFiltering);
       if (countNum) countNum.textContent = total;
     }
