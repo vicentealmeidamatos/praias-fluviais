@@ -991,7 +991,39 @@ html {
   border: 1px solid #E5DED1;
 }
 @media (max-width: 640px) {
-  .wq-card { flex-wrap: wrap; gap: 12px; padding: 16px; }
+  .wq-card {
+    position: relative;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 18px 16px;
+  }
+  /* Drop + headline ficam em linha no topo (drop à esquerda, headline a preencher) */
+  .wq-card .wq-headline { flex: 1; min-width: 0; }
+  /* Meta passa a bloco full-width abaixo, separado por linha subtil */
+  .wq-card .wq-meta {
+    flex-basis: 100%;
+    border-top: 1px solid rgba(146, 128, 102, 0.18);
+    padding-top: 12px;
+  }
+  .wq-card .wq-meta-row { display: block; margin-bottom: 9px; }
+  .wq-card .wq-meta-row:last-child { margin-bottom: 0; }
+  .wq-card .wq-meta-label {
+    display: block; min-width: auto; margin-right: 0; margin-bottom: 2px;
+  }
+  /* Link-ícone fica no canto superior-direito do card */
+  .wq-card .wq-link {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    justify-content: center;
+    background: rgba(0, 58, 64, 0.05);
+    transition: background 0.2s ease;
+  }
+  .wq-card .wq-link:hover { background: rgba(0, 58, 64, 0.12); }
 }
 
 .wq-drop {

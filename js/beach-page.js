@@ -109,8 +109,12 @@ function renderWaterQualitySection(beachId, waterQualityJson) {
 
   const stateText = _wqStateText(entry);
   const seasonRange = _wqFormatRange(entry.seasonStart, entry.seasonEnd);
-  const updated = _wqFormatUpdated(waterQualityJson.lastUpdated);
-  const sourceLine = `Fonte · <strong>APA</strong> · ${entry.apaCode}${updated ? ` · actualizado a ${updated}` : ''}`;
+  // Usa lastChanged (data efectiva da última alteração para esta praia),
+  // com fallback ao lastUpdated global se a entrada ainda não tem o campo.
+  const updated = _wqFormatUpdated(entry.lastChanged || waterQualityJson.lastUpdated);
+  const sourceLine = `Fonte APA${updated ? ` · actualizado a ${updated}` : ''}`;
+
+  const linkSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>';
 
   return `
       <section class="mb-12">
@@ -125,7 +129,7 @@ function renderWaterQualitySection(beachId, waterQualityJson) {
             <div class="wq-meta-row"><span class="wq-meta-label">Estado</span>${stateText}</div>
             <div class="wq-meta-row"><span class="wq-meta-label">Época Balnear</span>${seasonRange}</div>
           </div>
-          ${entry.snirhUrl ? `<a href="${entry.snirhUrl}" target="_blank" rel="noopener" class="wq-link">SNIRH ↗</a>` : ''}
+          ${entry.snirhUrl ? `<a href="${entry.snirhUrl}" target="_blank" rel="noopener" class="wq-link" aria-label="Ver no SNIRH" title="Ver no SNIRH">${linkSvg}</a>` : ''}
         </div>
         <div class="wq-source">${sourceLine}</div>
       </section>`;

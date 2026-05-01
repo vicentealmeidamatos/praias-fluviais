@@ -116,6 +116,33 @@ function buildEntry(siteBeach, match) {
   };
 }
 
+// Campos cujo valor implica "houve actualização visível para o utilizador".
+// Mudanças em apaCode / apaName / matchMethod NÃO contam (são metadados internos).
+const USER_FACING_FIELDS = [
+  'previousYearDsc',
+  'previousYearValue',
+  'currentSeasonStatus',
+  'currentSeasonValue',
+  'lastAnalysisDate',
+  'interdictionReason',
+  'seasonStart',
+  'seasonEnd',
+];
+
+function entrySignature(entry) {
+  if (!entry) return null;
+  return JSON.stringify(USER_FACING_FIELDS.map((f) => entry[f] ?? null));
+}
+
+async function loadExistingOutput() {
+  try {
+    const raw = await readFile(OUTPUT_PATH, 'utf8');
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
 async function main() {
   console.log(`[fetch-water-quality] A obter ${APA_URL}`);
   const html = await fetchApaPage();
@@ -127,18 +154,33 @@ async function main() {
   const siteBeaches = JSON.parse(siteRaw);
   console.log(`[fetch-water-quality] Site: ${siteBeaches.length} praias`);
 
+  const existing = await loadExistingOutput();
+  const nowIso = new Date().toISOString();
+
   const beachesOut = {};
   let matched = 0;
+  let changedCount = 0;
   for (const sb of siteBeaches) {
     if (!sb.id) continue;
     const m = findApaMatch(sb, apaBeaches);
     if (!m) continue;
-    beachesOut[sb.id] = buildEntry(sb, m);
+    const entry = buildEntry(sb, m);
+    const oldEntry = existing?.beaches?.[sb.id];
+    const sigOld = entrySignature(oldEntry);
+    const sigNew = entrySignature(entry);
+    if (oldEntry && sigOld === sigNew) {
+      // Nada mudou para o utilizador: preserva a data anterior
+      entry.lastChanged = oldEntry.lastChanged || existing?.lastUpdated || nowIso;
+    } else {
+      entry.lastChanged = nowIso;
+      if (oldEntry) changedCount++;
+    }
+    beachesOut[sb.id] = entry;
     matched++;
   }
 
   const out = {
-    lastUpdated: new Date().toISOString(),
+    lastUpdated: nowIso,
     sourceUrl: APA_URL,
     stats: {
       siteBeaches: siteBeaches.length,
@@ -149,7 +191,7 @@ async function main() {
   };
 
   await writeFile(OUTPUT_PATH, JSON.stringify(out, null, 2) + '\n', 'utf8');
-  console.log(`[fetch-water-quality] Match: ${matched}/${siteBeaches.length} → ${OUTPUT_PATH}`);
+  console.log(`[fetch-water-quality] Match: ${matched}/${siteBeaches.length} · ${changedCount} entradas com alterações reais → ${OUTPUT_PATH}`);
 }
 
 main().catch((err) => fail(err.stack || err.message));

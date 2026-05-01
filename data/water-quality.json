@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-01T08:26:07.587Z",
+  "lastUpdated": "2026-05-01T12:23:09.753Z",
   "sourceUrl": "https://infoagua.apambiente.pt/pt/praias/praias-pesquisa-avancada",
   "stats": {
     "siteBeaches": 228,
@@ -22,7 +22,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCX3P&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 195
+      "matchDistance": 195,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-albufeira-de-queimadela": {
       "apaCode": "PTCQ2X",
@@ -39,7 +40,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCQ2X&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 114
+      "matchDistance": 114,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-albufeira-da-tapada-grande": {
       "apaCode": "PTCQ3F",
@@ -56,7 +58,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCQ3F&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 43
+      "matchDistance": 43,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-albufeira-de-odeleite": {
       "apaCode": "PTCV8C",
@@ -73,7 +76,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCV8C&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 26
+      "matchDistance": 26,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-albufeira-do-ermal": {
       "apaCode": "PTCJ9P",
@@ -90,7 +94,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCJ9P&ano=2026",
       "matchMethod": "name+proximity",
       "matchPool": "interior",
-      "matchDistance": 1819
+      "matchDistance": 1819,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-albufeira-do-vilar": {
       "apaCode": "PTCK3E",
@@ -107,7 +112,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCK3E&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 69
+      "matchDistance": 69,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-albufeira-do-caldeirao": {
       "apaCode": "PTCN8Q",
@@ -124,7 +130,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCN8Q&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 262
+      "matchDistance": 262,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-barrinha-de-mira": {
       "apaCode": "PTCW3T",
@@ -141,7 +148,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCW3T&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 51
+      "matchDistance": 51,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-bogueira": {
       "apaCode": "PTCH3L",
@@ -158,7 +166,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCH3L&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 44
+      "matchDistance": 44,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-cabreira": {
       "apaCode": "PTCV3N",
@@ -175,7 +184,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCV3N&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 54
+      "matchDistance": 54,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-congida": {
       "apaCode": "PTCW3P",
@@ -192,7 +202,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCW3P&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 62
+      "matchDistance": 62,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-fraga-da-pegada": {
       "apaCode": "PTCE3K",
@@ -209,7 +220,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCE3K&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 116
+      "matchDistance": 116,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-froia": {
       "apaCode": "PTCH3E",
@@ -226,7 +238,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCH3E&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 68
+      "matchDistance": 68,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-lenta": {
       "apaCode": "PTCF7N",
@@ -243,7 +256,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCF7N&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 87
+      "matchDistance": 87,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-lomba": {
       "apaCode": "PTCH3T",
@@ -260,7 +274,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCH3T&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 80
+      "matchDistance": 80,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-loucainha": {
       "apaCode": "PTCN2C",
@@ -277,7 +292,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCN2C&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 21
+      "matchDistance": 21,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-mamoa": {
       "apaCode": "PTCV3F",
@@ -294,7 +310,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCV3F&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 38
+      "matchDistance": 38,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-peneda-pego-escuro": {
       "apaCode": "PTCJ3D",
@@ -311,7 +328,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCJ3D&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 12
+      "matchDistance": 12,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-videmonte-quinta-da-taberna": {
       "apaCode": "PTCX3K",
@@ -328,7 +346,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCX3K&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 192
+      "matchDistance": 192,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-quinta-do-barco": {
       "apaCode": "PTCJ8T",
@@ -345,7 +364,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCJ8T&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 41
+      "matchDistance": 41,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-relva-da-reboleira": {
       "apaCode": "PTCV2Q",
@@ -362,7 +382,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCV2Q&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 18
+      "matchDistance": 18,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-ribeira": {
       "apaCode": "PTCP9W",
@@ -379,7 +400,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCP9W&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 170
+      "matchDistance": 170,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-ribeira-grande": {
       "apaCode": "PTCX2U",
@@ -396,7 +418,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCX2U&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 25
+      "matchDistance": 25,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-ronqueira": {
       "apaCode": "PTCV8L",
@@ -413,7 +436,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCV8L&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 4
+      "matchDistance": 4,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-zaboeira": {
       "apaCode": "PTCU7P",
@@ -430,7 +454,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCU7P&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 71
+      "matchDistance": 71,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-azenhas-de-vilar-de-mouros": {
       "apaCode": "PTCD2X",
@@ -447,7 +472,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCD2X&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 17
+      "matchDistance": 17,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-canaveias": {
       "apaCode": "PTCJ3Q",
@@ -464,7 +490,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCJ3Q&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 50
+      "matchDistance": 50,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-pedras-ruivas": {
       "apaCode": "PTCW9H",
@@ -481,7 +508,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCW9H&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "costeira",
-      "matchDistance": 755
+      "matchDistance": 755,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-acude-pinto": {
       "apaCode": "PTCE2N",
@@ -498,7 +526,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCE2N&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 45
+      "matchDistance": 45,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-adaufe": {
       "apaCode": "PTCP3J",
@@ -515,7 +544,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCP3J&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 230
+      "matchDistance": 230,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-agroal": {
       "apaCode": "PTCU3D",
@@ -532,7 +562,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCU3D&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 16
+      "matchDistance": 16,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-albergaria-dos-fusos": {
       "apaCode": "PTCP7X",
@@ -549,7 +580,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCP7X&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 118
+      "matchDistance": 118,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-aldeia-do-mato": {
       "apaCode": "PTCT9H",
@@ -566,7 +598,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCT9H&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 25
+      "matchDistance": 25,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-aldeia-ruiva": {
       "apaCode": "PTCN2L",
@@ -583,7 +616,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCN2L&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 20
+      "matchDistance": 20,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-aldeia-vicosa": {
       "apaCode": "PTCK8E",
@@ -600,7 +634,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCK8E&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 309
+      "matchDistance": 309,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-albufeira-de-alfaiates": {
       "apaCode": "PTCL8H",
@@ -617,7 +652,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCL8H&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 11
+      "matchDistance": 11,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-almaceda": {
       "apaCode": "PTCQ3W",
@@ -634,7 +670,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCQ3W&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 45
+      "matchDistance": 45,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-alqueidao": {
       "apaCode": "PTCT3H",
@@ -651,7 +688,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCT3H&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 240
+      "matchDistance": 240,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-alqueva": {
       "apaCode": "PTCD9W",
@@ -668,7 +706,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCD9W&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 229
+      "matchDistance": 229,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-alvares": {
       "apaCode": "PTCL9E",
@@ -685,7 +724,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCL9E&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 18
+      "matchDistance": 18,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-alvaro": {
       "apaCode": "PTCW8N",
@@ -702,7 +742,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCW8N&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 120
+      "matchDistance": 120,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-alvoco-das-varzeas": {
       "apaCode": "PTCH2X",
@@ -719,7 +760,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCH2X&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 87
+      "matchDistance": 87,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-amieira": {
       "apaCode": "PTCJ2P",
@@ -736,7 +778,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCJ2P&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 39
+      "matchDistance": 39,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-ana-de-aviz": {
       "apaCode": "PTCU9E",
@@ -753,7 +796,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCU9E&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 27
+      "matchDistance": 27,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-anca": {
       "apaCode": "PTCL3M",
@@ -770,7 +814,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCL3M&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 5
+      "matchDistance": 5,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-avo": {
       "apaCode": "PTCP9T",
@@ -787,7 +832,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCP9T&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 37
+      "matchDistance": 37,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-azenhas-d-el-rei": {
       "apaCode": "PTCQ8V",
@@ -804,7 +850,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCQ8V&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 79
+      "matchDistance": 79,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-badamalos": {
       "apaCode": "PTCJ8D",
@@ -821,7 +868,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCJ8D&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 47
+      "matchDistance": 47,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-bairrada-bairradinha": {
       "apaCode": "PTCT9V",
@@ -838,7 +886,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCT9V&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 34
+      "matchDistance": 34,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-bitetos": {
       "apaCode": "PTCK8M",
@@ -855,7 +904,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCK8M&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 61
+      "matchDistance": 61,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-burgaes-rio-caima": {
       "apaCode": "PTCT7H",
@@ -872,7 +922,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCT7H&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 665
+      "matchDistance": 665,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-cambas": {
       "apaCode": "PTCP3U",
@@ -889,7 +940,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCP3U&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 6
+      "matchDistance": 6,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-cardigos": {
       "apaCode": "PTCE7T",
@@ -906,7 +958,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCE7T&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 108
+      "matchDistance": 108,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-carrica": {
       "apaCode": "PTCH3M",
@@ -923,7 +976,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCH3M&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 193
+      "matchDistance": 193,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-cascalheira-secarias": {
       "apaCode": "PTCV8L",
@@ -940,7 +994,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCV8L&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 66
+      "matchDistance": 66,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-castelo-novo": {
       "apaCode": "PTCL2N",
@@ -957,7 +1012,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCL2N&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 15
+      "matchDistance": 15,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-cavadinho": {
       "apaCode": "PTCK8W",
@@ -974,7 +1030,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCK8W&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 13
+      "matchDistance": 13,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-cavez": {
       "apaCode": "PTCL3C",
@@ -991,7 +1048,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCL3C&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 17
+      "matchDistance": 17,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-cinco-reis": {
       "apaCode": "PTCE8X",
@@ -1008,7 +1066,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCE8X&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 102
+      "matchDistance": 102,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-coja": {
       "apaCode": "PTCL8X",
@@ -1025,7 +1084,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCL8X&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 656
+      "matchDistance": 656,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-constancia": {
       "apaCode": "PTCQ2L",
@@ -1042,7 +1102,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCQ2L&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 50
+      "matchDistance": 50,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-cornicovo": {
       "apaCode": "PTCP9K",
@@ -1059,7 +1120,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCP9K&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 45
+      "matchDistance": 45,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-ereira": {
       "apaCode": "PTCQ9H",
@@ -1076,7 +1138,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCQ9H&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 51
+      "matchDistance": 51,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-fernandaires": {
       "apaCode": "PTCE2L",
@@ -1093,7 +1156,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCE2L&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 38
+      "matchDistance": 38,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-folgosa": {
       "apaCode": "PTCL9V",
@@ -1110,7 +1174,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCL9V&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 660
+      "matchDistance": 660,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-fontes": {
       "apaCode": "PTCK3H",
@@ -1127,7 +1192,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCK3H&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 39
+      "matchDistance": 39,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-foz-do-cobrao": {
       "apaCode": "PTCV8P",
@@ -1144,7 +1210,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCV8P&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 13
+      "matchDistance": 13,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-foz-do-lizandro": {
       "apaCode": "PTCW3M",
@@ -1161,7 +1228,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCW3M&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 81
+      "matchDistance": 81,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-fragas-de-sao-simao": {
       "apaCode": "PTCK7V",
@@ -1178,7 +1246,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCK7V&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 14
+      "matchDistance": 14,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-janeiro-de-baixo": {
       "apaCode": "PTCJ7P",
@@ -1195,7 +1264,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCJ7P&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 64
+      "matchDistance": 64,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-lapa-dos-dinheiros": {
       "apaCode": "PTCL7N",
@@ -1212,7 +1282,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCL7N&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 24
+      "matchDistance": 24,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-loriga": {
       "apaCode": "PTCN9K",
@@ -1229,7 +1300,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCN9K&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 10
+      "matchDistance": 10,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-mega-fundeira": {
       "apaCode": "PTCP2U",
@@ -1246,7 +1318,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCP2U&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 15
+      "matchDistance": 15,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-merelim-sao-paio": {
       "apaCode": "PTCT3U",
@@ -1263,7 +1336,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCT3U&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 86
+      "matchDistance": 86,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-moinho-de-alva": {
       "apaCode": "PTCU7N",
@@ -1280,7 +1354,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCU7N&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 8
+      "matchDistance": 8,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-monsaraz": {
       "apaCode": "PTCQ7M",
@@ -1297,7 +1372,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCQ7M&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 72
+      "matchDistance": 72,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-montalvo-tesos": {
       "apaCode": "PTCT2W",
@@ -1314,7 +1390,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCT2W&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 63
+      "matchDistance": 63,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-montes": {
       "apaCode": "PTCX7N",
@@ -1331,7 +1408,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCX7N&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 18
+      "matchDistance": 18,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-mourao": {
       "apaCode": "PTCJ3E",
@@ -1348,7 +1426,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCJ3E&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 202
+      "matchDistance": 202,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-olhos-de-fervenca": {
       "apaCode": "PTCT2F",
@@ -1365,7 +1444,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCT2F&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 176
+      "matchDistance": 176,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-oriola": {
       "apaCode": "PTCN7P",
@@ -1382,7 +1462,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCN7P&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 23
+      "matchDistance": 23,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-paco-do-mato": {
       "apaCode": "PTCK8N",
@@ -1399,7 +1480,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCK8N&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 11
+      "matchDistance": 11,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-palheiros-e-zorro": {
       "apaCode": "PTCN8M",
@@ -1416,7 +1498,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCN8M&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 92
+      "matchDistance": 92,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-pampilhosa-da-serra-vila": {
       "apaCode": "PTCH2Q",
@@ -1433,7 +1516,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCH2Q&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 111
+      "matchDistance": 111,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-pessegueiro": {
       "apaCode": "PTCQ3H",
@@ -1450,7 +1534,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCQ3H&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 74
+      "matchDistance": 74,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-corga": {
       "apaCode": "PTCL9C",
@@ -1467,7 +1552,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCL9C&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 24
+      "matchDistance": 24,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-pomares": {
       "apaCode": "PTCT7Q",
@@ -1484,7 +1570,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCT7Q&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 377
+      "matchDistance": 377,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-ponte-da-barca": {
       "apaCode": "PTCQ7E",
@@ -1501,7 +1588,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCQ7E&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 8
+      "matchDistance": 8,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-ponte-de-frades": {
       "apaCode": "PTCP7U",
@@ -1518,7 +1606,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCP7U&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 757
+      "matchDistance": 757,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-ponte-de-juncais": {
       "apaCode": "PTCJ3K",
@@ -1535,7 +1624,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCJ3K&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 43
+      "matchDistance": 43,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-ponte-do-bico": {
       "apaCode": "PTCK9H",
@@ -1552,7 +1642,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCK9H&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 66
+      "matchDistance": 66,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-ponte-do-sotao": {
       "apaCode": "PTCL9D",
@@ -1569,7 +1660,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCL9D&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 37
+      "matchDistance": 37,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-ponte-soeira": {
       "apaCode": "PTCF9U",
@@ -1586,7 +1678,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCF9U&ano=2026",
       "matchMethod": "name+proximity",
       "matchPool": "interior",
-      "matchDistance": 846
+      "matchDistance": 846,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-pontemieiro": {
       "apaCode": "PTCJ2X",
@@ -1603,7 +1696,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCJ2X&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 42
+      "matchDistance": 42,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-prado-faial": {
       "apaCode": "PTCF8C",
@@ -1620,7 +1714,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCF8C&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 68
+      "matchDistance": 68,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-quadrazais-lameira": {
       "apaCode": "PTCP9X",
@@ -1637,7 +1732,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCP9X&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 46
+      "matchDistance": 46,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-quintas": {
       "apaCode": "PTCE2J",
@@ -1654,7 +1750,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCE2J&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 23
+      "matchDistance": 23,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-rapoula-do-coa": {
       "apaCode": "PTCW2M",
@@ -1671,7 +1768,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCW2M&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 35
+      "matchDistance": 35,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-sabugal-devesa": {
       "apaCode": "PTCP7D",
@@ -1688,7 +1786,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCP7D&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 7
+      "matchDistance": 7,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-sandomil": {
       "apaCode": "PTCD8X",
@@ -1705,7 +1804,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCD8X&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 79
+      "matchDistance": 79,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-santa-clara": {
       "apaCode": "PTCX9T",
@@ -1722,7 +1822,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCX9T&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 117
+      "matchDistance": 117,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-santa-luzia": {
       "apaCode": "PTCD3H",
@@ -1739,7 +1840,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCD3H&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 117
+      "matchDistance": 117,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-sao-giao": {
       "apaCode": "PTCF7V",
@@ -1756,7 +1858,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCF7V&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 108
+      "matchDistance": 108,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-sao-sebastiao-da-feira": {
       "apaCode": "PTCL7X",
@@ -1773,7 +1876,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCL7X&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 38
+      "matchDistance": 38,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-segoes": {
       "apaCode": "PTCP9F",
@@ -1790,7 +1894,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCP9F&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 61
+      "matchDistance": 61,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-senhora-da-graca": {
       "apaCode": "PTCN3Q",
@@ -1807,7 +1912,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCN3Q&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 190
+      "matchDistance": 190,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-senhora-da-piedade": {
       "apaCode": "PTCH3K",
@@ -1824,7 +1930,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCH3K&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 222
+      "matchDistance": 222,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-senhora-da-ribeira": {
       "apaCode": "PTCD3K",
@@ -1841,7 +1948,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCD3K&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 236
+      "matchDistance": 236,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-sete-fontes": {
       "apaCode": "PTCJ7H",
@@ -1858,7 +1966,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCJ7H&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 23
+      "matchDistance": 23,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-unhais-da-serra": {
       "apaCode": "PTCT7F",
@@ -1875,7 +1984,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCT7F&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 39
+      "matchDistance": 39,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-vale-das-eguas-insua": {
       "apaCode": "PTCE7D",
@@ -1892,7 +2002,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCE7D&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 43
+      "matchDistance": 43,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-vale-juncal": {
       "apaCode": "PTCQ7H",
@@ -1909,7 +2020,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCQ7H&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 36
+      "matchDistance": 36,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-valhelhas": {
       "apaCode": "PTCT9E",
@@ -1926,7 +2038,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCT9E&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 58
+      "matchDistance": 58,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-verim": {
       "apaCode": "PTCU2F",
@@ -1943,7 +2056,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCU2F&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 138
+      "matchDistance": 138,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-vila-cova-a-coelheira": {
       "apaCode": "PTCF8J",
@@ -1960,7 +2074,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCF8J&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 60
+      "matchDistance": 60,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-vila-da-ponte": {
       "apaCode": "PTCJ2N",
@@ -1977,7 +2092,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCJ2N&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 84
+      "matchDistance": 84,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-vila-nova-serra": {
       "apaCode": "PTCF3C",
@@ -1994,7 +2110,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCF3C&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 23
+      "matchDistance": 23,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-acude-dos-vais": {
       "apaCode": "PTCN3P",
@@ -2011,7 +2128,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCN3P&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 32
+      "matchDistance": 32,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-agroal-ourem": {
       "apaCode": "PTCD8N",
@@ -2028,7 +2146,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCD8N&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 15
+      "matchDistance": 15,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-alqueirao": {
       "apaCode": "PTCE7L",
@@ -2045,7 +2164,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCE7L&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 209
+      "matchDistance": 209,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-boico": {
       "apaCode": "PTCP7F",
@@ -2062,7 +2182,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCP7F&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 48
+      "matchDistance": 48,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-bostelim": {
       "apaCode": "PTCJ9W",
@@ -2079,7 +2200,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCJ9W&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 30
+      "matchDistance": 30,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-cabril": {
       "apaCode": "PTCE2U",
@@ -2096,7 +2218,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCE2U&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 114
+      "matchDistance": 114,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-carvoeiro": {
       "apaCode": "PTCV8N",
@@ -2113,7 +2236,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCV8N&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 50
+      "matchDistance": 50,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-clube-nautico-de-avis": {
       "apaCode": "PTCL3X",
@@ -2130,7 +2254,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCL3X&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 79
+      "matchDistance": 79,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-colmeal": {
       "apaCode": "PTCX7K",
@@ -2147,7 +2272,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCX7K&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 40
+      "matchDistance": 40,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-praia-do-lago": {
       "apaCode": "PTCW7M",
@@ -2164,7 +2290,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCW7M&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 71
+      "matchDistance": 71,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-lago-azul": {
       "apaCode": "PTCT7W",
@@ -2181,7 +2308,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCT7W&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 24
+      "matchDistance": 24,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-malhadal": {
       "apaCode": "PTCQ8M",
@@ -2198,7 +2326,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCQ8M&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 54
+      "matchDistance": 54,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-marmeleiro": {
       "apaCode": "PTCW9K",
@@ -2215,7 +2344,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCW9K&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 67
+      "matchDistance": 67,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-meimao": {
       "apaCode": "PTCT8H",
@@ -2232,7 +2362,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCT8H&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 200
+      "matchDistance": 200,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-mosteiro": {
       "apaCode": "PTCX9N",
@@ -2249,7 +2380,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCX9N&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 17
+      "matchDistance": 17,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-pego-das-cancelas": {
       "apaCode": "PTCE2Q",
@@ -2266,7 +2398,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCE2Q&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 41
+      "matchDistance": 41,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-pego-fundo": {
       "apaCode": "PTCF8M",
@@ -2283,7 +2416,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCF8M&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 28
+      "matchDistance": 28,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-penedo-furado": {
       "apaCode": "PTCN3H",
@@ -2300,7 +2434,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCN3H&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 24
+      "matchDistance": 24,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-piodao": {
       "apaCode": "PTCK2U",
@@ -2317,7 +2452,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCK2U&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 110
+      "matchDistance": 110,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-pontilhao-da-valeta": {
       "apaCode": "PTCT7E",
@@ -2334,7 +2470,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCT7E&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 31
+      "matchDistance": 31,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-rabacal": {
       "apaCode": "PTCX2N",
@@ -2351,7 +2488,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCX2N&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 32
+      "matchDistance": 32,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-rebolim": {
       "apaCode": "PTCX8M",
@@ -2368,7 +2506,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCX8M&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 65
+      "matchDistance": 65,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-reconquinho": {
       "apaCode": "PTCL3T",
@@ -2385,7 +2524,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCL3T&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 67
+      "matchDistance": 67,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-sesmo": {
       "apaCode": "PTCX9C",
@@ -2402,7 +2542,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCX9C&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 10
+      "matchDistance": 10,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-sorraia": {
       "apaCode": "PTCW7T",
@@ -2419,7 +2560,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCW7T&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 46
+      "matchDistance": 46,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-trabulo": {
       "apaCode": "PTCF2H",
@@ -2436,7 +2578,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCF2H&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 41
+      "matchDistance": 41,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-troviscal": {
       "apaCode": "PTCU3V",
@@ -2453,7 +2596,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCU3V&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 48
+      "matchDistance": 48,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-vale-do-mondego": {
       "apaCode": "PTCP7W",
@@ -2470,7 +2614,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCP7W&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 35
+      "matchDistance": 35,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-vale-do-rossim": {
       "apaCode": "PTCP2N",
@@ -2487,7 +2632,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCP2N&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 599
+      "matchDistance": 599,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-vimieiro": {
       "apaCode": "PTCJ7U",
@@ -2504,7 +2650,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCJ7U&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 56
+      "matchDistance": 56,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-olhos-de-agua-do-alviela": {
       "apaCode": "PTCH9D",
@@ -2521,7 +2668,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCH9D&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 92
+      "matchDistance": 92,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-ucha": {
       "apaCode": "PTCL7U",
@@ -2538,7 +2686,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCL7U&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 121
+      "matchDistance": 121,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-maravilha": {
       "apaCode": "PTCX2D",
@@ -2555,7 +2704,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCX2D&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 47
+      "matchDistance": 47,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "zona-balnear-de-amoreira-rio": {
       "apaCode": "PTCD3F",
@@ -2572,7 +2722,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCD3F&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "costeira",
-      "matchDistance": 82
+      "matchDistance": 82,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-folques": {
       "apaCode": "PTCF8N",
@@ -2589,7 +2740,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCF8N&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 26
+      "matchDistance": 26,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-foz-d-egua": {
       "apaCode": "PTCW3V",
@@ -2606,7 +2758,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCW3V&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 30
+      "matchDistance": 30,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-peneda-talhada": {
       "apaCode": "PTCX3F",
@@ -2623,7 +2776,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCX3F&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 73
+      "matchDistance": 73,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-sabugueiro": {
       "apaCode": "PTCL8Q",
@@ -2640,7 +2794,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCL8Q&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 91
+      "matchDistance": 91,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-sao-joao-do-monte": {
       "apaCode": "PTCQ7L",
@@ -2657,7 +2812,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCQ7L&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 91
+      "matchDistance": 91,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-urtigal": {
       "apaCode": "PTCQ8E",
@@ -2674,7 +2830,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCQ8E&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 12
+      "matchDistance": 12,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-poco-do-lagar": {
       "apaCode": "PTCX9J",
@@ -2691,7 +2848,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCX9J&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 133
+      "matchDistance": 133,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     },
     "praia-fluvial-de-dr-pedro-n-sra-do-desterro": {
       "apaCode": "PTCD7J",
@@ -2708,7 +2866,8 @@
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCD7J&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
-      "matchDistance": 187
+      "matchDistance": 187,
+      "lastChanged": "2026-05-01T08:26:07.587Z"
     }
   }
 }
