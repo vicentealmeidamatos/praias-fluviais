@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-04T08:43:04.050Z",
+  "lastUpdated": "2026-05-05T08:29:19.813Z",
   "sourceUrl": "https://infoagua.apambiente.pt/pt/praias/praias-pesquisa-avancada",
   "stats": {
     "siteBeaches": 228,
@@ -11,8 +11,8 @@
       "apaCode": "PTCX3P",
       "apaName": "Praia Fluvial Arq. Albino Mendo",
       "apaConcelho": "MIRANDELA",
-      "previousYearDsc": "Excelente",
-      "previousYearValue": 1,
+      "previousYearDsc": "Boa",
+      "previousYearValue": 2,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
       "lastAnalysisDate": null,
@@ -23,7 +23,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 195,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-05-05T08:29:19.813Z"
     },
     "praia-fluvial-de-albufeira-de-queimadela": {
       "apaCode": "PTCQ2X",
@@ -299,8 +299,8 @@
       "apaCode": "PTCV3F",
       "apaName": "Mamoa",
       "apaConcelho": "SANTA MARIA DA FEIRA",
-      "previousYearDsc": "Excelente",
-      "previousYearValue": 1,
+      "previousYearDsc": "Boa",
+      "previousYearValue": 2,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
       "lastAnalysisDate": null,
@@ -311,7 +311,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 38,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-05-05T08:29:19.813Z"
     },
     "praia-fluvial-de-peneda-pego-escuro": {
       "apaCode": "PTCJ3D",
@@ -893,8 +893,8 @@
       "apaCode": "PTCK8M",
       "apaName": "Bitetos",
       "apaConcelho": "MARCO DE CANAVESES",
-      "previousYearDsc": "Boa",
-      "previousYearValue": 2,
+      "previousYearDsc": "Má",
+      "previousYearValue": 4,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
       "lastAnalysisDate": null,
@@ -905,7 +905,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 61,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-05-05T08:29:19.813Z"
     },
     "praia-fluvial-de-burgaes-rio-caima": {
       "apaCode": "PTCT7H",
@@ -929,8 +929,8 @@
       "apaCode": "PTCP3U",
       "apaName": "Cambas",
       "apaConcelho": "OLEIROS",
-      "previousYearDsc": "Excelente",
-      "previousYearValue": 1,
+      "previousYearDsc": "Boa",
+      "previousYearValue": 2,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
       "lastAnalysisDate": null,
@@ -941,7 +941,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 6,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-05-05T08:29:19.813Z"
     },
     "praia-fluvial-de-cardigos": {
       "apaCode": "PTCE7T",
@@ -1109,8 +1109,8 @@
       "apaCode": "PTCP9K",
       "apaName": "Cornicovo",
       "apaConcelho": "PENACOVA",
-      "previousYearDsc": "Boa",
-      "previousYearValue": 2,
+      "previousYearDsc": "Sem classificação",
+      "previousYearValue": 5,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
       "lastAnalysisDate": null,
@@ -1121,7 +1121,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 45,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-05-05T08:29:19.813Z"
     },
     "praia-fluvial-de-ereira": {
       "apaCode": "PTCQ9H",
@@ -1253,8 +1253,8 @@
       "apaCode": "PTCJ7P",
       "apaName": "Janeiro de Baixo",
       "apaConcelho": "PAMPILHOSA DA SERRA",
-      "previousYearDsc": "Boa",
-      "previousYearValue": 2,
+      "previousYearDsc": "Aceitável",
+      "previousYearValue": 3,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
       "lastAnalysisDate": null,
@@ -1265,7 +1265,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 64,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-05-05T08:29:19.813Z"
     },
     "praia-fluvial-de-lapa-dos-dinheiros": {
       "apaCode": "PTCL7N",
@@ -1325,8 +1325,8 @@
       "apaCode": "PTCT3U",
       "apaName": "Merelim S. Paio",
       "apaConcelho": "BRAGA",
-      "previousYearDsc": "Excelente",
-      "previousYearValue": 1,
+      "previousYearDsc": "Boa",
+      "previousYearValue": 2,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
       "lastAnalysisDate": null,
@@ -1337,7 +1337,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 86,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-05-05T08:29:19.813Z"
     },
     "praia-fluvial-de-moinho-de-alva": {
       "apaCode": "PTCU7N",
@@ -1379,8 +1379,8 @@
       "apaCode": "PTCT2W",
       "apaName": "Montalvo\\Tesos",
       "apaConcelho": "PONTE DE SOR",
-      "previousYearDsc": "Excelente",
-      "previousYearValue": 1,
+      "previousYearDsc": "Sem classificação",
+      "previousYearValue": 5,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
       "lastAnalysisDate": null,
@@ -1391,7 +1391,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 63,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-05-05T08:29:19.813Z"
     },
     "praia-fluvial-de-montes": {
       "apaCode": "PTCX7N",
@@ -1541,8 +1541,8 @@
       "apaCode": "PTCL9C",
       "apaName": "Poço Corga",
       "apaConcelho": "CASTANHEIRA DE PÊRA",
-      "previousYearDsc": "Excelente",
-      "previousYearValue": 1,
+      "previousYearDsc": "Boa",
+      "previousYearValue": 2,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
       "lastAnalysisDate": null,
@@ -1553,7 +1553,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 24,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-05-05T08:29:19.813Z"
     },
     "praia-fluvial-de-pomares": {
       "apaCode": "PTCT7Q",
@@ -1577,8 +1577,8 @@
       "apaCode": "PTCQ7E",
       "apaName": "Ponte da Barca",
       "apaConcelho": "PONTE DA BARCA",
-      "previousYearDsc": "Excelente",
-      "previousYearValue": 1,
+      "previousYearDsc": "Má",
+      "previousYearValue": 4,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
       "lastAnalysisDate": null,
@@ -1589,7 +1589,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 8,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-05-05T08:29:19.813Z"
     },
     "praia-fluvial-de-ponte-de-frades": {
       "apaCode": "PTCP7U",
@@ -1775,8 +1775,8 @@
       "apaCode": "PTCP7D",
       "apaName": "Devesa",
       "apaConcelho": "SABUGAL",
-      "previousYearDsc": "Excelente",
-      "previousYearValue": 1,
+      "previousYearDsc": "Sem classificação",
+      "previousYearValue": 5,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
       "lastAnalysisDate": null,
@@ -1787,7 +1787,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 7,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-05-05T08:29:19.813Z"
     },
     "praia-fluvial-de-sandomil": {
       "apaCode": "PTCD8X",
@@ -2009,8 +2009,8 @@
       "apaCode": "PTCQ7H",
       "apaName": "Vale Juncal",
       "apaConcelho": "MIRANDELA",
-      "previousYearDsc": "Boa",
-      "previousYearValue": 2,
+      "previousYearDsc": "Aceitável",
+      "previousYearValue": 3,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
       "lastAnalysisDate": null,
@@ -2021,7 +2021,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 36,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-05-05T08:29:19.813Z"
     },
     "praia-fluvial-de-valhelhas": {
       "apaCode": "PTCT9E",
@@ -2171,8 +2171,8 @@
       "apaCode": "PTCP7F",
       "apaName": "Boiçô",
       "apaConcelho": "SERTÃ",
-      "previousYearDsc": "Excelente",
-      "previousYearValue": 1,
+      "previousYearDsc": "Sem classificação",
+      "previousYearValue": 5,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
       "lastAnalysisDate": null,
@@ -2183,7 +2183,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 48,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-05-05T08:29:19.813Z"
     },
     "praia-fluvial-de-bostelim": {
       "apaCode": "PTCJ9W",
@@ -2333,8 +2333,8 @@
       "apaCode": "PTCW9K",
       "apaName": "Marmeleiro",
       "apaConcelho": "SERTÃ",
-      "previousYearDsc": "Excelente",
-      "previousYearValue": 1,
+      "previousYearDsc": "Sem classificação",
+      "previousYearValue": 5,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
       "lastAnalysisDate": null,
@@ -2345,7 +2345,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 67,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-05-05T08:29:19.813Z"
     },
     "praia-fluvial-de-meimao": {
       "apaCode": "PTCT8H",
@@ -2459,8 +2459,8 @@
       "apaCode": "PTCT7E",
       "apaName": "Pontilhão da Valeta",
       "apaConcelho": "ARCOS DE VALDEVEZ",
-      "previousYearDsc": "Excelente",
-      "previousYearValue": 1,
+      "previousYearDsc": "Aceitável",
+      "previousYearValue": 3,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
       "lastAnalysisDate": null,
@@ -2471,7 +2471,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 31,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-05-05T08:29:19.813Z"
     },
     "praia-fluvial-de-rabacal": {
       "apaCode": "PTCX2N",
@@ -2657,8 +2657,8 @@
       "apaCode": "PTCH9D",
       "apaName": "Olhos de Água do Alviela",
       "apaConcelho": "ALCANENA",
-      "previousYearDsc": "Excelente",
-      "previousYearValue": 1,
+      "previousYearDsc": "Sem classificação",
+      "previousYearValue": 5,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
       "lastAnalysisDate": null,
@@ -2669,7 +2669,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 92,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-05-05T08:29:19.813Z"
     },
     "praia-fluvial-de-ucha": {
       "apaCode": "PTCL7U",
