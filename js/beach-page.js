@@ -118,7 +118,7 @@ function renderWaterQualitySection(beachId, waterQualityJson) {
 
   return `
       <section class="mb-12">
-        <h2 class="font-display text-xs uppercase tracking-[0.2em] text-praia-teal-500 font-semibold mb-5">Qualidade da Água</h2>
+        <h2 class="font-display text-xs uppercase tracking-[0.2em] text-praia-teal-500 font-semibold mb-3">Qualidade da Água</h2>
         <div class="wq-card ${mod}" role="group" aria-label="${ariaLabel}">
           <div class="wq-drop">${dropSvg}</div>
           <div class="wq-headline">
@@ -166,18 +166,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   const wazeUrl = `https://waze.com/ul?ll=${beach.coordinates.lat},${beach.coordinates.lng}&navigate=yes`;
 
   const serviceIcons = {
-    blueFlag:    { icon: 'flag',          label: 'Bandeira Azul' },
-    goldQuality: { icon: 'award',         label: 'Qualidade de Ouro' },
-    accessible:  { icon: 'accessibility', label: 'Acessibilidades' },
-    lifeguard:   { icon: 'life-buoy',     label: 'Nadador-Salvador' },
-    bar:         { icon: 'utensils',      label: 'Bar/Restaurante' },
-    picnicArea:  { icon: 'trees',         label: 'Parque Merendas' },
-    petFriendly: { icon: 'dog',           label: 'Pet-friendly' },
-    playground:  { icon: null, svg: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256" fill="currentColor"><path d="M128 24a104 104 0 1 0 104 104A104.11 104.11 0 0 0 128 24m81.7 71.3a199.8 199.8 0 0 0-40.94-8.06a199.8 199.8 0 0 0-8.06-40.94a88.57 88.57 0 0 1 49 49M216 128a87.8 87.8 0 0 1-4.28 27.12a200.3 200.3 0 0 0-29.16-49.93a183 183 0 0 1 32.31 8.75A88 88 0 0 1 216 128m-73.94-86.87a183 183 0 0 1 8.75 32.31a200.3 200.3 0 0 0-49.93-29.16a88.05 88.05 0 0 1 41.18-3.15M80.44 54a183.9 183.9 0 0 1 61.25 32.64A200.2 200.2 0 0 0 40.41 119.5A88.11 88.11 0 0 1 80.44 54m-39.77 84.86a184.08 184.08 0 0 1 112.88-36.41a184.08 184.08 0 0 1-36.41 112.88a88.18 88.18 0 0 1-76.47-76.47m95.83 76.73a200.2 200.2 0 0 0 32.87-101.28A183.9 183.9 0 0 1 202 175.56a88.11 88.11 0 0 1-65.5 40.03"/></svg>', label: 'Parque Infantil' },
-    boatRental:  { icon: null, svg: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M2 23v-2h1q.8 0 1.55-.25T6 20q.7.5 1.45.75T9 21t1.563-.25T12 20q.7.5 1.45.75T15 21t1.563-.25T18 20q.675.5 1.438.75T21 21h1v2h-1q-.775 0-1.525-.187T18 22.25q-.725.375-1.475.563T15 23t-1.525-.187T12 22.25q-.725.375-1.475.563T9 23t-1.525-.187T6 22.25q-.725.375-1.475.563T3 23zm7-4q-.9 0-1.675-.425T6 17.5q-.425.45-.937.813t-1.138.562Q2.9 18.6 1.85 18.225T0 17.5q1.35-.575 3.3-1.175t3.825-.9l1.35-4.175q.275-.85 1.038-1.125t1.437.075l2.55 1.3l2.825-1.5l1.65-3.7l-.5-1.325L18.8 2L22 3.425L20.675 6.4l-1.325.5l-3.7 8.35q2.325.275 4.662.95T24 17.5q-.725.325-1.838.713t-2.087.662q-.625-.175-1.137-.537T18 17.5q-.55.65-1.325 1.075T15 19t-1.675-.425T12 17.5q-.55.65-1.325 1.075T9 19m5.075-3.925l.95-2.125l-1.525.8l-1.75-.9l-.7 2.15H12q.525 0 1.05.013t1.025.062m-3.487-6.162Q10 8.325 10 7.5t.588-1.412T12 5.5t1.413.588T14 7.5t-.587 1.413T12 9.5t-1.412-.587"/></svg>', label: 'Embarcações' },
-    camping:     { icon: 'bed-double',     label: 'Alojamento' },
-    wc:          { icon: null, svg: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 640 512" fill="currentColor"><path d="M80 48a48 48 0 1 1 96 0a48 48 0 1 1-96 0m40 304v128c0 17.7-14.3 32-32 32s-32-14.3-32-32V325.2c-8.1 9.2-21.1 13.2-33.5 9.4c-16.9-5.3-26.3-23.2-21-40.1l30.9-99.1C44.9 155.3 82 128 124 128h8c42 0 79.1 27.3 91.6 67.4l30.9 99.1c5.3 16.9-4.1 34.8-21 40.1c-12.4 3.9-25.4-.2-33.5-9.4V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V352zM320 0c13.3 0 24 10.7 24 24v464c0 13.3-10.7 24-24 24s-24-10.7-24-24V24c0-13.3 10.7-24 24-24m144 48a48 48 0 1 1 96 0a48 48 0 1 1-96 0m-24 432v-96h-17.8c-10.9 0-18.6-10.7-15.2-21.1l9-26.9c-3.2 0-6.4-.5-9.5-1.5c-16.9-5.3-26.3-23.2-21-40.1l29.7-95.2c13.2-42.3 52.4-71.2 96.8-71.2s83.6 28.9 96.8 71.2l29.7 95.2c5.3 16.9-4.1 34.8-21 40.1c-3.2 1-6.4 1.5-9.5 1.5l9 26.9c3.5 10.4-4.3 21.1-15.2 21.1H584v96c0 17.7-14.3 32-32 32s-32-14.3-32-32v-96h-16v96c0 17.7-14.3 32-32 32s-32-14.3-32-32"/></svg>', label: 'Instal. Sanitárias' },
-    nacional2:   { icon: 'signpost',      label: 'Estrada Nacional 2' },
+    blueFlag:    { img: 'brand_assets/icones/bandeiraazul.png',     label: 'Bandeira Azul' },
+    goldQuality: { img: 'brand_assets/icones/qualidadeouro.png',    label: 'Qualidade de Ouro' },
+    accessible:  { img: 'brand_assets/icones/acessibilidades.png',  label: 'Acessibilidades' },
+    lifeguard:   { img: 'brand_assets/icones/socorrista.png',       label: 'Nadador-Salvador' },
+    bar:         { img: 'brand_assets/icones/bar.png',              label: 'Bar/Restaurante' },
+    picnicArea:  { img: 'brand_assets/icones/parquedemerendas.png', label: 'Parque Merendas' },
+    petFriendly: { img: 'brand_assets/icones/cao.png',              label: 'Pet-friendly' },
+    playground:  { img: 'brand_assets/icones/bola.png',             label: 'Parque Infantil' },
+    boatRental:  { img: 'brand_assets/icones/embarcacoes.png',      label: 'Embarcações' },
+    camping:     { img: 'brand_assets/icones/alojamento.png',       label: 'Alojamento' },
+    wc:          { img: 'brand_assets/icones/wc.png',               label: 'Instal. Sanitárias' },
+    nacional2:   { img: 'brand_assets/icones/EN2.png',              label: 'Estrada Nacional 2' },
   };
 
   const servicesHtml = Object.entries(beach.services)
@@ -186,16 +186,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       const s = serviceIcons[k];
       return `<div class="flex flex-col items-center gap-1.5 group" title="${s.label}">
         <div class="w-12 h-12 rounded-xl bg-praia-teal-800/5 flex items-center justify-center group-hover:bg-praia-yellow-400/20 transition-colors duration-300">
-          ${s.svg ? s.svg : `<i data-lucide="${s.icon}" class="w-5 h-5 text-praia-teal-700"></i>`}
+          <img src="${s.img}" alt="${s.label}" class="w-7 h-7 object-contain" loading="lazy" decoding="async">
         </div>
         <span class="text-[10px] font-display font-semibold uppercase tracking-wider text-praia-sand-500 text-center leading-tight">${s.label}</span>
       </div>`;
     }).join('');
-
-  const badges = [];
-  if (beach.services.blueFlag) badges.push('<span class="badge badge-blue-flag"><i data-lucide="flag" class="w-3 h-3"></i> Bandeira Azul</span>');
-  if (beach.services.goldQuality) badges.push('<span class="badge badge-gold"><i data-lucide="award" class="w-3 h-3"></i> Qualidade Ouro</span>');
-  if (beach.services.accessible) badges.push('<span class="badge badge-accessible"><i data-lucide="accessibility" class="w-3 h-3"></i> Acessibilidades</span>');
 
   const nearby = beaches
     .filter(b => b.id !== beach.id)
@@ -248,7 +243,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       ${carouselControls}
       <div class="absolute inset-0 bg-gradient-to-t from-praia-teal-800/80 via-transparent to-transparent pointer-events-none z-10"></div>
       <div class="absolute bottom-0 left-0 right-0 p-6 md:p-10 z-20">
-        <div class="flex flex-wrap gap-2 mb-3">${badges.join('')}</div>
         <span class="kicker-yellow block mb-2">${beach.type === 'zona_balnear' ? 'Zona Balnear' : 'Praia Fluvial'}</span>
         <h1 data-content-bind="beaches:${beachIdx}.name" class="font-display text-2xl md:text-4xl lg:text-5xl font-bold text-white tracking-tightest mb-2">${beach.name}</h1>
         <p class="text-white/60 font-body text-sm md:text-base"><span data-content-bind="beaches:${beachIdx}.municipality">${beach.municipality}</span>${beach.freguesia ? `, <span data-content-bind="beaches:${beachIdx}.freguesia">${beach.freguesia}</span>` : `, <span data-content-bind="beaches:${beachIdx}.district">${beach.district}</span>`} · <span data-content-bind="beaches:${beachIdx}.river">${beach.river}</span></p>
@@ -258,7 +252,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     <div class="max-w-5xl mx-auto px-6 py-10 md:py-16">
       <!-- Services -->
       <section class="mb-12">
-        <h2 class="font-display text-xs uppercase tracking-[0.2em] text-praia-teal-500 font-semibold mb-5">Serviços e Infraestruturas</h2>
+        <h2 class="font-display text-xs uppercase tracking-[0.2em] text-praia-teal-500 font-semibold mb-5">Serviços</h2>
         <div class="grid gap-4" style="grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));">${servicesHtml}</div>
       </section>
 

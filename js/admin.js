@@ -1834,10 +1834,10 @@ function renderSettings(container) {
         </div>
       </div>
 
-      <!-- Praias em Destaque -->
+      <!-- Pool Praias da Semana -->
       <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100">
-        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-3">Praias em Destaque (Homepage)</h3>
-        <p class="text-xs text-praia-sand-400 mb-3">Arraste para reordenar. Clique × para remover.</p>
+        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-1">Pool de Praias da Semana (Homepage)</h3>
+        <p style="font-size:12px;color:#8A7D60;margin-bottom:14px;">Lista de praias candidatas a serem destacadas na secção "Praias da Semana". A homepage escolhe 5 aleatoriamente em cada visita. Adicione no mínimo 5 praias para que a rotação funcione bem.</p>
         <div id="featured-beaches-list" style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px;">
           ${featuredBeaches.map(id => {
             const beach = beaches.find(b => b.id === id);
@@ -1849,7 +1849,7 @@ function renderSettings(container) {
         </div>
         <div style="display:flex;gap:8px;align-items:center;">
           <select id="s-add-beach" class="flex-1 px-3 py-2 text-sm border border-praia-sand-200 rounded-lg bg-white">
-            <option value="">- Adicionar praia -</option>
+            <option value="">- Adicionar praia ao pool -</option>
             ${beaches.filter(b => !featuredBeaches.includes(b.id)).map(b => `<option value="${b.id}">${escHtml(b.name)}</option>`).join('')}
           </select>
           <button onclick="addFeaturedBeach()" class="admin-btn admin-btn-primary" style="white-space:nowrap;">+ Adicionar</button>
@@ -2098,6 +2098,7 @@ function saveSettings() {
     shippingPriceIslands: Math.round(parseFloat(document.getElementById('s-shipping-ilhas')?.value || '6.00') * 100),
     freeShippingThreshold: Math.round(parseFloat(document.getElementById('s-shipping-free')?.value || '30.00') * 100),
     // previousWinners already flushed into state by _flushWinnersFromDOM()
+    // featuredBeaches (pool da homepage) e featuredArticles são geridos via funções add/remove
   };
   markDirty('settings');
   toast('Configurações guardadas!', 'success');
@@ -4185,7 +4186,19 @@ function renderConteudoTab(tabId) {
       </div>`,
     homepage: `
       <div class="bg-white rounded-xl p-5 shadow-sm border border-praia-sand-100 admin-form">
-        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4">Estatísticas Hero</h3>
+        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4">Hero · Imagem de Fundo</h3>
+        ${field('homepage.heroBgImage', 'Caminho da Imagem (BRAGA ADAUFE, etc.)', h.heroBgImage)}
+        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4 mt-6">Hero · Vídeo (placeholder)</h3>
+        ${field('homepage.heroVideoSrc', 'Caminho do Vídeo (.mp4)', h.heroVideoSrc)}
+        ${field('homepage.heroVideoPoster', 'Imagem Poster (mostrada antes do vídeo)', h.heroVideoPoster)}
+        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4 mt-6">Hero · Texto</h3>
+        <div class="grid grid-cols-2 gap-4">
+          ${field('homepage.heroTitleWord1', 'Título · 1ª palavra', h.heroTitleWord1)}
+          ${field('homepage.heroTitleWord2', 'Título · 2ª palavra', h.heroTitleWord2)}
+        </div>
+        ${field('homepage.heroDate', 'Data / Edição', h.heroDate)}
+        ${field('homepage.heroScrollHint', 'Indicação de scroll', h.heroScrollHint)}
+        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4 mt-6">Estatísticas (aparecem após expansão)</h3>
         <div class="grid grid-cols-2 gap-4">
           ${field('homepage.stat1Label', 'Estatística 1 · Label', h.stat1Label)}
           ${field('homepage.stat1Value', 'Estatística 1 · Valor', h.stat1Value)}
@@ -4194,9 +4207,6 @@ function renderConteudoTab(tabId) {
           ${field('homepage.stat3Label', 'Estatística 3 · Label', h.stat3Label)}
           ${field('homepage.stat3Value', 'Estatística 3 · Valor', h.stat3Value)}
         </div>
-        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4 mt-6">CTAs</h3>
-        ${field('homepage.heroCtaPrimary', 'CTA Primário', h.heroCtaPrimary)}
-        ${field('homepage.heroCtaSecondary', 'CTA Secundário', h.heroCtaSecondary)}
         <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4 mt-6">Secções</h3>
         ${field('homepage.destaquesSectionTitle', 'Título Secção Destaques', h.destaquesSectionTitle)}
         ${field('homepage.yearSectionLabel', 'Label Secção Votação', h.yearSectionLabel)}

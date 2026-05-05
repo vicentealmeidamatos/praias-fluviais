@@ -37,6 +37,10 @@
   }
   </script>
 
+  <!-- Hero images: preload para começarem a transferir no parse do HTML -->
+  <link rel="preload" as="image" href="brand_assets/BRAGA ADAUFE 2025_10.jpg" fetchpriority="high">
+  <link rel="preload" as="image" href="brand_assets/COVILHA Unhais da Serra 2025_1.jpg" fetchpriority="high">
+
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -55,16 +59,15 @@
 
   <!-- Lucide Icons -->
   <script src="js/lucide.min.js"></script>
+  <!-- Scroll Expand Hero (homepage only) — loaded with defer so DOM is parsed but scroll lock activates before user can interact. -->
+  <script defer src="js/scroll-expand-hero.js"></script>
   <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-
-  <!-- Leaflet (for mini-map preview) -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
 
   <!-- Styles -->
   <link rel="stylesheet" href="css/shared.css">
   <link rel="stylesheet" href="css/page-turn.css">
+  <link rel="stylesheet" href="css/scroll-expand-hero.css">
 
   <style>
     /* Hero parallax background */
@@ -84,6 +87,319 @@
       z-index: 0;
     }
 
+    /* ── Section base (homepage redesign) ── */
+    .section {
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+    }
+    /* Light variants — paleta da marca: branco puro + acentos amarelos subtis */
+    .section-light       { background: #FFFFFF; color: #003A40; }
+    .section-light-warm  { background: #FFFFFF; color: #003A40; }
+    .section-light-cool  { background: #FFFFFF; color: #003A40; }
+    /* Dark variants — high-contrast teal to deep navy-teal */
+    .section-dark        { background: linear-gradient(180deg, #003A40 0%, #002A2E 100%); color: #fff; }
+    .section-dark-rich   { background: linear-gradient(180deg, #00484F 0%, #003036 100%); color: #fff; }
+    .section-dark-deep   { background: linear-gradient(180deg, #00161A 0%, #00080A 100%); color: #fff; }
+    .section-yellow      { background: linear-gradient(135deg, #F5B800 0%, #FFEB3B 100%); color: #003A40; }
+    .section-pad         { padding: clamp(56px, 7vw, 96px) 0; }
+    /* Uniform vertical rhythm — keep sections close in size and never fullscreen */
+    .section-uniform {
+      display: flex;
+      align-items: center;
+    }
+    .section-uniform > * { width: 100%; }
+    @media (min-width: 768px) {
+      .section-uniform { min-height: clamp(560px, 64vh, 720px); }
+    }
+
+    /* ── Section hover-able CTA (drop-in for inline-styled buttons) ── */
+    .cta-yellow {
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  box-shadow 0.35s ease,
+                  background 0.25s ease,
+                  color 0.25s ease;
+    }
+    .cta-yellow:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 22px 38px -14px rgba(255,235,59,0.55), 0 0 0 2px rgba(255,235,59,0.4) inset;
+      background: #FFF36B;
+    }
+    .cta-yellow:active { transform: translateY(0) scale(0.98); }
+    .cta-yellow:focus-visible { outline: 3px solid #FFEB3B; outline-offset: 3px; }
+
+    .cta-teal {
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  box-shadow 0.35s ease,
+                  background 0.25s ease;
+    }
+    .cta-teal:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 22px 38px -14px rgba(0,58,64,0.55);
+      background: #00282C;
+    }
+    .cta-teal:active { transform: translateY(0) scale(0.98); }
+    .cta-teal:focus-visible { outline: 3px solid #FFEB3B; outline-offset: 3px; }
+
+    .cta-ghost {
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  background 0.25s ease,
+                  border-color 0.25s ease,
+                  color 0.25s ease;
+    }
+    .cta-ghost:hover {
+      transform: translateY(-2px);
+      background: rgba(255,235,59,0.12);
+      border-color: rgba(255,235,59,0.55);
+      color: #FFEB3B;
+    }
+    .cta-ghost:active { transform: translateY(0); }
+
+    /* Mobile: allow Passaporte CTA row to wrap so labels keep readable */
+    @media (max-width: 480px) {
+      .passaporte-cta-row { flex-wrap: wrap !important; }
+    }
+
+    /* Outline CTA on light surfaces (fills with teal on hover) */
+    .cta-outline-teal {
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  background 0.25s ease,
+                  color 0.25s ease,
+                  border-color 0.25s ease,
+                  box-shadow 0.35s ease;
+    }
+    .cta-outline-teal:hover {
+      transform: translateY(-3px) scale(1.03);
+      background: #003A40;
+      color: #FFEB3B;
+      border-color: #003A40;
+      box-shadow: 0 22px 38px -14px rgba(0,58,64,0.5);
+    }
+    .cta-outline-teal:active { transform: translateY(0) scale(0.98); }
+    .cta-outline-teal:focus-visible { outline: 3px solid #003A40; outline-offset: 3px; }
+
+    /* Eyebrow */
+    .eyebrow {
+      display: inline-block;
+      font-family: 'Poppins', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+    }
+    .eyebrow-light  { color: #0288D1; }
+    .eyebrow-dark   { color: #FFEB3B; }
+
+    /* Headings editoriais */
+    .h-editorial {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: clamp(40px, 6vw, 88px);
+      line-height: 0.98;
+      letter-spacing: -0.02em;
+    }
+    .h-giant {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 800;
+      font-size: clamp(80px, 14vw, 220px);
+      line-height: 0.9;
+      letter-spacing: -0.04em;
+    }
+
+    /* Reveal helpers (GSAP toma conta a partir daqui; .is-visible é fallback p/ screenshots) */
+    .reveal-up       { opacity: 0; transform: translateY(28px); }
+    .reveal-fade     { opacity: 0; }
+    .reveal-clip h1, .reveal-clip h2 { clip-path: inset(0 100% 0 0); }
+    .reveal-up.is-visible, .reveal-fade.is-visible { opacity: 1 !important; transform: none !important; }
+    .reveal-clip.is-visible h1, .reveal-clip.is-visible h2 { clip-path: none !important; }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .reveal-up, .reveal-fade { opacity: 1 !important; transform: none !important; }
+      .reveal-clip h1, .reveal-clip h2 { clip-path: none !important; }
+    }
+
+    /* ── Praias da Semana — carousel ── */
+    .semana-stage {
+      position: relative;
+      width: 100%;
+      min-height: 380px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+      gap: clamp(16px, 2vw, 26px);
+      align-items: stretch;
+    }
+    @media (max-width: 1023px) {
+      .semana-stage { grid-template-columns: 1fr; min-height: auto; gap: 18px; }
+    }
+    .semana-feature {
+      position: relative;
+      border-radius: 22px;
+      overflow: hidden;
+      background: #003A40;
+      box-shadow: 0 30px 60px -22px rgba(0,58,64,0.35);
+      min-height: 380px;
+    }
+    /* Carousel arrows — subtle, ghost style, only fade in on feature hover */
+    .semana-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 4;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.18);
+      color: rgba(255,255,255,0.85);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 0;
+      cursor: pointer;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      opacity: 0;
+      transition: opacity 0.25s ease,
+                  background 0.25s ease,
+                  transform 0.25s ease;
+    }
+    .semana-feature:hover .semana-arrow,
+    .semana-arrow:focus-visible {
+      opacity: 0.85;
+    }
+    .semana-arrow:hover {
+      opacity: 1 !important;
+      background: rgba(0,0,0,0.32);
+    }
+    .semana-arrow:active { transform: translateY(-50%) scale(0.9); }
+    .semana-arrow.prev { left: 10px; }
+    .semana-arrow.next { right: 10px; }
+    .semana-arrow:focus-visible { outline: 2px solid rgba(255,235,59,0.6); outline-offset: 2px; }
+    /* Touch devices — keep arrows visible since there's no hover */
+    @media (hover: none) {
+      .semana-arrow { opacity: 0.7; }
+    }
+    .semana-feature .slide {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transform: scale(1.04);
+      transition: opacity 1s ease, transform 1.6s ease;
+    }
+    .semana-feature .slide.is-active {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .semana-feature .slide::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,58,64,0) 35%, rgba(0,58,64,0.85) 100%);
+    }
+    .semana-feature .caption {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      padding: 28px 28px 26px;
+      color: #fff;
+      z-index: 2;
+    }
+    .semana-thumb-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .semana-thumb {
+      position: relative;
+      display: grid;
+      grid-template-columns: 92px minmax(0, 1fr);
+      gap: 14px;
+      align-items: center;
+      padding: 10px 14px 10px 10px;
+      border-radius: 16px;
+      background: #fff;
+      border: 1px solid rgba(0,58,64,0.12);
+      box-shadow: 0 6px 14px -10px rgba(0,58,64,0.15);
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+      text-decoration: none;
+      color: inherit;
+      overflow: hidden;
+    }
+    .semana-thumb:hover {
+      transform: translateX(-4px);
+      box-shadow: 0 16px 28px -14px rgba(0,58,64,0.28);
+      border-color: #FFEB3B;
+    }
+    .semana-thumb.is-active {
+      border-color: #FFEB3B;
+      background: #FFFFFF;
+      box-shadow: 0 0 0 3px rgba(255,235,59,0.35), 0 16px 28px -14px rgba(0,58,64,0.28);
+    }
+    .semana-thumb .thumb-img {
+      width: 92px;
+      height: 70px;
+      border-radius: 10px;
+      background-size: cover;
+      background-position: center;
+      background-color: #F5F8F8;
+      flex-shrink: 0;
+    }
+    .semana-thumb .thumb-progress {
+      position: absolute;
+      left: 0; bottom: 0;
+      height: 3px;
+      width: 0%;
+      background: linear-gradient(90deg, #FFEB3B 0%, #F5B800 100%);
+      transition: width 80ms linear;
+    }
+
+    /* ── Comunidade — testimonials grid ── */
+    .testi-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    @media (min-width: 768px) {
+      .testi-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    }
+    .testi-card {
+      background: #fff;
+      border-radius: 18px;
+      padding: 22px 22px 20px;
+      box-shadow: 0 24px 50px -22px rgba(0,0,0,0.45);
+      border: 1px solid rgba(255,255,255,0.06);
+      position: relative;
+    }
+    .testi-card::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: 19px;
+      padding: 1px;
+      background: linear-gradient(140deg, rgba(255,235,59,0.35), rgba(255,255,255,0));
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+              mask-composite: exclude;
+      pointer-events: none;
+    }
+    .testi-card.featured { transform: translateY(-12px); }
+    @media (max-width: 767px) {
+      .testi-card.featured { transform: none; }
+    }
+
+    /* Social icons breathing loop (Task 15) */
+    @keyframes social-breath {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 0 rgba(255,235,59,0); }
+      50%      { transform: scale(1.04); box-shadow: 0 0 24px rgba(255,235,59,0.15); }
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .social-breath { animation: social-breath 4s ease-in-out infinite; }
+    }
+    .social-breath:hover { background: #FFEB3B !important; color: #003A40 !important; }
+    .social-breath:hover svg { color: #003A40; }
+
     /* Cards carousel */
     .cards-scroll {
       scroll-snap-type: x mandatory;
@@ -95,13 +411,244 @@
       scroll-snap-align: start;
     }
 
-    /* Mini-map styling */
-    #mini-map {
-      border-radius: 16px;
+    /* Rede section — flex: título à esquerda + mapa à direita, ambos centrados
+       como um bloco horizontal único. Pequeno gap fixo entre eles → naturalmente
+       próximos sem o mapa sair da sua posição na coluna. */
+    .rede-grid {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+    }
+    @media (min-width: 1024px) {
+      .rede-grid {
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 40px;
+      }
+      .rede-grid > .rede-text { max-width: 620px; flex: 0 1 620px; }
+      .rede-grid > .rede-map  { flex: 0 0 auto; }
+    }
+
+    /* Static map preview — vertical */
+    .mapa-preview-wrap {
+      position: relative;
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 30px 60px -22px rgba(0,58,64,0.32);
+      border: 1px solid rgba(0,58,64,0.12);
+      background: #F5F8F8;
+      transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  box-shadow 0.5s ease;
+      aspect-ratio: 4 / 5;
+      width: 100%;
+      max-width: 440px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .mapa-preview-wrap:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 40px 70px -22px rgba(0,58,64,0.4);
+    }
+    .mapa-preview-img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transition: transform 0.8s ease;
+    }
+    .mapa-preview-wrap:hover .mapa-preview-img { transform: scale(1.03); }
+    .mapa-preview-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,58,64,0) 60%, rgba(0,58,64,0.10) 100%);
+      pointer-events: none;
+    }
+
+    /* Articles grid (replaces flaky horizontal scroll) */
+    .artigos-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 22px;
+    }
+    @media (min-width: 768px)  { .artigos-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; } }
+    @media (min-width: 1024px) { .artigos-grid { grid-template-columns: repeat(3, 1fr); gap: 26px; } }
+    .artigo-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+      border: 1px solid rgba(0,58,64,0.10);
+      border-radius: 18px;
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      box-shadow: 0 6px 18px -10px rgba(0,58,64,0.18);
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  box-shadow 0.4s ease,
+                  border-color 0.3s ease;
+      min-height: 100%;
+    }
+    .artigo-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 26px 50px -22px rgba(0,58,64,0.35);
+      border-color: #FFEB3B;
+    }
+    .artigo-card .artigo-img {
+      aspect-ratio: 16 / 10;
+      background: #F0F4F4;
+      background-size: cover;
+      background-position: center;
+      position: relative;
       overflow: hidden;
     }
-    #mini-map .leaflet-tile-pane {
-      filter: saturate(0.5) brightness(0.85);
+    .artigo-card .artigo-img::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,58,64,0) 55%, rgba(0,58,64,0.45) 100%);
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      opacity: 0.8;
+    }
+    .artigo-card:hover .artigo-img::after { opacity: 1; }
+    .artigo-card .artigo-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: #003A40;
+      color: #FFEB3B;
+      font-family: 'Poppins', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 5px 10px;
+      border-radius: 99px;
+      z-index: 2;
+    }
+    .artigo-card .artigo-body {
+      padding: 20px 22px 22px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      gap: 8px;
+    }
+    .artigo-card .artigo-title {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 18px;
+      color: #003A40;
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+    }
+    .artigo-card .artigo-excerpt {
+      font-size: 13.5px;
+      color: rgba(0,58,64,0.75);
+      line-height: 1.55;
+      flex: 1;
+    }
+    .artigo-card .artigo-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(0,58,64,0.55);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-top: 4px;
+    }
+    .artigo-card .artigo-arrow {
+      font-family: 'Poppins', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: #003A40;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+      transition: gap 0.3s ease, color 0.3s ease;
+    }
+    .artigo-card:hover .artigo-arrow { gap: 12px; color: #0288D1; }
+    .artigo-skeleton {
+      border-radius: 18px;
+      min-height: 360px;
+      background: linear-gradient(90deg, #F0F4F4 0%, #FAFCFC 50%, #F0F4F4 100%);
+      background-size: 200% 100%;
+      animation: skel-shine 1.4s linear infinite;
+    }
+    @keyframes skel-shine {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* Guia das Praias Fluviais — foto real, dimensões idênticas ao antigo
+       placeholder para que a secção mantenha a mesma altura (~560-720px). */
+    .guia-photo-wrap {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+    .guia-photo {
+      display: block;
+      width: 100%;
+      max-width: 380px;
+      aspect-ratio: 3 / 4;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 12px;
+      box-shadow: 0 30px 60px -22px rgba(0,0,0,0.45);
+      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .guia-photo-wrap:hover .guia-photo {
+      transform: scale(1.03);
+    }
+
+    /* Passaporte — foto real (selo + páginas com carimbos).
+       Sem sombra/borda — o fundo branco da imagem funde-se com o branco
+       da secção. A imagem é grande e arrastada para a esquerda (overflow
+       para fora da coluna) para que o fundo branco não empurre o texto
+       da coluna direita. */
+    .passaporte-photo-wrap {
+      position: relative;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    .passaporte-photo {
+      display: block;
+      width: auto;
+      max-width: none;
+      height: auto;
+      object-fit: contain;
+      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @media (min-width: 1024px) {
+      .passaporte-photo {
+        /* Imagem maior, deslocada para a esquerda para fora da coluna. */
+        width: 780px;
+        max-width: none;
+        margin-left: -120px;
+      }
+    }
+    .passaporte-photo-wrap:hover .passaporte-photo {
+      transform: scale(1.02);
+    }
+    @media (max-width: 1023px) {
+      .passaporte-photo {
+        width: 100%;
+        max-width: 520px;
+        margin: 0 auto;
+      }
+      .passaporte-photo-wrap { justify-content: center; }
     }
 
     /* Quick link buttons */
@@ -126,10 +673,69 @@
       box-shadow: 0 0 0 3px rgba(255, 235, 59, 0.25), 0 0 20px rgba(255, 235, 59, 0.1);
     }
 
+    /* Footer separation accent */
+    .footer-separator {
+      height: 6px;
+      background: linear-gradient(90deg, transparent 0%, #FFEB3B 50%, transparent 100%);
+      opacity: 0.45;
+    }
+
+    /* Social orbs (last section) */
+    .social-orb {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  background 0.25s ease,
+                  color 0.25s ease,
+                  border-color 0.25s ease,
+                  box-shadow 0.35s ease;
+    }
+    .social-orb:hover {
+      transform: translateY(-4px) scale(1.06);
+      background: #FFEB3B;
+      color: #003A40;
+      border-color: #FFEB3B;
+      box-shadow: 0 16px 30px -10px rgba(255,235,59,0.5);
+    }
+    .social-orb:active { transform: translateY(0) scale(0.97); }
+
+    /* Light variant for cream/sand backgrounds */
+    .social-orb-light {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: rgba(0,58,64,0.08);
+      border: 1px solid rgba(0,58,64,0.15);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #003A40;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  background 0.25s ease,
+                  color 0.25s ease,
+                  border-color 0.25s ease,
+                  box-shadow 0.35s ease;
+    }
+    .social-orb-light:hover {
+      transform: translateY(-4px) scale(1.06);
+      background: #003A40;
+      color: #FFEB3B;
+      border-color: #003A40;
+      box-shadow: 0 16px 30px -10px rgba(0,58,64,0.45);
+    }
+    .social-orb-light:active { transform: translateY(0) scale(0.97); }
+
   </style>
 </head>
 
-<body class="bg-praia-sand-50 font-body text-praia-sand-900 antialiased">
+<body class="bg-white font-body text-praia-teal-800 antialiased">
   <!-- Skip to content -->
   <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:bg-praia-yellow-400 focus:text-praia-teal-800 focus:px-4 focus:py-2 focus:rounded-lg focus:font-display focus:font-semibold">
     Saltar para o conteúdo
@@ -251,534 +857,360 @@
   </nav>
 
   <!-- ─── Main Content ─── -->
-  <main id="main" style="background-color:#003A40;">
-    <!-- Page Dots Navigation -->
-    <div class="page-indicator hidden md:flex">
-      <button class="page-dot active" aria-label="Capa" title="Capa"></button>
-      <button class="page-dot" aria-label="Destaques" title="Destaques"></button>
-      <button class="page-dot" aria-label="Mapa" title="Explorar Mapa"></button>
-      <button class="page-dot" aria-label="Descubra" title="Descubra"></button>
-      <button class="page-dot" aria-label="Praia do Ano" title="Praia do Ano"></button>
-    </div>
+  <main id="main" class="bg-white">
 
-    <div class="magazine-container">
+    <!-- 1. HERO — Scroll Expansion (vanilla port of ScrollExpandMedia) -->
+    <section id="page-hero" class="seh-section">
+      <!-- Background image: fica sempre visível; a sombra é que cresce para a esmaecer -->
+      <div class="seh-bg" data-seh-bg>
+        <img data-content-img="homepage.heroBgImage" src="brand_assets/BRAGA ADAUFE 2025_10.jpg" alt="" loading="eager" fetchpriority="high">
+        <div class="seh-bg-shadow" data-seh-bg-shadow></div>
+      </div>
 
-      <!-- ═══════════════════════════════════════ -->
-      <!-- PAGE 1: CAPA / HERO                     -->
-      <!-- ═══════════════════════════════════════ -->
-      <section class="magazine-page hero-bg relative flex items-center justify-center min-h-screen" id="page-hero">
-        <div class="noise-overlay absolute inset-0"></div>
+      <div class="seh-stage">
+        <!-- Expanding media frame (sits behind the title) -->
+        <div class="seh-media-frame" data-seh-frame>
+          <!-- Placeholder video: drop a real MP4 at img/hero-placeholder.mp4 to swap.
+               Until then the poster image (a beach photo) shows the effect. -->
+          <video
+            class="seh-media-el"
+            data-content-img="homepage.heroVideoSrc"
+            src="img/hero-placeholder.mp4"
+            poster="brand_assets/COVILHA Unhais da Serra 2025_1.jpg"
+            autoplay muted loop playsinline preload="auto"
+            disablepictureinpicture disableremoteplayback></video>
+          <div class="seh-media-veil" data-seh-media-veil></div>
+        </div>
 
-        <!-- Underwater bubbles — dispersed across hero, small & fast -->
-        <!-- Rising bubbles -->
-        <div class="bubble w-1 h-1"     style="left:2%;  top:78%; --delay:0s;   --dur:4s;  --drift:10px;"></div>
-        <div class="bubble w-1.5 h-1.5" style="left:5%;  top:22%; --delay:1.2s; --dur:3s;  --drift:-12px;"></div>
-        <div class="bubble w-1 h-1"     style="left:8%;  top:88%; --delay:2.5s; --dur:5s;  --drift:8px;"></div>
-        <div class="bubble w-1.5 h-1.5" style="left:11%; top:40%; --delay:0.4s; --dur:4s;  --drift:-9px;"></div>
-        <div class="bubble w-1 h-1"     style="left:14%; top:65%; --delay:3s;   --dur:3.5s;--drift:11px;"></div>
-        <div class="bubble w-2 h-2"     style="left:17%; top:12%; --delay:1.8s; --dur:5s;  --drift:-14px;"></div>
-        <div class="bubble w-1 h-1"     style="left:20%; top:55%; --delay:0.7s; --dur:3s;  --drift:7px;"></div>
-        <div class="bubble w-1.5 h-1.5" style="left:23%; top:80%; --delay:4s;   --dur:4.5s;--drift:-10px;"></div>
-        <div class="bubble w-1 h-1"     style="left:26%; top:32%; --delay:2s;   --dur:3.5s;--drift:13px;"></div>
-        <div class="bubble w-1.5 h-1.5" style="left:29%; top:70%; --delay:0.2s; --dur:4s;  --drift:-8px;"></div>
-        <div class="bubble w-1 h-1"     style="left:32%; top:18%; --delay:3.5s; --dur:3s;  --drift:10px;"></div>
-        <div class="bubble w-2 h-2"     style="left:35%; top:90%; --delay:1.5s; --dur:5s;  --drift:-11px;"></div>
-        <div class="bubble w-1 h-1"     style="left:38%; top:45%; --delay:2.8s; --dur:3.5s;--drift:9px;"></div>
-        <div class="bubble w-1.5 h-1.5" style="left:41%; top:75%; --delay:0.9s; --dur:4s;  --drift:-13px;"></div>
-        <div class="bubble w-1 h-1"     style="left:44%; top:28%; --delay:4.5s; --dur:3s;  --drift:11px;"></div>
-        <div class="bubble w-1.5 h-1.5" style="left:47%; top:60%; --delay:1.1s; --dur:4.5s;--drift:-8px;"></div>
-        <div class="bubble w-1 h-1"     style="left:50%; top:10%; --delay:3.2s; --dur:3.5s;--drift:12px;"></div>
-        <div class="bubble w-2 h-2"     style="left:53%; top:85%; --delay:0.6s; --dur:5s;  --drift:-10px;"></div>
-        <div class="bubble w-1 h-1"     style="left:56%; top:38%; --delay:2.3s; --dur:3s;  --drift:8px;"></div>
-        <div class="bubble w-1.5 h-1.5" style="left:59%; top:68%; --delay:4.8s; --dur:4s;  --drift:-14px;"></div>
-        <div class="bubble w-1 h-1"     style="left:62%; top:22%; --delay:1.4s; --dur:3.5s;--drift:10px;"></div>
-        <div class="bubble w-1.5 h-1.5" style="left:65%; top:92%; --delay:0.3s; --dur:4.5s;--drift:-9px;"></div>
-        <div class="bubble w-1 h-1"     style="left:68%; top:50%; --delay:3.7s; --dur:3s;  --drift:13px;"></div>
-        <div class="bubble w-2 h-2"     style="left:71%; top:15%; --delay:2.1s; --dur:5s;  --drift:-12px;"></div>
-        <div class="bubble w-1 h-1"     style="left:74%; top:78%; --delay:0.8s; --dur:3.5s;--drift:9px;"></div>
-        <div class="bubble w-1.5 h-1.5" style="left:77%; top:42%; --delay:5s;   --dur:4s;  --drift:-10px;"></div>
-        <div class="bubble w-1 h-1"     style="left:80%; top:65%; --delay:1.6s; --dur:3s;  --drift:11px;"></div>
-        <div class="bubble w-1.5 h-1.5" style="left:83%; top:25%; --delay:3.9s; --dur:4.5s;--drift:-8px;"></div>
-        <div class="bubble w-1 h-1"     style="left:86%; top:82%; --delay:0.5s; --dur:3.5s;--drift:14px;"></div>
-        <div class="bubble w-2 h-2"     style="left:89%; top:48%; --delay:2.6s; --dur:5s;  --drift:-11px;"></div>
-        <div class="bubble w-1 h-1"     style="left:92%; top:30%; --delay:4.3s; --dur:3s;  --drift:9px;"></div>
-        <div class="bubble w-1.5 h-1.5" style="left:95%; top:70%; --delay:1.9s; --dur:4s;  --drift:-13px;"></div>
-        <div class="bubble w-1 h-1"     style="left:98%; top:55%; --delay:3.4s; --dur:3.5s;--drift:10px;"></div>
-        <!-- Extra fill -->
-        <div class="bubble w-1 h-1"     style="left:7%;  top:95%; --delay:5.5s; --dur:3s;  --drift:-7px;"></div>
-        <div class="bubble w-1 h-1"     style="left:16%; top:5%;  --delay:0.1s; --dur:4s;  --drift:8px;"></div>
-        <div class="bubble w-1.5 h-1.5" style="left:31%; top:50%; --delay:6s;   --dur:4.5s;--drift:-12px;"></div>
-        <div class="bubble w-1 h-1"     style="left:46%; top:95%; --delay:2.7s; --dur:3s;  --drift:10px;"></div>
-        <div class="bubble w-1 h-1"     style="left:58%; top:5%;  --delay:5.2s; --dur:3.5s;--drift:-9px;"></div>
-        <div class="bubble w-1.5 h-1.5" style="left:70%; top:35%; --delay:1.3s; --dur:4s;  --drift:11px;"></div>
-        <div class="bubble w-1 h-1"     style="left:84%; top:8%;  --delay:4.1s; --dur:3s;  --drift:-10px;"></div>
-        <!-- Sideways-drifting bubbles -->
-        <div class="bubble-sideways w-1 h-1"     style="left:4%;  top:55%; --delay:1.5s; --dur:4s;  --dx:38px;  --dy:-20px;"></div>
-        <div class="bubble-sideways w-1.5 h-1.5" style="left:13%; top:72%; --delay:3.5s; --dur:5s;  --dx:-42px; --dy:-15px;"></div>
-        <div class="bubble-sideways w-1 h-1"     style="left:24%; top:38%; --delay:0.6s; --dur:3.5s;--dx:45px;  --dy:-18px;"></div>
-        <div class="bubble-sideways w-1 h-1"     style="left:37%; top:20%; --delay:2.4s; --dur:4s;  --dx:-40px; --dy:12px;"></div>
-        <div class="bubble-sideways w-1.5 h-1.5" style="left:48%; top:82%; --delay:4.6s; --dur:5s;  --dx:36px;  --dy:-24px;"></div>
-        <div class="bubble-sideways w-1 h-1"     style="left:57%; top:48%; --delay:1s;   --dur:3.5s;--dx:-44px; --dy:-16px;"></div>
-        <div class="bubble-sideways w-1 h-1"     style="left:67%; top:25%; --delay:3.8s; --dur:4s;  --dx:40px;  --dy:-10px;"></div>
-        <div class="bubble-sideways w-1.5 h-1.5" style="left:76%; top:62%; --delay:0.4s; --dur:4.5s;--dx:-38px; --dy:-20px;"></div>
-        <div class="bubble-sideways w-1 h-1"     style="left:87%; top:85%; --delay:5.3s; --dur:3.5s;--dx:42px;  --dy:-22px;"></div>
-        <div class="bubble-sideways w-1 h-1"     style="left:94%; top:18%; --delay:2s;   --dur:4s;  --dx:-36px; --dy:14px;"></div>
+        <!-- Title (split halves) -->
+        <div class="seh-title" data-seh-title>
+          <span class="seh-title-word" data-seh-left data-content="homepage.heroTitleWord1">Praias</span>
+          <span class="seh-title-word" data-seh-right data-content="homepage.heroTitleWord2">Fluviais</span>
+        </div>
 
-        <div class="bubble w-2 h-2"     style="left:3%;  top:42%; --delay:1.7s; --dur:4.5s; --drift:9px;"></div>
-        <div class="bubble w-1 h-1"     style="left:10%; top:60%; --delay:3.1s; --dur:3s;   --drift:-11px;"></div>
-        <div class="bubble w-1.5 h-1.5" style="left:19%; top:15%; --delay:0.8s; --dur:5s;   --drift:13px;"></div>
-        <div class="bubble w-1 h-1"     style="left:28%; top:88%; --delay:4.2s; --dur:3.5s; --drift:-8px;"></div>
-        <div class="bubble w-2 h-2"     style="left:39%; top:35%; --delay:2.6s; --dur:4s;   --drift:10px;"></div>
-        <div class="bubble w-1 h-1"     style="left:51%; top:72%; --delay:1s;   --dur:3.5s; --drift:-12px;"></div>
-        <div class="bubble w-1.5 h-1.5" style="left:63%; top:8%;  --delay:5.4s; --dur:4.5s; --drift:9px;"></div>
-        <div class="bubble w-1 h-1"     style="left:72%; top:55%; --delay:2.9s; --dur:3s;   --drift:-10px;"></div>
-        <div class="bubble w-2 h-2"     style="left:81%; top:30%; --delay:0.3s; --dur:5s;   --drift:14px;"></div>
-        <div class="bubble w-1 h-1"     style="left:91%; top:75%; --delay:3.6s; --dur:3.5s; --drift:-7px;"></div>
+        <!-- Date + scroll hint (also slide outward) -->
+        <div class="seh-meta">
+          <p class="seh-date" data-seh-left data-content="homepage.heroDate">Edição 2026</p>
+          <p class="seh-scroll-hint" data-seh-right data-content="homepage.heroScrollHint">Faça scroll para descobrir</p>
+        </div>
+      </div>
 
-        <!-- Content -->
-        <div class="relative z-10 text-center px-6 max-w-4xl mx-auto">
-          <!-- Logo large -->
-          <div class="mb-2 flex justify-center reveal-on-scroll">
-            <img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="w-80 md:w-[480px] lg:w-[640px] h-auto drop-shadow-2xl">
+      <!-- Children: sobreposto à imagem expandida — fade-up + scale staggered (logo, depois cada estatística) -->
+      <div class="seh-children">
+        <div class="seh-children-inner">
+          <div class="seh-logo-wrap mb-3 flex justify-center">
+            <img src="brand_assets/logotipo.png" alt="Praias Fluviais" class="w-72 md:w-[420px] lg:w-[560px] h-auto">
           </div>
-
-          <!-- Stats -->
-          <div class="flex flex-wrap justify-center gap-8 md:gap-16 mb-12">
-            <div class="text-center reveal-on-scroll" data-reveal-delay="300">
-              <div class="font-display text-4xl md:text-5xl font-bold text-praia-yellow-400 tracking-tight" data-counter="200" data-suffix="+">200+</div>
-              <div class="font-display text-xs uppercase tracking-widest text-white/50 mt-1" data-content="homepage.stat1Label">Praias</div>
+          <div class="seh-stats flex flex-wrap justify-center gap-8 md:gap-16">
+            <div class="seh-stat text-center">
+              <div class="font-display text-4xl md:text-5xl font-bold text-praia-yellow-400 tracking-tight" data-counter="200" data-suffix="+" data-counter-defer>200+</div>
+              <div class="font-display text-xs uppercase tracking-widest text-white/85 mt-1" data-content="homepage.stat1Label">Praias</div>
             </div>
-            <div class="text-center reveal-on-scroll" data-reveal-delay="400">
-              <div class="font-display text-4xl md:text-5xl font-bold text-praia-yellow-400 tracking-tight" data-counter="120" data-suffix="k">120k</div>
-              <div class="font-display text-xs uppercase tracking-widest text-white/50 mt-1" data-content="homepage.stat2Label">Guias Distribuídos</div>
+            <div class="seh-stat text-center">
+              <div class="font-display text-4xl md:text-5xl font-bold text-praia-yellow-400 tracking-tight" data-counter="120" data-suffix="k" data-counter-defer>120k</div>
+              <div class="font-display text-xs uppercase tracking-widest text-white/85 mt-1" data-content="homepage.stat2Label">Guias Distribuídos</div>
             </div>
-            <div class="text-center reveal-on-scroll" data-reveal-delay="500">
-              <div class="font-display text-4xl md:text-5xl font-bold text-praia-yellow-400 tracking-tight" data-counter="250" data-prefix="+" data-suffix="">+250</div>
-              <div class="font-display text-xs uppercase tracking-widest text-white/50 mt-1" data-content="homepage.stat3Label">Descontos</div>
+            <div class="seh-stat text-center">
+              <div class="font-display text-4xl md:text-5xl font-bold text-praia-yellow-400 tracking-tight" data-counter="250" data-prefix="+" data-suffix="" data-counter-defer>+250</div>
+              <div class="font-display text-xs uppercase tracking-widest text-white/85 mt-1" data-content="homepage.stat3Label">Descontos</div>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
 
-          <!-- CTAs -->
-          <div class="flex flex-col sm:flex-row items-center justify-center gap-4 reveal-on-scroll" data-reveal-delay="600">
-            <a href="rede.html" class="btn-primary inline-flex items-center gap-3 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider px-8 py-4 rounded-full shadow-layered-yellow">
-              <i data-lucide="map" class="w-5 h-5"></i>
-              <span data-content="homepage.heroCtaPrimary">Explorar Mapa</span>
+    <!-- 2. REDE / MAPA — título à esquerda, mapa vertical à direita -->
+    <section id="sec-rede" class="section section-light section-pad section-uniform" data-bg="light">
+      <div class="max-w-7xl mx-auto px-6 w-full rede-grid">
+
+        <!-- Texto + CTA (esquerda) -->
+        <div class="rede-text">
+          <span class="eyebrow eyebrow-light reveal-up">Rede Nacional</span>
+          <h2 class="h-editorial reveal-up mt-3" data-reveal-delay="100" style="color:#003A40;font-size:clamp(32px,4.6vw,58px);line-height:1.05;">
+            Descubra <span style="color:#0288D1;">todas as praias fluviais</span> e zonas balneares de Portugal Continental
+          </h2>
+          <a href="rede.html" class="cta-teal inline-flex items-center gap-3 mt-7 bg-praia-teal-800 text-praia-yellow-400 font-display font-bold text-sm uppercase tracking-wider px-8 py-4 rounded-full reveal-up" data-reveal-delay="200" style="box-shadow:0 14px 28px -10px rgba(0,58,64,0.45);">
+            <i data-lucide="map" style="width:18px;height:18px;"></i>
+            Explorar Mapa
+          </a>
+        </div>
+
+        <!-- Mapa estático vertical (direita) -->
+        <a href="rede.html" class="reveal-up block mapa-preview-wrap rede-map" data-reveal-delay="300" aria-label="Abrir mapa interactivo das praias fluviais">
+          <img src="img/homepage-mapa-rede-vertical.png" alt="Mapa de Portugal com a rede de praias fluviais e zonas balneares" class="mapa-preview-img" loading="lazy" width="800" height="1200">
+        </a>
+
+      </div>
+    </section>
+
+    <!-- 3. ONDE ENCONTRAR O GUIA -->
+    <section id="sec-guia" class="section section-dark section-pad section-uniform" data-bg="dark">
+      <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-10 lg:gap-16 items-center w-full">
+
+        <!-- Foto real do Guia em exposição -->
+        <div class="relative reveal-up guia-photo-wrap">
+          <img src="brand_assets/guia_exposicao.jpg" alt="O Guia das Praias Fluviais em exposição com passaportes e cartazes" class="guia-photo" loading="lazy">
+        </div>
+
+        <!-- Texto + CTA -->
+        <div>
+          <span class="eyebrow eyebrow-dark reveal-up">O Guia das Praias Fluviais</span>
+          <div class="reveal-up" data-reveal-delay="100" style="font-family:'Poppins',sans-serif;font-weight:800;color:#FFEB3B;line-height:0.9;margin-top:8px;font-size:clamp(64px,9vw,128px);letter-spacing:-0.04em;display:flex;align-items:baseline;gap:6px;">
+            <span>+</span><span data-counter="5" data-suffix="M">5M</span>
+          </div>
+          <h2 class="h-editorial reveal-up" data-reveal-delay="200" style="color:#fff;margin-top:6px;font-size:clamp(28px,4vw,48px);line-height:1.05;">
+            guias distribuídos
+          </h2>
+          <p class="reveal-up" data-reveal-delay="280" style="margin-top:18px;color:rgba(255,255,255,0.72);font-size:15px;line-height:1.65;max-width:460px;">
+            Há <strong style="color:#FFEB3B;">25 anos</strong> a levar a beleza de Portugal às mãos de quem viaja. Distribuímos o guia gratuitamente em postos de turismo, alojamentos e todo o tipo de estabelecimentos parceiros ao redor do país.
+          </p>
+          <a href="onde-encontrar.html" class="cta-yellow inline-flex items-center gap-3 mt-8 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider px-8 py-4 rounded-full reveal-up" data-reveal-delay="400" style="box-shadow:0 14px 28px -10px rgba(255,235,59,0.4);">
+            <i data-lucide="book-open" style="width:18px;height:18px;"></i>
+            Ver Pontos de Distribuição
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 4. PRAIAS DA SEMANA -->
+    <section id="sec-semana" class="section section-light section-pad section-uniform" data-bg="light">
+      <div class="max-w-7xl mx-auto px-6 w-full">
+        <div class="text-center mb-8">
+          <span class="eyebrow eyebrow-light reveal-up">Destaques</span>
+          <h2 class="h-editorial reveal-up" data-reveal-delay="100" style="color:#003A40;margin-top:10px;font-size:clamp(36px,5vw,64px);">
+            Praias <span style="color:#0288D1;">da Semana</span>
+          </h2>
+        </div>
+
+        <!-- Container do carrossel (preenchido via JS) -->
+        <div id="sec-semana-stage" class="semana-stage reveal-up" data-reveal-delay="200">
+          <div class="semana-feature">
+            <div class="skeleton" style="position:absolute;inset:0;"></div>
+          </div>
+          <div class="semana-thumb-list">
+            <div class="skeleton" style="height:90px;border-radius:16px;"></div>
+            <div class="skeleton" style="height:90px;border-radius:16px;"></div>
+            <div class="skeleton" style="height:90px;border-radius:16px;"></div>
+            <div class="skeleton" style="height:90px;border-radius:16px;"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. COMUNIDADE -->
+    <section id="sec-comunidade" class="section section-pad section-uniform" data-bg="dark" style="position:relative;background:linear-gradient(135deg,#005760 0%,#003A40 60%,#00282C 100%);color:#fff;">
+      <!-- Glow amarelo diagonal para diferenciar das outras secções escuras -->
+      <div style="position:absolute;inset:0;background:
+        radial-gradient(ellipse at 15% 50%, rgba(255,235,59,0.10) 0%, transparent 45%),
+        radial-gradient(ellipse at 85% 100%, rgba(255,235,59,0.06) 0%, transparent 50%);pointer-events:none;"></div>
+      <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-12 gap-12 lg:gap-16 items-center w-full relative">
+
+        <!-- Texto -->
+        <div class="lg:col-span-5">
+          <span class="eyebrow eyebrow-dark reveal-up">Comunidade</span>
+          <h2 class="h-editorial reveal-up" data-reveal-delay="100" style="color:#fff;margin-top:10px;font-size:clamp(36px,5vw,60px);line-height:1.05;">
+            Fale sobre a sua <span style="color:#FFEB3B;">experiência</span>
+          </h2>
+          <p class="reveal-up" data-reveal-delay="200" style="margin-top:18px;color:rgba(255,255,255,0.7);font-size:16px;line-height:1.6;max-width:480px;">Em cada página de uma praia fluvial pode escrever comentários e tanto responder como ler aos de outros visitantes. A comunidade ajuda quem chega a seguir.</p>
+          <a href="rede.html" class="cta-yellow inline-flex items-center gap-3 mt-8 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider px-8 py-4 rounded-full reveal-up" data-reveal-delay="300" style="box-shadow:0 14px 28px -10px rgba(255,235,59,0.4);">
+            <i data-lucide="message-square-quote" style="width:18px;height:18px;"></i>
+            Explorar Avaliações
+          </a>
+        </div>
+
+        <!-- Grid 2x2 com depth controlado -->
+        <div class="lg:col-span-7">
+          <div class="testi-grid">
+            <div class="testi-card reveal-up featured" data-reveal-delay="150">
+              <div style="display:flex;align-items:center;gap:12px;">
+                <div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#43A047,#0288D1);display:inline-flex;align-items:center;justify-content:center;color:#fff;font-family:'Poppins',sans-serif;font-weight:700;">JP</div>
+                <div>
+                  <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:14px;color:#003A40;">João P.</div>
+                </div>
+              </div>
+              <p style="margin-top:12px;font-size:14px;color:#003A40;line-height:1.5;">Praia limpa e com bom acesso. As crianças adoraram a zona rasa.</p>
+              <div style="margin-top:10px;font-size:11px;color:rgba(0,58,64,0.55);">Praia Fluvial de Avô · Jul 2025</div>
+            </div>
+            <div class="testi-card reveal-up" data-reveal-delay="250">
+              <div style="display:flex;align-items:center;gap:12px;">
+                <div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#FFEB3B,#F5B800);display:inline-flex;align-items:center;justify-content:center;color:#003A40;font-family:'Poppins',sans-serif;font-weight:700;">MS</div>
+                <div>
+                  <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:14px;color:#003A40;">Maria S.</div>
+                </div>
+              </div>
+              <p style="margin-top:12px;font-size:14px;color:#003A40;line-height:1.5;">Água cristalina e pouca gente. Voltamos para o ano sem dúvida.</p>
+              <div style="margin-top:10px;font-size:11px;color:rgba(0,58,64,0.55);">Praia Fluvial de Loriga · Ago 2025</div>
+            </div>
+            <div class="testi-card reveal-up" data-reveal-delay="350">
+              <div style="display:flex;align-items:center;gap:12px;">
+                <div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#0288D1,#003A40);display:inline-flex;align-items:center;justify-content:center;color:#fff;font-family:'Poppins',sans-serif;font-weight:700;">AC</div>
+                <div>
+                  <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:14px;color:#003A40;">Ana C.</div>
+                </div>
+              </div>
+              <p style="margin-top:12px;font-size:14px;color:#003A40;line-height:1.5;">Ambiente tranquilo, ideal para fugir ao calor da cidade. Recomendo o caminho pela ribeira.</p>
+              <div style="margin-top:10px;font-size:11px;color:rgba(0,58,64,0.55);">Albufeira do Azibo · Set 2025</div>
+            </div>
+            <div class="testi-card reveal-up featured" data-reveal-delay="450">
+              <div style="display:flex;align-items:center;gap:12px;">
+                <div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#F5B800,#43A047);display:inline-flex;align-items:center;justify-content:center;color:#003A40;font-family:'Poppins',sans-serif;font-weight:700;">RC</div>
+                <div>
+                  <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:14px;color:#003A40;">Rui C.</div>
+                </div>
+              </div>
+              <p style="margin-top:12px;font-size:14px;color:#003A40;line-height:1.5;">Excelente sítio para passar o dia em família. Voltámos no fim-de-semana seguinte.</p>
+              <div style="margin-top:10px;font-size:11px;color:rgba(0,58,64,0.55);">Praia Fluvial da Carriça · Ago 2025</div>
+            </div>
+          </div>
+          <p class="reveal-up" data-reveal-delay="550" style="margin-top:14px;color:rgba(255,255,255,0.45);font-size:11px;font-style:italic;">* Comentários apresentados meramente ilustrativos.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. PASSAPORTE — físico + digital fundido com pontos de carimbo -->
+    <section id="sec-passaporte" class="section section-light-warm section-pad section-uniform" data-bg="light-warm">
+      <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center w-full">
+
+        <!-- Imagem real do passaporte (selo + páginas com carimbos) -->
+        <div class="reveal-up passaporte-photo-wrap">
+          <img src="brand_assets/passaporte.jpg" alt="Passaporte Turístico das Praias Fluviais com selo e carimbos" class="passaporte-photo" loading="lazy">
+        </div>
+
+        <!-- Texto + CTAs -->
+        <div>
+          <span class="eyebrow eyebrow-light reveal-up">Passaporte Turístico &amp; Digital</span>
+          <h2 class="h-editorial reveal-up" data-reveal-delay="100" style="color:#003A40;margin-top:10px;font-size:clamp(34px,4.6vw,54px);line-height:1.05;">
+            <span style="color:#0288D1;">Colecione carimbos</span> das praias que visitar
+          </h2>
+          <ul style="margin-top:22px;display:flex;flex-direction:column;gap:10px;max-width:520px;">
+            <li class="reveal-up" data-reveal-delay="240" style="display:flex;gap:12px;align-items:flex-start;color:#003A40;font-size:14.5px;">
+              <span style="width:24px;height:24px;border-radius:50%;background:#003A40;color:#FFEB3B;display:inline-flex;align-items:center;justify-content:center;font-family:'Poppins',sans-serif;font-weight:700;font-size:12px;flex-shrink:0;">1</span>
+              <span><strong>Registe-se</strong>, visite uma praia e abra o seu passaporte digital.</span>
+            </li>
+            <li class="reveal-up" data-reveal-delay="290" style="display:flex;gap:12px;align-items:flex-start;color:#003A40;font-size:14.5px;">
+              <span style="width:24px;height:24px;border-radius:50%;background:#003A40;color:#FFEB3B;display:inline-flex;align-items:center;justify-content:center;font-family:'Poppins',sans-serif;font-weight:700;font-size:12px;flex-shrink:0;">2</span>
+              <span><strong>Carimbe</strong> digitalizando o código QR no local.</span>
+            </li>
+            <li class="reveal-up" data-reveal-delay="340" style="display:flex;gap:12px;align-items:flex-start;color:#003A40;font-size:14.5px;">
+              <span style="width:24px;height:24px;border-radius:50%;background:#003A40;color:#FFEB3B;display:inline-flex;align-items:center;justify-content:center;font-family:'Poppins',sans-serif;font-weight:700;font-size:12px;flex-shrink:0;">3</span>
+              <span><strong>Habilite-se</strong> a ganhar prémios e medalhas.</span>
+            </li>
+          </ul>
+          <div class="passaporte-cta-row" style="margin-top:26px;display:flex;flex-wrap:nowrap;gap:8px;align-items:center;">
+            <a href="passaporte.html" class="cta-teal inline-flex items-center gap-2 bg-praia-teal-800 text-praia-yellow-400 font-display font-bold uppercase tracking-wider rounded-full reveal-up whitespace-nowrap" data-reveal-delay="400" style="box-shadow:0 14px 28px -10px rgba(0,58,64,0.45);font-size:12px;padding:11px 16px;letter-spacing:0.08em;">
+              <i data-lucide="stamp" style="width:15px;height:15px;"></i>
+              Abrir Passaporte
             </a>
-            <a href="votar.html" class="btn-primary inline-flex items-center gap-3 bg-white/10 text-white border border-white/20 font-display font-bold text-sm uppercase tracking-wider px-8 py-4 rounded-full backdrop-blur-sm hover:bg-white/20">
-              <i data-lucide="vote" class="w-5 h-5"></i>
-              <span data-content="homepage.heroCtaSecondary">Votar Praia do Ano</span>
+            <a href="onde-encontrar.html" class="cta-outline-teal inline-flex items-center gap-2 bg-white border-2 text-praia-teal-800 font-display font-bold uppercase tracking-wider rounded-full reveal-up whitespace-nowrap" data-reveal-delay="440" style="border-color:rgba(0,58,64,0.25);font-size:12px;padding:9px 16px;letter-spacing:0.08em;">
+              <i data-lucide="book-open" style="width:15px;height:15px;"></i>
+              Onde Encontrar
+            </a>
+            <a href="onde-carimbar-passaporte.html" class="cta-outline-teal inline-flex items-center gap-2 bg-white border-2 text-praia-teal-800 font-display font-bold uppercase tracking-wider rounded-full reveal-up whitespace-nowrap" data-reveal-delay="480" style="border-color:rgba(0,58,64,0.25);font-size:12px;padding:9px 16px;letter-spacing:0.08em;">
+              <i data-lucide="map-pin" style="width:15px;height:15px;"></i>
+              Onde Carimbar
             </a>
           </div>
         </div>
 
-      </section>
+      </div>
+    </section>
 
-      <!-- ═══════════════════════════════════════ -->
-      <!-- PAGE 2: DESTAQUES / ARTIGOS             -->
-      <!-- ═══════════════════════════════════════ -->
-      <section class="magazine-page bg-praia-sand-50 relative" id="page-destaques" data-section-id="destaques">
-        <div class="noise-overlay absolute inset-0 pointer-events-none"></div>
-        <div class="relative z-10 py-20 md:py-28 lg:py-32">
-          <!-- Section header -->
-          <div class="max-w-7xl mx-auto px-6 mb-12 reveal-on-scroll">
-            <div class="section-line mx-0 mb-6"></div>
-            <div class="flex items-end justify-between">
-              <div>
-                <span class="section-label font-display text-xs uppercase tracking-[0.2em] text-praia-teal-500 font-semibold block mb-2">Destaques</span>
-                <h2 class="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-praia-teal-800 tracking-tight leading-tight" data-content="homepage.destaquesSectionTitle">
-                  Histórias do Interior de Portugal
-                </h2>
-              </div>
-              <a href="artigos.html" class="hidden md:inline-flex items-center gap-2 text-praia-teal-700 font-display text-sm font-semibold uppercase tracking-wider hover:text-praia-yellow-600 transition-colors duration-300">
-                Ver Todos <i data-lucide="arrow-right" class="w-4 h-4"></i>
-              </a>
-            </div>
-          </div>
+    <!-- 8. PRAIA DO ANO 2026 -->
+    <section id="sec-ano" class="section section-dark-rich section-pad section-uniform" data-bg="dark">
+      <div class="max-w-7xl mx-auto px-6 text-center w-full">
+        <h2 class="h-editorial reveal-up" data-reveal-delay="100" style="color:#fff;font-size:clamp(36px,5.4vw,76px);">
+          Vote na <span style="color:#FFEB3B;">Praia Fluvial do Ano</span>
+        </h2>
+        <p class="reveal-up" data-reveal-delay="200" style="margin-top:14px;color:rgba(255,255,255,0.7);font-size:16px;line-height:1.6;max-width:540px;margin-left:auto;margin-right:auto;">Vencedor anunciado a 15 Novembro. Vote até 31 Outubro 2026.</p>
+        <a href="votar.html" class="cta-yellow inline-flex items-center gap-3 mt-7 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider px-10 py-4 rounded-full reveal-up" data-reveal-delay="300" style="box-shadow:0 14px 28px -10px rgba(255,235,59,0.4);">
+          <i data-lucide="vote" style="width:18px;height:18px;"></i>
+          Votar Agora
+        </a>
 
-          <!-- Horizontal scrolling cards -->
-          <div class="cards-scroll flex gap-6 overflow-x-auto px-6 pb-6 max-w-[100vw] reveal-on-scroll" data-reveal-delay="150">
-            <!-- Card 1 -->
-            <a href="artigo.html?slug=melhores-praias-centro" class="card-interactive flex-shrink-0 w-72 md:w-80 lg:w-96 rounded-2xl overflow-hidden bg-white shadow-layered group">
-              <div class="relative h-48 md:h-56 overflow-hidden">
-                <img src="https://placehold.co/800x600/003A40/FFEB3B?text=Praias+Centro" alt="Praias do Centro" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" loading="lazy">
-                <div class="absolute inset-0 bg-gradient-to-t from-praia-teal-800/70 via-transparent to-transparent"></div>
-                <span class="badge badge-blue-flag absolute top-4 left-4">
-                  <i data-lucide="star" class="w-3 h-3"></i> Destaque
-                </span>
-              </div>
-              <div class="p-5 md:p-6">
-                <h3 class="font-display text-lg font-bold text-praia-teal-800 leading-snug mb-2 group-hover:text-praia-teal-600 transition-colors duration-300">
-                  As Melhores Praias Fluviais da Região Centro
-                </h3>
-                <p class="text-sm text-praia-sand-600 leading-relaxed-plus">
-                  Descubra as praias mais bonitas e bem equipadas do centro de Portugal, de Coimbra a Castelo Branco.
-                </p>
-              </div>
-            </a>
-
-            <!-- Card 2 -->
-            <a href="artigo.html?slug=cascatas-portugal" class="card-interactive flex-shrink-0 w-72 md:w-80 lg:w-96 rounded-2xl overflow-hidden bg-white shadow-layered group">
-              <div class="relative h-48 md:h-56 overflow-hidden">
-                <img src="https://placehold.co/800x600/005D56/FFEB3B?text=Cascatas" alt="Cascatas de Portugal" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" loading="lazy">
-                <div class="absolute inset-0 bg-gradient-to-t from-praia-teal-800/70 via-transparent to-transparent"></div>
-              </div>
-              <div class="p-5 md:p-6">
-                <h3 class="font-display text-lg font-bold text-praia-teal-800 leading-snug mb-2 group-hover:text-praia-teal-600 transition-colors duration-300">
-                  As Mais Bonitas Cascatas de Portugal
-                </h3>
-                <p class="text-sm text-praia-sand-600 leading-relaxed-plus">
-                  Um roteiro pelas quedas de água mais espetaculares do país, do Gerês ao Algarve.
-                </p>
-              </div>
-            </a>
-
-            <!-- Card 3 -->
-            <a href="artigo.html?slug=alcoutim-nova-praia" class="card-interactive flex-shrink-0 w-72 md:w-80 lg:w-96 rounded-2xl overflow-hidden bg-white shadow-layered group">
-              <div class="relative h-48 md:h-56 overflow-hidden">
-                <img src="https://placehold.co/800x600/002A2E/FFEB3B?text=Alcoutim" alt="Alcoutim" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" loading="lazy">
-                <div class="absolute inset-0 bg-gradient-to-t from-praia-teal-800/70 via-transparent to-transparent"></div>
-                <span class="badge badge-gold absolute top-4 left-4">
-                  <i data-lucide="badge-check" class="w-3 h-3"></i> Novo
-                </span>
-              </div>
-              <div class="p-5 md:p-6">
-                <h3 class="font-display text-lg font-bold text-praia-teal-800 leading-snug mb-2 group-hover:text-praia-teal-600 transition-colors duration-300">
-                  Alcoutim: A Nova Praia Fluvial do Algarve
-                </h3>
-                <p class="text-sm text-praia-sand-600 leading-relaxed-plus">
-                  Pego Fundo em Alcoutim é a mais recente adição ao mapa das praias fluviais do Algarve.
-                </p>
-              </div>
-            </a>
-
-            <!-- Card 4 -->
-            <a href="artigo.html?slug=praias-norte" class="card-interactive flex-shrink-0 w-72 md:w-80 lg:w-96 rounded-2xl overflow-hidden bg-white shadow-layered group">
-              <div class="relative h-48 md:h-56 overflow-hidden">
-                <img src="https://placehold.co/800x600/003A40/4FC3F7?text=Norte" alt="Praias do Norte" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" loading="lazy">
-                <div class="absolute inset-0 bg-gradient-to-t from-praia-teal-800/70 via-transparent to-transparent"></div>
-              </div>
-              <div class="p-5 md:p-6">
-                <h3 class="font-display text-lg font-bold text-praia-teal-800 leading-snug mb-2 group-hover:text-praia-teal-600 transition-colors duration-300">
-                  Praias Fluviais do Gerês e Minho
-                </h3>
-                <p class="text-sm text-praia-sand-600 leading-relaxed-plus">
-                  As águas cristalinas do norte de Portugal, entre cascatas e paisagens de montanha.
-                </p>
-              </div>
-            </a>
-
-            <!-- Card 5 -->
-            <a href="artigo.html?slug=praias-acessiveis" class="card-interactive flex-shrink-0 w-72 md:w-80 lg:w-96 rounded-2xl overflow-hidden bg-white shadow-layered group">
-              <div class="relative h-48 md:h-56 overflow-hidden">
-                <img src="https://placehold.co/800x600/2E7D32/FFEB3B?text=Acess%C3%ADveis" alt="Praias Acessíveis" class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" loading="lazy">
-                <div class="absolute inset-0 bg-gradient-to-t from-praia-teal-800/70 via-transparent to-transparent"></div>
-                <span class="badge badge-accessible absolute top-4 left-4">
-                  <i data-lucide="accessibility" class="w-3 h-3"></i> Acessibilidades
-                </span>
-              </div>
-              <div class="p-5 md:p-6">
-                <h3 class="font-display text-lg font-bold text-praia-teal-800 leading-snug mb-2 group-hover:text-praia-teal-600 transition-colors duration-300">
-                  Praias Fluviais Acessíveis a Todos
-                </h3>
-                <p class="text-sm text-praia-sand-600 leading-relaxed-plus">
-                  Guia completo de praias com acessibilidade para mobilidade reduzida.
-                </p>
-              </div>
-            </a>
-          </div>
-
-          <!-- Scroll hint for cards -->
-          <div class="scroll-hint flex items-center justify-center gap-2 mt-6 opacity-0">
-            <div class="w-8 h-0.5 bg-praia-teal-300/30 rounded-full"></div>
-            <span class="font-display text-[10px] uppercase tracking-widest text-praia-teal-400/50">Deslize</span>
-            <i data-lucide="chevrons-right" class="w-4 h-4 text-praia-teal-400/40 scroll-hint-arrow"></i>
-          </div>
-
-          <!-- Mobile: Ver todos -->
-          <div class="md:hidden text-center mt-6 px-6">
-            <a href="artigos.html" class="inline-flex items-center gap-2 text-praia-teal-700 font-display text-sm font-semibold uppercase tracking-wider">
-              Ver Todas as Novidades <i data-lucide="arrow-right" class="w-4 h-4"></i>
-            </a>
+        <!-- Timeline horizontal de vencedores (preenchida via JS) -->
+        <div class="mt-14 reveal-up" data-reveal-delay="400">
+          <div style="position:relative;max-width:1100px;margin:0 auto;">
+            <svg id="ano-timeline-line" viewBox="0 0 1100 4" preserveAspectRatio="none" style="position:absolute;top:14px;left:0;width:100%;height:4px;">
+              <line x1="0" y1="2" x2="1100" y2="2" stroke="#FFEB3B" stroke-width="2" stroke-dasharray="1100" stroke-dashoffset="1100" />
+            </svg>
+            <div id="ano-timeline-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px;position:relative;"></div>
           </div>
         </div>
-      </section>
 
-      <!-- ═══════════════════════════════════════ -->
-      <!-- PAGE 3: MAPA PREVIEW                    -->
-      <!-- ═══════════════════════════════════════ -->
-      <section class="magazine-page relative" id="page-mapa" data-section-id="mapa" style="background: linear-gradient(180deg, #003A40 0%, #002A2E 100%);">
-        <div class="noise-overlay absolute inset-0 pointer-events-none"></div>
-        <!-- Underwater bubbles -->
-        <div class="bubble w-2 h-2" style="left:8%; --delay:0.5s; --dur:9s; --drift:10px;"></div>
-        <div class="bubble w-3 h-3" style="left:20%; --delay:2s; --dur:8s; --drift:-12px;"></div>
-        <div class="bubble w-1.5 h-1.5" style="left:35%; --delay:0s; --dur:7s; --drift:8px;"></div>
-        <div class="bubble w-2.5 h-2.5" style="left:50%; --delay:3s; --dur:10s; --drift:-9px;"></div>
-        <div class="bubble w-2 h-2" style="left:65%; --delay:1.5s; --dur:8s; --drift:11px;"></div>
-        <div class="bubble w-1 h-1" style="left:78%; --delay:4s; --dur:6s; --drift:-6px;"></div>
-        <div class="bubble w-3 h-3" style="left:90%; --delay:2.5s; --dur:9s; --drift:7px;"></div>
-        <div class="bubble w-1.5 h-1.5" style="left:15%; --delay:5s; --dur:7s; --drift:-8px;"></div>
-        <div class="bubble w-2 h-2" style="left:42%; --delay:4.5s; --dur:8s; --drift:13px;"></div>
-        <div class="bubble w-2.5 h-2.5" style="left:72%; --delay:6s; --dur:10s; --drift:-10px;"></div>
-        <div class="bubble w-1 h-1" style="left:55%; --delay:5.5s; --dur:6s; --drift:5px;"></div>
-        <div class="bubble w-3.5 h-3.5" style="left:28%; --delay:7s; --dur:11s; --drift:-7px;"></div>
-        <div class="bubble w-2 h-2" style="left:85%; --delay:3.5s; --dur:8s; --drift:9px;"></div>
-        <div class="bubble w-1.5 h-1.5" style="left:5%; --delay:6.5s; --dur:7s; --drift:-11px;"></div>
-        <div class="bubble w-2.5 h-2.5" style="left:60%; --delay:1s; --dur:9s; --drift:6px;"></div>
-        <div class="relative z-10 py-20 md:py-28 lg:py-32">
-          <div class="max-w-7xl mx-auto px-6">
-            <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-              <!-- Text -->
-              <div>
-                <div class="section-line mb-4" style="background: linear-gradient(90deg, transparent, #FFEB3B, transparent);"></div>
-                <span class="section-label font-display text-xs uppercase tracking-[0.2em] text-praia-yellow-400 font-semibold block mb-3 reveal-on-scroll">Mapa Interativo</span>
-                <h2 class="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight mb-6 reveal-on-scroll" data-reveal-delay="100">
-                  Descubra praias fluviais<br>
-                  <span class="text-praia-yellow-400">perto de si</span>
-                </h2>
-                <p class="text-white/60 text-lg leading-relaxed-plus mb-8 max-w-lg reveal-on-scroll" data-reveal-delay="200">
-                  Explore mais de 200 praias fluviais no mapa interativo. Filtre por serviços, bandeira azul, acessibilidade e encontre a praia perfeita com um clique.
-                </p>
-                <!-- Features list -->
-                <div class="space-y-4 mb-10">
-                  <div class="flex items-center gap-4 reveal-on-scroll" data-reveal-delay="300">
-                    <div class="w-10 h-10 rounded-xl bg-praia-yellow-400/10 flex items-center justify-center flex-shrink-0">
-                      <i data-lucide="navigation" class="w-5 h-5 text-praia-yellow-400"></i>
-                    </div>
-                    <span class="text-white/80 font-body">Geolocalização: veja praias perto de si em tempo real</span>
-                  </div>
-                  <div class="flex items-center gap-4 reveal-on-scroll" data-reveal-delay="400">
-                    <div class="w-10 h-10 rounded-xl bg-praia-yellow-400/10 flex items-center justify-center flex-shrink-0">
-                      <i data-lucide="sliders-horizontal" class="w-5 h-5 text-praia-yellow-400"></i>
-                    </div>
-                    <span class="text-white/80 font-body">Filtros avançados: bar, grelhadores, nadador-salvador, e mais</span>
-                  </div>
-                  <div class="flex items-center gap-4 reveal-on-scroll" data-reveal-delay="500">
-                    <div class="w-10 h-10 rounded-xl bg-praia-yellow-400/10 flex items-center justify-center flex-shrink-0">
-                      <i data-lucide="route" class="w-5 h-5 text-praia-yellow-400"></i>
-                    </div>
-                    <span class="text-white/80 font-body">Direções: abra o Google Maps ou o Waze com um toque</span>
-                  </div>
-                </div>
+      </div>
+    </section>
 
-                <a href="rede.html" class="btn-primary inline-flex items-center gap-3 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider px-8 py-4 rounded-full shadow-layered-yellow">
-                  <i data-lucide="map" class="w-5 h-5"></i>
-                  Explorar o Mapa
-                </a>
-              </div>
+    <!-- 9. ARTIGOS — O Nosso Blog -->
+    <section id="sec-artigos" class="section section-light section-pad section-uniform" data-bg="light" style="position:relative;">
+      <!-- Faixa amarela ténue no topo -->
+      <div style="position:absolute;top:0;left:0;right:0;height:60%;background:linear-gradient(180deg,rgba(255,235,59,0.12) 0%,transparent 100%);pointer-events:none;"></div>
 
-              <!-- Mini Map -->
-              <div class="relative">
-                <div class="absolute -inset-4 bg-praia-yellow-400/5 rounded-3xl blur-xl"></div>
-                <div id="mini-map" class="relative w-full aspect-[4/3] rounded-2xl shadow-layered-lg border border-white/10 overflow-hidden">
-                </div>
-                <!-- Map overlay gradient -->
-                <div class="absolute inset-0 rounded-2xl pointer-events-none" style="box-shadow: inset 0 0 60px rgba(0,58,64,0.3);"></div>
-              </div>
-            </div>
+      <div class="max-w-7xl mx-auto px-6 relative w-full">
+        <div class="flex items-end justify-between mb-8 gap-6 flex-wrap">
+          <div>
+            <span class="eyebrow eyebrow-light reveal-up">Novidades</span>
+            <h2 class="h-editorial reveal-up" data-reveal-delay="100" style="color:#003A40;margin-top:10px;font-size:clamp(34px,4.6vw,54px);line-height:1.05;letter-spacing:-0.02em;text-transform:uppercase;">
+              O Nosso <span style="color:#0288D1;">Blog</span>
+            </h2>
           </div>
+          <a href="artigos.html" class="cta-outline-teal inline-flex items-center gap-2 bg-white border-2 px-5 py-2.5 rounded-full text-praia-teal-800 font-display text-xs font-bold uppercase tracking-wider reveal-up" data-reveal-delay="200" style="border-color:rgba(0,58,64,0.2);">
+            Ver Todos <i data-lucide="arrow-right" style="width:14px;height:14px;"></i>
+          </a>
         </div>
-      </section>
 
-      <!-- ═══════════════════════════════════════ -->
-      <!-- PAGE 4: QUICK LINKS / DESCUBRA          -->
-      <!-- ═══════════════════════════════════════ -->
-      <section class="magazine-page bg-praia-sand-50 relative" id="page-descubra" data-section-id="quicklinks">
-        <div class="noise-overlay absolute inset-0 pointer-events-none"></div>
-        <div class="relative z-10 py-20 md:py-28 lg:py-32">
-          <div class="max-w-7xl mx-auto px-6">
-            <!-- Section header -->
-            <div class="text-center mb-16 reveal-on-scroll">
-              <div class="section-line mx-auto mb-5"></div>
-              <span class="section-label font-display text-xs uppercase tracking-[0.2em] text-praia-teal-500 font-semibold block mb-3">Descubra</span>
-              <h2 class="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-praia-teal-800 tracking-tight">
-                Tudo num <span class="text-praia-yellow-600">só lugar</span>
-              </h2>
-            </div>
-
-            <!-- Quick Links Grid -->
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-5 md:gap-8 max-w-4xl mx-auto">
-              <!-- Mapa Interativo -->
-              <a href="rede.html" class="quick-link group relative rounded-2xl overflow-hidden shadow-layered aspect-square flex items-end reveal-on-scroll" data-reveal-delay="0" style="background: linear-gradient(135deg, #003A40, #005D56);">
-                <div class="absolute inset-0 flex items-center justify-center opacity-10">
-                  <i data-lucide="map" class="w-32 h-32 text-white"></i>
-                </div>
-                <div class="relative z-10 p-4 md:p-5 w-full">
-                  <div class="flex items-center gap-2 mb-1">
-                    <i data-lucide="map" class="w-4 h-4 text-praia-yellow-400"></i>
-                    <span class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-semibold">Mapa</span>
-                  </div>
-                  <p class="font-display text-sm md:text-base font-bold text-white leading-snug">Mapa Interativo</p>
-                </div>
-              </a>
-
-              <!-- Votar Praia do Ano -->
-              <a href="votar.html" class="quick-link group relative rounded-2xl overflow-hidden shadow-layered aspect-square flex items-end reveal-on-scroll" data-reveal-delay="80" style="background: linear-gradient(135deg, #0288D1, #005D56);">
-                <div class="absolute inset-0 flex items-center justify-center opacity-10">
-                  <i data-lucide="trophy" class="w-32 h-32 text-white"></i>
-                </div>
-                <div class="relative z-10 p-4 md:p-5 w-full">
-                  <div class="flex items-center gap-2 mb-1">
-                    <i data-lucide="trophy" class="w-4 h-4 text-praia-yellow-400"></i>
-                    <span class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-semibold">Galardão</span>
-                  </div>
-                  <p class="font-display text-sm md:text-base font-bold text-white leading-snug">Praia Fluvial do Ano</p>
-                </div>
-              </a>
-
-              <!-- Rede de Praias -->
-              <a href="rede.html" class="quick-link group relative rounded-2xl overflow-hidden shadow-layered aspect-square flex items-end reveal-on-scroll" data-reveal-delay="160" style="background: linear-gradient(135deg, #002A2E, #003A40);">
-                <div class="absolute inset-0 flex items-center justify-center opacity-10">
-                  <i data-lucide="map-pinned" class="w-32 h-32 text-white"></i>
-                </div>
-                <div class="relative z-10 p-4 md:p-5 w-full">
-                  <div class="flex items-center gap-2 mb-1">
-                    <i data-lucide="map-pinned" class="w-4 h-4 text-praia-yellow-400"></i>
-                    <span class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-semibold">Rede</span>
-                  </div>
-                  <p class="font-display text-sm md:text-base font-bold text-white leading-snug">Rede de Praias Fluviais</p>
-                </div>
-              </a>
-
-              <!-- Passaporte -->
-              <a href="passaporte.html" class="quick-link group relative rounded-2xl overflow-hidden shadow-layered aspect-square flex items-end reveal-on-scroll" data-reveal-delay="240" style="background: linear-gradient(135deg, #005D56, #003A40);">
-                <div class="absolute inset-0 flex items-center justify-center opacity-10">
-                  <i data-lucide="stamp" class="w-32 h-32 text-white"></i>
-                </div>
-                <div class="relative z-10 p-4 md:p-5 w-full">
-                  <div class="flex items-center gap-2 mb-1">
-                    <i data-lucide="stamp" class="w-4 h-4 text-praia-yellow-400"></i>
-                    <span class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-semibold">Passaporte</span>
-                  </div>
-                  <p class="font-display text-sm md:text-base font-bold text-white leading-snug">Passaporte Digital</p>
-                </div>
-              </a>
-
-              <!-- Onde Encontrar -->
-              <a href="onde-encontrar.html" class="quick-link group relative rounded-2xl overflow-hidden shadow-layered aspect-square flex items-end reveal-on-scroll" data-reveal-delay="320" style="background: linear-gradient(135deg, #43A047, #2E7D32);">
-                <div class="absolute inset-0 flex items-center justify-center opacity-10">
-                  <i data-lucide="map-pin" class="w-32 h-32 text-white"></i>
-                </div>
-                <div class="relative z-10 p-4 md:p-5 w-full">
-                  <div class="flex items-center gap-2 mb-1">
-                    <i data-lucide="map-pin" class="w-4 h-4 text-praia-yellow-400"></i>
-                    <span class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-semibold">Guia</span>
-                  </div>
-                  <p class="font-display text-sm md:text-base font-bold text-white leading-snug">Onde Encontrar</p>
-                </div>
-              </a>
-
-              <!-- Descontos -->
-              <a href="descontos.html" class="quick-link group relative rounded-2xl overflow-hidden shadow-layered aspect-square flex items-end reveal-on-scroll" data-reveal-delay="400" style="background: linear-gradient(135deg, #F5B800, #F9C916);">
-                <div class="absolute inset-0 flex items-center justify-center opacity-10">
-                  <i data-lucide="ticket-percent" class="w-32 h-32 text-praia-teal-800"></i>
-                </div>
-                <div class="relative z-10 p-4 md:p-5 w-full">
-                  <div class="flex items-center gap-2 mb-1">
-                    <i data-lucide="tag" class="w-4 h-4 text-praia-teal-800"></i>
-                    <span class="font-display text-xs uppercase tracking-wider text-praia-teal-800 font-semibold">Descontos</span>
-                  </div>
-                  <p class="font-display text-sm md:text-base font-bold text-praia-teal-800 leading-snug">Aproveite os Descontos</p>
-                </div>
-              </a>
-            </div>
-          </div>
+        <div id="sec-artigos-cards" class="artigos-grid">
+          <div class="artigo-skeleton"></div>
+          <div class="artigo-skeleton"></div>
+          <div class="artigo-skeleton"></div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- ═══════════════════════════════════════ -->
-      <!-- PAGE 5: PRAIA DO ANO                    -->
-      <!-- ═══════════════════════════════════════ -->
-      <section class="magazine-page relative" id="page-praia-ano" data-section-id="votar" style="background: linear-gradient(180deg, #002A2E 0%, #003A40 50%, #005D56 100%);">
-        <div class="noise-overlay absolute inset-0 pointer-events-none"></div>
-        <!-- Underwater bubbles -->
-        <div class="bubble w-2.5 h-2.5" style="left:10%; --delay:1s; --dur:9s; --drift:10px;"></div>
-        <div class="bubble w-2 h-2" style="left:22%; --delay:3s; --dur:7s; --drift:-8px;"></div>
-        <div class="bubble w-3 h-3" style="left:40%; --delay:0s; --dur:10s; --drift:14px;"></div>
-        <div class="bubble w-1.5 h-1.5" style="left:55%; --delay:2.5s; --dur:8s; --drift:-6px;"></div>
-        <div class="bubble w-2 h-2" style="left:68%; --delay:4s; --dur:9s; --drift:9px;"></div>
-        <div class="bubble w-1 h-1" style="left:80%; --delay:1.5s; --dur:6s; --drift:-11px;"></div>
-        <div class="bubble w-3.5 h-3.5" style="left:92%; --delay:5s; --dur:11s; --drift:7px;"></div>
-        <div class="bubble w-1.5 h-1.5" style="left:30%; --delay:6s; --dur:7s; --drift:-9px;"></div>
-        <div class="bubble w-2 h-2" style="left:48%; --delay:4.5s; --dur:8s; --drift:12px;"></div>
-        <div class="bubble w-2.5 h-2.5" style="left:75%; --delay:3.5s; --dur:10s; --drift:-7px;"></div>
-        <div class="bubble w-1 h-1" style="left:15%; --delay:5.5s; --dur:6s; --drift:5px;"></div>
-        <div class="bubble w-3 h-3" style="left:62%; --delay:7s; --dur:9s; --drift:-13px;"></div>
-        <div class="bubble w-2 h-2" style="left:85%; --delay:2s; --dur:8s; --drift:8px;"></div>
-        <div class="relative z-10 py-20 md:py-28 lg:py-32">
-          <div class="max-w-7xl mx-auto px-6">
-            <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-              <!-- Left: Info -->
-              <div>
-                <div class="inline-flex items-center gap-2 bg-praia-yellow-400/10 border border-praia-yellow-400/20 rounded-full px-4 py-1.5 mb-6 reveal-on-scroll">
-                  <i data-lucide="trophy" class="w-4 h-4 text-praia-yellow-400"></i>
-                  <span class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-semibold" data-content="homepage.yearSectionLabel">Galardão Anual</span>
-                </div>
+    <!-- 10. LOJA — concisa, fundo verde escuro com acento amarelo -->
+    <section id="sec-loja" class="section section-dark section-pad" data-bg="dark" style="padding:clamp(48px,6vw,72px) 0;position:relative;">
+      <!-- Glow ambiente amarelo subtil -->
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(255,235,59,0.08) 0%,transparent 60%);pointer-events:none;"></div>
+      <div class="max-w-3xl mx-auto px-6 text-center relative w-full">
+        <span class="eyebrow eyebrow-dark reveal-up">Loja</span>
+        <h2 class="h-editorial reveal-up" data-reveal-delay="100" style="color:#fff;margin-top:10px;font-size:clamp(30px,4.4vw,52px);line-height:1.05;">
+          Adquira a nossa <span style="color:#FFEB3B;">merchandising</span>
+        </h2>
+        <a href="loja.html" class="cta-yellow inline-flex items-center gap-3 mt-7 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider px-9 py-4 rounded-full reveal-up" data-reveal-delay="200" style="box-shadow:0 14px 28px -10px rgba(255,235,59,0.4);">
+          <i data-lucide="shopping-bag" style="width:18px;height:18px;"></i>
+          Visitar Loja
+        </a>
+      </div>
+    </section>
 
-                <h2 class="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight mb-6 reveal-on-scroll" data-reveal-delay="100" data-content="homepage.yearSectionTitle">
-                  Praia Fluvial do Ano 2026
-                </h2>
-                <p class="text-white/60 text-lg leading-relaxed-plus mb-8 max-w-lg reveal-on-scroll" data-reveal-delay="200" data-content="homepage.yearSectionDesc">
-                  Todos os anos, milhares de portugueses elegem a sua praia fluvial favorita. O galardão "Praia Fluvial do Ano" distingue a excelência nas praias fluviais de Portugal.
-                </p>
+    <!-- 11. CONTACTOS — última secção, branco com acento amarelo subtil -->
+    <section id="sec-contactos" class="section section-pad" data-bg="contactos" style="position:relative;padding:clamp(48px,6vw,72px) 0;background:#FFFFFF;">
+      <!-- Faixa decorativa amarela subtil para profundidade -->
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(255,235,59,0.18) 0%,transparent 55%);pointer-events:none;"></div>
+      <div class="max-w-3xl mx-auto px-6 text-center relative w-full">
+        <span class="eyebrow reveal-up" style="color:#003A40;">Fale Connosco</span>
+        <h2 class="h-editorial reveal-up" data-reveal-delay="100" style="color:#003A40;margin-top:10px;font-size:clamp(32px,4.6vw,52px);line-height:1.05;">
+          Estamos a um <span style="color:#0288D1;">clique</span>
+        </h2>
 
-                <a href="votar.html" class="btn-primary inline-flex items-center gap-3 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider px-8 py-4 rounded-full shadow-layered-yellow mb-12">
-                  <i data-lucide="vote" class="w-5 h-5"></i>
-                  Votar Agora
-                </a>
-              </div>
-
-              <!-- Right: Winners Timeline -->
-              <div class="relative">
-                <div class="absolute left-6 top-0 bottom-0 w-0.5 timeline-line"></div>
-
-                <!-- Winner 2025 -->
-                <div class="relative pl-16 mb-10 reveal-on-scroll" data-reveal-delay="100">
-                  <div class="absolute left-4 top-1 w-5 h-5 rounded-full bg-praia-yellow-400 border-4 border-praia-teal-800 shadow-lg"></div>
-                  <div class="bg-white/5 border border-white/10 rounded-xl p-5 backdrop-blur-sm">
-                    <span class="font-display text-xs uppercase tracking-wider text-praia-yellow-400 font-bold">2025 · Vencedora</span>
-                    <h3 class="font-display text-xl font-bold text-white mt-1">Zona de Fruição Ribeirinha da Carriça</h3>
-                    <p class="text-white/50 text-sm mt-1">São João da Serra, Oliveira de Frades</p>
-                  </div>
-                </div>
-
-                <!-- Winner 2024 -->
-                <div class="relative pl-16 mb-10 reveal-on-scroll" data-reveal-delay="250">
-                  <div class="absolute left-4 top-1 w-5 h-5 rounded-full bg-praia-yellow-400/60 border-4 border-praia-teal-800"></div>
-                  <div class="bg-white/5 border border-white/10 rounded-xl p-5 backdrop-blur-sm">
-                    <span class="font-display text-xs uppercase tracking-wider text-praia-yellow-400/80 font-bold">2024 · 7.175 votos</span>
-                    <h3 class="font-display text-lg font-bold text-white/90 mt-1">Praia Fluvial de Avô</h3>
-                    <p class="text-white/40 text-sm mt-1">Oliveira do Hospital</p>
-                  </div>
-                </div>
-
-                <!-- Winner 2023 -->
-                <div class="relative pl-16 mb-10 reveal-on-scroll" data-reveal-delay="400">
-                  <div class="absolute left-4 top-1 w-5 h-5 rounded-full bg-praia-yellow-400/40 border-4 border-praia-teal-800"></div>
-                  <div class="bg-white/5 border border-white/10 rounded-xl p-5 backdrop-blur-sm">
-                    <span class="font-display text-xs uppercase tracking-wider text-praia-yellow-400/60 font-bold">2023 · 7.357 votos</span>
-                    <h3 class="font-display text-lg font-bold text-white/80 mt-1">Praia Fluvial do Vimieiro</h3>
-                    <p class="text-white/40 text-sm mt-1">Penacova, Coimbra</p>
-                  </div>
-                </div>
-
-                <!-- Revelation 2024 -->
-                <div class="relative pl-16 reveal-on-scroll" data-reveal-delay="550">
-                  <div class="absolute left-4 top-1 w-5 h-5 rounded-full bg-praia-blue-400/60 border-4 border-praia-teal-800"></div>
-                  <div class="bg-white/5 border border-white/10 rounded-xl p-5 backdrop-blur-sm">
-                    <span class="font-display text-xs uppercase tracking-wider text-praia-blue-400 font-bold">2024 · Revelação Norte</span>
-                    <h3 class="font-display text-lg font-bold text-white/80 mt-1">Praia do Cavadinho</h3>
-                    <p class="text-white/40 text-sm mt-1">Braga</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div class="reveal-up mt-6 flex flex-wrap items-center justify-center gap-3" data-reveal-delay="200">
+          <a href="contactos.html" class="cta-teal inline-flex items-center gap-3 bg-praia-teal-800 text-praia-yellow-400 font-display font-bold text-sm uppercase tracking-wider px-9 py-4 rounded-full" style="box-shadow:0 14px 28px -10px rgba(0,58,64,0.45);">
+            <i data-lucide="mail" style="width:18px;height:18px;"></i>
+            Contactos
+          </a>
+          <a href="https://www.facebook.com/praiasfluviais" target="_blank" rel="noopener" aria-label="Facebook" class="social-orb-light">
+            <svg style="width:22px;height:22px;" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+          <a href="https://www.instagram.com/guiadaspraiasfluviais" target="_blank" rel="noopener" aria-label="Instagram" class="social-orb-light">
+            <svg style="width:22px;height:22px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
         </div>
-      </section>
-
-    </div><!-- end magazine-container -->
+      </div>
+    </section>
 
   </main>
+
+
 
   <!-- ═══════════════════════════════════════ -->
   <!-- FOOTER                                  -->
@@ -868,110 +1300,467 @@
     </div>
   </nav>
 
-  <!-- Page-turn script -->
-  <script src="js/page-turn.js"></script>
-
-  <!-- Initialize icons & mini-map -->
+  <!-- Initialize icons -->
   <script>
     // Lucide icons
     lucide.createIcons();
 
-    // Mini-map on homepage
-    document.addEventListener('DOMContentLoaded', () => {
-      const mapEl = document.getElementById('mini-map');
-      if (!mapEl) return;
-
-      const map = L.map('mini-map', {
-        center: [39.5, -8.0],
-        zoom: 7,
-        zoomControl: false,
-        dragging: false,
-        scrollWheelZoom: false,
-        doubleClickZoom: false,
-        touchZoom: false,
-        attributionControl: false,
-      });
-
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 18,
-      }).addTo(map);
-
-      // Sample beach markers for preview
-      const sampleBeaches = [
-        [41.55, -8.43], [41.72, -8.16], [40.95, -8.13],
-        [40.28, -7.88], [40.10, -8.00], [39.78, -8.25],
-        [40.37, -7.70], [40.05, -7.95], [39.98, -7.49],
-        [39.52, -8.07], [40.67, -7.92], [41.17, -7.79],
-        [40.55, -8.37], [39.20, -7.42], [37.47, -7.47],
-        [40.80, -7.53], [41.40, -7.32], [40.65, -7.30],
-      ];
-
-      const markerIcon = L.divIcon({
-        className: '',
-        html: '<div style="width:10px;height:10px;border-radius:50%;background:#FFEB3B;border:2px solid #003A40;box-shadow:0 0 8px rgba(255,235,59,0.4);"></div>',
-        iconSize: [10, 10],
-        iconAnchor: [5, 5],
-      });
-
-      sampleBeaches.forEach(coords => {
-        L.marker(coords, { icon: markerIcon }).addTo(map);
-      });
-    });
-
-    // ─── Counter Animation (slow easing on last digits) ───
+    // ─── Counter Animation ──
+    // Per-element observer + flag (sem global hasAnimated que causava
+    // animação prematura de outros counters). Pré-povoamento a "0" em todos
+    // os counters animáveis para evitar o flash 5→0→5. Duração adaptativa:
+    // counters pequenos (target≤10) animam rapidamente para parecerem responsivos.
     document.addEventListener('DOMContentLoaded', () => {
       const counters = document.querySelectorAll('[data-counter]');
       if (!counters.length) return;
 
-      // Set final values immediately as fallback (visible if animation never runs)
+      const fmt = (target, prefix, suffix) =>
+        prefix + target.toLocaleString('pt-PT') + suffix;
+
       counters.forEach(el => {
         const target = parseInt(el.dataset.counter, 10);
         const prefix = el.dataset.prefix || '';
         const suffix = el.dataset.suffix || '';
-        el.textContent = prefix + target.toLocaleString('pt-PT') + suffix;
+        // Sempre pré-povoar a "0" para todos — evita flash do valor final
+        // ao entrar em viewport.
+        el.textContent = fmt(0, prefix, suffix);
+        // Fallback: se nada disparar, garantir que mostra o target em 4s
+        el._fallbackTimer = setTimeout(() => {
+          if (!el._animated) el.textContent = fmt(target, prefix, suffix);
+        }, 4000);
       });
 
-      // Only animate on first visit (not on tab-switch back)
-      let hasAnimated = false;
-
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (!entry.isIntersecting || hasAnimated) return;
-          hasAnimated = true;
-          counters.forEach(el => animateCounter(el));
-        });
-      }, { threshold: 0.5 });
-
-      counters.forEach(el => observer.observe(el));
-
-      function easeInOutCubic(t) {
-        return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-      }
+      function easeOutQuart(t) { return 1 - Math.pow(1 - t, 4); }
 
       function animateCounter(el) {
+        if (el._animated) return;
+        el._animated = true;
+        clearTimeout(el._fallbackTimer);
+
         const target = parseInt(el.dataset.counter, 10);
         const prefix = el.dataset.prefix || '';
         const suffix = el.dataset.suffix || '';
-        const duration = 2800;
         const revealDelay = parseInt(el.closest('[data-reveal-delay]')?.dataset.revealDelay || 0);
 
-        // Start from 0 for the animation
-        el.textContent = prefix + '0' + suffix;
+        // Duração adaptativa: pequena para targets pequenos (5M), maior para
+        // targets grandes (200, 120, 250). Cap entre 700ms e 1800ms.
+        const duration = Math.max(700, Math.min(1800, 600 + target * 4));
 
         setTimeout(() => {
           const startTime = performance.now();
           function update(now) {
             const elapsed = now - startTime;
             const progress = Math.min(elapsed / duration, 1);
-            const eased = easeInOutCubic(progress);
+            const eased = easeOutQuart(progress);
             const current = Math.round(eased * target);
-            el.textContent = prefix + current.toLocaleString('pt-PT') + suffix;
+            el.textContent = fmt(current, prefix, suffix);
             if (progress < 1) requestAnimationFrame(update);
           }
           requestAnimationFrame(update);
-        }, revealDelay + 350);
+        }, revealDelay + 200);
       }
+
+      // Observer por-elemento: cada counter anima quando ele próprio entra em
+      // viewport. Nunca dispara antecipadamente por causa de outros counters.
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          if (entry.target.hasAttribute('data-counter-defer')) return;
+          animateCounter(entry.target);
+          observer.unobserve(entry.target);
+        });
+      }, { threshold: 0.4 });
+
+      counters.forEach(el => {
+        if (!el.hasAttribute('data-counter-defer')) observer.observe(el);
+      });
+
+      // Expor para os counters defer (hero scroll-expand)
+      window.__animateCounter = animateCounter;
     });
+  </script>
+  <!-- Praias da Semana + Comunidade — popula 3 cards + estrelas + nº avaliações -->
+  <script>
+    // Render the Artigos section. Independent of other data fetches so it is
+    // resilient to slow/failed settings/beaches loads. Caches with no-store to
+    // avoid stale skeletons when the JSON changes.
+    async function renderArtigos() {
+      const artContainer = document.getElementById('sec-artigos-cards');
+      if (!artContainer) return;
+
+      const renderError = (msg) => {
+        artContainer.innerHTML = `
+          <div style="grid-column:1/-1;text-align:center;padding:40px 20px;color:rgba(0,58,64,0.55);">
+            <i data-lucide="alert-circle" style="width:28px;height:28px;color:rgba(0,58,64,0.55);margin:0 auto 8px;display:block;"></i>
+            <div style="font-size:14px;">${msg}</div>
+            <a href="artigos.html" style="display:inline-flex;align-items:center;gap:6px;margin-top:14px;color:#003A40;font-family:'Poppins',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;">Ver Todos <i data-lucide="arrow-right" style="width:14px;height:14px;"></i></a>
+          </div>`;
+        if (window.lucide) lucide.createIcons();
+      };
+
+      try {
+        const res = await fetch('data/articles.json', { cache: 'no-store' });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const articles = await res.json();
+        const published = (Array.isArray(articles) ? articles : [])
+          .filter(a => a && a.status === 'published')
+          .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0))
+          .slice(0, 3);
+
+        if (!published.length) {
+          renderError('Sem artigos publicados.');
+          return;
+        }
+
+        const formatDate = (iso) => {
+          try {
+            const d = new Date(iso);
+            if (isNaN(d.getTime())) return '';
+            return d.toLocaleDateString('pt-PT', { day: '2-digit', month: 'short', year: 'numeric' });
+          } catch (_) { return ''; }
+        };
+
+        artContainer.innerHTML = published.map((a, i) => {
+          const photo = a.image || '';
+          const excerpt = (a.excerpt || '').slice(0, 140);
+          const dateStr = formatDate(a.date);
+          const badge = (i === 0) ? 'Destaque' : (a.featured ? 'Em destaque' : '');
+          const slugSafe = encodeURIComponent(a.slug || '');
+          const title = (a.title || '').replace(/</g, '&lt;');
+          const exc = excerpt.replace(/</g, '&lt;');
+          return `
+            <a href="artigo.html?slug=${slugSafe}" class="artigo-card reveal-up" data-reveal-delay="${i * 70}">
+              <div class="artigo-img" style="${photo ? `background-image:url('${photo}')` : ''}">
+                ${badge ? `<span class="artigo-badge">${badge}</span>` : ''}
+              </div>
+              <div class="artigo-body">
+                <div class="artigo-title">${title}</div>
+                ${exc ? `<div class="artigo-excerpt">${exc}${(a.excerpt || '').length > 140 ? '…' : ''}</div>` : ''}
+                ${dateStr ? `<div class="artigo-meta"><i data-lucide="calendar" style="width:12px;height:12px;"></i> ${dateStr}</div>` : ''}
+                <span class="artigo-arrow">Ler artigo <i data-lucide="arrow-right" style="width:12px;height:12px;"></i></span>
+              </div>
+            </a>
+          `;
+        }).join('');
+
+        if (window.lucide) lucide.createIcons();
+
+        // Trigger GSAP reveal on the freshly injected cards (initial pass already ran).
+        if (window.gsap && window.ScrollTrigger) {
+          artContainer.querySelectorAll('.reveal-up').forEach(el => {
+            const delay = parseInt(el.dataset.revealDelay || '0', 10);
+            gsap.fromTo(el,
+              { opacity: 0, y: 28 },
+              { opacity: 1, y: 0, duration: 0.7, delay: delay / 1000, ease: 'power2.out',
+                scrollTrigger: { trigger: el, start: 'top 92%', toggleActions: 'play none none none' } }
+            );
+          });
+          ScrollTrigger.refresh();
+        }
+      } catch (err) {
+        console.error('Erro a carregar Artigos:', err);
+        renderError('Não foi possível carregar os artigos.');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Fire articles render immediately, in parallel with the rest of the page.
+      renderArtigos();
+
+      let settings = {};
+      let beaches = [];
+
+      try {
+        const [s, b] = await Promise.all([
+          fetch('data/settings.json').then(r => r.json()),
+          fetch('data/beaches.json').then(r => r.json()),
+        ]);
+        settings = s;
+        beaches = b;
+      } catch (err) {
+        console.error('Erro ao carregar settings/beaches:', err);
+      }
+
+      // Helpers reused across sections
+      const photoOf = (b) => b?.thumbnail || (Array.isArray(b?.photos) && b.photos[0]) || '';
+      const shuffle = (arr) => {
+        const a = arr.slice();
+        for (let i = a.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+      };
+
+      // ── Praias da Semana — 5 praias semanais (rotação fixa por semana ISO),
+      // ordem aleatória a cada visita, com setas de navegação. ──
+      const stage = document.getElementById('sec-semana-stage');
+      if (stage && Array.isArray(beaches) && beaches.length) {
+        const pool = (settings.featuredBeaches && settings.featuredBeaches.length)
+          ? settings.featuredBeaches
+          : (settings.homeFeaturedBeachIds || []);
+
+        // Mulberry32 — pequeno PRNG determinístico (semente: ano*100+semana)
+        function mulberry32(seed) {
+          return function() {
+            seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+            let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+            t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+            return ((t ^ t >>> 14) >>> 0) / 4294967296;
+          };
+        }
+        function seededShuffle(arr, seed) {
+          const r = mulberry32(seed);
+          const a = arr.slice();
+          for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(r() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+          }
+          return a;
+        }
+        function isoWeek(d) {
+          const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+          const day = t.getUTCDay() || 7;
+          t.setUTCDate(t.getUTCDate() + 4 - day);
+          const yearStart = new Date(Date.UTC(t.getUTCFullYear(), 0, 1));
+          const week = Math.ceil(((t - yearStart) / 86400000 + 1) / 7);
+          return { year: t.getUTCFullYear(), week };
+        }
+
+        // Pool resolvido a partir do admin; se não houver, usa todas as praias
+        let candidates = pool
+          .map(id => beaches.find(x => x.id === id))
+          .filter(Boolean);
+        if (candidates.length < 5) {
+          const extras = beaches.filter(b => !candidates.includes(b));
+          candidates = candidates.concat(extras);
+        }
+
+        // 1) Selecionar as 5 praias da semana — sementeira fixa por semana ISO,
+        //    para que sejam as mesmas durante a semana e mudem no mesmo dia.
+        const { year, week } = isoWeek(new Date());
+        const weekSeed = year * 100 + week;
+        const weeklyPicks = seededShuffle(candidates, weekSeed).slice(0, 5);
+
+        // 2) Embaralhar a ordem de exibição em cada visita (sem semente).
+        const picks = shuffle(weeklyPicks);
+
+        if (!picks.length) {
+          stage.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:rgba(0,58,64,0.55);">Sem praias seleccionadas.</p>';
+        } else {
+          const slidesHtml = picks.map((p, i) => {
+            const photo = photoOf(p);
+            return `<div class="slide${i === 0 ? ' is-active' : ''}" data-idx="${i}" style="background-image:url('${photo}');"></div>`;
+          }).join('');
+
+          const captionsHtml = picks.map((p, i) => `
+            <div class="caption" data-cap="${i}" style="display:${i === 0 ? 'block' : 'none'};">
+              <div style="font-family:'Poppins',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.25em;text-transform:uppercase;color:#FFEB3B;">Em destaque</div>
+              <div style="font-family:'Poppins',sans-serif;font-weight:800;font-size:clamp(28px,3.4vw,40px);line-height:1.05;letter-spacing:-0.01em;margin-top:8px;">${p.name || ''}</div>
+              <div style="font-size:13px;color:rgba(255,255,255,0.78);margin-top:4px;">${p.municipality || ''}${p.district ? ' · ' + p.district : ''}</div>
+              <a href="praia.html?id=${encodeURIComponent(p.id)}" style="display:inline-flex;align-items:center;gap:10px;margin-top:14px;background:#FFEB3B;color:#003A40;font-family:'Poppins',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;padding:10px 16px;border-radius:99px;text-decoration:none;">
+                <i data-lucide="arrow-right" style="width:14px;height:14px;"></i> Ver Praia
+              </a>
+            </div>
+          `).join('');
+
+          const thumbsHtml = picks.map((p, i) => {
+            const photo = photoOf(p);
+            return `
+              <a class="semana-thumb${i === 0 ? ' is-active' : ''}" data-thumb="${i}" href="praia.html?id=${encodeURIComponent(p.id)}">
+                <div class="thumb-img" style="background-image:url('${photo}');"></div>
+                <div style="min-width:0;">
+                  <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:14px;color:#003A40;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.name || ''}</div>
+                  <div style="font-size:12px;color:rgba(0,58,64,0.75);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.municipality || ''}</div>
+                </div>
+                <span class="thumb-progress"></span>
+              </a>
+            `;
+          }).join('');
+
+          stage.innerHTML = `
+            <div class="semana-feature">
+              ${slidesHtml}
+              ${captionsHtml}
+              <button type="button" class="semana-arrow prev" aria-label="Praia anterior">
+                <i data-lucide="chevron-left" style="width:16px;height:16px;"></i>
+              </button>
+              <button type="button" class="semana-arrow next" aria-label="Praia seguinte">
+                <i data-lucide="chevron-right" style="width:16px;height:16px;"></i>
+              </button>
+            </div>
+            <div class="semana-thumb-list">${thumbsHtml}</div>
+          `;
+
+          // Carousel logic
+          const slides = stage.querySelectorAll('.slide');
+          const captions = stage.querySelectorAll('.caption');
+          const thumbs = stage.querySelectorAll('.semana-thumb');
+          const progressBars = stage.querySelectorAll('.thumb-progress');
+          let active = 0;
+          let timer = null;
+          let progressTimer = null;
+          const DURATION = 5500;
+
+          function show(idx) {
+            slides.forEach((s, i) => s.classList.toggle('is-active', i === idx));
+            captions.forEach((c, i) => c.style.display = i === idx ? 'block' : 'none');
+            thumbs.forEach((t, i) => t.classList.toggle('is-active', i === idx));
+            progressBars.forEach((b, i) => b.style.width = '0%');
+            active = idx;
+          }
+          function next() { show((active + 1) % picks.length); startProgress(); }
+          function prev() { show((active - 1 + picks.length) % picks.length); startProgress(); }
+          function startProgress() {
+            clearInterval(progressTimer);
+            const start = performance.now();
+            progressTimer = setInterval(() => {
+              const elapsed = performance.now() - start;
+              const pct = Math.min(100, (elapsed / DURATION) * 100);
+              if (progressBars[active]) progressBars[active].style.width = pct + '%';
+              if (pct >= 100) clearInterval(progressTimer);
+            }, 60);
+          }
+          function startAuto() {
+            clearInterval(timer);
+            timer = setInterval(next, DURATION);
+            startProgress();
+          }
+          thumbs.forEach((t, i) => {
+            t.addEventListener('click', (e) => {
+              if (e.target.closest('.thumb-img') || !e.target.closest('a')) {
+                e.preventDefault();
+                show(i);
+                startAuto();
+              }
+            });
+            t.addEventListener('mouseenter', () => { clearInterval(timer); clearInterval(progressTimer); });
+            t.addEventListener('mouseleave', startAuto);
+          });
+
+          // Setas — clique avança/retrocede e reinicia o auto-rotate
+          const prevBtn = stage.querySelector('.semana-arrow.prev');
+          const nextBtn = stage.querySelector('.semana-arrow.next');
+          if (prevBtn) prevBtn.addEventListener('click', () => { prev(); startAuto(); });
+          if (nextBtn) nextBtn.addEventListener('click', () => { next(); startAuto(); });
+
+          startAuto();
+        }
+      }
+
+      // ── Praia do Ano — timeline dinâmica (top 4 vencedores, mais recentes à direita) ──
+      const tlGrid = document.getElementById('ano-timeline-grid');
+      if (tlGrid) {
+        const winners = (settings.previousWinners || [])
+          .map(w => {
+            const yearRaw = w.year;
+            const yearNum = (typeof yearRaw === 'string')
+              ? parseInt(yearRaw.split('-').pop(), 10)
+              : (parseInt(yearRaw, 10) || 0);
+            const winnerStr = (w.winner || '').trim();
+            const parts = winnerStr.split(' - ').map(x => (x || '').trim());
+            const namePart = parts[0] || '';
+            const locPart = parts.slice(1).join(' - ') || '';
+            const cleanName = namePart
+              .replace(/^Praia Fluvial (de |do |da |dos |das )?/i, '')
+              .replace(/^Albufeira (de |do |da )?/i, '')
+              .trim();
+            return {
+              yearLabel: String(yearRaw),
+              yearNum,
+              name: cleanName || namePart || '—',
+              location: locPart || ''
+            };
+          })
+          .filter(w => w.name && w.name !== '—')
+          .sort((a, b) => a.yearNum - b.yearNum)
+          .slice(-4);
+
+        if (!winners.length) {
+          tlGrid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:rgba(255,255,255,0.55);">Sem vencedores registados.</p>';
+        } else {
+          tlGrid.innerHTML = winners.map((w, i) => `
+            <div style="text-align:center;opacity:0;transform:translateY(20px);transition:opacity 0.7s ease ${i * 0.12}s,transform 0.7s ease ${i * 0.12}s;" data-tl-anim>
+              <div style="width:32px;height:32px;border-radius:50%;background:#FFEB3B;border:4px solid #003A40;margin:0 auto;"></div>
+              <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.2em;color:#FFEB3B;text-transform:uppercase;margin-top:14px;">${w.yearLabel}</div>
+              <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:18px;color:#fff;margin-top:6px;">${w.name}</div>
+              ${w.location ? `<div style="font-size:13px;color:rgba(255,255,255,0.55);margin-top:2px;">${w.location}</div>` : ''}
+            </div>
+          `).join('');
+          // Trigger animation when timeline scrolls into view
+          const obs = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+              if (e.isIntersecting) {
+                tlGrid.querySelectorAll('[data-tl-anim]').forEach(el => {
+                  el.style.opacity = '1';
+                  el.style.transform = 'translateY(0)';
+                });
+                obs.disconnect();
+              }
+            });
+          }, { threshold: 0.3 });
+          obs.observe(tlGrid);
+        }
+      }
+
+      // ── Artigos are rendered independently at the start of DOMContentLoaded ──
+
+      // Re-render lucide icons for any newly-injected HTML
+      if (window.lucide) lucide.createIcons();
+    });
+  </script>
+  <!-- GSAP scroll-driven animations da homepage -->
+  <script>
+    (function () {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        // prefers-reduced-motion: skip GSAP, force all reveal-up to visible state
+        document.querySelectorAll('.reveal-up, .reveal-fade').forEach(el => {
+          el.style.opacity = '1';
+          el.style.transform = 'none';
+        });
+        return;
+      }
+      if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+        console.warn('GSAP/ScrollTrigger nao carregados; reveal-up fica invisivel.');
+        return;
+      }
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Espera dois ticks para garantir que conteúdo injectado via JS já está no DOM
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        initRevealUp();
+        initTimelineDraw();
+      }));
+
+      // ── Reveal universal de elementos com .reveal-up ──
+      function initRevealUp() {
+        document.querySelectorAll('.reveal-up').forEach(el => {
+          const delay = parseInt(el.dataset.revealDelay || '0', 10);
+          gsap.fromTo(el,
+            { opacity: 0, y: 28 },
+            {
+              opacity: 1, y: 0, duration: 0.7,
+              delay: delay / 1000,
+              ease: 'power2.out',
+              scrollTrigger: { trigger: el, start: 'top 92%', toggleActions: 'play none none none' }
+            }
+          );
+        });
+      }
+
+      // ── Timeline da Praia do Ano: linha desenha-se L para R ──
+      function initTimelineDraw() {
+        const lineEl = document.querySelector('#ano-timeline-line line');
+        if (!lineEl) return;
+        gsap.to(lineEl, {
+          attr: { 'stroke-dashoffset': 0 },
+          ease: 'power2.out',
+          duration: 1.5,
+          scrollTrigger: { trigger: '#sec-ano', start: 'top 60%', toggleActions: 'play none none none' }
+        });
+      }
+
+    })();
   </script>
   <script src="js/auth.js"></script>
 

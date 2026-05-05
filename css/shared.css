@@ -984,9 +984,9 @@ html {
 .wq-card {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 18px 20px;
-  border-radius: 14px;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 12px;
   background: #FAF8F5;
   border: 1px solid #E5DED1;
 }
@@ -995,8 +995,8 @@ html {
     position: relative;
     flex-wrap: wrap;
     align-items: center;
-    gap: 14px;
-    padding: 18px 18px 16px;
+    gap: 12px;
+    padding: 14px 14px 12px;
   }
   /* Drop + headline ficam em linha no topo (drop à esquerda, headline a preencher) */
   .wq-card .wq-headline { flex: 1; min-width: 0; }
@@ -1004,9 +1004,9 @@ html {
   .wq-card .wq-meta {
     flex-basis: 100%;
     border-top: 1px solid rgba(146, 128, 102, 0.18);
-    padding-top: 12px;
+    padding-top: 10px;
   }
-  .wq-card .wq-meta-row { display: block; margin-bottom: 9px; }
+  .wq-card .wq-meta-row { display: block; margin-bottom: 8px; }
   .wq-card .wq-meta-row:last-child { margin-bottom: 0; }
   .wq-card .wq-meta-label {
     display: block; min-width: auto; margin-right: 0; margin-bottom: 2px;
@@ -1014,10 +1014,10 @@ html {
   /* Link-ícone fica no canto superior-direito do card */
   .wq-card .wq-link {
     position: absolute;
-    top: 14px;
-    right: 14px;
-    width: 32px;
-    height: 32px;
+    top: 12px;
+    right: 12px;
+    width: 28px;
+    height: 28px;
     border-radius: 8px;
     justify-content: center;
     background: rgba(0, 58, 64, 0.05);
@@ -1027,33 +1027,34 @@ html {
 }
 
 .wq-drop {
-  width: 54px;
-  height: 54px;
-  border-radius: 14px;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  color: #fff;
-  box-shadow: 0 6px 14px -6px rgba(0, 0, 0, 0.18);
+  color: #928066;
+  background: rgba(146, 128, 102, 0.10);
 }
-.wq-drop svg { width: 26px; height: 26px; fill: currentColor; }
+.wq-drop svg { width: 18px; height: 18px; fill: currentColor; }
 
-.wq-headline { display: flex; flex-direction: column; gap: 6px; }
+.wq-headline { display: flex; flex-direction: column; gap: 4px; }
 .wq-class {
   font-family: 'Poppins', sans-serif;
-  font-weight: 700;
-  font-size: 20px;
-  line-height: 1;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.15;
   color: #003A40;
 }
 .wq-stars {
   display: flex;
   gap: 2px;
-  font-size: 14px;
+  font-size: 11px;
+  opacity: 0.75;
 }
 .wq-stars svg { width: 1em; height: 1em; fill: currentColor; }
-.wq-stars .empty { opacity: 0.18; }
+.wq-stars .empty { opacity: 0.2; }
 
 .wq-meta {
   flex: 1;
@@ -1097,34 +1098,33 @@ html {
 }
 .wq-source strong { color: #003A40; font-weight: 600; }
 
-/* ── Modificadores por classificação (cores oficiais APA) ── */
-.wq-card.is-excelente .wq-drop  { background: #1976D2; color: #fff; }
+/* ── Modificadores por classificação (tons suaves, não-pejorativos) ──
+   A informação mantém-se (cor da família APA), mas com fundos tintados
+   e ícone colorido, para que nenhuma classificação domine visualmente. */
+.wq-card.is-excelente .wq-drop  { background: rgba(25, 118, 210, 0.10); color: #1976D2; }
 .wq-card.is-excelente .wq-stars { color: #1976D2; }
 
-.wq-card.is-boa .wq-drop  { background: #43A047; color: #fff; }
+.wq-card.is-boa .wq-drop  { background: rgba(67, 160, 71, 0.10); color: #43A047; }
 .wq-card.is-boa .wq-stars { color: #43A047; }
 
 .wq-card.is-aceitavel .wq-drop {
-  background: #FFEB3B;
-  color: #003A40;
-  box-shadow: 0 6px 14px -6px rgba(0, 58, 64, 0.25), inset 0 0 0 2px rgba(0, 58, 64, 0.12);
+  background: rgba(201, 147, 14, 0.12);
+  color: #C9930E;
 }
-.wq-card.is-aceitavel .wq-stars { color: #FFEB3B; }
-.wq-card.is-aceitavel .wq-stars svg { stroke: #003A40; stroke-width: 1.5; paint-order: stroke fill; }
+.wq-card.is-aceitavel .wq-stars { color: #C9930E; }
 
-.wq-card.is-ma .wq-drop  { background: #E53935; color: #fff; }
-.wq-card.is-ma .wq-stars { color: #E53935; }
+.wq-card.is-ma .wq-drop  { background: rgba(192, 74, 69, 0.10); color: #C04A45; }
+.wq-card.is-ma .wq-stars { color: #C04A45; }
 
-.wq-card.is-sem-classificacao .wq-drop { background: #9E9E9E; color: #fff; }
+.wq-card.is-sem-classificacao .wq-drop { background: rgba(146, 128, 102, 0.12); color: #928066; }
 .wq-card.is-sem-classificacao .wq-class { color: #6E5E48; }
-.wq-card.is-sem-classificacao .wq-stars { color: #9E9E9E; opacity: 0.4; }
+.wq-card.is-sem-classificacao .wq-stars { color: #928066; opacity: 0.4; }
 
 .wq-card.is-nova-epoca .wq-drop {
-  background: #fff;
-  color: #9E9E9E;
-  box-shadow: inset 0 0 0 2px #BDBDBD;
+  background: rgba(146, 128, 102, 0.10);
+  color: #928066;
 }
-.wq-card.is-nova-epoca .wq-class { color: #6E5E48; font-size: 16px; line-height: 1.2; }
+.wq-card.is-nova-epoca .wq-class { color: #6E5E48; font-size: 13px; line-height: 1.25; }
 .wq-card.is-nova-epoca .wq-stars svg { fill: none; stroke: #BDBDBD; stroke-width: 2; }
 
 /* ─── Generic Dropdown (espelha o wq-dropdown da página REDE) ───────────

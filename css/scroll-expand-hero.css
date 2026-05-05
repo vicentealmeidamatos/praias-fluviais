@@ -1,0 +1,298 @@
+/* ──────────────────────────────────────────────────────────
+   Scroll Expand Hero
+   Vanilla port of the React/Framer-Motion ScrollExpandMedia.
+   ────────────────────────────────────────────────────────── */
+
+/* Altura do header fixo — usado para que o frame e o título não sejam tapados */
+:root { --seh-header-h: 70px; }
+@media (max-width: 767px) { :root { --seh-header-h: 64px; } }
+
+.seh-section {
+  position: relative;
+  width: 100%;
+  min-height: 100dvh;
+  overflow: hidden;
+  isolation: isolate;
+  background: #000;
+}
+/* Vinheta inferior subtil — escurece o fundo onde a data e o hint de scroll
+   se encontram, sem quebrar a estética geral. Apenas no estado inicial; à
+   medida que o utilizador scrolla, a meta também se desloca e desvanece. */
+.seh-section::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 30%;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0, 0, 0, 0.18) 45%,
+    rgba(0, 0, 0, 0.55) 100%
+  );
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* Body is locked (no scroll) until the media is fully expanded. */
+body.seh-locked { overflow: hidden; }
+
+/* ── Background image (fades out as scroll progresses) ── */
+.seh-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  /* opacity is driven by JS — fall back to fully opaque. */
+  opacity: 1;
+  will-change: opacity;
+}
+.seh-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+/* Sombra dinâmica sobre a imagem de fundo. JS faz crescer a opacidade
+   conforme o scroll progride — a imagem nunca desaparece, apenas é sombreada. */
+.seh-bg-shadow {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: 0.10;
+  pointer-events: none;
+  will-change: opacity;
+}
+
+/* ── Stage (fills the viewport) ── */
+.seh-stage {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Expanding media frame ── */
+.seh-media-frame {
+  position: absolute;
+  /* Centro deslocado para baixo de modo a libertar espaço para o header fixo. */
+  top: calc(50% + var(--seh-header-h) / 2);
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  height: 400px;
+  max-width: 95vw;
+  /* Cap da altura: 85vh menos a altura do header — assim a borda superior
+     do frame nunca chega à zona ocupada pela barra de navegação. */
+  max-height: calc(85vh - var(--seh-header-h));
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.3);
+  z-index: 5;
+  pointer-events: none;
+  will-change: width, height;
+}
+.seh-media-el {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+  display: block;
+  background: #002A2E;
+}
+.seh-media-veil {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  border-radius: 16px;
+  opacity: 0.5;
+  pointer-events: none;
+  will-change: opacity;
+}
+
+/* ── Title (split into two halves) ── */
+.seh-title {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25em;
+  text-align: center;
+  pointer-events: none;
+  padding: 0 24px;
+  transform: translateY(calc(var(--seh-header-h) / 2));
+}
+.seh-title.seh-blend { mix-blend-mode: difference; }
+
+.seh-title-word {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: clamp(58px, 8.5vw, 118px);
+  line-height: 1;
+  letter-spacing: -0.025em;
+  text-transform: none;
+  margin: 0;
+  color: #FFEE00;
+  text-shadow: 0 6px 24px rgba(0, 0, 0, 0.40);
+  will-change: transform;
+}
+
+/* ── Meta (date + scroll-to-expand hint) ── */
+.seh-meta {
+  position: absolute;
+  z-index: 10;
+  left: 50%;
+  bottom: clamp(40px, 8vh, 100px);
+  transform: translateX(-50%);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+.seh-date {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(14px, 1.4vw, 18px);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.55), 0 1px 2px rgba(0, 0, 0, 0.4);
+  margin: 0;
+  will-change: transform;
+}
+.seh-scroll-hint {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: clamp(11px, 1vw, 13px);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55), 0 1px 2px rgba(0, 0, 0, 0.4);
+  margin: 0;
+  will-change: transform;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.seh-scroll-hint::before {
+  content: '';
+  width: 28px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.4);
+}
+.seh-scroll-hint::after {
+  content: '';
+  width: 28px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* When fully expanded, allow page-level scroll to take over. */
+.seh-expanded .seh-meta { opacity: 0; transition: opacity 0.6s ease; }
+
+/* ── Children: logo + 3 contagens — sobrepostos à imagem expandida ── */
+.seh-children {
+  position: absolute;
+  /* Mesmo offset vertical do frame para que o conteúdo fique centrado nele */
+  top: calc(50% + var(--seh-header-h) / 2);
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(96vw, 1100px);
+  z-index: 15;          /* acima do frame e do título */
+  padding: clamp(20px, 3vw, 40px) 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+/* Vignette muito subtil — só o suficiente para o texto ler. Sem zonas
+   visivelmente escuras a destacar-se na imagem. */
+.seh-children::before {
+  content: '';
+  position: absolute;
+  inset: -20% -15%;
+  background: radial-gradient(
+    ellipse 60% 50% at center,
+    rgba(0, 24, 26, 0.32) 0%,
+    rgba(0, 24, 26, 0.12) 60%,
+    transparent 100%
+  );
+  z-index: -1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.7s ease;
+}
+.seh-section.seh-show-content .seh-children {
+  opacity: 1;
+  pointer-events: auto;
+}
+.seh-section.seh-show-content .seh-children::before {
+  opacity: 1;
+}
+.seh-children-inner {
+  position: relative;
+  text-align: center;
+}
+
+/* Stagger — logo entra primeiro, depois cada estatística uma a uma */
+.seh-logo-wrap,
+.seh-stats .seh-stat {
+  opacity: 0;
+  transform: translateY(28px) scale(0.96);
+  transition:
+    opacity 0.55s ease,
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.seh-section.seh-show-content .seh-logo-wrap {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition-delay: 0.10s;
+}
+.seh-section.seh-show-content .seh-stats .seh-stat:nth-child(1) {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition-delay: 0.40s;
+}
+.seh-section.seh-show-content .seh-stats .seh-stat:nth-child(2) {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition-delay: 0.55s;
+}
+.seh-section.seh-show-content .seh-stats .seh-stat:nth-child(3) {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition-delay: 0.70s;
+}
+
+/* Reforço de legibilidade — sombra subtil sob números/labels */
+.seh-stats .seh-stat > div:first-child {
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.55), 0 0 1px rgba(0, 58, 64, 0.6);
+}
+.seh-stats .seh-stat > div:last-child {
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .seh-children, .seh-children::before { opacity: 1; }
+  .seh-logo-wrap,
+  .seh-stats .seh-stat {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Reduced motion: show end-state directly. */
+@media (prefers-reduced-motion: reduce) {
+  .seh-media-frame { width: min(95vw, 1550px) !important; height: min(85vh - var(--seh-header-h), 760px) !important; }
+  .seh-bg-shadow   { opacity: 0.55; }
+  .seh-media-veil  { opacity: 0.2; }
+  .seh-meta        { opacity: 0; }
+}

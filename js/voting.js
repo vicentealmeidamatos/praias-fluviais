@@ -72,16 +72,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     grid.innerHTML = sorted.map(b => {
       const isVoted  = userVote === b.id;
-      const badgesHtml = [];
-      if (b.services?.blueFlag)  badgesHtml.push('<span class="badge badge-blue-flag text-[10px]">Bandeira Azul</span>');
-      if (b.services?.accessible) badgesHtml.push('<span class="badge badge-accessible text-[10px]">Acessibilidades</span>');
 
       return `
         <div class="card-interactive rounded-2xl overflow-hidden bg-white shadow-layered group flex flex-col h-full ${isVoted ? 'ring-2 ring-praia-yellow-400' : ''}">
           <a href="praia.html?id=${b.id}" class="block relative h-44 overflow-hidden shrink-0" aria-label="Ver página de ${b.name}">
             <img src="${b.thumbnail || b.photos?.[0] || ''}" alt="${b.name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
             <div class="absolute inset-0 bg-gradient-to-t from-praia-teal-800/60 via-transparent to-transparent"></div>
-            ${badgesHtml.length ? `<div class="absolute top-3 left-3 flex gap-1.5">${badgesHtml.join('')}</div>` : ''}
             ${isVoted ? '<div class="absolute top-3 right-3 bg-praia-yellow-400 text-praia-teal-800 rounded-full p-1.5"><i data-lucide="check" class="w-4 h-4"></i></div>' : ''}
           </a>
           <div class="p-4 flex flex-col flex-1">
