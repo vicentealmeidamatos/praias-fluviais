@@ -18,9 +18,28 @@
   const leftEls    = section.querySelectorAll('[data-seh-left]');
   const rightEls   = section.querySelectorAll('[data-seh-right]');
   const titleEl    = section.querySelector('[data-seh-title]');
+  const videoEl    = section.querySelector('video.seh-media-el');
   const reduced    = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   if (!frameEl) return;
+
+  // ── Garantir que o vídeo do hero arranca em browsers que bloqueiam silenciosamente
+  //    o autoplay (ex.: Safari, Chrome com baixo media-engagement-index). Tenta play()
+  //    em vários momentos e cai num retry à primeira interacção do utilizador.
+  if (videoEl) {
+    const tryPlay = () => {
+      const p = videoEl.play();
+      if (p && typeof p.catch === 'function') p.catch(() => { /* ignored */ });
+    };
+    tryPlay();
+    videoEl.addEventListener('loadeddata', tryPlay, { once: true });
+    videoEl.addEventListener('canplay',     tryPlay, { once: true });
+    const onceInteract = () => { tryPlay(); };
+    window.addEventListener('pointerdown', onceInteract, { once: true });
+    window.addEventListener('keydown',     onceInteract, { once: true });
+    window.addEventListener('wheel',       onceInteract, { once: true, passive: true });
+    window.addEventListener('touchstart',  onceInteract, { once: true, passive: true });
+  }
 
   let progress = 0;
   let expanded = false;

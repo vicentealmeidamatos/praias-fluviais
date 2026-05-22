@@ -212,11 +212,17 @@ document.addEventListener('DOMContentLoaded', async () => {
   `).join('');
 
   const photoCount = beach.photos.length;
-  const carouselSlides = beach.photos.map((p, i) => `
-    <div class="carousel-slide absolute inset-0 transition-opacity duration-500 ease-in-out ${i === 0 ? 'opacity-100' : 'opacity-0'}">
-      <img src="${p}" alt="${beach.name} - foto ${i + 1}" class="w-full h-full object-cover" loading="${i === 0 ? 'eager' : 'lazy'}"${i === 0 ? ' fetchpriority="high"' : ' decoding="async"'}>
+  const focals = Array.isArray(beach.photoFocals) ? beach.photoFocals : [];
+  const carouselSlides = beach.photos.map((p, i) => {
+    const focalY = Number.isFinite(focals[i]) ? focals[i] : 50;
+    return `
+    <div class="carousel-slide photo-protected absolute inset-0 transition-opacity duration-500 ease-in-out ${i === 0 ? 'opacity-100' : 'opacity-0'}"
+         role="img" aria-label="${beach.name} - foto ${i + 1}"
+         style="background-image:url('${p}');background-size:cover;background-position:50% ${focalY}%;">
+      <div class="photo-shield" aria-hidden="true"></div>
     </div>
-  `).join('');
+  `;
+  }).join('');
 
   const carouselControls = photoCount > 1 ? `
     <button id="carousel-prev" class="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-black/35 hover:bg-black/55 backdrop-blur-sm flex items-center justify-center text-white transition-all duration-200 active:scale-95" aria-label="Foto anterior">
@@ -239,6 +245,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     <div class="relative" id="hero-carousel">
       <div class="relative overflow-hidden h-72 md:h-96 lg:h-[500px]">
         ${carouselSlides}
+        <div class="hero-watermark" aria-hidden="true">
+          <img src="brand_assets/logotipo.png" alt="">
+        </div>
       </div>
       ${carouselControls}
       <div class="absolute inset-0 bg-gradient-to-t from-praia-teal-800/80 via-transparent to-transparent pointer-events-none z-10"></div>

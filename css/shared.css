@@ -1183,3 +1183,62 @@ html {
   transition: opacity 0.15s ease;
 }
 .gpf-select-option[aria-selected="true"] .gpf-select-option-check { opacity: 1; }
+
+/* ───────────────────────── Photo Protection ───────────────────────────── */
+.photo-protected {
+  -webkit-user-select: none; user-select: none;
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  pointer-events: auto;
+}
+.photo-protected img { -webkit-user-drag: none; pointer-events: none; }
+.photo-protected .photo-shield {
+  position: absolute; inset: 0; z-index: 5;
+  background: transparent;
+  pointer-events: none; /* deixar interagir com carrossel; eventos são capturados em JS */
+}
+/* Ocultar fotos quando DevTools estão abertas */
+html.devtools-open .photo-protected {
+  filter: blur(36px) saturate(0);
+  transition: filter 0.2s ease;
+}
+html.devtools-open .photo-protected::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: rgba(0, 58, 64, 0.85); z-index: 10;
+  filter: blur(0) saturate(1);
+}
+/* Print: esconder fotos protegidas para evitar Cmd+P → Save as PDF */
+@media print {
+  .photo-protected { display: none !important; }
+}
+
+/* Marca de água sobreposta no hero (garante visibilidade mesmo em fotos
+   retrato cuja parte superior é cortada pelo crop do carrossel). */
+.hero-watermark {
+  position: absolute;
+  top: 18px; right: 18px;
+  z-index: 12;
+  pointer-events: none;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+.hero-watermark img {
+  display: block;
+  height: 28px;
+  width: auto;
+  opacity: 0.55;
+  filter: brightness(0) invert(1);
+}
+@media (min-width: 768px) {
+  .hero-watermark { top: 22px; right: 22px; }
+  .hero-watermark img { height: 34px; }
+}
+@media (min-width: 1024px) {
+  .hero-watermark { top: 28px; right: 28px; }
+  .hero-watermark img { height: 40px; }
+}

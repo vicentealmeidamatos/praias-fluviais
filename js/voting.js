@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     return;
   }
 
-  let beaches = beachesRaw.filter(b => !b.hidden);
+  let beaches = beachesRaw.filter(b => !b.hidden && b.inVotar !== false);
   let settings = settingsRaw || {};
   let userVote = null;
 
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       return `
         <div class="card-interactive rounded-2xl overflow-hidden bg-white shadow-layered group flex flex-col h-full ${isVoted ? 'ring-2 ring-praia-yellow-400' : ''}">
           <a href="praia.html?id=${b.id}" class="block relative h-44 overflow-hidden shrink-0" aria-label="Ver página de ${b.name}">
-            <img src="${b.thumbnail || b.photos?.[0] || ''}" alt="${b.name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+            <div class="photo-protected w-full h-full transition-transform duration-700 group-hover:scale-110" role="img" aria-label="${b.name}" style="background-image:url('${b.thumbnail || b.photos?.[0] || ''}');background-size:cover;background-position:center;"></div>
             <div class="absolute inset-0 bg-gradient-to-t from-praia-teal-800/60 via-transparent to-transparent"></div>
             ${isVoted ? '<div class="absolute top-3 right-3 bg-praia-yellow-400 text-praia-teal-800 rounded-full p-1.5"><i data-lucide="check" class="w-4 h-4"></i></div>' : ''}
           </a>

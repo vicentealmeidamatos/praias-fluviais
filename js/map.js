@@ -51,14 +51,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     },
   });
 
-  // Service icons for popups
-  const serviceLabels = {
-    bar: 'Bar', grills: 'Grelhadores', lifeguard: 'Nadador-salvador',
-    blueFlag: 'Bandeira Azul', goldQuality: 'Qualidade Ouro',
-    accessible: 'Acessibilidades', parking: 'Estacionamento',
-    wc: 'WC', picnicArea: 'Piquenique', camping: 'Campismo',
-  };
-
   // Create markers (popup content generated lazily by Leaflet on open)
   const allMarkers = [];
   beaches.forEach(beach => {
@@ -78,16 +70,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Leaflet calls the function only when popup opens — no upfront HTML cost
     marker.bindPopup(() => {
-      const activeServices = Object.entries(beach.services)
-        .filter(([, v]) => v)
-        .map(([k]) => serviceLabels[k])
-        .join(' · ');
       return `<div style="min-width:220px;font-family:'Open Sans',sans-serif;">
-          <img src="${beach.thumbnail || beach.photos[0]}" alt="${beach.name}" style="width:100%;height:120px;object-fit:cover;border-radius:8px 8px 0 0;" loading="lazy">
+          <div class="photo-protected" role="img" aria-label="${beach.name}" style="width:100%;height:120px;background-image:url('${beach.thumbnail || beach.photos[0]}');background-size:cover;background-position:center;border-radius:8px 8px 0 0;"></div>
           <div style="padding:12px;">
             <h3 style="font-family:Poppins,sans-serif;font-weight:700;font-size:14px;color:#003A40;margin:0 0 4px;">${beach.name}</h3>
-            <p style="font-size:12px;color:#8A7D60;margin:0 0 8px;">${beach.municipality} · ${beach.river}</p>
-            ${activeServices ? `<p style="font-size:11px;color:#A89A78;margin:0 0 10px;">${activeServices}</p>` : ''}
+            <p style="font-size:12px;color:#8A7D60;margin:0 0 10px;">${beach.municipality} · ${beach.river}</p>
             <a href="praia.html?id=${beach.id}" style="display:inline-flex;align-items:center;gap:6px;background:#003A40;color:#FFEB3B;padding:6px 14px;border-radius:20px;font-family:Poppins,sans-serif;font-size:11px;font-weight:600;text-decoration:none;text-transform:uppercase;letter-spacing:0.05em;">Ver Praia →</a>
           </div>
         </div>`;

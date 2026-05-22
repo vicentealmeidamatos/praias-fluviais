@@ -151,13 +151,6 @@
     "heroImageUrl": ""
   },
   "homepage": {
-    "heroBgImage": "brand_assets/BRAGA ADAUFE 2025_10.jpg",
-    "heroVideoSrc": "img/hero-placeholder.mp4",
-    "heroVideoPoster": "brand_assets/COVILHA Unhais da Serra 2025_1.jpg",
-    "heroTitleWord1": "Praias",
-    "heroTitleWord2": "Fluviais",
-    "heroDate": "Edição 2026",
-    "heroScrollHint": "Faça scroll para descobrir",
     "stat1Label": "Praias",
     "stat1Value": "200+",
     "stat2Label": "Guias Distribuídos",
@@ -165,6 +158,8 @@
     "stat3Label": "Descontos",
     "stat3Value": "+250",
     "heroImageUrl": "",
+    "heroCtaPrimary": "Explorar Mapa",
+    "heroCtaSecondary": "Votar Praia do Ano",
     "sectionsOrder": [
       {
         "id": "destaques",

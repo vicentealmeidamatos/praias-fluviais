@@ -1,6 +1,6 @@
 // ─── Admin Panel — JSON Visual Editor ───
 const _norm = s => (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
-const SECTIONS = ['beaches', 'articles', 'locations-guia-passaporte', 'locations-carimbos', 'descontos', 'produtos', 'encomendas', 'utilizadores', 'comentarios', 'conteudo', 'settings'];
+const SECTIONS = ['beaches', 'concelhos', 'articles', 'locations-guia-passaporte', 'locations-carimbos', 'descontos', 'produtos', 'encomendas', 'utilizadores', 'comentarios', 'conteudo', 'settings'];
 
 // ─── Auto-save: section → dataset name (Supabase via /api/save-data) ───
 const SECTION_TO_DATASET = {
@@ -537,6 +537,7 @@ function getLocationsKey(section) { return section; }
 function renderDashboard() {
   const sectionMeta = {
     beaches:               { icon: '🏖️', label: 'Praias Fluviais' },
+    concelhos:             { icon: '🏛️', label: 'Concelhos · Premium' },
     articles:              { icon: '📰', label: 'Novidades' },
     'locations-guia-passaporte': { icon: '📗', label: 'Guia & Passaporte' },
     'locations-carimbos':        { icon: '🔖', label: 'Carimbo' },
@@ -581,6 +582,7 @@ function switchSection(section) {
   state.editingArticleImage = null;
   state.editingProductImages = [];
   state.editingDescontoLogo = null;
+  state.viewingConcelho = null;
   renderDashboard();
 }
 
@@ -588,6 +590,7 @@ function renderSection() {
   const content = document.getElementById('admin-content');
   switch (state.currentSection) {
     case 'beaches':                renderBeaches(content); break;
+    case 'concelhos':              renderConcelhos(content); break;
     case 'articles':               renderArticles(content); break;
     case 'locations-guia-passaporte': renderLocationsGuia(content); break;
     case 'locations-carimbos':        renderLocationsPassaporte(content); break;
@@ -757,17 +760,120 @@ function renderPhotoGallery() {
     return;
   }
 
-  gallery.innerHTML = state.editingPhotos.map((p, i) => `
-    <div class="photo-thumb-item draggable-item" draggable="true" data-id="${i}" style="position:relative;display:inline-block;margin:0 8px 8px 0;vertical-align:top;">
-      <img src="${p.src}" alt="Foto ${i+1}" style="width:100px;height:75px;object-fit:cover;border-radius:8px;border:2px solid #E2D9C6;display:block;">
-      <button onclick="removeBeachPhoto(${i})" style="position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;background:#D32F2F;color:white;border:none;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;font-weight:bold;">×</button>
-      <div style="display:flex;gap:2px;justify-content:center;margin-top:4px;">
-        ${i > 0 ? `<button onclick="moveBeachPhoto(${i},-1)" style="background:#E2D9C6;border:none;border-radius:4px;padding:1px 5px;font-size:11px;cursor:pointer;" title="Mover para esquerda">←</button>` : '<span style="width:22px;"></span>'}
-        ${i < state.editingPhotos.length-1 ? `<button onclick="moveBeachPhoto(${i},1)" style="background:#E2D9C6;border:none;border-radius:4px;padding:1px 5px;font-size:11px;cursor:pointer;" title="Mover para direita">→</button>` : '<span style="width:22px;"></span>'}
+  gallery.innerHTML = state.editingPhotos.map((p, i) => {
+    const f = Number.isFinite(p.focalY) ? p.focalY : 50;
+    const last = state.editingPhotos.length - 1;
+    return `
+    <div class="photo-thumb-item draggable-item" draggable="true" data-id="${i}" style="position:relative;display:inline-block;margin:0 10px 12px 0;vertical-align:top;">
+      <!-- Preview com aspect ratio próximo do hero (2.6:1) e drag-to-position vertical -->
+      <div class="focal-preview" data-focal-index="${i}"
+           title="Arraste verticalmente para ajustar o ponto focal · scroll para afinar"
+           style="width:260px;height:100px;background-image:url('${p.src}');background-size:cover;background-position:50% ${f}%;border-radius:8px;border:2px solid #E2D9C6;display:block;cursor:ns-resize;position:relative;user-select:none;-webkit-user-drag:none;overflow:hidden;">
+        <span class="focal-readout" style="position:absolute;bottom:6px;right:6px;background:rgba(0,58,64,0.85);color:#FFEB3B;border-radius:6px;padding:2px 7px;font-size:11px;font-family:Poppins,sans-serif;font-weight:700;letter-spacing:0.02em;pointer-events:none;text-shadow:0 1px 2px rgba(0,0,0,0.4);">${f}%</span>
+        <span style="position:absolute;top:6px;left:6px;background:rgba(0,0,0,0.45);color:white;border-radius:6px;padding:2px 6px;font-size:10px;font-family:Poppins,sans-serif;font-weight:600;pointer-events:none;">↕ arrastar</span>
       </div>
-      <div style="font-size:9px;color:#8A7D60;text-align:center;margin-top:2px;max-width:100px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">${p.name || ''}</div>
+      <button onclick="removeBeachPhoto(${i})" style="position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;background:#D32F2F;color:white;border:none;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;font-weight:bold;box-shadow:0 1px 3px rgba(0,0,0,0.3);" title="Remover foto">×</button>
+      <div style="margin-top:6px;width:260px;display:flex;align-items:center;gap:6px;">
+        <input type="range" min="0" max="100" value="${f}" data-focal-slider="${i}" oninput="updateBeachPhotoFocal(${i}, this.value)" style="flex:1;accent-color:#003A40;cursor:pointer;" title="Foco vertical">
+        <button type="button" onclick="updateBeachPhotoFocal(${i}, 50)" title="Centrar (50%)" style="background:#E2D9C6;border:none;border-radius:4px;padding:3px 8px;font-size:10px;font-family:Poppins,sans-serif;font-weight:600;color:#003A40;cursor:pointer;">↺</button>
+      </div>
+      <div style="display:flex;gap:4px;justify-content:space-between;align-items:center;margin-top:4px;width:260px;">
+        <div style="display:flex;gap:2px;">
+          ${i > 0 ? `<button onclick="moveBeachPhoto(${i},-1)" style="background:#E2D9C6;border:none;border-radius:4px;padding:2px 7px;font-size:11px;cursor:pointer;" title="Mover para esquerda">←</button>` : '<span style="width:24px;"></span>'}
+          ${i < last ? `<button onclick="moveBeachPhoto(${i},1)" style="background:#E2D9C6;border:none;border-radius:4px;padding:2px 7px;font-size:11px;cursor:pointer;" title="Mover para direita">→</button>` : '<span style="width:24px;"></span>'}
+        </div>
+        <div style="font-size:9px;color:#8A7D60;flex:1;text-align:right;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">${p.name || ''}</div>
+      </div>
     </div>
-  `).join('');
+  `;
+  }).join('');
+
+  setupFocalDragHandlers();
+}
+
+// ─── Drag-to-position handler ───
+// Permite arrastar verticalmente sobre o preview da foto para definir o
+// background-position-y (focal Y), em vez de usar só o slider. Mapping:
+// arrastar 1px ≈ 1% de focal_Y (preview tem ~100px de altura).
+let _focalDrag = null;
+function setupFocalDragHandlers() {
+  document.querySelectorAll('.focal-preview').forEach(el => {
+    if (el.__focalBound) return;
+    el.__focalBound = true;
+    const onPointerDown = (ev) => {
+      // Ignorar se o utilizador está a usar arrastar nativo do thumb (HTML5 drag)
+      ev.preventDefault();
+      const idx = parseInt(el.dataset.focalIndex, 10);
+      if (!Number.isFinite(idx) || !state.editingPhotos[idx]) return;
+      const rect = el.getBoundingClientRect();
+      // Desactivar o drag-to-reorder do parent enquanto se está a ajustar focal.
+      const parent = el.closest('[draggable="true"]');
+      if (parent) parent.setAttribute('draggable', 'false');
+      _focalDrag = {
+        idx,
+        el,
+        parent,
+        startY: ev.clientY ?? ev.touches?.[0]?.clientY ?? 0,
+        startFocal: Number.isFinite(state.editingPhotos[idx].focalY) ? state.editingPhotos[idx].focalY : 50,
+        height: rect.height,
+      };
+      el.style.cursor = 'grabbing';
+      el.style.borderColor = '#003A40';
+    };
+    el.addEventListener('mousedown', onPointerDown);
+    el.addEventListener('touchstart', onPointerDown, { passive: false });
+    // Wheel: incrementos finos de 1%
+    el.addEventListener('wheel', (ev) => {
+      const idx = parseInt(el.dataset.focalIndex, 10);
+      if (!Number.isFinite(idx) || !state.editingPhotos[idx]) return;
+      ev.preventDefault();
+      const cur = Number.isFinite(state.editingPhotos[idx].focalY) ? state.editingPhotos[idx].focalY : 50;
+      const delta = ev.deltaY > 0 ? 1 : -1; // scroll down → focal sobe (mostra mais em baixo)
+      updateBeachPhotoFocal(idx, cur + delta);
+    }, { passive: false });
+  });
+}
+
+function _onFocalDragMove(ev) {
+  if (!_focalDrag) return;
+  const y = ev.clientY ?? ev.touches?.[0]?.clientY ?? 0;
+  const dy = y - _focalDrag.startY;
+  // Arrastar para baixo (dy>0) → puxar a foto para baixo → mostrar o que está
+  // ACIMA → focal_Y diminui. Inverso para arrastar para cima.
+  // Mapping: 1px = 1% (preview tem ~100px de altura, range é 100%).
+  const newFocal = _focalDrag.startFocal - dy;
+  updateBeachPhotoFocal(_focalDrag.idx, newFocal);
+}
+function _onFocalDragEnd() {
+  if (!_focalDrag) return;
+  const el = _focalDrag.el;
+  if (el) {
+    el.style.cursor = 'ns-resize';
+    el.style.borderColor = '#E2D9C6';
+  }
+  if (_focalDrag.parent) {
+    _focalDrag.parent.setAttribute('draggable', 'true');
+  }
+  _focalDrag = null;
+}
+document.addEventListener('mousemove', _onFocalDragMove);
+document.addEventListener('mouseup', _onFocalDragEnd);
+document.addEventListener('touchmove', _onFocalDragMove, { passive: false });
+document.addEventListener('touchend', _onFocalDragEnd);
+
+function updateBeachPhotoFocal(index, value) {
+  const v = Math.max(0, Math.min(100, Math.round(parseFloat(value)) || 0));
+  if (!state.editingPhotos[index]) return;
+  state.editingPhotos[index].focalY = v;
+  // Atualizar preview, readout e slider
+  const preview = document.querySelector(`.focal-preview[data-focal-index="${index}"]`);
+  if (preview) {
+    preview.style.backgroundPosition = `50% ${v}%`;
+    const readout = preview.querySelector('.focal-readout');
+    if (readout) readout.textContent = v + '%';
+  }
+  const slider = document.querySelector(`input[data-focal-slider="${index}"]`);
+  if (slider && parseInt(slider.value, 10) !== v) slider.value = v;
 }
 
 function moveBeachPhoto(i, dir) {
@@ -783,6 +889,26 @@ function removeBeachPhoto(index) {
   renderPhotoGallery();
 }
 
+// Aplica a marca de água do GPF a um File via js/watermark.js e calcula o
+// ponto focal vertical. Devolve { file, focalY }.
+async function preparePhotoForUpload(rawFile, checkboxId) {
+  const cb = document.getElementById(checkboxId);
+  const wantWatermark = cb ? cb.checked : true;
+  if (!window.GpfWatermark) {
+    console.warn('[admin] watermark.js não carregado');
+    return { file: rawFile, focalY: 50 };
+  }
+  try {
+    const { blob, focalY } = await window.GpfWatermark.preparePhoto(rawFile, { watermark: wantWatermark });
+    if (!blob) return { file: rawFile, focalY: focalY ?? 50 };
+    const newName = rawFile.name.replace(/\.\w+$/, '') + (wantWatermark ? '_wm.jpg' : '.jpg');
+    return { file: new File([blob], newName, { type: 'image/jpeg' }), focalY };
+  } catch (e) {
+    console.warn('[admin] falha ao preparar foto:', e);
+    return { file: rawFile, focalY: 50 };
+  }
+}
+
 async function handleBeachPhotoFiles(files) {
   const uploadBtn = document.getElementById('photo-upload-btn');
   const fileList = Array.from(files).filter(f => f.type.startsWith('image/'));
@@ -790,9 +916,10 @@ async function handleBeachPhotoFiles(files) {
 
   if (uploadBtn) { uploadBtn.disabled = true; uploadBtn.textContent = 'A carregar...'; }
 
-  for (const file of fileList) {
+  for (const raw of fileList) {
+    const { file, focalY } = await preparePhotoForUpload(raw, 'photo-watermark-cb');
     const result = await uploadImageFile(file, 'beaches');
-    state.editingPhotos.push(result);
+    state.editingPhotos.push({ ...result, focalY });
   }
 
   if (uploadBtn) { uploadBtn.disabled = false; uploadBtn.textContent = '+ Adicionar Fotos'; }
@@ -836,11 +963,12 @@ function removeThumbnail() {
 }
 
 async function handleThumbnailFile(files) {
-  const file = Array.from(files).find(f => f.type.startsWith('image/'));
-  if (!file) return;
+  const raw = Array.from(files).find(f => f.type.startsWith('image/'));
+  if (!raw) return;
   if (state.editingThumbnail) {
     if (!confirm('Esta secção apenas permite uma imagem. Deseja substituir a miniatura atual?')) return;
   }
+  const file = await watermarkIfRequested(raw, 'thumb-watermark-cb');
   const result = await uploadImageFile(file, 'beaches');
   state.editingThumbnail = result.src;
   renderThumbnailPreview();
@@ -964,6 +1092,319 @@ function renderBeaches(container) {
     </div>`;
 }
 
+// ─── Concelhos · Premium ──────────────────────────────────────────────────────
+function renderConcelhos(container) {
+  if (state.viewingConcelho) { renderConcelhoDetail(container, state.viewingConcelho); return; }
+
+  const beaches = state.data.beaches || [];
+  const s = state.data.settings || {};
+  const premiumMunis = s.premiumMunicipalities || [];
+
+  // Agrupar praias por concelho
+  const groups = {};
+  beaches.forEach(b => {
+    const muni = (b.municipality || '').trim();
+    if (!muni) return;
+    if (!groups[muni]) groups[muni] = { name: muni, beaches: [] };
+    groups[muni].beaches.push(b);
+  });
+  let concelhos = Object.values(groups);
+
+  const sortMode = state.concelhoSort || 'az';
+  const filter   = state.concelhoFilter || 'all';
+  const search   = (state.concelhoSearch || '').trim().toLowerCase();
+
+  const total = concelhos.length;
+  const totalPremium = concelhos.filter(c => premiumMunis.includes(c.name)).length;
+
+  concelhos = concelhos.filter(c => {
+    if (search && !_norm(c.name).includes(_norm(search))) return false;
+    const isPrem = premiumMunis.includes(c.name);
+    if (filter === 'premium' && !isPrem) return false;
+    if (filter === 'standard' && isPrem) return false;
+    return true;
+  });
+
+  concelhos.sort((a, b) => {
+    const aPrem = premiumMunis.includes(a.name);
+    const bPrem = premiumMunis.includes(b.name);
+    if (sortMode === 'premium-first' && aPrem !== bPrem) return aPrem ? -1 : 1;
+    if (sortMode === 'standard-first' && aPrem !== bPrem) return aPrem ? 1 : -1;
+    if (sortMode === 'za') return b.name.localeCompare(a.name, 'pt');
+    return a.name.localeCompare(b.name, 'pt');
+  });
+
+  container.innerHTML = `
+    <div class="p-6">
+      <div class="flex items-start justify-between mb-2 gap-4 flex-wrap">
+        <div>
+          <h1 class="font-display text-2xl font-bold text-praia-teal-800">Concelhos · Premium</h1>
+          <p class="text-sm text-praia-sand-500 mt-1">
+            ${total} concelho(s) com praias registadas ·
+            <span style="color:#0288D1;font-weight:600;">${totalPremium} premium</span> ·
+            ${total - totalPremium} standard
+          </p>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="saveConcelhosChanges()" class="admin-btn admin-btn-export">Gravar alterações</button>
+        </div>
+      </div>
+
+      <div style="background:#FFF8E1;border:1px solid #FFE082;border-radius:12px;padding:12px 16px;margin-bottom:18px;font-size:13px;color:#5D4D1A;line-height:1.5;">
+        <strong style="font-family:'Poppins';font-weight:600;">Como funciona:</strong>
+        marque um concelho como <em>premium</em> para ativar todas as suas praias em bloco.
+        Pode depois excluir praias específicas no detalhe do concelho.
+        Apenas praias premium podem aparecer na rotação "Praias da Semana" da homepage.
+      </div>
+
+      <div class="bg-white rounded-xl p-4 mb-4 shadow-sm border border-praia-sand-100" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+        <input type="text" id="concelho-search" placeholder="Procurar concelho…"
+               value="${escHtml(state.concelhoSearch || '')}"
+               style="flex:1;min-width:200px;padding:8px 12px;font-size:13px;border:1px solid #E2D9C6;border-radius:8px;background:#FAF8F5;font-family:'Open Sans',sans-serif;">
+        <select id="concelho-filter" style="padding:8px 10px;font-size:13px;border:1px solid #E2D9C6;border-radius:8px;background:white;">
+          <option value="all"      ${filter === 'all'      ? 'selected' : ''}>Todos</option>
+          <option value="premium"  ${filter === 'premium'  ? 'selected' : ''}>Só premium</option>
+          <option value="standard" ${filter === 'standard' ? 'selected' : ''}>Só standard</option>
+        </select>
+        <select id="concelho-sort" style="padding:8px 10px;font-size:13px;border:1px solid #E2D9C6;border-radius:8px;background:white;">
+          <option value="az"             ${sortMode === 'az'             ? 'selected' : ''}>A-Z</option>
+          <option value="za"             ${sortMode === 'za'             ? 'selected' : ''}>Z-A</option>
+          <option value="premium-first"  ${sortMode === 'premium-first'  ? 'selected' : ''}>Premium primeiro</option>
+          <option value="standard-first" ${sortMode === 'standard-first' ? 'selected' : ''}>Standard primeiro</option>
+        </select>
+      </div>
+
+      ${concelhos.length === 0
+        ? '<p class="text-praia-sand-500 text-sm">Nenhum concelho corresponde aos filtros.</p>'
+        : `<div class="bg-white rounded-xl shadow-sm border border-praia-sand-100 overflow-hidden">
+            <table class="w-full text-sm">
+              <thead style="background:#FAF8F5;">
+                <tr>
+                  <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700 text-left" style="width:60px;">Paga</th>
+                  <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700 text-left">Concelho</th>
+                  <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700 text-left">Praias</th>
+                  <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700 text-left">Premium ativas</th>
+                  <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700 text-right">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${concelhos.map(c => {
+                  const isPrem = premiumMunis.includes(c.name);
+                  const activeCount = c.beaches.filter(b => b.premium === true).length;
+                  const totalCount  = c.beaches.length;
+                  const hiddenCount = c.beaches.filter(b => b.hidden).length;
+                  return `
+                  <tr class="border-t border-praia-sand-100 hover:bg-praia-sand-50 admin-table-row" data-concelho="${escHtml(c.name)}">
+                    <td class="px-4 py-3">
+                      <label style="display:inline-flex;align-items:center;cursor:pointer;">
+                        <input type="checkbox" ${isPrem ? 'checked' : ''} onchange="toggleConcelhoPremium('${escHtml(c.name).replace(/'/g, "\\'")}', this.checked)" style="accent-color:#003A40;width:18px;height:18px;cursor:pointer;">
+                      </label>
+                    </td>
+                    <td class="px-4 py-3 font-semibold text-praia-teal-800">
+                      <span style="display:inline-flex;align-items:center;gap:8px;">
+                        ${escHtml(c.name)}
+                        ${isPrem ? '<span class="badge" style="background:rgba(2,136,209,0.12);color:#0288D1;font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:.05em;padding:2px 8px;border-radius:6px;">Premium</span>' : ''}
+                      </span>
+                    </td>
+                    <td class="px-4 py-3 text-praia-sand-600">${totalCount}${hiddenCount ? ` <span style="color:#999;font-size:11px;">(${hiddenCount} oculta${hiddenCount === 1 ? '' : 's'})</span>` : ''}</td>
+                    <td class="px-4 py-3">
+                      <span style="font-family:'Poppins',sans-serif;font-weight:600;font-size:12px;color:${activeCount > 0 ? '#0288D1' : '#C4B898'};">
+                        ${activeCount} / ${totalCount}
+                      </span>
+                    </td>
+                    <td class="px-4 py-3 text-right">
+                      <button onclick="openConcelho('${escHtml(c.name).replace(/'/g, "\\'")}')" class="text-praia-teal-600 hover:text-praia-teal-800 text-xs font-semibold">Ver praias →</button>
+                    </td>
+                  </tr>`;
+                }).join('')}
+              </tbody>
+            </table>
+          </div>`
+      }
+    </div>`;
+
+  // Filtros vivos
+  document.getElementById('concelho-search')?.addEventListener('input', e => {
+    state.concelhoSearch = e.target.value;
+    renderSection();
+    // restaurar foco no campo (renderSection() destruiu o nó)
+    const el = document.getElementById('concelho-search');
+    if (el) { el.focus(); el.setSelectionRange(el.value.length, el.value.length); }
+  });
+  document.getElementById('concelho-filter')?.addEventListener('change', e => {
+    state.concelhoFilter = e.target.value; renderSection();
+  });
+  document.getElementById('concelho-sort')?.addEventListener('change', e => {
+    state.concelhoSort = e.target.value; renderSection();
+  });
+}
+
+function openConcelho(name) {
+  state.viewingConcelho = name;
+  renderSection();
+}
+
+function closeConcelho() {
+  state.viewingConcelho = null;
+  renderSection();
+}
+
+function renderConcelhoDetail(container, name) {
+  const beaches = (state.data.beaches || []).filter(b => (b.municipality || '').trim() === name);
+  const s = state.data.settings || {};
+  const premiumMunis = s.premiumMunicipalities || [];
+  const isPrem = premiumMunis.includes(name);
+
+  const activeCount = beaches.filter(b => b.premium === true).length;
+  const total = beaches.length;
+  const hiddenCount = beaches.filter(b => b.hidden).length;
+
+  container.innerHTML = `
+    <div class="p-6">
+      <button onclick="closeConcelho()" class="text-praia-teal-600 text-sm font-semibold mb-4 flex items-center gap-1">← Voltar a Concelhos</button>
+
+      <div class="flex items-start justify-between gap-4 flex-wrap mb-4">
+        <div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <h1 class="font-display text-2xl font-bold text-praia-teal-800">${escHtml(name)}</h1>
+            ${isPrem ? '<span class="badge" style="background:rgba(2,136,209,0.12);color:#0288D1;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.05em;padding:3px 10px;border-radius:8px;">Premium</span>' : ''}
+          </div>
+          <p class="text-sm text-praia-sand-500 mt-1">
+            ${total} praia(s) ·
+            <span style="color:#0288D1;font-weight:600;">${activeCount} com benefícios premium</span>${hiddenCount ? ` · ${hiddenCount} oculta(s)` : ''}
+          </p>
+        </div>
+        <button onclick="saveConcelhosChanges()" class="admin-btn admin-btn-export">Gravar alterações</button>
+      </div>
+
+      <!-- Concelho premium toggle -->
+      <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100" style="display:flex;align-items:center;justify-content:space-between;gap:16px;">
+        <div>
+          <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-1">Concelho pagante</h3>
+          <p style="font-size:12px;color:#8A7D60;line-height:1.5;">Activar marca o concelho como premium e atribui benefícios a <strong>todas as suas praias</strong>. Pode depois excluir praias específicas em baixo.</p>
+        </div>
+        <label style="display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-family:'Poppins',sans-serif;font-weight:600;font-size:13px;color:#003A40;">
+          <input type="checkbox" ${isPrem ? 'checked' : ''} onchange="toggleConcelhoPremium('${escHtml(name).replace(/'/g, "\\'")}', this.checked)" style="accent-color:#003A40;width:20px;height:20px;cursor:pointer;">
+          ${isPrem ? 'Premium ativo' : 'Standard'}
+        </label>
+      </div>
+
+      <!-- Quick actions -->
+      <div class="bg-white rounded-xl p-3 mb-4 shadow-sm border border-praia-sand-100" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+        <span style="font-size:12px;color:#8A7D60;font-family:'Poppins',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-right:6px;">Ações em massa</span>
+        <button onclick="setAllConcelhoBeachesPremium('${escHtml(name).replace(/'/g, "\\'")}', true)"  class="admin-btn admin-btn-secondary" style="font-size:11px;padding:6px 12px;">✓ Ativar premium em todas</button>
+        <button onclick="setAllConcelhoBeachesPremium('${escHtml(name).replace(/'/g, "\\'")}', false)" class="admin-btn admin-btn-secondary" style="font-size:11px;padding:6px 12px;">✗ Desativar em todas</button>
+      </div>
+
+      ${beaches.length === 0
+        ? '<p class="text-praia-sand-500 text-sm">Nenhuma praia registada neste concelho.</p>'
+        : `<div class="bg-white rounded-xl shadow-sm border border-praia-sand-100 overflow-hidden">
+            <table class="w-full text-sm">
+              <thead style="background:#FAF8F5;">
+                <tr>
+                  <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700 text-left">Praia</th>
+                  <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700 text-left">Rio</th>
+                  <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700 text-center" style="width:140px;">Benefícios premium</th>
+                  <th class="px-4 py-3 font-display text-xs uppercase tracking-wider text-praia-teal-700 text-center" style="width:100px;">Ocultar</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${beaches.sort((a, b) => (a.name || '').localeCompare(b.name || '', 'pt')).map(b => {
+                  const idEsc = escHtml(b.id).replace(/'/g, "\\'");
+                  return `
+                  <tr class="border-t border-praia-sand-100 hover:bg-praia-sand-50${b.hidden ? ' opacity-60' : ''}" style="${b.hidden ? 'background:repeating-linear-gradient(135deg,transparent,transparent 10px,rgba(0,0,0,.02) 10px,rgba(0,0,0,.02) 20px);' : ''}">
+                    <td class="px-4 py-3 font-semibold text-praia-teal-800" style="display:flex;align-items:center;gap:8px;">
+                      ${b.hidden ? '<span style="display:inline-flex;align-items:center;padding:1px 6px;border-radius:6px;font-size:9px;font-weight:700;background:#f1f1f1;color:#999;border:1px solid #ddd;margin-right:2px;">OCULTO</span>' : ''}
+                      ${b.thumbnail ? `<img src="${escHtml(b.thumbnail)}" style="width:36px;height:24px;object-fit:cover;border-radius:4px;flex-shrink:0;">` : ''}
+                      ${escHtml(b.name)}
+                    </td>
+                    <td class="px-4 py-3 text-praia-sand-600">${escHtml(b.river || '-')}</td>
+                    <td class="px-4 py-3 text-center">
+                      <label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;">
+                        <input type="checkbox" ${b.premium === true ? 'checked' : ''} onchange="toggleBeachPremium('${idEsc}', this.checked)" style="accent-color:#0288D1;width:18px;height:18px;cursor:pointer;">
+                        <span style="font-size:11px;color:#0288D1;font-weight:600;font-family:'Poppins',sans-serif;text-transform:uppercase;letter-spacing:.05em;">${b.premium === true ? 'Ativo' : 'Inativo'}</span>
+                      </label>
+                    </td>
+                    <td class="px-4 py-3 text-center">
+                      <label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;">
+                        <input type="checkbox" ${b.hidden ? 'checked' : ''} onchange="toggleBeachHiddenInline('${idEsc}', this.checked)" style="accent-color:#C62828;width:18px;height:18px;cursor:pointer;">
+                      </label>
+                    </td>
+                  </tr>`;
+                }).join('')}
+              </tbody>
+            </table>
+          </div>`
+      }
+    </div>`;
+}
+
+function toggleConcelhoPremium(name, paid) {
+  const s = state.data.settings = state.data.settings || {};
+  s.premiumMunicipalities = s.premiumMunicipalities || [];
+  const idx = s.premiumMunicipalities.indexOf(name);
+  if (paid && idx === -1) s.premiumMunicipalities.push(name);
+  if (!paid && idx > -1) s.premiumMunicipalities.splice(idx, 1);
+  markDirty('settings');
+
+  (state.data.beaches || []).forEach(b => {
+    if ((b.municipality || '').trim() === name) b.premium = paid;
+  });
+  markDirty('beaches');
+
+  toast(paid ? `${name} marcado como premium` : `${name} desmarcado de premium`, 'success');
+  renderSection();
+}
+
+function setAllConcelhoBeachesPremium(name, on) {
+  let n = 0;
+  (state.data.beaches || []).forEach(b => {
+    if ((b.municipality || '').trim() === name) { b.premium = on; n++; }
+  });
+  markDirty('beaches');
+  toast(`${n} praia(s) ${on ? 'com' : 'sem'} benefícios premium`, 'success');
+  renderSection();
+}
+
+function toggleBeachPremium(beachId, on) {
+  const b = (state.data.beaches || []).find(x => x.id === beachId);
+  if (!b) return;
+  b.premium = on;
+  markDirty('beaches');
+  renderSection();
+}
+
+function toggleBeachHiddenInline(beachId, hidden) {
+  const b = (state.data.beaches || []).find(x => x.id === beachId);
+  if (!b) return;
+  b.hidden = hidden;
+  markDirty('beaches');
+  renderSection();
+}
+
+async function saveConcelhosChanges() {
+  const beachesDirty  = sectionHasRealChanges('beaches');
+  const settingsDirty = sectionHasRealChanges('settings');
+  if (!beachesDirty && !settingsDirty) {
+    toast('Não existem alterações por gravar.', 'info'); return;
+  }
+  if (!confirm('As alterações serão publicadas no site em produção. Deseja continuar?')) return;
+  if (beachesDirty)  await saveSectionNowSilent('beaches');
+  if (settingsDirty) await saveSectionNowSilent('settings');
+  toast('Alterações de concelhos gravadas e publicadas.', 'success');
+}
+
+async function saveSectionNowSilent(section) {
+  if (!SECTION_TO_DATASET[section]) return;
+  _autoSave.pending.add(section);
+  _autoSave.lastError = null;
+  await _autoSaveFlush(section);
+  if (!_autoSave.lastError) {
+    state.serverSnapshot[section] = JSON.stringify(state.data[section]);
+  }
+  _renderPublishBar();
+}
+
 function editBeach(index) {
   const b = index !== null ? state.data.beaches[index] : {
     id: '', name: '', municipality: '', freguesia: '', district: '', type: 'praia_fluvial', river: '',
@@ -972,14 +1413,20 @@ function editBeach(index) {
     photos: [],
     video360: null,
     services: { ...DEFAULT_SERVICES },
-    apaCode: '', featured: false, passportStamp: true
+    apaCode: '', featured: false, passportStamp: true,
+    inRede: true, inPassaporteDigital: true, inVotar: true
   };
 
   // Merge any missing service keys
   const services = { ...DEFAULT_SERVICES, ...(b.services || {}) };
 
-  // Load photos and thumbnail into state
-  state.editingPhotos = (b.photos || []).map(src => ({ src, name: '' }));
+  // Load photos and thumbnail into state — incluir focalY se existir
+  const focals = Array.isArray(b.photoFocals) ? b.photoFocals : [];
+  state.editingPhotos = (b.photos || []).map((src, i) => ({
+    src,
+    name: '',
+    focalY: Number.isFinite(focals[i]) ? focals[i] : 50,
+  }));
   state.editingThumbnail = b.thumbnail || '';
 
   const districtOptions = DISTRICTS.map(d =>
@@ -1067,6 +1514,11 @@ function editBeach(index) {
       <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100">
         <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-3">Miniatura</h3>
         <p style="font-size:12px;color:#A89A78;margin-bottom:8px;">Imagem pequena usada nas listagens, mapa e votação. Separada da galeria de fotos.</p>
+        <label style="display:flex;align-items:flex-start;gap:8px;background:#FAF8F5;border:1px solid #E8DFD0;border-radius:8px;padding:9px 11px;margin-bottom:10px;font-size:12px;color:#3D3525;cursor:pointer;">
+          <input type="checkbox" id="thumb-watermark-cb" checked style="margin-top:2px;accent-color:#003A40;">
+          <span><strong>Aplicar marca de água do Guia das Praias Fluviais</strong> antes do upload.
+          <span style="display:block;color:#8A7D60;font-size:11px;margin-top:2px;">Igual à das fotos da revista. Desligar apenas se a imagem já vier com marca de água.</span></span>
+        </label>
         <div id="thumbnail-preview" style="margin-bottom:8px;"></div>
         <div id="thumb-drop-zone" style="border:2px dashed #C4B898;border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:all 0.2s;background:#FAF8F5;" onclick="document.getElementById('thumb-file-input').click()">
           <div style="font-family:'Poppins',sans-serif;font-size:13px;color:#8A7D60;font-weight:600;">Arraste a miniatura aqui</div>
@@ -1079,6 +1531,11 @@ function editBeach(index) {
       <!-- Fotografias -->
       <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100">
         <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-3">Fotografias</h3>
+        <label style="display:flex;align-items:flex-start;gap:8px;background:#FAF8F5;border:1px solid #E8DFD0;border-radius:8px;padding:9px 11px;margin-bottom:10px;font-size:12px;color:#3D3525;cursor:pointer;">
+          <input type="checkbox" id="photo-watermark-cb" checked style="margin-top:2px;accent-color:#003A40;">
+          <span><strong>Aplicar marca de água do Guia das Praias Fluviais</strong> antes do upload.
+          <span style="display:block;color:#8A7D60;font-size:11px;margin-top:2px;">Idêntica à das fotos da revista (logo no topo direito + texto diagonal). Desligue apenas se a imagem já estiver marcada.</span></span>
+        </label>
         <div id="photo-gallery" class="mb-3" style="min-height:24px;"></div>
         <div id="photo-drop-zone" style="border:2px dashed #C4B898;border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all 0.2s;background:#FAF8F5;" onclick="document.getElementById('photo-file-input').click()">
           <div style="font-family:'Poppins',sans-serif;font-size:13px;color:#8A7D60;font-weight:600;">Arraste fotos aqui</div>
@@ -1108,12 +1565,30 @@ function editBeach(index) {
       <!-- Opções -->
       <div class="bg-white rounded-xl p-5 mb-6 shadow-sm border border-praia-sand-100">
         <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-3">Opções</h3>
+
+        <div style="font-family:'Poppins';font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#928066;margin-bottom:8px;">Disponibilidade no site</div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-4">
+          <label class="flex items-center gap-2 cursor-pointer text-sm py-1.5 px-3 rounded-lg border border-praia-sand-100 hover:bg-praia-sand-50" title="Se desligada, a praia não aparece na página Rede.">
+            <input type="checkbox" id="b-inRede" ${b.inRede !== false ? 'checked' : ''} style="accent-color:#003A40;">
+            <span class="font-body">Disponível na Rede</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer text-sm py-1.5 px-3 rounded-lg border border-praia-sand-100 hover:bg-praia-sand-50" title="Se desligada, a praia não aparece no álbum do Passaporte Digital.">
+            <input type="checkbox" id="b-inPassaporteDigital" ${b.inPassaporteDigital !== false ? 'checked' : ''} style="accent-color:#003A40;">
+            <span class="font-body">Disponível no Passaporte Digital</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer text-sm py-1.5 px-3 rounded-lg border border-praia-sand-100 hover:bg-praia-sand-50" title="Se desligada, a praia não aparece como candidata na página Votar.">
+            <input type="checkbox" id="b-inVotar" ${b.inVotar !== false ? 'checked' : ''} style="accent-color:#003A40;">
+            <span class="font-body">Disponível em Votar</span>
+          </label>
+        </div>
+
+        <div style="font-family:'Poppins';font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#928066;margin-bottom:8px;">Outros</div>
         <div class="flex items-center gap-6">
           <label class="flex items-center gap-2 cursor-pointer text-sm">
             <input type="checkbox" id="b-featured" ${b.featured ? 'checked' : ''} style="accent-color:#003A40;">
             Destaque na Homepage
           </label>
-          <label class="flex items-center gap-2 cursor-pointer text-sm" title="Marca se esta praia aparece no passaporte impresso do guia. No passaporte digital, todas as praias visíveis aparecem sempre.">
+          <label class="flex items-center gap-2 cursor-pointer text-sm" title="Marca se esta praia aparece no passaporte impresso do guia. O passaporte digital é controlado em cima.">
             <input type="checkbox" id="b-passportStamp" ${b.passportStamp ? 'checked' : ''} style="accent-color:#003A40;">
             No passaporte impresso
           </label>
@@ -1148,10 +1623,16 @@ function editBeach(index) {
 function getBeachFormSnapshot() {
   const inputIds = ['b-name', 'b-id', 'b-municipality', 'b-freguesia', 'b-district', 'b-type', 'b-river', 'b-apaCode', 'b-lat', 'b-lng'];
   const values = inputIds.map(id => document.getElementById(id)?.value || '');
-  const checks = [document.getElementById('b-featured')?.checked, document.getElementById('b-passportStamp')?.checked];
+  const checks = [
+    document.getElementById('b-featured')?.checked,
+    document.getElementById('b-passportStamp')?.checked,
+    document.getElementById('b-inRede')?.checked,
+    document.getElementById('b-inPassaporteDigital')?.checked,
+    document.getElementById('b-inVotar')?.checked,
+  ];
   const services = [];
   document.querySelectorAll('.b-service').forEach(cb => services.push(cb.checked));
-  return JSON.stringify({ values, checks, services, thumb: state.editingThumbnail || '', photos: state.editingPhotos.map(p => p.src), desc: getQuillHTML('b-description-editor') || '' });
+  return JSON.stringify({ values, checks, services, thumb: state.editingThumbnail || '', photos: state.editingPhotos.map(p => ({ src: p.src, focalY: p.focalY })), desc: getQuillHTML('b-description-editor') || '' });
 }
 
 function hasBeachChanges() {
@@ -1190,11 +1671,15 @@ function saveBeach(index) {
     description: getQuillHTML('b-description-editor') || '',
     thumbnail: state.editingThumbnail || '',
     photos: state.editingPhotos.map(p => p.src),
+    photoFocals: state.editingPhotos.map(p => Number.isFinite(p.focalY) ? p.focalY : 50),
     video360: null,
     services,
     apaCode: document.getElementById('b-apaCode').value.trim() || undefined,
     featured: document.getElementById('b-featured').checked,
     passportStamp: document.getElementById('b-passportStamp').checked,
+    inRede: document.getElementById('b-inRede').checked,
+    inPassaporteDigital: document.getElementById('b-inPassaporteDigital').checked,
+    inVotar: document.getElementById('b-inVotar').checked,
   };
 
   if (index !== null) state.data.beaches[index] = beach;
@@ -4186,19 +4671,12 @@ function renderConteudoTab(tabId) {
       </div>`,
     homepage: `
       <div class="bg-white rounded-xl p-5 shadow-sm border border-praia-sand-100 admin-form">
-        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4">Hero · Imagem de Fundo</h3>
-        ${field('homepage.heroBgImage', 'Caminho da Imagem (BRAGA ADAUFE, etc.)', h.heroBgImage)}
-        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4 mt-6">Hero · Vídeo (placeholder)</h3>
-        ${field('homepage.heroVideoSrc', 'Caminho do Vídeo (.mp4)', h.heroVideoSrc)}
-        ${field('homepage.heroVideoPoster', 'Imagem Poster (mostrada antes do vídeo)', h.heroVideoPoster)}
-        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4 mt-6">Hero · Texto</h3>
+        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4">Hero · Botões</h3>
         <div class="grid grid-cols-2 gap-4">
-          ${field('homepage.heroTitleWord1', 'Título · 1ª palavra', h.heroTitleWord1)}
-          ${field('homepage.heroTitleWord2', 'Título · 2ª palavra', h.heroTitleWord2)}
+          ${field('homepage.heroCtaPrimary', 'Botão 1 (Explorar Mapa)', h.heroCtaPrimary)}
+          ${field('homepage.heroCtaSecondary', 'Botão 2 (Votar Praia do Ano)', h.heroCtaSecondary)}
         </div>
-        ${field('homepage.heroDate', 'Data / Edição', h.heroDate)}
-        ${field('homepage.heroScrollHint', 'Indicação de scroll', h.heroScrollHint)}
-        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4 mt-6">Estatísticas (aparecem após expansão)</h3>
+        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-4 mt-6">Hero · Estatísticas</h3>
         <div class="grid grid-cols-2 gap-4">
           ${field('homepage.stat1Label', 'Estatística 1 · Label', h.stat1Label)}
           ${field('homepage.stat1Value', 'Estatística 1 · Valor', h.stat1Value)}

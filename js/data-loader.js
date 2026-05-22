@@ -27,7 +27,9 @@
   };
 
   const isAdmin = /\/admin\.html?$/.test(location.pathname);
-  const TTL_MS = isAdmin ? 60 * 1000 : 5 * 60 * 1000;
+  // TTL curto no público: alterações gravadas no admin propagam-se em ~5s.
+  // No admin, 30s chega (o save invalida o cache imediatamente).
+  const TTL_MS = isAdmin ? 30 * 1000 : 5 * 1000;
   const SS_PREFIX = '__dl_';
 
   const memCache = Object.create(null);
@@ -148,6 +150,27 @@
   // Compat: expor também loadDataset top-level
   global.loadDataset = loadDataset;
   global.saveDataset = saveDataset;
+
+  // ─── Revalidação ao voltar ao separador ───
+  // Quando o utilizador volta ao separador (visibilitychange) OU navega de volta
+  // via BFCache (pageshow.persisted), invalidamos o cache para que a próxima
+  // leitura traga dados frescos da Supabase. Isto garante que qualquer alteração
+  // feita no admin é vista imediatamente quando o utilizador regressa ao site.
+  function _onRevalidate() {
+    invalidate();
+    // Disparar evento para os módulos que queiram re-renderizar
+    try { global.dispatchEvent(new CustomEvent('datasets:revalidate')); } catch {}
+  }
+  if (typeof document !== 'undefined') {
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') _onRevalidate();
+    });
+  }
+  if (typeof window !== 'undefined') {
+    window.addEventListener('pageshow', (ev) => {
+      if (ev.persisted) _onRevalidate();
+    });
+  }
 
   // ─── Fetch interceptor ───
   // Intercepta `fetch('data/<name>.json')` (e variantes com `/data/`, `./data/`,

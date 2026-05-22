@@ -42,3 +42,7 @@ skills-lock.json
 Thumbs.db
 sync-from-admin.mjs
 .sync-cache/
+
+
+# Source photos (2.1GB) — processed into img/praias/ via scripts/process-beach-photos.py
+brand_assets/fotos/Praias Fluviais 2025 Fotos/

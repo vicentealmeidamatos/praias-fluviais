@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // ── Wait only for beaches: that's the only blocking dependency for the
   // initial paint. Auth + Supabase queries run in background afterwards.
   const beachesRaw = await (_beachesEarlyPassport || loadData('beaches').catch(() => null));
-  let beaches = (beachesRaw || []).filter(b => !b.hidden);
+  let beaches = (beachesRaw || []).filter(b => !b.hidden && b.inPassaporteDigital !== false);
   if (!beaches.length) { console.error('Failed to load beaches.json'); return; }
 
   // O álbum digital inclui todas as praias visíveis, mesmo as que não estão no
@@ -425,7 +425,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           <button id="visit-info-close" class="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-black/45 text-white flex items-center justify-center hover:bg-black/60 transition-colors" aria-label="Fechar">
             <i data-lucide="x" style="width:14px;height:14px;"></i>
           </button>
-          ${photo ? `<div class="h-32 sm:h-40 bg-cover bg-center" style="background-image:url('${photo}')"></div>` : ''}
+          ${photo ? `<div class="photo-protected h-32 sm:h-40 bg-cover bg-center" role="img" aria-label="${beach.name}" style="background-image:url('${photo}')"></div>` : ''}
           <div class="p-5 text-center">
             <div class="inline-flex items-center gap-1.5 mb-3 px-3 py-1 rounded-full bg-praia-teal-800 text-praia-yellow-400 font-display text-[10px] font-bold uppercase tracking-wider">
               <i data-lucide="check-circle-2" style="width:13px;height:13px;"></i> Visita registada
@@ -454,7 +454,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           <button id="visit-info-close" class="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-black/40 text-white/90 flex items-center justify-center hover:bg-black/60 transition-colors" aria-label="Fechar">
             <i data-lucide="x" style="width:14px;height:14px;"></i>
           </button>
-          ${photo ? `<div class="h-32 sm:h-40 bg-cover bg-center" style="background-image:url('${photo}');filter:grayscale(0.4) brightness(0.85)"></div>` : ''}
+          ${photo ? `<div class="photo-protected h-32 sm:h-40 bg-cover bg-center" role="img" aria-label="${beach.name}" style="background-image:url('${photo}');filter:grayscale(0.4) brightness(0.85)"></div>` : ''}
           <div class="p-5 text-center">
             <div class="w-12 h-12 mx-auto rounded-2xl bg-praia-sand-100 flex items-center justify-center mb-3">
               <i data-lucide="qr-code" class="w-6 h-6 text-praia-teal-700"></i>
