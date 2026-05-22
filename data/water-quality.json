@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-21T10:05:11.660Z",
+  "lastUpdated": "2026-05-22T09:51:18.669Z",
   "sourceUrl": "https://infoagua.apambiente.pt/pt/praias/praias-pesquisa-avancada",
   "stats": {
     "siteBeaches": 228,
@@ -1219,9 +1219,9 @@
       "apaConcelho": "MAFRA",
       "previousYearDsc": "Boa",
       "previousYearValue": 2,
-      "currentSeasonStatus": "Ainda não há análises",
-      "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "currentSeasonStatus": "Água adequada a banhos",
+      "currentSeasonValue": 1,
+      "lastAnalysisDate": "2026-05-19",
       "interdictionReason": null,
       "seasonStart": "2026-06-13",
       "seasonEnd": "2026-09-13",
@@ -1229,7 +1229,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 81,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-05-22T09:51:18.669Z"
     },
     "praia-fluvial-de-fragas-de-sao-simao": {
       "apaCode": "PTCK7V",
