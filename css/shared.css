@@ -210,6 +210,16 @@ body {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
+/* Header ligeiramente mais compacto em mobile (override das classes Tailwind
+   h-16 / h-14 inline nos HTML — evita editar 16 ficheiros). */
+@media (max-width: 767px) {
+  #main-header > div > .flex.items-center.justify-between {
+    height: 58px;
+  }
+  #main-header > div > .flex.items-center.justify-between > a > img {
+    height: 46px;
+  }
+}
 
 /* ─── Nav Links ─── */
 .nav-link {
@@ -303,7 +313,7 @@ body {
 .bottom-nav .bottom-nav-inner {
   padding-left: env(safe-area-inset-left);
   padding-right: env(safe-area-inset-right);
-  height: 72px;
+  height: 64px;
 }
 /* Em PWA instalado: a nav ocupa toda a zona do fundo (content + safe-area)
    e o conteúdo é alinhado ao fundo com pequena respiração para o
@@ -315,8 +325,8 @@ body {
     padding-bottom: 0;
   }
   .bottom-nav .bottom-nav-inner {
-    /* Inner cobre toda a zona: content (76px) + safe-area do home-indicator */
-    height: calc(76px + env(safe-area-inset-bottom));
+    /* Inner cobre toda a zona: content (68px) + safe-area do home-indicator */
+    height: calc(68px + env(safe-area-inset-bottom));
   }
   /* Ícones e labels maiores (sensação nativa) */
   .bottom-nav [data-lucide],
@@ -368,21 +378,21 @@ body {
 /* ─── Page padding when bottom nav present ─── */
 @media (max-width: 1023px) {
   body.has-bottom-nav {
-    padding-bottom: 72px;
+    padding-bottom: 64px;
   }
   /* Guest-banner (passaporte) deve ficar acima da bottom-nav em mobile */
   body.has-bottom-nav #guest-banner:not(.hidden) {
-    bottom: 72px !important;
+    bottom: 64px !important;
   }
 }
 /* Em PWA instalado, reservar espaço correspondente à altura total da nav
-   (76px de content + safe-area do home-indicator) */
+   (68px de content + safe-area do home-indicator) */
 @media (max-width: 1023px) and (display-mode: standalone) {
   body.has-bottom-nav {
-    padding-bottom: calc(76px + env(safe-area-inset-bottom));
+    padding-bottom: calc(68px + env(safe-area-inset-bottom));
   }
   body.has-bottom-nav #guest-banner:not(.hidden) {
-    bottom: calc(76px + env(safe-area-inset-bottom)) !important;
+    bottom: calc(68px + env(safe-area-inset-bottom)) !important;
   }
 }
 
@@ -404,20 +414,20 @@ body {
    Aplica-se ao modal de detalhes de carimbo no Passaporte. */
 @media (max-width: 639px) {
   body.has-bottom-nav #visit-info-overlay {
-    padding-bottom: calc(72px + env(safe-area-inset-bottom)) !important;
+    padding-bottom: calc(64px + env(safe-area-inset-bottom)) !important;
   }
   body.has-bottom-nav #visit-info-overlay > div {
-    max-height: calc(100dvh - 72px - env(safe-area-inset-bottom) - 16px);
+    max-height: calc(100dvh - 64px - env(safe-area-inset-bottom) - 16px);
     overflow-y: auto;
     overscroll-behavior: contain;
   }
 }
 @media (max-width: 639px) and (display-mode: standalone) {
   body.has-bottom-nav #visit-info-overlay {
-    padding-bottom: calc(76px + env(safe-area-inset-bottom)) !important;
+    padding-bottom: calc(68px + env(safe-area-inset-bottom)) !important;
   }
   body.has-bottom-nav #visit-info-overlay > div {
-    max-height: calc(100dvh - 76px - env(safe-area-inset-bottom) - 16px);
+    max-height: calc(100dvh - 68px - env(safe-area-inset-bottom) - 16px);
   }
 }
 
@@ -427,12 +437,12 @@ body {
    nav. Subimos para que o toast respire ~16px acima da nav. */
 @media (max-width: 1023px) {
   body.has-bottom-nav .fixed.bottom-6 {
-    bottom: calc(72px + 1rem) !important;
+    bottom: calc(64px + 1rem) !important;
   }
 }
 @media (max-width: 1023px) and (display-mode: standalone) {
   body.has-bottom-nav .fixed.bottom-6 {
-    bottom: calc(76px + env(safe-area-inset-bottom) + 1rem) !important;
+    bottom: calc(68px + env(safe-area-inset-bottom) + 1rem) !important;
   }
 }
 

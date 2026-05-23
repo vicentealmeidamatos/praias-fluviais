@@ -1,21 +1,35 @@
 // ─── Pré-carregamento imediato (sem esperar pelo DOM) ───
+// Tudo o que envolve rede é disparado já aqui em paralelo. A página de praia
+// espera por todos estes promises e só depois faz um único render, evitando
+// secções a aparecer em momentos diferentes.
 const _beachId = new URLSearchParams(window.location.search).get('id');
+const _currentYearBP = new Date().getFullYear();
+
 const _beachesEarlyBP = _beachId ? getBeaches() : null;
 const _settingsEarlyBP = _beachId ? loadData('settings') : null;
 const _authEarlyBP = _beachId && window.AuthUtils ? AuthUtils.authGetUser() : null;
 let _reviewsEarlyBP = _beachId && window.AuthUtils ? AuthUtils.reviewsGetForBeach(_beachId) : null;
 const _waterQualityEarlyBP = _beachId
-  ? (window.loadData ? window.loadData('waterQuality').catch(() => null) : null)
-  : null;
+  ? (window.loadData ? window.loadData('waterQuality').catch(() => null) : Promise.resolve(null))
+  : Promise.resolve(null);
+
+// Profile + voto: dependem do utilizador autenticado. Resolvem-se a null se for visitante.
+const _profileEarlyBP = (_beachId && _authEarlyBP)
+  ? _authEarlyBP.then(u => u ? AuthUtils.profileGet(u.id) : null).catch(() => null)
+  : Promise.resolve(null);
+const _voteEarlyBP = (_beachId && _authEarlyBP)
+  ? _authEarlyBP.then(u => u ? AuthUtils.voteGet(u.id, _currentYearBP) : null).catch(() => null)
+  : Promise.resolve(null);
+
 // Pre-start batched badge fetch as soon as reviews + beaches resolve.
 // One call → 3 Supabase queries total, regardless of commenter count.
 let _badgesEarlyBP = (_reviewsEarlyBP && _beachesEarlyBP)
   ? Promise.all([_reviewsEarlyBP, _beachesEarlyBP]).then(([reviews, beaches]) => {
-      const uids = [...new Set(reviews.map(r => r.user_id).filter(Boolean))];
+      const uids = [...new Set((reviews || []).map(r => r.user_id).filter(Boolean))];
       if (!uids.length) return {};
       return AuthUtils.badgesGetForUsers(uids, beaches).catch(() => ({}));
     }).catch(() => ({}))
-  : null;
+  : Promise.resolve({});
 
 // Preload hero image o mais cedo possível
 if (_beachId && _beachesEarlyBP) {
@@ -31,6 +45,43 @@ if (_beachId && _beachesEarlyBP) {
     }
   }).catch(() => {});
 }
+
+// Injecta CSS das medalhas/glow logo ao carregar o módulo. Antes era inserido
+// dentro de loadReviews(); com o render atómico passa a estar sempre disponível
+// antes do primeiro pincel de comentários, garantindo que cartões míticos e
+// diamante aparecem com o glow desde a primeira frame.
+(function injectMedalStyles() {
+  if (typeof document === 'undefined') return;
+  if (document.getElementById('medal-anim-style')) return;
+  const style = document.createElement('style');
+  style.id = 'medal-anim-style';
+  style.textContent = `
+    @keyframes badgeCommentRainbow {
+      from { filter: hue-rotate(0deg) brightness(1.1); }
+      to   { filter: hue-rotate(360deg) brightness(1.1); }
+    }
+    .medal-badge-legendary {
+      animation: badgeCommentRainbow 4s linear infinite;
+    }
+    @keyframes miticoBorder {
+      0%   { border-color: #90E2F0; box-shadow: 0 4px 16px rgba(0,0,0,0.07), 0 0 18px rgba(144,226,240,0.5); }
+      17%  { border-color: #9090F0; box-shadow: 0 4px 16px rgba(0,0,0,0.07), 0 0 18px rgba(144,144,240,0.5); }
+      33%  { border-color: #F090E0; box-shadow: 0 4px 16px rgba(0,0,0,0.07), 0 0 18px rgba(240,144,224,0.5); }
+      50%  { border-color: #F0A890; box-shadow: 0 4px 16px rgba(0,0,0,0.07), 0 0 18px rgba(240,168,144,0.5); }
+      67%  { border-color: #E0F090; box-shadow: 0 4px 16px rgba(0,0,0,0.07), 0 0 18px rgba(224,240,144,0.5); }
+      83%  { border-color: #90F0B4; box-shadow: 0 4px 16px rgba(0,0,0,0.07), 0 0 18px rgba(144,240,180,0.5); }
+      100% { border-color: #90E2F0; box-shadow: 0 4px 16px rgba(0,0,0,0.07), 0 0 18px rgba(144,226,240,0.5); }
+    }
+    .mitico-card {
+      border: 1.5px solid #90E2F0;
+      animation: miticoBorder 4s linear infinite;
+    }
+    .diamante-card {
+      border: 1.5px solid #B9F2FF80;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.07), 0 0 18px rgba(185,242,255,0.45);
+    }`;
+  (document.head || document.documentElement).appendChild(style);
+})();
 
 // ─── Qualidade da Água (APA) ──────────────────────────────────────────────
 const WQ_CLASS_MAP = {
@@ -141,13 +192,30 @@ document.addEventListener('DOMContentLoaded', async () => {
   const mainContent = document.getElementById('beach-content');
   if (!beachId || !mainContent) return;
 
-  // Show skeleton
-  mainContent.innerHTML = `<div class="max-w-5xl mx-auto px-6 py-20"><div class="skeleton h-72 w-full mb-6"></div><div class="skeleton h-8 w-2/3 mb-4"></div><div class="skeleton h-4 w-1/2 mb-8"></div><div class="skeleton h-32 w-full"></div></div>`;
-
-  let beaches = [];
+  // ── Espera por TODOS os dados em paralelo ──────────────────────────────────
+  // Render atómico: nenhuma secção pode aparecer antes das outras. O esqueleto
+  // já está no HTML inicial; substituímo-lo apenas quando tudo está pronto.
+  let beaches, settings, waterQualityJson, currentUser, allReviews,
+      currentProfile, votedBeachId, badgeMap;
   try {
-    beaches = await (_beachesEarlyBP || getBeaches());
+    [beaches, settings, waterQualityJson, currentUser, allReviews,
+     currentProfile, votedBeachId, badgeMap] = await Promise.all([
+      (_beachesEarlyBP || getBeaches()).catch(() => []),
+      (_settingsEarlyBP || loadData('settings')).then(s => s || {}).catch(() => ({})),
+      _waterQualityEarlyBP,
+      _authEarlyBP || (window.AuthUtils ? AuthUtils.authGetUser() : Promise.resolve(null)),
+      (_reviewsEarlyBP || (window.AuthUtils ? AuthUtils.reviewsGetForBeach(beachId) : Promise.resolve([]))).catch(() => []),
+      _profileEarlyBP,
+      _voteEarlyBP,
+      _badgesEarlyBP || Promise.resolve({}),
+    ]);
+    // Consumir o cache do reviews/badges pré-buscado para que rerenders após
+    // submissão/eliminação obtenham dados frescos.
+    _reviewsEarlyBP = null;
+    _badgesEarlyBP = null;
   } catch {}
+
+  beaches = beaches || [];
   if (!beaches.length) {
     mainContent.innerHTML = '<div class="text-center py-20"><p class="text-praia-sand-500">Erro ao carregar dados.</p></div>';
     return;
@@ -213,12 +281,25 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const photoCount = beach.photos.length;
   const focals = Array.isArray(beach.photoFocals) ? beach.photoFocals : [];
+  // Anchor preferencial: fundo. Para fotos com assunto bem ao centro/topo
+  // (focal_Y < 50), respeita-se o focal_Y. Caso contrário, mostra-se o fundo
+  // da foto com um pequeno empurrão extra (a praia/água está quase sempre
+  // na metade inferior).
+  const biasFocal = (f) => (f < 50 ? f : Math.min(100, f + 12));
+  // Cada slide tem:
+  //   - .slide-bg-blur : sempre cover + blur (preenche os lados em letterbox)
+  //   - .slide-photo   : cover por defeito; comuta para contain se a foto for
+  //     significativamente mais estreita que o hero (detecção async no JS).
   const carouselSlides = beach.photos.map((p, i) => {
-    const focalY = Number.isFinite(focals[i]) ? focals[i] : 50;
+    const focalY = biasFocal(Number.isFinite(focals[i]) ? focals[i] : 100);
     return `
     <div class="carousel-slide photo-protected absolute inset-0 transition-opacity duration-500 ease-in-out ${i === 0 ? 'opacity-100' : 'opacity-0'}"
          role="img" aria-label="${beach.name} - foto ${i + 1}"
-         style="background-image:url('${p}');background-size:cover;background-position:50% ${focalY}%;">
+         data-photo-src="${p}" data-focal-y="${focalY}">
+      <div class="slide-bg-blur absolute inset-0"
+           style="background-image:url('${p}');background-size:cover;background-position:50% 50%;filter:blur(28px) brightness(0.45);transform:scale(1.1);"></div>
+      <div class="slide-photo absolute inset-0"
+           style="background-image:url('${p}');background-size:cover;background-position:50% ${focalY}%;background-repeat:no-repeat;"></div>
       <div class="photo-shield" aria-hidden="true"></div>
     </div>
   `;
@@ -231,8 +312,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     <button id="carousel-next" class="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-black/35 hover:bg-black/55 backdrop-blur-sm flex items-center justify-center text-white transition-all duration-200 active:scale-95" aria-label="Próxima foto">
       <i data-lucide="chevron-right" class="w-5 h-5"></i>
     </button>
-    <div class="absolute bottom-20 md:bottom-24 left-0 right-0 flex justify-center gap-1.5 z-20 pointer-events-none">
-      ${beach.photos.map((_, i) => `<button class="carousel-dot pointer-events-auto rounded-full transition-all duration-300 ${i === 0 ? 'bg-white h-1.5 w-4' : 'bg-white/40 h-1.5 w-1.5'}" data-index="${i}" aria-label="Foto ${i + 1}"></button>`).join('')}
+  ` : '';
+
+  const carouselDots = photoCount > 1 ? `
+    <div class="flex gap-1.5 mb-3 md:mb-4">
+      ${beach.photos.map((_, i) => `<button class="carousel-dot rounded-full transition-all duration-300 ${i === 0 ? 'bg-white h-1.5 w-4' : 'bg-white/40 h-1.5 w-1.5'}" data-index="${i}" aria-label="Foto ${i + 1}"></button>`).join('')}
     </div>
   ` : '';
 
@@ -240,21 +324,99 @@ document.addEventListener('DOMContentLoaded', async () => {
     ? `${beach.municipality}, ${beach.freguesia} · ${beach.river}`
     : `${beach.municipality}, ${beach.district} · ${beach.river}`;
 
+  // ── Pré-computar TODAS as secções dinâmicas antes do render único ──────────
+  // Galardões (vencedores anteriores)
+  let winnerMedalsHtml = '';
+  try {
+    const winnerAwards = [];
+    const norm = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+    const beachNorm = norm(beach.name);
+    function matchesBeach(name) {
+      if (!name) return false;
+      const n = norm(name);
+      const nBase = norm(name.split(' - ')[0]);
+      return n.includes(beachNorm) || beachNorm.includes(nBase) || nBase.includes(beachNorm);
+    }
+    ((settings && settings.previousWinners) || []).forEach(w => {
+      const year = w.year;
+      if (matchesBeach(w.winner)) {
+        winnerAwards.push({ rank: 1, position: '1.º Lugar', year, icon: 'trophy', iconColor: '#C8960A', labelColor: '#A67C00', bg: 'linear-gradient(135deg, #FFFDE7 0%, #FFF59D 100%)', bgFlat: '#FFF9C4', border: '#F5C518', textColor: '#7A6200' });
+      }
+      if (matchesBeach(w.second)) {
+        winnerAwards.push({ rank: 2, position: '2.º Lugar', year, icon: 'medal', iconColor: '#8A8A8A', labelColor: '#6B6B6B', bg: 'rgba(192,192,192,0.08)', border: 'rgba(192,192,192,0.3)', textColor: '#003A40' });
+      }
+      if (matchesBeach(w.third)) {
+        winnerAwards.push({ rank: 3, position: '3.º Lugar', year, icon: 'award', iconColor: '#A0612B', labelColor: '#7A4A1E', bg: 'rgba(205,127,50,0.08)', border: 'rgba(205,127,50,0.3)', textColor: '#003A40' });
+      }
+      (w.revelations || []).forEach(rv => {
+        if (matchesBeach(rv.name)) {
+          winnerAwards.push({ rank: 4, position: `Revelação${rv.label ? ' ' + rv.label : ''}`, year, icon: 'sparkles', iconColor: '#0270AD', labelColor: '#025E8F', bg: 'rgba(2,136,209,0.08)', border: 'rgba(2,136,209,0.3)', textColor: '#003A40' });
+        }
+      });
+    });
+    winnerAwards.sort((a, b) => a.rank !== b.rank ? a.rank - b.rank : String(b.year).localeCompare(String(a.year), undefined, { numeric: true }));
+    if (winnerAwards.length > 0) {
+      winnerMedalsHtml = `
+      <section class="mb-12">
+        <h2 class="font-display text-xs uppercase tracking-[0.2em] text-praia-teal-500 font-semibold mb-5">Galardões</h2>
+        <div class="flex flex-wrap gap-3">
+          ${winnerAwards.map(a => `
+            <a href="votar.html?ano=${a.year}#vencedores" style="text-decoration:none;display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border-radius:14px;background:${a.bg};border:1px solid ${a.border};transition:transform 0.2s,box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+              <div style="width:40px;height:40px;border-radius:10px;background:${a.rank === 1 ? 'rgba(245,197,24,0.15)' : a.bgFlat || a.bg};display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <i data-lucide="${a.icon}" style="width:20px;height:20px;color:${a.rank === 1 ? '#D4A800' : a.iconColor};"></i>
+              </div>
+              <div>
+                <span style="font-family:'Poppins',sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:${a.rank === 1 ? '#A67C00' : a.labelColor};font-weight:600;display:block;">Praia Fluvial do Ano</span>
+                <span style="font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;color:${a.textColor};">${a.position} ${a.year}</span>
+              </div>
+            </a>
+          `).join('')}
+        </div>
+      </section>`;
+    }
+  } catch (e) {
+    console.warn('[beach-page] winner medals error:', e);
+  }
+
+  // Qualidade da água (APA) — string vazia se não houver dados (omite secção)
+  const waterQualityHtml = renderWaterQualitySection(beach.id, waterQualityJson) || '';
+
+  // CTA de voto — mostra se utilizador ainda não votou neste ano (visitantes vêem CTA também)
+  const showVoteCta = !currentUser || !votedBeachId;
+  const voteSectionHtml = `
+      <section class="mb-12 bg-praia-teal-800 rounded-2xl p-8 md:p-10 text-center noise-overlay relative overflow-hidden${showVoteCta ? '' : ' hidden'}" id="beach-vote-section">
+        <div class="relative z-10">
+          <i data-lucide="trophy" class="w-10 h-10 text-praia-yellow-400 mx-auto mb-4"></i>
+          <h2 class="font-display text-xl md:text-2xl font-bold text-white mb-3">Vote nesta praia fluvial para Praia do Ano 2026</h2>
+          <p class="text-white/50 text-sm mb-6">Ajude ${beach.name} a ganhar o galardão Praia Fluvial do Ano!</p>
+          <button onclick="openVoteModal('${beach.id}', '${beach.name.replace(/'/g, "\\'")}')" class="btn-primary inline-flex items-center gap-2 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider px-8 py-4 rounded-full shadow-layered-yellow">
+            <i data-lucide="vote" class="w-5 h-5"></i> Votar Agora
+          </button>
+        </div>
+      </section>`;
+
+  // Comentários — render imediato já com medalhas (badgeMap pré-buscado)
+  const reviewsInnerHtml = buildReviewsHtml(allReviews || [], currentUser, badgeMap || {}, beach.id);
+  // Formulário de comentário
+  const reviewFormHtml = buildReviewFormHtml(beach.id, currentUser, currentProfile);
+
   mainContent.innerHTML = `
     <!-- Hero Carousel -->
     <div class="relative" id="hero-carousel">
-      <div class="relative overflow-hidden h-72 md:h-96 lg:h-[500px]">
+      <div class="relative overflow-hidden h-[440px] md:h-[560px] lg:h-[680px]">
         ${carouselSlides}
         <div class="hero-watermark" aria-hidden="true">
           <img src="brand_assets/logotipo.png" alt="">
         </div>
       </div>
       ${carouselControls}
-      <div class="absolute inset-0 bg-gradient-to-t from-praia-teal-800/80 via-transparent to-transparent pointer-events-none z-10"></div>
-      <div class="absolute bottom-0 left-0 right-0 p-6 md:p-10 z-20">
-        <span class="kicker-yellow block mb-2">${beach.type === 'zona_balnear' ? 'Zona Balnear' : 'Praia Fluvial'}</span>
-        <h1 data-content-bind="beaches:${beachIdx}.name" class="font-display text-2xl md:text-4xl lg:text-5xl font-bold text-white tracking-tightest mb-2">${beach.name}</h1>
-        <p class="text-white/60 font-body text-sm md:text-base"><span data-content-bind="beaches:${beachIdx}.municipality">${beach.municipality}</span>${beach.freguesia ? `, <span data-content-bind="beaches:${beachIdx}.freguesia">${beach.freguesia}</span>` : `, <span data-content-bind="beaches:${beachIdx}.district">${beach.district}</span>`} · <span data-content-bind="beaches:${beachIdx}.river">${beach.river}</span></p>
+      <!-- Gradiente mais contido no fundo (não invade a metade superior) -->
+      <div class="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-praia-teal-900/85 via-praia-teal-900/35 to-transparent pointer-events-none z-10"></div>
+      <div class="absolute bottom-0 left-0 right-0 p-4 md:p-8 lg:p-10 z-20">
+        ${carouselDots}
+        <span class="kicker-yellow block mb-1.5 md:mb-2">${beach.type === 'zona_balnear' ? 'Zona Balnear' : 'Praia Fluvial'}</span>
+        <h1 data-content-bind="beaches:${beachIdx}.name" class="font-display text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold text-white tracking-tightest mb-1 md:mb-2 leading-tight">${beach.name}</h1>
+        <p class="text-white/70 font-body text-xs sm:text-sm md:text-base"><span data-content-bind="beaches:${beachIdx}.municipality">${beach.municipality}</span>${beach.freguesia ? `, <span data-content-bind="beaches:${beachIdx}.freguesia">${beach.freguesia}</span>` : `, <span data-content-bind="beaches:${beachIdx}.district">${beach.district}</span>`} · <span data-content-bind="beaches:${beachIdx}.river">${beach.river}</span></p>
       </div>
     </div>
 
@@ -265,14 +427,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         <div class="grid gap-4" style="grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));">${servicesHtml}</div>
       </section>
 
+      ${winnerMedalsHtml}
+
       <!-- Description -->
       <section class="mb-12">
         <h2 class="font-display text-xs uppercase tracking-[0.2em] text-praia-teal-500 font-semibold mb-4">Sobre esta Praia</h2>
         <p data-content-bind="beaches:${beachIdx}.description" class="text-praia-sand-700 leading-relaxed-plus text-base md:text-lg">${beach.description}</p>
       </section>
 
-      <!-- Water Quality (APA) — populated async (omitida se sem dados) -->
-      <div id="water-quality-slot"></div>
+      ${waterQualityHtml}
 
       <!-- Weather -->
       <section class="mb-12">
@@ -300,17 +463,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         </div>
       </section>
 
-      <!-- Vote (hidden until we confirm user hasn't voted) -->
-      <section class="mb-12 bg-praia-teal-800 rounded-2xl p-8 md:p-10 text-center noise-overlay relative overflow-hidden hidden" id="beach-vote-section">
-        <div class="relative z-10">
-          <i data-lucide="trophy" class="w-10 h-10 text-praia-yellow-400 mx-auto mb-4"></i>
-          <h2 class="font-display text-xl md:text-2xl font-bold text-white mb-3">Vote nesta praia fluvial para Praia do Ano 2026</h2>
-          <p class="text-white/50 text-sm mb-6">Ajude ${beach.name} a ganhar o galardão Praia Fluvial do Ano!</p>
-          <button onclick="openVoteModal('${beach.id}', '${beach.name.replace(/'/g, "\\'")}')" class="btn-primary inline-flex items-center gap-2 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider px-8 py-4 rounded-full shadow-layered-yellow">
-            <i data-lucide="vote" class="w-5 h-5"></i> Votar Agora
-          </button>
-        </div>
-      </section>
+      ${voteSectionHtml}
 
       <!-- Share -->
       <section class="mb-12">
@@ -331,11 +484,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       <!-- Community Reviews -->
       <section class="mb-12">
         <h2 class="font-display text-xs uppercase tracking-[0.2em] text-praia-teal-500 font-semibold mb-5">Comunidade</h2>
-        <div id="reviews-container" class="space-y-4 mb-6">
-          <div class="skeleton h-24 rounded-xl"></div>
-          <div class="skeleton h-24 rounded-xl"></div>
-        </div>
-        <div id="review-form-area"></div>
+        <div id="reviews-container" class="space-y-4 mb-6">${reviewsInnerHtml}</div>
+        <div id="review-form-area">${reviewFormHtml}</div>
       </section>
 
       <!-- Nearby Beaches -->
@@ -365,6 +515,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   lucide.createIcons();
   initCarousel(photoCount);
+  initSlideAspectFit();
 
   // ── Fire weather independently (never blocks anything) ──────────────────────
   const weatherWidget = document.getElementById('weather-widget');
@@ -1022,6 +1173,80 @@ function showToast(msg) {
   t.textContent = msg;
   document.body.appendChild(t);
   setTimeout(() => t.remove(), 3500);
+}
+
+// ─── Slide aspect fit ────────────────────────────────────────────────────────
+// Para cada slide, detecta o aspect ratio natural da foto. Se for
+// significativamente mais estreita que o hero (e.g. portrait), comuta de
+// `cover` (que faria zoom excessivo) para `contain` (mostra a foto inteira à
+// altura do hero, na largura original) — o fundo blurred preenche os lados.
+function initSlideAspectFit() {
+  const slides = document.querySelectorAll('.carousel-slide[data-photo-src]');
+  if (!slides.length) return;
+  // Pré-carregar dimensões naturais das fotos (cache local)
+  const naturals = new Map();
+  function applyOne(slide) {
+    const src = slide.dataset.photoSrc;
+    const photo = slide.querySelector('.slide-photo');
+    if (!src || !photo) return;
+    const heroW = slide.clientWidth;
+    const heroH = slide.clientHeight;
+    if (!heroW || !heroH) return false;
+    const nat = naturals.get(src);
+    if (!nat) return false;
+    const photoA = nat.w / nat.h;
+    // Apenas fotos verticais ou quase-quadradas recebem letterbox.
+    // Fotos landscape (4:3, 3:2, 16:9, etc.) ficam sempre em `cover`.
+    const shouldContain = photoA < 1.05;
+    const focalY = slide.dataset.focalY || '50';
+    if (shouldContain) {
+      photo.style.backgroundSize = 'contain';
+      photo.style.backgroundPosition = '50% 50%';
+    } else {
+      photo.style.backgroundSize = 'cover';
+      photo.style.backgroundPosition = `50% ${focalY}%`;
+    }
+    return true;
+  }
+  function loadAndApply(slide) {
+    const src = slide.dataset.photoSrc;
+    if (!src) return;
+    if (naturals.has(src)) { applyOne(slide); return; }
+    const im = new Image();
+    im.onload = () => {
+      naturals.set(src, { w: im.naturalWidth, h: im.naturalHeight });
+      applyOne(slide);
+    };
+    im.src = src;
+  }
+  // Esperar o layout do hero ficar pronto antes da primeira aplicação
+  // (Tailwind CDN injecta CSS async; sem isto, clientHeight=0).
+  function waitForLayoutAndApply() {
+    const first = slides[0];
+    if (first && first.clientHeight > 0) {
+      slides.forEach(loadAndApply);
+      return;
+    }
+    // Polling curto até o hero ter altura
+    let tries = 0;
+    const t = setInterval(() => {
+      tries++;
+      if (first && first.clientHeight > 0) {
+        clearInterval(t);
+        slides.forEach(loadAndApply);
+      } else if (tries > 40) { // ~2s
+        clearInterval(t);
+        slides.forEach(loadAndApply);
+      }
+    }, 50);
+  }
+  waitForLayoutAndApply();
+  // Re-avaliar em resize (mudança de viewport pode alterar o hero aspect)
+  let rT;
+  window.addEventListener('resize', () => {
+    clearTimeout(rT);
+    rT = setTimeout(() => slides.forEach(applyOne), 150);
+  });
 }
 
 // ─── Carousel ─────────────────────────────────────────────────────────────────

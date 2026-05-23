@@ -1,0 +1,832 @@
+{
+  "zona-balnear-de-melres": [
+    49
+  ],
+  "zona-balnear-de-zebreiros": [
+    47
+  ],
+  "zona-balnear-de-janeiro-de-cima": [
+    71,
+    72
+  ],
+  "parque-fluvial-do-alfusqueiro": [
+    50
+  ],
+  "praia-fluvial-de-rocas": [
+    69,
+    56,
+    55
+  ],
+  "praia-fluvial-de-arquiteto-albino-mendo": [
+    57,
+    39
+  ],
+  "praia-fluvial-de-albufeira-de-queimadela": [
+    50
+  ],
+  "praia-fluvial-de-albufeira-da-tapada-grande": [
+    50
+  ],
+  "praia-fluvial-de-albufeira-de-odeleite": [
+    50
+  ],
+  "praia-fluvial-de-albufeira-do-ermal": [
+    50
+  ],
+  "praia-fluvial-de-albufeira-do-vilar": [
+    50
+  ],
+  "praia-fluvial-de-albufeira-do-caldeirao": [
+    76,
+    65
+  ],
+  "praia-fluvial-de-barrinha-de-mira": [
+    50
+  ],
+  "praia-fluvial-de-bogueira": [
+    50
+  ],
+  "praia-fluvial-de-cabreira": [
+    46
+  ],
+  "praia-fluvial-de-congida": [
+    36,
+    53,
+    44,
+    48
+  ],
+  "praia-fluvial-de-fraga-da-pegada": [
+    50
+  ],
+  "praia-fluvial-de-froia": [
+    35,
+    56
+  ],
+  "praia-fluvial-de-lagoa-da-ervedeira": [
+    67,
+    35
+  ],
+  "praia-fluvial-de-lenta": [
+    50
+  ],
+  "praia-fluvial-de-lomba": [
+    54,
+    49,
+    49
+  ],
+  "praia-fluvial-de-loucainha": [
+    50
+  ],
+  "praia-fluvial-de-mamoa": [
+    50
+  ],
+  "praia-fluvial-de-mota": [
+    50
+  ],
+  "zona-balnear-de-ortiga": [
+    76,
+    53
+  ],
+  "praia-fluvial-de-peneda-pego-escuro": [
+    46,
+    42
+  ],
+  "praia-fluvial-de-videmonte-quinta-da-taberna": [
+    54
+  ],
+  "praia-fluvial-de-quinta-do-alamal": [
+    42,
+    65,
+    76
+  ],
+  "praia-fluvial-de-quinta-do-barco": [
+    50
+  ],
+  "praia-fluvial-de-relva-da-reboleira": [
+    50
+  ],
+  "praia-fluvial-de-ribeira": [
+    50
+  ],
+  "praia-fluvial-de-ribeira-grande": [
+    41,
+    35
+  ],
+  "praia-fluvial-de-ronqueira": [
+    51,
+    69
+  ],
+  "praia-fluvial-de-zaboeira": [
+    47
+  ],
+  "praia-fluvial-de-azenhas-de-vilar-de-mouros": [
+    50
+  ],
+  "praia-fluvial-de-canaveias": [
+    59,
+    64
+  ],
+  "praia-fluvial-de-pedras-ruivas": [
+    50
+  ],
+  "praia-fluvial-de-acude-pinto": [
+    50
+  ],
+  "praia-fluvial-de-adaufe": [
+    50,
+    69
+  ],
+  "praia-fluvial-de-agroal": [
+    50
+  ],
+  "praia-fluvial-de-albergaria-dos-fusos": [
+    50
+  ],
+  "praia-fluvial-de-aldeia-do-mato": [
+    76,
+    61
+  ],
+  "praia-fluvial-de-aldeia-ruiva": [
+    66,
+    50
+  ],
+  "praia-fluvial-de-aldeia-vicosa": [
+    76,
+    75,
+    35,
+    59,
+    66
+  ],
+  "praia-fluvial-de-albufeira-de-alfaiates": [
+    76
+  ],
+  "praia-fluvial-de-almaceda": [
+    48,
+    61,
+    54
+  ],
+  "praia-fluvial-de-alqueidao": [
+    57,
+    76
+  ],
+  "praia-fluvial-de-alqueva": [
+    50
+  ],
+  "praia-fluvial-de-alvares": [
+    57,
+    61
+  ],
+  "praia-fluvial-de-alvaro": [
+    50
+  ],
+  "praia-fluvial-de-alvoco-das-varzeas": [
+    60,
+    35
+  ],
+  "praia-fluvial-de-amieira": [
+    50
+  ],
+  "praia-fluvial-de-ana-de-aviz": [
+    65,
+    51
+  ],
+  "praia-fluvial-de-anca": [
+    50
+  ],
+  "praia-fluvial-de-avo": [
+    42,
+    35,
+    43
+  ],
+  "praia-fluvial-de-azenhas-d-el-rei": [
+    50
+  ],
+  "praia-fluvial-de-badamalos": [
+    74,
+    50
+  ],
+  "praia-fluvial-de-bairrada-bairradinha": [
+    50
+  ],
+  "praia-fluvial-de-benfeita": [
+    50
+  ],
+  "praia-fluvial-de-bitetos": [
+    50
+  ],
+  "praia-fluvial-de-burgaes-rio-caima": [
+    50
+  ],
+  "praia-fluvial-de-cambas": [
+    50
+  ],
+  "praia-fluvial-de-cardigos": [
+    59,
+    62
+  ],
+  "praia-fluvial-de-carrica": [
+    45,
+    35
+  ],
+  "praia-fluvial-de-cascalheira-secarias": [
+    50
+  ],
+  "praia-fluvial-de-castelo-novo": [
+    49,
+    52,
+    56,
+    53
+  ],
+  "praia-fluvial-de-cavadinho": [
+    49,
+    59,
+    51,
+    66
+  ],
+  "praia-fluvial-de-cavez": [
+    50
+  ],
+  "praia-fluvial-de-cinco-reis": [
+    50
+  ],
+  "praia-fluvial-de-coja": [
+    50
+  ],
+  "praia-fluvial-de-constancia": [
+    70,
+    54
+  ],
+  "praia-fluvial-de-cornicovo": [
+    48,
+    58,
+    49,
+    49,
+    72,
+    75
+  ],
+  "praia-fluvial-de-destriz": [
+    45
+  ],
+  "praia-fluvial-de-ereira": [
+    50
+  ],
+  "praia-fluvial-de-fernandaires": [
+    36
+  ],
+  "praia-fluvial-de-folgosa": [
+    50
+  ],
+  "praia-fluvial-de-fontes": [
+    59,
+    64,
+    55
+  ],
+  "praia-fluvial-de-foz-do-cobrao": [
+    50
+  ],
+  "praia-fluvial-de-foz-do-lizandro": [
+    50
+  ],
+  "praia-fluvial-de-fragas-de-sao-simao": [
+    76,
+    53
+  ],
+  "praia-fluvial-de-janeiro-de-baixo": [
+    50
+  ],
+  "praia-fluvial-de-lapa-dos-dinheiros": [
+    42,
+    50
+  ],
+  "praia-fluvial-de-loriga": [
+    73,
+    76
+  ],
+  "praia-fluvial-de-mega-fundeira": [
+    60,
+    58
+  ],
+  "praia-fluvial-de-merelim-sao-paio": [
+    37,
+    69
+  ],
+  "praia-fluvial-de-moinho-de-alva": [
+    50
+  ],
+  "praia-fluvial-de-monsaraz": [
+    37,
+    76
+  ],
+  "praia-fluvial-de-montalvo-tesos": [
+    41,
+    76,
+    56
+  ],
+  "praia-fluvial-de-montes": [
+    76,
+    57
+  ],
+  "praia-fluvial-de-mourao": [
+    50
+  ],
+  "praia-fluvial-de-navarra": [
+    50
+  ],
+  "praia-fluvial-de-odemira": [
+    54,
+    76
+  ],
+  "praia-fluvial-de-olhos-de-fervenca": [
+    50
+  ],
+  "praia-fluvial-de-oriola": [
+    50
+  ],
+  "praia-fluvial-de-paco-do-mato": [
+    50
+  ],
+  "praia-fluvial-de-palheiros-e-zorro": [
+    50
+  ],
+  "praia-fluvial-de-pampilhosa-da-serra-vila": [
+    50
+  ],
+  "praia-fluvial-de-pessegueiro": [
+    50
+  ],
+  "praia-fluvial-de-corga": [
+    72,
+    56
+  ],
+  "praia-fluvial-de-pomares": [
+    50
+  ],
+  "praia-fluvial-de-ponte-da-barca": [
+    50
+  ],
+  "praia-fluvial-de-ponte-da-pedra": [
+    76,
+    35
+  ],
+  "zona-balnear-de-ponte-da-ranca": [
+    72
+  ],
+  "praia-fluvial-de-ponte-de-frades": [
+    52
+  ],
+  "praia-fluvial-de-ponte-de-juncais": [
+    58,
+    47
+  ],
+  "praia-fluvial-de-ponte-do-bico": [
+    51,
+    75
+  ],
+  "praia-fluvial-de-ponte-do-sotao": [
+    70,
+    70
+  ],
+  "praia-fluvial-de-ponte-soeira": [
+    58,
+    59
+  ],
+  "praia-fluvial-de-pontemieiro": [
+    50
+  ],
+  "praia-fluvial-de-prado-faial": [
+    50
+  ],
+  "praia-fluvial-de-quadrazais-lameira": [
+    50,
+    48
+  ],
+  "praia-fluvial-de-quintas": [
+    44,
+    66
+  ],
+  "praia-fluvial-de-rapoula-do-coa": [
+    60,
+    59
+  ],
+  "praia-fluvial-de-sabugal-devesa": [
+    56,
+    45
+  ],
+  "praia-fluvial-de-sandomil": [
+    52,
+    76
+  ],
+  "praia-fluvial-de-santa-clara": [
+    50,
+    75
+  ],
+  "praia-fluvial-de-santa-luzia": [
+    50
+  ],
+  "praia-fluvial-de-sao-giao": [
+    65,
+    45
+  ],
+  "praia-fluvial-de-sao-sebastiao-da-feira": [
+    40,
+    36
+  ],
+  "praia-fluvial-de-segoes": [
+    50
+  ],
+  "praia-fluvial-de-senhora-da-graca": [
+    50
+  ],
+  "praia-fluvial-de-senhora-da-piedade": [
+    50
+  ],
+  "praia-fluvial-de-senhora-da-ribeira": [
+    50
+  ],
+  "praia-fluvial-de-sete-fontes": [
+    50
+  ],
+  "praia-fluvial-de-unhais-da-serra": [
+    62,
+    62
+  ],
+  "praia-fluvial-de-vale-das-eguas-insua": [
+    53,
+    68
+  ],
+  "praia-fluvial-de-vale-juncal": [
+    60,
+    66
+  ],
+  "praia-fluvial-de-valhelhas": [
+    76
+  ],
+  "praia-fluvial-de-verim": [
+    50
+  ],
+  "praia-fluvial-de-vila-cova-a-coelheira": [
+    61
+  ],
+  "praia-fluvial-de-vila-da-ponte": [
+    76,
+    41,
+    52
+  ],
+  "praia-fluvial-de-vila-nova-serra": [
+    75,
+    59
+  ],
+  "praia-fluvial-de-acude-dos-vais": [
+    50
+  ],
+  "praia-fluvial-de-agroal-ourem": [
+    65,
+    67,
+    67
+  ],
+  "praia-fluvial-de-alqueirao": [
+    50
+  ],
+  "praia-fluvial-de-boico": [
+    67
+  ],
+  "praia-fluvial-de-bostelim": [
+    72
+  ],
+  "praia-fluvial-de-cabril": [
+    35,
+    62
+  ],
+  "praia-fluvial-de-carvoeiro": [
+    74,
+    74
+  ],
+  "praia-fluvial-de-clube-nautico-de-avis": [
+    50
+  ],
+  "praia-fluvial-de-colmeal": [
+    46
+  ],
+  "praia-fluvial-de-praia-do-lago": [
+    50
+  ],
+  "praia-fluvial-de-lago-azul": [
+    76
+  ],
+  "praia-fluvial-de-malhadal": [
+    70,
+    60
+  ],
+  "praia-fluvial-de-marmeleiro": [
+    54
+  ],
+  "praia-fluvial-de-meimao": [
+    48,
+    49,
+    76
+  ],
+  "praia-fluvial-de-mosteiro": [
+    46,
+    35,
+    68
+  ],
+  "praia-fluvial-de-pego-das-cancelas": [
+    55,
+    59
+  ],
+  "praia-fluvial-de-pego-fundo": [
+    50
+  ],
+  "praia-fluvial-de-penedo-furado": [
+    54,
+    64
+  ],
+  "praia-fluvial-de-piodao": [
+    38,
+    38,
+    41
+  ],
+  "praia-fluvial-de-pontilhao-da-valeta": [
+    50
+  ],
+  "praia-fluvial-de-rabacal": [
+    50
+  ],
+  "praia-fluvial-de-rebolim": [
+    50
+  ],
+  "praia-fluvial-de-reconquinho": [
+    74,
+    55
+  ],
+  "praia-fluvial-de-sesmo": [
+    67,
+    39
+  ],
+  "praia-fluvial-de-sorraia": [
+    76,
+    44
+  ],
+  "praia-fluvial-de-trabulo": [
+    59,
+    76,
+    53
+  ],
+  "praia-fluvial-de-troviscal": [
+    59,
+    74
+  ],
+  "praia-fluvial-de-vale-do-mondego": [
+    55,
+    76
+  ],
+  "praia-fluvial-de-vale-do-rossim": [
+    50
+  ],
+  "praia-fluvial-de-vimieiro": [
+    51,
+    59,
+    35,
+    35,
+    53,
+    45
+  ],
+  "praia-fluvial-de-olhos-de-agua-do-alviela": [
+    50
+  ],
+  "praia-fluvial-de-ucha": [
+    44,
+    73,
+    66,
+    59
+  ],
+  "zona-balnear-de-barragem-de-idanha": [
+    60,
+    68
+  ],
+  "zona-balnear-de-barroca": [
+    50
+  ],
+  "zona-balnear-de-capinha": [
+    44,
+    76
+  ],
+  "praia-fluvial-de-cascata-da-cabreia": [
+    50
+  ],
+  "zona-balnear-de-lisga": [
+    62,
+    48
+  ],
+  "praia-fluvial-de-maravilha": [
+    36,
+    36
+  ],
+  "zona-balnear-de-meimoa": [
+    50,
+    57
+  ],
+  "zona-balnear-de-paradinha": [
+    50
+  ],
+  "praia-fluvial-de-portagem": [
+    50
+  ],
+  "praia-fluvial-de-ratoeira": [
+    50
+  ],
+  "zona-balnear-de-ribeira-da-venda": [
+    66,
+    43,
+    64
+  ],
+  "zona-balnear-de-ribeira-grande": [
+    50
+  ],
+  "praia-fluvial-de-albergaria-da-serra": [
+    50
+  ],
+  "praia-fluvial-de-alverangel": [
+    50
+  ],
+  "zona-balnear-de-alvito-da-beira": [
+    51,
+    53
+  ],
+  "zona-balnear-de-amoreira-rio": [
+    50
+  ],
+  "zona-balnear-de-armoniz": [
+    50
+  ],
+  "zona-balnear-de-cabeco-de-vide": [
+    50
+  ],
+  "zona-balnear-de-cartamil": [
+    50
+  ],
+  "zona-balnear-de-cerejeira": [
+    49,
+    76
+  ],
+  "zona-balnear-de-cortes-do-meio": [
+    66,
+    66,
+    39,
+    72
+  ],
+  "praia-fluvial-de-espiunca": [
+    50
+  ],
+  "praia-fluvial-de-folques": [
+    50
+  ],
+  "praia-fluvial-de-foz-d-egua": [
+    50
+  ],
+  "zona-balnear-de-foz-do-sabor": [
+    50
+  ],
+  "zona-balnear-de-fraguas": [
+    50
+  ],
+  "zona-balnear-de-frechas": [
+    70,
+    51
+  ],
+  "zona-balnear-de-fresulfe": [
+    50
+  ],
+  "zona-balnear-de-lajeosa-do-mondego": [
+    50
+  ],
+  "zona-balnear-de-lavacolhos": [
+    53,
+    68
+  ],
+  "zona-balnear-de-leomil": [
+    50
+  ],
+  "zona-balnear-de-malcata": [
+    56,
+    54
+  ],
+  "zona-balnear-de-malhada-cha": [
+    50
+  ],
+  "zona-balnear-de-nuzedo-de-baixo": [
+    50
+  ],
+  "zona-balnear-de-ourondo": [
+    71,
+    49,
+    36,
+    62
+  ],
+  "zona-balnear-de-penalobo": [
+    73,
+    56,
+    76
+  ],
+  "praia-fluvial-de-peneda-talhada": [
+    50
+  ],
+  "zona-balnear-de-pombal": [
+    50
+  ],
+  "zona-balnear-de-ponte-macas": [
+    50
+  ],
+  "praia-fluvial-de-rio-torto": [
+    50
+  ],
+  "praia-fluvial-de-sabugueiro": [
+    67,
+    66
+  ],
+  "praia-fluvial-de-sao-joao-do-monte": [
+    50
+  ],
+  "zona-balnear-de-segade": [
+    50
+  ],
+  "praia-fluvial-de-seixo-do-coa": [
+    46
+  ],
+  "zona-balnear-de-sobral-de-sao-miguel": [
+    76
+  ],
+  "zona-balnear-de-souto-da-casa": [
+    60,
+    39,
+    49
+  ],
+  "zona-balnear-de-souto-do-rio": [
+    50
+  ],
+  "praia-fluvial-de-urtigal": [
+    50
+  ],
+  "zona-balnear-de-vale-de-espinho": [
+    72,
+    58
+  ],
+  "zona-balnear-de-valeiro-do-barco-sarzedo": [
+    50
+  ],
+  "zona-balnear-de-vau": [
+    50
+  ],
+  "zona-balnear-de-verdelhos": [
+    44,
+    55
+  ],
+  "zona-balnear-de-vila-do-carvalho": [
+    69,
+    59
+  ],
+  "praia-fluvial-de-areinho": [
+    50
+  ],
+  "zona-balnear-de-covao-da-ponte": [
+    50
+  ],
+  "zona-balnear-de-paul": [
+    35,
+    62
+  ],
+  "zona-balnear-de-pego": [
+    71,
+    40
+  ],
+  "zona-balnear-do-poco-da-cesta-casal-novo": [
+    50
+  ],
+  "praia-fluvial-de-poco-do-lagar": [
+    66,
+    76
+  ],
+  "zona-balnear-do-poco-do-pujadouro-cepos": [
+    50
+  ],
+  "zona-balnear-de-trizio": [
+    76,
+    50
+  ],
+  "praia-fluvial-de-dr-pedro-n-sra-do-desterro": [
+    53,
+    46
+  ],
+  "praia-fluvial-de-o-moinho-benquerenca": [
+    69,
+    64,
+    62,
+    59,
+    67,
+    55,
+    65
+  ],
+  "zona-de-lazer-de-sejaes": [
+    69
+  ]
+}

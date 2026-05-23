@@ -27,12 +27,18 @@
   };
 
   const isAdmin = /\/admin\.html?$/.test(location.pathname);
-  // TTL curto no público: alterações gravadas no admin propagam-se em ~5s.
-  // No admin, 30s chega (o save invalida o cache imediatamente).
-  const TTL_MS = isAdmin ? 30 * 1000 : 5 * 1000;
+  // Stale-while-revalidate:
+  //  - FRESH: dentro deste tempo, devolve sem refetch
+  //  - STALE: depois de FRESH e antes de MAX, devolve já e refetch em background
+  //  - > MAX: tratado como inexistente (refetch síncrono)
+  // Admin precisa dados quase em tempo real; público pode ser muito mais relaxado
+  // (visibilitychange + admin save invalidam explicitamente).
+  const TTL_FRESH_MS = isAdmin ? 10 * 1000 : 60 * 1000;
+  const TTL_MAX_MS   = isAdmin ? 5 * 60 * 1000 : 24 * 60 * 60 * 1000;
   const SS_PREFIX = '__dl_';
 
   const memCache = Object.create(null);
+  const _inflight = Object.create(null);
   // Capturar fetch original imediatamente, antes do interceptor ser instalado
   const _rawFetch = global.fetch ? global.fetch.bind(global) : null;
 
@@ -41,7 +47,9 @@
       const raw = sessionStorage.getItem(SS_PREFIX + name);
       if (!raw) return null;
       const o = JSON.parse(raw);
-      if (!o || !o.t || (Date.now() - o.t) > TTL_MS) return null;
+      if (!o || !o.t) return null;
+      const age = Date.now() - o.t;
+      if (age > TTL_MAX_MS) return null;
       return o;
     } catch { return null; }
   }
@@ -70,6 +78,37 @@
     } catch { return null; }
   }
 
+  // Refetch real (API → ficheiro). Partilhado entre stale-revalidate e síncrono.
+  async function refetchDataset(name) {
+    const api = await fetchFromApi(name);
+    if (api && !api.empty && typeof api.data !== 'undefined') {
+      const obj = { data: api.data, t: Date.now(), src: 'api' };
+      memCache[name] = obj;
+      writeSession(name, obj);
+      return api.data;
+    }
+    const file = await fetchFromFile(name);
+    if (file && typeof file.data !== 'undefined') {
+      const obj = { data: file.data, t: Date.now(), src: 'file' };
+      memCache[name] = obj;
+      writeSession(name, obj);
+      return file.data;
+    }
+    if (name === 'layout') {
+      const obj = { data: {}, t: Date.now(), src: 'empty' };
+      memCache[name] = obj;
+      return {};
+    }
+    return null;
+  }
+
+  // Garante que só há uma refetch em curso por dataset (deduplica chamadas paralelas).
+  function refetchOnce(name) {
+    if (_inflight[name]) return _inflight[name];
+    _inflight[name] = refetchDataset(name).finally(() => { delete _inflight[name]; });
+    return _inflight[name];
+  }
+
   /**
    * loadDataset(name, { force }) → Promise<any>
    * Devolve a data crua (array, object, etc.) ou null se nada disponível.
@@ -80,38 +119,24 @@
       return null;
     }
     if (!opts.force) {
-      const m = memCache[name];
-      if (m && (Date.now() - m.t) < TTL_MS) return m.data;
-      const s = readSession(name);
-      if (s) { memCache[name] = s; return s.data; }
+      // Hit em memória ou sessionStorage: devolve já. Se já estiver stale
+      // (> TTL_FRESH), refetch em background para a próxima leitura.
+      let cached = memCache[name];
+      if (!cached) {
+        const s = readSession(name);
+        if (s) { memCache[name] = s; cached = s; }
+      }
+      if (cached) {
+        const age = Date.now() - cached.t;
+        if (age > TTL_FRESH_MS) {
+          // Stale: serve já e revalida em background (sem await).
+          refetchOnce(name).catch(() => {});
+        }
+        return cached.data;
+      }
     }
 
-    // 1) API
-    const api = await fetchFromApi(name);
-    if (api && !api.empty && typeof api.data !== 'undefined') {
-      const obj = { data: api.data, t: Date.now(), src: 'api' };
-      memCache[name] = obj;
-      writeSession(name, obj);
-      return api.data;
-    }
-
-    // 2) Fallback ficheiro estático
-    const file = await fetchFromFile(name);
-    if (file && typeof file.data !== 'undefined') {
-      const obj = { data: file.data, t: Date.now(), src: 'file' };
-      memCache[name] = obj;
-      writeSession(name, obj);
-      return file.data;
-    }
-
-    // 3) Layout vazio é OK
-    if (name === 'layout') {
-      const obj = { data: {}, t: Date.now(), src: 'empty' };
-      memCache[name] = obj;
-      return {};
-    }
-
-    return null;
+    return refetchOnce(name);
   }
 
   /**
@@ -152,13 +177,22 @@
   global.saveDataset = saveDataset;
 
   // ─── Revalidação ao voltar ao separador ───
-  // Quando o utilizador volta ao separador (visibilitychange) OU navega de volta
-  // via BFCache (pageshow.persisted), invalidamos o cache para que a próxima
-  // leitura traga dados frescos da Supabase. Isto garante que qualquer alteração
-  // feita no admin é vista imediatamente quando o utilizador regressa ao site.
+  // Em vez de apagar tudo (que forçava um refetch síncrono e lento na próxima
+  // leitura), marcamos cada dataset cacheado para refetch em background. A
+  // leitura seguinte devolve os dados imediatamente (sem bloquear) e a versão
+  // fresca chega a tempo da navegação seguinte.
+  function _markAllStale() {
+    Object.keys(memCache).forEach(name => { refetchOnce(name).catch(() => {}); });
+    try {
+      for (const k of Object.keys(sessionStorage)) {
+        if (!k.startsWith(SS_PREFIX)) continue;
+        const name = k.slice(SS_PREFIX.length);
+        if (!memCache[name]) refetchOnce(name).catch(() => {});
+      }
+    } catch {}
+  }
   function _onRevalidate() {
-    invalidate();
-    // Disparar evento para os módulos que queiram re-renderizar
+    _markAllStale();
     try { global.dispatchEvent(new CustomEvent('datasets:revalidate')); } catch {}
   }
   if (typeof document !== 'undefined') {

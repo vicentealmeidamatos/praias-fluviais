@@ -48,11 +48,11 @@
       "winner": "Praia Fluvial de Avô - Oliveira do Hospital",
       "revelations": [
         {
-          "name": "Praia Fluvial de Sabugal/Devesa - Sabugal",
+          "name": "Praia Fluvial de Sabugal (Devesa) - Sabugal",
           "label": "Norte"
         },
         {
-          "name": "Praia Fluvial de Corga - Castanheira de Pera",
+          "name": "Praia Fluvial de Poço Corga - Castanheira de Pera",
           "label": "Centro"
         },
         {
@@ -64,11 +64,11 @@
     {
       "year": 2023,
       "third": "",
-      "second": "Praia Fluvial de Reconquinho - Penacova",
-      "winner": "Praia Fluvial de Vimieiro - Penacova",
+      "second": "Praia Fluvial do Reconquinho - Penacova",
+      "winner": "Praia Fluvial do Vimieiro - Penacova",
       "revelations": [
         {
-          "name": "Praia Fluvial de Sorraia - Coruche",
+          "name": "Praia Fluvial do Sorraia - Coruche",
           "label": "1.º"
         },
         {
@@ -81,7 +81,7 @@
       "year": "2021-2022",
       "third": "Praia Fluvial de Aldeia Viçosa - Guarda",
       "second": "Praia Fluvial de Santa Luzia - Pampilhosa da Serra",
-      "winner": "Praia Fluvial de Videmonte - Quinta da Taberna - Guarda",
+      "winner": "Praia Fluvial da Quinta da Taberna - Videmonte - Guarda",
       "revelations": [
         {
           "name": "Praia Fluvial de Alqueva - Portel",
@@ -91,7 +91,7 @@
     },
     {
       "year": 2020,
-      "third": "Praia Fluvial de Troviscal - Sertã",
+      "third": "Praia Fluvial do Troviscal - Sertã",
       "second": "Praia Fluvial de Fontes - Abrantes",
       "winner": "Praia Fluvial de Santa Luzia - Pampilhosa da Serra",
       "revelations": [

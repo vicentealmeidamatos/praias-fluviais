@@ -1,5 +1,6 @@
 import { createServer } from 'http';
 import { readFile, stat, writeFile, mkdir } from 'fs/promises';
+import { createReadStream } from 'fs';
 import { join, extname, basename } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -223,13 +224,40 @@ const server = createServer(async (req, res) => {
 
     const ext = extname(filePath).toLowerCase();
     const contentType = MIME_TYPES[ext] || 'application/octet-stream';
-    const data = await readFile(filePath);
-
     const noCacheExts = new Set(['.html', '.js', '.mjs', '.css', '.json']);
     const cacheHeader = noCacheExts.has(ext)
       ? 'no-store, no-cache, must-revalidate, max-age=0'
       : 'no-cache';
-    res.writeHead(200, { 'Content-Type': contentType, 'Cache-Control': cacheHeader, Pragma: 'no-cache', Expires: '0', ...CORS });
+
+    // ── Suporte a HTTP Range para vídeo/áudio (necessário para o <video> em Safari/Firefox) ──
+    const isMedia = ext === '.mp4' || ext === '.webm' || ext === '.mp3' || ext === '.ogg' || ext === '.m4v';
+    const rangeHeader = req.headers.range;
+    if (isMedia && rangeHeader) {
+      const total = fileStat.size;
+      const m = /bytes=(\d*)-(\d*)/.exec(rangeHeader);
+      const start = m && m[1] ? parseInt(m[1], 10) : 0;
+      const end   = m && m[2] ? parseInt(m[2], 10) : total - 1;
+      if (isNaN(start) || isNaN(end) || start > end || end >= total) {
+        res.writeHead(416, { 'Content-Range': `bytes */${total}`, ...CORS });
+        res.end();
+        return;
+      }
+      res.writeHead(206, {
+        'Content-Type': contentType,
+        'Content-Range': `bytes ${start}-${end}/${total}`,
+        'Accept-Ranges': 'bytes',
+        'Content-Length': end - start + 1,
+        'Cache-Control': cacheHeader,
+        ...CORS,
+      });
+      createReadStream(filePath, { start, end }).pipe(res);
+      return;
+    }
+
+    const data = await readFile(filePath);
+    const headers = { 'Content-Type': contentType, 'Cache-Control': cacheHeader, Pragma: 'no-cache', Expires: '0', ...CORS };
+    if (isMedia) headers['Accept-Ranges'] = 'bytes';
+    res.writeHead(200, headers);
     res.end(data);
   } catch {
     res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });

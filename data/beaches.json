@@ -2777,7 +2777,7 @@
   },
   {
     "id": "praia-fluvial-de-cavadinho",
-    "name": "Praia Fluvial de Cavadinho",
+    "name": "Praia Fluvial do Cavadinho",
     "type": "praia_fluvial",
     "river": "Rio Cávado",
     "photos": [
@@ -2990,7 +2990,7 @@
   },
   {
     "id": "praia-fluvial-de-cornicovo",
-    "name": "Praia Fluvial de Cornicovo",
+    "name": "Praia Fluvial do Cornicovo",
     "type": "praia_fluvial",
     "river": "Rio Alva",
     "photos": [

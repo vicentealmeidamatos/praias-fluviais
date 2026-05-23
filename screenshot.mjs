@@ -33,9 +33,14 @@ await page.evaluate(() => new Promise((resolve) => {
 }));
 // Force-reveal all entrance items so fullPage screenshot captures final states
 await page.evaluate(() => {
-  document.querySelectorAll('.reveal-up, .reveal-fade').forEach(el => {
+  document.querySelectorAll('.reveal-up, .reveal-fade, .cta-spring, .card-3d-item').forEach(el => {
     el.style.transitionDelay = '0ms';
     el.classList.add('is-visible');
+  });
+  // Clear any clip-path applied by GSAP to headlines (force them visible)
+  document.querySelectorAll('.h-editorial').forEach(el => {
+    el.style.clipPath = 'none';
+    el.style.webkitClipPath = 'none';
   });
   if (window.gsap) {
     try { window.gsap.globalTimeline.progress(1); } catch (e) {}

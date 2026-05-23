@@ -717,199 +717,259 @@ function badgeCardHTML(badge) {
 
 // ─── Badge Unlock Celebration ─────────────────────────────────────────────────
 
-function _injectMiticoStyles() {
-  if (document.getElementById('mitico-badge-styles')) return;
+function _injectBadgeStyles() {
+  if (document.getElementById('badge-celebrate-styles')) return;
   const style = document.createElement('style');
-  style.id = 'mitico-badge-styles';
+  style.id = 'badge-celebrate-styles';
   style.textContent = `
+    @keyframes badge-overlay-in  { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes badge-overlay-out { from { opacity: 1; } to { opacity: 0; } }
+    @keyframes badge-card-in {
+      from { opacity: 0; transform: translateY(10px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0)    scale(1); }
+    }
+    @keyframes badge-card-out {
+      to { opacity: 0; transform: translateY(-6px) scale(0.985); }
+    }
+    @keyframes badge-medal-in {
+      from { opacity: 0; transform: scale(0.84); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    .badge-overlay {
+      animation: badge-overlay-in 0.28s ease forwards;
+      -webkit-backdrop-filter: blur(4px);
+              backdrop-filter: blur(4px);
+    }
+    .badge-overlay.is-leaving                { animation: badge-overlay-out 0.24s ease forwards; }
+    .badge-overlay.is-leaving .badge-toast,
+    .badge-overlay.is-leaving .mitico-border-wrap {
+      animation: badge-card-out 0.24s ease forwards;
+    }
+    .badge-toast { animation: badge-card-in 0.42s cubic-bezier(0.22,1,0.36,1) forwards; }
+    .badge-medal { animation: badge-medal-in 0.5s cubic-bezier(0.22,1,0.36,1) 0.10s both; }
+    .badge-ok-btn {
+      transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease;
+      outline: none;
+    }
+    .badge-ok-btn:hover  { filter: brightness(1.06); }
+    .badge-ok-btn:active { transform: scale(0.985); }
+    .badge-ok-btn:focus-visible {
+      box-shadow: 0 0 0 2px rgba(250,248,245,0.9), 0 0 0 4px rgba(0,58,64,0.55);
+    }
+    .badge-x-btn { transition: color 0.15s ease, background 0.15s ease; outline: none; }
+    .badge-x-btn:hover { color: #003A40; background: rgba(0,58,64,0.06); }
+    .mitico-inner .badge-x-btn:hover { color: #B9F2FF; background: rgba(144,226,240,0.12); }
+
+    /* ─── Mítico variant ──────────────────────────────────────────────────── */
     @keyframes mitico-rainbow-border {
       0%   { background-position: 0% 50%; }
       50%  { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
-    @keyframes mitico-icon-pulse {
-      0%, 100% { transform: scale(1);    filter: brightness(1); }
-      50%       { transform: scale(1.08); filter: brightness(1.2); }
-    }
-    @keyframes mitico-float {
-      0%, 100% { transform: translateY(0px); }
-      50%       { transform: translateY(-6px); }
-    }
-    @keyframes mitico-shimmer {
-      0%   { transform: translateX(-100%) skewX(-15deg); }
-      100% { transform: translateX(300%) skewX(-15deg); }
-    }
-    @keyframes mitico-sparkle {
-      0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
-      50%       { opacity: 1; transform: scale(1) rotate(180deg); }
-    }
-    @keyframes mitico-title-glow {
-      0%, 100% { text-shadow: 0 0 10px rgba(144,226,240,0.4), 0 0 30px rgba(144,226,240,0.2); }
-      50%       { text-shadow: 0 0 20px rgba(144,226,240,0.8), 0 0 60px rgba(144,226,240,0.4), 0 0 100px rgba(144,226,240,0.2); }
-    }
     .mitico-border-wrap {
-      padding: 3px;
-      border-radius: 28px;
+      padding: 2px;
+      border-radius: 26px;
       background: linear-gradient(270deg, #90E2F0, #ff79c6, #FFD700, #43A047, #90E2F0);
       background-size: 400% 400%;
-      animation: mitico-rainbow-border 3s ease infinite;
-      box-shadow: 0 0 30px rgba(144,226,240,0.5), 0 0 80px rgba(144,226,240,0.2), 0 30px 80px rgba(0,0,0,0.5);
+      animation: mitico-rainbow-border 5.5s ease infinite,
+                 badge-card-in 0.42s cubic-bezier(0.22,1,0.36,1) forwards;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.5);
     }
     .mitico-inner {
-      border-radius: 26px;
-      background: linear-gradient(145deg, #002A2E, #003A40, #004D3A);
-      overflow: hidden;
+      border-radius: 24px;
+      background: #001E22;
       position: relative;
-    }
-    .mitico-shimmer-line {
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: linear-gradient(105deg, transparent 40%, rgba(144,226,240,0.12) 50%, transparent 60%);
-      animation: mitico-shimmer 2.5s ease-in-out infinite;
-      pointer-events: none;
-    }
-    .mitico-icon-wrap {
-      animation: mitico-float 3s ease-in-out infinite;
-    }
-    .mitico-icon-bg {
-      animation: mitico-icon-pulse 2s ease-in-out infinite;
-      background: linear-gradient(135deg, #90E2F0, #B9F2FF, #FFD700);
-    }
-    .mitico-title {
-      animation: mitico-title-glow 2s ease-in-out infinite;
-      background: linear-gradient(135deg, #ffffff, #90E2F0, #ffffff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .mitico-sparkle {
-      position: absolute;
-      pointer-events: none;
-      font-size: 14px;
     }
   `;
   document.head.appendChild(style);
 }
 
-function _createMiticoToastHTML(badge) {
-  const sparkles = [
-    { top: '8%',  left: '10%', delay: '0s',    dur: '2s'   },
-    { top: '15%', left: '85%', delay: '0.4s',  dur: '2.3s' },
-    { top: '75%', left: '8%',  delay: '0.8s',  dur: '1.8s' },
-    { top: '80%', left: '88%', delay: '0.2s',  dur: '2.1s' },
-    { top: '45%', left: '5%',  delay: '1.1s',  dur: '2.4s' },
-    { top: '40%', left: '92%', delay: '0.6s',  dur: '1.9s' },
-    { top: '5%',  left: '50%', delay: '1.4s',  dur: '2.2s' },
-    { top: '90%', left: '50%', delay: '0.9s',  dur: '2s'   },
-  ];
+function _badgeEyebrow(color, label) {
+  return `<div class="text-[10px] font-display font-bold uppercase tracking-[0.22em]" style="color:${color};">${label}</div>`;
+}
+
+function _badgeQueueChip(remaining, color) {
+  if (!remaining) return '';
+  return `<div class="absolute top-3 left-4 text-[10px] font-display font-bold tracking-[0.10em]"
+               style="color:${color};">+${remaining}</div>`;
+}
+
+function _normalBadgeHTML(badge, remaining) {
+  const tier = BADGE_TIERS[badge.tier];
   return `
-    <div class="mitico-border-wrap">
-      <div class="mitico-inner px-8 py-9 text-center relative" style="min-width:280px;max-width:320px;">
-        <div class="mitico-shimmer-line"></div>
-        ${sparkles.map(s => `<span class="mitico-sparkle" style="top:${s.top};left:${s.left};animation:mitico-sparkle ${s.dur} ease-in-out infinite;animation-delay:${s.delay};">✦</span>`).join('')}
-        <div class="text-xs font-display font-bold uppercase tracking-widest mb-4 relative z-10" style="color:#90E2F0;letter-spacing:0.2em;">✦ Medalha Mítica Desbloqueada! ✦</div>
-        <div class="mitico-icon-wrap relative z-10 mb-5">
-          <div class="mitico-icon-bg w-24 h-24 rounded-2xl flex items-center justify-center mx-auto shadow-[0_0_30px_rgba(144,226,240,0.6)]">
-            <i data-lucide="${badge.icon}" class="w-12 h-12" style="color:#003A40;stroke-width:1.5;"></i>
-          </div>
+    <div class="badge-toast relative w-[320px] max-w-[92vw] text-center"
+         style="background:#FAF8F5;
+                border:1px solid rgba(0,58,64,0.08);
+                border-radius:24px;
+                box-shadow:0 28px 60px rgba(0,0,0,0.22), 0 8px 22px rgba(0,0,0,0.10);">
+
+      ${_badgeQueueChip(remaining, 'rgba(0,58,64,0.40)')}
+
+      <button data-badge-close class="badge-x-btn absolute top-3 right-3 w-7 h-7 rounded-full flex items-center justify-center"
+              style="color:rgba(0,58,64,0.40);" aria-label="Fechar">
+        <i data-lucide="x" style="width:14px;height:14px;"></i>
+      </button>
+
+      <div class="px-7 pt-8 pb-7">
+        ${_badgeEyebrow('rgba(0,58,64,0.55)', 'Medalha conquistada')}
+
+        <div class="badge-medal mx-auto mt-6 mb-6 rounded-full flex items-center justify-center"
+             style="width:104px;height:104px;
+                    background:${tier.gradient || tier.hex};
+                    box-shadow: inset 0 -6px 12px rgba(0,0,0,0.14),
+                                inset 0 6px 10px rgba(255,255,255,0.28),
+                                0 8px 20px rgba(0,58,64,0.18);">
+          <i data-lucide="${badge.icon}" style="width:48px;height:48px;color:#003A40;stroke-width:1.6;"></i>
         </div>
-        <div class="mitico-title font-display text-2xl font-bold mb-2 relative z-10">${badge.name}</div>
-        <div class="text-sm mb-5 relative z-10" style="color:rgba(144,226,240,0.7);">${badge.desc}</div>
-        <div class="relative z-10 inline-flex items-center gap-2 px-5 py-2 rounded-full text-xs font-display font-bold" style="background:linear-gradient(135deg,#90E2F0,#B9F2FF);color:#003A40;box-shadow:0 0 20px rgba(144,226,240,0.4);">
-          ✦ Mítico
+
+        <div class="font-display text-[22px] leading-tight font-bold" style="color:#003A40;">${badge.name}</div>
+        <div class="text-[13px] mt-1.5 leading-snug" style="color:rgba(0,58,64,0.62);">${badge.desc}</div>
+
+        <div class="inline-flex items-center mt-5 px-3.5 py-1 rounded-full text-[10px] font-display font-bold uppercase tracking-[0.14em]"
+             style="background:rgba(0,58,64,0.06); color:#003A40;">
+          ${tier.label}
         </div>
-        <button onclick="this.closest('.badge-toast-overlay').remove()" class="absolute top-3 right-3 w-7 h-7 rounded-full flex items-center justify-center transition-colors z-20" style="color:rgba(144,226,240,0.5);" onmouseover="this.style.color='rgba(144,226,240,1)';this.style.background='rgba(144,226,240,0.1)'" onmouseout="this.style.color='rgba(144,226,240,0.5)';this.style.background='transparent'">
-          <i data-lucide="x" style="width:14px;height:14px;"></i>
+
+        <div class="mt-7 mb-1" style="height:1px;background:rgba(0,58,64,0.10);"></div>
+
+        <button data-badge-ok class="badge-ok-btn block w-full mt-5 font-display font-bold text-[13px] uppercase tracking-[0.16em] py-3 rounded-full"
+                style="background:#003A40;color:#FAF8F5;">
+          OK
         </button>
       </div>
     </div>`;
 }
 
+function _miticoBadgeHTML(badge, remaining) {
+  return `
+    <div class="mitico-border-wrap w-[340px] max-w-[92vw]">
+      <div class="mitico-inner px-7 pt-8 pb-7 text-center">
+        ${_badgeQueueChip(remaining, 'rgba(144,226,240,0.55)')}
+
+        <button data-badge-close class="badge-x-btn absolute top-3 right-3 w-7 h-7 rounded-full flex items-center justify-center z-20"
+                style="color:rgba(144,226,240,0.45);" aria-label="Fechar">
+          <i data-lucide="x" style="width:14px;height:14px;"></i>
+        </button>
+
+        ${_badgeEyebrow('#90E2F0', 'Medalha mítica')}
+
+        <div class="badge-medal mx-auto mt-6 mb-6 rounded-full flex items-center justify-center"
+             style="width:112px;height:112px;
+                    background: linear-gradient(135deg,#B9F2FF,#90E2F0 55%,#FFD700);
+                    box-shadow: inset 0 -6px 12px rgba(0,0,0,0.15),
+                                inset 0 6px 10px rgba(255,255,255,0.32),
+                                0 10px 24px rgba(144,226,240,0.35);">
+          <i data-lucide="${badge.icon}" style="width:52px;height:52px;color:#003A40;stroke-width:1.5;"></i>
+        </div>
+
+        <div class="font-display text-[22px] leading-tight font-bold text-white">${badge.name}</div>
+        <div class="text-[13px] mt-1.5 leading-snug" style="color:rgba(144,226,240,0.70);">${badge.desc}</div>
+
+        <div class="inline-flex items-center mt-5 px-3.5 py-1 rounded-full text-[10px] font-display font-bold uppercase tracking-[0.14em]"
+             style="background:rgba(144,226,240,0.14); color:#90E2F0;">
+          Mítico
+        </div>
+
+        <div class="mt-7 mb-1" style="height:1px;background:rgba(144,226,240,0.18);"></div>
+
+        <button data-badge-ok class="badge-ok-btn block w-full mt-5 font-display font-bold text-[13px] uppercase tracking-[0.16em] py-3 rounded-full"
+                style="background:linear-gradient(135deg,#B9F2FF,#90E2F0);color:#003A40;">
+          OK
+        </button>
+      </div>
+    </div>`;
+}
+
+// Queue so multiple unlocks show one-at-a-time and never overlap.
+const _badgeQueue = [];
+let _badgeShowing = false;
+let _badgeStartScheduled = false;
+
 function celebrateBadge(badge) {
+  if (!badge) return;
+  _badgeQueue.push(badge);
+  if (_badgeShowing || _badgeStartScheduled) return;
+  // Defer one microtask so synchronous bursts populate the queue
+  // before the first toast reads its remaining count.
+  _badgeStartScheduled = true;
+  Promise.resolve().then(() => {
+    _badgeStartScheduled = false;
+    _processBadgeQueue();
+  });
+}
+
+function _processBadgeQueue() {
+  if (!_badgeQueue.length) { _badgeShowing = false; return; }
+  _badgeShowing = true;
+  _showBadgeToast(_badgeQueue.shift(), _badgeQueue.length);
+}
+
+function _showBadgeToast(badge, remaining) {
   const tier = BADGE_TIERS[badge.tier];
   const isMitico = badge.tier === 'mitico';
 
-  // Vibration (mobile)
+  _injectBadgeStyles();
+
+  // Haptics (mobile)
   if (navigator.vibrate) {
-    const pattern = isMitico                   ? [100, 50, 100, 50, 200, 50, 200]
-                  : badge.tier === 'diamante'  ? [80, 40, 80, 40, 160]
-                  : [60, 30, 120];
+    const pattern = isMitico                  ? [80, 40, 80, 40, 160]
+                  : badge.tier === 'diamante' ? [60, 30, 120]
+                  : [50, 30];
     navigator.vibrate(pattern);
   }
 
-  // Confetti burst
+  // Confetti — restrained, scales with tier
   if (window.confetti) {
     const colors = isMitico
-      ? ['#90E2F0', '#ff79c6', '#FFD700', '#43A047', '#ffffff', '#B9F2FF']
-      : [tier.hex, '#FFEB3B', '#ffffff', '#003A40'];
+      ? ['#90E2F0', '#FFD700', '#FAF8F5', '#B9F2FF']
+      : [tier.hex, '#FAF8F5'];
+    const particleCount = isMitico ? 140
+                         : badge.tier === 'diamante' ? 90
+                         : badge.tier === 'ouro'     ? 60
+                         : 35;
     window.confetti({
-      particleCount: isMitico ? 300 : badge.tier === 'diamante' ? 140 : 80,
-      spread: isMitico ? 100 : 80,
-      startVelocity: isMitico ? 55 : 45,
-      colors,
-      origin: { x: 0.5, y: 0.4 },
+      particleCount, spread: 70, startVelocity: 40, ticks: 160,
+      colors, origin: { x: 0.5, y: 0.42 },
     });
-    if (isMitico || badge.tier === 'diamante') {
-      setTimeout(() => window.confetti({ particleCount: 80, angle: 60,  spread: 65, origin: { x: 0 }, colors }), 200);
-      setTimeout(() => window.confetti({ particleCount: 80, angle: 120, spread: 65, origin: { x: 1 }, colors }), 350);
-      if (isMitico) {
-        setTimeout(() => window.confetti({ particleCount: 60, angle: 90, spread: 120, startVelocity: 30, origin: { x: 0.5, y: 0.6 }, colors }), 600);
-      }
+    if (isMitico) {
+      setTimeout(() => window.confetti({ particleCount: 60, angle: 60,  spread: 60, origin: { x: 0 }, colors }), 220);
+      setTimeout(() => window.confetti({ particleCount: 60, angle: 120, spread: 60, origin: { x: 1 }, colors }), 360);
     }
   }
 
-  // Inject mythic CSS if needed
-  if (isMitico) _injectMiticoStyles();
+  const overlay = document.createElement('div');
+  overlay.className = 'badge-toast-overlay badge-overlay fixed inset-0 z-[9999] flex items-center justify-center px-4';
+  overlay.style.background = isMitico ? 'rgba(0,20,24,0.62)' : 'rgba(0,20,24,0.48)';
+  overlay.innerHTML = isMitico ? _miticoBadgeHTML(badge, remaining) : _normalBadgeHTML(badge, remaining);
 
-  // Overlay toast
-  const toast = document.createElement('div');
-  toast.className = 'badge-toast-overlay fixed inset-0 z-[9999] flex items-center justify-center px-4';
-  toast.style.background = isMitico ? 'rgba(0,0,0,0.75)' : 'rgba(0,0,0,0.5)';
+  document.body.appendChild(overlay);
+  if (window.lucide) lucide.createIcons();
 
-  if (isMitico) {
-    toast.innerHTML = `<div class="badge-toast">${_createMiticoToastHTML(badge)}</div>`;
-  } else {
-    toast.innerHTML = `
-      <div class="badge-toast relative rounded-3xl p-8 text-center max-w-xs mx-4 shadow-2xl"
-           style="background: linear-gradient(135deg, #003A40, #005D56); border: 2px solid ${tier.hex}; box-shadow: 0 0 40px ${tier.glow}, 0 20px 60px rgba(0,0,0,0.4);">
-        <div class="text-xs font-display font-bold uppercase tracking-widest mb-3 opacity-70" style="color:${tier.hex};">✦ Medalha Desbloqueada!</div>
-        <div class="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4" style="background:${tier.gradient || tier.hex};box-shadow:0 4px 20px ${tier.glow};">
-          <i data-lucide="${badge.icon}" class="w-10 h-10" style="color:#003A40;"></i>
-        </div>
-        <div class="font-display text-xl font-bold text-white mb-1">${badge.name}</div>
-        <div class="text-sm text-white/60 mb-4">${badge.desc}</div>
-        <div class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-display font-bold" style="background:${tier.gradient || tier.hex};color:#003A40;">
-          ${tier.label}
-        </div>
-        <button onclick="this.closest('.badge-toast-overlay').remove()" class="absolute top-3 right-3 w-7 h-7 rounded-full flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-colors">
-          <i data-lucide="x" style="width:14px;height:14px;"></i>
-        </button>
-      </div>`;
-  }
+  let dismissed = false;
+  const dismiss = () => {
+    if (dismissed) return;
+    dismissed = true;
+    document.removeEventListener('keydown', onKey);
+    overlay.classList.add('is-leaving');
+    setTimeout(() => {
+      overlay.remove();
+      setTimeout(_processBadgeQueue, 180);
+    }, 260);
+  };
+  const onKey = e => {
+    if (e.key === 'Enter' || e.key === 'Escape' || e.key === ' ') {
+      e.preventDefault();
+      dismiss();
+    }
+  };
 
-  document.body.appendChild(toast);
-  lucide.createIcons();
+  overlay.querySelector('[data-badge-ok]')?.addEventListener('click', dismiss);
+  overlay.querySelector('[data-badge-close]')?.addEventListener('click', dismiss);
+  overlay.addEventListener('click', e => { if (e.target === overlay) dismiss(); });
+  document.addEventListener('keydown', onKey);
 
-  // Click outside to dismiss
-  toast.addEventListener('click', e => { if (e.target === toast) toast.remove(); });
-
-  // Animate in
-  const inner = toast.querySelector('.badge-toast');
-  inner.style.transform = isMitico ? 'scale(0.6) translateY(60px) rotate(-3deg)' : 'scale(0.7) translateY(40px)';
-  inner.style.opacity = '0';
-  inner.style.transition = `transform 0.6s cubic-bezier(0.34,1.56,0.64,1), opacity 0.4s ease`;
-  requestAnimationFrame(() => requestAnimationFrame(() => {
-    inner.style.transform = 'scale(1) translateY(0) rotate(0deg)';
-    inner.style.opacity = '1';
-  }));
-
-  // Auto-dismiss
-  const dismissDelay = isMitico ? 7000 : 4000;
-  setTimeout(() => {
-    inner.style.transform = 'scale(0.9) translateY(-20px)';
-    inner.style.opacity = '0';
-    setTimeout(() => toast.remove(), 400);
-  }, dismissDelay);
+  // Autofocus OK after the entry settles (no flash on keyboards)
+  setTimeout(() => overlay.querySelector('[data-badge-ok]')?.focus({ preventScroll: true }), 550);
 }
 
 // ─── Header Auth Injection ────────────────────────────────────────────────────
