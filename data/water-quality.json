@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-22T09:51:18.669Z",
+  "lastUpdated": "2026-05-23T08:32:22.256Z",
   "sourceUrl": "https://infoagua.apambiente.pt/pt/praias/praias-pesquisa-avancada",
   "stats": {
     "siteBeaches": 228,
@@ -267,7 +267,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-05-19",
       "interdictionReason": null,
       "seasonStart": "2026-05-30",
       "seasonEnd": "2026-09-27",
@@ -275,7 +275,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 80,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-05-23T08:32:22.256Z"
     },
     "praia-fluvial-de-loucainha": {
       "apaCode": "PTCN2C",
@@ -843,7 +843,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-05-18",
       "interdictionReason": null,
       "seasonStart": "2026-06-01",
       "seasonEnd": "2026-09-13",
@@ -851,7 +851,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 79,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-05-23T08:32:22.256Z"
     },
     "praia-fluvial-de-badamalos": {
       "apaCode": "PTCJ8D",
@@ -1365,7 +1365,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-05-18",
       "interdictionReason": null,
       "seasonStart": "2026-06-01",
       "seasonEnd": "2026-09-13",
@@ -1373,7 +1373,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 72,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-05-23T08:32:22.256Z"
     },
     "praia-fluvial-de-montalvo-tesos": {
       "apaCode": "PTCT2W",
@@ -1815,7 +1815,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-05-18",
       "interdictionReason": null,
       "seasonStart": "2026-05-30",
       "seasonEnd": "2026-09-30",
@@ -1823,7 +1823,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 117,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-05-23T08:32:22.256Z"
     },
     "praia-fluvial-de-santa-luzia": {
       "apaCode": "PTCD3H",
@@ -2283,7 +2283,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-05-18",
       "interdictionReason": null,
       "seasonStart": "2026-05-30",
       "seasonEnd": "2026-09-13",
@@ -2291,7 +2291,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 71,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-05-23T08:32:22.256Z"
     },
     "praia-fluvial-de-lago-azul": {
       "apaCode": "PTCT7W",
