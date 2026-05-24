@@ -517,33 +517,21 @@ document.addEventListener('DOMContentLoaded', async () => {
   initCarousel(photoCount);
   initSlideAspectFit();
 
-  // ── Fire weather independently (never blocks anything) ──────────────────────
+  // Bind do file input do formulário de comentário (não pode ser feito via HTML).
+  bindReviewFormInput();
+
+  // ── Weather: skeleton inline → conteúdo dentro da mesma secção ─────────────
+  // Não é "nova secção a aparecer" porque a secção e a moldura já estão
+  // visíveis no render atómico; só o conteúdo dos cartões troca.
   const weatherWidget = document.getElementById('weather-widget');
   if (weatherWidget) {
     fetchWeather(beach.coordinates.lat, beach.coordinates.lng)
       .then(w => { renderWeatherWidget(weatherWidget, w); lucide.createIcons(); });
   }
 
-  // ── Qualidade da água (APA) — não bloqueia ──────────────────────────────
-  const wqSlot = document.getElementById('water-quality-slot');
-  if (wqSlot && _waterQualityEarlyBP) {
-    _waterQualityEarlyBP.then((wq) => {
-      const html = renderWaterQualitySection(beach.id, wq);
-      if (html) wqSlot.outerHTML = html;
-      else wqSlot.remove();
-    }).catch(() => { wqSlot.remove(); });
-  } else if (wqSlot) {
-    wqSlot.remove();
-  }
-
-  // ── Settings + auth + reviews all in parallel ─────────────────────────────
-  const [settings, currentUser] = await Promise.all([
-    (_settingsEarlyBP || loadData('settings')).then(s => s || {}).catch(() => ({})),
-    _authEarlyBP || AuthUtils.authGetUser(),
-  ]);
-
-  // ── Winner medals (sync) ──────────────────────────────────────────────────
-  try {
+  // ── Bloco antigo eliminado: galardões/voto/reviews já estão no template
+  //     único acima e os dados foram pré-resolvidos no Promise.all inicial.
+  /* eslint-disable */ if (false) { try {
     const winnerAwards = [];
     const norm = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
     const beachNorm = norm(beach.name);
@@ -602,30 +590,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         lucide.createIcons();
       }
     }
-  } catch (e) {
-    console.warn('[beach-page] winner medals error:', e);
-  }
-
-  // ── Show vote CTA only if user hasn't voted yet ────────────────────────────
-  const voteSection = document.getElementById('beach-vote-section');
-  if (voteSection) {
-    const currentYear = new Date().getFullYear();
-    if (!currentUser) {
-      // Guest — show CTA (will redirect to auth on click)
-      voteSection.classList.remove('hidden');
-    } else {
-      AuthUtils.voteGet(currentUser.id, currentYear).then(votedId => {
-        if (!votedId) voteSection.classList.remove('hidden');
-      }).catch(() => { voteSection.classList.remove('hidden'); });
-    }
-  }
-
-  // ── Reviews + profile in parallel (reviews fetch pre-started) ─────────────
-  const [currentProfile] = await Promise.all([
-    currentUser ? AuthUtils.profileGet(currentUser.id) : Promise.resolve(null),
-    loadReviews(beach.id, currentUser, beaches),
-  ]);
-  renderReviewForm(beach.id, currentUser, currentProfile, beaches);
+  } catch (e) { /* legacy block (dead) */ } } /* end if(false) */
+  /* eslint-enable */
 
   // Inject JSON-LD structured data
   const jsonLd = document.createElement('script');
@@ -687,38 +653,176 @@ function medalDisplayHTML(topBadges) {
 
 // ─── Load Reviews ─────────────────────────────────────────────────────────────
 
-async function loadReviews(beachId, currentUser, beaches) {
-  const container = document.getElementById('reviews-container');
-  if (!container) return;
-
-  // Use pre-fetched reviews + badges when available (first load only — consume once)
-  const useEarlyReviews = beachId === _beachId && _reviewsEarlyBP;
-  const useEarlyBadges  = beachId === _beachId && _badgesEarlyBP;
-  const reviewsPromise = useEarlyReviews ? _reviewsEarlyBP : AuthUtils.reviewsGetForBeach(beachId);
-  let badgesPromise    = useEarlyBadges  ? _badgesEarlyBP  : null;
-  if (useEarlyReviews) _reviewsEarlyBP = null;
-  if (useEarlyBadges)  _badgesEarlyBP  = null;
-
-  const allReviews = await reviewsPromise;
-
-  if (allReviews.length === 0) {
-    container.innerHTML = `
+// Helper síncrono: devolve o HTML interno do contentor de comentários, já com
+// as medalhas resolvidas (mítico/diamante). Usado pelo render atómico do
+// DOMContentLoaded para evitar o flash "comentários sem medalhas → com".
+function buildReviewsHtml(allReviews, currentUser, badgeMap, beachId) {
+  if (!allReviews || allReviews.length === 0) {
+    return `
       <div class="text-center py-8 text-praia-sand-400">
         <i data-lucide="message-circle" class="w-10 h-10 mx-auto mb-2 opacity-40"></i>
         <p class="text-sm font-display font-semibold">Ainda sem comentários</p>
         <p class="text-xs mt-1">Seja o primeiro a partilhar a sua experiência!</p>
       </div>`;
-    lucide.createIcons();
-    return;
   }
-
-  // Separate top-level and replies
   const topLevel = allReviews.filter(r => !r.parent_id);
   const replies  = allReviews.filter(r => !!r.parent_id);
+  const medalMap = badgeMap || {};
 
-  // Medals are an enhancement: render comments now, fill medals when ready.
-  let medalMap = {};
+  function reviewCardHTML(r, isReply = false) {
+    if (r.deleted_by_admin) {
+      const commentReplies = replies.filter(reply => reply.parent_id === r.id);
+      const repliesHtml = commentReplies.length > 0
+        ? `<div class="mt-3 space-y-2 border-l-2 border-praia-sand-200 pl-4">${commentReplies.map(reply => reviewCardHTML(reply, true)).join('')}</div>`
+        : '';
+      return `
+        <div class="bg-praia-sand-50 rounded-xl p-4 border border-praia-sand-200 ${isReply ? 'shadow-none rounded-lg' : ''}" data-review-id="${r.id}">
+          <div class="flex items-center gap-2 text-praia-sand-400">
+            <i data-lucide="shield-off" class="w-3.5 h-3.5 flex-shrink-0"></i>
+            <span class="text-xs italic">Este comentário foi removido por um administrador.</span>
+          </div>
+          ${repliesHtml}
+        </div>`;
+    }
 
+    const profile    = r.profiles;
+    const name       = profile?.username || 'Visitante';
+    const userId     = r.user_id;
+    const date       = new Date(r.created_at).toLocaleDateString('pt-PT');
+    const isOwn      = currentUser && userId === currentUser.id;
+    const topMedals  = medalMap[userId] || [];
+    const profileUrl = `perfil.html?user=${userId}`;
+
+    const avatarSrc  = profile?.avatar_url;
+    const avatarHtml = avatarSrc
+      ? `<a href="${profileUrl}" class="flex-shrink-0"><img src="${avatarSrc}" alt="${name}" class="w-9 h-9 rounded-full object-cover border-2 border-praia-sand-100 hover:opacity-80 transition-opacity"></a>`
+      : `<a href="${profileUrl}" class="flex-shrink-0"><div class="w-9 h-9 rounded-full bg-praia-teal-800 flex items-center justify-center border-2 border-praia-sand-100 hover:opacity-80 transition-opacity"><span class="font-display font-bold text-sm text-praia-yellow-400">${name.charAt(0).toUpperCase()}</span></div></a>`;
+
+    const hasMedals   = topMedals.length > 0;
+    const hasMitico   = topMedals.some(b => b.tier === 'mitico');
+    const hasDiamante = !hasMitico && topMedals.some(b => b.tier === 'diamante');
+    const medalHtml = hasMedals ? medalDisplayHTML(topMedals) : '';
+    const miticoCardClass   = hasMitico   && !isReply ? 'mitico-card'   : '';
+    const diamanteCardClass = hasDiamante && !isReply ? 'diamante-card' : '';
+
+    const replyButtonHtml = currentUser && !isReply
+      ? `<button onclick="toggleReplyForm('${r.id}', '${beachId}')" class="inline-flex items-center gap-1 text-[10px] font-display font-semibold text-praia-teal-500 hover:text-praia-teal-700 transition-colors mt-2"><i data-lucide="corner-down-right" style="width:11px;height:11px;"></i> Responder</button>`
+      : '';
+
+    const commentReplies = replies.filter(reply => reply.parent_id === r.id);
+    const repliesHtml = commentReplies.length > 0
+      ? `<div class="mt-3 space-y-2 border-l-2 border-praia-sand-200 pl-4">${commentReplies.map(reply => reviewCardHTML(reply, true)).join('')}</div>`
+      : '';
+
+    return `
+      <div class="bg-white rounded-xl p-4 shadow-layered ${miticoCardClass} ${diamanteCardClass} ${isReply ? 'shadow-none border border-praia-sand-100 rounded-lg' : ''}" data-review-id="${r.id}" data-user-id="${userId}">
+        <div class="flex items-start gap-3">
+          ${avatarHtml}
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center flex-wrap gap-1.5">
+              <a href="${profileUrl}" class="font-display text-xs font-bold text-praia-teal-800 hover:text-praia-teal-600 transition-colors">${name}</a>
+              <span class="text-[10px] text-praia-sand-400">${date}</span>
+            </div>
+            ${medalHtml}
+            <p class="text-sm text-praia-sand-700 leading-relaxed mt-2">${r.text}</p>
+            ${r.images?.length ? `<div class="flex flex-wrap gap-2 mt-3">${r.images.map(img => `<img src="${img}" alt="Anexo" class="max-h-32 max-w-[160px] object-contain rounded-lg border border-praia-sand-100 cursor-pointer hover:opacity-90 transition-opacity" onclick="openImageViewer(this.src)">`).join('')}</div>` : ''}
+            <div class="flex items-center gap-3 mt-1">${replyButtonHtml}</div>
+            <div id="reply-form-${r.id}" class="hidden mt-3"></div>
+          </div>
+          ${isOwn ? `<button onclick="deleteReview('${r.id}', '${beachId}')" class="flex-shrink-0 text-praia-sand-300 hover:text-red-400 transition-colors p-1" title="Apagar comentário"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>` : ''}
+        </div>
+        ${repliesHtml}
+      </div>`;
+  }
+
+  return topLevel.map(r => reviewCardHTML(r, false)).join('');
+}
+
+// Helper síncrono: devolve o HTML do formulário de comentário. Mantém o
+// estilo de visitante (call-to-action para login) e o de utilizador autenticado.
+function buildReviewFormHtml(beachId, user, profile) {
+  if (!user) {
+    return `
+      <div class="rounded-2xl p-6 text-center" style="background:linear-gradient(135deg,#003A40,#005D56);border:1px solid rgba(255,255,255,0.1);">
+        <i data-lucide="message-circle" class="w-8 h-8 mx-auto text-praia-yellow-400 mb-3"></i>
+        <p class="font-display text-sm font-bold text-white mb-1">Partilhe a sua experiência</p>
+        <p class="text-white/50 text-xs mb-4">Precisa de conta para comentar nesta praia.</p>
+        <div class="flex flex-col sm:flex-row gap-2 justify-center">
+          <a href="auth.html?redirect=${encodeURIComponent('praia.html?id=' + beachId)}" class="btn-primary bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full shadow-layered-yellow">Criar Conta</a>
+          <a href="auth.html?tab=login&redirect=${encodeURIComponent('praia.html?id=' + beachId)}" class="border border-white/25 text-white/70 hover:text-white font-display font-semibold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full transition-colors">Iniciar Sessão</a>
+        </div>
+      </div>`;
+  }
+  const name = profile?.username || user.email?.split('@')[0] || 'U';
+  const avatarHtml = profile?.avatar_url
+    ? `<img src="${profile.avatar_url}" alt="${name}" class="w-9 h-9 rounded-full object-cover border-2 border-praia-sand-200 flex-shrink-0">`
+    : `<div class="w-9 h-9 rounded-full bg-praia-teal-800 flex items-center justify-center flex-shrink-0"><span class="font-display font-bold text-sm text-praia-yellow-400">${name.charAt(0).toUpperCase()}</span></div>`;
+  return `
+    <div class="bg-praia-sand-50 rounded-xl p-5 border border-praia-sand-200">
+      <div class="flex items-center gap-3 mb-3">
+        ${avatarHtml}
+        <h3 class="font-display text-sm font-bold text-praia-teal-800">O seu comentário</h3>
+      </div>
+      <textarea id="review-text" rows="3" placeholder="Partilhe a sua experiência nesta praia…" class="w-full p-3 rounded-lg bg-white border border-praia-sand-200 text-sm resize-none focus:outline-none focus:border-praia-teal-400 mb-3"></textarea>
+      <div class="flex items-center justify-between gap-3">
+        <div>
+          <input type="file" id="review-images" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,image/heic,image/heif" multiple class="hidden">
+          <label for="review-images" class="inline-flex items-center gap-2 cursor-pointer text-xs font-display font-semibold text-praia-teal-600 border border-praia-sand-200 bg-white px-4 py-2 rounded-full hover:border-praia-teal-400 transition-colors"><i data-lucide="image" class="w-3.5 h-3.5"></i> Fotos/Vídeos</label>
+        </div>
+        <button id="review-submit-btn" onclick="submitReview('${beachId}')" class="btn-primary bg-praia-teal-800 text-praia-yellow-400 font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full">Publicar</button>
+      </div>
+      <div id="review-image-preview" class="flex gap-2 mt-2 flex-wrap"></div>
+    </div>`;
+}
+
+// Liga o handler de preview de imagens ao input do formulário. Idempotente —
+// safe para chamar várias vezes; o listener anterior é substituído.
+function bindReviewFormInput() {
+  const input = document.getElementById('review-images');
+  if (!input) return;
+  input.onchange = function () {
+    const preview = document.getElementById('review-image-preview');
+    _renderImagePreview(this, preview, 'w-16 h-16');
+  };
+}
+
+// Re-render dos comentários (após submeter/eliminar/responder). Mantida a
+// chamada existente: agora delega no `buildReviewsHtml` para garantir que
+// medalhas (mítico/diamante) entram já no mesmo paint que os comentários.
+async function loadReviews(beachId, currentUser, beaches) {
+  const container = document.getElementById('reviews-container');
+  if (!container) return;
+
+  // Pré-buscas continuam a ser respeitadas (caso o caller ainda as tenha
+  // disponíveis). Em rerenders normais, ambas estão a null.
+  const useEarlyReviews = beachId === _beachId && _reviewsEarlyBP;
+  const useEarlyBadges  = beachId === _beachId && _badgesEarlyBP;
+  const reviewsPromise  = useEarlyReviews ? _reviewsEarlyBP : AuthUtils.reviewsGetForBeach(beachId);
+  if (useEarlyReviews) _reviewsEarlyBP = null;
+
+  const allReviews = await reviewsPromise;
+
+  // Buscar medalhas em paralelo (cached por sessão em _badgesCache).
+  let badgeMap = {};
+  if (allReviews.length) {
+    const uids = [...new Set(allReviews.map(r => r.user_id).filter(Boolean))];
+    if (uids.length) {
+      const badgesPromise = useEarlyBadges
+        ? _badgesEarlyBP
+        : AuthUtils.badgesGetForUsers(uids, beaches).catch(() => ({}));
+      if (useEarlyBadges) _badgesEarlyBP = null;
+      try { badgeMap = (await badgesPromise) || {}; } catch { badgeMap = {}; }
+    }
+  }
+
+  container.innerHTML = buildReviewsHtml(allReviews, currentUser, badgeMap, beachId);
+  lucide.createIcons();
+}
+
+// ─── Bloco antigo (reviewCardHTML/renderAll/medals-CSS injection) — removido:
+//    a função foi extraída para `buildReviewsHtml` (síncrona) e o CSS das
+//    medalhas é injectado uma vez ao carregar o módulo (no topo do ficheiro).
+/* eslint-disable */ if (false) {
   function reviewCardHTML(r, isReply = false) {
     if (r.deleted_by_admin) {
       const commentReplies = replies.filter(reply => reply.parent_id === r.id);
@@ -983,65 +1087,13 @@ async function submitReply(parentId, beachId) {
 }
 
 // ─── Render Review Form ────────────────────────────────────────────────────────
-
-function renderReviewForm(beachId, user, profile, beaches) {
+// Re-renders após submeter resposta: delega no helper síncrono usado pelo
+// render atómico, garantindo coerência entre primeiro paint e refreshes.
+function renderReviewForm(beachId, user, profile) {
   const area = document.getElementById('review-form-area');
   if (!area) return;
-
-  if (!user) {
-    area.innerHTML = `
-      <div class="rounded-2xl p-6 text-center" style="background:linear-gradient(135deg,#003A40,#005D56);border:1px solid rgba(255,255,255,0.1);">
-        <i data-lucide="message-circle" class="w-8 h-8 mx-auto text-praia-yellow-400 mb-3"></i>
-        <p class="font-display text-sm font-bold text-white mb-1">Partilhe a sua experiência</p>
-        <p class="text-white/50 text-xs mb-4">Precisa de conta para comentar nesta praia.</p>
-        <div class="flex flex-col sm:flex-row gap-2 justify-center">
-          <a href="auth.html?redirect=${encodeURIComponent('praia.html?id=' + beachId)}"
-             class="btn-primary bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full shadow-layered-yellow">
-            Criar Conta
-          </a>
-          <a href="auth.html?tab=login&redirect=${encodeURIComponent('praia.html?id=' + beachId)}"
-             class="border border-white/25 text-white/70 hover:text-white font-display font-semibold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full transition-colors">
-            Iniciar Sessão
-          </a>
-        </div>
-      </div>`;
-    lucide.createIcons();
-    return;
-  }
-
-  const name       = profile?.username || user.email?.split('@')[0] || 'U';
-  const avatarHtml = profile?.avatar_url
-    ? `<img src="${profile.avatar_url}" alt="${name}" class="w-9 h-9 rounded-full object-cover border-2 border-praia-sand-200 flex-shrink-0">`
-    : `<div class="w-9 h-9 rounded-full bg-praia-teal-800 flex items-center justify-center flex-shrink-0"><span class="font-display font-bold text-sm text-praia-yellow-400">${name.charAt(0).toUpperCase()}</span></div>`;
-
-  area.innerHTML = `
-    <div class="bg-praia-sand-50 rounded-xl p-5 border border-praia-sand-200">
-      <div class="flex items-center gap-3 mb-3">
-        ${avatarHtml}
-        <h3 class="font-display text-sm font-bold text-praia-teal-800">O seu comentário</h3>
-      </div>
-      <textarea id="review-text" rows="3" placeholder="Partilhe a sua experiência nesta praia…"
-                class="w-full p-3 rounded-lg bg-white border border-praia-sand-200 text-sm resize-none focus:outline-none focus:border-praia-teal-400 mb-3"></textarea>
-      <div class="flex items-center justify-between gap-3">
-        <div>
-          <input type="file" id="review-images" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,image/heic,image/heif" multiple class="hidden">
-          <label for="review-images" class="inline-flex items-center gap-2 cursor-pointer text-xs font-display font-semibold text-praia-teal-600 border border-praia-sand-200 bg-white px-4 py-2 rounded-full hover:border-praia-teal-400 transition-colors">
-            <i data-lucide="image" class="w-3.5 h-3.5"></i> Fotos/Vídeos
-          </label>
-        </div>
-        <button id="review-submit-btn" onclick="submitReview('${beachId}')"
-                class="btn-primary bg-praia-teal-800 text-praia-yellow-400 font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full">
-          Publicar
-        </button>
-      </div>
-      <div id="review-image-preview" class="flex gap-2 mt-2 flex-wrap"></div>
-    </div>`;
-
-  document.getElementById('review-images')?.addEventListener('change', function () {
-    const preview = document.getElementById('review-image-preview');
-    _renderImagePreview(this, preview, 'w-16 h-16');
-  });
-
+  area.innerHTML = buildReviewFormHtml(beachId, user, profile);
+  bindReviewFormInput();
   lucide.createIcons();
 }
 
