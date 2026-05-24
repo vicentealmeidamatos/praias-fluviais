@@ -1245,10 +1245,16 @@ async function handleThumbnailFile(files) {
   if (state.editingThumbnail) {
     if (!confirm('Esta secção apenas permite uma imagem. Deseja substituir a miniatura atual?')) return;
   }
-  const file = await watermarkIfRequested(raw, 'thumb-watermark-cb');
-  const result = await uploadImageFile(file, 'beaches');
-  state.editingThumbnail = result.src;
-  renderThumbnailPreview();
+  try {
+    const { file } = await preparePhotoForUpload(raw, 'thumb-watermark-cb');
+    const result = await uploadImageFile(file, 'beaches');
+    state.editingThumbnail = result.src;
+    renderThumbnailPreview();
+    toast('Miniatura carregada.', 'success');
+  } catch (e) {
+    console.error('[admin] falha ao carregar miniatura:', e);
+    toast('Não foi possível carregar a miniatura.', 'error');
+  }
 }
 
 function setupThumbDragDrop() {
