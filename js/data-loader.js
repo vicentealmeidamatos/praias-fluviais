@@ -78,6 +78,10 @@
     } catch { return null; }
   }
 
+  // Carimbo updated_at de cada dataset trazido da API. Usado para optimistic
+  // concurrency check em saveDataset.
+  const lastUpdatedAt = Object.create(null);
+
   // Refetch real (API → ficheiro). Partilhado entre stale-revalidate e síncrono.
   async function refetchDataset(name) {
     const api = await fetchFromApi(name);
@@ -85,6 +89,7 @@
       const obj = { data: api.data, t: Date.now(), src: 'api' };
       memCache[name] = obj;
       writeSession(name, obj);
+      if (api.updated_at) lastUpdatedAt[name] = api.updated_at;
       return api.data;
     }
     const file = await fetchFromFile(name);
@@ -140,18 +145,35 @@
   }
 
   /**
-   * saveDataset(name, data, { note }) → Promise<{ok}>
+   * saveDataset(name, data, { note, force }) → Promise<{ok}>
    * Grava no Supabase via /api/save-data. Invalida cache local.
+   *
+   * Por defeito envia `baseUpdatedAt` (o updated_at observado no último load)
+   * para que a API recuse o save se a Supabase tiver versão mais recente.
+   * Passar `{ force: true }` para sobrescrever sem verificação.
+   *
+   * Em caso de conflito (HTTP 409) lança um Error com `code = 'conflict'` e
+   * propriedades `expectedUpdatedAt` / `currentUpdatedAt`.
    */
   async function saveDataset(name, data, opts = {}) {
     if (!FILES.hasOwnProperty(name)) throw new Error('dataset desconhecido: ' + name);
+    const payload = { dataset: name, data, note: opts.note || '' };
+    if (!opts.force && lastUpdatedAt[name]) payload.baseUpdatedAt = lastUpdatedAt[name];
     const r = await _rawFetch('/api/save-data', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ dataset: name, data, note: opts.note || '' }),
+      body: JSON.stringify(payload),
     });
     const j = await r.json().catch(() => ({}));
+    if (r.status === 409) {
+      const err = new Error('Conflito: a versão na Supabase mudou desde que carregou.');
+      err.code = 'conflict';
+      err.expectedUpdatedAt = j.expectedUpdatedAt;
+      err.currentUpdatedAt  = j.currentUpdatedAt;
+      throw err;
+    }
     if (!r.ok) throw new Error(j.error || 'Falha ao gravar');
+    if (j.updated_at) lastUpdatedAt[name] = j.updated_at;
     delete memCache[name];
     try { sessionStorage.removeItem(SS_PREFIX + name); } catch {}
     return j;

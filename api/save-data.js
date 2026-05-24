@@ -104,12 +104,32 @@ export default async function handler(req, res) {
   }
   const note = (body.note || '').toString().slice(0, 200);
 
+  // Optimistic concurrency check: if the client passes the updated_at it
+  // observed when loading, fail the save when Supabase has a newer version.
+  // Evita que um separador admin com state em cache sobrescreva edições
+  // mais recentes feitas noutro lado (script, outro browser, etc.).
+  if (body.baseUpdatedAt) {
+    const { data: cur, error: curErr } = await sb
+      .from(cfg.table)
+      .select('updated_at')
+      .eq('id', 1)
+      .maybeSingle();
+    if (!curErr && cur && cur.updated_at && cur.updated_at !== body.baseUpdatedAt) {
+      return res.status(409).json({
+        error: 'conflict',
+        expectedUpdatedAt: body.baseUpdatedAt,
+        currentUpdatedAt: cur.updated_at,
+      });
+    }
+  }
+
+  const newUpdatedAt = new Date().toISOString();
   const { error: upErr } = await sb
     .from(cfg.table)
-    .upsert({ id: 1, data, updated_at: new Date().toISOString() });
+    .upsert({ id: 1, data, updated_at: newUpdatedAt });
   if (upErr) return res.status(500).json({ error: upErr.message });
 
   await sb.from(cfg.history).insert({ data, note: note || null });
 
-  return res.status(200).json({ ok: true });
+  return res.status(200).json({ ok: true, updated_at: newUpdatedAt });
 }

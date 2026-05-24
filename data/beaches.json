@@ -2464,7 +2464,6 @@
       "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779634256069_Praia_Fluvial_de_Benfeita_5_wm.jpg"
     ],
     "inVotar": true,
-    "premium": false,
     "district": "Coimbra",
     "featured": false,
     "services": {
@@ -2768,7 +2767,6 @@
       "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779634497166_Praia_Fluvial_da_Cascalheira_Secarias_wm.jpg"
     ],
     "inVotar": true,
-    "premium": false,
     "district": "Coimbra",
     "featured": false,
     "services": {
@@ -3061,7 +3059,6 @@
       "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779634756478_Praia_Fluvial_de_Coja_6_wm.jpg"
     ],
     "inVotar": true,
-    "premium": false,
     "district": "Coimbra",
     "featured": false,
     "services": {
@@ -8083,40 +8080,105 @@
     "name": "Zona Balnear de Folques",
     "type": "zona_balnear",
     "river": "Ribeira de Folques",
+    "inRede": true,
     "photos": [
-      "https://placehold.co/800x600/003A40/FFEB3B?text=Folques"
+      "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779635538682_Zona_Balnear_de_Folques_1_wm.jpg",
+      "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779635544390_Zona_Balnear_de_Folques_2_wm.jpg",
+      "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779635545669_Zona_Balnear_de_Folques_3_wm.jpg",
+      "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779635546693_Zona_Balnear_de_Folques_4_wm.jpg",
+      "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779635548602_Zona_Balnear_de_Folques_5_wm.jpg",
+      "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779635551532_Zona_Balnear_de_Folques_6_wm.jpg"
     ],
-    "premium": false,
+    "inVotar": true,
     "district": "Coimbra",
     "featured": false,
     "services": {
-      "wc": false,
-      "bar": false,
+      "wc": true,
+      "bar": true,
       "camping": false,
       "blueFlag": false,
       "lifeguard": false,
       "nacional2": false,
       "accessible": false,
       "boatRental": false,
-      "picnicArea": false,
+      "picnicArea": true,
       "playground": false,
       "goldQuality": false,
       "petFriendly": false
     },
     "video360": null,
     "freguesia": "",
-    "thumbnail": "brand_assets/fotos/FOTOS PRAIA DO ANO/Folques ARGANIL.jpeg",
+    "thumbnail": "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779635561693_Zona_Balnear_de_Folques_2_wm.jpg",
     "coordinates": {
       "lat": 40.221475,
       "lng": -8.014688
     },
     "description": "A apenas 5 km de Arganil, na localidade de Folques, esta zona de lazer acolhe os seus visitantes com uma vasta área de relvado, em ambos os lados do rio Alva, árvores e águas frescas e cristalinas, formando um generoso lençol de água. No espaço foi criado um parque de merendas, um parque infantil e o bar/restaurante, para que não faltem motivos para ficar mais horas a relaxar ou a desfrutar do verão.",
     "photoFocals": [
-      50
+      {
+        "x": 50.97626456769785,
+        "y": 66.68020105751029,
+        "zoom": 1,
+        "mobile": {
+          "x": 42.22271321254971,
+          "y": 47.88001827795548,
+          "zoom": 1
+        }
+      },
+      {
+        "x": 66.4988711940936,
+        "y": 64.99569162477968,
+        "zoom": 1,
+        "mobile": {
+          "x": 62.25511857416409,
+          "y": 30.94647170180821,
+          "zoom": 1
+        }
+      },
+      {
+        "x": 55.27182866556837,
+        "y": 87.1381291206998,
+        "zoom": 1,
+        "mobile": {
+          "x": 57.392906880327544,
+          "y": 86.72034728115415,
+          "zoom": 1
+        }
+      },
+      {
+        "x": 50.78101165415828,
+        "y": 80.2581108427443,
+        "zoom": 1,
+        "mobile": {
+          "x": 45.99351892767712,
+          "y": 48.08890919772831,
+          "zoom": 1
+        }
+      },
+      {
+        "x": 49.80474708646043,
+        "y": 84.70696520660617,
+        "zoom": 1,
+        "mobile": {
+          "x": 95.29009102518484,
+          "y": 86.16920164501599,
+          "zoom": 1
+        }
+      },
+      {
+        "x": 56.05284031972665,
+        "y": 10.43070696520661,
+        "zoom": 1,
+        "mobile": {
+          "x": 74.74591250552365,
+          "y": 54.506691037273974,
+          "zoom": 1
+        }
+      }
     ],
     "municipality": "Arganil",
-    "waterQuality": "excelente",
-    "passportStamp": true
+    "passportStamp": true,
+    "inPassaporteDigital": true
   },
   {
     "id": "praia-fluvial-de-foz-d-egua",

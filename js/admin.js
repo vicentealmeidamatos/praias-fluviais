@@ -65,8 +65,31 @@ async function _autoSaveFlush(section) {
     try { window.dispatchEvent(new CustomEvent('datasetChanged:' + dataset, { detail: { section, dataset, data } })); } catch {}
   } catch (e) {
     _autoSave.lastError = e;
-    _autoSaveStatus(`✗ Erro a guardar ${section}: ${e.message}`, 'error');
-    console.error('[autoSave]', section, e);
+    if (e && e.code === 'conflict') {
+      _autoSaveStatus(`⚠ ${section}: versão na Supabase mais recente`, 'error');
+      // Avisa explicitamente o utilizador para que perceba que precisa de recarregar.
+      try {
+        const force = confirm(
+          `Conflito de versão em "${section}":\n\n` +
+          `Os dados na Supabase foram alterados por outra fonte (admin noutro separador, ` +
+          `script de importação, etc.) desde que este painel carregou.\n\n` +
+          `Cancelar = recomenda recarregar o painel (Ctrl+R) e voltar a editar.\n` +
+          `OK = forçar a gravação e sobrescrever as alterações remotas.`
+        );
+        if (force) {
+          await window.DataLoader.saveDataset(dataset, state.data[section], { note: 'admin (force)', force: true });
+          _autoSaveStatus(`✓ ${section} guardado (forçado)`, 'saved');
+          try { window.dispatchEvent(new CustomEvent('datasetChanged:' + dataset, { detail: { section, dataset, data: state.data[section] } })); } catch {}
+          _autoSave.lastError = null;
+        }
+      } catch (e2) {
+        _autoSave.lastError = e2;
+        console.error('[autoSave force]', section, e2);
+      }
+    } else {
+      _autoSaveStatus(`✗ Erro a guardar ${section}: ${e.message}`, 'error');
+      console.error('[autoSave]', section, e);
+    }
   } finally {
     _autoSave.saving.delete(section);
     if (_autoSave.pending.has(section)) {
