@@ -281,25 +281,51 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const photoCount = beach.photos.length;
   const focals = Array.isArray(beach.photoFocals) ? beach.photoFocals : [];
-  // Anchor preferencial: fundo. Para fotos com assunto bem ao centro/topo
-  // (focal_Y < 50), respeita-se o focal_Y. Caso contrário, mostra-se o fundo
-  // da foto com um pequeno empurrão extra (a praia/água está quase sempre
-  // na metade inferior).
-  const biasFocal = (f) => (f < 50 ? f : Math.min(100, f + 12));
+  // Normaliza um valor de photoFocals (número antigo ou objecto novo) para
+  // { x, y, zoom }. Mantém compatibilidade com dados existentes:
+  //   - número → focal Y apenas; X=50; zoom=1 (e mantém-se o bias antigo)
+  //   - objecto → { x, y, zoom } explícitos, sem bias
+  //   - ausente → default: bottom-anchor (Y=100) como antes
+  function readFocal(raw) {
+    if (typeof raw === 'number' && Number.isFinite(raw)) {
+      // Bias legado: Y>=50 → puxa mais para baixo (praia/água quase sempre em baixo)
+      const yBiased = raw < 50 ? raw : Math.min(100, raw + 12);
+      return { x: 50, y: yBiased, zoom: 1, mobile: null };
+    }
+    if (raw && typeof raw === 'object') {
+      const m = (raw.mobile && typeof raw.mobile === 'object') ? {
+        x: Number.isFinite(raw.mobile.x) ? Math.max(0, Math.min(100, raw.mobile.x)) : 50,
+        y: Number.isFinite(raw.mobile.y) ? Math.max(0, Math.min(100, raw.mobile.y)) : 50,
+        zoom: Number.isFinite(raw.mobile.zoom) ? Math.max(1, Math.min(3, raw.mobile.zoom)) : 1,
+      } : null;
+      return {
+        x: Number.isFinite(raw.x) ? Math.max(0, Math.min(100, raw.x)) : 50,
+        y: Number.isFinite(raw.y) ? Math.max(0, Math.min(100, raw.y)) : 50,
+        zoom: Number.isFinite(raw.zoom) ? Math.max(1, Math.min(3, raw.zoom)) : 1,
+        mobile: m,
+      };
+    }
+    return { x: 50, y: 100, zoom: 1, mobile: null };
+  }
   // Cada slide tem:
   //   - .slide-bg-blur : sempre cover + blur (preenche os lados em letterbox)
   //   - .slide-photo   : cover por defeito; comuta para contain se a foto for
   //     significativamente mais estreita que o hero (detecção async no JS).
+  // Se houver override mobile, escreve-se nos data-mobile-* e o aplicador
+  // runtime escolhe o conjunto certo conforme o viewport.
   const carouselSlides = beach.photos.map((p, i) => {
-    const focalY = biasFocal(Number.isFinite(focals[i]) ? focals[i] : 100);
+    const f = readFocal(focals[i]);
+    const mobileAttrs = f.mobile
+      ? ` data-mobile-focal-x="${f.mobile.x}" data-mobile-focal-y="${f.mobile.y}" data-mobile-focal-zoom="${f.mobile.zoom}"`
+      : '';
     return `
     <div class="carousel-slide photo-protected absolute inset-0 transition-opacity duration-500 ease-in-out ${i === 0 ? 'opacity-100' : 'opacity-0'}"
          role="img" aria-label="${beach.name} - foto ${i + 1}"
-         data-photo-src="${p}" data-focal-y="${focalY}">
+         data-photo-src="${p}" data-focal-x="${f.x}" data-focal-y="${f.y}" data-focal-zoom="${f.zoom}"${mobileAttrs}>
       <div class="slide-bg-blur absolute inset-0"
            style="background-image:url('${p}');background-size:cover;background-position:50% 50%;filter:blur(28px) brightness(0.45);transform:scale(1.1);"></div>
       <div class="slide-photo absolute inset-0"
-           style="background-image:url('${p}');background-size:cover;background-position:50% ${focalY}%;background-repeat:no-repeat;"></div>
+           style="background-image:url('${p}');background-size:cover;background-position:${f.x}% ${f.y}%;background-repeat:no-repeat;transform:scale(${f.zoom});transform-origin:${f.x}% ${f.y}%;"></div>
       <div class="photo-shield" aria-hidden="true"></div>
     </div>
   `;
@@ -416,23 +442,23 @@ document.addEventListener('DOMContentLoaded', async () => {
         ${carouselDots}
         <span class="kicker-yellow block mb-1.5 md:mb-2">${beach.type === 'zona_balnear' ? 'Zona Balnear' : 'Praia Fluvial'}</span>
         <h1 data-content-bind="beaches:${beachIdx}.name" class="font-display text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold text-white tracking-tightest mb-1 md:mb-2 leading-tight">${beach.name}</h1>
-        <p class="text-white/70 font-body text-xs sm:text-sm md:text-base"><span data-content-bind="beaches:${beachIdx}.municipality">${beach.municipality}</span>${beach.freguesia ? `, <span data-content-bind="beaches:${beachIdx}.freguesia">${beach.freguesia}</span>` : `, <span data-content-bind="beaches:${beachIdx}.district">${beach.district}</span>`} · <span data-content-bind="beaches:${beachIdx}.river">${beach.river}</span></p>
+        <p class="text-white/70 font-body text-xs sm:text-sm md:text-base"><span data-content-bind="beaches:${beachIdx}.municipality" class="font-bold text-white">${beach.municipality}</span>${beach.freguesia ? `, <span data-content-bind="beaches:${beachIdx}.freguesia">${beach.freguesia}</span>` : `, <span data-content-bind="beaches:${beachIdx}.district">${beach.district}</span>`} · <span data-content-bind="beaches:${beachIdx}.river">${beach.river}</span></p>
       </div>
     </div>
 
     <div class="max-w-5xl mx-auto px-6 py-10 md:py-16">
-      <!-- Services -->
-      <section class="mb-12">
-        <h2 class="font-display text-xs uppercase tracking-[0.2em] text-praia-teal-500 font-semibold mb-5">Serviços</h2>
-        <div class="grid gap-4" style="grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));">${servicesHtml}</div>
-      </section>
-
-      ${winnerMedalsHtml}
-
       <!-- Description -->
       <section class="mb-12">
         <h2 class="font-display text-xs uppercase tracking-[0.2em] text-praia-teal-500 font-semibold mb-4">Sobre esta Praia</h2>
         <p data-content-bind="beaches:${beachIdx}.description" class="text-praia-sand-700 leading-relaxed-plus text-base md:text-lg">${beach.description}</p>
+      </section>
+
+      ${winnerMedalsHtml}
+
+      <!-- Services -->
+      <section class="mb-12">
+        <h2 class="font-display text-xs uppercase tracking-[0.2em] text-praia-teal-500 font-semibold mb-5">Serviços</h2>
+        <div class="grid gap-4" style="grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));">${servicesHtml}</div>
       </section>
 
       ${waterQualityHtml}
@@ -477,6 +503,9 @@ document.addEventListener('DOMContentLoaded', async () => {
           </button>
           <button onclick="shareBeach('instagram')" class="btn-primary inline-flex items-center gap-2 font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full text-white" style="background:linear-gradient(135deg,#f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg> Instagram
+          </button>
+          <button onclick="shareBeach('x')" class="btn-primary inline-flex items-center gap-2 font-display font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-full text-white" style="background:#000;">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> X
           </button>
         </div>
       </section>
@@ -1250,13 +1279,24 @@ function initSlideAspectFit() {
     // Apenas fotos verticais ou quase-quadradas recebem letterbox.
     // Fotos landscape (4:3, 3:2, 16:9, etc.) ficam sempre em `cover`.
     const shouldContain = photoA < 1.05;
-    const focalY = slide.dataset.focalY || '50';
+    // Escolher conjunto de focals consoante o viewport. Se houver override
+    // mobile e o viewport corresponder ao breakpoint mobile (<768px), usa-se;
+    // caso contrário usa-se sempre o conjunto desktop por defeito.
+    const isMobileVp = window.matchMedia('(max-width: 767px)').matches;
+    const hasMobileOverride = slide.dataset.mobileFocalX !== undefined;
+    const useMobile = isMobileVp && hasMobileOverride;
+    const focalX = useMobile ? slide.dataset.mobileFocalX : (slide.dataset.focalX || '50');
+    const focalY = useMobile ? slide.dataset.mobileFocalY : (slide.dataset.focalY || '50');
+    const focalZoom = useMobile ? slide.dataset.mobileFocalZoom : (slide.dataset.focalZoom || '1');
     if (shouldContain) {
       photo.style.backgroundSize = 'contain';
       photo.style.backgroundPosition = '50% 50%';
+      photo.style.transform = 'none';
     } else {
       photo.style.backgroundSize = 'cover';
-      photo.style.backgroundPosition = `50% ${focalY}%`;
+      photo.style.backgroundPosition = `${focalX}% ${focalY}%`;
+      photo.style.transform = `scale(${focalZoom})`;
+      photo.style.transformOrigin = `${focalX}% ${focalY}%`;
     }
     return true;
   }

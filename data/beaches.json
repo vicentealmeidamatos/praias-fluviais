@@ -33,12 +33,12 @@
       "lng": -8.402556
     },
     "description": "Descubra esta zona balnear no concelho de Gondomar. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Gondomar",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       77
-    ]
+    ],
+    "municipality": "Gondomar",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-zebreiros",
@@ -74,12 +74,12 @@
       "lng": -8.516694
     },
     "description": "Descubra esta zona balnear no concelho de Gondomar. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Gondomar",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       75
-    ]
+    ],
+    "municipality": "Gondomar",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-janeiro-de-cima",
@@ -116,19 +116,20 @@
       "lng": -7.805222
     },
     "description": "Descubra esta zona balnear no concelho de Fundão. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Fundão",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92,
       92
-    ]
+    ],
+    "municipality": "Fundão",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "parque-fluvial-do-alfusqueiro",
     "name": "Parque Fluvial do Alfusqueiro",
     "type": "zona_balnear",
     "river": "Rio Alfusqueiro",
+    "hidden": true,
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Parque%20Fluvial%20do%20Alfusqueiro"
     ],
@@ -156,12 +157,12 @@
       "lng": -8.361641666666666
     },
     "description": "<p></p>",
-    "municipality": "Águeda",
-    "waterQuality": "excelente",
-    "passportStamp": false,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Águeda",
+    "waterQuality": "excelente",
+    "passportStamp": false
   },
   {
     "id": "praia-fluvial-de-rocas",
@@ -197,14 +198,14 @@
       "lng": -8.205742
     },
     "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Castanheira&nbsp;de&nbsp;Pera.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
-    "municipality": "Castanheira de Pera",
-    "waterQuality": "excelente",
-    "passportStamp": true,
     "photoFocals": [
       92,
       84,
       83
-    ]
+    ],
+    "municipality": "Castanheira de Pera",
+    "waterQuality": "excelente",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-arquiteto-albino-mendo",
@@ -241,13 +242,13 @@
       "lng": -7.189444
     },
     "description": "Descubra esta praia fluvial no concelho de Mirandela. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Mirandela",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       85,
       55
-    ]
+    ],
+    "municipality": "Mirandela",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-albufeira-de-queimadela",
@@ -283,12 +284,12 @@
       "lng": -8.161657
     },
     "description": "Descubra esta praia fluvial no concelho de Fafe. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Fafe",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Fafe",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-albufeira-da-tapada-grande",
@@ -324,12 +325,12 @@
       "lng": -7.505236
     },
     "description": "Descubra esta praia fluvial no concelho de Mértola. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Mértola",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Mértola",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-albufeira-de-odeleite",
@@ -365,12 +366,12 @@
       "lng": -7.492497
     },
     "description": "Descubra esta praia fluvial no concelho de Castro Marim. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Castro Marim",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Castro Marim",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-albufeira-do-ermal",
@@ -406,12 +407,12 @@
       "lng": -8.126863
     },
     "description": "Descubra esta praia fluvial no concelho de Vieira do Minho. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Vieira do Minho",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Vieira do Minho",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-albufeira-do-vilar",
@@ -447,12 +448,12 @@
       "lng": -7.544518
     },
     "description": "Descubra esta praia fluvial no concelho de Moimenta da Beira. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Moimenta da Beira",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Moimenta da Beira",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-albufeira-do-caldeirao",
@@ -489,13 +490,13 @@
       "lng": -7.330194
     },
     "description": "Descubra esta praia fluvial no concelho de Guarda. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Guarda",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92,
       92
-    ]
+    ],
+    "municipality": "Guarda",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-barrinha-de-mira",
@@ -531,12 +532,12 @@
       "lng": -8.800259
     },
     "description": "Descubra esta praia fluvial no concelho de Mira. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Mira",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Mira",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-bogueira",
@@ -572,12 +573,12 @@
       "lng": -8.241692
     },
     "description": "Descubra esta praia fluvial no concelho de Lousã. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Lousã",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Lousã",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-cabreira",
@@ -613,12 +614,12 @@
       "lng": -8.066778
     },
     "description": "Descubra esta praia fluvial no concelho de Góis. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Góis",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       74
-    ]
+    ],
+    "municipality": "Góis",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-congida",
@@ -657,15 +658,15 @@
       "lng": -6.779722
     },
     "description": "Descubra esta praia fluvial no concelho de Freixo de Espada À Cinta. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Freixo de Espada À Cinta",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92,
       81,
       72,
       76
-    ]
+    ],
+    "municipality": "Freixo de Espada À Cinta",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-fraga-da-pegada",
@@ -701,12 +702,12 @@
       "lng": -6.899167
     },
     "description": "Descubra esta praia fluvial no concelho de Macedo de Cavaleiros. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Macedo de Cavaleiros",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Macedo de Cavaleiros",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-froia",
@@ -743,13 +744,13 @@
       "lng": -7.838528
     },
     "description": "Descubra esta praia fluvial no concelho de Proença-a-Nova. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Proença-a-Nova",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       86,
       84
-    ]
+    ],
+    "municipality": "Proença-a-Nova",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-lagoa-da-ervedeira",
@@ -786,13 +787,13 @@
       "lng": -8.895191
     },
     "description": "Descubra esta praia fluvial no concelho de Leiria. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Leiria",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92,
       92
-    ]
+    ],
+    "municipality": "Leiria",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-lenta",
@@ -828,12 +829,12 @@
       "lng": -8.745654
     },
     "description": "Descubra esta praia fluvial no concelho de Vila Nova de Cerveira. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Vila Nova de Cerveira",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Vila Nova de Cerveira",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-lomba",
@@ -871,14 +872,14 @@
       "lng": -8.412833
     },
     "description": "Descubra esta praia fluvial no concelho de Gondomar. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Gondomar",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       82,
       77,
       77
-    ]
+    ],
+    "municipality": "Gondomar",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-loucainha",
@@ -914,12 +915,12 @@
       "lng": -8.30403
     },
     "description": "Descubra esta praia fluvial no concelho de Penela. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Penela",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Penela",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-mamoa",
@@ -955,12 +956,12 @@
       "lng": -8.467356
     },
     "description": "Descubra esta praia fluvial no concelho de Santa Maria da Feira. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Santa Maria da Feira",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Santa Maria da Feira",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-mota",
@@ -996,12 +997,12 @@
       "lng": -8.774569
     },
     "description": "Descubra esta praia fluvial no concelho de Vila Nova de Cerveira. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Vila Nova de Cerveira",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Vila Nova de Cerveira",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-ortiga",
@@ -1036,13 +1037,13 @@
       "lng": -8.001833
     },
     "description": "<p>Descubra&nbsp;esta&nbsp;zona&nbsp;balnear&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Mação.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
-    "municipality": "Mação",
-    "waterQuality": "excelente",
-    "passportStamp": true,
     "photoFocals": [
       92,
       81
-    ]
+    ],
+    "municipality": "Mação",
+    "waterQuality": "excelente",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-peneda-pego-escuro",
@@ -1077,13 +1078,13 @@
       "lng": -8.112139
     },
     "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Góis.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
-    "municipality": "Góis",
-    "waterQuality": "excelente",
-    "passportStamp": true,
     "photoFocals": [
       74,
       70
-    ]
+    ],
+    "municipality": "Góis",
+    "waterQuality": "excelente",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-videmonte-quinta-da-taberna",
@@ -1119,12 +1120,12 @@
       "lng": -7.415028
     },
     "description": "Descubra esta praia fluvial no concelho de Guarda. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Guarda",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       82
-    ]
+    ],
+    "municipality": "Guarda",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-quinta-do-alamal",
@@ -1162,14 +1163,14 @@
       "lng": -7.969139
     },
     "description": "Descubra esta praia fluvial no concelho de Gavião. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Gavião",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       70,
       92,
       50
-    ]
+    ],
+    "municipality": "Gavião",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-quinta-do-barco",
@@ -1205,12 +1206,12 @@
       "lng": -8.360834
     },
     "description": "Descubra esta praia fluvial no concelho de Sever do Vouga. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Sever do Vouga",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Sever do Vouga",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-relva-da-reboleira",
@@ -1246,12 +1247,12 @@
       "lng": -7.467206
     },
     "description": "Descubra esta praia fluvial no concelho de Manteigas. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Manteigas",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Manteigas",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-ribeira",
@@ -1287,12 +1288,12 @@
       "lng": -6.907139
     },
     "description": "Descubra esta praia fluvial no concelho de Macedo de Cavaleiros. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Macedo de Cavaleiros",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Macedo de Cavaleiros",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-ribeira-grande",
@@ -1329,13 +1330,13 @@
       "lng": -8.0965
     },
     "description": "Descubra esta praia fluvial no concelho de Sertã. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Sertã",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       69,
       52
-    ]
+    ],
+    "municipality": "Sertã",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-ronqueira",
@@ -1372,13 +1373,13 @@
       "lng": -8.036806
     },
     "description": "Descubra esta praia fluvial no concelho de Tábua. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Tábua",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       79,
       92
-    ]
+    ],
+    "municipality": "Tábua",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-zaboeira",
@@ -1414,12 +1415,12 @@
       "lng": -8.222639
     },
     "description": "Descubra esta praia fluvial no concelho de Vila de Rei. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Vila de Rei",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       75
-    ]
+    ],
+    "municipality": "Vila de Rei",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-azenhas-de-vilar-de-mouros",
@@ -1455,12 +1456,12 @@
       "lng": -8.783759
     },
     "description": "Descubra esta praia fluvial no concelho de Caminha. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Caminha",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Caminha",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-canaveias",
@@ -1497,13 +1498,13 @@
       "lng": -8.150028
     },
     "description": "Descubra esta praia fluvial no concelho de Góis. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Góis",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       87,
       92
-    ]
+    ],
+    "municipality": "Góis",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-pedras-ruivas",
@@ -1539,12 +1540,12 @@
       "lng": -8.820144
     },
     "description": "Descubra esta praia fluvial no concelho de Caminha. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Caminha",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Caminha",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-acude-pinto",
@@ -1580,12 +1581,12 @@
       "lng": -7.891798
     },
     "description": "Descubra esta praia fluvial no concelho de Oleiros. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Oleiros",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Oleiros",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-adaufe",
@@ -1622,30 +1623,34 @@
       "lng": -8.407778
     },
     "description": "Descubra esta praia fluvial no concelho de Braga. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Braga",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       78,
       92
-    ]
+    ],
+    "municipality": "Braga",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-agroal",
     "name": "Praia Fluvial de Agroal",
     "type": "praia_fluvial",
     "river": "Ribeira de Pomares",
+    "inRede": true,
     "photos": [
-      "https://placehold.co/800x600/003A40/FFEB3B?text=Agroal"
+      "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779633009996_Zona_Balnear_de_Agroal_1_wm.jpg",
+      "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779633036219_Zona_Balnear_de_Agroal_0_wm.jpg",
+      "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779633056079_Zona_Balnear_de_Agroal_3_wm.jpg",
+      "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779633077582_Zona_Balnear_de_Agroal_2_wm.jpg",
+      "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779633089536_Zona_Balnear_de_Agroal_4_wm.jpg"
     ],
+    "inVotar": true,
     "district": "Coimbra",
     "featured": false,
     "services": {
       "wc": false,
       "bar": false,
-      "grills": false,
       "camping": false,
-      "parking": false,
       "blueFlag": false,
       "lifeguard": false,
       "nacional2": false,
@@ -1663,13 +1668,17 @@
       "lat": 40.264877,
       "lng": -7.88467
     },
-    "description": "Descubra esta praia fluvial no concelho de Arganil. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Arganil",
-    "waterQuality": "",
-    "passportStamp": true,
+    "description": "<p>A&nbsp;ribeira&nbsp;de&nbsp;Pomares&nbsp;garante&nbsp;dias&nbsp;tranquilos&nbsp;e&nbsp;dias&nbsp;mais&nbsp;frescos&nbsp;na&nbsp;zona&nbsp;balnear&nbsp;criada&nbsp;na&nbsp;povoação&nbsp;de&nbsp;Agroal,&nbsp;freguesia&nbsp;de&nbsp;Pomares,&nbsp;acerca&nbsp;de&nbsp;30&nbsp;km&nbsp;de&nbsp;Arganil.&nbsp;É&nbsp;junto&nbsp;à&nbsp;ponte&nbsp;que&nbsp;une&nbsp;as&nbsp;duas&nbsp;margens,&nbsp;que&nbsp;o&nbsp;espelho&nbsp;de&nbsp;água&nbsp;é&nbsp;acompanhado&nbsp;de&nbsp;uma&nbsp;zona&nbsp;de&nbsp;apoio&nbsp;e&nbsp;lazer.&nbsp;A&nbsp;zona&nbsp;fluvial&nbsp;oferece&nbsp;aos&nbsp;seus&nbsp;visitantes&nbsp;uma&nbsp;extensa&nbsp;área&nbsp;para&nbsp;banhos&nbsp;com&nbsp;saída&nbsp;por&nbsp;escadas,&nbsp;parque&nbsp;de&nbsp;merendas,&nbsp;serviço&nbsp;de&nbsp;bar&nbsp;com&nbsp;esplanada,&nbsp;instalações&nbsp;sanitárias,&nbsp;zona&nbsp;de&nbsp;solário&nbsp;e&nbsp;parque&nbsp;de&nbsp;estacionamento.</p>",
     "photoFocals": [
-      50
-    ]
+      46,
+      0,
+      90,
+      100,
+      100
+    ],
+    "municipality": "Arganil",
+    "passportStamp": true,
+    "inPassaporteDigital": true
   },
   {
     "id": "praia-fluvial-de-albergaria-dos-fusos",
@@ -1705,12 +1714,12 @@
       "lng": -7.91765
     },
     "description": "Descubra esta praia fluvial no concelho de Cuba. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Cuba",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Cuba",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-aldeia-do-mato",
@@ -1747,13 +1756,13 @@
       "lng": -8.277492
     },
     "description": "Descubra esta praia fluvial no concelho de Abrantes. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Abrantes",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92,
       89
-    ]
+    ],
+    "municipality": "Abrantes",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-aldeia-ruiva",
@@ -1790,13 +1799,13 @@
       "lng": -7.982294
     },
     "description": "Descubra esta praia fluvial no concelho de Proença-a-Nova. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Proença-a-Nova",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92,
       78
-    ]
+    ],
+    "municipality": "Proença-a-Nova",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-aldeia-vicosa",
@@ -1836,16 +1845,16 @@
       "lng": -7.307333
     },
     "description": "Descubra esta praia fluvial no concelho de Guarda. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Guarda",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92,
       92,
       86,
       87,
       92
-    ]
+    ],
+    "municipality": "Guarda",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-albufeira-de-alfaiates",
@@ -1881,12 +1890,12 @@
       "lng": -6.92675
     },
     "description": "Descubra esta praia fluvial no concelho de Sabugal. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Sabugal",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92
-    ]
+    ],
+    "municipality": "Sabugal",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-almaceda",
@@ -1924,14 +1933,14 @@
       "lng": -7.661108
     },
     "description": "Descubra esta praia fluvial no concelho de Castelo Branco. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Castelo Branco",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       76,
       89,
       82
-    ]
+    ],
+    "municipality": "Castelo Branco",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-alqueidao",
@@ -1968,13 +1977,13 @@
       "lng": -8.264944
     },
     "description": "Descubra esta praia fluvial no concelho de Tomar. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Tomar",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       85,
       92
-    ]
+    ],
+    "municipality": "Tomar",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-alqueva",
@@ -2010,12 +2019,12 @@
       "lng": -7.521918
     },
     "description": "Descubra esta praia fluvial no concelho de Portel. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Portel",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Portel",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-alvares",
@@ -2052,13 +2061,13 @@
       "lng": -8.100361
     },
     "description": "Descubra esta praia fluvial no concelho de Góis. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Góis",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       85,
       89
-    ]
+    ],
+    "municipality": "Góis",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-alvaro",
@@ -2094,12 +2103,12 @@
       "lng": -7.960255
     },
     "description": "Descubra esta praia fluvial no concelho de Oleiros. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Oleiros",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Oleiros",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-alvoco-das-varzeas",
@@ -2136,13 +2145,13 @@
       "lng": -7.835944
     },
     "description": "Descubra esta praia fluvial no concelho de Oliveira do Hospital. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Oliveira do Hospital",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       88,
       78
-    ]
+    ],
+    "municipality": "Oliveira do Hospital",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-amieira",
@@ -2178,12 +2187,12 @@
       "lng": -7.559312
     },
     "description": "Descubra esta praia fluvial no concelho de Portel. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Portel",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Portel",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-ana-de-aviz",
@@ -2220,13 +2229,13 @@
       "lng": -8.284321
     },
     "description": "Descubra esta praia fluvial no concelho de Figueiró dos Vinhos. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Figueiró dos Vinhos",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92,
       79
-    ]
+    ],
+    "municipality": "Figueiró dos Vinhos",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-anca",
@@ -2262,12 +2271,12 @@
       "lng": -8.524831
     },
     "description": "Descubra esta praia fluvial no concelho de Cantanhede. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Cantanhede",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Cantanhede",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-avo",
@@ -2305,14 +2314,14 @@
       "lng": -7.905889
     },
     "description": "Descubra esta praia fluvial no concelho de Oliveira do Hospital. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Oliveira do Hospital",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       83,
       83,
       92
-    ]
+    ],
+    "municipality": "Oliveira do Hospital",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-azenhas-d-el-rei",
@@ -2348,12 +2357,12 @@
       "lng": -7.304415
     },
     "description": "Descubra esta praia fluvial no concelho de Alandroal. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Alandroal",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Alandroal",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-badamalos",
@@ -2390,13 +2399,13 @@
       "lng": -6.990583
     },
     "description": "Descubra esta praia fluvial no concelho de Sabugal. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Sabugal",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       86,
       78
-    ]
+    ],
+    "municipality": "Sabugal",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-bairrada-bairradinha",
@@ -2432,12 +2441,12 @@
       "lng": -8.241472
     },
     "description": "Descubra esta praia fluvial no concelho de Ferreira do Zêzere. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Ferreira do Zêzere",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Ferreira do Zêzere",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-benfeita",
@@ -2473,12 +2482,12 @@
       "lng": -7.9454
     },
     "description": "Descubra esta praia fluvial no concelho de Arganil. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Arganil",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Arganil",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-bitetos",
@@ -2514,12 +2523,12 @@
       "lng": -8.259749
     },
     "description": "Descubra esta praia fluvial no concelho de Marco de Canaveses. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Marco de Canaveses",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Marco de Canaveses",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-burgaes-rio-caima",
@@ -2555,12 +2564,12 @@
       "lng": -8.390691
     },
     "description": "Descubra esta praia fluvial no concelho de Vale de Cambra. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Vale de Cambra",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Vale de Cambra",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-cambas",
@@ -2596,12 +2605,12 @@
       "lng": -7.846415
     },
     "description": "Descubra esta praia fluvial no concelho de Oleiros. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Oleiros",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Oleiros",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-cardigos",
@@ -2638,13 +2647,13 @@
       "lng": -8.01375
     },
     "description": "Descubra esta praia fluvial no concelho de Mação. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Mação",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       87,
       90
-    ]
+    ],
+    "municipality": "Mação",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-carrica",
@@ -2679,30 +2688,30 @@
       "lng": -8.257917
     },
     "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Oliveira&nbsp;de&nbsp;Frades.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
-    "municipality": "Oliveira de Frades",
-    "waterQuality": "excelente",
-    "passportStamp": true,
     "photoFocals": [
       73,
       83
-    ]
+    ],
+    "municipality": "Oliveira de Frades",
+    "waterQuality": "excelente",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-cascalheira-secarias",
     "name": "Praia Fluvial de Cascalheira - Secarias",
     "type": "praia_fluvial",
     "river": "Rio Alva",
+    "inRede": true,
     "photos": [
-      "https://placehold.co/800x600/003A40/FFEB3B?text=Cascalheira%2B-%2BSecarias"
+      "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779579325911_Praia_Fluvial_da_Cascalheira_Secarias_wm.jpg"
     ],
+    "inVotar": true,
     "district": "Coimbra",
     "featured": false,
     "services": {
       "wc": false,
       "bar": false,
-      "grills": false,
       "camping": false,
-      "parking": false,
       "blueFlag": true,
       "lifeguard": false,
       "nacional2": false,
@@ -2720,13 +2729,13 @@
       "lat": 40.249213,
       "lng": -8.036018
     },
-    "description": "Descubra esta praia fluvial no concelho de Arganil. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Arganil",
-    "waterQuality": "",
-    "passportStamp": true,
+    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Arganil.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
     "photoFocals": [
-      50
-    ]
+      1
+    ],
+    "municipality": "Arganil",
+    "passportStamp": true,
+    "inPassaporteDigital": true
   },
   {
     "id": "praia-fluvial-de-castelo-novo",
@@ -2765,15 +2774,15 @@
       "lng": -7.489928
     },
     "description": "Descubra esta praia fluvial no concelho de Fundão. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Fundão",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       77,
       80,
       84,
       81
-    ]
+    ],
+    "municipality": "Fundão",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-cavadinho",
@@ -2812,15 +2821,15 @@
       "lng": -8.356556
     },
     "description": "Descubra esta praia fluvial no concelho de Braga. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Braga",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       77,
       87,
       79,
       92
-    ]
+    ],
+    "municipality": "Braga",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-cavez",
@@ -2856,12 +2865,12 @@
       "lng": -7.890001
     },
     "description": "Descubra esta praia fluvial no concelho de Cabeceiras de Basto. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Cabeceiras de Basto",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Cabeceiras de Basto",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-cinco-reis",
@@ -2897,12 +2906,12 @@
       "lng": -7.935867
     },
     "description": "Descubra esta praia fluvial no concelho de Beja. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Beja",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Beja",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-coja",
@@ -2938,12 +2947,12 @@
       "lng": -7.995
     },
     "description": "Descubra esta praia fluvial no concelho de Arganil. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Arganil",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Arganil",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-constancia",
@@ -2980,13 +2989,13 @@
       "lng": -8.34125
     },
     "description": "Descubra esta praia fluvial no concelho de Constância. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Constância",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92,
       82
-    ]
+    ],
+    "municipality": "Constância",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-cornicovo",
@@ -3027,9 +3036,6 @@
       "lng": -8.212724
     },
     "description": "Descubra esta praia fluvial no concelho de Penacova. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Penacova",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       76,
       86,
@@ -3037,7 +3043,10 @@
       77,
       58,
       92
-    ]
+    ],
+    "municipality": "Penacova",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-destriz",
@@ -3073,12 +3082,12 @@
       "lng": -8.281972
     },
     "description": "Descubra esta praia fluvial no concelho de Oliveira de Frades. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Oliveira de Frades",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       73
-    ]
+    ],
+    "municipality": "Oliveira de Frades",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-ereira",
@@ -3114,12 +3123,12 @@
       "lng": -8.712193
     },
     "description": "Descubra esta praia fluvial no concelho de Montemor-o-Velho. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Montemor-o-Velho",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Montemor-o-Velho",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-fernandaires",
@@ -3155,12 +3164,12 @@
       "lng": -8.209333
     },
     "description": "Descubra esta praia fluvial no concelho de Vila de Rei. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Vila de Rei",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       64
-    ]
+    ],
+    "municipality": "Vila de Rei",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-folgosa",
@@ -3196,12 +3205,12 @@
       "lng": -7.905353
     },
     "description": "Descubra esta praia fluvial no concelho de Castro Daire. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Castro Daire",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Castro Daire",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-fontes",
@@ -3239,14 +3248,14 @@
       "lng": -8.263611
     },
     "description": "Descubra esta praia fluvial no concelho de Abrantes. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Abrantes",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       87,
       92,
       83
-    ]
+    ],
+    "municipality": "Abrantes",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-foz-do-cobrao",
@@ -3282,12 +3291,12 @@
       "lng": -7.760396
     },
     "description": "Descubra esta praia fluvial no concelho de Vila Velha de Ródão. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Vila Velha de Ródão",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Vila Velha de Ródão",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-foz-do-lizandro",
@@ -3323,12 +3332,12 @@
       "lng": -9.413372
     },
     "description": "Descubra esta praia fluvial no concelho de Mafra. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Mafra",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Mafra",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-fragas-de-sao-simao",
@@ -3365,13 +3374,13 @@
       "lng": -8.316917
     },
     "description": "Descubra esta praia fluvial no concelho de Figueiró dos Vinhos. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Figueiró dos Vinhos",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       60,
       81
-    ]
+    ],
+    "municipality": "Figueiró dos Vinhos",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-janeiro-de-baixo",
@@ -3407,12 +3416,12 @@
       "lng": -7.801454
     },
     "description": "Descubra esta praia fluvial no concelho de Pampilhosa da Serra. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Pampilhosa da Serra",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Pampilhosa da Serra",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-lapa-dos-dinheiros",
@@ -3449,13 +3458,13 @@
       "lng": -7.69725
     },
     "description": "Descubra esta praia fluvial no concelho de Seia. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Seia",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       70,
       78
-    ]
+    ],
+    "municipality": "Seia",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-loriga",
@@ -3492,13 +3501,13 @@
       "lng": -7.678472
     },
     "description": "Descubra esta praia fluvial no concelho de Seia. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Seia",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92,
       92
-    ]
+    ],
+    "municipality": "Seia",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-mega-fundeira",
@@ -3535,13 +3544,13 @@
       "lng": -8.121556
     },
     "description": "Descubra esta praia fluvial no concelho de Pedrógão Grande. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Pedrógão Grande",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       88,
       86
-    ]
+    ],
+    "municipality": "Pedrógão Grande",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-merelim-sao-paio",
@@ -3578,13 +3587,13 @@
       "lng": -8.4655
     },
     "description": "Descubra esta praia fluvial no concelho de Braga. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Braga",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92,
       92
-    ]
+    ],
+    "municipality": "Braga",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-moinho-de-alva",
@@ -3620,12 +3629,12 @@
       "lng": -7.984296
     },
     "description": "Descubra esta praia fluvial no concelho de Arganil. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Arganil",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Arganil",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-monsaraz",
@@ -3662,13 +3671,13 @@
       "lng": -7.350278
     },
     "description": "Descubra esta praia fluvial no concelho de Reguengos de Monsaraz. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Reguengos de Monsaraz",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       65,
       92
-    ]
+    ],
+    "municipality": "Reguengos de Monsaraz",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-montalvo-tesos",
@@ -3706,14 +3715,14 @@
       "lng": -8.125917
     },
     "description": "Descubra esta praia fluvial no concelho de Ponte de Sor. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Ponte de Sor",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       69,
       92,
       84
-    ]
+    ],
+    "municipality": "Ponte de Sor",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-montes",
@@ -3750,13 +3759,13 @@
       "lng": -8.252778
     },
     "description": "Descubra esta praia fluvial no concelho de Tomar. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Tomar",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92,
       85
-    ]
+    ],
+    "municipality": "Tomar",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-mourao",
@@ -3792,12 +3801,12 @@
       "lng": -7.35521
     },
     "description": "Descubra esta praia fluvial no concelho de Mourão. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Mourão",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Mourão",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-navarra",
@@ -3833,12 +3842,12 @@
       "lng": -8.384403
     },
     "description": "Descubra esta praia fluvial no concelho de Braga. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Braga",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Braga",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-odemira",
@@ -3875,13 +3884,13 @@
       "lng": -8.647195
     },
     "description": "Descubra esta praia fluvial no concelho de Odemira. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Odemira",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       82,
       86
-    ]
+    ],
+    "municipality": "Odemira",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-olhos-de-fervenca",
@@ -3917,12 +3926,12 @@
       "lng": -8.696632
     },
     "description": "Descubra esta praia fluvial no concelho de Cantanhede. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Cantanhede",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Cantanhede",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-oriola",
@@ -3958,12 +3967,12 @@
       "lng": -7.862162
     },
     "description": "Descubra esta praia fluvial no concelho de Portel. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Portel",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Portel",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-paco-do-mato",
@@ -3999,12 +4008,12 @@
       "lng": -8.305047
     },
     "description": "Descubra esta praia fluvial no concelho de Vale de Cambra. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Vale de Cambra",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Vale de Cambra",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-palheiros-e-zorro",
@@ -4040,12 +4049,12 @@
       "lng": -8.365126
     },
     "description": "Descubra esta praia fluvial no concelho de Coimbra. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Coimbra",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Coimbra",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-pampilhosa-da-serra-vila",
@@ -4081,12 +4090,12 @@
       "lng": -7.950218
     },
     "description": "Descubra esta praia fluvial no concelho de Pampilhosa da Serra. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Pampilhosa da Serra",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Pampilhosa da Serra",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-pessegueiro",
@@ -4122,12 +4131,12 @@
       "lng": -8.024147
     },
     "description": "Descubra esta praia fluvial no concelho de Pampilhosa da Serra. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Pampilhosa da Serra",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Pampilhosa da Serra",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-corga",
@@ -4164,13 +4173,13 @@
       "lng": -8.18925
     },
     "description": "Descubra esta praia fluvial no concelho de Castanheira de Pera. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Castanheira de Pera",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92,
       84
-    ]
+    ],
+    "municipality": "Castanheira de Pera",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-pomares",
@@ -4206,12 +4215,12 @@
       "lng": -7.897287
     },
     "description": "Descubra esta praia fluvial no concelho de Arganil. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Arganil",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Arganil",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-ponte-da-barca",
@@ -4247,12 +4256,12 @@
       "lng": -8.416778
     },
     "description": "Descubra esta praia fluvial no concelho de Ponte da Barca. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Ponte da Barca",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Ponte da Barca",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-ponte-da-pedra",
@@ -4289,13 +4298,13 @@
       "lng": -7.145972
     },
     "description": "Descubra esta praia fluvial no concelho de Mirandela. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Mirandela",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92,
       83
-    ]
+    ],
+    "municipality": "Mirandela",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-ponte-da-ranca",
@@ -4329,12 +4338,12 @@
       "lng": -6.996556
     },
     "description": "<p>Descubra&nbsp;esta&nbsp;zona&nbsp;balnear&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Vinhais.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
-    "municipality": "Vinhais",
-    "waterQuality": "excelente",
-    "passportStamp": true,
     "photoFocals": [
       92
-    ]
+    ],
+    "municipality": "Vinhais",
+    "waterQuality": "excelente",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-ponte-de-frades",
@@ -4370,12 +4379,12 @@
       "lng": -7.119333
     },
     "description": "Descubra esta praia fluvial no concelho de Vinhais. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Vinhais",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       80
-    ]
+    ],
+    "municipality": "Vinhais",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-ponte-de-juncais",
@@ -4412,13 +4421,13 @@
       "lng": -7.518681
     },
     "description": "Descubra esta praia fluvial no concelho de Fornos de Algodres. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Fornos de Algodres",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       86,
       75
-    ]
+    ],
+    "municipality": "Fornos de Algodres",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-ponte-do-bico",
@@ -4455,13 +4464,13 @@
       "lng": -8.430333
     },
     "description": "Descubra esta praia fluvial no concelho de Braga. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Braga",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       79,
       92
-    ]
+    ],
+    "municipality": "Braga",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-ponte-do-sotao",
@@ -4498,13 +4507,13 @@
       "lng": -8.148056
     },
     "description": "Descubra esta praia fluvial no concelho de Góis. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Góis",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92,
       92
-    ]
+    ],
+    "municipality": "Góis",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-ponte-soeira",
@@ -4541,13 +4550,13 @@
       "lng": -6.936722
     },
     "description": "Descubra esta praia fluvial no concelho de Vinhais. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Vinhais",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       86,
       87
-    ]
+    ],
+    "municipality": "Vinhais",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-pontemieiro",
@@ -4583,12 +4592,12 @@
       "lng": -8.313146
     },
     "description": "Descubra esta praia fluvial no concelho de Vale de Cambra. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Vale de Cambra",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Vale de Cambra",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-prado-faial",
@@ -4624,12 +4633,12 @@
       "lng": -8.45791
     },
     "description": "Descubra esta praia fluvial no concelho de Vila Verde. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Vila Verde",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Vila Verde",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-quadrazais-lameira",
@@ -4666,13 +4675,13 @@
       "lng": -6.986472
     },
     "description": "Descubra esta praia fluvial no concelho de Sabugal. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Sabugal",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       78,
       76
-    ]
+    ],
+    "municipality": "Sabugal",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-quintas",
@@ -4709,13 +4718,13 @@
       "lng": -7.164417
     },
     "description": "Descubra esta praia fluvial no concelho de Mirandela. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Mirandela",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       72,
       92
-    ]
+    ],
+    "municipality": "Mirandela",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-rapoula-do-coa",
@@ -4752,13 +4761,13 @@
       "lng": -7.044302
     },
     "description": "Descubra esta praia fluvial no concelho de Sabugal. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Sabugal",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       88,
       87
-    ]
+    ],
+    "municipality": "Sabugal",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-sabugal-devesa",
@@ -4793,13 +4802,13 @@
       "lng": -7.092694
     },
     "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Sabugal.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
-    "municipality": "Sabugal",
-    "waterQuality": "excelente",
-    "passportStamp": true,
     "photoFocals": [
       84,
       73
-    ]
+    ],
+    "municipality": "Sabugal",
+    "waterQuality": "excelente",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-sandomil",
@@ -4836,13 +4845,13 @@
       "lng": -7.782111
     },
     "description": "Descubra esta praia fluvial no concelho de Seia. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Seia",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       80,
       92
-    ]
+    ],
+    "municipality": "Seia",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-santa-clara",
@@ -4879,13 +4888,13 @@
       "lng": -8.444389
     },
     "description": "Descubra esta praia fluvial no concelho de Odemira. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Odemira",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       78,
       86
-    ]
+    ],
+    "municipality": "Odemira",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-santa-luzia",
@@ -4921,12 +4930,12 @@
       "lng": -7.852256
     },
     "description": "Descubra esta praia fluvial no concelho de Pampilhosa da Serra. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Pampilhosa da Serra",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Pampilhosa da Serra",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-sao-giao",
@@ -4963,13 +4972,13 @@
       "lng": -7.808472
     },
     "description": "Descubra esta praia fluvial no concelho de Oliveira do Hospital. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Oliveira do Hospital",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92,
       73
-    ]
+    ],
+    "municipality": "Oliveira do Hospital",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-sao-sebastiao-da-feira",
@@ -5006,13 +5015,13 @@
       "lng": -7.865806
     },
     "description": "Descubra esta praia fluvial no concelho de Oliveira do Hospital. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Oliveira do Hospital",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       68,
       64
-    ]
+    ],
+    "municipality": "Oliveira do Hospital",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-segoes",
@@ -5048,12 +5057,12 @@
       "lng": -7.681164
     },
     "description": "Descubra esta praia fluvial no concelho de Moimenta da Beira. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Moimenta da Beira",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Moimenta da Beira",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-senhora-da-graca",
@@ -5089,12 +5098,12 @@
       "lng": -8.196988
     },
     "description": "Descubra esta praia fluvial no concelho de Lousã. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Lousã",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Lousã",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-senhora-da-piedade",
@@ -5130,12 +5139,12 @@
       "lng": -8.234095
     },
     "description": "Descubra esta praia fluvial no concelho de Lousã. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Lousã",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Lousã",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-senhora-da-ribeira",
@@ -5171,12 +5180,12 @@
       "lng": -8.124259
     },
     "description": "Descubra esta praia fluvial no concelho de Santa Comba Dão. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Santa Comba Dão",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Santa Comba Dão",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-sete-fontes",
@@ -5212,12 +5221,12 @@
       "lng": -8.537897
     },
     "description": "Descubra esta praia fluvial no concelho de Cantanhede. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Cantanhede",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Cantanhede",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-unhais-da-serra",
@@ -5254,13 +5263,13 @@
       "lng": -7.622917
     },
     "description": "Descubra esta praia fluvial no concelho de Covilhã. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Covilhã",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       90,
       90
-    ]
+    ],
+    "municipality": "Covilhã",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-vale-das-eguas-insua",
@@ -5295,13 +5304,13 @@
       "lng": -7.024325
     },
     "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Sabugal.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
-    "municipality": "Sabugal",
-    "waterQuality": "excelente",
-    "passportStamp": true,
     "photoFocals": [
       81,
       92
-    ]
+    ],
+    "municipality": "Sabugal",
+    "waterQuality": "excelente",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-vale-juncal",
@@ -5338,13 +5347,13 @@
       "lng": -7.184278
     },
     "description": "Descubra esta praia fluvial no concelho de Mirandela. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Mirandela",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       88,
       92
-    ]
+    ],
+    "municipality": "Mirandela",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-valhelhas",
@@ -5380,12 +5389,12 @@
       "lng": -7.403639
     },
     "description": "Descubra esta praia fluvial no concelho de Guarda. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Guarda",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92
-    ]
+    ],
+    "municipality": "Guarda",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-verim",
@@ -5421,12 +5430,12 @@
       "lng": -8.314106
     },
     "description": "Descubra esta praia fluvial no concelho de Póvoa de Lanhoso. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Póvoa de Lanhoso",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Póvoa de Lanhoso",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-vila-cova-a-coelheira",
@@ -5462,12 +5471,12 @@
       "lng": -7.735556
     },
     "description": "Descubra esta praia fluvial no concelho de Seia. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Seia",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       89
-    ]
+    ],
+    "municipality": "Seia",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-vila-da-ponte",
@@ -5505,14 +5514,14 @@
       "lng": -7.513632
     },
     "description": "Descubra esta praia fluvial no concelho de Sernancelhe. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Sernancelhe",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       60,
       83,
       80
-    ]
+    ],
+    "municipality": "Sernancelhe",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-vila-nova-serra",
@@ -5549,13 +5558,13 @@
       "lng": -8.266
     },
     "description": "Descubra esta praia fluvial no concelho de Tomar. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Tomar",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92,
       87
-    ]
+    ],
+    "municipality": "Tomar",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-acude-dos-vais",
@@ -5591,12 +5600,12 @@
       "lng": -7.657218
     },
     "description": "Descubra esta praia fluvial no concelho de Penalva do Castelo. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Penalva do Castelo",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Penalva do Castelo",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-agroal-ourem",
@@ -5634,14 +5643,14 @@
       "lng": -8.436167
     },
     "description": "Descubra esta praia fluvial no concelho de Ourém. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Ourém",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92,
       92,
       92
-    ]
+    ],
+    "municipality": "Ourém",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-alqueirao",
@@ -5677,12 +5686,12 @@
       "lng": -8.176039
     },
     "description": "Descubra esta praia fluvial no concelho de Terras de Bouro. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Terras do Bouro",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Terras do Bouro",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-boico",
@@ -5718,12 +5727,12 @@
       "lng": -8.009361
     },
     "description": "Descubra esta praia fluvial no concelho de Sertã. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Sertã",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92
-    ]
+    ],
+    "municipality": "Sertã",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-bostelim",
@@ -5759,12 +5768,12 @@
       "lng": -8.108083
     },
     "description": "Descubra esta praia fluvial no concelho de Vila de Rei. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Vila de Rei",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92
-    ]
+    ],
+    "municipality": "Vila de Rei",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-cabril",
@@ -5801,13 +5810,13 @@
       "lng": -8.133395
     },
     "description": "Descubra esta praia fluvial no concelho de Pedrógão Grande. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Pedrógão Grande",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       86,
       90
-    ]
+    ],
+    "municipality": "Pedrógão Grande",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-carvoeiro",
@@ -5844,13 +5853,13 @@
       "lng": -7.9235
     },
     "description": "Descubra esta praia fluvial no concelho de Mação. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Mação",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92,
       92
-    ]
+    ],
+    "municipality": "Mação",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-clube-nautico-de-avis",
@@ -5886,12 +5895,12 @@
       "lng": -7.912565
     },
     "description": "Descubra esta praia fluvial no concelho de Avis. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Avis",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Avis",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-colmeal",
@@ -5927,12 +5936,12 @@
       "lng": -7.998778
     },
     "description": "Descubra esta praia fluvial no concelho de Góis. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Góis",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       74
-    ]
+    ],
+    "municipality": "Góis",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-praia-do-lago",
@@ -5968,12 +5977,12 @@
       "lng": -7.487391
     },
     "description": "Descubra esta praia fluvial no concelho de Moura. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Moura",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Moura",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-lago-azul",
@@ -6009,12 +6018,12 @@
       "lng": -8.230972
     },
     "description": "Descubra esta praia fluvial no concelho de Ferreira do Zêzere. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Ferreira do Zêzere",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       88
-    ]
+    ],
+    "municipality": "Ferreira do Zêzere",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-malhadal",
@@ -6051,13 +6060,13 @@
       "lng": -7.951167
     },
     "description": "Descubra esta praia fluvial no concelho de Proença-a-Nova. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Proença-a-Nova",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92,
       88
-    ]
+    ],
+    "municipality": "Proença-a-Nova",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-marmeleiro",
@@ -6093,12 +6102,12 @@
       "lng": -8.089806
     },
     "description": "Descubra esta praia fluvial no concelho de Sertã. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Sertã",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       82
-    ]
+    ],
+    "municipality": "Sertã",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-meimao",
@@ -6136,14 +6145,14 @@
       "lng": -7.143778
     },
     "description": "Descubra esta praia fluvial no concelho de Penamacor. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Penamacor",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       76,
       92,
       92
-    ]
+    ],
+    "municipality": "Penamacor",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-mosteiro",
@@ -6181,14 +6190,14 @@
       "lng": -8.186333
     },
     "description": "Descubra esta praia fluvial no concelho de Pedrógão Grande. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Pedrógão Grande",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       74,
       83,
       92
-    ]
+    ],
+    "municipality": "Pedrógão Grande",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-pego-das-cancelas",
@@ -6225,13 +6234,13 @@
       "lng": -8.057944
     },
     "description": "Descubra esta praia fluvial no concelho de Vila de Rei. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Vila de Rei",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       83,
       87
-    ]
+    ],
+    "municipality": "Vila de Rei",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-pego-fundo",
@@ -6267,12 +6276,12 @@
       "lng": -7.476824
     },
     "description": "Descubra esta praia fluvial no concelho de Alcoutim. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Alcoutim",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Alcoutim",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-penedo-furado",
@@ -6309,13 +6318,13 @@
       "lng": -8.162417
     },
     "description": "Descubra esta praia fluvial no concelho de Vila de Rei. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Vila de Rei",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       82,
       92
-    ]
+    ],
+    "municipality": "Vila de Rei",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-piodao",
@@ -6353,14 +6362,14 @@
       "lng": -7.826306
     },
     "description": "Descubra esta praia fluvial no concelho de Arganil. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Arganil",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       66,
       66,
       69
-    ]
+    ],
+    "municipality": "Arganil",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-pontilhao-da-valeta",
@@ -6396,12 +6405,12 @@
       "lng": -8.41903
     },
     "description": "Descubra esta praia fluvial no concelho de Arcos de Valdevez. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Arcos de Valdevez",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Arcos de Valdevez",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-rabacal",
@@ -6437,12 +6446,12 @@
       "lng": -7.247152
     },
     "description": "Descubra esta praia fluvial no concelho de Valpaços. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Valpaços",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Valpaços",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-rebolim",
@@ -6478,12 +6487,12 @@
       "lng": -8.417114
     },
     "description": "Descubra esta praia fluvial no concelho de Coimbra. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Coimbra",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Coimbra",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-reconquinho",
@@ -6520,13 +6529,13 @@
       "lng": -8.279333
     },
     "description": "Descubra esta praia fluvial no concelho de Penacova. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Penacova",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92,
       83
-    ]
+    ],
+    "municipality": "Penacova",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-sesmo",
@@ -6563,13 +6572,13 @@
       "lng": -7.742794
     },
     "description": "Descubra esta praia fluvial no concelho de Castelo Branco. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Castelo Branco",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92,
       67
-    ]
+    ],
+    "municipality": "Castelo Branco",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-sorraia",
@@ -6606,13 +6615,13 @@
       "lng": -8.522167
     },
     "description": "Descubra esta praia fluvial no concelho de Coruche. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Coruche",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92,
       72
-    ]
+    ],
+    "municipality": "Coruche",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-trabulo",
@@ -6650,14 +6659,14 @@
       "lng": -7.652306
     },
     "description": "Descubra esta praia fluvial no concelho de Sátão. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Sátão",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       42,
       55,
       88
-    ]
+    ],
+    "municipality": "Sátão",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-troviscal",
@@ -6694,13 +6703,13 @@
       "lng": -8.007944
     },
     "description": "Descubra esta praia fluvial no concelho de Sertã. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Sertã",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       87,
       92
-    ]
+    ],
+    "municipality": "Sertã",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-vale-do-mondego",
@@ -6737,13 +6746,13 @@
       "lng": -7.300194
     },
     "description": "Descubra esta praia fluvial no concelho de Guarda. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Guarda",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       83,
       92
-    ]
+    ],
+    "municipality": "Guarda",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-vale-do-rossim",
@@ -6779,12 +6788,12 @@
       "lng": -7.586448
     },
     "description": "Descubra esta praia fluvial no concelho de Gouveia. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Gouveia",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Gouveia",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-vimieiro",
@@ -6825,9 +6834,6 @@
       "lng": -8.197694
     },
     "description": "Descubra esta praia fluvial no concelho de Penacova. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Penacova",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       79,
       87,
@@ -6835,7 +6841,10 @@
       83,
       81,
       73
-    ]
+    ],
+    "municipality": "Penacova",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-olhos-de-agua-do-alviela",
@@ -6871,12 +6880,12 @@
       "lng": -8.711811
     },
     "description": "Descubra esta praia fluvial no concelho de Alcanena. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Alcanena",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Alcanena",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-ucha",
@@ -6913,15 +6922,15 @@
       "lng": -8.012389
     },
     "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;São&nbsp;Pedro&nbsp;do&nbsp;Sul.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
-    "municipality": "São Pedro do Sul",
-    "waterQuality": "excelente",
-    "passportStamp": true,
     "photoFocals": [
       72,
       86,
       92,
       87
-    ]
+    ],
+    "municipality": "São Pedro do Sul",
+    "waterQuality": "excelente",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-barragem-de-idanha",
@@ -6958,19 +6967,20 @@
       "lng": -7.188556
     },
     "description": "Descubra esta zona balnear no concelho de Idanha-a-Nova. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Idanha-a-Nova",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       88,
       92
-    ]
+    ],
+    "municipality": "Idanha-a-Nova",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-barroca",
     "name": "Zona Balnear da Barroca",
     "type": "zona_balnear",
     "river": "Rio Zêzere",
+    "hidden": true,
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Barroca"
     ],
@@ -7000,12 +7010,12 @@
       "lng": -7.717485
     },
     "description": "Descubra esta zona balnear no concelho de Fundão. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Fundão",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Fundão",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-capinha",
@@ -7042,13 +7052,13 @@
       "lng": -7.382189
     },
     "description": "Descubra esta zona balnear no concelho de Fundão. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Fundão",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       72,
       92
-    ]
+    ],
+    "municipality": "Fundão",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-cascata-da-cabreia",
@@ -7082,12 +7092,12 @@
       "lng": -8.391401
     },
     "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Sever&nbsp;do&nbsp;Vouga.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
-    "municipality": "Sever do Vouga",
-    "waterQuality": "excelente",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Sever do Vouga",
+    "waterQuality": "excelente",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-lisga",
@@ -7124,13 +7134,13 @@
       "lng": -7.822167
     },
     "description": "Descubra esta zona balnear no concelho de Castelo Branco. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Castelo Branco",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       90,
       76
-    ]
+    ],
+    "municipality": "Castelo Branco",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-maravilha",
@@ -7165,13 +7175,13 @@
       "lng": -7.196583
     },
     "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Mirandela.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
-    "municipality": "Mirandela",
-    "waterQuality": "excelente",
-    "passportStamp": true,
     "photoFocals": [
       64,
       64
-    ]
+    ],
+    "municipality": "Mirandela",
+    "waterQuality": "excelente",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-meimoa",
@@ -7208,13 +7218,13 @@
       "lng": -7.188083
     },
     "description": "Descubra esta zona balnear no concelho de Penamacor. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Penamacor",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       78,
       85
-    ]
+    ],
+    "municipality": "Penamacor",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-paradinha",
@@ -7250,12 +7260,12 @@
       "lng": -8.174415
     },
     "description": "Descubra esta zona balnear no concelho de Arouca. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Arouca",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Arouca",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-portagem",
@@ -7289,12 +7299,12 @@
       "lng": -7.381737
     },
     "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Marvão.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
-    "municipality": "Marvão",
-    "waterQuality": "excelente",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Marvão",
+    "waterQuality": "excelente",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-ratoeira",
@@ -7328,12 +7338,12 @@
       "lng": -7.341505
     },
     "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Celorico&nbsp;da&nbsp;Beira.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
-    "municipality": "Celorico da Beira",
-    "waterQuality": "excelente",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Celorico da Beira",
+    "waterQuality": "excelente",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-ribeira-da-venda",
@@ -7371,14 +7381,14 @@
       "lng": -7.800028
     },
     "description": "Descubra esta zona balnear no concelho de Gavião. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Gavião",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92,
       71,
       92
-    ]
+    ],
+    "municipality": "Gavião",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-ribeira-grande",
@@ -7414,12 +7424,12 @@
       "lng": -7.651424
     },
     "description": "Descubra esta zona balnear no concelho de Fronteira. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Fronteira",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Fronteira",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-albergaria-da-serra",
@@ -7453,18 +7463,19 @@
       "lng": -8.277262
     },
     "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Arouca.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
-    "municipality": "Arouca",
-    "waterQuality": "excelente",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Arouca",
+    "waterQuality": "excelente",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-alverangel",
     "name": "Zona Balnear de Alverangel",
     "type": "zona_balnear",
     "river": "Rio Zêzere - Albufeira de Castelo de Bode",
+    "hidden": true,
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Alverangel"
     ],
@@ -7492,12 +7503,12 @@
       "lng": -8.301562
     },
     "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Tomar.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
-    "municipality": "Tomar",
-    "waterQuality": "excelente",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Tomar",
+    "waterQuality": "excelente",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-alvito-da-beira",
@@ -7534,13 +7545,13 @@
       "lng": -7.798583
     },
     "description": "Descubra esta zona balnear no concelho de Proença-a-Nova. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Proença-a-Nova",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       79,
       81
-    ]
+    ],
+    "municipality": "Proença-a-Nova",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-amoreira-rio",
@@ -7576,12 +7587,12 @@
       "lng": -8.839786
     },
     "description": "Descubra esta zona balnear no concelho de Aljezur. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Aljezur",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Aljezur",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-armoniz",
@@ -7617,12 +7628,12 @@
       "lng": -7.04229
     },
     "description": "Descubra esta zona balnear no concelho de Vinhais. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Vinhais",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Vinhais",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-cabeco-de-vide",
@@ -7656,12 +7667,12 @@
       "lng": -7.580259
     },
     "description": "<p>Descubra&nbsp;esta&nbsp;zona&nbsp;balnear&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Fronteira.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
-    "municipality": "Fronteira",
-    "waterQuality": "excelente",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Fronteira",
+    "waterQuality": "excelente",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-cartamil",
@@ -7695,12 +7706,12 @@
       "lng": -7.927083333333334
     },
     "description": "<p></p>",
-    "municipality": "Arganil",
-    "waterQuality": "excelente",
-    "passportStamp": false,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Arganil",
+    "waterQuality": "excelente",
+    "passportStamp": false
   },
   {
     "id": "zona-balnear-de-cerejeira",
@@ -7737,13 +7748,13 @@
       "lng": -7.753306
     },
     "description": "Descubra esta zona balnear no concelho de Proença-a-Nova. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Proença-a-Nova",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       77,
       92
-    ]
+    ],
+    "municipality": "Proença-a-Nova",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-cortes-do-meio",
@@ -7782,15 +7793,15 @@
       "lng": -7.581111
     },
     "description": "Descubra esta zona balnear no concelho de Covilhã. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Covilhã",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92,
       92,
       67,
       92
-    ]
+    ],
+    "municipality": "Covilhã",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-espiunca",
@@ -7824,12 +7835,12 @@
       "lng": -8.213075
     },
     "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Arouca.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
-    "municipality": "Arouca",
-    "waterQuality": "excelente",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Arouca",
+    "waterQuality": "excelente",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-folques",
@@ -7863,12 +7874,12 @@
       "lng": -8.014688
     },
     "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Arganil.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
-    "municipality": "Arganil",
-    "waterQuality": "excelente",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Arganil",
+    "waterQuality": "excelente",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-foz-d-egua",
@@ -7902,12 +7913,12 @@
       "lng": -7.812722
     },
     "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Arganil.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
-    "municipality": "Arganil",
-    "waterQuality": "excelente",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Arganil",
+    "waterQuality": "excelente",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-foz-do-sabor",
@@ -7943,12 +7954,12 @@
       "lng": -7.112082
     },
     "description": "Descubra esta zona balnear no concelho de Torre de Moncorvo. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Torre de Moncorvo",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Torre de Moncorvo",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-fraguas",
@@ -7984,12 +7995,12 @@
       "lng": -7.769
     },
     "description": "Descubra esta zona balnear no concelho de Vila Nova de Paiva. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Vila Nova de Paiva",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Vila Nova de Paiva",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-frechas",
@@ -8026,13 +8037,13 @@
       "lng": -7.165328
     },
     "description": "Descubra esta zona balnear no concelho de Mirandela. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Mirandela",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92,
       79
-    ]
+    ],
+    "municipality": "Mirandela",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-fresulfe",
@@ -8068,12 +8079,12 @@
       "lng": -6.938359
     },
     "description": "Descubra esta zona balnear no concelho de Vinhais. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Vinhais",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Vinhais",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-lajeosa-do-mondego",
@@ -8109,12 +8120,12 @@
       "lng": -7.335767
     },
     "description": "Descubra esta zona balnear no concelho de Celorico da Beira. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Celorico da Beira",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Celorico da Beira",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-lavacolhos",
@@ -8151,13 +8162,13 @@
       "lng": -7.614174
     },
     "description": "Descubra esta zona balnear no concelho de Fundão. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Fundão",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       81,
       92
-    ]
+    ],
+    "municipality": "Fundão",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-leomil",
@@ -8193,12 +8204,12 @@
       "lng": -7.653687
     },
     "description": "Descubra esta zona balnear no concelho de Moimenta da Beira. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Moimenta da Beira",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Moimenta da Beira",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-malcata",
@@ -8235,13 +8246,13 @@
       "lng": -7.078111
     },
     "description": "Descubra esta zona balnear no concelho de Sabugal. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Sabugal",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       84,
       82
-    ]
+    ],
+    "municipality": "Sabugal",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-malhada-cha",
@@ -8275,12 +8286,12 @@
       "lng": -7.800722222222222
     },
     "description": "<p></p>",
-    "municipality": "Arganil",
-    "waterQuality": "excelente",
-    "passportStamp": false,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Arganil",
+    "waterQuality": "excelente",
+    "passportStamp": false
   },
   {
     "id": "zona-balnear-de-nuzedo-de-baixo",
@@ -8316,12 +8327,12 @@
       "lng": -7.101805
     },
     "description": "Descubra esta zona balnear no concelho de Vinhais. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Vinhais",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Vinhais",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-ourondo",
@@ -8360,15 +8371,15 @@
       "lng": -7.686583
     },
     "description": "Descubra esta zona balnear no concelho de Covilhã. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Covilhã",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92,
       77,
       86,
       90
-    ]
+    ],
+    "municipality": "Covilhã",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-penalobo",
@@ -8406,14 +8417,14 @@
       "lng": -7.201421
     },
     "description": "Descubra esta zona balnear no concelho de Sabugal. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Sabugal",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92,
       84,
       55
-    ]
+    ],
+    "municipality": "Sabugal",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-peneda-talhada",
@@ -8447,12 +8458,12 @@
       "lng": -8.051188
     },
     "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Arganil.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
-    "municipality": "Arganil",
-    "waterQuality": "excelente",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Arganil",
+    "waterQuality": "excelente",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-pombal",
@@ -8486,12 +8497,12 @@
       "lng": -8.108621
     },
     "description": "<p>Descubra&nbsp;esta&nbsp;zona&nbsp;balnear&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Vieira&nbsp;do&nbsp;Minho.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
-    "municipality": "Vieira do Minho",
-    "waterQuality": "excelente",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Vieira do Minho",
+    "waterQuality": "excelente",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-ponte-macas",
@@ -8527,12 +8538,12 @@
       "lng": -6.568961
     },
     "description": "Descubra esta zona balnear no concelho de Vimioso. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Vimioso",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Vimioso",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-rio-torto",
@@ -8566,12 +8577,12 @@
       "lng": -7.259883
     },
     "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Valpaços.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
-    "municipality": "Valpaços",
-    "waterQuality": "excelente",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Valpaços",
+    "waterQuality": "excelente",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-sabugueiro",
@@ -8606,13 +8617,13 @@
       "lng": -7.640472
     },
     "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Seia.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
-    "municipality": "Seia",
-    "waterQuality": "excelente",
-    "passportStamp": true,
     "photoFocals": [
       92,
       92
-    ]
+    ],
+    "municipality": "Seia",
+    "waterQuality": "excelente",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-sao-joao-do-monte",
@@ -8646,12 +8657,12 @@
       "lng": -8.236388
     },
     "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Tondela.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
-    "municipality": "Tondela",
-    "waterQuality": "excelente",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Tondela",
+    "waterQuality": "excelente",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-segade",
@@ -8687,12 +8698,12 @@
       "lng": -8.317092
     },
     "description": "Descubra esta zona balnear no concelho de Miranda do Corvo. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Miranda do Corvo",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Miranda do Corvo",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-seixo-do-coa",
@@ -8726,12 +8737,12 @@
       "lng": -7.017467
     },
     "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Sabugal.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
-    "municipality": "Sabugal",
-    "waterQuality": "excelente",
-    "passportStamp": true,
     "photoFocals": [
       74
-    ]
+    ],
+    "municipality": "Sabugal",
+    "waterQuality": "excelente",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-sobral-de-sao-miguel",
@@ -8767,12 +8778,12 @@
       "lng": -7.7445
     },
     "description": "Descubra esta zona balnear no concelho de Covilhã. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Covilhã",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92
-    ]
+    ],
+    "municipality": "Covilhã",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-souto-da-casa",
@@ -8810,14 +8821,14 @@
       "lng": -7.543522
     },
     "description": "Descubra esta zona balnear no concelho de Fundão. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Fundão",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       88,
       67,
       77
-    ]
+    ],
+    "municipality": "Fundão",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-souto-do-rio",
@@ -8853,12 +8864,12 @@
       "lng": -8.425537
     },
     "description": "Descubra esta zona balnear no concelho de Águeda. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Águeda",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Águeda",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-urtigal",
@@ -8892,12 +8903,12 @@
       "lng": -7.959148
     },
     "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Arganil.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
-    "municipality": "Arganil",
-    "waterQuality": "excelente",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Arganil",
+    "waterQuality": "excelente",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-vale-de-espinho",
@@ -8934,13 +8945,13 @@
       "lng": -6.964694
     },
     "description": "Descubra esta zona balnear no concelho de Sabugal. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Sabugal",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92,
       86
-    ]
+    ],
+    "municipality": "Sabugal",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-valeiro-do-barco-sarzedo",
@@ -8974,12 +8985,12 @@
       "lng": -8.067444444444444
     },
     "description": "<p></p>",
-    "municipality": "Arganil",
-    "waterQuality": "excelente",
-    "passportStamp": false,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Arganil",
+    "waterQuality": "excelente",
+    "passportStamp": false
   },
   {
     "id": "zona-balnear-de-vau",
@@ -9015,12 +9026,12 @@
       "lng": -8.190002
     },
     "description": "Descubra esta zona balnear no concelho de Arouca. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Arouca",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Arouca",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-verdelhos",
@@ -9057,13 +9068,13 @@
       "lng": -7.467583
     },
     "description": "Descubra esta zona balnear no concelho de Covilhã. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Covilhã",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       72,
       83
-    ]
+    ],
+    "municipality": "Covilhã",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-vila-do-carvalho",
@@ -9100,13 +9111,13 @@
       "lng": -7.493944
     },
     "description": "Descubra esta zona balnear no concelho de Covilhã. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Covilhã",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92,
       87
-    ]
+    ],
+    "municipality": "Covilhã",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-areinho",
@@ -9140,12 +9151,12 @@
       "lng": -8.177201
     },
     "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Arouca.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
-    "municipality": "Arouca",
-    "waterQuality": "excelente",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Arouca",
+    "waterQuality": "excelente",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-covao-da-ponte",
@@ -9181,12 +9192,12 @@
       "lng": -7.515131
     },
     "description": "Descubra esta zona balnear no concelho de Manteigas. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Manteigas",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Manteigas",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-paul",
@@ -9223,13 +9234,13 @@
       "lng": -7.631944
     },
     "description": "Descubra esta zona balnear no concelho de Covilhã. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Covilhã",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       78,
       90
-    ]
+    ],
+    "municipality": "Covilhã",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-de-pego",
@@ -9266,13 +9277,13 @@
       "lng": -7.014222
     },
     "description": "Descubra esta zona balnear no concelho de Idanha-a-Nova. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Idanha-a-Nova",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92,
       91
-    ]
+    ],
+    "municipality": "Idanha-a-Nova",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-do-poco-da-cesta-casal-novo",
@@ -9306,12 +9317,12 @@
       "lng": -7.943138888888889
     },
     "description": "<p></p>",
-    "municipality": "Arganil",
-    "waterQuality": "excelente",
-    "passportStamp": false,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Arganil",
+    "waterQuality": "excelente",
+    "passportStamp": false
   },
   {
     "id": "praia-fluvial-de-poco-do-lagar",
@@ -9346,13 +9357,13 @@
       "lng": -7.709444
     },
     "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Seia.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
-    "municipality": "Seia",
-    "waterQuality": "excelente",
-    "passportStamp": true,
     "photoFocals": [
       92,
       92
-    ]
+    ],
+    "municipality": "Seia",
+    "waterQuality": "excelente",
+    "passportStamp": true
   },
   {
     "id": "zona-balnear-do-poco-do-pujadouro-cepos",
@@ -9386,12 +9397,12 @@
       "lng": -7.959138888888889
     },
     "description": "<p></p>",
-    "municipality": "Arganil",
-    "waterQuality": "excelente",
-    "passportStamp": false,
     "photoFocals": [
       50
-    ]
+    ],
+    "municipality": "Arganil",
+    "waterQuality": "excelente",
+    "passportStamp": false
   },
   {
     "id": "zona-balnear-de-trizio",
@@ -9428,13 +9439,13 @@
       "lng": -8.230806
     },
     "description": "Descubra esta zona balnear no concelho de Sertã. Informações, serviços e localização disponíveis em breve.",
-    "municipality": "Sertã",
-    "waterQuality": "",
-    "passportStamp": true,
     "photoFocals": [
       92,
       78
-    ]
+    ],
+    "municipality": "Sertã",
+    "waterQuality": "",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-dr-pedro-n-sra-do-desterro",
@@ -9469,13 +9480,13 @@
       "lng": -7.687639
     },
     "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Seia.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
-    "municipality": "Seia",
-    "waterQuality": "excelente",
-    "passportStamp": true,
     "photoFocals": [
       81,
       74
-    ]
+    ],
+    "municipality": "Seia",
+    "waterQuality": "excelente",
+    "passportStamp": true
   },
   {
     "id": "praia-fluvial-de-o-moinho-benquerenca",
@@ -9515,9 +9526,6 @@
       "lng": -7.221639
     },
     "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Penamacor.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
-    "municipality": "Penamacor",
-    "waterQuality": "excelente",
-    "passportStamp": true,
     "photoFocals": [
       48,
       92,
@@ -9526,7 +9534,10 @@
       92,
       83,
       92
-    ]
+    ],
+    "municipality": "Penamacor",
+    "waterQuality": "excelente",
+    "passportStamp": true
   },
   {
     "id": "zona-de-lazer-de-sejaes",
@@ -9560,11 +9571,11 @@
       "lng": -8.203944444444444
     },
     "description": "<p></p>",
-    "municipality": "Oliveira de Frades",
-    "waterQuality": "excelente",
-    "passportStamp": false,
     "photoFocals": [
       92
-    ]
+    ],
+    "municipality": "Oliveira de Frades",
+    "waterQuality": "excelente",
+    "passportStamp": false
   }
 ]

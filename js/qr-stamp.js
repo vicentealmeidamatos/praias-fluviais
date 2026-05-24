@@ -31,7 +31,33 @@
   }
 
   // ── GPS ────────────────────────────────────────────────────────────────────
-  function getPosition() {
+  // Usa o plugin nativo Capacitor quando estamos dentro da app (mais preciso,
+  // permissões nativas) e cai para navigator.geolocation na web.
+  async function getPosition() {
+    if (window.isApp && window.isApp() && window.Capacitor?.Plugins?.Geolocation) {
+      const Geolocation = window.Capacitor.Plugins.Geolocation;
+      try {
+        const perm = await Geolocation.requestPermissions({ permissions: ['location'] });
+        if (perm.location === 'denied') {
+          throw { code: 1, message: 'Permission denied' };
+        }
+        const p = await Geolocation.getCurrentPosition({
+          enableHighAccuracy: true,
+          timeout: GPS_TIMEOUT_MS,
+          maximumAge: 30000,
+        });
+        return { lat: p.coords.latitude, lng: p.coords.longitude, accuracy: p.coords.accuracy };
+      } catch (err) {
+        // Mapear erros do Capacitor para o mesmo formato de navigator.geolocation
+        const code = err.code === 1 ? 1
+                   : (err.message || '').toLowerCase().includes('denied') ? 1
+                   : (err.message || '').toLowerCase().includes('timeout') ? 3
+                   : 2;
+        throw { code, message: err.message || 'Unknown error' };
+      }
+    }
+
+    // Web fallback
     return new Promise((resolve, reject) => {
       if (!('geolocation' in navigator)) {
         return reject({ code: 'UNSUPPORTED' });

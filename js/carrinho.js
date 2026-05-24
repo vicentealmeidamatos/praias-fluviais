@@ -295,7 +295,19 @@ async function proceedToCheckout() {
     }
 
     const { url } = await res.json();
-    if (url) window.location.href = url;
+    if (!url) return;
+
+    // Na app nativa, abrir Stripe Checkout num in-app browser (SFSafariView no
+    // iOS, Custom Tab no Android) em vez de redirect — mantém o utilizador
+    // dentro da app, com botão "Fechar" para voltar.
+    if (window.isApp && window.isApp() && window.Capacitor?.Plugins?.Browser) {
+      await window.Capacitor.Plugins.Browser.open({
+        url,
+        presentationStyle: 'popover',
+      });
+    } else {
+      window.location.href = url;
+    }
   } catch (err) {
     console.error('Checkout error:', err);
     showToastCart(err.message || 'Erro ao iniciar o pagamento. Tenta novamente.', 'error');

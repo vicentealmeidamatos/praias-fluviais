@@ -11,10 +11,17 @@
   <meta property="og:locale" content="pt_PT">
   <meta property="og:type" content="website">
 
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#003A40">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Praias Fluviais">
+  <link rel="apple-touch-icon" href="/brand_assets/pwa-icon-192.png">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/tailwind.built.css">
   <script src="js/shared.js"></script>
   <script src="js/data-loader.js"></script>
   <script src="js/layout-overrides.js"></script>
@@ -784,6 +791,29 @@
     let _qrScanner = null;
 
     async function openQRScanner() {
+      // Na app nativa: usar BarcodeScanner do Capacitor MLKit (câmara nativa
+      // fullscreen, mais rápida e robusta que html5-qrcode).
+      if (window.isApp && window.isApp() && window.Capacitor?.Plugins?.BarcodeScanner) {
+        try {
+          const BarcodeScanner = window.Capacitor.Plugins.BarcodeScanner;
+          const perm = await BarcodeScanner.requestPermissions();
+          if (perm.camera !== 'granted' && perm.camera !== 'limited') {
+            return _qrScannerError('Permita o acesso à câmara nas definições da app e tente de novo.');
+          }
+          const result = await BarcodeScanner.scan({ formats: ['QR_CODE'] });
+          if (result?.barcodes?.length) {
+            _handleQRDecoded(result.barcodes[0].rawValue);
+          }
+        } catch (err) {
+          console.error('[qr-scanner native] failed:', err);
+          if (!String(err.message || '').toLowerCase().includes('cancel')) {
+            _qrScannerError('Não foi possível ler o QR code. Tente de novo.');
+          }
+        }
+        return;
+      }
+
+      // Web fallback: html5-qrcode em modal
       const modal = document.getElementById('qr-scanner-modal');
       if (!modal) return;
       modal.classList.remove('hidden');

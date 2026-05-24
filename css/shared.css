@@ -198,6 +198,47 @@ body {
   100% { background-position: -200% 0; }
 }
 
+/* ─── App context (Capacitor native) — esconder elementos web-only e gerir
+       safe-areas do iOS/Android. A classe `is-app` é adicionada ao <html>
+       por js/app-context.js quando isApp() === true. ─── */
+:where(.is-app) #main-header,
+:where(.is-app) #mobile-menu,
+:where(.is-app) #mobile-menu-overlay,
+:where(.is-app) footer {
+  display: none !important;
+}
+
+/* Page transitions slide — sensação nativa entre páginas. CSS animations só
+   aplicadas em is-app para o site web continuar com navegação instantânea. */
+@keyframes gpf-app-slide-in {
+  from { opacity: 0; transform: translateX(16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes gpf-app-slide-out {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(-16px); }
+}
+:where(.is-app) body {
+  animation: gpf-app-slide-in 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+:where(.is-app) body.gpf-app-navigating {
+  animation: gpf-app-slide-out 0.18s ease-out forwards;
+}
+
+/* Sem header e sem overlay — conteúdo vai edge-to-edge até ao topo do display.
+   A status bar do sistema (notch / dynamic island) flutua transparente sobre
+   o conteúdo. O StatusBar.style em capacitor.config.json escolhe LIGHT/DARK
+   conforme o conteúdo da página dominante (por agora LIGHT — texto branco). */
+:where(.is-app) body {
+  padding-top: 0;
+}
+
+/* Páginas usam <main class="pt-16 md:pt-[70px]"> para dar espaço ao header
+   fixed. Sem header, este padding fica desperdiçado — reset para 0. */
+:where(.is-app) main {
+  padding-top: 0 !important;
+}
+
 /* ─── Header ─── */
 #main-header {
   transition: box-shadow 0.3s var(--smooth-ease), background-color 0.3s var(--smooth-ease);

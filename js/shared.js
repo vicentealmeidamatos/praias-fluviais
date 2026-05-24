@@ -2,6 +2,16 @@
 if (!window.location.hash) window.scrollTo(0, 0);
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
+// ─── Service Worker registration ──────────────────────────────────────────────
+// Cache offline para o site PWA e para a app Capacitor.
+// Não regista em http (excepto localhost, que conta como secure context).
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('/js/service-worker.js', { scope: '/' })
+      .catch(function (e) { /* silently ignore — site funciona sem SW */ });
+  });
+}
+
 // ─── Unified data loader (Supabase-first, JSON fallback) ─────────────────────
 // Garante que TODAS as páginas leem os mesmos dados que o admin grava.
 window._datasetFiles = {
@@ -33,8 +43,11 @@ window.getBeaches = function () {
   return window._beachesCachePromise;
 };
 
-// Tailwind configuration — must load after Tailwind CDN script
-tailwind.config = {
+// Tailwind configuration — só aplica se Tailwind CDN ainda estiver carregado.
+// Páginas migradas para tailwind.built.css não definem `tailwind`, então
+// este bloco é silenciosamente ignorado. Quando todas as páginas migrarem,
+// este bloco pode ser removido (a config vive em tailwind.config.js).
+if (typeof tailwind !== 'undefined') tailwind.config = {
   theme: {
     extend: {
       colors: {
@@ -515,6 +528,10 @@ window.openShareSheet = function(opts) {
   }
   if (highlight === 'instagram') {
     _shareSheetInstagram(opts);
+    return;
+  }
+  if (highlight === 'x' || highlight === 'twitter') {
+    _shareSheetX(fullText);
     return;
   }
 

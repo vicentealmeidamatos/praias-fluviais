@@ -43,6 +43,16 @@ Thumbs.db
 sync-from-admin.mjs
 .sync-cache/
 
+# App nativa (Capacitor) — exclusivamente da aplicação, fora do repo público
+dist-app/
+android/
+ios/
+assets/
+capacitor.config.json
+scripts/build-app.mjs
+scripts/generate-app-assets.mjs
+scripts/add-xattr-clean-phase.rb
+
 
 # Source photos (2.1GB) — processed into img/praias/ via scripts/process-beach-photos.py
 brand_assets/fotos/Praias Fluviais 2025 Fotos/

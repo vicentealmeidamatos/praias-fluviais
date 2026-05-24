@@ -314,7 +314,16 @@ const state = {
   editingProductImages: [],    // [{ src: string, name: string }]
   editingDescontoLogo: null,   // { src: string, name: string } | null
   editingContent: {},          // for content.json editor
+  _restoreScroll: null,        // scrollTop a repor após próximo renderSection()
 };
+
+// Captura a posição de scroll actual do painel para a repor após o próximo
+// renderSection(). Chamada antes de entrar num formulário de detalhe (editX)
+// para que a lista volte a abrir exactamente onde o utilizador estava.
+function _captureAdminScroll() {
+  const main = document.getElementById('admin-content');
+  if (main) state._restoreScroll = main.scrollTop;
+}
 
 // ─── Constants ───
 const DISTRICTS = [
@@ -583,11 +592,24 @@ function switchSection(section) {
   state.editingProductImages = [];
   state.editingDescontoLogo = null;
   state.viewingConcelho = null;
+  // Mudar de secção via menu lateral → começar no topo da nova secção
+  state._restoreScroll = 0;
+  state._concelhoListScroll = null;
   renderDashboard();
 }
 
 function renderSection() {
   const content = document.getElementById('admin-content');
+  // Decidir que scroll repor:
+  // — se um editX capturou a posição da lista, usar essa (volta ao sítio
+  //   exacto onde se estava antes de abrir o formulário);
+  // — caso contrário, preservar a posição actual (evita saltos em toggles
+  //   inline, filtros, ordenação e outros re-renders da mesma vista).
+  const targetScroll = (state._restoreScroll != null)
+    ? state._restoreScroll
+    : (content ? content.scrollTop : 0);
+  state._restoreScroll = null;
+
   switch (state.currentSection) {
     case 'beaches':                renderBeaches(content); break;
     case 'concelhos':              renderConcelhos(content); break;
@@ -601,6 +623,15 @@ function renderSection() {
     case 'encomendas':             renderEncomendas(content); break;
     case 'utilizadores':           renderUtilizadores(content); break;
     case 'comentarios':            renderComentarios(content); break;
+  }
+
+  if (content) {
+    // Repor após o browser processar o novo DOM. Dois rAF garantem que a
+    // altura final já reflecte imagens/CSS sincronamente disponíveis.
+    requestAnimationFrame(() => {
+      content.scrollTop = targetScroll;
+      requestAnimationFrame(() => { content.scrollTop = targetScroll; });
+    });
   }
 }
 
@@ -750,6 +781,30 @@ function makeDraggableList(containerId, onReorder) {
   });
 }
 
+// ─── Focal helpers ───────────────────────────────────────────────────
+// Normaliza um valor de photoFocals (número antigo ou objecto novo) para
+// { x, y, zoom, mobile? }. Mantém compatibilidade com dados existentes.
+function normalizeFocal(raw) {
+  if (typeof raw === 'number' && Number.isFinite(raw)) {
+    return { x: 50, y: clamp(raw, 0, 100), zoom: 1, mobile: null };
+  }
+  if (raw && typeof raw === 'object') {
+    const m = (raw.mobile && typeof raw.mobile === 'object') ? {
+      x: Number.isFinite(raw.mobile.x) ? clamp(raw.mobile.x, 0, 100) : 50,
+      y: Number.isFinite(raw.mobile.y) ? clamp(raw.mobile.y, 0, 100) : 50,
+      zoom: Number.isFinite(raw.mobile.zoom) ? clamp(raw.mobile.zoom, 1, 3) : 1,
+    } : null;
+    return {
+      x: Number.isFinite(raw.x) ? clamp(raw.x, 0, 100) : 50,
+      y: Number.isFinite(raw.y) ? clamp(raw.y, 0, 100) : 50,
+      zoom: Number.isFinite(raw.zoom) ? clamp(raw.zoom, 1, 3) : 1,
+      mobile: m,
+    };
+  }
+  return { x: 50, y: 50, zoom: 1, mobile: null };
+}
+function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
 // ─── Beach Photo Gallery ───
 function renderPhotoGallery() {
   const gallery = document.getElementById('photo-gallery');
@@ -761,23 +816,26 @@ function renderPhotoGallery() {
   }
 
   gallery.innerHTML = state.editingPhotos.map((p, i) => {
-    const f = Number.isFinite(p.focalY) ? p.focalY : 50;
+    const fx = Number.isFinite(p.focalX) ? p.focalX : 50;
+    const fy = Number.isFinite(p.focalY) ? p.focalY : 50;
+    const zm = Number.isFinite(p.zoom) ? p.zoom : 1;
     const last = state.editingPhotos.length - 1;
     return `
     <div class="photo-thumb-item draggable-item" draggable="true" data-id="${i}" style="position:relative;display:inline-block;margin:0 10px 12px 0;vertical-align:top;">
-      <!-- Preview com aspect ratio próximo do hero (2.6:1) e drag-to-position vertical -->
+      <!-- Preview com aspect ratio do hero (2.6:1). Clicar abre o editor. -->
       <div class="focal-preview" data-focal-index="${i}"
-           title="Arraste verticalmente para ajustar o ponto focal · scroll para afinar"
-           style="width:260px;height:100px;background-image:url('${p.src}');background-size:cover;background-position:50% ${f}%;border-radius:8px;border:2px solid #E2D9C6;display:block;cursor:ns-resize;position:relative;user-select:none;-webkit-user-drag:none;overflow:hidden;">
-        <span class="focal-readout" style="position:absolute;bottom:6px;right:6px;background:rgba(0,58,64,0.85);color:#FFEB3B;border-radius:6px;padding:2px 7px;font-size:11px;font-family:Poppins,sans-serif;font-weight:700;letter-spacing:0.02em;pointer-events:none;text-shadow:0 1px 2px rgba(0,0,0,0.4);">${f}%</span>
-        <span style="position:absolute;top:6px;left:6px;background:rgba(0,0,0,0.45);color:white;border-radius:6px;padding:2px 6px;font-size:10px;font-family:Poppins,sans-serif;font-weight:600;pointer-events:none;">↕ arrastar</span>
+           onclick="openFocalEditor(${i})"
+           title="Clicar para editar enquadramento"
+           style="width:260px;height:100px;border-radius:8px;border:2px solid #E2D9C6;display:block;cursor:pointer;position:relative;user-select:none;-webkit-user-drag:none;overflow:hidden;">
+        <div class="focal-preview-photo" style="position:absolute;inset:0;background-image:url('${p.src}');background-size:cover;background-position:${fx}% ${fy}%;background-repeat:no-repeat;transform:scale(${zm});transform-origin:${fx}% ${fy}%;transition:transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);"></div>
+        ${p.mobile ? `<span class="focal-mobile-badge" title="Tem ajuste mobile próprio" style="position:absolute;top:6px;left:6px;background:rgba(0,58,64,0.85);color:#FFEB3B;border-radius:6px;padding:3px 7px;font-size:9px;font-family:Poppins,sans-serif;font-weight:700;letter-spacing:0.12em;display:flex;align-items:center;gap:4px;pointer-events:none;text-shadow:0 1px 2px rgba(0,0,0,0.4);"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2.5"/><line x1="12" y1="18" x2="12" y2="18"/></svg>MOBILE</span>` : ''}
+        <div class="focal-preview-overlay" style="position:absolute;inset:0;background:rgba(0,58,64,0.78);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:#FFEB3B;opacity:0;transition:opacity 0.18s ease;pointer-events:none;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          <span style="font-family:Poppins,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.18em;">Editar</span>
+        </div>
       </div>
-      <button onclick="removeBeachPhoto(${i})" style="position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;background:#D32F2F;color:white;border:none;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;font-weight:bold;box-shadow:0 1px 3px rgba(0,0,0,0.3);" title="Remover foto">×</button>
-      <div style="margin-top:6px;width:260px;display:flex;align-items:center;gap:6px;">
-        <input type="range" min="0" max="100" value="${f}" data-focal-slider="${i}" oninput="updateBeachPhotoFocal(${i}, this.value)" style="flex:1;accent-color:#003A40;cursor:pointer;" title="Foco vertical">
-        <button type="button" onclick="updateBeachPhotoFocal(${i}, 50)" title="Centrar (50%)" style="background:#E2D9C6;border:none;border-radius:4px;padding:3px 8px;font-size:10px;font-family:Poppins,sans-serif;font-weight:600;color:#003A40;cursor:pointer;">↺</button>
-      </div>
-      <div style="display:flex;gap:4px;justify-content:space-between;align-items:center;margin-top:4px;width:260px;">
+      <button onclick="removeBeachPhoto(${i})" style="position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;background:#D32F2F;color:white;border:none;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;font-weight:bold;box-shadow:0 1px 3px rgba(0,0,0,0.3);z-index:2;" title="Remover foto">×</button>
+      <div style="display:flex;gap:4px;justify-content:space-between;align-items:center;margin-top:6px;width:260px;">
         <div style="display:flex;gap:2px;">
           ${i > 0 ? `<button onclick="moveBeachPhoto(${i},-1)" style="background:#E2D9C6;border:none;border-radius:4px;padding:2px 7px;font-size:11px;cursor:pointer;" title="Mover para esquerda">←</button>` : '<span style="width:24px;"></span>'}
           ${i < last ? `<button onclick="moveBeachPhoto(${i},1)" style="background:#E2D9C6;border:none;border-radius:4px;padding:2px 7px;font-size:11px;cursor:pointer;" title="Mover para direita">→</button>` : '<span style="width:24px;"></span>'}
@@ -788,92 +846,311 @@ function renderPhotoGallery() {
   `;
   }).join('');
 
-  setupFocalDragHandlers();
-}
-
-// ─── Drag-to-position handler ───
-// Permite arrastar verticalmente sobre o preview da foto para definir o
-// background-position-y (focal Y), em vez de usar só o slider. Mapping:
-// arrastar 1px ≈ 1% de focal_Y (preview tem ~100px de altura).
-let _focalDrag = null;
-function setupFocalDragHandlers() {
-  document.querySelectorAll('.focal-preview').forEach(el => {
-    if (el.__focalBound) return;
-    el.__focalBound = true;
-    const onPointerDown = (ev) => {
-      // Ignorar se o utilizador está a usar arrastar nativo do thumb (HTML5 drag)
-      ev.preventDefault();
-      const idx = parseInt(el.dataset.focalIndex, 10);
-      if (!Number.isFinite(idx) || !state.editingPhotos[idx]) return;
-      const rect = el.getBoundingClientRect();
-      // Desactivar o drag-to-reorder do parent enquanto se está a ajustar focal.
-      const parent = el.closest('[draggable="true"]');
-      if (parent) parent.setAttribute('draggable', 'false');
-      _focalDrag = {
-        idx,
-        el,
-        parent,
-        startY: ev.clientY ?? ev.touches?.[0]?.clientY ?? 0,
-        startFocal: Number.isFinite(state.editingPhotos[idx].focalY) ? state.editingPhotos[idx].focalY : 50,
-        height: rect.height,
-      };
-      el.style.cursor = 'grabbing';
-      el.style.borderColor = '#003A40';
-    };
-    el.addEventListener('mousedown', onPointerDown);
-    el.addEventListener('touchstart', onPointerDown, { passive: false });
-    // Wheel: incrementos finos de 1%
-    el.addEventListener('wheel', (ev) => {
-      const idx = parseInt(el.dataset.focalIndex, 10);
-      if (!Number.isFinite(idx) || !state.editingPhotos[idx]) return;
-      ev.preventDefault();
-      const cur = Number.isFinite(state.editingPhotos[idx].focalY) ? state.editingPhotos[idx].focalY : 50;
-      const delta = ev.deltaY > 0 ? 1 : -1; // scroll down → focal sobe (mostra mais em baixo)
-      updateBeachPhotoFocal(idx, cur + delta);
-    }, { passive: false });
+  // Hover state on .focal-preview to reveal the edit overlay
+  gallery.querySelectorAll('.focal-preview').forEach(el => {
+    const overlay = el.querySelector('.focal-preview-overlay');
+    if (!overlay) return;
+    el.addEventListener('mouseenter', () => { overlay.style.opacity = '1'; });
+    el.addEventListener('mouseleave', () => { overlay.style.opacity = '0'; });
   });
 }
 
-function _onFocalDragMove(ev) {
-  if (!_focalDrag) return;
-  const y = ev.clientY ?? ev.touches?.[0]?.clientY ?? 0;
-  const dy = y - _focalDrag.startY;
-  // Arrastar para baixo (dy>0) → puxar a foto para baixo → mostrar o que está
-  // ACIMA → focal_Y diminui. Inverso para arrastar para cima.
-  // Mapping: 1px = 1% (preview tem ~100px de altura, range é 100%).
-  const newFocal = _focalDrag.startFocal - dy;
-  updateBeachPhotoFocal(_focalDrag.idx, newFocal);
+// ─── Focal Editor Modal ──────────────────────────────────────────────
+// Modal hero-shape para ajustar enquadramento por drag (X+Y) e zoom por
+// slider. Toggle Desktop/Mobile permite definir um crop separado para
+// cada viewport. Actualiza state.editingPhotos[index] em tempo real.
+//
+// Proporções correspondem ao hero real (h-[440px] md:h-[560px] lg:h-[680px],
+// largura = viewport):
+//   - Desktop: window.innerWidth × 680  → ratio depende do ecrã do editor
+//                                          (≈ 1440/680 = 2.12 num MacBook)
+//   - Mobile : 390 × 440 (referência iPhone 14, ratio ≈ 0.886)
+const FOCAL_MOBILE_REF = { w: 390, h: 440 };
+function focalAspect(mode) {
+  if (mode === 'mobile') return `${FOCAL_MOBILE_REF.w} / ${FOCAL_MOBILE_REF.h}`;
+  // Desktop: usa o ecrã actual do utilizador para preview fiel
+  const w = Math.max(1024, Math.min(2400, window.innerWidth || 1440));
+  return `${w} / 680`;
 }
-function _onFocalDragEnd() {
-  if (!_focalDrag) return;
-  const el = _focalDrag.el;
-  if (el) {
-    el.style.cursor = 'ns-resize';
-    el.style.borderColor = '#E2D9C6';
-  }
-  if (_focalDrag.parent) {
-    _focalDrag.parent.setAttribute('draggable', 'true');
-  }
-  _focalDrag = null;
+function focalDims(mode) {
+  if (mode === 'mobile') return `${FOCAL_MOBILE_REF.w} × ${FOCAL_MOBILE_REF.h}`;
+  const w = Math.max(1024, Math.min(2400, window.innerWidth || 1440));
+  return `${w} × 680`;
 }
-document.addEventListener('mousemove', _onFocalDragMove);
-document.addEventListener('mouseup', _onFocalDragEnd);
-document.addEventListener('touchmove', _onFocalDragMove, { passive: false });
-document.addEventListener('touchend', _onFocalDragEnd);
 
-function updateBeachPhotoFocal(index, value) {
-  const v = Math.max(0, Math.min(100, Math.round(parseFloat(value)) || 0));
-  if (!state.editingPhotos[index]) return;
-  state.editingPhotos[index].focalY = v;
-  // Atualizar preview, readout e slider
-  const preview = document.querySelector(`.focal-preview[data-focal-index="${index}"]`);
-  if (preview) {
-    preview.style.backgroundPosition = `50% ${v}%`;
-    const readout = preview.querySelector('.focal-readout');
-    if (readout) readout.textContent = v + '%';
+function openFocalEditor(index) {
+  const photo = state.editingPhotos[index];
+  if (!photo) return;
+  // Garantir defaults desktop
+  if (!Number.isFinite(photo.focalX)) photo.focalX = 50;
+  if (!Number.isFinite(photo.focalY)) photo.focalY = 50;
+  if (!Number.isFinite(photo.zoom)) photo.zoom = 1;
+
+  // Remover modal anterior se existir
+  const existing = document.getElementById('focal-editor-modal');
+  if (existing) existing.remove();
+
+  // Modo activo (memorizado entre aberturas)
+  let mode = openFocalEditor._lastMode || 'desktop';
+
+  // Devolve sempre o objecto vivo (desktop ou mobile) a editar.
+  // Em modo mobile, cria-se o override inicializado com os valores desktop
+  // se ainda não existir.
+  function current() {
+    if (mode === 'mobile') {
+      if (!photo.mobile) {
+        photo.mobile = { focalX: photo.focalX, focalY: photo.focalY, zoom: photo.zoom };
+      }
+      return photo.mobile;
+    }
+    return photo;
   }
-  const slider = document.querySelector(`input[data-focal-slider="${index}"]`);
-  if (slider && parseInt(slider.value, 10) !== v) slider.value = v;
+
+  const modal = document.createElement('div');
+  modal.id = 'focal-editor-modal';
+  modal.setAttribute('role', 'dialog');
+  modal.setAttribute('aria-label', 'Editor de enquadramento');
+  modal.style.cssText = `
+    position:fixed;inset:0;z-index:10000;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(8,18,20,0.88);
+    backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+    padding:24px;
+    opacity:0;transition:opacity 0.18s ease;
+  `;
+  const desktopIcon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>`;
+  const mobileIcon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><line x1="12" y1="18" x2="12" y2="18"/></svg>`;
+  const cur = current();
+  modal.innerHTML = `
+    <button id="focal-editor-close" aria-label="Fechar"
+      style="position:absolute;top:18px;right:22px;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#FAF8F5;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.18s, transform 0.18s;z-index:2;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+
+    <div style="display:flex;flex-direction:column;align-items:center;gap:16px;width:min(85vw, calc(68vh * 2.6));max-width:1500px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%;">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+          <span style="font-family:Poppins,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.22em;color:#FFEB3B;">Foto ${index + 1} de ${state.editingPhotos.length}</span>
+          <span id="focal-dims-readout" style="font-family:Poppins,sans-serif;font-size:10px;color:rgba(250,248,245,0.5);font-variant-numeric:tabular-nums;letter-spacing:0.06em;">${focalDims(mode)} px</span>
+          <span style="font-family:Poppins,sans-serif;font-size:11px;color:rgba(250,248,245,0.55);">· Arraste para reposicionar · slider para aproximar</span>
+        </div>
+        <!-- Toggle Desktop / Mobile -->
+        <div id="focal-mode-toggle" role="tablist" aria-label="Viewport"
+          style="display:inline-flex;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:999px;padding:3px;gap:2px;">
+          <button type="button" data-mode="desktop" role="tab"
+            style="display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:999px;border:none;cursor:pointer;font-family:Poppins,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;background:${mode==='desktop'?'#FFEB3B':'transparent'};color:${mode==='desktop'?'#003A40':'rgba(250,248,245,0.7)'};transition:background 0.18s, color 0.18s;">
+            ${desktopIcon} Desktop
+          </button>
+          <button type="button" data-mode="mobile" role="tab"
+            style="display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:999px;border:none;cursor:pointer;font-family:Poppins,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;background:${mode==='mobile'?'#FFEB3B':'transparent'};color:${mode==='mobile'?'#003A40':'rgba(250,248,245,0.7)'};transition:background 0.18s, color 0.18s;">
+            ${mobileIcon} Mobile
+            ${photo.mobile ? '<span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:'+(mode==='mobile'?'#003A40':'#FFEB3B')+';"></span>' : ''}
+          </button>
+        </div>
+      </div>
+
+      <div id="focal-stage-wrap" style="position:relative;width:100%;height:min(64vh, 560px);display:flex;align-items:center;justify-content:center;">
+        <div id="focal-stage"
+          style="position:relative;aspect-ratio:${focalAspect(mode)};max-width:100%;max-height:100%;height:100%;border-radius:14px;overflow:hidden;background:#0a1416;box-shadow:0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06);user-select:none;-webkit-user-select:none;cursor:grab;transition:aspect-ratio 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);">
+          <div id="focal-stage-photo" style="position:absolute;inset:0;background-image:url('${photo.src}');background-size:cover;background-repeat:no-repeat;background-position:${cur.focalX}% ${cur.focalY}%;transform:scale(${cur.zoom});transform-origin:${cur.focalX}% ${cur.focalY}%;will-change:transform, background-position;"></div>
+          <div style="position:absolute;top:50%;left:50%;width:38px;height:38px;transform:translate(-50%,-50%);pointer-events:none;opacity:0.55;">
+            <div style="position:absolute;top:50%;left:0;right:0;height:1px;background:rgba(255,255,255,0.7);"></div>
+            <div style="position:absolute;left:50%;top:0;bottom:0;width:1px;background:rgba(255,255,255,0.7);"></div>
+          </div>
+          <div style="position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 0 1px rgba(255,235,59,0.18);border-radius:14px;"></div>
+        </div>
+      </div>
+
+      <div id="focal-mobile-hint" style="font-family:Poppins,sans-serif;font-size:10px;color:rgba(250,248,245,0.55);text-align:center;height:14px;letter-spacing:0.06em;">
+        ${mode === 'mobile' ? (photo.mobile ? 'A editar enquadramento mobile · ' : 'A criar enquadramento mobile · ') + '<a href="#" id="focal-clear-mobile" style="color:#FFEB3B;text-decoration:none;border-bottom:1px dotted rgba(255,235,59,0.4);">remover override</a>' : 'Pré-visualização: hero em ecrã grande'}
+      </div>
+
+      <div style="width:100%;display:flex;align-items:center;gap:18px;padding:14px 20px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;">
+        <label for="focal-zoom-slider" style="font-family:Poppins,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.2em;color:#FFEB3B;white-space:nowrap;">Aproximação</label>
+        <input id="focal-zoom-slider" type="range" min="1" max="3" step="0.02" value="${cur.zoom}"
+          style="flex:1;accent-color:#FFEB3B;cursor:pointer;height:4px;">
+        <span id="focal-zoom-readout" style="font-family:Poppins,sans-serif;font-size:13px;font-weight:700;color:#FAF8F5;min-width:52px;text-align:right;">${cur.zoom.toFixed(2)}×</span>
+        <button id="focal-reset" type="button"
+          style="background:transparent;border:1px solid rgba(255,255,255,0.18);color:#FAF8F5;font-family:Poppins,sans-serif;font-size:11px;font-weight:600;padding:7px 14px;border-radius:8px;cursor:pointer;transition:background 0.18s, border-color 0.18s;letter-spacing:0.05em;">↺ Centrar</button>
+        <button id="focal-done" type="button"
+          style="background:#FFEB3B;border:none;color:#003A40;font-family:Poppins,sans-serif;font-size:11px;font-weight:800;padding:8px 18px;border-radius:8px;cursor:pointer;transition:transform 0.18s, box-shadow 0.18s;letter-spacing:0.05em;text-transform:uppercase;box-shadow:0 4px 14px rgba(255,235,59,0.25);">Concluído</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  requestAnimationFrame(() => { modal.style.opacity = '1'; });
+
+  const stage = modal.querySelector('#focal-stage');
+  const photoEl = modal.querySelector('#focal-stage-photo');
+  const slider = modal.querySelector('#focal-zoom-slider');
+  const readout = modal.querySelector('#focal-zoom-readout');
+  const closeBtn = modal.querySelector('#focal-editor-close');
+  const resetBtn = modal.querySelector('#focal-reset');
+  const doneBtn = modal.querySelector('#focal-done');
+  const toggle = modal.querySelector('#focal-mode-toggle');
+  const hintEl = modal.querySelector('#focal-mobile-hint');
+  const dimsEl = modal.querySelector('#focal-dims-readout');
+
+  // Mantém o stage com proporção exacta ao viewport real. Em modo desktop,
+  // a proporção é window.innerWidth / 680 — se o utilizador redimensionar a
+  // janela (e.g. mover entre monitores), o preview adapta-se imediatamente.
+  function refreshStageAspect() {
+    stage.style.aspectRatio = focalAspect(mode);
+    if (dimsEl) dimsEl.textContent = focalDims(mode) + ' px';
+  }
+  let _resizeT;
+  function onWindowResize() {
+    clearTimeout(_resizeT);
+    _resizeT = setTimeout(refreshStageAspect, 80);
+  }
+  window.addEventListener('resize', onWindowResize);
+
+  function applyToPhotoEl() {
+    const c = current();
+    photoEl.style.backgroundPosition = `${c.focalX}% ${c.focalY}%`;
+    photoEl.style.transform = `scale(${c.zoom})`;
+    photoEl.style.transformOrigin = `${c.focalX}% ${c.focalY}%`;
+  }
+  function syncThumbPreview() {
+    // O thumb mostra sempre o crop desktop
+    const previewEl = document.querySelector(`.focal-preview[data-focal-index="${index}"] .focal-preview-photo`);
+    if (previewEl) {
+      previewEl.style.backgroundPosition = `${photo.focalX}% ${photo.focalY}%`;
+      previewEl.style.transform = `scale(${photo.zoom})`;
+      previewEl.style.transformOrigin = `${photo.focalX}% ${photo.focalY}%`;
+    }
+    // Garante badge "MOBILE" sincronizado com presença/ausência de override
+    const previewWrap = document.querySelector(`.focal-preview[data-focal-index="${index}"]`);
+    if (previewWrap) {
+      const badge = previewWrap.querySelector('.focal-mobile-badge');
+      if (photo.mobile && !badge) {
+        previewWrap.insertAdjacentHTML('beforeend', `<span class="focal-mobile-badge" title="Tem ajuste mobile próprio" style="position:absolute;top:6px;left:6px;background:rgba(0,58,64,0.85);color:#FFEB3B;border-radius:6px;padding:3px 7px;font-size:9px;font-family:Poppins,sans-serif;font-weight:700;letter-spacing:0.12em;display:flex;align-items:center;gap:4px;pointer-events:none;text-shadow:0 1px 2px rgba(0,0,0,0.4);"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2.5"/><line x1="12" y1="18" x2="12" y2="18"/></svg>MOBILE</span>`);
+      } else if (!photo.mobile && badge) {
+        badge.remove();
+      }
+    }
+  }
+
+  function refreshHint() {
+    if (mode === 'mobile') {
+      hintEl.innerHTML = (photo.mobile ? 'A editar enquadramento mobile · ' : 'A criar enquadramento mobile · ') + '<a href="#" id="focal-clear-mobile" style="color:#FFEB3B;text-decoration:none;border-bottom:1px dotted rgba(255,235,59,0.4);">remover override</a>';
+      const clearLink = hintEl.querySelector('#focal-clear-mobile');
+      if (clearLink) clearLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        photo.mobile = null;
+        // Voltar para desktop para que o estado seja coerente
+        setMode('desktop');
+        syncThumbPreview();
+      });
+    } else {
+      hintEl.innerHTML = 'Pré-visualização: hero em ecrã grande';
+    }
+  }
+
+  function setMode(next) {
+    if (next === mode) return;
+    mode = next;
+    openFocalEditor._lastMode = next;
+    // Actualizar visual do toggle
+    toggle.querySelectorAll('button').forEach(b => {
+      const isActive = b.dataset.mode === mode;
+      b.style.background = isActive ? '#FFEB3B' : 'transparent';
+      b.style.color = isActive ? '#003A40' : 'rgba(250,248,245,0.7)';
+    });
+    // Stage: nova proporção + dimensões na kicker
+    refreshStageAspect();
+    const c = current();
+    slider.value = String(c.zoom);
+    readout.textContent = c.zoom.toFixed(2) + '×';
+    applyToPhotoEl();
+    refreshHint();
+    syncThumbPreview();
+  }
+
+  toggle.querySelectorAll('button').forEach(b => {
+    b.addEventListener('click', () => setMode(b.dataset.mode));
+  });
+  refreshHint();
+
+  // ── Drag interaction ──
+  let drag = null;
+  function startDrag(ev) {
+    const point = ev.touches ? ev.touches[0] : ev;
+    if (!point) return;
+    ev.preventDefault();
+    const c = current();
+    drag = {
+      startX: point.clientX,
+      startY: point.clientY,
+      startFx: c.focalX,
+      startFy: c.focalY,
+      rect: stage.getBoundingClientRect(),
+    };
+    stage.style.cursor = 'grabbing';
+  }
+  function moveDrag(ev) {
+    if (!drag) return;
+    const point = ev.touches ? ev.touches[0] : ev;
+    if (!point) return;
+    ev.preventDefault();
+    const dx = point.clientX - drag.startX;
+    const dy = point.clientY - drag.startY;
+    const c = current();
+    const dpx = -(dx / drag.rect.width) * 100 / c.zoom;
+    const dpy = -(dy / drag.rect.height) * 100 / c.zoom;
+    c.focalX = clamp(drag.startFx + dpx, 0, 100);
+    c.focalY = clamp(drag.startFy + dpy, 0, 100);
+    applyToPhotoEl();
+    syncThumbPreview();
+  }
+  function endDrag() {
+    if (!drag) return;
+    drag = null;
+    stage.style.cursor = 'grab';
+  }
+  stage.addEventListener('mousedown', startDrag);
+  stage.addEventListener('touchstart', startDrag, { passive: false });
+  document.addEventListener('mousemove', moveDrag);
+  document.addEventListener('touchmove', moveDrag, { passive: false });
+  document.addEventListener('mouseup', endDrag);
+  document.addEventListener('touchend', endDrag);
+
+  // ── Zoom slider ──
+  slider.addEventListener('input', (e) => {
+    const z = clamp(parseFloat(e.target.value) || 1, 1, 3);
+    current().zoom = z;
+    readout.textContent = z.toFixed(2) + '×';
+    applyToPhotoEl();
+    syncThumbPreview();
+  });
+
+  // ── Buttons ──
+  resetBtn.addEventListener('click', () => {
+    const c = current();
+    c.focalX = 50;
+    c.focalY = 50;
+    c.zoom = 1;
+    slider.value = '1';
+    readout.textContent = '1.00×';
+    applyToPhotoEl();
+    syncThumbPreview();
+  });
+
+  function closeModal() {
+    document.removeEventListener('mousemove', moveDrag);
+    document.removeEventListener('touchmove', moveDrag);
+    document.removeEventListener('mouseup', endDrag);
+    document.removeEventListener('touchend', endDrag);
+    document.removeEventListener('keydown', onKey);
+    window.removeEventListener('resize', onWindowResize);
+    modal.style.opacity = '0';
+    setTimeout(() => modal.remove(), 180);
+  }
+  closeBtn.addEventListener('click', closeModal);
+  doneBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+  function onKey(e) { if (e.key === 'Escape') closeModal(); }
+  document.addEventListener('keydown', onKey);
 }
 
 function moveBeachPhoto(i, dir) {
@@ -919,7 +1196,7 @@ async function handleBeachPhotoFiles(files) {
   for (const raw of fileList) {
     const { file, focalY } = await preparePhotoForUpload(raw, 'photo-watermark-cb');
     const result = await uploadImageFile(file, 'beaches');
-    state.editingPhotos.push({ ...result, focalY });
+    state.editingPhotos.push({ ...result, focalX: 50, focalY: Number.isFinite(focalY) ? focalY : 50, zoom: 1, mobile: null });
   }
 
   if (uploadBtn) { uploadBtn.disabled = false; uploadBtn.textContent = '+ Adicionar Fotos'; }
@@ -1240,12 +1517,23 @@ function renderConcelhos(container) {
 }
 
 function openConcelho(name) {
+  // Capturar scroll da lista para repor quando fechar o detalhe (closeConcelho),
+  // mas no detalhe propriamente dito começar no topo.
+  const main = document.getElementById('admin-content');
+  state._concelhoListScroll = main ? main.scrollTop : 0;
   state.viewingConcelho = name;
+  state._restoreScroll = 0;
   renderSection();
 }
 
 function closeConcelho() {
   state.viewingConcelho = null;
+  // Repor scroll que o utilizador tinha na lista de concelhos quando abriu
+  // este concelho.
+  if (typeof state._concelhoListScroll === 'number') {
+    state._restoreScroll = state._concelhoListScroll;
+    state._concelhoListScroll = null;
+  }
   renderSection();
 }
 
@@ -1406,6 +1694,7 @@ async function saveSectionNowSilent(section) {
 }
 
 function editBeach(index) {
+  _captureAdminScroll();
   const b = index !== null ? state.data.beaches[index] : {
     id: '', name: '', municipality: '', freguesia: '', district: '', type: 'praia_fluvial', river: '',
     coordinates: { lat: 39.5, lng: -8.0 }, description: '',
@@ -1420,13 +1709,16 @@ function editBeach(index) {
   // Merge any missing service keys
   const services = { ...DEFAULT_SERVICES, ...(b.services || {}) };
 
-  // Load photos and thumbnail into state — incluir focalY se existir
+  // Load photos and thumbnail into state — incluir focal (X, Y, zoom) e override mobile opcional
   const focals = Array.isArray(b.photoFocals) ? b.photoFocals : [];
-  state.editingPhotos = (b.photos || []).map((src, i) => ({
-    src,
-    name: '',
-    focalY: Number.isFinite(focals[i]) ? focals[i] : 50,
-  }));
+  state.editingPhotos = (b.photos || []).map((src, i) => {
+    const f = normalizeFocal(focals[i]);
+    return {
+      src, name: '',
+      focalX: f.x, focalY: f.y, zoom: f.zoom,
+      mobile: f.mobile ? { focalX: f.mobile.x, focalY: f.mobile.y, zoom: f.mobile.zoom } : null,
+    };
+  });
   state.editingThumbnail = b.thumbnail || '';
 
   const districtOptions = DISTRICTS.map(d =>
@@ -1632,7 +1924,7 @@ function getBeachFormSnapshot() {
   ];
   const services = [];
   document.querySelectorAll('.b-service').forEach(cb => services.push(cb.checked));
-  return JSON.stringify({ values, checks, services, thumb: state.editingThumbnail || '', photos: state.editingPhotos.map(p => ({ src: p.src, focalY: p.focalY })), desc: getQuillHTML('b-description-editor') || '' });
+  return JSON.stringify({ values, checks, services, thumb: state.editingThumbnail || '', photos: state.editingPhotos.map(p => ({ src: p.src, focalX: p.focalX, focalY: p.focalY, zoom: p.zoom, mobile: p.mobile || null })), desc: getQuillHTML('b-description-editor') || '' });
 }
 
 function hasBeachChanges() {
@@ -1671,7 +1963,21 @@ function saveBeach(index) {
     description: getQuillHTML('b-description-editor') || '',
     thumbnail: state.editingThumbnail || '',
     photos: state.editingPhotos.map(p => p.src),
-    photoFocals: state.editingPhotos.map(p => Number.isFinite(p.focalY) ? p.focalY : 50),
+    photoFocals: state.editingPhotos.map(p => {
+      const out = {
+        x: Number.isFinite(p.focalX) ? p.focalX : 50,
+        y: Number.isFinite(p.focalY) ? p.focalY : 50,
+        zoom: Number.isFinite(p.zoom) ? p.zoom : 1,
+      };
+      if (p.mobile) {
+        out.mobile = {
+          x: Number.isFinite(p.mobile.focalX) ? p.mobile.focalX : 50,
+          y: Number.isFinite(p.mobile.focalY) ? p.mobile.focalY : 50,
+          zoom: Number.isFinite(p.mobile.zoom) ? p.mobile.zoom : 1,
+        };
+      }
+      return out;
+    }),
     video360: null,
     services,
     apaCode: document.getElementById('b-apaCode').value.trim() || undefined,
@@ -1728,6 +2034,7 @@ function renderArticles(container) {
 }
 
 function editArticle(index) {
+  _captureAdminScroll();
   const a = index !== null ? state.data.articles[index] : {
     slug: '', title: '', excerpt: '', content: '',
     image: '',
@@ -1927,6 +2234,7 @@ function filterLocationsGuia() {
 }
 
 function editLocationGuia(index) {
+  _captureAdminScroll();
   const section = 'locations-guia-passaporte';
   const l = index !== null ? state.data[section][index] : {
     name: '', municipality: '', address: '', phone: '',
@@ -2069,6 +2377,7 @@ function filterLocationsPassaporte() {
 }
 
 function editLocationPassaporte(index) {
+  _captureAdminScroll();
   const section = 'locations-carimbos';
   const l = index !== null ? state.data[section][index] : {
     name: '', municipality: '', address: '', phone: '', beaches: [], seasonal: false,
@@ -2179,6 +2488,7 @@ function renderDescontos(container) {
 }
 
 function editDesconto(index) {
+  _captureAdminScroll();
   const d = index !== null ? state.data.descontos[index] : {
     name: '', description: '', conditions: '', region: 'centro', category: 'alojamento', municipality: '', logo: ''
   };
