@@ -32,7 +32,7 @@
       "lat": 41.06675,
       "lng": -8.402556
     },
-    "description": "Descubra esta zona balnear no concelho de Gondomar. Informações, serviços e localização disponíveis em breve.",
+    "description": "Na margem direita do Douro, o areal de Melres oferece tranquilidade e muito espaço, desde o estacionamento até ao areal e relvado. Não faltam atividades náuticas, boas acessibilidades, cadeira anfíbia e campo de voleibol de praia. O parque de campismo Campidouro fica a 8 km. Na freguesia, no Solar da Bandeirinha, existe o Núcleo Museológico. Para ver o Douro noutra perspetiva, existe o baloiço do cu grande.",
     "photoFocals": [
       77
     ],
@@ -73,7 +73,7 @@
       "lat": 41.079333,
       "lng": -8.516694
     },
-    "description": "Descubra esta zona balnear no concelho de Gondomar. Informações, serviços e localização disponíveis em breve.",
+    "description": "Inaugurado em 2015, depois de uma requalificação, o areal de Zebreiros, na União de Freguesias de Foz do Sousa e Covelo, oferece excelentes condições para um dia bem passado ou apenas para um piquenique. Na margem direita do rio Douro, perto da foz do rio Sousa, o espaço dispõe de bar com esplanada, parque de estacionamento, lava- pés e bons acessos por rampas até ao vasto areal. A zona de banhos é delimitada e vigiada.",
     "photoFocals": [
       75
     ],
@@ -115,7 +115,7 @@
       "lat": 40.066278,
       "lng": -7.805222
     },
-    "description": "Descubra esta zona balnear no concelho de Fundão. Informações, serviços e localização disponíveis em breve.",
+    "description": "Este parque fluvial funcionou muitos anos como um dos mais importantes pontos de travessia do rio Zêzere. Ao grito “Ó da barca!”, uniam-se as gentes e o comércio das duas margens. Ainda hoje é possível alugar uma barca rio acima, além do aluguer de canoas, caiaques, paddle e caminhada aquática ao concessionário, que também gere o bar com petiscos e esplanada. No local encontra-se uma extensa área de relvado, zona de campismo (gratuito), parque infantil e campo de futebol e ténis, trilhos pedestres e de BTT.",
     "photoFocals": [
       92,
       92
@@ -197,7 +197,7 @@
       "lat": 40.004994,
       "lng": -8.205742
     },
-    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Castanheira&nbsp;de&nbsp;Pera.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
+    "description": "A Praia das Rocas estende-se por 1Km ao longo da Ribeira de Pera, no centro da localidade. Para além da piscina circular de 7000 m2 e da piscina com ondas de 2100 m2 (a maior do país), o espaço tem diversas atividades como slide, rapel, gaivotas, canoagem, escalada e standup paddle familiar. O “Rocas Lounge”, o alojamento Villa Praia, com seis bungalows disponíveis durante todo o ano e os campos de ténis também fazem parte deste complexo.",
     "photoFocals": [
       92,
       84,
@@ -241,7 +241,7 @@
       "lat": 41.488611,
       "lng": -7.189444
     },
-    "description": "Descubra esta praia fluvial no concelho de Mirandela. Informações, serviços e localização disponíveis em breve.",
+    "description": "A praia fluvial arquiteto Albino Mendo, inserida no Parque Dr. José Gama, em plena cidade de Mirandela, fica na margem direita do rio Tua, com uma vista privilegiada para a localidade e perfeitamente integrada na paisagem do parque. A frente de rio tem cerca cem metros, águas puras e profundidade variável. A praia tem capacidade para cerca de 800 pessoas, entre areal, zona relvada e outros espaços verdes do Parque, ao longo do qual há mesas para refeições e café-restaurante. Existe ainda aluguer de embarcações.",
     "photoFocals": [
       85,
       55
@@ -283,7 +283,7 @@
       "lat": 41.504626,
       "lng": -8.161657
     },
-    "description": "Descubra esta praia fluvial no concelho de Fafe. Informações, serviços e localização disponíveis em breve.",
+    "description": "Esta praia fluvial fica localizada na albufeira da Barragem de Queimadela, abastecida pelas águas do Rio Vizela, e possui boas infraestruturas de apoio, acessos e equipamentos de Praia Acesível com cadeira anfíbia. A extraordinária beleza desta região convida a que os banhos e descanso nesta praia sejam alternados com as atividades náuticas não poluentes e com a realização dos Passadiços da Barragem da Queimadela, iniciando a caminhada junto ao parque de campismo e caravanismo, a dois passos da praia.",
     "photoFocals": [
       50
     ],
@@ -324,7 +324,7 @@
       "lat": 37.671738,
       "lng": -7.505236
     },
-    "description": "Descubra esta praia fluvial no concelho de Mértola. Informações, serviços e localização disponíveis em breve.",
+    "description": "A praia fluvial da Tapada Grande fica situada na Barragem da Tapada Grande, em Mina de São Domingos, concelho de Mértola. É um verdadeiro oásis no verão Alentejano, proporcionando horas de lazer, e também local de prática de canoagem. Está toda equipada com as infraestruturas necessárias e oferece parque de merendas, diversos bar restaurante com esplanada, chapéus de sol e parque de estacionamento gratuito. É possível o aluguer de canoas e gaivotas e no anfiteatro costuma haver sessões de cinema e música ao vivo.",
     "photoFocals": [
       50
     ],
@@ -340,6 +340,7 @@
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Albufeira%2Bde%2BOdeleite"
     ],
+    "premium": true,
     "district": "Faro",
     "featured": false,
     "services": {
@@ -365,7 +366,7 @@
       "lat": 37.330208,
       "lng": -7.492497
     },
-    "description": "Descubra esta praia fluvial no concelho de Castro Marim. Informações, serviços e localização disponíveis em breve.",
+    "description": "Integrada no Centro de Atividades da Barragem de Odeleite, esta recente praia fluvial criada em desníveis e totalmente equipada é um refúgio refrescante que beneficia do Centro de Atividades Náuticas da albufeira. O visitante encontra aqui parque de estacionamento, bar com esplanada, solário em zona relvada e em areia, além da zona de banhos delimitada, onde se encontra também a piscina flutuante. Em 2026 a praia fluvial conquista a sua primeira Bandeira Azul.",
     "photoFocals": [
       50
     ],
@@ -406,7 +407,7 @@
       "lat": 41.59185,
       "lng": -8.126863
     },
-    "description": "Descubra esta praia fluvial no concelho de Vieira do Minho. Informações, serviços e localização disponíveis em breve.",
+    "description": "Na Barragem do Ermal, esta praia fluvial ta,bém conhecida como Ilha do Ermal, convida não apenas a mergulhos, como a desportos náuticos, nomeadamente Teleski, razão por que é muito procurada, sendo um pouco invulgar em Portugal. Na praia do Ermal, esta infraestrutura permite praticar wakeboard, mono-ski e kneeboard através de um circuito com cerca de 800 m de perímetro. A praia tem restaurante, snack-bar, insufláveis no Aquapark Fratelli Ermal, Canoas e Kayaks; Gaivotas; e Pranchas de paddle.",
     "photoFocals": [
       50
     ],
@@ -447,7 +448,7 @@
       "lat": 40.964034,
       "lng": -7.544518
     },
-    "description": "Descubra esta praia fluvial no concelho de Moimenta da Beira. Informações, serviços e localização disponíveis em breve.",
+    "description": "As águas do Távora que enchem a Albufeira de Vilar, uma das maiores do distrito de Viseu, são consideradas das menos poluídas do país. Esta é uma zona de excelência totalmente equipada, com guarda-sóis em colmo e parque de merendas com churrasqueiras. No bar servem-se petiscos, e junto ao espelho de água alugam-se embarcações. Nas imediações da praia, o Parque Aventura Crónicas da Terra, oferece inúmeras atividades desportivas. O Parque de Campismo fica à entrada de Vilar e também tem bungalows.",
     "photoFocals": [
       50
     ],
@@ -489,7 +490,7 @@
       "lat": 40.516528,
       "lng": -7.330194
     },
-    "description": "Descubra esta praia fluvial no concelho de Guarda. Informações, serviços e localização disponíveis em breve.",
+    "description": "A cerca de 15 minutos do centro da Guarda, o vasto espelho de água da Barragem do Caldeirão, projetada para a produção de energia e abastecimento de água, viu nascer uma zona balnear em 2019. Além da margem, com relva e areão, foi instalada uma piscina flutuante na albufeira, bar, duches e sanitários. A barragem é alimentada pela ribeira do Caldeirão e rodeada de encostas arborizadas, salpicadas aqui e ali de algum casario.",
     "photoFocals": [
       92,
       92
@@ -531,7 +532,7 @@
       "lat": 40.448942,
       "lng": -8.800259
     },
-    "description": "Descubra esta praia fluvial no concelho de Mira. Informações, serviços e localização disponíveis em breve.",
+    "description": "Requalificada e inaugurada em 2025, esta praia fluvial fica situada na Lagoa e na Barrinha de Mira, que integram o Sítio da Rede Natura 2000. Esta área era há muito frequentada como alternativa à praia de Mira, para fugir às águas marítimas, mas após a requalificação cria áreas de solário em areal e em relvado, chapéus de sol, bar com esplanada, caminhos pedonais e piscina flutuante. Por ali, a Estação da Biodiversidade da Barrinha de Mira convida a percorrer 1,2 km com 10 painéis sobre a diversidade biológica local.",
     "photoFocals": [
       50
     ],
@@ -572,7 +573,7 @@
       "lat": 40.153988,
       "lng": -8.241692
     },
-    "description": "Descubra esta praia fluvial no concelho de Lousã. Informações, serviços e localização disponíveis em breve.",
+    "description": "A Praia Fluvial da Bogueira fica localizada na freguesia de Casal de Ermio, a 6 km da Lousã, e garante a qualidade das águas do rio Ceira, rodeadas de uma paisagem deslumbrante. Está toda equipada, incluindo com bar e esplanada, duches e parque de merendas. Além disso disponibiliza campo de jogos, prancha de saltos e aluguer de canoas e gaivotas. Inclui um passadiço de madeira sobre o rio com ligação ao relvado.",
     "photoFocals": [
       50
     ],
@@ -613,7 +614,7 @@
       "lat": 40.141583,
       "lng": -8.066778
     },
-    "description": "Descubra esta praia fluvial no concelho de Góis. Informações, serviços e localização disponíveis em breve.",
+    "description": "Na aldeia da Cabreira, junto à Ponte Velha, este recanto lembra outros tempos. O espaço é marcado pelas tulhas, pequenas casas em xisto que serviam de armazenagem da azeitona ou do milho, o lagar e o moinho, ambos restaurados. Nas águas do Ceira foi criado um açude permanente e não muito profundo. Da zona balnear parte o percurso circular de 13 km, PR3 - Trilho do Vale do Ceira.",
     "photoFocals": [
       74
     ],
@@ -657,7 +658,7 @@
       "lat": 41.076528,
       "lng": -6.779722
     },
-    "description": "Descubra esta praia fluvial no concelho de Freixo de Espada À Cinta. Informações, serviços e localização disponíveis em breve.",
+    "description": "A 4 km da vila de Freixo de Espada à Cinta, em pleno Parque do Douro Internacional e com Espanha na margem oposta, a praia fluvial da Congida distingue-se pela envolvente natural e tranquilidade. Em 2022 foi requalificada, melhorando acessos, piscina flutuante, zona de areal e um campo multijogos que recebe competições nacionais. No rio, que aqui se transforma em albufeira através da barragem de Saucelle, são possíveis passeios de barco panorâmicos, excelente meio para observar as grandes aves no céu.",
     "photoFocals": [
       92,
       81,
@@ -701,7 +702,7 @@
       "lat": 41.581694,
       "lng": -6.899167
     },
-    "description": "Descubra esta praia fluvial no concelho de Macedo de Cavaleiros. Informações, serviços e localização disponíveis em breve.",
+    "description": "A praia fluvial de Fraga da Pegada fica localizada em plena Paisagem Protegida da Albufeira do Azibo. A praia possui dois locais de banhos, cada um com vigilância dedicada, dois bares de apoio e grande área de solário com relva e areia fina. Ali, também é possível escolher entre desportos náuticos não motorizados como remo, windsurf, canoagem e vela. Por terra, na envolvente as opções são a escalada, orientação e passeios pedestres.",
     "photoFocals": [
       50
     ],
@@ -743,7 +744,7 @@
       "lat": 39.789444,
       "lng": -7.838528
     },
-    "description": "Descubra esta praia fluvial no concelho de Proença-a-Nova. Informações, serviços e localização disponíveis em breve.",
+    "description": "A dois passos das aldeias de xisto de Oliveiras e Pedreira, e com enquadramento paisagístico de montanha, a praia fluvial da Fróia, na freguesia de Sobreira Formosa, oferece a água cristalina das nascentes da ribeira da Fróia num espaço totalmente equipado e vigiado. O Centro Cyclin’Portugal, instalado na zona balnear, é ponto de partida para 4 percursos, com 4 níveis de dificuldade, num total de 138 km de trilhos, mas os caminhantes também dispõem do trilho de praia da Fróia. O bar restaurante está aberto todo o ano.",
     "photoFocals": [
       86,
       84
@@ -786,7 +787,7 @@
       "lat": 39.93251,
       "lng": -8.895191
     },
-    "description": "Descubra esta praia fluvial no concelho de Leiria. Informações, serviços e localização disponíveis em breve.",
+    "description": "Este paraíso de água doce num concelho banhado por mar é praia oficial desde 2023 e encontra-se junto da povoação de Ervedeira, freguesia de Coimbrão. Oferece 500 metros de extensão e duas zonas de areia destinadas aos banhistas. A Lagoa é uma área ambientalmente protegida e o passadiço de madeira em redor inclui um nicho ornitológico para observação da fauna. Para passear, sugere-se a rota circular da lagoa da Ervedeira, de 2,7 km e 1,4 km opcionais até Ervedeira. A 5 km fica o Parque de Campismo da Praia do Pedrógão.",
     "photoFocals": [
       92,
       92
@@ -828,7 +829,7 @@
       "lat": 41.956673,
       "lng": -8.745654
     },
-    "description": "Descubra esta praia fluvial no concelho de Vila Nova de Cerveira. Informações, serviços e localização disponíveis em breve.",
+    "description": "Localizada nas margens do rio Minho, na União de Freguesias de V. N. de Cerveira e Lovelhe, esta praia fluvial transmite serenidade e ligação à natureza. Contribuem para tal o espelho de água, o parque de merendas com arvoredo e os bosquetes ripícolas. A praia dispõe de snack-bar e vigilância e a marina tem condições para pesca desportiva. Aqui inicia também a Ecovia - Caminho do Rio. A subida ao Forte de São Francisco de Lovelhe (séc. XVII), também vale a pena.",
     "photoFocals": [
       50
     ],
@@ -871,7 +872,7 @@
       "lat": 41.069972,
       "lng": -8.412833
     },
-    "description": "Descubra esta praia fluvial no concelho de Gondomar. Informações, serviços e localização disponíveis em breve.",
+    "description": "Na freguesia da Lomba, as temperaturas convidativas, o vasto areal e a paisagem natural fazem desta praia fluvial um refúgio longe da azáfama das praias costeiras. A praia está localizada na margem esquerda do rio Douro, que ali forma um “U” invertido antes de seguir para a foz. A praia tem todos os equipamentos necessários, incluindo bar com refeições. O serviço de táxi-boat (224 761 033) assegura transporte a partir da Marina de Melres. O Centro de Atividades Náuticas da praia disponibiliza embarcações.",
     "photoFocals": [
       82,
       77,
@@ -914,7 +915,7 @@
       "lat": 40.02629,
       "lng": -8.30403
     },
-    "description": "Descubra esta praia fluvial no concelho de Penela. Informações, serviços e localização disponíveis em breve.",
+    "description": "Adaptada das represas naturais da ribeira da Azenha, e camuflada entre a densa floresta da serra do Espinhal, esta praia fluvial foi ganhando galardões ao longo dos anos. A praia tem a configuração de piscina, com profundidade de um a três metros, com prancha de mergulho, e o acesso à água faz-se por uma rampa. A represa dispõe de uma zona de solário relvado e o edifício do restaurante e bar tem uma esplanada sobre ela. Na aldeia encontra uma mercearia com produtos locais e em redor existe uma cascata imperdível.",
     "photoFocals": [
       50
     ],
@@ -955,7 +956,7 @@
       "lat": 40.928021,
       "lng": -8.467356
     },
-    "description": "Descubra esta praia fluvial no concelho de Santa Maria da Feira. Informações, serviços e localização disponíveis em breve.",
+    "description": "A praia fluvial da Mâmoa, em Milheirós de Poiares, está classificada como água balnear desde 2013 e tem arrecadado galardões de qualidade. A praia é Acessível com cadeira anfíbia e banho assistido. É sobretudo um espaço que convida a relaxar e apreciar a envolvente banhada pelas águas do Rio Úl, afluente do rio Antuã. Oferece uma área de dois hectares e está dotada de diversos equipamentos, incluindo bicicletário e bar, aberto só na época balnear. A cerca de 500 metros da praia existe o Parque de Lazer do Outeiro.",
     "photoFocals": [
       50
     ],
@@ -996,7 +997,7 @@
       "lat": 41.920671,
       "lng": -8.774569
     },
-    "description": "Descubra esta praia fluvial no concelho de Vila Nova de Cerveira. Informações, serviços e localização disponíveis em breve.",
+    "description": "A zona balnear da Mota é um dos pontos de encontro dos cerveirenses quando o calor aperta. Na freguesia de Gondarém, o rio Minho acolhe os banhistas com um estacionamento fácil e com um pequeno areal branco, mas sem infraestruturas. A praia é ponto de passagem da Ecovia - Caminho do Rio, que inicia a 800 metros a jusante. Seguindo por ela, o cais da Mota fica a 120 metros. Espanha espreita do outro lado do rio.",
     "photoFocals": [
       50
     ],
@@ -1036,7 +1037,7 @@
       "lat": 39.483139,
       "lng": -8.001833
     },
-    "description": "<p>Descubra&nbsp;esta&nbsp;zona&nbsp;balnear&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Mação.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
+    "description": "A primeira praia fluvial de Mação e uma das mais antigas do país é um dos ex-líbris do concelho. Em pleno rio Tejo, dispõe de uma grande zona de banhos com extenso areal, espreguiçadeiras, toldos em palha e zona de refeições com churrasqueiras. É um local equipado com torre de escalada, slide, rapel, campo futebol de praia, assim como atividades náuticas, a partir do pequeno cais para barcos de recreio. O convite é para visitar o Núcleo Museológico de Ortiga, que homenageia a população ribeirinha e as artes da pesca.",
     "photoFocals": [
       92,
       81
@@ -1077,7 +1078,7 @@
       "lat": 40.154333,
       "lng": -8.112139
     },
-    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Góis.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
+    "description": "Situada no centro da vila de Góis e perto de todos os serviços, esta praia fluvial beneficia de um excelente enquadramento paisagístico, rodeada pelas serras do Açor e da Lousã, a ponte Real edificada por D. João III em 1533, o açude, os frondosos Amieiros, a ilha de areia branca no centro do rio e os dois bares junto ao rio. A 450 m fica a azenha do Pêgo Escuro, mas é imperdível a subida ao miradouro e ao baloiço do castelo, e ao miradouro Naturally da serra do Açor/ Rabadão.",
     "photoFocals": [
       74,
       70
@@ -1119,7 +1120,7 @@
       "lat": 40.486083,
       "lng": -7.415028
     },
-    "description": "Descubra esta praia fluvial no concelho de Guarda. Informações, serviços e localização disponíveis em breve.",
+    "description": "Esta praia fluvial em Videmonte oferece a pureza das águas límpidas e frescas do Mondego e um espaço verdejante. Em pleno Parque Natural da Serra da Estrela, a 22 km da Guarda, a praia foi inaugurada em 2019 e brinda os banhistas com um açude e rampa de acesso até à água, solário, zonas de sombras e parque de merendas, bar de apoio com esplanada e petiscos e churrasqueiras. A Rota da Quinta da Taberna, de 8 km, com partida da praia e passagem nas antigas minas de volfrâmio, é um bom exercício.",
     "photoFocals": [
       82
     ],
@@ -1162,7 +1163,7 @@
       "lat": 39.487944,
       "lng": -7.969139
     },
-    "description": "Descubra esta praia fluvial no concelho de Gavião. Informações, serviços e localização disponíveis em breve.",
+    "description": "Esta zona balnear está localizada entre as barragens de Belver e Fratel. O arvoredo no espaço relvado oferece muitas sombras e lugares recatados, ideais para piqueniques e descanso. A zona balnear tem espaços verdes, jardins e a Fonte do Lagarto, de onde brota água de nascente. Junto ao espaço balnear há um bar restaurante, passeios de barco com guia, aluguer de embarcações e uma unidade de alojamento. Na época balnear, é possível praticar canoagem, passeios de BTT e caminhadas, entre as 10h e as 19h.",
     "photoFocals": [
       70,
       92,
@@ -1205,7 +1206,7 @@
       "lat": 40.708025,
       "lng": -8.360834
     },
-    "description": "Descubra esta praia fluvial no concelho de Sever do Vouga. Informações, serviços e localização disponíveis em breve.",
+    "description": "Inserida num cenário natural verdejante, num vale aberto e luminoso, a praia fluvial da Quinta do Barco é a zona balnear interior mais galardoada do distrito de Aveiro. No vasto lençol de água foi colocada uma piscina flutuante e a praia possui um vasto conjunto de equipamentos e infraestruturas de apoio. Existem canoas, paddles e caiaques para alugar, para além de BTT e outras atividades. Por perto, o trilho circular dos Moinhos (7,7Km) é um dos percursos sugeridos.",
     "photoFocals": [
       50
     ],
@@ -1246,7 +1247,7 @@
       "lat": 40.411835,
       "lng": -7.467206
     },
-    "description": "Descubra esta praia fluvial no concelho de Manteigas. Informações, serviços e localização disponíveis em breve.",
+    "description": "A praia fluvial da Relva da Reboleira fica apenas a 8 km da sede de concelho, num enquadramento natural único, nas margens do Zêzere, a poucos quilómetros da sua nascente. O espaço é um destino ideal para horas ou dias de diversão ou descanso e possui bar de apoio, uma área comercial com venda de produtos da região, parque aventura e parque de campismo. Para os mais corajosos, o lugar da Azinha, Sameiro, é um dos melhores locais para a prática de parapente.",
     "photoFocals": [
       50
     ],
@@ -1287,7 +1288,7 @@
       "lat": 41.587083,
       "lng": -6.907139
     },
-    "description": "Descubra esta praia fluvial no concelho de Macedo de Cavaleiros. Informações, serviços e localização disponíveis em breve.",
+    "description": "Situada na área de Paisagem Protegida da Albufeira do Azibo, esta praia fluvial é uma das 7 Maravilhas – Praias de Portugal e destaca-se pela beleza paisagística do local e a qualidade ambiental. A praia oferece um grande espaço relvado multiusos, grande areal e vista desafogada sobre toda a área. Está toda equipada e conta com aluguer de esteiras, tendas, colmos e embarcações de recreio. Conta também com vários serviços de bar e restauração.",
     "photoFocals": [
       50
     ],
@@ -1329,7 +1330,7 @@
       "lat": 39.807111,
       "lng": -8.0965
     },
-    "description": "Descubra esta praia fluvial no concelho de Sertã. Informações, serviços e localização disponíveis em breve.",
+    "description": "Pérola da Sertã na época mais quente do ano, a praia fluvial da Ribeira Grande está situada em pleno coração da vila que é Aldeia de Xisto, nas traseiras das piscinas municipais. A ponte que atravessa a ribeira da Sertã une as partes nova e antiga da vila. O espaço conta com equipamentos de apoio como bar, solários, relvados, balneários, espreguiçadeiras e chapéus de sol (por aluguer), e máquinas de manutenção. Os utilizadores da piscina (10-20h) têm acesso livre à praia fluvial, mas não o inverso.",
     "photoFocals": [
       69,
       52
@@ -1372,7 +1373,7 @@
       "lat": 40.249333,
       "lng": -8.036806
     },
-    "description": "Descubra esta praia fluvial no concelho de Tábua. Informações, serviços e localização disponíveis em breve.",
+    "description": "No concelho de Tábua, freguesia de Mouronho a esta praia fluvial é fortemente caraterizada por paisagens rurais e florestais nas margens do rio Alva e distingue-se pela aposta diferenciadora no Turismo Acessível, ao nível da mobilidade e da insuficiência visual e/ou auditiva. Assim, dispõe de espaços próprios para parqueamento, sanitários e toda uma panóplia de estruturas e equipamentos para facilitar a circulação e o desfrute deste público, não esquecendo os cães-guia.",
     "photoFocals": [
       79,
       92
@@ -1414,7 +1415,7 @@
       "lat": 39.703722,
       "lng": -8.222639
     },
-    "description": "Descubra esta praia fluvial no concelho de Vila de Rei. Informações, serviços e localização disponíveis em breve.",
+    "description": "Descendo a típica aldeia beirã da Zaboeira, encontra-se a albufeira de Castelo de Bode, que acolhe esta praia fluvial. No vasto espelho de água estão duas piscinas flutuantes e a oportunidade de desfrutar de wakeboard, wakeskate e passeios de barco. Existe também um cais. A Zaboeira tem uma estação intermodal da GR33 - Grande Rota do Zêzere (para fazer a pé, de bicicleta ou de canoa). A partir desta praia, em direção a Fernandaires, a estrada panorâmica oferece vista para a albufeira e miradouros naturais.",
     "photoFocals": [
       75
     ],
@@ -1455,7 +1456,7 @@
       "lat": 41.888783,
       "lng": -8.783759
     },
-    "description": "Descubra esta praia fluvial no concelho de Caminha. Informações, serviços e localização disponíveis em breve.",
+    "description": "No Município de Caminha, freguesia de Vilar de Mouros, a Praia Fluvial das Azenhas é banhada pelas águas cristalinas do rio Coura e envolta numa paisagem natural, verde e densa, integrada na Rede Natura 2000, promovendo descanso e contacto com a natureza. Ali é possível usufruir das áreas de lazer, bar e parque de merendas, num espaço com vista para as azenhas que lhe dão nome. Bem próxima, está a ponte romana de Vilar de Mouros.",
     "photoFocals": [
       50
     ],
@@ -1497,7 +1498,7 @@
       "lat": 40.185083,
       "lng": -8.150028
     },
-    "description": "Descubra esta praia fluvial no concelho de Góis. Informações, serviços e localização disponíveis em breve.",
+    "description": "Esta praia fluvial é um dos pequenos paraísos de Vila Nova do Ceira. Nas margens do rio Ceira foi criada, em 2004, uma estrutura tranquila, com vastas áreas de relva, solário em areia, oliveiras em todo o espaço e socalcos em pedra, usada também nos passeios e rampas até à linha de água. É também aqui que fica o parque de lazer, com mesas, grelhadores, circuito de manutenção e sombras. Mais próximo da água, está o Caneco Bar com esplanada, que petiscos. A praia é Acessível com cadeira anfíbia.",
     "photoFocals": [
       87,
       92
@@ -1539,7 +1540,7 @@
       "lat": 41.896094,
       "lng": -8.820144
     },
-    "description": "Descubra esta praia fluvial no concelho de Caminha. Informações, serviços e localização disponíveis em breve.",
+    "description": "Praia oficial desde 2021, é na freguesia de Seixas que se e encontra a Praia de Pedras Ruivas, um espaço de banhos e de lazer que conta com o vasto leito do rio Minho e uma paisagem belíssima, com vista para o monte galego de Santa Tecla, e pedrinhas do rio de cor peculiar. Este é um espaço de recreio e lazer, com embarcações que vão passando nas águas do rio e condições para a prática de windsurf. Dispõe de equipamentos como parque de merendas e sanitários. A partir da praia é possível percorrer a Ecovia do Caminho do Rio Minho.",
     "photoFocals": [
       50
     ],
@@ -1580,7 +1581,7 @@
       "lat": 39.921244,
       "lng": -7.891798
     },
-    "description": "Descubra esta praia fluvial no concelho de Oleiros. Informações, serviços e localização disponíveis em breve.",
+    "description": "Próxima da vila de Oleiros, esta praia fluvial está instalada na ribeira de Oleiros, afluente do Zêzere. Projetada em forma de piscina fluvial, tem as margens limitadas por paredes. Possui relvado e arvoredo, espreguiçadeiras, churrasqueiras e até cinzeiros de praia. Em plena ribeira, encontra a Moon Gate, uma obra de arte suspensa. Nas imediações existe um parque de campismo e alguns dos troços do Trilho Português dos Apalaches, Grande Rota Muradal Pangeia (GR38).",
     "photoFocals": [
       50
     ],
@@ -1622,7 +1623,7 @@
       "lat": 41.609167,
       "lng": -8.407778
     },
-    "description": "Descubra esta praia fluvial no concelho de Braga. Informações, serviços e localização disponíveis em breve.",
+    "description": "A belíssima praia fluvial de Adaúfe, no rio Cávado, oferece uma vasta extensão de espelho de água e margens aos seus banhistas, para além de um vasto conjunto de equipamentos: churrasqueiras, parque de manutenção, estacionamento, bicicletário, bar com petiscos. Como elementos diferenciadores, existem os moinhos e o engenho de águas. Uma empresa de desportos náuticos faz a gestão do aluguer de canoas, gaivotas, escorregas, paddle, e organiza descidas no rio. Por terra, o Trilho das Fontes é uma alternativa aos banhos.",
     "photoFocals": [
       78,
       92
@@ -1645,6 +1646,7 @@
       "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779633089536_Zona_Balnear_de_Agroal_4_wm.jpg"
     ],
     "inVotar": true,
+    "premium": false,
     "district": "Coimbra",
     "featured": false,
     "services": {
@@ -1668,7 +1670,7 @@
       "lat": 40.264877,
       "lng": -7.88467
     },
-    "description": "<p>A&nbsp;ribeira&nbsp;de&nbsp;Pomares&nbsp;garante&nbsp;dias&nbsp;tranquilos&nbsp;e&nbsp;dias&nbsp;mais&nbsp;frescos&nbsp;na&nbsp;zona&nbsp;balnear&nbsp;criada&nbsp;na&nbsp;povoação&nbsp;de&nbsp;Agroal,&nbsp;freguesia&nbsp;de&nbsp;Pomares,&nbsp;acerca&nbsp;de&nbsp;30&nbsp;km&nbsp;de&nbsp;Arganil.&nbsp;É&nbsp;junto&nbsp;à&nbsp;ponte&nbsp;que&nbsp;une&nbsp;as&nbsp;duas&nbsp;margens,&nbsp;que&nbsp;o&nbsp;espelho&nbsp;de&nbsp;água&nbsp;é&nbsp;acompanhado&nbsp;de&nbsp;uma&nbsp;zona&nbsp;de&nbsp;apoio&nbsp;e&nbsp;lazer.&nbsp;A&nbsp;zona&nbsp;fluvial&nbsp;oferece&nbsp;aos&nbsp;seus&nbsp;visitantes&nbsp;uma&nbsp;extensa&nbsp;área&nbsp;para&nbsp;banhos&nbsp;com&nbsp;saída&nbsp;por&nbsp;escadas,&nbsp;parque&nbsp;de&nbsp;merendas,&nbsp;serviço&nbsp;de&nbsp;bar&nbsp;com&nbsp;esplanada,&nbsp;instalações&nbsp;sanitárias,&nbsp;zona&nbsp;de&nbsp;solário&nbsp;e&nbsp;parque&nbsp;de&nbsp;estacionamento.</p>",
+    "description": "A ribeira de Pomares garante dias tranquilos e dias mais frescos na zona balnear criada na povoação de Agroal, freguesia de Pomares, acerca de 30 km de Arganil. É junto à ponte que une as duas margens, que o espelho de água é acompanhado de uma zona de apoio e lazer. A zona fluvial oferece aos seus visitantes uma extensa área para banhos com saída por escadas, parque de merendas, serviço de bar com esplanada, instalações sanitárias, zona de solário e parque de estacionamento.",
     "photoFocals": [
       46,
       0,
@@ -1713,7 +1715,7 @@
       "lat": 38.287438,
       "lng": -7.91765
     },
-    "description": "Descubra esta praia fluvial no concelho de Cuba. Informações, serviços e localização disponíveis em breve.",
+    "description": "A Praia Fluvial de Albergaria dos Fusos é um oásis no verão quente alentejano. Foi inaugurada em 2023 e está inserida no complexo do Ecopark do Alentejo Central, que comporta um centro náutico para desportos náuticos não poluentes e uma torre para observação de aves. A praia oferece água de temperatura amena e uma extensa área de areia fina branca, duas piscinas flutuantes, (adultos e crianças), campos de futebol, andebol e de voleibol de praia, bar/restaurante panorâmico e espaços de merendas.",
     "photoFocals": [
       50
     ],
@@ -1755,7 +1757,7 @@
       "lat": 39.545331,
       "lng": -8.277492
     },
-    "description": "Descubra esta praia fluvial no concelho de Abrantes. Informações, serviços e localização disponíveis em breve.",
+    "description": "Localizada em plena Albufeira de Castelo do Bode, Junto à povoação de Aldeia do Mato, esta praia fluvial está dotada de todas as infraestruturas de apoio para dias bem passados. Não faltam piscina flutuante, apta para crianças e adultos, e uma panóplia de atividades náuticas para explorar entre banhos. Pode percorrer a Grande Rota Zêzere e as pequenas rotas circulares de Martinchel e Souto, e ficar mais dias por aqui, reservando um dos bungalows existentes com uma vista excecional sobre a albufeira.",
     "photoFocals": [
       92,
       89
@@ -1798,7 +1800,7 @@
       "lat": 39.768931,
       "lng": -7.982294
     },
-    "description": "Descubra esta praia fluvial no concelho de Proença-a-Nova. Informações, serviços e localização disponíveis em breve.",
+    "description": "Nesta praia fluvial totalmente requalificada em 2021, distingue-se a piscina biológica, com fins lúdicos e didáticos. A praia fluvial, na ribeira da Isna, dispõe de todas as condições de conforto, incluindo solário e churrasqueiras, edifício de apoio feito em xisto, o bar aberto durante a época balnear e o Centro Interpretativo do Corredor Fluvial da Aldeia Ruiva, que complementa a rota pedestre cheia de fauna “Trilho da Ribeira da Isna”. Junto à praia fica o Parque de Campismo e Caravanismo.",
     "photoFocals": [
       92,
       78
@@ -1844,7 +1846,7 @@
       "lat": 40.579472,
       "lng": -7.307333
     },
-    "description": "Descubra esta praia fluvial no concelho de Guarda. Informações, serviços e localização disponíveis em breve.",
+    "description": "É na margem direita do Mondego que se encontra esta praia fluvial, recentemente requalificada com materiais naturais e um segundo açude. O espaço inclui uma área de solário e relvado e está rodeada de árvores e sombras. Dispõe de espaços infantis, parque de merendas, duches, bar, campo de futebol, vestiários e escorrega. Uma das duas zonas de banhos é acessível a pessoas com mobilidade reduzida. Dali parte o Trilho da Água até à cidade da Guarda, usada há décadas pelas Mondegueiras.",
     "photoFocals": [
       92,
       92,
@@ -1889,7 +1891,7 @@
       "lat": 40.382028,
       "lng": -6.92675
     },
-    "description": "Descubra esta praia fluvial no concelho de Sabugal. Informações, serviços e localização disponíveis em breve.",
+    "description": "Na barragem alimentada pela ribeira de Alfaiates, que anteriormente tinha apenas funções de regadio e de pesca, surgiu uma praia inaugurada em 2017. Em 2022, recebeu o galardão Praia Zero Poluição, única praia fluvial em 58 praias. A estrutura dispõe de churrasqueiras, bar com petiscos, canoas, gaivotas e campo de futebol. Nas imediações há um parque de autocaravanas para cinco viaturas. O banhista pode ainda percorrer a PR4- Vilares, visitar o castelo ou participar nas festas tauromáquicas e raianas nos meses de verão.",
     "photoFocals": [
       92
     ],
@@ -1932,7 +1934,7 @@
       "lat": 40.007175,
       "lng": -7.661108
     },
-    "description": "Descubra esta praia fluvial no concelho de Castelo Branco. Informações, serviços e localização disponíveis em breve.",
+    "description": "A ribeira de Almaceda, que desagua na ribeira do Tripeiro, atravessa o coração da aldeia de Almaceda. Nesta área, conhecida por Poço do Lagar, a praia fluvial foi recentemente requalificada. Um antigo lagar é agora um bar com esplanada, servindo algumas comidas rápidas e petiscos, e o espaço verde mereceu arranjos. Além dos banhos, é possível uma panóplia de atividades: aproveitar o campo de jogos, as canoas e as bicicletas de BTT, descobrir o território nas pequenas rotas ou subir aos baloiços panorâmicos.",
     "photoFocals": [
       76,
       89,
@@ -1976,7 +1978,7 @@
       "lat": 39.611417,
       "lng": -8.264944
     },
-    "description": "Descubra esta praia fluvial no concelho de Tomar. Informações, serviços e localização disponíveis em breve.",
+    "description": "Após a requalificação de 2022, este recanto sossegado e de grande beleza situado na albufeira de Castelo de Bode, disponibiliza piscina flutuante, parque de merendas e churrasqueiras, bons acessos, edifício de apoio e zona de estacionamentos. No centro da albufeira, encontra-se a mítica Ilha do Lombo e a sua estalagem. A praia fluvial poderá ser um ponto de partida para diversas atividades náuticas e desportivas. Na antiga Escola Primária do Alqueidão merece visita o seu Museu Virtual das Azenhas.",
     "photoFocals": [
       85,
       92
@@ -2018,7 +2020,7 @@
       "lat": 38.21317,
       "lng": -7.521918
     },
-    "description": "Descubra esta praia fluvial no concelho de Portel. Informações, serviços e localização disponíveis em breve.",
+    "description": "A cerca de 1,5 km da aldeia que deu o nome à barragem, nasce a Praia Fluvial de Alqueva, a segunda criada pelo concelho de Portel no maior lago artificial da Europ. A estrutura presenteia os seus banhistas com um areal e zona relvada com toldos e colmos que se estendem por um vasto espaço de lazer com mais de 15 mil m2. Dispõe de zona de banhos delimitada para crianças, equipamentos para pessoas com mobilidade reduzida e diversos equipamentos de lazer para alugar. No bar há pratos típicos locais.",
     "photoFocals": [
       50
     ],
@@ -2060,7 +2062,7 @@
       "lat": 40.016472,
       "lng": -8.100361
     },
-    "description": "Descubra esta praia fluvial no concelho de Góis. Informações, serviços e localização disponíveis em breve.",
+    "description": "As margens da ribeira do Sinhel, na freguesia de Alvares, acolhem a praia fluvial de Alvares que estende a sua zona balnear a ambas as margens: De um lado, estão as mesas do parque de merendas, o parque infantil e o casario. No outro, o café restaurante, com a especialidade de cabrito à Sinhel. Alvares é o ponto médio da mítica EN2, possuindo o marco 300 do itinerário. Da praia parte o trilho do Sinhel (PR2) com 6 Km.",
     "photoFocals": [
       85,
       89
@@ -2102,7 +2104,7 @@
       "lat": 39.977703,
       "lng": -7.960255
     },
-    "description": "Descubra esta praia fluvial no concelho de Oleiros. Informações, serviços e localização disponíveis em breve.",
+    "description": "À medida que desce em direção à praia fluvial de Álvaro, avista-se uma vasta extensão de água e um panorama envolvente de rara beleza promovida pelo rio Zêzere. O local transmite absoluta tranquilidade e um contacto com a natureza em estado puro. As duas piscinas flutuantes, para adultos e crianças, o bar com esplanada, parque de merendas, a fonte e cais para embarcações fazem parte do conjunto. Atracada na marina de Álvaro está uma unidade hoteleira flutuante e de passeio.",
     "photoFocals": [
       50
     ],
@@ -2144,7 +2146,7 @@
       "lat": 40.301111,
       "lng": -7.835944
     },
-    "description": "Descubra esta praia fluvial no concelho de Oliveira do Hospital. Informações, serviços e localização disponíveis em breve.",
+    "description": "Na praia fluvial de Alvoco das Várzeas, nas águas cristalinas do rio Alvoco, a protagonista é a belíssima ponte medieval do séc. XIV, de estilo gótico-românico. A praia dispõe de bar com petiscos, almoços e jantares e as águas pouco profundas são indicadas para crianças. A pequena cascata junto à praia ajuda a alimentar a represa do açude da Moenda (séc. XVIII), à entrada de Alvoco. Pelas redondezas há diversas rotas pedestres disponíveis, excelente forma de conhecer a região.",
     "photoFocals": [
       88,
       78
@@ -2186,7 +2188,7 @@
       "lat": 38.291806,
       "lng": -7.559312
     },
-    "description": "Descubra esta praia fluvial no concelho de Portel. Informações, serviços e localização disponíveis em breve.",
+    "description": "A cerca de 15 km Portel, na aldeia de Amieira, esta praia fluvial é um paraíso no Grande Lago Alqueva. Inaugurada em 2019, oferece condições de excelência ao lazer: tosos os equipamentos de apoio, 22 mil m2 de solário em areia fina e zonas relvadas, canoas, paddle e gaivotas. A praia é totalmente inclusiva e acessível, dispondo de cadeira anfíbia e de um passadiço em toda a extensão da zona fluvial. No bar e restaurante panorâmico, aberto durante todo o ano (exceto dezembro e janeiro), servem-se refeições.",
     "photoFocals": [
       50
     ],
@@ -2228,7 +2230,7 @@
       "lat": 39.918325,
       "lng": -8.284321
     },
-    "description": "Descubra esta praia fluvial no concelho de Figueiró dos Vinhos. Informações, serviços e localização disponíveis em breve.",
+    "description": "A praia fluvial Ana de Aviz encontra-se à entrada da aldeia com o mesmo nome. A acumulação de água da ribeira forma uma piscina na qual se consegue ver o chão regular em xisto. A área envolvente tem um espaço com relvado e sombras. A praia é segura, mesmo para as crianças, e no bar da praia servem-se petiscos. Devido à proximidade da aldeia, o lugar é perfeito para uns dias de turismo rural, visitas ao centro histórico e ao Museu e Centro de Artes.",
     "photoFocals": [
       92,
       79
@@ -2270,7 +2272,7 @@
       "lat": 40.272467,
       "lng": -8.524831
     },
-    "description": "Descubra esta praia fluvial no concelho de Cantanhede. Informações, serviços e localização disponíveis em breve.",
+    "description": "Situada no centro da vila de Ançã, esta praia fluvial é uma piscina natural alimentada pelo caudal da fonte de Ançã, uma das mais abundantes de Portugal, proporcionando águas cristalinas. A piscina fluvial está perfeitamente integrada no centro da vila, rodeada do casario, e possui todas as infraestruturas de apoio, como bar e sanitários, e um pitoresco enquadramento paisagístico, com a ponte romana ao fundo.",
     "photoFocals": [
       50
     ],
@@ -2313,7 +2315,7 @@
       "lat": 40.294417,
       "lng": -7.905889
     },
-    "description": "Descubra esta praia fluvial no concelho de Oliveira do Hospital. Informações, serviços e localização disponíveis em breve.",
+    "description": "A praia fluvial de Avô é uma das mais singulares do interior do país. Encontra-se em pleno coração da vila, fazendo o encontro do rio Alva e da ribeira de Pomares, e de onde sobressai a peculiar ilha do Picoto e o baloiço dentro de água. A ponte do séc. XVIII cria uma tela especial. A praia é constituída por dois açudes, passadiços no areal e uma piscina infantil, e amplos espaços de lazer e de relvado. Esta é uma Praia Acessível com cadeira e andarilho anfíbio. Na ilha é possível alugar caiaques, gaivotas e paddles.",
     "photoFocals": [
       83,
       83,
@@ -2356,7 +2358,7 @@
       "lat": 38.547078,
       "lng": -7.304415
     },
-    "description": "Descubra esta praia fluvial no concelho de Alandroal. Informações, serviços e localização disponíveis em breve.",
+    "description": "Integrada na rede de Praias Fluviais do Alqueva, a Área Recreativa e de Lazer de Azenhas d’El Rei, que inclui a praia fluvial, está localizada numa das margens da Albufeira de Alqueva, na freguesia de Capelins. A praia oferece um vasto areal, sombras, e vários parques de estacionamento e merendas. Dispõe de todos os equipamentos de apoio, do bar e restaurante ao posto médico, e ainda beneficia das atividades da Estação Náutica.",
     "photoFocals": [
       50
     ],
@@ -2398,7 +2400,7 @@
       "lat": 40.485528,
       "lng": -6.990583
     },
-    "description": "Descubra esta praia fluvial no concelho de Sabugal. Informações, serviços e localização disponíveis em breve.",
+    "description": "Esta praia, servida pelo rio Côa e ladeada de suaves encostas rurais, é local de encontro e de convívio de amigos e famílias. A praia fluvial dispõe dos equipamentos e estruturas necessárias: parque de merendas, zona de relva e solário com areão, rampa de acesso à zona de banhos e bar de apoio. A cerca de 1km, à entrada da aldeia, encontra-se um café restaurante com pratos do dia a preços acessíveis. Visitar Badamalos é percorrer a Grande Rota do Vale do Côa, visitar o Museu de Vilar Maior e subir ao Baloiço do Chão da Forca.",
     "photoFocals": [
       86,
       78
@@ -2440,7 +2442,7 @@
       "lat": 39.648944,
       "lng": -8.241472
     },
-    "description": "Descubra esta praia fluvial no concelho de Ferreira do Zêzere. Informações, serviços e localização disponíveis em breve.",
+    "description": "A albufeira de Castelo de Bode, inaugurada em 1951, transformou o rio Zêzere num lago com cerca de 60 quilómetros de extensão. Nas margens da albufeira, entre as aldeias ribeirinhas de Bairrada/ Bairradinha, foi surgindo uma zona de banhos, hoje praia fluvial vigiada, classificada em 2023. A praia encontra-se em estado muito natural, onde apenas existem alguns chapéus de sol e sanitários. É o local ideal para repousar em sossego e observar os barcos típicos chamados de abrangel ou catrafuz.",
     "photoFocals": [
       50
     ],
@@ -2453,41 +2455,95 @@
     "name": "Praia Fluvial de Benfeita",
     "type": "praia_fluvial",
     "river": "Ribeira da Mata / Ribeira do Carcavão",
+    "inRede": true,
     "photos": [
-      "https://placehold.co/800x600/003A40/FFEB3B?text=Benfeita"
+      "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779634251573_Praia_Fluvial_de_Benfeita_1_wm.jpg",
+      "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779634252886_Praia_Fluvial_de_Benfeita_2_wm.jpg",
+      "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779634253910_Praia_Fluvial_de_Benfeita_3_wm.jpg",
+      "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779634255125_Praia_Fluvial_de_Benfeita_4_wm.jpg",
+      "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779634256069_Praia_Fluvial_de_Benfeita_5_wm.jpg"
     ],
+    "inVotar": true,
+    "premium": false,
     "district": "Coimbra",
     "featured": false,
     "services": {
-      "wc": false,
-      "bar": false,
-      "grills": false,
-      "camping": false,
-      "parking": false,
+      "wc": true,
+      "bar": true,
+      "camping": true,
       "blueFlag": false,
       "lifeguard": false,
       "nacional2": false,
-      "accessible": false,
+      "accessible": true,
       "boatRental": false,
-      "picnicArea": false,
+      "picnicArea": true,
       "playground": false,
       "goldQuality": false,
       "petFriendly": false
     },
     "video360": null,
     "freguesia": "",
-    "thumbnail": "brand_assets/fotos/FOTOS PRAIA DO ANO/Benfeita ARGANIL.jpg",
+    "thumbnail": "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779634234151_Praia_Fluvial_de_Benfeita_1_wm.jpg",
     "coordinates": {
       "lat": 40.229334,
       "lng": -7.9454
     },
-    "description": "Descubra esta praia fluvial no concelho de Arganil. Informações, serviços e localização disponíveis em breve.",
+    "description": "No coração da Aldeia de Xisto de Benfeita, a Praia Fluvial de Benfeita utiliza as águas da união das Ribeiras da Mata e do Carcavão, que ali correm frescas e puras todo o ano. A praia dispõe de todos os equipamentos necessários ao conforto dos banhistas e a excelentes dias de descanso, desde o parque de estacionamento até ao bar, sanitários e duches. É ainda uma praia aderente ao sistema para daltónicos ColorAdd. Bem perto, a Fraga da Pena, a Mata da Margaraça e a Aldeia Histórica do Piódão convidam a uma visita.",
     "photoFocals": [
-      50
+      {
+        "x": 49.80474708646043,
+        "y": 77.32025589137672,
+        "zoom": 1,
+        "mobile": {
+          "x": 0,
+          "y": 75.8580194529669,
+          "zoom": 1
+        }
+      },
+      {
+        "x": 50.68338519738849,
+        "y": 66.12905542137216,
+        "zoom": 1,
+        "mobile": {
+          "x": 47.878921785240834,
+          "y": 60.69789150727854,
+          "zoom": 1
+        }
+      },
+      {
+        "x": 44.04478613704314,
+        "y": 50.26672759318493,
+        "zoom": 1,
+        "mobile": {
+          "x": 58.18530756877094,
+          "y": 38.15105424636073,
+          "zoom": 1
+        }
+      },
+      {
+        "x": 50.48813228384892,
+        "y": 37.079835498400676,
+        "zoom": 1,
+        "mobile": {
+          "x": 17.948151421416995,
+          "y": 48.15105424636073,
+          "zoom": 1
+        }
+      },
+      {
+        "x": 78.31167246323753,
+        "y": 52.98661792545205,
+        "zoom": 1,
+        "mobile": {
+          "x": 4.780961018252995,
+          "y": 47.9732358509041,
+          "zoom": 1
+        }
+      }
     ],
     "municipality": "Arganil",
-    "waterQuality": "",
-    "passportStamp": true
+    "passportStamp": true,
+    "inPassaporteDigital": true
   },
   {
     "id": "praia-fluvial-de-bitetos",
@@ -2522,7 +2578,7 @@
       "lat": 41.072017,
       "lng": -8.259749
     },
-    "description": "Descubra esta praia fluvial no concelho de Marco de Canaveses. Informações, serviços e localização disponíveis em breve.",
+    "description": "Na margem do Rio Douro, esta praia já foi ponto de paragem dos barcos rabelos, que até 1965 transportavam as pipas do Vinho do Porto entre as quintas do Douro e Vila Nova de Gaia. Hoje é um espaço balnear, náutico e de lazer. Recebe os diversos barcos de turismo fluvial e oferece atividades náuticas como canoagem, stand up paddle, ski aquático, passeios de barco, entre outras atividades mais radicais. Está dotada de todos os equipamentos, incluindo parque de estacionamento.",
     "photoFocals": [
       50
     ],
@@ -2563,7 +2619,7 @@
       "lat": 40.833088,
       "lng": -8.390691
     },
-    "description": "Descubra esta praia fluvial no concelho de Vale de Cambra. Informações, serviços e localização disponíveis em breve.",
+    "description": "A Praia Fluvial de Burgães, localizada na Freguesia de S. Pedro de Castelães, oferece um cenário extraordinário e as águas cristalinas do rio Caima a quem procura relaxar e divertir-se em natureza. As amplas e acolhedoras áreas de banhos, de solário e de sombras são complementadas com um bom parque infantil, campos de jogos, parque de merendas, bar e restaurante. É possível alugar um toldo ou espreguiçadeira e utilizar pranchas de paddle, praticar escalada, touro mecânico e usar o skate park.",
     "photoFocals": [
       50
     ],
@@ -2604,7 +2660,7 @@
       "lat": 40.012893,
       "lng": -7.846415
     },
-    "description": "Descubra esta praia fluvial no concelho de Oleiros. Informações, serviços e localização disponíveis em breve.",
+    "description": "Em torno do Zêzere, a beleza é garantida e esta praia fluvial também beneficia dela. Situada na margem direita do rio e resguardada por serras cobertas de pinhais, a praia permite tirar partido do extenso espaço repleto de choupos, salgueiros, freixos e amieiros a oferecer as suas sombras. A zona balnear dispõe de churrasqueira, bar, mesas, sanitários, e condições propícias para prática de desportos náuticos, de futebol e de voleibol. Um dos atrativos da praia fluvial é o açude, com uma cascata.",
     "photoFocals": [
       50
     ],
@@ -2646,7 +2702,7 @@
       "lat": 39.708111,
       "lng": -8.01375
     },
-    "description": "Descubra esta praia fluvial no concelho de Mação. Informações, serviços e localização disponíveis em breve.",
+    "description": "Localizada a 2 Km de Cardigos, junto ao Campo de Tiro, a praia fluvial de Cardigos utiliza os materiais da região nas inúmeras infraestruturas de apoio, casando na perfeição com a envolvente natural que impressiona à chegada. O local é singular pela cor límpida da água da ribeira do Vergancinho e pelo pormenor do fundo da pequena albufeira. A praia está totalmente equipada. Ali inicia a PR10 - Rota de Cardigos Praia, com 10 km, circular.",
     "photoFocals": [
       87,
       90
@@ -2687,7 +2743,7 @@
       "lat": 40.786306,
       "lng": -8.257917
     },
-    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Oliveira&nbsp;de&nbsp;Frades.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
+    "description": "Inaugurada em agosto de 2024, a Zona de Fruição Ribeirinha da Carriça, em São João da Serra, veio substituir a antiga praia do Vau, engolida pelas águas da albufeira da barragem de Ribeiradio. Agora, no rio Teixeira, existe um vasto areal com chapéus de palha, parque de estacionamento, bar de apoio com esplanada, campo de voleibol e churrasqueiras. Na envolvente há carvalhos, freixos, amieiros e salgueiros. Todo o recinto é de fácil circulação até à linha de água. O restaurante mais próximo fica a cerca de 1 km.",
     "photoFocals": [
       73,
       83
@@ -2703,21 +2759,28 @@
     "river": "Rio Alva",
     "inRede": true,
     "photos": [
-      "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779579325911_Praia_Fluvial_da_Cascalheira_Secarias_wm.jpg"
+      "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779579325911_Praia_Fluvial_da_Cascalheira_Secarias_wm.jpg",
+      "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779634492006_Praia_Fluvial_da_Cascalheira_Secarias_3_wm.jpg",
+      "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779634490178_Praia_Fluvial_da_Cascalheira_Secarias_2_wm.jpg",
+      "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779634493725_Praia_Fluvial_da_Cascalheira_Secarias_4_wm.jpg",
+      "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779634495115_Praia_Fluvial_da_Cascalheira_Secarias_5_wm.jpg",
+      "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779634496028_Praia_Fluvial_da_Cascalheira_Secarias_6_wm.jpg",
+      "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779634497166_Praia_Fluvial_da_Cascalheira_Secarias_wm.jpg"
     ],
     "inVotar": true,
+    "premium": false,
     "district": "Coimbra",
     "featured": false,
     "services": {
-      "wc": false,
-      "bar": false,
+      "wc": true,
+      "bar": true,
       "camping": false,
       "blueFlag": true,
-      "lifeguard": false,
+      "lifeguard": true,
       "nacional2": false,
       "accessible": false,
-      "boatRental": false,
-      "picnicArea": false,
+      "boatRental": true,
+      "picnicArea": true,
       "playground": false,
       "goldQuality": false,
       "petFriendly": false
@@ -2729,9 +2792,78 @@
       "lat": 40.249213,
       "lng": -8.036018
     },
-    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Arganil.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
+    "description": "Nas margens do rio Alva foi criado um açude e um conjunto de infraestruturas que, a par da sua envolvente natural, oferece um espaço de excelência para os banhistas. O convite é feito através da sua tranquilidade, sombras dos amieiros, águas puras premiadas e som das aves, e onde não faltam o parque de merendas com churrasqueiras, o estacionamento para bicicletas e as estruturas de apoio enquanto Praia Acessível com cadeira anfíbia e praia ColorAdd.",
     "photoFocals": [
-      1
+      {
+        "x": 52.5382878760144,
+        "y": 6.8489457536392715,
+        "zoom": 1,
+        "mobile": {
+          "x": 100,
+          "y": 0,
+          "zoom": 1
+        }
+      },
+      {
+        "x": 50,
+        "y": 100,
+        "zoom": 1,
+        "mobile": {
+          "x": 52.31992929739285,
+          "y": 56.1467458711404,
+          "zoom": 1
+        }
+      },
+      {
+        "x": 50,
+        "y": 87.06260199751942,
+        "zoom": 1,
+        "mobile": {
+          "x": 0,
+          "y": 82.46700176251714,
+          "zoom": 1
+        }
+      },
+      {
+        "x": 49.90237354323022,
+        "y": 90.18212677067694,
+        "zoom": 1,
+        "mobile": {
+          "x": 54.00648107232288,
+          "y": 49.61329068477055,
+          "zoom": 1
+        }
+      },
+      {
+        "x": 78.60455183354689,
+        "y": 100,
+        "zoom": 1,
+        "mobile": {
+          "x": 29.02489320960377,
+          "y": 88.53822051047717,
+          "zoom": 1
+        }
+      },
+      {
+        "x": 56.24809323326622,
+        "y": 0,
+        "zoom": 1,
+        "mobile": {
+          "x": 37.39406465762916,
+          "y": 0,
+          "zoom": 1
+        }
+      },
+      {
+        "x": 87.58618585636708,
+        "y": 48,
+        "zoom": 1,
+        "mobile": {
+          "x": 87.58618585636708,
+          "y": 48,
+          "zoom": 1
+        }
+      }
     ],
     "municipality": "Arganil",
     "passportStamp": true,
@@ -2773,7 +2905,7 @@
       "lat": 40.077317,
       "lng": -7.489928
     },
-    "description": "Descubra esta praia fluvial no concelho de Fundão. Informações, serviços e localização disponíveis em breve.",
+    "description": "É em plena Aldeia Histórica e com uma vista deslumbrante para a Serra da Gardunha que a zona fluvial de Castelo Novo acolhe os seus visitantes. A ribeira de Alpreade é o curso de água que serve esta estrutura. Através de comportas e de uma requalificação, permite cinco profundidades diferentes até alcançar os quatro metros de fundura. No bar com esplanada há petiscos e música ao vivo. Os amantes de atividades em natureza encontram por aqui diversos trilhos pedestres e rotas de BTT.",
     "photoFocals": [
       77,
       80,
@@ -2820,7 +2952,7 @@
       "lat": 41.616639,
       "lng": -8.356556
     },
-    "description": "Descubra esta praia fluvial no concelho de Braga. Informações, serviços e localização disponíveis em breve.",
+    "description": "Recentemente requalificada, esta praia fluvial situada na União de Freguesias de Crespos e Pousada é a praia mais a montante do Rio Cávado e é também a mais natural. Já era usada há décadas como zona de banhos, mas agora oferece um novo bar, estacionamento, novo mobiliário e acessos, e parque de estacionamento, para além do campo de jogos e do parque de merendas, cheio de sombras das árvores. Entre banhos, o Trilho dos Solares, de 10 km, não sinalizado, pode ser feito a partir da praia.",
     "photoFocals": [
       77,
       87,
@@ -2864,7 +2996,7 @@
       "lat": 41.51601,
       "lng": -7.890001
     },
-    "description": "Descubra esta praia fluvial no concelho de Cabeceiras de Basto. Informações, serviços e localização disponíveis em breve.",
+    "description": "A praia fluvial de Cavez é uma praia rural, situada na foz da ribeira de Moimenta, junto ao rio Tâmega, e rodeada de uma paisagem sublime, verde e tranquila. A zona de banhos é criada artificialmente por intermédio de dois açudes. O espaço abrange uma zona relvada, sanitários, bar de apoio e parque de merendas. Dispõe também de uma pista de Pesca Desportiva que recebe diversas provas de cariz regional, nacional e internacional. Explorar as imediações é conectar-se com a natureza.",
     "photoFocals": [
       50
     ],
@@ -2905,7 +3037,7 @@
       "lat": 38.011773,
       "lng": -7.935867
     },
-    "description": "Descubra esta praia fluvial no concelho de Beja. Informações, serviços e localização disponíveis em breve.",
+    "description": "Situada a 7 km da cidade de Beja, na Albufeira de Cinco Reis, esta praia fluvial com 265 metros de frente está integrada num parque fluvial cheio de alternativas para os tempos de lazer: atividades náuticas com veículos não motorizados, observação de aves, circuito de manutenção, bar com petiscos regionais, quatro trilhos rurais nas proximidades e ainda, a cerca de um quilómetro, a vila romana de Pisões. A praia tem zona concessionada com palhotas e espreguiçadeiras e é Praia Acessível.",
     "photoFocals": [
       50
     ],
@@ -2918,24 +3050,31 @@
     "name": "Praia Fluvial de Côja",
     "type": "praia_fluvial",
     "river": "Rio Alva",
+    "inRede": true,
     "photos": [
-      "https://placehold.co/800x600/003A40/FFEB3B?text=C%C3%B4ja"
+      "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779634740927_Praia_Fluvial_de_Coja_0_wm.jpg",
+      "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779634744345_Praia_Fluvial_de_Coja_1_wm.jpg",
+      "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779634747199_Praia_Fluvial_de_Coja_2_wm.jpg",
+      "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779634750336_Praia_Fluvial_de_Coja_3_wm.jpg",
+      "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779634753216_Praia_Fluvial_de_Coja_4_wm.jpg",
+      "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779634755658_Praia_Fluvial_de_Coja_5_wm.jpg",
+      "https://tjvhnbukzfyxtpkrhpsw.supabase.co/storage/v1/object/public/media/beaches/1779634756478_Praia_Fluvial_de_Coja_6_wm.jpg"
     ],
+    "inVotar": true,
+    "premium": false,
     "district": "Coimbra",
     "featured": false,
     "services": {
-      "wc": false,
-      "bar": false,
-      "grills": false,
-      "camping": false,
-      "parking": false,
-      "blueFlag": false,
-      "lifeguard": false,
+      "wc": true,
+      "bar": true,
+      "camping": true,
+      "blueFlag": true,
+      "lifeguard": true,
       "nacional2": false,
-      "accessible": false,
+      "accessible": true,
       "boatRental": false,
-      "picnicArea": false,
-      "playground": false,
+      "picnicArea": true,
+      "playground": true,
       "goldQuality": false,
       "petFriendly": false
     },
@@ -2946,13 +3085,82 @@
       "lat": 40.26768,
       "lng": -7.995
     },
-    "description": "Descubra esta praia fluvial no concelho de Arganil. Informações, serviços e localização disponíveis em breve.",
+    "description": "Esta praia fluvial está localizada em Côja, junto à confluência do rio Alva com a ribeira da Mata numa zona arborizada e tranquila, arborizada por choupos e amieiros, e totalmente equipada. A praia fluvial é dividida em duas partes: num lado, o açude cria um espelho de água, onde se disponibilizam passeios de gaivotas e pesca desportiva e noutro surgem as duas margens com areal. A praia é Acessível e dispõe de cadeira anfíbia. Esta zona beirã foi alcunhada por poetas e pintores como a “Princesa do Alva”.",
     "photoFocals": [
-      50
+      {
+        "x": 49.80474708646044,
+        "y": 52.58176121156733,
+        "zoom": 1,
+        "mobile": {
+          "x": 99.05729857121815,
+          "y": 55.77341863045891,
+          "zoom": 1
+        }
+      },
+      {
+        "x": 52.14778204893526,
+        "y": 73.62236438409818,
+        "zoom": 1,
+        "mobile": {
+          "x": 52.14778204893526,
+          "y": 73.62236438409818,
+          "zoom": 1
+        }
+      },
+      {
+        "x": 56.15046677649643,
+        "y": 0,
+        "zoom": 1,
+        "mobile": {
+          "x": 43.40108999852702,
+          "y": 45.89770872772374,
+          "zoom": 1
+        }
+      },
+      {
+        "x": 50,
+        "y": 59,
+        "zoom": 1,
+        "mobile": {
+          "x": 0,
+          "y": 58.58221816045434,
+          "zoom": 1
+        }
+      },
+      {
+        "x": 50.68338519738849,
+        "y": 0,
+        "zoom": 1,
+        "mobile": {
+          "x": 56.59891000147297,
+          "y": 42.58221816045434,
+          "zoom": 1
+        }
+      },
+      {
+        "x": 51.562023308316554,
+        "y": 75.83125530387102,
+        "zoom": 1,
+        "mobile": {
+          "x": 23.368684636912647,
+          "y": 100,
+          "zoom": 1
+        }
+      },
+      {
+        "x": 66.4988711940936,
+        "y": 28.09752594816894,
+        "zoom": 1,
+        "mobile": {
+          "x": 0,
+          "y": 24.964162151576474,
+          "zoom": 1
+        }
+      }
     ],
     "municipality": "Arganil",
-    "waterQuality": "",
-    "passportStamp": true
+    "passportStamp": true,
+    "inPassaporteDigital": true
   },
   {
     "id": "praia-fluvial-de-constancia",
@@ -2988,7 +3196,7 @@
       "lat": 39.474806,
       "lng": -8.34125
     },
-    "description": "Descubra esta praia fluvial no concelho de Constância. Informações, serviços e localização disponíveis em breve.",
+    "description": "É a última praia fluvial do Zêzere antes de chegar à foz, no Tejo, cerca de 200 metros à frente. Requalificada em 2022, apresenta um vasto areal, chapéus de sol, zona relvada com sombras, estacionamento gratuito, churrasqueiras, lava-pés e rampa de acesso à praia. Bicicletas e canoas estão disponíveis por aluguer. O bar com esplanada serve petiscos e existem restaurantes nas imediações, assim como um parque de campismo. A 800 m, há um parque de autocaravanas.",
     "photoFocals": [
       92,
       82
@@ -3035,7 +3243,7 @@
       "lat": 40.290681,
       "lng": -8.212724
     },
-    "description": "Descubra esta praia fluvial no concelho de Penacova. Informações, serviços e localização disponíveis em breve.",
+    "description": "No extremo nordeste do concelho, a praia fluvial de Cornicovo situa-se entre as aldeias de Hombres e Laborins, na União das Freguesias de São Pedro de Alva e São Paio de Mondego. É a mais natural das três praias classificadas do concelho e está banhada pelo rio Alva. Através do açude foi criado um espelho de água, complementado por parque de merendas. Os acessos são em terra batida, mas tem estacionamento. A partir da praia, existe um percurso de 700 m até à zona de lazer conhecida por praia da Maria Delgada.",
     "photoFocals": [
       76,
       86,
@@ -3081,7 +3289,7 @@
       "lat": 40.648472,
       "lng": -8.281972
     },
-    "description": "Descubra esta praia fluvial no concelho de Oliveira de Frades. Informações, serviços e localização disponíveis em breve.",
+    "description": "Na União de Freguesias de Destriz e Reigoso, a calmaria das águas do rio Alfusqueiro (afluente do rio Águeda), as suas margens relvadas e bem cuidadas e as sombras da densa vegetação fazem desta praia fluvial um recanto para aproveitar o verão. O espaço está muito bem organizado, com materiais naturais, nomeadamente pedra e madeira. A praia contempla parque de merendas, parque infantil, chuveiros, lava- louça, um bar com uma agradável esplanada e uma pérgula em madeira.",
     "photoFocals": [
       73
     ],
@@ -3122,7 +3330,7 @@
       "lat": 40.148935,
       "lng": -8.712193
     },
-    "description": "Descubra esta praia fluvial no concelho de Montemor-o-Velho. Informações, serviços e localização disponíveis em breve.",
+    "description": "A Praia Fluvial da Ereira, na freguesia de Ereira, combina as águas doces do Mondego com as areias finas das águas costeiras. A praia fornece ampla zonas de sombras, campos de futsal, voleibol e futebol de praia, churrasqueiras e parque de merendas, parque de manutenção e parque infantil. É local de descanso para a família com ou sem crianças tem sido galardoada pela sua qualidade. Localizada às portas da povoação, vale a pena um passeio de descoberta do património e gastronomia locais.",
     "photoFocals": [
       50
     ],
@@ -3163,7 +3371,7 @@
       "lat": 39.734694,
       "lng": -8.209333
     },
-    "description": "Descubra esta praia fluvial no concelho de Vila de Rei. Informações, serviços e localização disponíveis em breve.",
+    "description": "A barragem de Castelo de Bode, rodeada de encostas arborizadas, dá as boas vindas a miúdos e graúdos com uma extensa área de margens para passeios e banhos, piscina flutuante e parque aquático insuflável. O aluguer de embarcações com e sem motor, o Cable Park (sem necessidade de veículo de tração), e o ancoradouro municipal para barcos de lazer e marítimo-turísticos permitem um sem número de atividades náuticas. A sugestão de visita vai para o miradouro de Fernandaires e o Museu do Fogo e da Resina.",
     "photoFocals": [
       64
     ],
@@ -3204,7 +3412,7 @@
       "lat": 40.888508,
       "lng": -7.905353
     },
-    "description": "Descubra esta praia fluvial no concelho de Castro Daire. Informações, serviços e localização disponíveis em breve.",
+    "description": "Localizada na margem direita do rio Paiva e rodeada por frondosas árvores, esta praia oferece tranquilidade e águas calmas na sua represa de aspeto quase natural. Totalmente equipada e com estacionamento, reserva uma área a campismo selvagem o que lhe permite pernoitar por este local. Para além disso, possui bar com esplanada, churrasqueiras, parque de merendas, campo de futebol e parque infantil, garantindo dias bem passados. Esta praia é cuidada pelo Grupo Desportivo e Recreativo de Folgosa.",
     "photoFocals": [
       50
     ],
@@ -3247,7 +3455,7 @@
       "lat": 39.605333,
       "lng": -8.263611
     },
-    "description": "Descubra esta praia fluvial no concelho de Abrantes. Informações, serviços e localização disponíveis em breve.",
+    "description": "É na povoação da Cabeça Ruiva, na freguesia de Fontes, que se encontra a praia fluvial. Rodeada de encostas arborizadas e situada na margem esquerda da albufeira de Castelo do Bode, esta praia convida a desfrutar de dias de puro descanso. Aqui é possível desfrutar da piscina flutuante, experimentar diferentes desportos náuticos, passear de barco ou pausar com uma refeição ligeira ou uma bebida refrescante.",
     "photoFocals": [
       87,
       92,
@@ -3290,7 +3498,7 @@
       "lat": 39.730125,
       "lng": -7.760396
     },
-    "description": "Descubra esta praia fluvial no concelho de Vila Velha de Ródão. Informações, serviços e localização disponíveis em breve.",
+    "description": "A Zona de Lazer da Foz do Cobrão situa-se nas margens do ribeiro do Cobrão, no coração da Aldeia do Xisto da Foz do Cobrão. É um local aprazível, requalificado em 2016 e 2021, criando um conjunto de estruturas em xisto e madeira, com escadarias, cascatas e mobiliário. No meio do ribeiro permanece o grande bloco de pedra, sendo criada uma piscina que também servirá de apoio a regas e combate a incêndios. As margens arrelvadas servem de solário e descanso. A praia tem todos os equipamentos necessários.",
     "photoFocals": [
       50
     ],
@@ -3331,7 +3539,7 @@
       "lat": 38.940212,
       "lng": -9.413372
     },
-    "description": "Descubra esta praia fluvial no concelho de Mafra. Informações, serviços e localização disponíveis em breve.",
+    "description": "Não falta espaço, ao longo do extenso areal da praia da Foz do Lizandro. Situada na freguesia da Carvoeira, a praia é mais que uma zona de banhos. Ali existem diversos e modernos bares e restaurantes com esplanadas, dispostos ao longo de um passadiço sobrelevado, paralelo à frente de rio/ mar e que permite efetuar a ligação a um amplo parque de estacionamento. A praia está totalmente equipada e ainda dispõe de colmos e espreguiçadeiras para aluguer. A poucos metros, fica a água salgada.",
     "photoFocals": [
       50
     ],
@@ -3373,7 +3581,7 @@
       "lat": 39.915817,
       "lng": -8.316917
     },
-    "description": "Descubra esta praia fluvial no concelho de Figueiró dos Vinhos. Informações, serviços e localização disponíveis em breve.",
+    "description": "A pureza das águas da ribeira de Alge, que desagua no Zêzere, deixa vislumbrar as pequenas pedras no seu interior. A praia fluvial, toda equipada, está embutida entre duas fragas majestosas e rodeada de loureiros e sobreiros. Em 2020, ganhou o Percurso Fragas de São Simão, que complementa o percurso pedestre PR1 FVN, e que serve, simultaneamente, de acesso à praia e à aldeia do Casal de São Simão, de visita obrigatória, no outro lado do vale. Para os amantes da escalada existe as Fragas do Cercal.",
     "photoFocals": [
       60,
       81
@@ -3415,7 +3623,7 @@
       "lat": 40.046759,
       "lng": -7.801454
     },
-    "description": "Descubra esta praia fluvial no concelho de Pampilhosa da Serra. Informações, serviços e localização disponíveis em breve.",
+    "description": "Inserida num verdadeiro santuário natural e etnográfico, em plena aldeia do xisto, esta praia fluvial é colecionista de galardões de qualidade ao longo dos anos. Em pleno rio Zêzere, mais um cenário idílico, um ambiente tranquilo e um conjunto de equipamentos que contribuem para uma permanência mais duradoura: parque infantil, parque desportivo, parque de lazer, parque fluvial e parque de campismo. O troço 4 da GR33 passa junto a esta zona balnear onde foi instalada uma estação intermodal do percurso.",
     "photoFocals": [
       50
     ],
@@ -3457,7 +3665,7 @@
       "lat": 40.385278,
       "lng": -7.69725
     },
-    "description": "Descubra esta praia fluvial no concelho de Seia. Informações, serviços e localização disponíveis em breve.",
+    "description": "A praia fluvial da Lapa dos Dinheiros é um pequeno paraíso de águas límpidas e frescas, escondido entre encostas íngremes marcadas por floresta e granito, servida pelas águas da ribeira da Caniça, afluente do Alva. Nas imediações ficam as quedas da Caniça e um dos mais extensos e antigos bosques de castanheiros do concelho, com árvores centenárias – o Souto da Lapa. A praia, sempre galardoada pela sua qualidade, está totalmente equipada e é Acessível com cadeira anfíbia.",
     "photoFocals": [
       70,
       78
@@ -3500,7 +3708,7 @@
       "lat": 40.32725,
       "lng": -7.678472
     },
-    "description": "Descubra esta praia fluvial no concelho de Seia. Informações, serviços e localização disponíveis em breve.",
+    "description": "Em plena serra da Estrela, esta praia aproveita as águas puras, frias e cristalinas da ribeira de Loriga, nascida no planalto superior, que à semelhança de outras, sustentaram moinhos de água e indústrias de lanifícios. No relevo acidentado criaram-se cascatas e pequenas piscinas muito apreciadas pelos mais novos. A praia está equipada e tem parque de estacionamento num patamar inferior. No Lugar do Regato há um parque para autocaravanas e não faltam pela serra atrativos geológicos e rotas pedestres. Em Loriga, o Bolo Negro é rei.",
     "photoFocals": [
       92,
       92
@@ -3543,7 +3751,7 @@
       "lat": 39.985528,
       "lng": -8.121556
     },
-    "description": "Descubra esta praia fluvial no concelho de Pedrógão Grande. Informações, serviços e localização disponíveis em breve.",
+    "description": "É uma das praias fluviais mais acolhedoras pela sua localização, qualidade da água e envolvência. Situa-se na ribeira de Mega, no coração da aldeia de Mega Fundeira e junto à mítica Estrada Nacional 2. O antigo moinho em xisto, pedra da região, foi transformado em bar e a esplanada conta com sombras da latada de videiras. A praia dispõe ainda de churrasqueira, duche exterior e parque de merendas. Junto à praia tem início o percurso pedestre circular Trilho de Mega Fundeira (PR10), com 5 km de extensão.",
     "photoFocals": [
       88,
       86
@@ -3586,7 +3794,7 @@
       "lat": 41.59375,
       "lng": -8.4655
     },
-    "description": "Descubra esta praia fluvial no concelho de Braga. Informações, serviços e localização disponíveis em breve.",
+    "description": "A Praia Fluvial de Merelim – S. Paio surge nas águas calmas do rio Cávado, perto da Ponte de Prado (séc. XVII), que integra o Caminho Português de Santiago. A praia oferece equipamentos como churrasqueiras, circuito de manutenção, solário, campo de jogos, dois bares com esplanada, insuflável e prancha de saltos. É também Praia Acessível com cadeira anfíbia e apoio aos banhos. Junto à praia funciona o Clube Fluvial de Merelim, fundado pelo atleta olímpico Emanuel Silva. Nas redondezas pode percorrer a Ecovia do Cávado.",
     "photoFocals": [
       92,
       92
@@ -3603,6 +3811,7 @@
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Moinho%2Bde%2BAlva"
     ],
+    "premium": false,
     "district": "Coimbra",
     "featured": false,
     "services": {
@@ -3628,7 +3837,7 @@
       "lat": 40.274142,
       "lng": -7.984296
     },
-    "description": "Descubra esta praia fluvial no concelho de Arganil. Informações, serviços e localização disponíveis em breve.",
+    "description": "A montante da zona Balnear de Côja, na freguesia de Côja e Barril de Alva, foi criada uma zona balnear que utiliza as águas do rio Alva, rodeadas de margens arborizadas e uma área de areal. O espaço dispõe apenas de estacionamento e sanitários, mas estão garantidas longas horas de leitura, de banhos e de contacto com a natureza. Perfeita para quem apenas deseja descansar.",
     "photoFocals": [
       50
     ],
@@ -3670,7 +3879,7 @@
       "lat": 38.434167,
       "lng": -7.350278
     },
-    "description": "Descubra esta praia fluvial no concelho de Reguengos de Monsaraz. Informações, serviços e localização disponíveis em breve.",
+    "description": "A praia fluvial de Monsaraz foi a primeira a surgir no Lago Alqueva, em 2017, e desde então que repete os galardões de qualidade e segurança. O areal tem 150 metros de extensão, duches públicos, posto médico com desfibrilhador automático e vários equipamentos de apoio enquanto Praia Acessivel. O parque de estacionamento Para 500 viaturas, o bar/restaurante, ancoradouro e rampa para acesso dos barcos à água e as atividades diversas náuticas através dos operadores turísticos são outras das suas valências.",
     "photoFocals": [
       65,
       92
@@ -3714,7 +3923,7 @@
       "lat": 39.12125,
       "lng": -8.125917
     },
-    "description": "Descubra esta praia fluvial no concelho de Ponte de Sor. Informações, serviços e localização disponíveis em breve.",
+    "description": "A barragem de Montargil, alimentada pela ribeira de Sor, foi construída em 1958 e é utilizada para a prática de vela, wakeboard, canoagem e Jet-Ski. No concelho de Ponte de Sor, esta zona de lazer conhecida por “Praia dos Tesos” foi até agora um espaço muito natural, junto à Estrada Nacional 2. Após uma grande requalificação, deverá prevê abrir com piscina flutuante, campo de jogos, parque infantil, parque de merendas, bar e instalações sanitárias, campo de voleibol, embarcadouro móvel, estacionamento e acessos. A 4km daqui, existe um parque de campismo e bungalows (orbitur.pt).",
     "photoFocals": [
       69,
       92,
@@ -3758,7 +3967,7 @@
       "lat": 39.630278,
       "lng": -8.252778
     },
-    "description": "Descubra esta praia fluvial no concelho de Tomar. Informações, serviços e localização disponíveis em breve.",
+    "description": "Perto da localidade de Cabeço de Moura, freguesia de Olalhas, a zona balnear de Montes beneficia das águas límpidas da albufeira de Castelo de Bode num cenário rodeado de encostas arborizadas. A zona balnear não tem infraestruturas e não é vigiada, mas a tranquilidade e a natureza em estado puro valem a pena. A extensão do espelho de água é aproveitada para a prática balnear e de desportos náuticos desde há décadas. No Hotel dos Templários vale a pena comprar uma viagem no Barco S. Cristóvão, com cais perto da praia.",
     "photoFocals": [
       92,
       85
@@ -3775,6 +3984,7 @@
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Mour%C3%A3o"
     ],
+    "premium": true,
     "district": "Évora",
     "featured": false,
     "services": {
@@ -3800,7 +4010,7 @@
       "lat": 38.367746,
       "lng": -7.35521
     },
-    "description": "Descubra esta praia fluvial no concelho de Mourão. Informações, serviços e localização disponíveis em breve.",
+    "description": "Um areal de 320 metros, dos quais 100 são vigiados, impressiona qualquer um e não falta água nesta que é a praia maior do Alqueva. A estrutura foi inaugurada em 2017 e está localizada junto ao parque de merendas, na freguesia de Mourão, estando equipada com mesas, churrasqueiras e zonas de sombras. Inclui uma piscina flutuante, plataforma flutuante com torre de saltos, escada para banhistas e escorrega. É também uma Praia Acessível.",
     "photoFocals": [
       50
     ],
@@ -3841,7 +4051,7 @@
       "lat": 41.613231,
       "lng": -8.384403
     },
-    "description": "Descubra esta praia fluvial no concelho de Braga. Informações, serviços e localização disponíveis em breve.",
+    "description": "Na freguesia de Santa Lucrécia de Algeriz e Navarra está prestes a nascer uma nova zona balnear com todas as condições, nomeadamente sanitários, bar, bebedouro, caixotes para resíduos, etc, de modo a cumprir com os requisitos legais para a sua classificação de praia fluvial, bem como a colocação de nadadores salvadores. Até lá, permanece como espaço de lazer, com as águas cristalinas do Cávado a serpentear tranquilamente entre as rochas e as margens arborizadas.",
     "photoFocals": [
       50
     ],
@@ -3883,7 +4093,7 @@
       "lat": 37.597772,
       "lng": -8.647195
     },
-    "description": "Descubra esta praia fluvial no concelho de Odemira. Informações, serviços e localização disponíveis em breve.",
+    "description": "O rio Mira, em plena vila de Odemira, oferece agora um espaço de lazer diferenciado, integrado na Estação Náutica de Odemira. No Jardim Ribeirinho têm sido criadas condições para atividades náuticas e para lazer. As duas margens, unidas por uma ponte pedonal e com plataformas de acesso à água, contam com um bar numa margem e chapéus de sol na outra e convidam a passeios ou apenas a um momento de leitura ou contemplação. Através do clube fluvial e de empresas de animação turística estão disponíveis várias embarcações.",
     "photoFocals": [
       82,
       86
@@ -3925,7 +4135,7 @@
       "lat": 40.348744,
       "lng": -8.696632
     },
-    "description": "Descubra esta praia fluvial no concelho de Cantanhede. Informações, serviços e localização disponíveis em breve.",
+    "description": "Na aldeia Olhos da Fervença, freguesia de Cadima, as águas da ribeira da Corujeira deram origem a uma recente praia fluvial e zona de lazer perfeitamente equipada, com circuitos pedonais, bar com esplanada parque de merendas e campo de jogos. Foram criadas plataformas arrelvadas e zonas de areal para proporcionar banhos de sol. O nome tem origem nos pequenos “olhos” com que a água nascia do chão, a borbulhar no solo arenoso.",
     "photoFocals": [
       50
     ],
@@ -3966,7 +4176,7 @@
       "lat": 38.314526,
       "lng": -7.862162
     },
-    "description": "Descubra esta praia fluvial no concelho de Portel. Informações, serviços e localização disponíveis em breve.",
+    "description": "Portel repete o modelo de sucesso na sua terceira e mais recente praia fluvial, inaugurada em 2025, desta vez na albufeira de Albergaria dos Fusos (barragem de Alvito). Além do vasto areal e zona relvada, dispõe de todos os equipamentos de apoio, campo de futebol de praia, olmos e bar com restaurante, o Com Calma, que promove tardes animadas com DJ, petiscos e bebidas frescas. Ena aldeia de Oriola prova-se o queijo, a carne de Bravo do Ribatejo e o borrego, produzidos tradicionalmente na freguesia.",
     "photoFocals": [
       50
     ],
@@ -4007,7 +4217,7 @@
       "lat": 40.85417,
       "lng": -8.305047
     },
-    "description": "Descubra esta praia fluvial no concelho de Vale de Cambra. Informações, serviços e localização disponíveis em breve.",
+    "description": "Situada na freguesia de Rôge, a caminho da serra da Freita, esta praia fluvial é banhada pelo rio Caima, através de um açude, mas não é vigiada. Conta com estacionamento, parque de merendas e sanitários, posto de primeiros socorros, duches e infraestruturas. O acesso é diretamente pela estrada da serra da Freira, a M550. A Rota da Água e da Pedra é uma excelente forma de desfrutar desta natureza e da sua biodiversidade.",
     "photoFocals": [
       50
     ],
@@ -4023,6 +4233,7 @@
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Palheiros%2Be%2BZorro"
     ],
+    "premium": true,
     "district": "Coimbra",
     "featured": false,
     "services": {
@@ -4048,7 +4259,7 @@
       "lat": 40.20247,
       "lng": -8.365126
     },
-    "description": "Descubra esta praia fluvial no concelho de Coimbra. Informações, serviços e localização disponíveis em breve.",
+    "description": "A qualidade da água, o areal branco, o sossego da paisagem e os equipamentos variados continuam a atrair muitos visitantes e desportistas a esta praia de águas galardoadas. O restaurante está aberto todo o ano com gastronomia regional e é possível praticar ali perto inúmeros desportos dentro e fora de água. Nas imediações há estruturas de pesca, BTT e voleibol. É imperdível a visita à Mata Nacional de Vale de Canas, pelas PR2 ou PR3, um percurso ribeirinho fabuloso.",
     "photoFocals": [
       50
     ],
@@ -4089,7 +4300,7 @@
       "lat": 40.046936,
       "lng": -7.950218
     },
-    "description": "Descubra esta praia fluvial no concelho de Pampilhosa da Serra. Informações, serviços e localização disponíveis em breve.",
+    "description": "A mais recente praia da Pampilhosa da Serra rapidamente se tornou na mais visitada do concelho. Trata-se de uma praia urbana banhada pelo rio Unhais, com extensa área de banhos e solário generoso em relva. O açude foi instalado junto à ponte e complementado com os diversos equipamentos, sendo também Praia Acessível. A dois passos, ficam os restaurantes onde se pode provar a chanfana de cabra, o maranho, o cabrito assado e a tigelada.",
     "photoFocals": [
       50
     ],
@@ -4130,7 +4341,7 @@
       "lat": 40.051561,
       "lng": -8.024147
     },
-    "description": "Descubra esta praia fluvial no concelho de Pampilhosa da Serra. Informações, serviços e localização disponíveis em breve.",
+    "description": "A praia fluvial de Pessegueiro está inserida numa envolvência tipicamente serrana. Do local avistam-se a igreja e o rústico casario de xisto, atravessados pela ribeira de Pessegueiro. A qualidade desta zona balnear tem sido premiada. Junto à praia, há bungalows para alugar e num passeio pela freguesia pode visitar-se o Museu Etnográfico, o Lagar e a capela de Nossa Senhora de Lurdes, situada no cabeço, entre os dois Pessegueiros (de Baixo e de Cima). Bem perto, passa o percurso pedestre circular PR5, de 3,8km.",
     "photoFocals": [
       50
     ],
@@ -4172,7 +4383,7 @@
       "lat": 40.024444,
       "lng": -8.18925
     },
-    "description": "Descubra esta praia fluvial no concelho de Castanheira de Pera. Informações, serviços e localização disponíveis em breve.",
+    "description": "Nos planaltos da vertente sul da Serra da Lousã, nas águas da Ribeira de Pera, a Praia Fluvial do Poço Corga foi recentemente requalificada para oferecer todas as condições de conforto aos banhistas e boas acessibilidades. Esta Praia Acessível acolhe os seus visitantes com um vasto parque de merendas e um Parque de Arborismo. Ao lado, sugere-se a visita do Núcleo Museológico “O Lagar do Corga”, uma antiga unidade industrial de produção de azeite com mais de 400 anos de existência.",
     "photoFocals": [
       92,
       84
@@ -4189,6 +4400,7 @@
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Pomares"
     ],
+    "premium": false,
     "district": "Coimbra",
     "featured": false,
     "services": {
@@ -4214,7 +4426,7 @@
       "lat": 40.268849,
       "lng": -7.897287
     },
-    "description": "Descubra esta praia fluvial no concelho de Arganil. Informações, serviços e localização disponíveis em breve.",
+    "description": "A praia fluvial de Pomares localiza-se junto à ponte que atravessa a Ribeira da Moura, que remonta ao século XVIII, na aldeia de Pomares. A represa forma um extenso manto de água, que permite a atividade balnear, rodeada de sombras de árvores e zona relvada. A estrutura está totalmente equipada, inclusive com parque de estacionamento para bicicletas, sendo também Praia Acessível. Bem perto, existe um parque de campismo.",
     "photoFocals": [
       50
     ],
@@ -4255,7 +4467,7 @@
       "lat": 41.809799,
       "lng": -8.416778
     },
-    "description": "Descubra esta praia fluvial no concelho de Ponte da Barca. Informações, serviços e localização disponíveis em breve.",
+    "description": "Na belíssima zona ribeirinha de Ponte da Barca, servida pelo rio Lima e embelezada pela ponte medieval, esta praia fluvial surge em perfeita sintonia com a natureza. Possui uma extensa área de relvado e águas pouco profundas. Está equipada com sanitários e chuveiros, bar de apoio, parque infantil, pequenas embarcações e parque desportivo, que oferece campos de ténis, futebol de 5 e basquetebol 3x3. Fica próximo das piscinas municipais e de todo um território rico em património, pronto para descobrir.",
     "photoFocals": [
       50
     ],
@@ -4297,7 +4509,7 @@
       "lat": 41.665472,
       "lng": -7.145972
     },
-    "description": "Descubra esta praia fluvial no concelho de Mirandela. Informações, serviços e localização disponíveis em breve.",
+    "description": "A zona de lazer da Ponte da Pedra deve o seu nome à ponte sobre o rio Tuela, datada do séc. III, classificada de Monumento Nacional, importante vestígio romano transmontano. A ponte liga as freguesias de São Pedro Velho e Torre de Dona Chama, mas a praia situa-se a 3 km desta vila, na margem direita do rio Tuela. A zona de lazer já era usado para piqueniques, mas depois da recente requalificação, oferece melhores condições como sanitários, churrasqueiras, estacionamento e zona de jogos.",
     "photoFocals": [
       92,
       83
@@ -4337,7 +4549,7 @@
       "lat": 41.810167,
       "lng": -6.996556
     },
-    "description": "<p>Descubra&nbsp;esta&nbsp;zona&nbsp;balnear&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Vinhais.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
+    "description": "Passar um dia de descanso pode ser algo tão simples como procurar um local recôndito, onde impera o respeito pela natureza. Esse local pode ser a praia da Ponte da Ranca, na freguesia de Nunes, às portas da vila de Vinhais, onde o rio Tuela convida a mergulhos, a espreguiçar na toalha e a ouvir os sons da natureza. A cerca de 170 m, fica a ponte de Arranca sobre o rio Tuela, de origens medievais, na estrada que liga Vinhais a Nunes.",
     "photoFocals": [
       92
     ],
@@ -4378,7 +4590,7 @@
       "lat": 41.865361,
       "lng": -7.119333
     },
-    "description": "Descubra esta praia fluvial no concelho de Vinhais. Informações, serviços e localização disponíveis em breve.",
+    "description": "Basta um olhar de relance pelo espelho de água e pelas margens verdejantes do rio Rabaçal para se perceber a elevada qualidade ambiental da praia fluvial de Ponte de Frades, na freguesia de Santalha. A sinfonia da natureza desprende-se da água a correr, da brisa nas árvores e do chilrear das aves. Incluída na área do Parque Natural de Montesinho, o espaço conta com parque de merendas, rodeado de uma considerável mancha florestal e uma temperatura média da água no verão de 22°C.",
     "photoFocals": [
       80
     ],
@@ -4420,7 +4632,7 @@
       "lat": 40.612043,
       "lng": -7.518681
     },
-    "description": "Descubra esta praia fluvial no concelho de Fornos de Algodres. Informações, serviços e localização disponíveis em breve.",
+    "description": "Em pleno rio Mondego, a praia fluvial de Ponte de Juncais é um dos cartões de visita do concelho, rodeada de natureza e equipamentos indispensáveis a horas de lazer. Para além da piscina flutuante e bar de apoio com refeições, o espaço conta com boas áreas de solário em areia, relvado e parque de merendas sob as árvores. As águas tranquilas convidam a um mergulho e a usufruir das canoas, gaivotas e SUP. Com tempo, a partir da EN16, a subida ao miradouro da Janela do Talegre promete uma paisagem em 360 graus.",
     "photoFocals": [
       86,
       75
@@ -4463,7 +4675,7 @@
       "lat": 41.605667,
       "lng": -8.430333
     },
-    "description": "Descubra esta praia fluvial no concelho de Braga. Informações, serviços e localização disponíveis em breve.",
+    "description": "A Ponte do Bico (séc. XIX), ao fundo, localizada antes da confluência entre os rios Cávado e Homem marca o cenário desta praia. A praia tem diversas áreas, relvado a areal e todos os equipamentos são recentes, incluindo churrasqueiras cobertas e campos de jogos. Um concessionário disponibiliza canoas. É também Praia Acessível com cadeira anfíbia e apoio a banhos. Algumas vezes por dia, o nadador salvador ativa o sinal de alerta para sair da água devido a descargas de uma mini-hídrica a montante.",
     "photoFocals": [
       79,
       92
@@ -4506,7 +4718,7 @@
       "lat": 40.139917,
       "lng": -8.148056
     },
-    "description": "Descubra esta praia fluvial no concelho de Góis. Informações, serviços e localização disponíveis em breve.",
+    "description": "No extremo Este do concelho, a zona balnear de Ponte do Sótão é fruto de uma recente requalificação na intersecção da Ribeira de Ponte do Sótão com o Rio Sótão, criando um espaço de lazer digno numa aldeia tranquila. A zona de lazer fica próxima da povoação e possui bons arruamentos, estacionamento, relvado e passadiços, sanitários, rampa de acesso até à água e uma escada ao estilo de piscina. As águas cristalinas permitem ver todo o fundo do rio. Ali perto existe uma unidade de alojamento local.",
     "photoFocals": [
       92,
       92
@@ -4549,7 +4761,7 @@
       "lat": 41.846833,
       "lng": -6.936722
     },
-    "description": "Descubra esta praia fluvial no concelho de Vinhais. Informações, serviços e localização disponíveis em breve.",
+    "description": "Encostada à fronteira do Parque Natural de Montesinho, esta praia aproveita um dos poços naturais criados pelo rio Tuela – o Poço do Pelgo, que a requalificação de 2022 veio melhorar. O espaço, com cerca de 1,5 hectares é composto por zonas rochosas, zonas verdes e um extenso areal branco. Está abrigado do vento e tem sombras de árvores, parque de merendas, parque de estacionamento e bar de apoio com esplanada. A Ponte Velha, a 2,5 km, e a belíssima aldeia da Soeira são ótimos destinos para esticar as pernas.",
     "photoFocals": [
       86,
       87
@@ -4591,7 +4803,7 @@
       "lat": 40.807382,
       "lng": -8.313146
     },
-    "description": "Descubra esta praia fluvial no concelho de Vale de Cambra. Informações, serviços e localização disponíveis em breve.",
+    "description": "Em Junqueira, a praia fluvial de Pontemieiro é um dos locais bucólicos, verdejantes e convidativos do concelho de Vale de Cambra, onde as águas são do mais cristalino que existe. A praia foi recentemente remodelada com elementos naturais e estão definidas duas zonas de banhos. A área envolvente convida a piqueniques, descanso, convívio e amizade à volta da churrasqueira. Uma vez por ano, por causas naturais, a água ganha um tom amarelado, razão pelo qual é conhecido por rio Amarela.",
     "photoFocals": [
       50
     ],
@@ -4632,7 +4844,7 @@
       "lat": 41.597816,
       "lng": -8.45791
     },
-    "description": "Descubra esta praia fluvial no concelho de Vila Verde. Informações, serviços e localização disponíveis em breve.",
+    "description": "A Praia Fluvial do Faial fica situada junto ao rio Cávado, na freguesia de Vila de Prado e é um destino de banhos, de convívio e de espaços verdes de excelência, com zonas de águas pouco profundas, ótimas para crianças. O Clube Náutico de Prado disponibiliza um campo polidesportivo para futebol, ténis e basquetebol. A praia há também um campo de voleibol de praia, um parque infantil, um parque de merendas com mesas e bancos, um bar e um bom parque de estacionamento.",
     "photoFocals": [
       50
     ],
@@ -4674,7 +4886,7 @@
       "lat": 40.312611,
       "lng": -6.986472
     },
-    "description": "Descubra esta praia fluvial no concelho de Sabugal. Informações, serviços e localização disponíveis em breve.",
+    "description": "Na margem esquerda do rio Côa, que delimita o início da Reserva Natural da Serra da Malcata, a praia fluvial de Quadrazais recebe os banhistas com solários de areal e de relvado, dois parques de merendas e snack bar com esplanada. Por ali são comuns os jogos de mesa e a petanca. A zona de estacionamento é coberta, e bem perto da praia existe uma estação de autocaravanismo. Na Junta de Freguesia está exposto o traje típico da mulher Quadrazenha, com mais de cem anos. Agosto é o mês das festas locais.",
     "photoFocals": [
       78,
       76
@@ -4717,7 +4929,7 @@
       "lat": 41.596306,
       "lng": -7.164417
     },
-    "description": "Descubra esta praia fluvial no concelho de Mirandela. Informações, serviços e localização disponíveis em breve.",
+    "description": "Quase sem intervenção da mão humana, com águas de excelente qualidade e num ambiente de tranquilidade e chilrear das aves, esta zona balnear em Quintas, na freguesia de Vale de Gouvinhas, aproveita o rio Tuela para oferecer descanso e dias frescos. A zona de banhos fica a 50 metros do casario de Quintas, e conta com bar de apoio com esplanada, sanitários e parque de merendas com churrasqueiras. A cerca de 1km, o Castro de São Juzenda, da Idade do ferro, merece uma subida ao monte.",
     "photoFocals": [
       72,
       92
@@ -4760,7 +4972,7 @@
       "lat": 40.418294,
       "lng": -7.044302
     },
-    "description": "Descubra esta praia fluvial no concelho de Sabugal. Informações, serviços e localização disponíveis em breve.",
+    "description": "Classificada como praia de banhos desde 2022, mas com uma longa história de zona de banhos, esta praia localizada no centro da povoação está bem servida de espaços verdes e de areal, sombras e espelhos de água. Dispõe de zona de pesca, parque de merendas, chapéus de palha, além do bar de apoio, instalado no antigo moinho do Giestal. Está ainda dotada de área de estacionamento, parque infantil, equipamentos de manutenção física e baloiço. Em agosto, o HIM Dub Festival anima as margens do Côa.",
     "photoFocals": [
       88,
       87
@@ -4801,7 +5013,7 @@
       "lat": 40.348778,
       "lng": -7.092694
     },
-    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Sabugal.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
+    "description": "Depois da profunda requalificação em 2024, a praia fluvial da Devesa, a dois passos do centro histórico e do castelo do Sabugal, convida simplesmente a estar, repousar e viver a vida. A praia conta com um solário de areia fina, ponte pedonal e toda a ampla área é Acessível, possuindo também cadeira anfíbia. Dispõe de equipamentos de apoio à praia e um hangar náutico, parque infantil e o cais para canoas e caiaques. A 1 km, o Centro de BTT do Sabugal tem um bike point e a indicação dos oito percursos de BTT.",
     "photoFocals": [
       84,
       73
@@ -4844,7 +5056,7 @@
       "lat": 40.356528,
       "lng": -7.782111
     },
-    "description": "Descubra esta praia fluvial no concelho de Seia. Informações, serviços e localização disponíveis em breve.",
+    "description": "A praia fluvial situada nas margens do rio Alva há muito que está dotada com infraestruturas necessárias para um magnífico dia à beira rio. Parque infantil, campo de jogos, snack-bar com esplanada, algumas cadeiras baloiço, duas zonas de solário e parque de merendas com churrasqueiras, complementam este espaço verde que tem a ponte medieval ao fundo. A área é totalmente Acessível, desde o estacionamento adaptado até à entrada na água, com cadeira anfíbia. Estão disponíveis bicicletas de passeio e gaivotas.",
     "photoFocals": [
       80,
       92
@@ -4887,7 +5099,7 @@
       "lat": 37.516917,
       "lng": -8.444389
     },
-    "description": "Descubra esta praia fluvial no concelho de Odemira. Informações, serviços e localização disponíveis em breve.",
+    "description": "A imensidão do espelho de água e a instalação de uma praia fluvial num cenário idílico, com todas as condições, mostram que o concelho de Odemira é muito mais que as praias oceânicas por que é conhecido. Das encostas verdejantes acede-se a todas as infraestruturas, às plataformas e às duas piscinas flutuantes. Empresas de animação turística promovem a prática de canoagem, stand up paddle e passeios de barco. Por terra, há passeios a cavalo e de burro, BTT, caminhadas e trail running.",
     "photoFocals": [
       78,
       86
@@ -4929,7 +5141,7 @@
       "lat": 40.090353,
       "lng": -7.852256
     },
-    "description": "Descubra esta praia fluvial no concelho de Pampilhosa da Serra. Informações, serviços e localização disponíveis em breve.",
+    "description": "A praia fluvial de Santa Luzia, na barragem com o mesmo nome construída em 1942, é regularmente premiada pela sua qualidade, mas as suas características da envolvente natural, com vista desafogada sobre o imenso espelho de água, também atraem os veraneantes. A estrutura é composta por duas piscinas flutuantes e está totalmente equipada. Nas imediações existe uma ciclovia e vários trilhos pedestres com passagem pela praia.",
     "photoFocals": [
       50
     ],
@@ -4971,7 +5183,7 @@
       "lat": 40.346444,
       "lng": -7.808472
     },
-    "description": "Descubra esta praia fluvial no concelho de Oliveira do Hospital. Informações, serviços e localização disponíveis em breve.",
+    "description": "Em pleno vale de São Gião, e banhada pelo rio Alva, esta praia está integrada no complexo turístico da Fundação Albino Mendes da Silva, no Parque Natural da Serra da Estrela e na Rede Aldeias de Montanha. A estrutura apresenta grande zona de relvado e área florestada, solário, parque de merendas, parque infantil e duches, bar e restaurante, que todos os domingos serve o tradicional borrego assado e pratos típicos de bacalhau. Ainda existe o moinho tradicional em atividade, um lagar, a fábrica de tecidos e a casa da quinta.",
     "photoFocals": [
       92,
       73
@@ -5014,7 +5226,7 @@
       "lat": 40.315056,
       "lng": -7.865806
     },
-    "description": "Descubra esta praia fluvial no concelho de Oliveira do Hospital. Informações, serviços e localização disponíveis em breve.",
+    "description": "O rio Alva, a envolvente de choupos, as encostas arborizadas, o areal e algumas casas da aldeia, bem como a característica Roda de Água, ainda em funcionamento, são a tela de fundo desta recatada praia fluvial. Com uma frente de cerca de cem metros, a praia possui chapéus de sol e cadeira anfíbia. Dispõe de área de serviço de autocaravanismo, um parque de merendas, e a recuperação de um moinho a água, em pleno funcionamento e visitável. Pelo concelho existem diversas rotas pedestres e de BTT.",
     "photoFocals": [
       68,
       64
@@ -5056,7 +5268,7 @@
       "lat": 40.862146,
       "lng": -7.681164
     },
-    "description": "Descubra esta praia fluvial no concelho de Moimenta da Beira. Informações, serviços e localização disponíveis em breve.",
+    "description": "A praia fluvial de Segões está instalada no rio Paiva, um dos cursos de água menos poluídos da Europa. A cor escura das suas águas resulta da presença de sais minerais, procurados para tratamento de doenças de pele. O rio está ladeado pelo planalto da Nave/ serra do Leomil e pela serra da Lapa. O espaço conta com um Centro de Acolhimento ao Turista de Natureza, um conjunto de que engloba o bar com esplanada e os sanitários. De Segões parte a Rota do Paiva (PR1), integrado no Parque Paiva Natura.",
     "photoFocals": [
       50
     ],
@@ -5097,7 +5309,7 @@
       "lat": 40.157132,
       "lng": -8.196988
     },
-    "description": "Descubra esta praia fluvial no concelho de Lousã. Informações, serviços e localização disponíveis em breve.",
+    "description": "",
     "photoFocals": [
       50
     ],
@@ -5138,7 +5350,7 @@
       "lat": 40.100124,
       "lng": -8.234095
     },
-    "description": "Descubra esta praia fluvial no concelho de Lousã. Informações, serviços e localização disponíveis em breve.",
+    "description": "Localizada na ribeira de São João, em plena Serra da Lousã, esta praia fluvial insere-se num complexo composto pelo castelo e pelo santuário da Senhora da Piedade. Num cenário fabuloso e verdejante, o destaque vai para o uso do xisto, mesmo na praia, com águas pouco profundas. No recinto, existe um café com esplanada e, atravessando uma das passagens sobre a ribeira, tem-se acesso à zona de solário e ao restaurante “O Burgo”, com pratos típicos.",
     "photoFocals": [
       50
     ],
@@ -5179,7 +5391,7 @@
       "lat": 40.343842,
       "lng": -8.124259
     },
-    "description": "Descubra esta praia fluvial no concelho de Santa Comba Dão. Informações, serviços e localização disponíveis em breve.",
+    "description": "Rodeada de área florestal, a Praia Fluvial da Senhora da Ribeira, situada na albufeira da Barragem da Aguieira, em Pinheiro de Ázere, oferece excelentes infraestruturas, incluindo um restaurante, parque de merendas, sombras e desportos aquáticos: caiaque, gaivotas e SUP. A a albufeira costuma ser palco de competições desportivas e ao lado da praia fica um cais de embarque. Numa elevação, situa-se a Capela da Senhora da Ribeira, que foi para ali transladada antes da construção da barragem.",
     "photoFocals": [
       50
     ],
@@ -5220,7 +5432,7 @@
       "lat": 40.357133,
       "lng": -8.537897
     },
-    "description": "Descubra esta praia fluvial no concelho de Cantanhede. Informações, serviços e localização disponíveis em breve.",
+    "description": "A praia fluvial das Sete Fontes fica situada na freguesia de Ourentã, junto à N234, a partir das águas do rio Ançã. Em plena zona florestal surge um oásis, uma piscina construída em forma oval e com profundidade de até cerca de 1,2 m, com água é limpa e vigilância durante a época balnear. O parque possui também uma fonte, um parque infantil e um pequeno circuito de manutenção, um parque de merendas com churrasqueiras, parque de merendas e sanitários.",
     "photoFocals": [
       50
     ],
@@ -5262,7 +5474,7 @@
       "lat": 40.257028,
       "lng": -7.622917
     },
-    "description": "Descubra esta praia fluvial no concelho de Covilhã. Informações, serviços e localização disponíveis em breve.",
+    "description": "Situada num vale com vista para os contrafortes da Serra da Estrela e para a vila, esta praia fluvial utiliza as águas da ribeira de Unhais, afluente do Zêzere. A praia é a mais equipada do concelho da Covilhã, incluindo parque infantil, zonas de jogos e estruturas desportivas, grelhadores e bar com música ao vivo. Solicitando no bar ou ao nadador salvador, pode ser feita uma visita aos moinhos que mostram o processo de moagem do milho. Nas imediações fica o parque e estação de serviço de autocaravanas.",
     "photoFocals": [
       90,
       90
@@ -5303,7 +5515,7 @@
       "lat": 40.435855,
       "lng": -7.024325
     },
-    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Sabugal.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
+    "description": "O murmúrio das águas canta em uníssono com as aves e a brisa nas grandes árvores na praia fluvial de Vale das Éguas, também conhecida como zona de lazer da Ínsua. O espaço dispõe de um conjunto de equipamentos em cenário deslumbrante. Parte da água do Côa alimenta uma piscina construída, rodeada de relvado, além do leito do rio. Não falta duche exterior, parque de merendas, esplanada, parque infantil, canoas e gaivotas.",
     "photoFocals": [
       81,
       92
@@ -5346,7 +5558,7 @@
       "lat": 41.533639,
       "lng": -7.184278
     },
-    "description": "Descubra esta praia fluvial no concelho de Mirandela. Informações, serviços e localização disponíveis em breve.",
+    "description": "A água translúcida e tranquila é a imagem de marca da zona de lazer Vale de Juncal, na freguesia de Abambres. A zona balnear compreende ainda uma área com infraestruturas de apoio: sanitários, zona de areia, bar com petiscos, grelhadores e parque de merendas. Com ou sem farnel, é o local ideal para horas de lazer com a família ou com os amigos. Nas imediações encontra-se um campo de voleibol. Esta zona balnear é particularmente indicada para as crianças já que podem nadar numa vasta área sem perder o pé.",
     "photoFocals": [
       88,
       92
@@ -5388,7 +5600,7 @@
       "lat": 40.402578,
       "lng": -7.403639
     },
-    "description": "Descubra esta praia fluvial no concelho de Guarda. Informações, serviços e localização disponíveis em breve.",
+    "description": "Valhelhas continua a ser uma das praias preferidas dos banhistas. Servida pelas águas do Zêzere e pelas sombras dos grandes amieiros, choupos e freixos, está toda equipada, incluindo com restaurante com refeições diárias ou, em opção, uma área com 22 grelhadores e parque de merendas. Ambas as margens estão ao dispor dos banhistas, com uma imensa área, até para passeio. O baloiço suspenso e a piscina infantil abaixo das comportas, o campo de jogos e o parque de campismo adjacente, são outras das valências.",
     "photoFocals": [
       92
     ],
@@ -5429,7 +5641,7 @@
       "lat": 41.644843,
       "lng": -8.314106
     },
-    "description": "Descubra esta praia fluvial no concelho de Póvoa de Lanhoso. Informações, serviços e localização disponíveis em breve.",
+    "description": "Nas margens do rio Cávado, a Praia Fluvial de Verim, localizada na freguesia com o mesmo nome, garante frescura, águas puras, sombras, zonas de areal e de relvado e dias de descontração. Em tempos idos, as gentes locais acorriam ali, a uma das suas nascentes, para tratamento de doenças de pele e reumatismo. Hoje em dia, a praia tem recebido sucessivos galardões de qualidade. Está totalmente equipada, dispõe de campo de voleibol e estacionamento e é Praia Acessível.",
     "photoFocals": [
       50
     ],
@@ -5470,7 +5682,7 @@
       "lat": 40.378889,
       "lng": -7.735556
     },
-    "description": "Descubra esta praia fluvial no concelho de Seia. Informações, serviços e localização disponíveis em breve.",
+    "description": "O rio Alva corre ao longo de mais de 100 km e fornece várias praias fluviais. Esta está localizada no limite do Parque Natural da Serra da Estrela e oferece areão no fundo do leiro do rio, em vez das rochas habituais. A zona de banhos é acessível através de uma rampa e uma ponte-açude que liga as duas margens. No bar de apoio servem-se refeições rápidas e, petiscos e é usual haver animação de verão. Nas imediações, existe parque de campismo, campo de futebol, Bike Park e uma pista de downhill com 2,7 km, além de duas rotas pedestres.",
     "photoFocals": [
       89
     ],
@@ -5513,7 +5725,7 @@
       "lat": 40.918437,
       "lng": -7.513632
     },
-    "description": "Descubra esta praia fluvial no concelho de Sernancelhe. Informações, serviços e localização disponíveis em breve.",
+    "description": "Inaugurada em 2021, esta praia fluvial, na freguesia Vila da Ponte, conhecida por “pérola do Távora” aposta no detalhe para receber os banhistas. O rio que atravessa Sernancelhe ao longo de 12km foi limpo e fechado, criando um espelho de água e duas piscinas flutuantes. Entre os atrativos estão o repuxo no centro do lago, o baloiço junto aos sobreiros, ancoradouro para embarcações sem motor, centro náutico e diversas atividades de aventura, para além das barraquinhas, parque de manutenção e os imperdíveis Passadiços do Távora.",
     "photoFocals": [
       60,
       83,
@@ -5557,7 +5769,7 @@
       "lat": 39.575028,
       "lng": -8.266
     },
-    "description": "Descubra esta praia fluvial no concelho de Tomar. Informações, serviços e localização disponíveis em breve.",
+    "description": "É nas margens da albufeira de Castelo de Bode que se encontra a zona balnear de Vila Nova-Serra. Na União de Freguesias de Serra e Junceira, o espaço oferece o privilégio da contemplação sobre o plano de água, numa das zonas de maior extensão. Ali funciona também a Escola de Ski Náutico. A zona de banhos não é vigiada nem tem estruturas de apoio, à exceção de um pequeno bar com esplanada. A rota das igrejas da União de Freguesias de Serra e Junceira engloba quase uma dezena de edificações, algumas delas bastante antigas (desde o séc. XVII).",
     "photoFocals": [
       92,
       87
@@ -5599,7 +5811,7 @@
       "lat": 40.665066,
       "lng": -7.657218
     },
-    "description": "Descubra esta praia fluvial no concelho de Penalva do Castelo. Informações, serviços e localização disponíveis em breve.",
+    "description": "No Rio Dão, na freguesia de Castelo de Penalva, uma estrutura existente no leito do rio, que foi reparada e consolidada, de modo a reter as águas no maior volume possível",
     "photoFocals": [
       50
     ],
@@ -5642,7 +5854,7 @@
       "lat": 39.679111,
       "lng": -8.436167
     },
-    "description": "Descubra esta praia fluvial no concelho de Ourém. Informações, serviços e localização disponíveis em breve.",
+    "description": "Duas características diferenciadoras estão na origem da procura pela Praia Fluvial do Agroal: a frieza das águas e as suas aplicações terapêuticas, sobretudo em doenças gastrointestinais e de pele. As águas brotam de nascentes nas rochas calcárias e alimentam o rio Nabão, do outro lado da piscina. A estrutura conta com um pequeno parque de merendas, solário e anfiteatro ao ar livre, alojamento local e restaurante. O Passadiço do Agroal liga o Parque Natureza (com estacionamento) à praia, ao longo de 780 metros.",
     "photoFocals": [
       92,
       92,
@@ -5685,7 +5897,7 @@
       "lat": 41.679577,
       "lng": -8.176039
     },
-    "description": "Descubra esta praia fluvial no concelho de Terras de Bouro. Informações, serviços e localização disponíveis em breve.",
+    "description": "A praia de Alqueirão está situada na margem da albufeira da Caniçada, após a ponte que liga Rio Caldo à Vila do Gerês, na freguesia de Vilar da Veiga. Trata-se de uma zona que fervilha de atividades náuticas e que agrada a banhistas, desportistas e turistas de ocasião que apenas procuram uma experiência pelo Gerês. A praia foi recentemente requalificada com novos e modernos acessos e equipamentos, como sanitários e estacionamento. Na região há que descobrir a gastronomia nortenha e os trilhos pedestres.",
     "photoFocals": [
       50
     ],
@@ -5726,7 +5938,7 @@
       "lat": 39.803417,
       "lng": -8.009361
     },
-    "description": "Descubra esta praia fluvial no concelho de Sertã. Informações, serviços e localização disponíveis em breve.",
+    "description": "A 2 km da sede da freguesia (Várzea dos Cavaleiros), a zona balnear do Boiçô é hoje um recanto tranquilo que utiliza as águas puras da ribeira da Tamolha para, através de um açude e muros de xisto, proporcionar dias mais frescos. O espaço foi inaugura- do em 2022 e está dotado de zonas de areia com chapéus de sol, relvado e churrasqueiras. O bar com esplanada serve petiscos e produtos regionais e é habitual ter animação de verão. O Núcleo Museológico da Resina é visitável através da Junta.",
     "photoFocals": [
       92
     ],
@@ -5767,7 +5979,7 @@
       "lat": 39.723833,
       "lng": -8.108083
     },
-    "description": "Descubra esta praia fluvial no concelho de Vila de Rei. Informações, serviços e localização disponíveis em breve.",
+    "description": "Na freguesia de Fundada, em plena ribeira de Bostelim, esta praia fluvial oferece todas as condições para um dia bem passado em natureza, incluindo churrasqueiras, boas áreas de areia e relvado e bar com esplanada e petiscos. Ao lado, fica o Parque de Campismo Rural, bem equipado e com sombras. Daqui parte a “Rota do Bostelim” de 9,5 Km, entre levadas e moinhos, ao longo das ribeiras do Bostelim e da Isna. Em agosto realizam-se as festas de Santa Margarida, em Fundada.",
     "photoFocals": [
       92
     ],
@@ -5809,7 +6021,7 @@
       "lat": 39.921412,
       "lng": -8.133395
     },
-    "description": "Descubra esta praia fluvial no concelho de Pedrógão Grande. Informações, serviços e localização disponíveis em breve.",
+    "description": "A albufeira do Cabril, no rio Zêzere, representa uma das maiores reservas de água doce do país, fazendo a fronteira entre os concelhos da Sertã e de Pedrógão Grande e entre os distritos de Leiria e Castelo Branco. A praia oferece uma piscina flutuante sobre o espelho de água límpida, dotada de amplo espaço de lazer, com mesas, churrasqueiras e quatro roulottes de street food. Bem perto fica o parque de campismo com bungalows. A barragem é procurada para passeios de barco e pesca. O cais fica junto à praia.",
     "photoFocals": [
       86,
       90
@@ -5852,7 +6064,7 @@
       "lat": 39.63,
       "lng": -7.9235
     },
-    "description": "Descubra esta praia fluvial no concelho de Mação. Informações, serviços e localização disponíveis em breve.",
+    "description": "Localizada na ribeira do Carvoeiro, a pouco mais de 1 Km da aldeia homónima e a 25 minutos de Mação, esta praia fluvial tem sido galardoada ao longo dos anos. Está rodeada por pinhais altos e verdes, longe de qualquer fonte de poluição, e possui todos os equipamentos necessários para um dia bem tranquilo e confortável, além de um extenso espelho de água, parque de merendas, churrasqueiras e espreguiçadeiras. No bar com esplanada são servidos petiscos. Na praia inicia a PR3- Rota do Carvoeiro, percurso circular de 20 km.",
     "photoFocals": [
       92,
       92
@@ -5894,7 +6106,7 @@
       "lat": 39.05641,
       "lng": -7.912565
     },
-    "description": "Descubra esta praia fluvial no concelho de Avis. Informações, serviços e localização disponíveis em breve.",
+    "description": "Integrada no Complexo do Clube Náutico de Avis, esta zona balnear convida a desfrutar da tranquilidade que as águas da Albufeira do Maranhão proporcionam em jeito de piscina natural. Além de aproveitar a praia, é possível desfrutar de um conjunto de equipamentos: desportos náuticos como natação em águas abertas, remo, canoagem ou stand up paddle, parque de merendas, parque infantil, solário, hangar náutico, restaurante, bar, parque de campismo e piscinas municipais.",
     "photoFocals": [
       50
     ],
@@ -5935,7 +6147,7 @@
       "lat": 40.139056,
       "lng": -7.998778
     },
-    "description": "Descubra esta praia fluvial no concelho de Góis. Informações, serviços e localização disponíveis em breve.",
+    "description": "As águas correntes e limpas do rio Ceira fazem da zona de lazer do Colmeal um local concorrido na época de verão. A zona de banhos não é muito profunda, retida por uma represa em pedra. A estrutura dispõe de sanitários e parque de merendas. Ali per- to, o antigo moinho complementa a tela verde. Entre banhos, é possível a visita ao Espaço Museológico do Soito e subida ao baloiço panorâmico, construído pela União Progressiva do Colmeal.",
     "photoFocals": [
       74
     ],
@@ -5976,7 +6188,7 @@
       "lat": 38.201903,
       "lng": -7.487391
     },
-    "description": "Descubra esta praia fluvial no concelho de Moura. Informações, serviços e localização disponíveis em breve.",
+    "description": "A Praia do Lago, localizada na Estação Náutica de Moura – Alqueva, foi inaugurada em 2024 e é um espaço acolhedor e multifuncional, com duas piscinas flutuantes, zonas em areal e relvado. A Plataforma Central de Lazer integra, por um lado, uma cafetaria com esplanada e, por outro, o espaço destinado aos operadores turísticos, que promovem passeios e a prática de desportos náuticos como canoagem, stand up paddle e o e-foil. O espaço dispõe ainda de uma Área de Serviço para Autocaravanas.",
     "photoFocals": [
       50
     ],
@@ -6017,7 +6229,7 @@
       "lat": 39.67575,
       "lng": -8.230972
     },
-    "description": "Descubra esta praia fluvial no concelho de Ferreira do Zêzere. Informações, serviços e localização disponíveis em breve.",
+    "description": "A piscina flutuante do Lago Azul, nas águas da albufeira de Castelo de Bode, oferece muito mais do que banhos em águas límpidas. É o local ideal para atividades como stand up paddle e canoagem, modalidades com rede municipal de percursos ao longo de 25 quilómetros de rio, e com embarque em cinco aldeias ribeirinhas. Existe ainda pesca, mergulho com garrafa, equitação e passeios de Moto 4, passeios no barco de S. Cristóvão, o wakeboard do Lago Azul (Cable Park), e diversos trilhos pedestres e de BTT.",
     "photoFocals": [
       88
     ],
@@ -6059,7 +6271,7 @@
       "lat": 39.797444,
       "lng": -7.951167
     },
-    "description": "Descubra esta praia fluvial no concelho de Proença-a-Nova. Informações, serviços e localização disponíveis em breve.",
+    "description": "A praia fluvial do Malhadal, criada na ribeira da Isna, é o local perfeito para quem valoriza uma envolvente natural afastada de qualquer localidade. Instalada numa represa, preserva a sua ponte filipina e as diversas azenhas a jusante da praia. Possui zona de solário, balneários e piscina flutuante. O bar abre apenas na época balnear, servindo snacks e petiscos. Na área, existe a Concessão de Pesca Desportiva do Malhadal e o espaço costuma disponibilizar o Fluvifun – Parque Aquático do Malhadal, com insufláveis, paddle e canoagem.",
     "photoFocals": [
       92,
       88
@@ -6101,7 +6313,7 @@
       "lat": 39.733806,
       "lng": -8.089806
     },
-    "description": "Descubra esta praia fluvial no concelho de Sertã. Informações, serviços e localização disponíveis em breve.",
+    "description": "De um açude para a rega, em plena ribeira da Isna, nasceu um espaço que convida à preguiça e a banhos frescos, com profundidade máxima de 2 metros. Esta zona de lazer, na União de Freguesias da Cumeada e Marmeleiro, é muito tranquila e está envolvida por amieiros, choupos e figueiras, cujas sombras beneficiam o parque de merendas e a zona de areal. O xisto marca presença nos muros e estruturas. Nas imediações está marcada a PR4 - Caminho do Xisto da Cumeada, com 12 km, com paisagens e passagem pelas aldeias da região.",
     "photoFocals": [
       82
     ],
@@ -6144,7 +6356,7 @@
       "lat": 40.2685,
       "lng": -7.143778
     },
-    "description": "Descubra esta praia fluvial no concelho de Penamacor. Informações, serviços e localização disponíveis em breve.",
+    "description": "Integrada na freguesia de Meimão, a zona balnear do Meimão foi criada na albufeira da Meimoa, oferecendo uma piscina flutuante e uma prancha de saltos para a barragem. A zona balnear é complementada com cais para embarcações, bar e um conjunto de bungalows. Além da pesca desportiva nas águas da albufeira, é possível fazer paddle e caminhadas nas imediações, designadamente pelo per- curso da “Patada da Mula”, com 8 km, com partida e chegada junto à Barragem, pelo lado da Carreira de Tiro.",
     "photoFocals": [
       76,
       92,
@@ -6189,7 +6401,7 @@
       "lat": 39.935889,
       "lng": -8.186333
     },
-    "description": "Descubra esta praia fluvial no concelho de Pedrógão Grande. Informações, serviços e localização disponíveis em breve.",
+    "description": "A praia fluvial de Mosteiro é banhada pela ribeira de Pera, que cria um extenso espelho de água. A dois passos da povoação respira-se tranquilidade e ar puro. À sua volta não faltam sombras dos salgueiros, amieiros e sobreiros, parque de merendas e um vasto relvado. O espaço está totalmente equipado, mas é uma excelente opção sair e realizar as duas rotas de BTT ou percorrer a PR5 – Na Senda da Ribeira de Pera (7km) e a PR6 – Rumando contra a Corrente em direção ao açude (2km) ambas a partir da praia.",
     "photoFocals": [
       74,
       83,
@@ -6233,7 +6445,7 @@
       "lat": 39.734556,
       "lng": -8.057944
     },
-    "description": "Descubra esta praia fluvial no concelho de Vila de Rei. Informações, serviços e localização disponíveis em breve.",
+    "description": "Ideal para quem procura o sossego quase absoluto, a praia fluvial do Pego das Cancelas garante as infraestruturas essenciais para um dia de descanso. Situada na freguesia de São João do Peso, longe de qualquer povoação, tem na ribeira de Isna o seu abrigo, bem rodeada de sombras. O restaurante mais próximo fica a 13 km. A zona é propícia a passeios e tem imensa biodiversidade. É imperdível a ida à Ponte dos Três Concelhos, de origem romana, que une Vila de Rei, Mação e Sertã.",
     "photoFocals": [
       83,
       87
@@ -6275,7 +6487,7 @@
       "lat": 37.472048,
       "lng": -7.476824
     },
-    "description": "Descubra esta praia fluvial no concelho de Alcoutim. Informações, serviços e localização disponíveis em breve.",
+    "description": "A apenas 500 metros do centro da vila de Alcoutim, nas margens da Ribeira de Cadavais, afluente do Guadiana, esta praia está rodeada de elementos naturais: choupos, loendros, alfazemas e roseiras, canaviais e árvores de fruto. Está completamente equipada, incluindo com bar e restaurante, campo de voleibol e parque de merendas. Entre banhos, a visita às ruínas do Montinho das Laranjeiras, ao castelo e ao centro da vila é obrigatória.",
     "photoFocals": [
       50
     ],
@@ -6288,18 +6500,18 @@
     "name": "Praia Fluvial do Penedo Furado",
     "type": "praia_fluvial",
     "river": "Ribeira de Codes",
+    "inRede": true,
     "photos": [
       "img/praias/vila-de-rei/penedo-furado/1.jpg",
       "img/praias/vila-de-rei/penedo-furado/2.jpg"
     ],
+    "inVotar": true,
     "district": "Castelo Branco",
     "featured": false,
     "services": {
       "wc": false,
       "bar": false,
-      "grills": false,
       "camping": false,
-      "parking": false,
       "blueFlag": false,
       "lifeguard": false,
       "nacional2": false,
@@ -6317,14 +6529,32 @@
       "lat": 39.625556,
       "lng": -8.162417
     },
-    "description": "Descubra esta praia fluvial no concelho de Vila de Rei. Informações, serviços e localização disponíveis em breve.",
+    "description": "Bem perto do centro geodésico de Portugal, o Penedo Furado é a praia fluvial mais procurada do concelho de Vila de Rei, não só pela água límpida e cristalina da ribeira de Codes até à albufeira de Castelo de Bode, uns metros mais adiante, mas também pela qualidade das infraestruturas do espaço bem equipado, e indicadas para crianças. A jusante da ribeira, existem os passadiços com 2 km e duas belíssimas cascatas pelo trilho ao longo da ribeira, bem como a “bicha pintada” (icnofóssil), e a Gruta do Penedo Furado.",
     "photoFocals": [
-      82,
-      92
+      {
+        "x": 50,
+        "y": 82,
+        "zoom": 1,
+        "mobile": {
+          "x": 50,
+          "y": 82,
+          "zoom": 1
+        }
+      },
+      {
+        "x": 49.21898834584172,
+        "y": 59.830798354984005,
+        "zoom": 1,
+        "mobile": {
+          "x": 50,
+          "y": 92,
+          "zoom": 1
+        }
+      }
     ],
     "municipality": "Vila de Rei",
-    "waterQuality": "",
-    "passportStamp": true
+    "passportStamp": true,
+    "inPassaporteDigital": true
   },
   {
     "id": "praia-fluvial-de-piodao",
@@ -6336,6 +6566,7 @@
       "img/praias/arganil/piodao/2.jpg",
       "img/praias/arganil/piodao/3.jpg"
     ],
+    "premium": false,
     "district": "Coimbra",
     "featured": false,
     "services": {
@@ -6361,7 +6592,7 @@
       "lat": 40.229556,
       "lng": -7.826306
     },
-    "description": "Descubra esta praia fluvial no concelho de Arganil. Informações, serviços e localização disponíveis em breve.",
+    "description": "Em pleno coração da aldeia de Piódão, numa das encostas da Serra do Açor, esta praia fluvial é conhecida pelas águas límpidas e refrescantes da ribeira do Piódão, que correm pela represa de xisto, rocha característica desta pitoresca Aldeia Histórica. No largo da Igreja encontra cafés, restaurantes e lembranças, e um passeio revelará as simbólicas cruzes de proteção contra as trovoadas, nas ombreiras das portas. Por toda a serra há inúmeros percursos pedestres e de BTT.",
     "photoFocals": [
       66,
       66,
@@ -6404,7 +6635,7 @@
       "lat": 41.848828,
       "lng": -8.41903
     },
-    "description": "Descubra esta praia fluvial no concelho de Arcos de Valdevez. Informações, serviços e localização disponíveis em breve.",
+    "description": "O rio Vez empresta as suas margens verdes aos banhistas bem perto do centro da vila de Valdevez. Este refúgio natural, disponível todo o ano, conta com um extenso areal, amplos espaços verdes, sombras e água límpida. A praia está equipada com vários parques de estacionamento, incluindo para caravanas e autocaravanas e infraestruturas de apoio como sanitários e bar com esplanada. O Paço de Giela, o Museu do rio Vez e o Museu Espaço Valdevez são algumas sugestões de visita.",
     "photoFocals": [
       50
     ],
@@ -6445,7 +6676,7 @@
       "lat": 41.632288,
       "lng": -7.247152
     },
-    "description": "Descubra esta praia fluvial no concelho de Valpaços. Informações, serviços e localização disponíveis em breve.",
+    "description": "A Praia Fluvial do Rabaçal, na freguesia de Possacos, foi requalificada em 2021. Além do generoso lençol de água do Rio Rabaçal, sobressaem na paisagem as encostas rodeadas de árvores, a ponte de Valtelhas, o extenso areal com chapéus de sol e as zonas relvadas. A praia dispõe de parque infantil, duches e até wi-fi, sendo Acessível com cadeira anfíbia. Na praia fica também o Centro Interpretativo da Ecovia do Rabaçal. A poucos metros encontra-se o Parque de Campismo e Caravanismo do Rabaçal, com bungalows.",
     "photoFocals": [
       50
     ],
@@ -6461,6 +6692,7 @@
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Rebolim"
     ],
+    "premium": true,
     "district": "Coimbra",
     "featured": false,
     "services": {
@@ -6486,7 +6718,7 @@
       "lat": 40.179602,
       "lng": -8.417114
     },
-    "description": "Descubra esta praia fluvial no concelho de Coimbra. Informações, serviços e localização disponíveis em breve.",
+    "description": "A praia de Rebolim está localizada na freguesia de Santo António dos Olivais, na zona da Portela, bem perto da baixa de Coimbra, convidando a sair da rotina e do trânsito para momentos de descontração junto ao Mondego. A praia foi criada em 1997, está toda equipada e oferece um vasto com areal e sombras de árvores, águas pouco profundas, estacionamento para automóveis e bicicletas, bares com doces e salgados. É uma Praia Acessível e estando perto do centro, facilita qualquer roteiro temático.",
     "photoFocals": [
       50
     ],
@@ -6528,7 +6760,7 @@
       "lat": 40.266833,
       "lng": -8.279333
     },
-    "description": "Descubra esta praia fluvial no concelho de Penacova. Informações, serviços e localização disponíveis em breve.",
+    "description": "Na margem esquerda do Mondego, o Reconquinho evidencia-se pela excelente qualidade da água e pela belíssima envolvente natural. A estrutura dispõe de todas os equipamentos, é Praia Acessível e inclui a insígnia ColorAdd, com o sistema de identificação de cores e símbolos para daltónicos. Nas proximidades, há muitas alternativas aos banhos: Pesca, caiaques ou gaivotas, passeios de barco numa Barca Serrana (968 039 154) e caminhadas pela PR1.",
     "photoFocals": [
       92,
       83
@@ -6571,7 +6803,7 @@
       "lat": 39.859769,
       "lng": -7.742794
     },
-    "description": "Descubra esta praia fluvial no concelho de Castelo Branco. Informações, serviços e localização disponíveis em breve.",
+    "description": "A belíssima aldeia do Sesmo, na freguesia de Sarzedas, no extremo Oeste do concelho de Castelo Branco, é o grande ponto de encontro durante o verão, atraindo os visitantes que apreciam a sua tranquilidade e natureza. Além dos banhos na ribeira do Sesmo ou dos banhos de sol no relvado, o espaço convida a momentos de lazer, seja no bar “O Sesmo” ou em caminhada, pelas rotas PR6 Poço dos Sinos – Sarzedas e PR9 - Rota da Ribeira da Magueija – Sarzedas, por três aldeias da freguesia.",
     "photoFocals": [
       92,
       67
@@ -6614,7 +6846,7 @@
       "lat": 38.957583,
       "lng": -8.522167
     },
-    "description": "Descubra esta praia fluvial no concelho de Coruche. Informações, serviços e localização disponíveis em breve.",
+    "description": "O rio Sorraia, que resulta da junção das ribeiras de Sor e da Raia, é afluente do Tejo e está registado nos autos da história desde o tempo dos romanos e árabes. Atualmente está associado ao lazer. Ao longo do Parque do Sorraia, em complemento à sua grande praia fluvial, existem inúmeros equipamentos: parede de escalada, skate park, circuito de manutenção, módulo de crossfit, parque infantil, bar com petiscos, sistema de bicicletas partilhadas posto de turismo, pavilhão gimnodesportivo e ciclovia.",
     "photoFocals": [
       92,
       72
@@ -6658,7 +6890,7 @@
       "lat": 40.772056,
       "lng": -7.652306
     },
-    "description": "Descubra esta praia fluvial no concelho de Sátão. Informações, serviços e localização disponíveis em breve.",
+    "description": "A praia fluvial do Trabulo foi oficialmente inaugurada em 2017. Situada na localidade de Rãs, a cerca de 10Km da sede de concelho, é exemplo de uma obra bem conseguida. Nas margens do rio Vouga, o enorme relvado atrai imediatamente as atenções. As modernas estruturas do bar, com petiscos e refeições rápidas, e os serviços de apoio integram um quadro paisagístico muito bem organizado e enquadrado na envolvente natural. Não foram esquecidos espaços adequados a crianças, internet gratuita e prancha de SUP.",
     "photoFocals": [
       42,
       55,
@@ -6702,7 +6934,7 @@
       "lat": 39.860056,
       "lng": -8.007944
     },
-    "description": "Descubra esta praia fluvial no concelho de Sertã. Informações, serviços e localização disponíveis em breve.",
+    "description": "Em plena ribeira da Sertã, junto à ponte do Troviscal, esta praia fluvial foi recentemente requalificada, mas continua a oferecer isolamento e tranquilidade, respirando-se natureza. A praia dispõe de bar com animação regular e sanitários acessíveis, cadeira anfíbia, parque de merendas com churrasqueira e zona de estacionamento. Junto à praia encontra-se um parque de autocaravanas e zonas para acampar. As paisagens da região são descobertas através da PR7 – Rota de Celin- da, ao longo das margens da Ribeira da Sertã.",
     "photoFocals": [
       87,
       92
@@ -6745,7 +6977,7 @@
       "lat": 40.608472,
       "lng": -7.300194
     },
-    "description": "Descubra esta praia fluvial no concelho de Guarda. Informações, serviços e localização disponíveis em breve.",
+    "description": "Servida pelo Mondego, junto às localidades de Vila Cortês do Mondego e de Porto da Carne, a praia fluvial de Vale do Mondego está enquadrada num verdejante espaço de cerca de 4 hectares, perto do núcleo rural. O espaço é dotado de uma extensa área relvada, um areal e sombras naturais, onde está instalado o parque de merendas, com mesas e grelhadores. No bar de apoio com esplanada, os dias de verão têm um sabor especial a tranquilidade e convívio, com vista para as águas límpidas do Mondego.",
     "photoFocals": [
       83,
       92
@@ -6787,7 +7019,7 @@
       "lat": 40.402541,
       "lng": -7.586448
     },
-    "description": "Descubra esta praia fluvial no concelho de Gouveia. Informações, serviços e localização disponíveis em breve.",
+    "description": "Situada na União de Freguesias de Aldeias e Mangualde da Serra, e em plena Reserva Biogenética do Parque Natural da Serra da Estrela, esta é a praia fluvial de maior altitude no país, a 1300 metros. Nas águas da barragem de Vale do Rossim há lugar não só para banhos como inúmeras atividades de lazer como rappel, slide, canoagem, passeios pedestres, btt, canoagem e paddle. Um bar de apoio com música e Wi-Fi e um eco resort complementam a estadia.",
     "photoFocals": [
       50
     ],
@@ -6833,7 +7065,7 @@
       "lat": 40.277194,
       "lng": -8.197694
     },
-    "description": "Descubra esta praia fluvial no concelho de Penacova. Informações, serviços e localização disponíveis em breve.",
+    "description": "A praia fluvial do Vimieiro, localizada no Rio Alva, destaca-se pela envolvência verde. A existência de um conjunto de equipamentos adaptados à paisagem e os galardões de qualidade refletem as condições deste espaço natural. Está ainda dotada da insígnia ColorAdd. Na encosta da praia, o conjunto de casas construídas em xisto, a ponte a ligar as duas margens, a roda e o moinho de água conferem ao Vimieiro um cenário acolhedor, que pode desfrutar também por caiaque. Ao longo do Alva segue a PR3- Rota do Alva.",
     "photoFocals": [
       79,
       87,
@@ -6879,7 +7111,7 @@
       "lat": 39.444749,
       "lng": -8.711811
     },
-    "description": "Descubra esta praia fluvial no concelho de Alcanena. Informações, serviços e localização disponíveis em breve.",
+    "description": "Na freguesia de Louriceira, concelho de Alcanena, a Zona Balnear dos Olhos d'Água do Alviela convida a desfrutar das águas frescas e cristalinas do rio Alviela, que nasce ali perto, e de uma estrutura recheada de equipamentos de apoio, do bar e restaurante ao parque infantil. Também ao lado, fica o parque de campismo, permitindo uma estadia maior, mote para explorar as paisagens do Parque Natural das Serras de Aire e Candeeiros ou o Centro de Ciência Viva.",
     "photoFocals": [
       50
     ],
@@ -6921,7 +7153,7 @@
       "lat": 40.820889,
       "lng": -8.012389
     },
-    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;São&nbsp;Pedro&nbsp;do&nbsp;Sul.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
+    "description": "Foi muitos anos o ponto de encontro da juventude local para banhos de verão e também fonte de regadio, mas uma candidatura ao orçamento participativo permitiu aprimorar esta área, inaugurada em 2023. Em Figueiredo de Alva, no rio Degarcia, que aqui muda de nome para rio Água Fria (afluente do rio Sul) preserva-se o acolhedor ambiente natural, mas agora complementado com bar com esplanada e comidas rápidas, zona de grelhadores, parque de merendas, campo de voleibol e barco a remos.",
     "photoFocals": [
       72,
       86,
@@ -6966,7 +7198,7 @@
       "lat": 39.953306,
       "lng": -7.188556
     },
-    "description": "Descubra esta zona balnear no concelho de Idanha-a-Nova. Informações, serviços e localização disponíveis em breve.",
+    "description": "Oficialmente designada por Barragem Marechal Carmona, e a apenas 8 Km da sede de concelho, Idanha-a-Nova, esta estrutura construída em 1946 possui uma extensa bacia de água, da qual se desfruta em dias de descanso, com banhos, canoagem e passeios. A Barragem de Idanha é conhecida por acolher o Boom Festival e não é vigiada. A zona balnear dispõe de um excelente parque de campismo com bungalows e caravanismo, disponível todo o ano.",
     "photoFocals": [
       88,
       92
@@ -7051,7 +7283,7 @@
       "lat": 40.215735,
       "lng": -7.382189
     },
-    "description": "Descubra esta zona balnear no concelho de Fundão. Informações, serviços e localização disponíveis em breve.",
+    "description": "Na Barragem da Capinha, alimentada pela ribeira das Poldras, os dias de verão têm sabor a sossego. As suas margens permitem banhos de sol e puro relaxamento e as estruturas existentes - churrasqueiras, parque de merendas, zona infantil e bar com esplanada, convidam a ficar mais tempo. A zona de lazer é de fácil acesso a pessoas com mobilidade reduzida. A albufeira é local de pesca desportiva, sendo o achigã uma das espécies mais apreciadas. Em redor da barragem, vale a pena um passeio.",
     "photoFocals": [
       72,
       92
@@ -7091,7 +7323,7 @@
       "lat": 40.753479,
       "lng": -8.391401
     },
-    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Sever&nbsp;do&nbsp;Vouga.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
+    "description": "Na União de Freguesias de Silva Escura e Dornelas, e o forte caudal do rio Mau e o terreno acidentado criaram inúmeras cascatas naturais. A Cascata da Cabreia, com 25 metros, é um desses locais de rara beleza que foi aproveitado para a criação de uma praia fluvial não vigiada. A envolvente é bem natural, transitável a pé por passadiços e apoios, debaixo de castanheiros e carvalhos. A restauração fica na povoação de Silva Escura, em Sever do Vouga, a cerca de 2 km. Do parque de lazer parte a PR2 -Cabreia e Minas do Braçal.",
     "photoFocals": [
       50
     ],
@@ -7133,7 +7365,7 @@
       "lat": 39.877722,
       "lng": -7.822167
     },
-    "description": "Descubra esta zona balnear no concelho de Castelo Branco. Informações, serviços e localização disponíveis em breve.",
+    "description": "A zona de Lazer da Lisga foi criada a partir da ribeira com o mesmo nome, situada na aldeia da Lisga, a mais distante da sede de freguesia, Sarzedas (a 20km). A cerca de 500 metros do interior da aldeia, encontra-se um açude complementado com um bar com esplanada, sanitários e duches exteriores. Na sede de freguesia, no restaurante “Fonte da Vila”, é possível degustar a chanfana, chamada de Carne Fresca, e a Sarzedinha (tigelada). A partir do Centro Cyclin’Portugal das Sarzedas estão disponíveis sete percursos.",
     "photoFocals": [
       90,
       76
@@ -7174,7 +7406,7 @@
       "lat": 41.50525,
       "lng": -7.196583
     },
-    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Mirandela.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
+    "description": "Na zona de lazer de Maravilha, a dimensão do espelho de água é resultado da confluência dos rios Rabaçal e Tuela que ali se une, criando o rio Tua. Através de uma represa e rodeado de choupos, amieiros, salgueiros e plátanos, cria-se um cenário magnífico, convidativo a dias de preguiça em pleno no verão, ou a um passeio todo o ano. A zona balnear dispõe de algumas mesas e existe um parque de campismo adjacente com piscina.",
     "photoFocals": [
       64,
       64
@@ -7217,7 +7449,7 @@
       "lat": 40.225528,
       "lng": -7.188083
     },
-    "description": "Descubra esta zona balnear no concelho de Penamacor. Informações, serviços e localização disponíveis em breve.",
+    "description": "A 11 km de Penamacor, a zona de lazer da Meimoa, criada a partir da ribeira com o mesmo nome, ganha vida no verão. O leito da ribeira foi delimitado por paredões, à volta dos quais foram construídas as infraestruturas de apoio e uma vasta área de relvado. No bar há petiscos e para mais diversão na água, estão ao dispor gaivotas. As crianças têm parque infantil, todo o ano. A importância histórica da localidade reflete- se na ponte filipina (imagem de marca da aldeia), e na Casa do Governador.",
     "photoFocals": [
       78,
       85
@@ -7259,7 +7491,7 @@
       "lat": 40.934755,
       "lng": -8.174415
     },
-    "description": "Descubra esta zona balnear no concelho de Arouca. Informações, serviços e localização disponíveis em breve.",
+    "description": "No lugar da Paradinha (Aldeia de Portugal), em Alvarenga, esta zona de lazer é marcada pela grande tranquilidade e menor adesão de visitantes e banhistas. Possui instalações sanitárias, balneários e estacionamento, mas a verdadeira beleza está no que a natureza e a envolvente oferecem. Aqui é possível descansar, ler um livro, mergulhar, nadar, percorrer alguns trilhos, relaxar no parque de merendas, visitar a aldeia e fazer birdwatching. As margens intercalam entre o cascalho, pedras e algumas zonas verdes.",
     "photoFocals": [
       50
     ],
@@ -7298,7 +7530,7 @@
       "lat": 39.382882,
       "lng": -7.381737
     },
-    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Marvão.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
+    "description": "A Praia Fluvial de Portagem é um refúgio natural tanto para quem procura refrescar- se, como para outras atividades de lazer e desporto. Próxima da histórica vila de Marvão, conhecida pelas suas imponentes muralhas, e instalada nas margens do rio Sever, esta praia dispõe de todos os equipamentos, área de piquenique e até um espaço para crianças. Ali é possível praticar natação e mergulho, caminhadas, canoagem e paddle e ainda observação de aves. No final do dia, o balanço é sempre positivo.",
     "photoFocals": [
       50
     ],
@@ -7311,6 +7543,7 @@
     "name": "Zona Balnear da Ratoeira",
     "type": "zona_balnear",
     "river": "Rio Mondego",
+    "hidden": true,
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Ratoeira"
     ],
@@ -7380,7 +7613,7 @@
       "lat": 39.414583,
       "lng": -7.800028
     },
-    "description": "Descubra esta zona balnear no concelho de Gavião. Informações, serviços e localização disponíveis em breve.",
+    "description": "Esta zona balnear está inserida num complexo de lazer, a 1 km da aldeia da Comenda, e encanta pela frescura e pela envolvência natural. Entre as pontes que cruzam o local, destaca-se a antiga ponte de arcos romanos. O Parque de Merendas da Ribeira da Venda, onde se inclui a zona balnear, disponibiliza piscina para adultos e para crianças, balneários e snack bar / restaurante com esplanada. Ali perto passa o percurso circular PR3 - No Remanso da Ribeira da Venda – Comenda.",
     "photoFocals": [
       92,
       71,
@@ -7395,6 +7628,7 @@
     "name": "Zona Balnear da Ribeira Grande",
     "type": "zona_balnear",
     "river": "Ribeira Grande",
+    "hidden": true,
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Ribeira%2BGrande"
     ],
@@ -7462,7 +7696,7 @@
       "lat": 40.865571,
       "lng": -8.277262
     },
-    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Arouca.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
+    "description": "Esta zona balnear situa-se na freguesia com o mesmo nome e é também conhecida por praia fluvial de serra da Freita. Está inserida numa área de recreio e lazer, aproveitando as águas cristalinas do Rio Caima através de uma represa, e em volta da qual foram criadas as diversas infraestruturas de apoio. Dispõe de zonas de relva, sanitários, campo de jogos mesas e grelhadores, e ainda lugares de estacionamento.",
     "photoFocals": [
       50
     ],
@@ -7544,7 +7778,7 @@
       "lat": 39.824333,
       "lng": -7.798583
     },
-    "description": "Descubra esta zona balnear no concelho de Proença-a-Nova. Informações, serviços e localização disponíveis em breve.",
+    "description": "Na Aldeia de Xisto, junto à entrada da povoação que dá o nome à ribeira, este espaço foi inaugurado em 2007 e conta com zonas relvadas para estender a toalha e sombras de árvores. Dispõe dos equipamentos necessários ao conforto dos banhistas, entre eles o bar e restaurante da praia, aberto todo o ano, onde se serve prove o alvitão, uma bebida inspirada na caipirinha feita com aguardente de medronho local. Nas redondezas há miradouros naturais e a belíssima PR5 até Cova do Alviro para descobrir.",
     "photoFocals": [
       79,
       81
@@ -7558,6 +7792,7 @@
     "name": "Zona Balnear de Amoreira - Rio",
     "type": "zona_balnear",
     "river": "Ribeira de Aljezur",
+    "hidden": true,
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Amoreira%2B-%2BRio"
     ],
@@ -7627,7 +7862,7 @@
       "lat": 41.788523,
       "lng": -7.04229
     },
-    "description": "Descubra esta zona balnear no concelho de Vinhais. Informações, serviços e localização disponíveis em breve.",
+    "description": "Esta zona balnear apresenta-se quase intocada pelo ser humano, oferecendo o melhor da natureza para desfrutar: a brisa das árvores, o cantar das águas do Tuela pelas e o chilrear das aves. Nas margens do rio convidam a estender a toalha. Na praia foi instalado o Centro de Interpretação dos Rios com uma exposição permanente sobre a fauna e flora dos rios, conselhos úteis, boas práticas, técnicas e equipamentos de pesca. As visitas são por marcação junto do Posto de Turismo de Vinhais ou do Centro Cultural.",
     "photoFocals": [
       50
     ],
@@ -7666,7 +7901,7 @@
       "lat": 39.134545,
       "lng": -7.580259
     },
-    "description": "<p>Descubra&nbsp;esta&nbsp;zona&nbsp;balnear&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Fronteira.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
+    "description": "Na parte norte da vila de Fronteira, sobre a ribeira Grande e junto à antiga ponte em granito, nasceu a zona balnear de Fronteira, um espaço restaurado e adaptado à prática balnear, composta por áreas verdes e águas divididas por sectores. Ali é possível também fazer canoagem, escalada, natação e rappel, além de percorrer os variados trilhos com diferentes níveis de dificuldade. Entre eles estão a Rota da Ribeira Grande e a Rota da Serra das Penas",
     "photoFocals": [
       50
     ],
@@ -7682,6 +7917,7 @@
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Zona%20Balnear%20de%20Cartamil"
     ],
+    "premium": false,
     "district": "Coimbra",
     "featured": false,
     "services": {
@@ -7747,7 +7983,7 @@
       "lat": 39.809944,
       "lng": -7.753306
     },
-    "description": "Descubra esta zona balnear no concelho de Proença-a-Nova. Informações, serviços e localização disponíveis em breve.",
+    "description": "Localizada na ribeira do Alvito e nas imediações da aldeia que lhe atribui o nome, a zona balnear da Cerejeira é mais resguardada que a praia do Alvito. Sob gestão da Associação Recreativa e Cultural da Cerejeira, tem conservado o seu aspeto natural e biodiversidade, com a devida manutenção dos espaços. O bar está berto só na época balnear, onde são servidos petiscos e pequenas refeições como caracóis, cachorros e hamburgers.",
     "photoFocals": [
       77,
       92
@@ -7792,7 +8028,7 @@
       "lat": 40.257722,
       "lng": -7.581111
     },
-    "description": "Descubra esta zona balnear no concelho de Covilhã. Informações, serviços e localização disponíveis em breve.",
+    "description": "Em pleno Parque Natural da Serra da Estrela, na freguesia de Cortes do Meio, a ribeira de Cortes alimenta um açude que proporciona banhos, sombras e dias tranquilos na época de verão. A zona balnear acolhe banhistas e desportistas que ali param, convidando-os a desfrutar do bar com esplanada e refeições rápidas, parque de merendas, zona de relvado e um escorrega para os mais novos. Ao longo da ribeira de Cortes encontram-se os seus tradicionais moinhos.",
     "photoFocals": [
       92,
       92,
@@ -7834,7 +8070,7 @@
       "lat": 40.993437,
       "lng": -8.213075
     },
-    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Arouca.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
+    "description": "Localizada no lugar da Espiunca, a cerca de 250 metros dos Passadiços do Paiva, as margens esta praia oferecem um areal e muitas sombras ara relaxar e contemplar a beleza natural envolvente. Nesta zona balnear o rio Paiva corre livremente, sem represas e com pouca profundidade, o que se torna mais atrativo para pessoas que não saibam nadar. Esta zona balnear dispõe de sanitários e duches, mas o bar com esplanada fica na entrada norte dos Passadiços do Paiva, bem perto dali.",
     "photoFocals": [
       50
     ],
@@ -7850,6 +8086,7 @@
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Folques"
     ],
+    "premium": false,
     "district": "Coimbra",
     "featured": false,
     "services": {
@@ -7873,7 +8110,7 @@
       "lat": 40.221475,
       "lng": -8.014688
     },
-    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Arganil.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
+    "description": "A apenas 5 km de Arganil, na localidade de Folques, esta zona de lazer acolhe os seus visitantes com uma vasta área de relvado, em ambos os lados do rio Alva, árvores e águas frescas e cristalinas, formando um generoso lençol de água. No espaço foi criado um parque de merendas, um parque infantil e o bar/restaurante, para que não faltem motivos para ficar mais horas a relaxar ou a desfrutar do verão.",
     "photoFocals": [
       50
     ],
@@ -7889,6 +8126,7 @@
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Foz%2Bd%C2%B4%C3%89gua"
     ],
+    "premium": false,
     "district": "Coimbra",
     "featured": false,
     "services": {
@@ -7912,7 +8150,7 @@
       "lat": 40.247285,
       "lng": -7.812722
     },
-    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Arganil.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
+    "description": "Entre elevadas encostas da serra do Açor e perto da aldeia do Piódão, esta zona de lazer resulta da união das ribeiras de Piódão e Chãs d´Égua, que seguem juntas em direção ao rio Alvoco. A represa criada cria um espelho de água onde não passa despercebido o cenário quase mágico, com as pontes em xisto e em madeira, os percursos estreitos e irresistíveis numa das encostas e a proximidade de dois moinhos em xisto.",
     "photoFocals": [
       50
     ],
@@ -7953,7 +8191,7 @@
       "lat": 41.177543,
       "lng": -7.112082
     },
-    "description": "Descubra esta zona balnear no concelho de Torre de Moncorvo. Informações, serviços e localização disponíveis em breve.",
+    "description": "Em Torre de Moncorvo, o rio Sabor encontra o rio Douro e a sua foz é aproveitada para momentos de lazer e relaxamento a partir do lençol de água criado junto ao vale da Vilariça. A Praia Fluvial de Foz do Sabor dispõe de parque de estacionamento, parque de merendas, sanitários e bar restaurante, além de um cais que facilita a prática de desportos náuticos. Nesta zona é possível saborear os pratos de peixe do rio e ainda desfrutar do Parque Aquático Douro AquaFun.",
     "photoFocals": [
       50
     ],
@@ -7966,6 +8204,7 @@
     "name": "Zona Balnear de Fráguas",
     "type": "zona_balnear",
     "river": "Rio Paiva",
+    "hidden": true,
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Fr%C3%A1guas"
     ],
@@ -8036,7 +8275,7 @@
       "lat": 41.409497,
       "lng": -7.165328
     },
-    "description": "Descubra esta zona balnear no concelho de Mirandela. Informações, serviços e localização disponíveis em breve.",
+    "description": "O rio Tua corre vagaroso na localidade de Frechas. A zona de lazer é um pequeno paraíso num território rural, com bom azeite e vinho. Este é um dos cinco lugares do Vale do Tua, (um por município), com condições de excelência para a observação do céu noturno. A estrutura proporciona sombras de choupos, amieiros e salgueiros, complementadas com bar, esplanada, chapéus de sol, churrasqueiras e parque de manutenção, zona de estacionamento e wc adaptado. Ali perto ficam as ruínas da antiga azenha.",
     "photoFocals": [
       92,
       79
@@ -8078,7 +8317,7 @@
       "lat": 41.896798,
       "lng": -6.938359
     },
-    "description": "Descubra esta zona balnear no concelho de Vinhais. Informações, serviços e localização disponíveis em breve.",
+    "description": "Integrada no Parque Natural de Montesinho, na margem esquerda do rio Tuela, esta zona balnear disponibiliza uma ampla zona relvada e arborizada, com mesas de pedra e grelhadores, indispensáveis para os piqueniques. No troço do rio, existe uma parte com pouca profundidade para que as crianças possam nadar livremente e outra mais funda. Esta estrutura seduz os veraneantes pela limpidez das águas, pela envolvente paisagística e pelos bons acessos. Ali perto, fica o moinho.",
     "photoFocals": [
       50
     ],
@@ -8091,6 +8330,7 @@
     "name": "Zona Balnear de Lajeosa do Mondego",
     "type": "zona_balnear",
     "river": "Ribeira da Cabeça Alta",
+    "hidden": true,
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Lajeosa%2Bdo%2BMondego"
     ],
@@ -8161,7 +8401,7 @@
       "lat": 40.135724,
       "lng": -7.614174
     },
-    "description": "Descubra esta zona balnear no concelho de Fundão. Informações, serviços e localização disponíveis em breve.",
+    "description": "Integrada na Rede das Aldeias do Xisto, e servindo a pequena povoação em ambiente familiar, a zona balnear de Lavacolhos – aldeia conhecida pelo seu grupo de bombos - está bem equipada. Na praia, o espelho de água e o vasto relvado são complementados com estruturas como ringue desportivo e um bar com esplanada onde se servem petiscos e refeições. O espaço tem como pano de fundo o verde dos pinhais. Este é também um ponto de descanso dos praticantes de BTT.",
     "photoFocals": [
       81,
       92
@@ -8203,7 +8443,7 @@
       "lat": 40.979513,
       "lng": -7.653687
     },
-    "description": "Descubra esta zona balnear no concelho de Moimenta da Beira. Informações, serviços e localização disponíveis em breve.",
+    "description": "O encontro das ribeiras de Leomil e de Valongo foi aproveitado para a construção de uma represa que, além de servir para o regadio local, é também um ponto de encontro e de lazer. Nas imediações existe uma unidade de Turismo Rural e na povoação encontram-se bar e restaurante. Leomil é uma vila de contexto rural, mas a descoberta do vasto património construído e a subida à serra de Leomil, onde estão duas eólicas com obras de arte de Joana Vasconcelos, merecem um passeio.",
     "photoFocals": [
       50
     ],
@@ -8245,7 +8485,7 @@
       "lat": 40.302472,
       "lng": -7.078111
     },
-    "description": "Descubra esta zona balnear no concelho de Sabugal. Informações, serviços e localização disponíveis em breve.",
+    "description": "Inaugurada em 2015, a zona de lazer de Malcata está instalada à entrada da aldeia, junto à barragem do Sabugal, alimentada pelo Côa. O espaço inclui parque infantil e parque de merendas, churrasqueiras, bar com esplanada e bons espaços verdes. Nas redondezas, está um campo de jogos, um parque de caravanismo e alojamento. Na freguesia existe um percurso urbano, promovendo espaços de tradição. A GR do Vale do Côa atravessa a zona norte da Malcata via Alto da Machoca, a 1078 m de altitude. O Centro de Interpretação do Lince Ibérico é de visita obrigatória.",
     "photoFocals": [
       84,
       82
@@ -8262,6 +8502,7 @@
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Zona%20Balnear%20de%20Malhada%20Ch%C3%A3"
     ],
+    "premium": false,
     "district": "Coimbra",
     "featured": false,
     "services": {
@@ -8326,7 +8567,7 @@
       "lat": 41.729787,
       "lng": -7.101805
     },
-    "description": "Descubra esta zona balnear no concelho de Vinhais. Informações, serviços e localização disponíveis em breve.",
+    "description": "O percurso Vale das Fontes – Nuzedo de baixo garante 7 km de exercício.",
     "photoFocals": [
       50
     ],
@@ -8370,7 +8611,7 @@
       "lat": 40.151722,
       "lng": -7.686583
     },
-    "description": "Descubra esta zona balnear no concelho de Covilhã. Informações, serviços e localização disponíveis em breve.",
+    "description": "A zona balnear de Ourondo, a cerca de 30 km da Covilhã, tem como protagonista a ribeira do Caia, afluente do Zêzere, que passa a poucos metros da zona de lazer. Entre riachos, amieiros e salgueiros, foram instaladas plataformas, escadas e acessos. Nas margens da ribeira não falta o areal e o açude com zona de mergulhos. O local está servido de zona de estacionamento, parque de merendas, grelhadores e snack- bar com refeições. O acesso à água por pessoas com mobilidade reduzida é possível.",
     "photoFocals": [
       92,
       77,
@@ -8416,7 +8657,7 @@
       "lat": 40.395998,
       "lng": -7.201421
     },
-    "description": "Descubra esta zona balnear no concelho de Sabugal. Informações, serviços e localização disponíveis em breve.",
+    "description": "A zona de lazer de Penalobo, alimentada por uma nascente e a 500 do centro da Penalobo, existia para servir de regadio e zona de pesca, mas acabou por se tornar um local de passeio e banhos no verão. Em 2020 foi requalificada e tem agora um areal com chapéus de sol, churrasqueira, sanitários e bar aberto em agosto. Bem perto, fica o baloiço de Penalobo, uma homenagem ao lobo que deu origem ao nome da aldeia. A PR5 – Penha do Lobo é circular e convida a um percurso de 10 km.",
     "photoFocals": [
       92,
       84,
@@ -8434,6 +8675,7 @@
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Peneda%2B-%2BTalhada"
     ],
+    "premium": false,
     "district": "Coimbra",
     "featured": false,
     "services": {
@@ -8457,7 +8699,7 @@
       "lat": 40.235978,
       "lng": -8.051188
     },
-    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Arganil.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
+    "description": "A 3,5 Km de Arganil, a Freguesia das Secarias e o rio Alva oferecem um local de lazer e relaxamento natural muito agradável, bem próximo do centro da vila, rodeado de choupos e ameeiros. O nome da “Peneda da Talhada” advém do conjunto em pedra que se ergue desde o rio até cerca de 18 metros, vencendo desníveis existentes. A zona de lazer conta com sanitários, duches parque de estacionamento e bar com esplanada e é um espaço único para dias de puro descanso e sossego.",
     "photoFocals": [
       50
     ],
@@ -8470,6 +8712,7 @@
     "name": "Zona Balnear de Pombal",
     "type": "zona_balnear",
     "river": "Rio Ave",
+    "hidden": true,
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Pombal"
     ],
@@ -8496,7 +8739,7 @@
       "lat": 41.575339,
       "lng": -8.108621
     },
-    "description": "<p>Descubra&nbsp;esta&nbsp;zona&nbsp;balnear&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Vieira&nbsp;do&nbsp;Minho.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
+    "description": "A praia encontra-se na zona de Rossas, a cerca de 15 km do centro de Vieira do Minho.",
     "photoFocals": [
       50
     ],
@@ -8509,6 +8752,7 @@
     "name": "Zona Balnear de Ponte Maçãs",
     "type": "zona_balnear",
     "river": "Rio Maçãs",
+    "hidden": true,
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Ponte%2BMa%C3%A7%C3%A3s"
     ],
@@ -8576,7 +8820,7 @@
       "lat": 41.56777,
       "lng": -7.259883
     },
-    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Valpaços.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
+    "description": "A poucos quilómetros da cidade de Valpaços, a Praia Fluvial de Rio Torto, na freguesia homónima, está instalada no Rio Rabaçal, que aqui divide o concelho de Mirandela e Valpaços. As suas águas límpidas e com diferentes profundidades são convidativas a famílias com crianças, mas também aos aventureiros que preferem realizar passeios de barco ou de caiaque, ou até rafting, junto do operador turístico. A zona balnear está equipada com parque infantil, bar e zona de merendas.",
     "photoFocals": [
       50
     ],
@@ -8616,7 +8860,7 @@
       "lat": 40.400694,
       "lng": -7.640472
     },
-    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Seia.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
+    "description": "A aldeia mais alta da Estrela, a 1050 metros de altitude, transformou, em 2018, uma área de banhos num espaço acolhedor, em granito e madeira. Em pleno Parque Natural da Serra da Estrela, esta zona balnear foi criada junto às águas límpidas da ribeira da Fervença e dispõe de parque de merendas, parque infantil e acessibilidade a pessoas com mobilidade condicionada até à linha de água. A caixa multibanco, a restauração e o comércio de produtos típicos, como o pão centeio e o queijo, encontram-se no coração da aldeia turística.",
     "photoFocals": [
       92,
       92
@@ -8656,7 +8900,7 @@
       "lat": 40.596278,
       "lng": -8.236388
     },
-    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Tondela.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
+    "description": "Em plena serra do Caramulo, a Praia Fluvial de São João do Monte, na União de Freguesias de S. João do Monte e Mosteirinho, é também conhecida por Zona de Lazer do Paraíso. Banhada pelo rio Águeda, rodeada de zona relvada e árvoredo e naturalmente delimitada por duas pontes, uma delas românica, é uma das zonas de lazer ribeirinhas mais procuradas pelos habitantes locais e pelos turistas para se refrescarem e enfrentarem o calor do verão. Dispõe de serviço de bar e restaurante, sanitários e parque de merendas.",
     "photoFocals": [
       50
     ],
@@ -8669,6 +8913,7 @@
     "name": "Zona Balnear de Segade",
     "type": "zona_balnear",
     "river": "Rio Ceira",
+    "hidden": true,
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Segade"
     ],
@@ -8736,7 +8981,7 @@
       "lat": 40.46388,
       "lng": -7.017467
     },
-    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Sabugal.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
+    "description": "No Seixo do Côa, a 18 km do Sabugal e a 1km do centro da aldeia, fica uma zona de lazer bem equipada que convida a passar o dia: tem parque de merendas, churrasqueira, estacionamento e campo de voleibol e badminton, bar com petiscos e paddles. Um passeio conduz ao baloiço Seixo’s Tower Swing, ao mural relativo à Ponte de Sequeiros, na escola de Vale Longo, ou aos photopoints “bancos do amor”, colocados em sítios estratégicos: Martim Pega, Peroficós, Seixo e Vale Longo.",
     "photoFocals": [
       74
     ],
@@ -8777,7 +9022,7 @@
       "lat": 40.212139,
       "lng": -7.7445
     },
-    "description": "Descubra esta zona balnear no concelho de Covilhã. Informações, serviços e localização disponíveis em breve.",
+    "description": "A zona balnear de Sobral de São Miguel, fica na aldeia conhecida por “coração do xisto”, um dos maiores aglomerados de edifícios de xisto a nível nacional. A ribeira de Porsim cria o espelho de água com profundidades diferentes. O espaço está junto à antiga ponte e, mesmo ao lado, um moinho, uma azenha e uma nora testemunham o uso da força das águas noutros tempos. Próximo da zona de banhos encontra-se a Loja do Xisto – Casa do Saber Fazer.",
     "photoFocals": [
       92
     ],
@@ -8820,7 +9065,7 @@
       "lat": 40.115285,
       "lng": -7.543522
     },
-    "description": "Descubra esta zona balnear no concelho de Fundão. Informações, serviços e localização disponíveis em breve.",
+    "description": "Implantada junto à serra da Gardunha, esta zona balnear, também conhecida por parque fluvial da Azenha da Figueira, usufrui das águas límpidas da ribeira da Gardunha. A estrutura conta com bons acessos, parque de merendas e grelhadores. Toda a área é facilmente acessível até à água. Por aqui é comum encontrar azenhas, uma delas na zona balnear, com moagem funcional e aberta a visitas. A identidade da aldeia é descoberta através da Rotas das Azenhas e Rota dos Moinhos, com passagem nas nove casas museu.",
     "photoFocals": [
       88,
       67,
@@ -8835,6 +9080,7 @@
     "name": "Zona Balnear de Souto do Rio",
     "type": "zona_balnear",
     "river": "Rio Águeda",
+    "hidden": true,
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Souto%2Bdo%2BRio"
     ],
@@ -8879,6 +9125,7 @@
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Urtigal"
     ],
+    "premium": false,
     "district": "Coimbra",
     "featured": false,
     "services": {
@@ -8902,7 +9149,7 @@
       "lat": 40.295069,
       "lng": -7.959148
     },
-    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Arganil.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
+    "description": "A cerca de 15 km de Arganil, a zona balnear do “Urtigal” localiza-se no Barril de Alva e aproveita a margem direita do rio Alva para, através de um açude, oferecer uma área de pura tranquilidade, águas límpidas e areias claras, onde os dias têm sabor a paz e sossego. A área é bastante arborizada e tem acesso pela saída da povoação. Dispõe de parque de estacionamento, sanitários, duches e bar/restaurante.",
     "photoFocals": [
       50
     ],
@@ -8944,7 +9191,7 @@
       "lat": 40.299722,
       "lng": -6.964694
     },
-    "description": "Descubra esta zona balnear no concelho de Sabugal. Informações, serviços e localização disponíveis em breve.",
+    "description": "Na zona de lazer de Vale de Espinho, em pleno rio Côa, o olhar perde-se na vasta extensão de relvado ladeado pelo rio, árvores altas e espaçoso parque de merendas. Entre as estruturas estão o bar de apoio com alguns petiscos, churrasqueiras e parque de estacionamento. O recinto é acessível a pessoas com mobilidade condicionada até à linha de água. Ao dispor, estão três canoas e uma gaivota, e no rio é habitual a pesca, sobretudo da truta. A visitar, está o novo Museu de Arte e Cultura, na antiga leitaria.",
     "photoFocals": [
       92,
       86
@@ -8961,6 +9208,7 @@
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Zona%20Balnear%20de%20Valeiro%20do%20Barco%20-%20Sarzedo"
     ],
+    "premium": false,
     "district": "Coimbra",
     "featured": false,
     "services": {
@@ -8997,6 +9245,7 @@
     "name": "Zona Balnear de Vau",
     "type": "zona_balnear",
     "river": "Rio Paiva",
+    "hidden": true,
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Vau"
     ],
@@ -9067,7 +9316,7 @@
       "lat": 40.373083,
       "lng": -7.467583
     },
-    "description": "Descubra esta zona balnear no concelho de Covilhã. Informações, serviços e localização disponíveis em breve.",
+    "description": "A zona balnear de Verdelhos é um esconderijo acolhedor entre duas encostas, em pleno Parque Natural da Serra da Estrela. Respira-se natureza e permitem-se momentos de indolência junto à ribeira de Beijames. A água não é vigiada. A estrutura balnear é marcada por margens com choupos e salgueiros, solário em areia, relvado, grelhadores, mesas de apoio e bar. Os sanitários ficam a cerca de 100 metros. O acesso até ao parque comunitário permite o uso do campo de futebol, do parque infantil e dos equipamentos de fitness.",
     "photoFocals": [
       72,
       83
@@ -9110,7 +9359,7 @@
       "lat": 40.309306,
       "lng": -7.493944
     },
-    "description": "Descubra esta zona balnear no concelho de Covilhã. Informações, serviços e localização disponíveis em breve.",
+    "description": "A apenas 6 Km a norte da Covilhã, a União de Freguesias de Cantar-Galo e Vila do Carvalho oferece uma zona balnear recatada, marcada por grandes rochedos, vasta vegetação e o fluir das águas límpidas da ribeira da Lapa, por vezes ladeadas de socalcos relvados. A zona balnear conta com parque de estacionamento e acessos pelo centro de saúde. Os sanitários ficam na junta. A equipa de trail ‘Amigos da Vila de Mouros’ ajuda com os trilhos que conduzem a marcos geológicos e belos recantos naturais.",
     "photoFocals": [
       92,
       87
@@ -9150,7 +9399,7 @@
       "lat": 40.952992,
       "lng": -8.177201
     },
-    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Arouca.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
+    "description": "Junto da entrada Sul dos Passadiços do Paiva, na freguesia de Canelas, esta zona balnear servida pelo rio Paiva e rodeada de vegetação, é entre as do concelho a que apresenta maior extensão de areal, dispondo de instalações sanitárias e balneários, parque de estacionamento, campo de jogos em areia e bar com esplanada. Conta com vigilância de nadador-salvador durante a época balnear, sendo também a mais procurada por banhistas mais ou menos aventureiros nas diferentes profundidades.",
     "photoFocals": [
       50
     ],
@@ -9191,7 +9440,7 @@
       "lat": 40.442556,
       "lng": -7.515131
     },
-    "description": "Descubra esta zona balnear no concelho de Manteigas. Informações, serviços e localização disponíveis em breve.",
+    "description": "Localizada a cerca de 10 km de Manteigas e a 950 metros de altitude, no limite dos concelhos de Manteigas e Gouveia, a zona de lazer do Covão da Ponte fica praticamente no início do percurso do rio Mondego, oferecendo águas límpidas e calmas e muitas sombras. Serve também de local de pernoita, contando com instalações sanitárias e algumas e mesas. Esta espaço é ideal para dias em contacto com a natureza mais pura e um excelente ponto de partida para aceder ao Planalto Central da Serra, seja por carro, de bicicleta ou a pé.",
     "photoFocals": [
       50
     ],
@@ -9233,7 +9482,7 @@
       "lat": 40.211417,
       "lng": -7.631944
     },
-    "description": "Descubra esta zona balnear no concelho de Covilhã. Informações, serviços e localização disponíveis em breve.",
+    "description": "Cascatas e piscinas naturais criadas pela ribeira do Paul, rodeadas de árvores e sombras, são os elementos diferenciadores deste pequeno paraíso, conhecido por “Poço do Zé Azinho”. Dois bares com esplanada, um em cada margem, servem alguns petiscos, e o local está servido com sanitários, máquinas de manutenção, churrasqueiras e campo desportivo multiusos. Através da Casa do Povo, é possível visitar a casa Museu, e através da Junta, o novo Centro Interpretativo da Ribeira do Paul.",
     "photoFocals": [
       78,
       90
@@ -9276,7 +9525,7 @@
       "lat": 40.043472,
       "lng": -7.014222
     },
-    "description": "Descubra esta zona balnear no concelho de Idanha-a-Nova. Informações, serviços e localização disponíveis em breve.",
+    "description": "Rodeada por um valioso património geológico, inserido no Geopark Naturtejo, esta zona balnear usufrui das águas da barragem de Penha Garcia, que conserva na sua represa parte do caudal do rio Ponsul. Das imediações avistam-se várias reservas naturais, de um e outro lado da fronteira. A ausência de infraestruturas de apoio é compensada pela excelente qualidade da água e por uma paisagem imponente como Junto à zona balnear existe a “Rota dos Fósseis” (PR3/3Km), que conduz pelo Parque Icnológico de Penha Garcia.",
     "photoFocals": [
       92,
       91
@@ -9293,6 +9542,7 @@
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Zona%20Balnear%20do%20Po%C3%A7o%20da%20Cesta%20-%20Casal%20Novo"
     ],
+    "premium": false,
     "district": "Coimbra",
     "featured": false,
     "services": {
@@ -9356,7 +9606,7 @@
       "lat": 40.28775,
       "lng": -7.709444
     },
-    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Seia.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
+    "description": "Em pleno Parque Natural da Serra da Estrela, esta zona balnear criada em 2015 usufrui das águas da ribeira de Alvoco, afluente do Alva, e está localizada em Vasco Esteves de Baixo, uma aldeia da freguesia de Alvoco da Serra. A envolvente foi requalificada, preservando a paisagem rural natural. A praia disponibiliza mesas de piquenique, bar e instalações sanitárias e é ponto de passagem da rota da Ribeira de Alvoco (PR13-SEI) entre Vide e Alvoco da Serra. A Casa-Museu é um bom ponto de visita na sede de freguesia.",
     "photoFocals": [
       92,
       92
@@ -9373,6 +9623,7 @@
     "photos": [
       "https://placehold.co/800x600/003A40/FFEB3B?text=Zona%20Balnear%20do%20Po%C3%A7o%20do%20Pujadouro%20-%20Cepos"
     ],
+    "premium": false,
     "district": "Coimbra",
     "featured": false,
     "services": {
@@ -9438,7 +9689,7 @@
       "lat": 39.729861,
       "lng": -8.230806
     },
-    "description": "Descubra esta zona balnear no concelho de Sertã. Informações, serviços e localização disponíveis em breve.",
+    "description": "Este pequeno paraíso no extremo sudoeste do concelho da Sertã é banhado pela albufeira de Castelo de Bode, onde atua o Centro Náutico do Zêzere. É um lugar com espaços de lazer e de recreio: área de espreguiçadeiras e areal junto à margem, bar de apoio, ciclovia e um restaurante com pratos regionais e caracol frito. Perto, fica a estação intermodal da GR Zêzere, o Cable Park do Trízio, a funcionar todo o ano, e a loja náutica, com aluguer de embarcações e diversos desportos.",
     "photoFocals": [
       92,
       78
@@ -9479,7 +9730,7 @@
       "lat": 40.397583,
       "lng": -7.687639
     },
-    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Seia.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
+    "description": "Há décadas que a conhecida “Praia do Dr. Pedro”, em S. Romão, já era usada por grupos de amigos e algumas famílias como espaço para banhos e tardes de lazer. Em 2018, foi totalmente requalificado. A estrutura balnear está integrada na Mata do Des- terro, na margem direita do rio Alva, na área protegida do Parque Natural da Serra da Estrela, de beleza extraordinária. Mesmo ao lado encontra-se o Museu Natural da Electricidade, onde estão instalados os sanitários de apoio, bar e esplanada, disponíveis apenas no horário do Museu.",
     "photoFocals": [
       81,
       74
@@ -9525,7 +9776,7 @@
       "lat": 40.229083,
       "lng": -7.221639
     },
-    "description": "<p>Descubra&nbsp;esta&nbsp;praia&nbsp;fluvial&nbsp;no&nbsp;concelho&nbsp;de&nbsp;Penamacor.&nbsp;Informações,&nbsp;serviços&nbsp;e&nbsp;localização&nbsp;disponíveis&nbsp;em&nbsp;breve.</p>",
+    "description": "A extensa área natural está marcada pelo açude de um velho moinho. Aqui se pode repousar, nadar e merendar. Possui estacionamento, área de serviço para autocaravanas, churrasqueira e bar de apoio. Localizada nas imediações de Benquerença, a zona de lazer está ladeada pelas serras de Santa Marta e da Opa, no meio de campos de cultivo e próxima de alguns dos 14 geossítios do concelho de Penamacor, no Geopark Naturtejo.",
     "photoFocals": [
       48,
       92,
@@ -9570,7 +9821,7 @@
       "lat": 40.743500000000004,
       "lng": -8.203944444444444
     },
-    "description": "<p></p>",
+    "description": "Na União das Freguesias de Oliveira de Frades, Souto de Lafões e Sejães, a Zona de Fruição Ribeirinha de Sejães, inaugurada em 2020, veio substituir a antiga zona de banhos, perdida após construção da barragem de Ribeiradio. O espaço oferece duas piscinas e um amplo relvado com vista para a albufeira e é excelente para descansar, fazer um piquenique, tomar um café e usar o campo de voleibol. Ao longo da albufeira existe o percurso pedestre entre Sejães a Ribeiradio, com levadas e quedas de água.",
     "photoFocals": [
       92
     ],

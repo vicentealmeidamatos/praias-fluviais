@@ -450,7 +450,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       <!-- Description -->
       <section class="mb-12">
         <h2 class="font-display text-xs uppercase tracking-[0.2em] text-praia-teal-500 font-semibold mb-4">Sobre esta Praia</h2>
-        <p data-content-bind="beaches:${beachIdx}.description" class="text-praia-sand-700 leading-relaxed-plus text-base md:text-lg">${beach.description}</p>
+        <p data-content-bind="beaches:${beachIdx}.description" class="text-praia-sand-700 leading-relaxed-plus text-base md:text-lg" style="word-break:break-word;overflow-wrap:anywhere;">${beach.description}</p>
       </section>
 
       ${winnerMedalsHtml}

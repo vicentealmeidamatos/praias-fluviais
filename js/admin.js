@@ -707,7 +707,10 @@ function initQuillEditor(elementId, existingHtml = '', opts = {}) {
 function getQuillHTML(elementId) {
   const q = _quillInstances[elementId];
   if (!q) return '';
-  return q.getSemanticHTML() || '';
+  const html = q.getSemanticHTML() || '';
+  // Substituir non-breaking spaces (provenientes de colagens) por espaços normais
+  // para que o texto quebre linha corretamente no admin e no site público.
+  return html.replace(/ /g, ' ').replace(/&nbsp;/g, ' ');
 }
 
 // ─── Geocodificação (Nominatim / OpenStreetMap) ───
