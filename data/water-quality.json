@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-26T10:30:28.474Z",
+  "lastUpdated": "2026-05-27T10:32:14.094Z",
   "sourceUrl": "https://infoagua.apambiente.pt/pt/praias/praias-pesquisa-avancada",
   "stats": {
     "siteBeaches": 228,
@@ -1221,7 +1221,7 @@
       "previousYearValue": 2,
       "currentSeasonStatus": "Água adequada a banhos",
       "currentSeasonValue": 1,
-      "lastAnalysisDate": "2026-05-19",
+      "lastAnalysisDate": "2026-05-25",
       "interdictionReason": null,
       "seasonStart": "2026-06-13",
       "seasonEnd": "2026-09-13",
@@ -1229,7 +1229,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 81,
-      "lastChanged": "2026-05-22T09:51:18.669Z"
+      "lastChanged": "2026-05-27T10:32:14.094Z"
     },
     "praia-fluvial-de-fragas-de-sao-simao": {
       "apaCode": "PTCK7V",
