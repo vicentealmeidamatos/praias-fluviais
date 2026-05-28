@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-27T10:32:14.094Z",
+  "lastUpdated": "2026-05-28T10:34:43.819Z",
   "sourceUrl": "https://infoagua.apambiente.pt/pt/praias/praias-pesquisa-avancada",
   "stats": {
     "siteBeaches": 228,
@@ -141,7 +141,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-05-25",
       "interdictionReason": null,
       "seasonStart": "2026-05-30",
       "seasonEnd": "2026-09-13",
@@ -149,7 +149,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 51,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-05-28T10:34:43.819Z"
     },
     "praia-fluvial-de-bogueira": {
       "apaCode": "PTCH3L",
@@ -1491,7 +1491,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-05-25",
       "interdictionReason": null,
       "seasonStart": "2026-06-01",
       "seasonEnd": "2026-09-15",
@@ -1499,7 +1499,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 92,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-05-28T10:34:43.819Z"
     },
     "praia-fluvial-de-pampilhosa-da-serra-vila": {
       "apaCode": "PTCH2Q",
@@ -1545,7 +1545,7 @@
       "previousYearValue": 2,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-05-25",
       "interdictionReason": null,
       "seasonStart": "2026-05-30",
       "seasonEnd": "2026-08-30",
@@ -1553,7 +1553,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 24,
-      "lastChanged": "2026-05-05T08:29:19.813Z"
+      "lastChanged": "2026-05-28T10:34:43.819Z"
     },
     "praia-fluvial-de-pomares": {
       "apaCode": "PTCT7Q",
@@ -2121,7 +2121,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-05-25",
       "interdictionReason": null,
       "seasonStart": "2026-06-01",
       "seasonEnd": "2026-09-30",
@@ -2129,7 +2129,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 32,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-05-28T10:34:43.819Z"
     },
     "praia-fluvial-de-agroal-ourem": {
       "apaCode": "PTCD8N",
@@ -2499,7 +2499,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-05-25",
       "interdictionReason": null,
       "seasonStart": "2026-06-01",
       "seasonEnd": "2026-09-30",
@@ -2507,7 +2507,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 65,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-05-28T10:34:43.819Z"
     },
     "praia-fluvial-de-reconquinho": {
       "apaCode": "PTCL3T",
@@ -2679,7 +2679,7 @@
       "previousYearValue": 2,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-05-25",
       "interdictionReason": null,
       "seasonStart": "2026-06-01",
       "seasonEnd": "2026-09-30",
@@ -2687,7 +2687,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 121,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-05-28T10:34:43.819Z"
     },
     "praia-fluvial-de-maravilha": {
       "apaCode": "PTCX2D",
@@ -2715,7 +2715,7 @@
       "previousYearValue": 2,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-05-25",
       "interdictionReason": null,
       "seasonStart": "2026-06-01",
       "seasonEnd": "2026-09-30",
@@ -2723,7 +2723,7 @@
       "matchMethod": "proximity",
       "matchPool": "costeira",
       "matchDistance": 82,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-05-28T10:34:43.819Z"
     },
     "praia-fluvial-de-folques": {
       "apaCode": "PTCF8N",
