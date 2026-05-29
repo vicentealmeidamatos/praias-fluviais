@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-28T10:34:43.819Z",
+  "lastUpdated": "2026-05-29T10:15:17.691Z",
   "sourceUrl": "https://infoagua.apambiente.pt/pt/praias/praias-pesquisa-avancada",
   "stats": {
     "siteBeaches": 228,
@@ -139,8 +139,8 @@
       "apaConcelho": "MIRA",
       "previousYearDsc": "Excelente",
       "previousYearValue": 1,
-      "currentSeasonStatus": "Ainda não há análises",
-      "currentSeasonValue": 0,
+      "currentSeasonStatus": "Água adequada a banhos",
+      "currentSeasonValue": 1,
       "lastAnalysisDate": "2026-05-25",
       "interdictionReason": null,
       "seasonStart": "2026-05-30",
@@ -149,7 +149,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 51,
-      "lastChanged": "2026-05-28T10:34:43.819Z"
+      "lastChanged": "2026-05-29T10:15:17.691Z"
     },
     "praia-fluvial-de-bogueira": {
       "apaCode": "PTCH3L",
@@ -265,8 +265,8 @@
       "apaConcelho": "GONDOMAR",
       "previousYearDsc": "Excelente",
       "previousYearValue": 1,
-      "currentSeasonStatus": "Ainda não há análises",
-      "currentSeasonValue": 0,
+      "currentSeasonStatus": "Água adequada a banhos",
+      "currentSeasonValue": 1,
       "lastAnalysisDate": "2026-05-19",
       "interdictionReason": null,
       "seasonStart": "2026-05-30",
@@ -275,7 +275,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 80,
-      "lastChanged": "2026-05-23T08:32:22.256Z"
+      "lastChanged": "2026-05-29T10:15:17.691Z"
     },
     "praia-fluvial-de-loucainha": {
       "apaCode": "PTCN2C",
@@ -841,8 +841,8 @@
       "apaConcelho": "ALANDROAL",
       "previousYearDsc": "Excelente",
       "previousYearValue": 1,
-      "currentSeasonStatus": "Ainda não há análises",
-      "currentSeasonValue": 0,
+      "currentSeasonStatus": "Água adequada a banhos",
+      "currentSeasonValue": 1,
       "lastAnalysisDate": "2026-05-18",
       "interdictionReason": null,
       "seasonStart": "2026-06-01",
@@ -851,7 +851,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 79,
-      "lastChanged": "2026-05-23T08:32:22.256Z"
+      "lastChanged": "2026-05-29T10:15:17.691Z"
     },
     "praia-fluvial-de-badamalos": {
       "apaCode": "PTCJ8D",
@@ -1363,8 +1363,8 @@
       "apaConcelho": "REGUENGOS DE MONSARAZ",
       "previousYearDsc": "Excelente",
       "previousYearValue": 1,
-      "currentSeasonStatus": "Ainda não há análises",
-      "currentSeasonValue": 0,
+      "currentSeasonStatus": "Água adequada a banhos",
+      "currentSeasonValue": 1,
       "lastAnalysisDate": "2026-05-18",
       "interdictionReason": null,
       "seasonStart": "2026-06-01",
@@ -1373,7 +1373,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 72,
-      "lastChanged": "2026-05-23T08:32:22.256Z"
+      "lastChanged": "2026-05-29T10:15:17.691Z"
     },
     "praia-fluvial-de-montalvo-tesos": {
       "apaCode": "PTCT2W",
@@ -1489,8 +1489,8 @@
       "apaConcelho": "COIMBRA",
       "previousYearDsc": "Excelente",
       "previousYearValue": 1,
-      "currentSeasonStatus": "Ainda não há análises",
-      "currentSeasonValue": 0,
+      "currentSeasonStatus": "Água adequada a banhos",
+      "currentSeasonValue": 1,
       "lastAnalysisDate": "2026-05-25",
       "interdictionReason": null,
       "seasonStart": "2026-06-01",
@@ -1499,7 +1499,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 92,
-      "lastChanged": "2026-05-28T10:34:43.819Z"
+      "lastChanged": "2026-05-29T10:15:17.691Z"
     },
     "praia-fluvial-de-pampilhosa-da-serra-vila": {
       "apaCode": "PTCH2Q",
@@ -1543,8 +1543,8 @@
       "apaConcelho": "CASTANHEIRA DE PÊRA",
       "previousYearDsc": "Boa",
       "previousYearValue": 2,
-      "currentSeasonStatus": "Ainda não há análises",
-      "currentSeasonValue": 0,
+      "currentSeasonStatus": "Água adequada a banhos",
+      "currentSeasonValue": 1,
       "lastAnalysisDate": "2026-05-25",
       "interdictionReason": null,
       "seasonStart": "2026-05-30",
@@ -1553,7 +1553,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 24,
-      "lastChanged": "2026-05-28T10:34:43.819Z"
+      "lastChanged": "2026-05-29T10:15:17.691Z"
     },
     "praia-fluvial-de-pomares": {
       "apaCode": "PTCT7Q",
@@ -1813,8 +1813,8 @@
       "apaConcelho": "ODEMIRA",
       "previousYearDsc": "Excelente",
       "previousYearValue": 1,
-      "currentSeasonStatus": "Ainda não há análises",
-      "currentSeasonValue": 0,
+      "currentSeasonStatus": "Água adequada a banhos",
+      "currentSeasonValue": 1,
       "lastAnalysisDate": "2026-05-18",
       "interdictionReason": null,
       "seasonStart": "2026-05-30",
@@ -1823,7 +1823,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 117,
-      "lastChanged": "2026-05-23T08:32:22.256Z"
+      "lastChanged": "2026-05-29T10:15:17.691Z"
     },
     "praia-fluvial-de-santa-luzia": {
       "apaCode": "PTCD3H",
@@ -2119,8 +2119,8 @@
       "apaConcelho": "PENALVA DO CASTELO",
       "previousYearDsc": "Excelente",
       "previousYearValue": 1,
-      "currentSeasonStatus": "Ainda não há análises",
-      "currentSeasonValue": 0,
+      "currentSeasonStatus": "Água adequada a banhos",
+      "currentSeasonValue": 1,
       "lastAnalysisDate": "2026-05-25",
       "interdictionReason": null,
       "seasonStart": "2026-06-01",
@@ -2129,7 +2129,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 32,
-      "lastChanged": "2026-05-28T10:34:43.819Z"
+      "lastChanged": "2026-05-29T10:15:17.691Z"
     },
     "praia-fluvial-de-agroal-ourem": {
       "apaCode": "PTCD8N",
@@ -2281,8 +2281,8 @@
       "apaConcelho": "MOURA",
       "previousYearDsc": "Excelente",
       "previousYearValue": 1,
-      "currentSeasonStatus": "Ainda não há análises",
-      "currentSeasonValue": 0,
+      "currentSeasonStatus": "Água adequada a banhos",
+      "currentSeasonValue": 1,
       "lastAnalysisDate": "2026-05-18",
       "interdictionReason": null,
       "seasonStart": "2026-05-30",
@@ -2291,7 +2291,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 71,
-      "lastChanged": "2026-05-23T08:32:22.256Z"
+      "lastChanged": "2026-05-29T10:15:17.691Z"
     },
     "praia-fluvial-de-lago-azul": {
       "apaCode": "PTCT7W",
@@ -2409,7 +2409,7 @@
       "previousYearValue": 2,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-05-26",
       "interdictionReason": null,
       "seasonStart": "2026-06-01",
       "seasonEnd": "2026-09-13",
@@ -2417,7 +2417,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 28,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-05-29T10:15:17.691Z"
     },
     "praia-fluvial-de-penedo-furado": {
       "apaCode": "PTCN3H",
@@ -2497,8 +2497,8 @@
       "apaConcelho": "COIMBRA",
       "previousYearDsc": "Excelente",
       "previousYearValue": 1,
-      "currentSeasonStatus": "Ainda não há análises",
-      "currentSeasonValue": 0,
+      "currentSeasonStatus": "Água adequada a banhos",
+      "currentSeasonValue": 1,
       "lastAnalysisDate": "2026-05-25",
       "interdictionReason": null,
       "seasonStart": "2026-06-01",
@@ -2507,7 +2507,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 65,
-      "lastChanged": "2026-05-28T10:34:43.819Z"
+      "lastChanged": "2026-05-29T10:15:17.691Z"
     },
     "praia-fluvial-de-reconquinho": {
       "apaCode": "PTCL3T",
@@ -2677,8 +2677,8 @@
       "apaConcelho": "SÃO PEDRO DO SUL",
       "previousYearDsc": "Boa",
       "previousYearValue": 2,
-      "currentSeasonStatus": "Ainda não há análises",
-      "currentSeasonValue": 0,
+      "currentSeasonStatus": "Água adequada a banhos",
+      "currentSeasonValue": 1,
       "lastAnalysisDate": "2026-05-25",
       "interdictionReason": null,
       "seasonStart": "2026-06-01",
@@ -2687,7 +2687,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 121,
-      "lastChanged": "2026-05-28T10:34:43.819Z"
+      "lastChanged": "2026-05-29T10:15:17.691Z"
     },
     "praia-fluvial-de-maravilha": {
       "apaCode": "PTCX2D",
@@ -2713,8 +2713,8 @@
       "apaConcelho": "ALJEZUR",
       "previousYearDsc": "Boa",
       "previousYearValue": 2,
-      "currentSeasonStatus": "Ainda não há análises",
-      "currentSeasonValue": 0,
+      "currentSeasonStatus": "Água adequada a banhos",
+      "currentSeasonValue": 1,
       "lastAnalysisDate": "2026-05-25",
       "interdictionReason": null,
       "seasonStart": "2026-06-01",
@@ -2723,7 +2723,7 @@
       "matchMethod": "proximity",
       "matchPool": "costeira",
       "matchDistance": 82,
-      "lastChanged": "2026-05-28T10:34:43.819Z"
+      "lastChanged": "2026-05-29T10:15:17.691Z"
     },
     "praia-fluvial-de-folques": {
       "apaCode": "PTCF8N",
