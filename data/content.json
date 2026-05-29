@@ -63,12 +63,6 @@
         "label": "Novidades"
       },
       {
-        "id": "descontos",
-        "href": "descontos.html",
-        "icon": "ticket-percent",
-        "label": "Descontos"
-      },
-      {
         "id": "loja",
         "href": "loja.html",
         "icon": "shopping-bag",
@@ -92,11 +86,6 @@
           "id": "novidades",
           "href": "artigos.html",
           "label": "Novidades"
-        },
-        {
-          "id": "descontos",
-          "href": "descontos.html",
-          "label": "Descontos"
         }
       ],
       "col1Title": "Explorar",
@@ -155,8 +144,6 @@
     "stat1Value": "200+",
     "stat2Label": "Guias Distribuídos",
     "stat2Value": "120k",
-    "stat3Label": "Descontos",
-    "stat3Value": "+250",
     "heroImageUrl": "",
     "heroCtaPrimary": "Explorar Mapa",
     "heroCtaSecondary": "Votar Praia do Ano",
@@ -188,13 +175,6 @@
     "label": "Fale Connosco",
     "title": "Contactos",
     "description": "Estamos disponíveis para responder a dúvidas, sugestões e parcerias."
-  },
-  "descontos": {
-    "label": "Parcerias Exclusivas",
-    "title": "Aproveite os Descontos",
-    "emptyState": "Nenhum desconto encontrado com estes filtros.",
-    "description": "Descontos exclusivos em alojamento, restauração, atividades e comércio para portadores do Guia das Praias Fluviais e do Passaporte.",
-    "heroImageUrl": ""
   },
   "onde_guia": {
     "label": "Rede de Distribuição",

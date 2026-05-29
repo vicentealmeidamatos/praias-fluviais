@@ -1,6 +1,6 @@
 // ─── Admin Panel — JSON Visual Editor ───
 const _norm = s => (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
-const SECTIONS = ['beaches', 'concelhos', 'articles', 'locations-guia-passaporte', 'locations-carimbos', 'descontos', 'produtos', 'encomendas', 'utilizadores', 'comentarios', 'conteudo', 'settings'];
+const SECTIONS = ['beaches', 'concelhos', 'articles', 'locations-guia-passaporte', 'locations-carimbos', 'produtos', 'encomendas', 'utilizadores', 'comentarios', 'conteudo', 'settings'];
 
 // ─── Auto-save: section → dataset name (Supabase via /api/save-data) ───
 const SECTION_TO_DATASET = {
@@ -8,7 +8,6 @@ const SECTION_TO_DATASET = {
   'articles':                   'articles',
   'locations-guia-passaporte':  'locationsGuia',
   'locations-carimbos':         'locationsCarimbo',
-  'descontos':                  'descontos',
   'produtos':                   'products',
   'settings':                   'settings',
   'conteudo':                   'content',
@@ -236,7 +235,6 @@ async function discardPendingChanges() {
     'articles': 'data/articles.json',
     'locations-guia-passaporte': 'data/locations-guia-passaporte.json',
     'locations-carimbos': 'data/locations-carimbos.json',
-    'descontos': 'data/descontos.json',
     'produtos': 'data/products.json',
     'settings': 'data/settings.json',
     'conteudo': 'data/content.json',
@@ -434,7 +432,7 @@ function showLoadingScreen() {
     'A obter conteúdos do site…',
     'A sincronizar com a base de dados…',
     'A carregar praias e artigos…',
-    'A organizar produtos e descontos…',
+    'A organizar produtos…',
     'Quase pronto…',
   ];
   let i = 0;
@@ -573,7 +571,6 @@ function renderDashboard() {
     articles:              { icon: '📰', label: 'Novidades' },
     'locations-guia-passaporte': { icon: '📗', label: 'Guia & Passaporte' },
     'locations-carimbos':        { icon: '🔖', label: 'Carimbo' },
-    descontos:             { icon: '🏷️', label: 'Descontos' },
     produtos:              { icon: '🛍️', label: 'Loja · Produtos' },
     encomendas:            { icon: '📦', label: 'Loja · Encomendas' },
     utilizadores:          { icon: '👥', label: 'Dados' },
@@ -639,7 +636,6 @@ function renderSection() {
     case 'articles':               renderArticles(content); break;
     case 'locations-guia-passaporte': renderLocationsGuia(content); break;
     case 'locations-carimbos':        renderLocationsPassaporte(content); break;
-    case 'descontos':              renderDescontos(content); break;
     case 'conteudo':               renderConteudo(content); break;
     case 'settings':               renderSettings(content); break;
     case 'produtos':               renderProdutos(content); break;
@@ -659,45 +655,96 @@ function renderSection() {
 }
 
 // ─── Image Upload ───
-// Compress/resize image client-side before upload (max 1200px, JPEG 80%)
+// Compress/resize image client-side before upload (max 1200px, JPEG 80%).
+// Devolve { blob } em sucesso ou { error } com motivo específico em falha.
+// Não usa fallback silencioso — o caller é informado da causa real.
 function compressImage(file, maxW = 1200, quality = 0.8) {
   return new Promise((resolve) => {
     const img = new Image();
+    const url = URL.createObjectURL(file);
     img.onload = () => {
+      URL.revokeObjectURL(url);
       let w = img.width, h = img.height;
+      if (!w || !h) { resolve({ error: 'imagem com dimensões inválidas' }); return; }
       if (w > maxW) { h = Math.round(h * maxW / w); w = maxW; }
       const canvas = document.createElement('canvas');
       canvas.width = w; canvas.height = h;
-      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      try { canvas.getContext('2d').drawImage(img, 0, 0, w, h); }
+      catch (e) { resolve({ error: 'falha a redimensionar (' + (e.message || 'canvas') + ')' }); return; }
       canvas.toBlob(blob => {
-        resolve(blob || file);
+        if (!blob || blob.size === 0) resolve({ error: 'falha a codificar JPEG' });
+        else resolve({ blob });
       }, 'image/jpeg', quality);
     };
-    img.onerror = () => resolve(file);
-    img.src = URL.createObjectURL(file);
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      resolve({ error: 'formato não suportado pelo browser (ex: HEIC/HEIF)' });
+    };
+    img.src = url;
   });
 }
 
+// Limites do endpoint /api/upload (api/upload.js: 10 MB por ficheiro).
+const UPLOAD_MAX_BYTES_RAW       = 50 * 1024 * 1024;  // 50 MB antes de comprimir
+const UPLOAD_MAX_BYTES_COMPRESSED = 10 * 1024 * 1024; // 10 MB depois de comprimir
+
 async function uploadImageFile(file, folder = 'misc') {
-  const compressed = await compressImage(file);
+  // ─── Pre-validations (falham cedo, sem tocar no estado) ──────────────────
+  if (!file || !(file instanceof Blob)) {
+    throw new Error('ficheiro inválido');
+  }
+  if (file.size === 0) {
+    throw new Error('ficheiro vazio (0 bytes)');
+  }
+  if (file.size > UPLOAD_MAX_BYTES_RAW) {
+    throw new Error(`demasiado grande (${(file.size / 1024 / 1024).toFixed(1)} MB; máximo ${UPLOAD_MAX_BYTES_RAW / 1024 / 1024} MB antes de compressão)`);
+  }
+  if (file.type && !file.type.startsWith('image/')) {
+    throw new Error(`tipo "${file.type}" não é imagem`);
+  }
+  // HEIC/HEIF: browsers não conseguem decodificar nativamente
+  const name = file.name || '';
+  if (/heic|heif/i.test(file.type || '') || /\.(heic|heif)$/i.test(name)) {
+    throw new Error('formato HEIC/HEIF não suportado — converta para JPG ou PNG antes');
+  }
+
+  // ─── Compressão (devolve { blob } ou { error }) ──────────────────────────
+  const result = await compressImage(file);
+  if (result.error) {
+    throw new Error(result.error);
+  }
+  const compressed = result.blob;
+  if (compressed.size > UPLOAD_MAX_BYTES_COMPRESSED) {
+    throw new Error(`mesmo após compressão fica em ${(compressed.size / 1024 / 1024).toFixed(1)} MB (máximo ${UPLOAD_MAX_BYTES_COMPRESSED / 1024 / 1024} MB)`);
+  }
+
+  // ─── Upload ──────────────────────────────────────────────────────────────
+  let res;
   try {
-    const res = await fetch('/api/upload', {
+    res = await fetch('/api/upload', {
       method: 'POST',
-      headers: { 'Content-Type': 'image/jpeg', 'X-Filename': file.name.replace(/\.\w+$/, '.jpg'), 'X-Folder': folder },
+      headers: {
+        'Content-Type': 'image/jpeg',
+        'X-Filename': name.replace(/\.\w+$/, '.jpg') || 'upload.jpg',
+        'X-Folder':   folder,
+      },
       body: compressed,
     });
-    if (!res.ok) throw new Error('Servidor não disponível');
-    const json = await res.json();
-    return { src: json.path, name: json.name };
-  } catch {
-    // Fallback: base64 data URL (works without server endpoint)
-    const src = await new Promise(resolve => {
-      const reader = new FileReader();
-      reader.onload = e => resolve(e.target.result);
-      reader.readAsDataURL(compressed);
-    });
-    return { src, name: file.name };
+  } catch (e) {
+    throw new Error(`falha de rede (${e.message || 'fetch'})`);
   }
+
+  let json = null;
+  try { json = await res.json(); } catch {}
+
+  if (!res.ok) {
+    const detail = (json && json.error) || `HTTP ${res.status}`;
+    throw new Error(`servidor recusou (${detail})`);
+  }
+  if (!json || !json.path) {
+    throw new Error('resposta do servidor sem URL');
+  }
+  return { src: json.path, name: json.name || name };
 }
 
 // ─── Quill WYSIWYG Helpers ───
@@ -886,12 +933,12 @@ function renderPhotoGallery() {
 // slider. Toggle Desktop/Mobile permite definir um crop separado para
 // cada viewport. Actualiza state.editingPhotos[index] em tempo real.
 //
-// Proporções correspondem ao hero real (h-[440px] md:h-[560px] lg:h-[680px],
-// largura = viewport):
-//   - Desktop: window.innerWidth × 680  → ratio depende do ecrã do editor
-//                                          (≈ 1440/680 = 2.12 num MacBook)
-//   - Mobile : 390 × 440 (referência iPhone 14, ratio ≈ 0.886)
-const FOCAL_MOBILE_REF = { w: 390, h: 440 };
+// Proporções correspondem ao hero real:
+//   - Desktop: window.innerWidth × 680 (web tem h-[680px] em lg+)
+//   - Mobile : 390 × 470 (referência iPhone 14 com app, ratio ≈ 0.83)
+//             O hero da app é 470px (CSS: html.is-app #hero-carousel > div.relative).
+//             Web mobile tem 440px (h-[440px]) mas o admin foca o caso app.
+const FOCAL_MOBILE_REF = { w: 390, h: 470 };
 function focalAspect(mode) {
   if (mode === 'mobile') return `${FOCAL_MOBILE_REF.w} / ${FOCAL_MOBILE_REF.h}`;
   // Desktop: usa o ecrã actual do utilizador para preview fiel
@@ -979,6 +1026,11 @@ function openFocalEditor(index) {
         <div id="focal-stage"
           style="position:relative;aspect-ratio:${focalAspect(mode)};max-width:100%;max-height:100%;height:100%;border-radius:14px;overflow:hidden;background:#0a1416;box-shadow:0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06);user-select:none;-webkit-user-select:none;cursor:grab;transition:aspect-ratio 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);">
           <div id="focal-stage-photo" style="position:absolute;inset:0;background-image:url('${photo.src}');background-size:cover;background-repeat:no-repeat;background-position:${cur.focalX}% ${cur.focalY}%;transform:scale(${cur.zoom});transform-origin:${cur.focalX}% ${cur.focalY}%;will-change:transform, background-position;"></div>
+          <div id="focal-stage-watermark" aria-hidden="true"
+            style="position:absolute;top:14px;right:14px;z-index:3;pointer-events:none;padding:6px 11px;border-radius:999px;background:rgba(0,0,0,0.42);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);">
+            <img src="brand_assets/logotipo.png" alt=""
+              style="display:block;height:26px;width:auto;opacity:0.92;filter:brightness(0) invert(1);">
+          </div>
           <div style="position:absolute;top:50%;left:50%;width:38px;height:38px;transform:translate(-50%,-50%);pointer-events:none;opacity:0.55;">
             <div style="position:absolute;top:50%;left:0;right:0;height:1px;background:rgba(255,255,255,0.7);"></div>
             <div style="position:absolute;left:50%;top:0;bottom:0;width:1px;background:rgba(255,255,255,0.7);"></div>
@@ -1219,15 +1271,38 @@ async function handleBeachPhotoFiles(files) {
 
   if (uploadBtn) { uploadBtn.disabled = true; uploadBtn.textContent = 'A carregar...'; }
 
+  const ok = [];
+  const failed = [];
   for (const raw of fileList) {
-    const { file, focalY } = await preparePhotoForUpload(raw, 'photo-watermark-cb');
-    const result = await uploadImageFile(file, 'beaches');
-    state.editingPhotos.push({ ...result, focalX: 50, focalY: Number.isFinite(focalY) ? focalY : 50, zoom: 1, mobile: null });
+    try {
+      const { file, focalY } = await preparePhotoForUpload(raw, 'photo-watermark-cb');
+      const result = await uploadImageFile(file, 'beaches');
+      state.editingPhotos.push({ ...result, focalX: 50, focalY: Number.isFinite(focalY) ? focalY : 50, zoom: 1, mobile: null });
+      ok.push(raw.name);
+    } catch (e) {
+      failed.push({ name: raw.name || '(sem nome)', reason: e.message });
+      console.error('[admin] foto rejeitada:', raw.name, e);
+    }
   }
 
   if (uploadBtn) { uploadBtn.disabled = false; uploadBtn.textContent = '+ Adicionar Fotos'; }
   renderPhotoGallery();
-  toast(`${fileList.length} foto(s) adicionada(s).`, 'success');
+  reportImageUploadResult('Fotos da praia', ok, failed);
+}
+
+// Reporter unificado de uploads — toast de sucesso ou modal com a lista
+// específica dos ficheiros recusados (para o utilizador saber exactamente
+// qual imagem é o problema, sem ter de adivinhar).
+function reportImageUploadResult(label, ok, failed) {
+  if (!failed.length) {
+    if (ok.length) toast(`${ok.length} ${ok.length === 1 ? 'imagem adicionada' : 'imagens adicionadas'}.`, 'success');
+    return;
+  }
+  if (ok.length) {
+    toast(`${ok.length} adicionada(s), ${failed.length} recusada(s) — ver detalhe.`, 'error');
+  }
+  const lines = failed.map(f => `• ${f.name}\n   ${f.reason}`).join('\n\n');
+  alert(`${label} — ${failed.length} ${failed.length === 1 ? 'imagem recusada' : 'imagens recusadas'}:\n\n${lines}\n\nEstas imagens NÃO foram adicionadas. Corrija e tente de novo.`);
 }
 
 function setupPhotoDragDrop(zoneId, inputId) {
@@ -1278,8 +1353,8 @@ async function handleThumbnailFile(files) {
     renderThumbnailPreview();
     toast('Miniatura carregada.', 'success');
   } catch (e) {
-    console.error('[admin] falha ao carregar miniatura:', e);
-    toast('Não foi possível carregar a miniatura.', 'error');
+    console.error('[admin] miniatura rejeitada:', raw.name, e);
+    reportImageUploadResult('Miniatura', [], [{ name: raw.name || '(sem nome)', reason: e.message }]);
   }
 }
 
@@ -1322,12 +1397,17 @@ function removeArticleImage() {
 
 async function handleArticleImageFile(file) {
   if (!file || !file.type.startsWith('image/')) return;
-  const result = await uploadImageFile(file, 'articles');
-  state.editingArticleImage = result;
-  const urlInput = document.getElementById('a-image');
-  if (urlInput) urlInput.value = result.src;
-  renderArticleImagePreview();
-  toast('Imagem de capa carregada.', 'success');
+  try {
+    const result = await uploadImageFile(file, 'articles');
+    state.editingArticleImage = result;
+    const urlInput = document.getElementById('a-image');
+    if (urlInput) urlInput.value = result.src;
+    renderArticleImagePreview();
+    toast('Imagem de capa carregada.', 'success');
+  } catch (e) {
+    console.error('[admin] capa do artigo rejeitada:', file.name, e);
+    reportImageUploadResult('Imagem de capa', [], [{ name: file.name || '(sem nome)', reason: e.message }]);
+  }
 }
 
 // ─── Beaches ───
@@ -1341,7 +1421,7 @@ function renderBeaches(container) {
           <p class="text-sm text-praia-sand-500">${beaches.length} praias registadas${beaches.filter(b => b.hidden).length ? ` · <span style="color:#C62828;font-weight:600;">${beaches.filter(b => b.hidden).length} oculta(s)</span>` : ''}</p>
         </div>
         <div class="flex gap-2">
-          <button onclick="downloadAllBeachQRsZip()" class="admin-btn admin-btn-secondary" title="Baixar todos os QR codes das praias num único ficheiro ZIP">QR codes (ZIP)</button>
+          <button onclick="downloadAllBeachQRsZip()" class="admin-btn admin-btn-secondary" title="Baixar todos os QR codes das praias (SVG vectoriais) num único ficheiro ZIP">QR codes (ZIP · SVG)</button>
           <button onclick="saveSectionNow('beaches')" class="admin-btn admin-btn-export">Gravar alterações</button>
           <button onclick="editBeach(null)" class="admin-btn admin-btn-primary">+ Adicionar Praia</button>
         </div>
@@ -2486,138 +2566,6 @@ function saveLocationPassaporte(index) {
   renderSection();
 }
 
-// ─── Descontos ───
-function renderDescontos(container) {
-  const items = state.data.descontos || [];
-  container.innerHTML = `
-    <div class="p-6">
-      <div class="flex items-center justify-between mb-6">
-        <h1 class="font-display text-2xl font-bold text-praia-teal-800">Descontos (${items.length})</h1>
-        <div class="flex gap-2">
-          <button onclick="saveSectionNow('descontos')" class="admin-btn admin-btn-export">Gravar alterações</button>
-          <button onclick="editDesconto(null)" class="admin-btn admin-btn-primary">+ Adicionar</button>
-        </div>
-      </div>
-      <div class="grid gap-4">
-        ${items.map((d, i) => `
-          <div class="bg-white rounded-xl shadow-layered p-4 flex items-center justify-between${d.hidden ? ' opacity-50' : ''}" style="${d.hidden ? 'background:repeating-linear-gradient(135deg,transparent,transparent 10px,rgba(0,0,0,.02) 10px,rgba(0,0,0,.02) 20px);' : ''}">
-            <div class="flex items-center gap-2">
-              ${d.hidden ? '<span style="display:inline-flex;align-items:center;padding:1px 6px;border-radius:6px;font-size:9px;font-weight:700;background:#f1f1f1;color:#999;border:1px solid #ddd;flex-shrink:0;">OCULTO</span>' : ''}
-              <div>
-                <h3 class="font-display text-sm font-bold text-praia-teal-800">${escHtml(d.name)}</h3>
-                <p class="text-xs text-praia-sand-500">${escHtml(d.description)}</p>
-              </div>
-            </div>
-            <div class="flex gap-2 flex-shrink-0">
-              <button onclick="toggleItemVisibility('descontos', ${i})" class="text-praia-sand-400 hover:text-praia-sand-600 text-xs font-semibold" title="${d.hidden ? 'Tornar visível' : 'Ocultar do site'}">${d.hidden ? 'Mostrar' : 'Ocultar'}</button>
-              <button onclick="editDesconto(${i})" class="text-praia-teal-600 text-xs font-semibold">Editar</button>
-              <button onclick="deleteItem('descontos', ${i})" class="text-red-400 text-xs font-semibold">Eliminar</button>
-            </div>
-          </div>
-        `).join('')}
-      </div>
-    </div>`;
-}
-
-function editDesconto(index) {
-  _captureAdminScroll();
-  const d = index !== null ? state.data.descontos[index] : {
-    name: '', description: '', conditions: '', region: 'centro', category: 'alojamento', municipality: '', logo: ''
-  };
-  state.editingDescontoLogo = d.logo ? { src: d.logo, name: '' } : null;
-
-  const container = document.getElementById('admin-content');
-  container.innerHTML = `
-    <div class="p-6 max-w-2xl admin-form">
-      <button onclick="renderSection()" class="text-praia-teal-600 text-sm font-semibold mb-4">← Voltar</button>
-      <h2 class="font-display text-xl font-bold text-praia-teal-800 mb-6">${index !== null ? 'Editar' : 'Adicionar'} Desconto</h2>
-      <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100">
-        <div class="mb-4"><label>Nome do Parceiro</label><input type="text" id="d-name" value="${escHtml(d.name)}"></div>
-        <div class="mb-4">
-          <label>Logo do Parceiro</label>
-          <div id="desconto-logo-preview"></div>
-          <div id="desconto-logo-drop" style="margin-top:8px;border:2px dashed #C4B898;border-radius:10px;padding:14px;text-align:center;cursor:pointer;background:#FAF8F5;" onclick="document.getElementById('desconto-logo-file').click()">
-            <span style="font-size:12px;color:#8A7D60;font-family:'Poppins',sans-serif;font-weight:600;">Clique ou arraste para carregar logo</span>
-          </div>
-          <input type="file" id="desconto-logo-file" accept="image/*" style="display:none;" onchange="handleDescontoLogoFile(this.files[0]); this.value='';">
-        </div>
-        <div class="mb-4"><label>Descrição do Desconto</label><div id="d-description-editor" style="min-height:80px;"></div></div>
-        <div class="mb-4"><label>Condições</label><div id="d-conditions-editor" style="min-height:80px;"></div></div>
-        <div class="grid grid-cols-3 gap-4">
-          <div><label>Região</label>
-            <select id="d-region">
-              <option value="norte" ${d.region==='norte'?'selected':''}>Norte</option>
-              <option value="centro" ${d.region==='centro'?'selected':''}>Centro</option>
-              <option value="alentejo" ${d.region==='alentejo'?'selected':''}>Alentejo</option>
-              <option value="algarve" ${d.region==='algarve'?'selected':''}>Algarve</option>
-            </select>
-          </div>
-          <div><label>Categoria</label>
-            <select id="d-category">
-              <option value="alojamento" ${d.category==='alojamento'?'selected':''}>Alojamento</option>
-              <option value="restauracao" ${d.category==='restauracao'?'selected':''}>Restauração</option>
-              <option value="atividades" ${d.category==='atividades'?'selected':''}>Atividades</option>
-              <option value="comercio" ${d.category==='comercio'?'selected':''}>Comércio</option>
-            </select>
-          </div>
-          <div><label>Concelho</label><input type="text" id="d-municipality" value="${escHtml(d.municipality)}"></div>
-        </div>
-      </div>
-      <div class="flex gap-3">
-        <button onclick="saveDesconto(${index})" class="admin-btn admin-btn-success">Guardar</button>
-        <button onclick="renderSection()" class="admin-btn bg-praia-sand-200 text-praia-sand-700">Cancelar</button>
-      </div>
-    </div>`;
-
-  renderDescontoLogoPreview();
-  setTimeout(() => {
-    initQuillEditor('d-description-editor', d.description || '', { minimal: true });
-    initQuillEditor('d-conditions-editor', d.conditions || '', { minimal: true });
-    const dz = document.getElementById('desconto-logo-drop');
-    if (dz) {
-      dz.addEventListener('dragover', e => { e.preventDefault(); dz.style.borderColor = '#003A40'; });
-      dz.addEventListener('dragleave', () => { dz.style.borderColor = '#C4B898'; });
-      dz.addEventListener('drop', e => { e.preventDefault(); dz.style.borderColor = '#C4B898'; if (e.dataTransfer.files[0]) handleDescontoLogoFile(e.dataTransfer.files[0]); });
-    }
-  }, 0);
-}
-
-function renderDescontoLogoPreview() {
-  const container = document.getElementById('desconto-logo-preview');
-  if (!container) return;
-  if (!state.editingDescontoLogo) { container.innerHTML = ''; return; }
-  container.innerHTML = `
-    <div style="position:relative;display:inline-block;margin-top:6px;">
-      <img src="${state.editingDescontoLogo.src}" alt="Logo" style="max-width:160px;max-height:80px;object-fit:contain;border-radius:8px;border:2px solid #E2D9C6;background:#fff;padding:4px;">
-      <button onclick="state.editingDescontoLogo=null;renderDescontoLogoPreview();" style="position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;background:#D32F2F;color:white;border:none;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;font-weight:bold;">×</button>
-    </div>`;
-}
-
-async function handleDescontoLogoFile(file) {
-  if (!file || !file.type.startsWith('image/')) return;
-  const result = await uploadImageFile(file, 'discounts');
-  state.editingDescontoLogo = result;
-  renderDescontoLogoPreview();
-  toast('Logo carregado.', 'success');
-}
-
-function saveDesconto(index) {
-  const d = {
-    name: document.getElementById('d-name').value.trim(),
-    description: getQuillHTML('d-description-editor') || '',
-    conditions: getQuillHTML('d-conditions-editor') || '',
-    region: document.getElementById('d-region').value,
-    category: document.getElementById('d-category').value,
-    municipality: document.getElementById('d-municipality').value.trim(),
-    logo: state.editingDescontoLogo?.src || '',
-  };
-  if (index !== null) state.data.descontos[index] = d;
-  else state.data.descontos.push(d);
-  markDirty('descontos');
-  toast('Desconto guardado!', 'success');
-  renderSection();
-}
-
 // ─── Settings ───
 function renderSettings(container) {
   const s = state.data.settings || {};
@@ -2631,6 +2579,27 @@ function renderSettings(container) {
   container.innerHTML = `
     <div class="p-6 max-w-3xl admin-form">
       <h1 class="font-display text-2xl font-bold text-praia-teal-800 mb-6">Configurações do Site</h1>
+
+      <!-- QR Codes · Passaporte Físico -->
+      <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100">
+        <h3 class="font-display text-xs uppercase tracking-wider text-praia-teal-700 font-semibold mb-1">QR Codes · Passaporte Físico</h3>
+        <p style="font-size:12px;color:#8A7D60;margin-bottom:14px;">QR codes para imprimir no passaporte físico. Cada um aponta para uma página fixa no domínio de produção (URL permanente). PNG 1500×1500 px ou SVG vectorial, ambos com correção de erro alta (resistente a desgaste). <strong>Confira o destino com um scan de teste antes de enviar para impressão.</strong></p>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;">
+          ${PASSPORT_PHYSICAL_QRS.map(q => `
+            <div style="display:flex;align-items:center;justify-content:space-between;background:#FAF8F5;border-radius:10px;padding:10px 14px;border:1px solid #E2D9C6;gap:10px;">
+              <div style="min-width:0;flex:1;">
+                <div style="font-family:'Poppins',sans-serif;font-size:13px;color:#003A40;font-weight:600;">${q.label}</div>
+                <div style="font-family:'Open Sans',sans-serif;font-size:11px;color:#8A7D60;margin-top:2px;word-break:break-all;">${_passportPhysicalQRUrl(q.slug)}</div>
+              </div>
+              <div style="display:flex;gap:6px;flex-shrink:0;">
+                <button onclick="downloadPassportPhysicalQR('${q.slug}', '${q.filename}', 'png')" class="admin-btn admin-btn-secondary" style="font-size:12px;white-space:nowrap;">↓ PNG</button>
+                <button onclick="downloadPassportPhysicalQR('${q.slug}', '${q.filename}', 'svg')" class="admin-btn admin-btn-secondary" style="font-size:12px;white-space:nowrap;">↓ SVG</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+        <button onclick="downloadAllPassportPhysicalQRsZip()" class="admin-btn admin-btn-primary" style="font-size:13px;">↓ Transferir todos (ZIP · PNG + SVG)</button>
+      </div>
 
       <!-- Votação -->
       <div class="bg-white rounded-xl p-5 mb-4 shadow-sm border border-praia-sand-100">
@@ -3668,13 +3637,21 @@ function moveProductImage(i, dir) {
 }
 
 async function handleProductImageFiles(files) {
+  const ok = [];
+  const failed = [];
   for (const file of Array.from(files)) {
     if (!file.type.startsWith('image/')) continue;
-    const result = await uploadImageFile(file, 'products');
-    state.editingProductImages.push(result);
+    try {
+      const result = await uploadImageFile(file, 'products');
+      state.editingProductImages.push(result);
+      ok.push(file.name);
+    } catch (e) {
+      failed.push({ name: file.name || '(sem nome)', reason: e.message });
+      console.error('[admin] imagem do produto rejeitada:', file.name, e);
+    }
   }
   renderProductImageGallery();
-  toast(`${files.length} imagem(ns) adicionada(s).`, 'success');
+  reportImageUploadResult('Imagens do produto', ok, failed);
 }
 
 function setupProductImageDrop() {
@@ -4088,7 +4065,6 @@ const CONTENT_PAGES = [
   { id: 'artigos',         label: 'Novidades',             file: 'artigos.html' },
   { id: 'loja',            label: 'Loja',                  file: 'loja.html' },
   { id: 'carrinho',        label: 'Carrinho',              file: 'carrinho.html' },
-  { id: 'descontos',       label: 'Descontos',             file: 'descontos.html' },
   { id: 'onde-encontrar',  label: 'Onde Encontrar Guia',   file: 'onde-encontrar.html' },
   { id: 'onde-carimbar',   label: 'Onde Carimbar',         file: 'onde-carimbar-passaporte.html' },
   { id: 'contactos',       label: 'Contactos',             file: 'contactos.html' },
@@ -4145,7 +4121,7 @@ function _recomputeDirty() {
 }
 
 // Datasets que entram no snapshot do undo/redo do editor visual.
-const _SNAPSHOT_DATASETS = ['beaches','articles','locations-guia-passaporte','locations-carimbos','descontos','produtos','settings'];
+const _SNAPSHOT_DATASETS = ['beaches','articles','locations-guia-passaporte','locations-carimbos','produtos','settings'];
 
 function _contentSnapshot() {
   // Captura estado de tudo o que pode ser revertido por undo/redo:
@@ -4521,7 +4497,7 @@ function _contentOnMessage(e) {
   }
   if (m.type === 'dataset-change') {
     // Edit feita no editor visual sobre um campo ligado a um dataset do
-    // admin (settings, beaches, articles, descontos, produtos, locations…).
+    // admin (settings, beaches, articles, produtos, locations…).
     // Atualiza state.data[<section>], marca como pendente, e re-renderiza
     // a secção correspondente se estiver aberta — sincronizando os dois
     // sentidos (Conteúdo ↔ secção dedicada do admin).
@@ -4865,8 +4841,9 @@ async function contentPageSettingsUploadImg(path, id, file) {
     const img = document.getElementById('ps-img-' + id);
     if (img) { img.src = result.src; img.style.display = ''; }
     toast('Imagem carregada.', 'success');
-  } catch {
-    toast('Erro ao carregar imagem.', 'error');
+  } catch (e) {
+    console.error('[admin] imagem do conteúdo rejeitada:', file.name, e);
+    reportImageUploadResult('Imagem da página', [], [{ name: file.name || '(sem nome)', reason: e.message }]);
   }
 }
 
@@ -4893,7 +4870,6 @@ function _legacyRenderConteudo_unused(container) {
     { id: 'votar', label: 'Votação' },
     { id: 'artigos', label: 'Artigos' },
     { id: 'loja', label: 'Loja' },
-    { id: 'descontos', label: 'Descontos' },
     { id: 'passaporte', label: 'Passaporte' },
     { id: 'rede', label: 'Rede' },
     { id: 'onde_guia', label: 'Onde Encontrar' },
@@ -4978,7 +4954,6 @@ function renderConteudoTab(tabId) {
   const v = c.votar || {};
   const a = c.artigos || {};
   const l = c.loja || {};
-  const d = c.descontos || {};
   const p = c.passaporte || {};
   const r = c.rede || {};
   const og = c.onde_guia || {};
@@ -5008,7 +4983,6 @@ function renderConteudoTab(tabId) {
         ${field('global.nav.novidades', 'Novidades / Blog', g.nav?.novidades)}
         ${field('global.nav.onde_encontrar', 'Onde Encontrar', g.nav?.onde_encontrar)}
         ${field('global.nav.onde_carimbar', 'Onde Carimbar', g.nav?.onde_carimbar)}
-        ${field('global.nav.descontos', 'Descontos', g.nav?.descontos)}
         ${field('global.nav.loja', 'Loja', g.nav?.loja)}
       </div>`,
     homepage: `
@@ -5058,12 +5032,6 @@ function renderConteudoTab(tabId) {
         ${textarea('loja.description', 'Descrição', l.description, 3)}
         ${field('loja.shippingNote', 'Nota de Envio 1', l.shippingNote)}
         ${field('loja.shippingNote2', 'Nota de Envio 2', l.shippingNote2)}
-      </div>`,
-    descontos: `
-      <div class="bg-white rounded-xl p-5 shadow-sm border border-praia-sand-100 admin-form">
-        ${field('descontos.label', 'Label (badge)', d.label)}
-        ${field('descontos.title', 'Título da Página', d.title)}
-        ${textarea('descontos.description', 'Descrição', d.description, 3)}
       </div>`,
     passaporte: `
       <div class="bg-white rounded-xl p-5 shadow-sm border border-praia-sand-100 admin-form">
@@ -5140,8 +5108,9 @@ async function handleContentImgFile(file, key, keyId) {
     if (input) input.value = result.src;
     updateImgPreview(keyId, result.src, key);
     toast('Imagem carregada.', 'success');
-  } catch {
-    toast('Erro a carregar imagem.', 'error');
+  } catch (e) {
+    console.error('[admin] imagem de conteúdo rejeitada:', file.name, e);
+    reportImageUploadResult('Imagem de conteúdo', [], [{ name: file.name || '(sem nome)', reason: e.message }]);
   } finally {
     if (drop) { drop.style.opacity = ''; drop.style.pointerEvents = ''; }
   }
@@ -5164,14 +5133,27 @@ function exportContentJSON() {
 }
 
 // ─── QR Codes das praias ───
-// Gera QR codes apontando para carimbar.html, um por praia. O scan numa praia
+// Gera QR codes apontando para /carimbar, um por praia. O scan numa praia
 // valida GPS (≤2km) e carimba o passaporte digital do utilizador.
 //
-// Produção: altere QR_PUBLIC_BASE para o domínio final quando for lançado.
-const QR_PUBLIC_BASE = 'https://praias-fluviais.vercel.app';
+// IMPORTANTE: este URL é gravado nas placas físicas das praias e nos
+// QR codes do passaporte físico → tem de funcionar para sempre.
+// Usa clean URLs (vercel.json cleanUrls:true) e o domínio de produção.
+const QR_PUBLIC_BASE = 'https://www.praiasfluviais.pt';
+
+// QR codes para o passaporte físico (impressos uma única vez, têm de durar para sempre).
+const PASSPORT_PHYSICAL_QRS = [
+  { slug: 'votar',                     label: 'Votar',              filename: 'qr-votar' },
+  { slug: 'passaporte',                label: 'Passaporte Digital', filename: 'qr-passaporte' },
+  { slug: 'onde-carimbar-passaporte',  label: 'Onde Carimbar',      filename: 'qr-onde-carimbar' },
+];
 
 function _beachQRUrl(beach) {
-  return `${QR_PUBLIC_BASE}/carimbar.html?id=${encodeURIComponent(beach.id)}`;
+  return `${QR_PUBLIC_BASE}/carimbar?id=${encodeURIComponent(beach.id)}`;
+}
+
+function _passportPhysicalQRUrl(slug) {
+  return `${QR_PUBLIC_BASE}/${slug}`;
 }
 
 // "Praia Fluvial de Loriga" → "Praia-Fluvial-de-Loriga"
@@ -5183,17 +5165,102 @@ function _sanitizeFilename(name) {
     .slice(0, 80) || 'praia';
 }
 
-async function _generateQRDataURL(url, size = 1024) {
+async function _generateQRDataURL(url, size = 1500) {
   if (!window.QRCode || !QRCode.toDataURL) {
     toast('Biblioteca de QR não carregou. Atualize a página.', 'error');
     throw new Error('QRCode library not available');
   }
+  // EC 'H' = 30% recovery, robusto para impressão (placas exteriores, passaporte físico).
   return QRCode.toDataURL(url, {
     width: size,
     margin: 2,
-    errorCorrectionLevel: 'M',
+    errorCorrectionLevel: 'H',
     color: { dark: '#000000', light: '#FFFFFF' },
   });
+}
+
+async function _generateQRSvg(url) {
+  if (!window.QRCode || !QRCode.toString) {
+    toast('Biblioteca de QR não carregou. Atualize a página.', 'error');
+    throw new Error('QRCode library not available');
+  }
+  return QRCode.toString(url, {
+    type: 'svg',
+    margin: 2,
+    errorCorrectionLevel: 'H',
+    color: { dark: '#000000', light: '#FFFFFF' },
+  });
+}
+
+async function downloadPassportPhysicalQR(slug, filename, format = 'png') {
+  const url = _passportPhysicalQRUrl(slug);
+  try {
+    if (format === 'svg') {
+      const svg = await _generateQRSvg(url);
+      const blob = new Blob([svg], { type: 'image/svg+xml' });
+      const objUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = objUrl;
+      a.download = `${filename}.svg`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(objUrl);
+    } else {
+      const dataUrl = await _generateQRDataURL(url, 1500);
+      const a = document.createElement('a');
+      a.href = dataUrl;
+      a.download = `${filename}.png`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+    toast(`QR "${slug}" (${format.toUpperCase()}) baixado.`, 'success');
+  } catch (err) {
+    console.error('[downloadPassportPhysicalQR]', err);
+    toast('Falha ao gerar QR code.', 'error');
+  }
+}
+
+async function downloadAllPassportPhysicalQRsZip() {
+  if (!window.JSZip) return toast('Biblioteca ZIP não carregou. Atualize a página.', 'error');
+  toast(`A gerar ${PASSPORT_PHYSICAL_QRS.length * 2} ficheiros…`, 'info');
+  try {
+    const zip = new JSZip();
+    for (const q of PASSPORT_PHYSICAL_QRS) {
+      const url = _passportPhysicalQRUrl(q.slug);
+      const dataUrl = await _generateQRDataURL(url, 1500);
+      zip.file(`${q.filename}.png`, dataUrl.split(',')[1], { base64: true });
+      const svg = await _generateQRSvg(url);
+      zip.file(`${q.filename}.svg`, svg);
+    }
+    // README com os URLs codificados (para conferência antes de imprimir).
+    const readme = [
+      'QR Codes do Passaporte Físico — Praias Fluviais',
+      '',
+      'Cada par PNG + SVG codifica o URL indicado abaixo.',
+      'Verifique sempre o destino com um scan de teste antes de enviar para impressão.',
+      '',
+      ...PASSPORT_PHYSICAL_QRS.map(q => `• ${q.label}: ${_passportPhysicalQRUrl(q.slug)}`),
+      '',
+      'PNG: 1500×1500 px, correção de erro H (30% — robusto a desgaste).',
+      'SVG: vectorial, escala infinita sem perda — recomendado para impressão a qualquer tamanho.',
+    ].join('\n');
+    zip.file('README.txt', readme);
+    const blob = await zip.generateAsync({ type: 'blob' });
+    const objUrl = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = objUrl;
+    a.download = `qr-codes-passaporte-fisico-${new Date().toISOString().split('T')[0]}.zip`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(objUrl);
+    toast(`${PASSPORT_PHYSICAL_QRS.length} QR codes (PNG + SVG) baixados.`, 'success');
+  } catch (err) {
+    console.error('[downloadAllPassportPhysicalQRsZip]', err);
+    toast('Falha ao gerar ZIP.', 'error');
+  }
 }
 
 async function downloadBeachQR(index) {
@@ -5201,13 +5268,16 @@ async function downloadBeachQR(index) {
   if (!beach) return toast('Praia não encontrada.', 'error');
   if (!beach.id) return toast('Esta praia não tem id — grave primeiro.', 'error');
   try {
-    const dataUrl = await _generateQRDataURL(_beachQRUrl(beach));
+    const svg = await _generateQRSvg(_beachQRUrl(beach));
+    const blob = new Blob([svg], { type: 'image/svg+xml' });
+    const objUrl = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = dataUrl;
-    a.download = `${_sanitizeFilename(beach.name)}.png`;
+    a.href = objUrl;
+    a.download = `${_sanitizeFilename(beach.name)}.svg`;
     document.body.appendChild(a);
     a.click();
     a.remove();
+    URL.revokeObjectURL(objUrl);
     toast(`QR de "${beach.name}" baixado.`, 'success');
   } catch (err) {
     console.error('[downloadBeachQR]', err);
@@ -5229,11 +5299,10 @@ async function downloadAllBeachQRsZip() {
       const base = _sanitizeFilename(b.name);
       const n = (seen.get(base) || 0) + 1;
       seen.set(base, n);
-      const fname = n === 1 ? `${base}.png` : `${base}-${n}.png`;
+      const fname = n === 1 ? `${base}.svg` : `${base}-${n}.svg`;
 
-      const dataUrl = await _generateQRDataURL(_beachQRUrl(b));
-      const base64 = dataUrl.split(',')[1];
-      zip.file(fname, base64, { base64: true });
+      const svg = await _generateQRSvg(_beachQRUrl(b));
+      zip.file(fname, svg);
     }
     const blob = await zip.generateAsync({ type: 'blob' });
     const url = URL.createObjectURL(blob);

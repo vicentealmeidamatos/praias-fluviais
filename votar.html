@@ -62,7 +62,6 @@
           <a href="passaporte.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-2 py-2">Passaporte</a>
           <a href="votar.html" class="nav-link active font-display text-xs font-semibold uppercase tracking-wider text-white px-3 py-2">Votar</a>
           <a href="artigos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-2 py-2">Novidades</a>
-          <a href="descontos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-2 py-2">Descontos</a>
           <a href="contactos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-2 py-2">Contactos</a>
           <a href="loja.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-2 py-2">Loja</a>
           <a href="carrinho.html" class="relative nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-2.5 py-2 flex items-center" aria-label="Carrinho de compras">
@@ -108,7 +107,6 @@
       <a href="artigos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="newspaper" class="w-5 h-5"></i> Novidades</a>
       <a href="onde-encontrar.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="book-open" class="w-5 h-5"></i> Onde Encontrar</a>
       <a href="onde-carimbar-passaporte.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="stamp" class="w-5 h-5"></i> Onde Carimbar</a>
-      <a href="descontos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="ticket-percent" class="w-5 h-5"></i> Descontos</a>
       <a href="loja.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="shopping-bag" class="w-5 h-5"></i> Loja</a>
       <a href="contactos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="mail" class="w-5 h-5"></i> Contactos</a>
     </div>
@@ -236,10 +234,10 @@
         </div>
 
         <div class="flex flex-col sm:flex-row gap-3 justify-center">
-          <a href="#voting-section" class="btn-primary inline-flex items-center gap-2 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider px-8 py-4 rounded-full shadow-layered-yellow">
+          <a href="#voting-section" class="btn-primary inline-flex items-center justify-center gap-2 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-sm uppercase tracking-wider px-8 py-4 rounded-full shadow-layered-yellow">
             <i data-lucide="chevrons-down" class="w-5 h-5"></i> Votar Agora
           </a>
-          <a href="#vencedores" class="btn-primary inline-flex items-center gap-2 bg-white/10 border border-white/20 backdrop-blur-sm text-white hover:bg-white/20 hover:shadow-[0_10px_28px_rgba(255,255,255,0.15)] font-display font-bold text-sm uppercase tracking-wider px-8 py-4 rounded-full" style="transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.6s ease, background-color 0.6s ease;">
+          <a href="#vencedores" class="btn-primary inline-flex items-center justify-center gap-2 bg-white/10 border border-white/20 backdrop-blur-sm text-white hover:bg-white/20 hover:shadow-[0_10px_28px_rgba(255,255,255,0.15)] font-display font-bold text-sm uppercase tracking-wider px-8 py-4 rounded-full" style="transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.6s ease, background-color 0.6s ease;">
             <i data-lucide="award" class="w-5 h-5"></i> Vencedores Anteriores
           </a>
         </div>
@@ -317,6 +315,28 @@
       .winner-rev { cursor: pointer; text-decoration: none; }
       .winner-rev:hover p.font-semibold { text-decoration: underline; text-underline-offset: 2px; }
       .winner-rev:hover { background: rgba(255,255,255,0.06); }
+      /* ─── Year tabs (.winners-tab) ── usar classe .active dedicada em vez de
+         togglar classes Tailwind. Evita conflitos com :hover sticky em touch
+         devices (sintoma: clicar num ano e ele ficar branco em vez de amarelo). */
+      .winners-tab {
+        background: rgba(255, 255, 255, 0.10);
+        color: rgba(255, 255, 255, 0.70);
+        -webkit-tap-highlight-color: transparent;
+      }
+      .winners-tab:hover { background: rgba(255, 255, 255, 0.20); color: #fff; }
+      .winners-tab.active,
+      .winners-tab.active:hover {
+        background: #FFEB3B !important;
+        color: #003A40 !important;
+      }
+      /* Separação visual entre nome da praia e concelho */
+      .winner-name { display: block; font-family: 'Poppins', sans-serif; font-weight: 800; color: #fff; line-height: 1.15; }
+      .winner-loc  { display: block; font-family: 'Poppins', sans-serif; font-weight: 500; color: rgba(255,255,255,0.55); font-size: 12px; margin-top: 4px; letter-spacing: 0.02em; }
+      .winner-loc::before { content: ''; display: inline-block; width: 10px; height: 1px; background: currentColor; vertical-align: middle; margin-right: 6px; opacity: 0.5; }
+      /* Podium grid: 1 coluna em mobile (cards têm largura suficiente), 2 colunas em ≥640px. */
+      @media (min-width: 640px) {
+        .winners-podium-grid { grid-template-columns: repeat(2, 1fr) !important; }
+      }
     </style>
     <section id="vencedores" class="relative py-16 md:py-24 overflow-hidden" style="background: linear-gradient(160deg, #002A2E 0%, #003A40 60%, #001E22 100%);">
       <div class="noise-overlay absolute inset-0 pointer-events-none"></div>
@@ -356,7 +376,6 @@
               <li><a href="rede.html" class="text-white/55 hover:text-white text-sm transition-colors duration-300">Rede de Praias</a></li>
               <li><a href="votar.html" class="text-white/55 hover:text-white text-sm transition-colors duration-300">Votar 2026</a></li>
               <li><a href="artigos.html" class="text-white/55 hover:text-white text-sm transition-colors duration-300">Artigos</a></li>
-              <li><a href="descontos.html" class="text-white/55 hover:text-white text-sm transition-colors duration-300">Descontos</a></li>
             </ul>
           </div>
           <!-- Col 3 — O Guia -->
@@ -415,24 +434,63 @@
   <script src="js/auth.js"></script>
   <script src="js/voting.js"></script>
   <script>
-    lucide.createIcons();
-    document.addEventListener("DOMContentLoaded", () => {
-      if (window.AuthUtils) { AuthUtils.initHeaderAuth(); AuthUtils.initMobileMenuAuth(); }
+    // Inline blindado: cada chamada em try/catch para isolar falhas.
+    try { if (window.lucide && lucide.createIcons) lucide.createIcons(); } catch (e) {}
+
+    // ─── Countdown SELF-CONTAINED — corre SEMPRE, independente de voting.js
+    // ou de qualquer outro script. Retry até os elementos cd-* existirem.
+    (function () {
+      var DEADLINE = '2026-10-31T23:59:59';
+      if (window._gpfCdInterval) { clearInterval(window._gpfCdInterval); window._gpfCdInterval = null; }
+      function _gpfCdTick() {
+        var d = document.getElementById('cd-days');
+        var h = document.getElementById('cd-hours');
+        var mi = document.getElementById('cd-minutes');
+        var se = document.getElementById('cd-seconds');
+        if (!d || !h || !mi || !se) return false;
+        var diff = new Date(DEADLINE) - new Date();
+        if (diff <= 0) {
+          d.textContent = '00'; h.textContent = '00'; mi.textContent = '00'; se.textContent = '00';
+          return true;
+        }
+        d.textContent  = String(Math.floor(diff / 86400000)).padStart(2, '0');
+        h.textContent  = String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0');
+        mi.textContent = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
+        se.textContent = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
+        return true;
+      }
+      function _gpfCdStart() {
+        if (!_gpfCdTick()) { setTimeout(_gpfCdStart, 50); return; }
+        window._gpfCdInterval = setInterval(_gpfCdTick, 1000);
+      }
+      _gpfCdStart();
+    })();
+    try {
+      if (typeof window.initVotarPage === 'function') {
+        Promise.resolve(window.initVotarPage()).catch(function(e){ console.error('[votar] initVotarPage err:', e); });
+      }
+    } catch (e) { console.error('[votar] call initVotarPage:', e); }
+    document.addEventListener("DOMContentLoaded", function () {
+      try { if (window.AuthUtils) { AuthUtils.initHeaderAuth(); AuthUtils.initMobileMenuAuth(); } } catch (e) {}
+      try { if (typeof initCountdown === 'function') initCountdown('2026-10-31T23:59:59'); } catch (e) {}
+      try { if (typeof window.initVotarPage === 'function') Promise.resolve(window.initVotarPage()).catch(function(){}); } catch (e) {}
     });
 
     function showWinnersYear(year) {
       document.querySelectorAll('.winners-panel').forEach(p => p.classList.add('hidden'));
-      document.querySelectorAll('.winners-tab').forEach(t => {
-        t.classList.remove('bg-praia-yellow-400', 'text-praia-teal-800');
-        t.classList.add('bg-white/10', 'text-white/70');
-      });
+      document.querySelectorAll('.winners-tab').forEach(t => t.classList.remove('active'));
       const panel = document.getElementById('panel-' + year);
       const tab = document.getElementById('tab-' + year);
       if (panel) panel.classList.remove('hidden');
-      if (tab) {
-        tab.classList.remove('bg-white/10', 'text-white/70');
-        tab.classList.add('bg-praia-yellow-400', 'text-praia-teal-800');
-      }
+      if (tab) tab.classList.add('active');
+    }
+    // Helper para separar "Nome da Praia - Concelho" em duas partes.
+    // Faz split no ÚLTIMO " - " para tolerar nomes que contenham hífens.
+    function splitBeachLoc(s) {
+      if (!s) return { name: '', loc: '' };
+      const i = s.lastIndexOf(' - ');
+      if (i < 0) return { name: s, loc: '' };
+      return { name: s.slice(0, i).trim(), loc: s.slice(i + 3).trim() };
     }
 
     // ─── Helper: slugify a beach name to build a link ───
@@ -520,8 +578,9 @@
 
           const btn = document.createElement('button');
           btn.id = 'tab-' + key;
-          btn.className = 'winners-tab font-display text-sm font-bold px-5 py-2 rounded-full transition-all duration-200 ' +
-            (i === 0 ? 'bg-praia-yellow-400 text-praia-teal-800' : 'bg-white/10 text-white/70 hover:bg-white/20 hover:text-white');
+          btn.type = 'button';
+          btn.className = 'winners-tab font-display text-sm font-bold px-5 py-2 rounded-full transition-all duration-200'
+            + (i === 0 ? ' active' : '');
           btn.textContent = String(w.year);
           btn.onclick = () => showWinnersYear(key);
           tabsContainer.appendChild(btn);
@@ -545,17 +604,22 @@
             const thirdLink = hasThird ? await getBeachLink(w.third) : null;
 
             // Build podium row (2nd + 3rd)
+            // Em mobile (< 640px) o podium fica em 2 linhas (uma por lugar) — evita texto cortado.
+            // Em ≥ 640px volta a 2 colunas se houver 2 e 3.
+            const _second = splitBeachLoc(w.second);
+            const _third  = splitBeachLoc(w.third);
             const podiumHTML = hasPodium ? `
-              <div style="display:grid;grid-template-columns:${hasSecond && hasThird ? '1fr 1fr' : '1fr'};gap:12px;margin-top:12px;">
+              <div style="display:grid;grid-template-columns:1fr;gap:12px;margin-top:12px;" class="winners-podium-grid">
                 ${hasSecond ? `
                 <${secondLink ? `a href="${secondLink}"` : 'div'} class="${secondLink ? 'winner-card' : ''}" style="position:relative;border-radius:16px;overflow:hidden;background:linear-gradient(160deg,rgba(192,192,192,.12),rgba(192,192,192,.04));border:1px solid rgba(192,192,192,.3);display:block;text-decoration:none;">
                   <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#C0C0C0,#9E9E9E);"></div>
-                  <div style="padding:20px;">
-                    <div style="display:flex;align-items:flex-start;gap:12px;">
-                      <div style="width:36px;height:36px;border-radius:10px;background:rgba(192,192,192,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;">🥈</div>
-                      <div>
-                        <span style="font-family:'Poppins',sans-serif;font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:rgba(192,192,192,.8);font-weight:600;display:block;margin-bottom:2px;">2.º Lugar</span>
-                        <p data-content-settings="previousWinners.${origIdx}.second" style="font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;color:white;line-height:1.3;margin:0;">${w.second}</p>
+                  <div style="padding:18px 20px;">
+                    <div style="display:flex;align-items:center;gap:14px;">
+                      <div style="width:40px;height:40px;border-radius:12px;background:rgba(192,192,192,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;">🥈</div>
+                      <div style="flex:1;min-width:0;">
+                        <span style="font-family:'Poppins',sans-serif;font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:rgba(192,192,192,.85);font-weight:700;display:block;margin-bottom:3px;">2.º Lugar</span>
+                        <span data-content-settings="previousWinners.${origIdx}.second" class="winner-name" style="font-size:15px;">${_second.name}</span>
+                        ${_second.loc ? `<span class="winner-loc">${_second.loc}</span>` : ''}
                       </div>
                     </div>
                   </div>
@@ -563,12 +627,13 @@
                 ${hasThird ? `
                 <${thirdLink ? `a href="${thirdLink}"` : 'div'} class="${thirdLink ? 'winner-card' : ''}" style="position:relative;border-radius:16px;overflow:hidden;background:linear-gradient(160deg,rgba(205,127,50,.1),rgba(205,127,50,.04));border:1px solid rgba(205,127,50,.28);display:block;text-decoration:none;">
                   <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#CD7F32,#A0522D);"></div>
-                  <div style="padding:20px;">
-                    <div style="display:flex;align-items:flex-start;gap:12px;">
-                      <div style="width:36px;height:36px;border-radius:10px;background:rgba(205,127,50,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;">🥉</div>
-                      <div>
-                        <span style="font-family:'Poppins',sans-serif;font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:rgba(205,127,50,.85);font-weight:600;display:block;margin-bottom:2px;">3.º Lugar</span>
-                        <p data-content-settings="previousWinners.${origIdx}.third" style="font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;color:white;line-height:1.3;margin:0;">${w.third}</p>
+                  <div style="padding:18px 20px;">
+                    <div style="display:flex;align-items:center;gap:14px;">
+                      <div style="width:40px;height:40px;border-radius:12px;background:rgba(205,127,50,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;">🥉</div>
+                      <div style="flex:1;min-width:0;">
+                        <span style="font-family:'Poppins',sans-serif;font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:rgba(205,127,50,.9);font-weight:700;display:block;margin-bottom:3px;">3.º Lugar</span>
+                        <span data-content-settings="previousWinners.${origIdx}.third" class="winner-name" style="font-size:15px;">${_third.name}</span>
+                        ${_third.loc ? `<span class="winner-loc">${_third.loc}</span>` : ''}
                       </div>
                     </div>
                   </div>
@@ -595,14 +660,15 @@
                     </div>
                   </div>
                   <div style="display:flex;flex-direction:column;gap:8px;">
-                    ${revsWithLinks.map((rv, ri) => `
-                    <${rv.link ? `a href="${rv.link}" class="winner-rev" style="display:flex;align-items:flex-start;gap:10px;text-decoration:none;border-radius:8px;margin:-4px -8px;padding:4px 8px;"` : 'div style="display:flex;align-items:flex-start;gap:10px;"'}>
-                      <i data-lucide="award" style="width:14px;height:14px;flex-shrink:0;margin-top:2px;color:#0288D1;"></i>
-                      <div>
-                        ${rv.label ? `<span style="font-family:'Poppins',sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:rgba(2,136,209,.8);font-weight:600;">${rv.label}:</span>` : ''}
-                        <span data-content-settings="previousWinners.${origIdx}.revelations.${ri}.name" style="font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;color:white;">${rv.name}</span>
+                    ${revsWithLinks.map((rv, ri) => { const rp = splitBeachLoc(rv.name); return `
+                    <${rv.link ? `a href="${rv.link}" class="winner-rev" style="display:flex;align-items:flex-start;gap:10px;text-decoration:none;border-radius:8px;margin:-4px -8px;padding:8px;"` : 'div style="display:flex;align-items:flex-start;gap:10px;padding:4px 0;"'}>
+                      <i data-lucide="award" style="width:14px;height:14px;flex-shrink:0;margin-top:3px;color:#0288D1;"></i>
+                      <div style="flex:1;min-width:0;">
+                        ${rv.label ? `<span style="font-family:'Poppins',sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:rgba(2,136,209,.85);font-weight:700;display:block;margin-bottom:2px;">${rv.label}</span>` : ''}
+                        <span data-content-settings="previousWinners.${origIdx}.revelations.${ri}.name" class="winner-name" style="font-size:13px;">${rp.name}</span>
+                        ${rp.loc ? `<span class="winner-loc" style="font-size:11px;">${rp.loc}</span>` : ''}
                       </div>
-                    </${rv.link ? 'a' : 'div'}>`).join('')}
+                    </${rv.link ? 'a' : 'div'}>`; }).join('')}
                   </div>
                 </div>
               </div>` : '';
@@ -623,9 +689,12 @@
                     <div style="width:48px;height:48px;border-radius:14px;background:rgba(255,235,59,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
                       <i data-lucide="trophy" style="width:24px;height:24px;color:#FFEB3B;"></i>
                     </div>
-                    <div style="flex:1;">
+                    <div style="flex:1;min-width:0;">
                       <span style="font-family:'Poppins',sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,235,59,.7);font-weight:600;display:block;margin-bottom:4px;">1.º · Praia Fluvial do Ano ${w.year}</span>
-                      <h3 data-content-settings="previousWinners.${origIdx}.winner" style="font-family:'Poppins',sans-serif;font-size:22px;font-weight:800;color:white;line-height:1.2;margin:0;">${w.winner}</h3>
+                      ${(function(){ const p = splitBeachLoc(w.winner); return `
+                      <h3 data-content-settings="previousWinners.${origIdx}.winner" class="winner-name" style="font-size:22px;">${p.name}</h3>
+                      ${p.loc ? `<span class="winner-loc" style="font-size:13px;color:rgba(255,255,255,0.6);">${p.loc}</span>` : ''}`;
+                      })()}
                     </div>
                     ${winnerLink ? '<span class="winner-arrow" style="color:#FFEB3B;font-family:Poppins,sans-serif;font-size:16px;font-weight:700;margin-top:8px;">→</span>' : ''}
                   </div>

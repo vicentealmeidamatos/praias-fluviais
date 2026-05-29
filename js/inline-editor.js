@@ -703,7 +703,6 @@
         { label: 'Passaporte', href: '/passaporte.html' },
         { label: 'Novidades', href: '/artigos.html' },
         { label: 'Loja', href: '/loja.html' },
-        { label: 'Descontos', href: '/descontos.html' },
         { label: 'Onde Encontrar o Guia', href: '/onde-encontrar.html' },
         { label: 'Onde Carimbar', href: '/onde-carimbar-passaporte.html' },
         { label: 'Contactos', href: '/contactos.html' },

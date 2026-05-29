@@ -18,7 +18,7 @@ window._datasetFiles = {
   beaches: 'data/beaches.json', articles: 'data/articles.json',
   locationsGuia: 'data/locations-guia-passaporte.json',
   locationsCarimbo: 'data/locations-carimbos.json',
-  descontos: 'data/descontos.json', products: 'data/products.json',
+  products: 'data/products.json',
   settings: 'data/settings.json',
 };
 window.loadData = function (dataset) {
@@ -111,6 +111,38 @@ if (typeof tailwind !== 'undefined') tailwind.config = {
         'relaxed-plus': '1.7',
       },
     },
+  },
+};
+
+// ─── PageState ─────────────────────────────────────────────────────────────────
+// Persiste filtros/scroll/posição-do-mapa por página em sessionStorage para
+// que a seta "voltar" da página da praia restaure exactamente o estado anterior.
+// Chave inclui o pathname para que rede.html e mapa.html não se cruzem.
+window.PageState = {
+  _key: function (key) { return 'pageState:' + key; },
+  save: function (key, data) {
+    try { sessionStorage.setItem(this._key(key), JSON.stringify(data)); } catch (e) {}
+  },
+  restore: function (key) {
+    try { return JSON.parse(sessionStorage.getItem(this._key(key)) || 'null'); }
+    catch (e) { return null; }
+  },
+  clear: function (key) {
+    try { sessionStorage.removeItem(this._key(key)); } catch (e) {}
+  },
+  // Persistência de scroll-only. Útil para páginas sem filtros (passaporte, perfil).
+  attachScrollPersistence: function (key) {
+    const self = this;
+    let t;
+    const save = function () {
+      clearTimeout(t);
+      t = setTimeout(function () { self.save(key, { scrollY: window.scrollY }); }, 150);
+    };
+    window.addEventListener('scroll', save, { passive: true });
+    const stored = self.restore(key);
+    if (stored && typeof stored.scrollY === 'number' && stored.scrollY > 0) {
+      requestAnimationFrame(function () { window.scrollTo(0, stored.scrollY); });
+    }
   },
 };
 
@@ -1016,13 +1048,29 @@ function slugify(text) {
   }
 
   // ─── 2. Bottom-nav unificada ──────────────────────────────────────────────
+  // SVGs inline (Lucide-style) para os ícones do bottom-nav. Usar SVG inline
+  // em vez de <i data-lucide> evita race conditions com lucide.createIcons()
+  // que falhava em algumas páginas (ex: rede.html, onde os ícones ficavam
+  // invisíveis). Garante 100% que os ícones aparecem.
+  var BOTTOM_NAV_ICONS = {
+    'map-pinned': '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8c0 3.613-3.869 7.429-5.393 8.795a1 1 0 0 1-1.214 0C9.87 15.429 6 11.613 6 8a6 6 0 0 1 12 0"/><circle cx="12" cy="8" r="2"/><path d="M8.714 14h-3.71a1 1 0 0 0-.948.683l-2.004 6A1 1 0 0 0 3 22h18a1 1 0 0 0 .948-1.316l-2-6a1 1 0 0 0-.949-.684h-3.712"/></svg>',
+    'stamp': '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22h14"/><path d="M19.27 13.73A2.5 2.5 0 0 0 17.5 13h-11A2.5 2.5 0 0 0 4 15.5V17a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-1.5c0-.66-.26-1.3-.73-1.77Z"/><path d="M14 13V8.5C14 7 15 7 15 5a3 3 0 0 0-3-3c-1.66 0-3 1-3 3s1 2 1 3.5V13"/></svg>',
+    'shopping-bag': '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>',
+    'log-in': '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>',
+    'user': '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+    'menu': '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>',
+  };
+  function navIcon(name) {
+    return '<span class="bottom-nav-icon">' + (BOTTOM_NAV_ICONS[name] || '') + '</span>';
+  }
+
   function bottomNavHTML(activeKey, cartCount) {
     function item(key, href, icon, label) {
       var activeClass = key === activeKey ? 'active' : '';
       var colorClass = key === activeKey ? 'text-praia-yellow-400' : 'text-white/60';
       return (
         '<a href="' + href + '" data-page="' + key + '" class="flex-1 flex flex-col items-center justify-center ' + colorClass + ' ' + activeClass + '" aria-label="' + label + '">' +
-          '<i data-lucide="' + icon + '"></i>' +
+          navIcon(icon) +
           '<span class="font-display uppercase tracking-wider font-semibold">' + label + '</span>' +
         '</a>'
       );
@@ -1056,7 +1104,7 @@ function slugify(text) {
     } else {
       authItem =
         '<a href="auth.html" data-page="auth" id="bottom-nav-auth" class="flex-1 flex flex-col items-center justify-center ' + authColor + '" aria-label="Entrar">' +
-          '<i data-lucide="log-in"></i>' +
+          navIcon('log-in') +
           '<span class="font-display uppercase tracking-wider font-semibold">Entrar</span>' +
         '</a>';
     }
@@ -1066,13 +1114,13 @@ function slugify(text) {
         item('rede', 'rede.html', 'map-pinned', 'Rede') +
         item('passaporte', 'passaporte.html', 'stamp', 'Passaporte') +
         '<a href="loja.html" data-page="loja" class="flex-1 flex flex-col items-center justify-center ' + (activeKey === 'loja' ? 'text-praia-yellow-400 active' : 'text-white/60') + ' relative" aria-label="Loja">' +
-          '<i data-lucide="shopping-bag"></i>' +
+          navIcon('shopping-bag') +
           '<span class="font-display uppercase tracking-wider font-semibold">Loja</span>' +
           lojaBadge +
         '</a>' +
         authItem +
         '<button type="button" id="bottom-nav-more-btn" data-page="mais" class="flex-1 flex flex-col items-center justify-center text-white/60" aria-label="Mais opções" aria-haspopup="dialog">' +
-          '<i data-lucide="menu"></i>' +
+          navIcon('menu') +
           '<span class="font-display uppercase tracking-wider font-semibold">Mais</span>' +
         '</button>' +
       '</div>'
@@ -1104,10 +1152,17 @@ function slugify(text) {
       { href: 'artigos.html', icon: 'newspaper', label: 'Novidades' },
       { href: 'onde-encontrar.html', icon: 'book-open', label: 'Onde Encontrar o Guia' },
       { href: 'onde-carimbar-passaporte.html', icon: 'stamp', label: 'Onde Carimbar' },
-      { href: 'descontos.html', icon: 'tag', label: 'Descontos' },
       { href: 'carrinho.html', icon: 'shopping-cart', label: 'Carrinho' },
       { href: 'contactos.html', icon: 'mail', label: 'Contactos' },
     ];
+    // Na app, certas páginas web-only não existem no bundle:
+    // - index.html (substituída por rede.html como entry point)
+    // - contactos.html (excluída do bundle — web-only)
+    if (window.isApp && window.isApp()) {
+      links = links.filter(function (l) {
+        return l.href !== 'index.html' && l.href !== 'contactos.html';
+      });
+    }
     var items = links.map(function (l) {
       return (
         '<a href="' + l.href + '">' +

@@ -46,7 +46,7 @@ window.__BRAND_ICONS = {
   // Em modo preview de draft, intercepta fetch para data/<dataset>.json e
   // devolve o draft em localStorage (escrito pelo admin durante undo/redo).
   // Permite que páginas como praia.html / artigo.html / produto.html /
-  // descontos.html / onde-encontrar.html reflictam edições não-gravadas.
+  // onde-encontrar.html reflictam edições não-gravadas.
   if (previewDraft && !window.__draftFetchInstalled) {
     window.__draftFetchInstalled = true;
     const FILE_TO_DATASET = {
@@ -54,7 +54,6 @@ window.__BRAND_ICONS = {
       'data/articles.json':                        'articles',
       'data/locations-guia-passaporte.json':       'locations-guia-passaporte',
       'data/locations-carimbos.json':              'locations-carimbos',
-      'data/descontos.json':                       'descontos',
       'data/products.json':                        'produtos',
       'data/settings.json':                        'settings',
     };

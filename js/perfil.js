@@ -1151,6 +1151,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.body.appendChild(t);
     setTimeout(() => t.remove(), 5000);
   }
+
+  // Persistir scroll para a seta "voltar" da página da praia
+  const _perfilPsKey = viewUserId ? 'perfil:' + viewUserId : 'perfil';
+  window.PageState?.attachScrollPersistence(_perfilPsKey);
 });
 
 // ── Share vote ───────────────────────────────────────────────────────────────

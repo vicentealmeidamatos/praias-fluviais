@@ -11,8 +11,17 @@ const _beachesEarlyC = loadData('beaches').then(d => d || []);
 // ─── Inicialização ────────────────────────────────────────────────────────────
 
 async function initCarrinho() {
+  // Speculative render: o caso comum (utilizador não autenticado) é renderizado
+  // IMEDIATAMENTE com a empty state. Auth + dados resolvem em paralelo em
+  // background; se aparecer um user, swap para a vista de carrinho.
+  // Sem isto, o ecrã ficava em skeleton durante o round-trip a Supabase
+  // (até ~1s em arranque a frio).
+  renderEmptyCart(true);
+  try { if (window.lucide) lucide.createIcons(); } catch (e) {}
+
+  let pData, bData;
   try {
-    const [pData, bData] = await Promise.all([_prodEarlyC, _beachesEarlyC]);
+    [pData, bData] = await Promise.all([_prodEarlyC, _beachesEarlyC]);
     _products = (pData || []).filter(p => !p.hidden);
     _beaches = bData || [];
   } catch {
@@ -21,7 +30,7 @@ async function initCarrinho() {
 
   const user = await authGetUser();
   if (!user) {
-    renderEmptyCart(true);
+    // Já estamos na empty state — nada a fazer.
     return;
   }
 

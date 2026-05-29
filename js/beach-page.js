@@ -254,7 +254,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const s = serviceIcons[k];
       return `<div class="flex flex-col items-center gap-1.5 group" title="${s.label}">
         <div class="w-12 h-12 rounded-xl bg-praia-teal-800/5 flex items-center justify-center group-hover:bg-praia-yellow-400/20 transition-colors duration-300">
-          <img src="${s.img}" alt="${s.label}" class="w-7 h-7 object-contain" loading="lazy" decoding="async">
+          <img src="${typeof window.gpfImgSrc === 'function' ? window.gpfImgSrc(s.img) : s.img}" alt="${s.label}" data-key="${k}" class="service-icon-img w-7 h-7 object-contain" loading="lazy" decoding="async">
         </div>
         <span class="text-[10px] font-display font-semibold uppercase tracking-wider text-praia-sand-500 text-center leading-tight">${s.label}</span>
       </div>`;
@@ -326,6 +326,9 @@ document.addEventListener('DOMContentLoaded', async () => {
            style="background-image:url('${p}');background-size:cover;background-position:50% 50%;filter:blur(28px) brightness(0.45);transform:scale(1.1);"></div>
       <div class="slide-photo absolute inset-0"
            style="background-image:url('${p}');background-size:cover;background-position:${f.x}% ${f.y}%;background-repeat:no-repeat;transform:scale(${f.zoom});transform-origin:${f.x}% ${f.y}%;"></div>
+      <div class="slide-watermark" aria-hidden="true">
+        <img src="brand_assets/logotipo.png" alt="">
+      </div>
       <div class="photo-shield" aria-hidden="true"></div>
     </div>
   `;
@@ -431,10 +434,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     <div class="relative" id="hero-carousel">
       <div class="relative overflow-hidden h-[440px] md:h-[560px] lg:h-[680px]">
         ${carouselSlides}
-        <div class="hero-watermark" aria-hidden="true">
-          <img src="brand_assets/logotipo.png" alt="">
-        </div>
       </div>
+      <button id="beach-back-btn" type="button" aria-label="Voltar à página anterior"
+        class="absolute top-3 left-3 sm:top-4 sm:left-4 z-30 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/25 hover:bg-black/45 active:bg-black/55 backdrop-blur-md flex items-center justify-center text-white/85 hover:text-white transition-all duration-200 active:scale-95"
+        style="-webkit-tap-highlight-color: transparent;">
+        <i data-lucide="arrow-left" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+      </button>
       ${carouselControls}
       <!-- Gradiente mais contido no fundo (não invade a metade superior) -->
       <div class="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-praia-teal-900/85 via-praia-teal-900/35 to-transparent pointer-events-none z-10"></div>
@@ -489,8 +494,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         </div>
       </section>
 
-      ${voteSectionHtml}
-
       <!-- Share -->
       <section class="mb-12">
         <h2 class="font-display text-xs uppercase tracking-[0.2em] text-praia-teal-500 font-semibold mb-5">Partilhar</h2>
@@ -518,10 +521,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       </section>
 
       <!-- Nearby Beaches -->
-      <section>
+      <section class="mb-12">
         <h2 class="font-display text-xs uppercase tracking-[0.2em] text-praia-teal-500 font-semibold mb-5">Praias Próximas</h2>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">${nearbyHtml}</div>
       </section>
+
+      ${voteSectionHtml}
     </div>
   `;
 
@@ -545,6 +550,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   lucide.createIcons();
   initCarousel(photoCount);
   initSlideAspectFit();
+  initBackButton();
 
   // Bind do file input do formulário de comentário (não pode ser feito via HTML).
   bindReviewFormInput();
@@ -1261,7 +1267,11 @@ function showToast(msg) {
 // significativamente mais estreita que o hero (e.g. portrait), comuta de
 // `cover` (que faria zoom excessivo) para `contain` (mostra a foto inteira à
 // altura do hero, na largura original) — o fundo blurred preenche os lados.
+// Em APP: bypass total. Hero tem altura fixa via CSS, fotos usam SEMPRE cover
+// (zoom mínimo necessário para evitar letterbox/fundos), focal positioning
+// continua a ser respeitado pelo background-position inline.
 function initSlideAspectFit() {
+  if (document.documentElement.classList.contains('is-app')) return;
   const slides = document.querySelectorAll('.carousel-slide[data-photo-src]');
   if (!slides.length) return;
   // Pré-carregar dimensões naturais das fotos (cache local)
@@ -1297,6 +1307,28 @@ function initSlideAspectFit() {
       photo.style.backgroundPosition = `${focalX}% ${focalY}%`;
       photo.style.transform = `scale(${focalZoom})`;
       photo.style.transformOrigin = `${focalX}% ${focalY}%`;
+    }
+    // Reposicionar marca de água: em fotos letterboxed (contain), encostar ao
+    // canto superior direito da foto exibida — não ao container, que mostra
+    // o blur de fundo nas laterais. Para cover, usa o default CSS (canto do
+    // container = canto da foto).
+    const wm = slide.querySelector('.slide-watermark');
+    if (wm) {
+      if (shouldContain) {
+        const heroA = heroW / heroH;
+        let dispW, dispH;
+        if (photoA > heroA) { dispW = heroW; dispH = heroW / photoA; }
+        else { dispH = heroH; dispW = heroH * photoA; }
+        const padL = Math.max(0, (heroW - dispW) / 2);
+        const padT = Math.max(0, (heroH - dispH) / 2);
+        const inset = window.matchMedia('(min-width: 1024px)').matches ? 14
+                    : window.matchMedia('(min-width: 768px)').matches ? 12 : 10;
+        wm.style.right = `${Math.round(padL + inset)}px`;
+        wm.style.top = `${Math.round(padT + inset)}px`;
+      } else {
+        wm.style.right = '';
+        wm.style.top = '';
+      }
     }
     return true;
   }
@@ -1370,5 +1402,62 @@ function initCarousel(count) {
   document.getElementById('carousel-next')?.addEventListener('click', () => { goTo(current + 1); startTimer(); });
   dots.forEach(d => d.addEventListener('click', () => { goTo(parseInt(d.dataset.index)); startTimer(); }));
 
+  // ─── Swipe gestures (touch) ───
+  // Permite navegar entre fotos arrastando o dedo horizontalmente. Essencial
+  // na app onde as setas laterais são escondidas para visual mais nativo.
+  const hero = document.getElementById('hero-carousel');
+  if (hero) {
+    let touchStartX = 0, touchStartY = 0, touchActive = false;
+    hero.addEventListener('touchstart', (ev) => {
+      if (ev.touches.length !== 1) return;
+      touchStartX = ev.touches[0].clientX;
+      touchStartY = ev.touches[0].clientY;
+      touchActive = true;
+    }, { passive: true });
+    hero.addEventListener('touchend', (ev) => {
+      if (!touchActive) return;
+      touchActive = false;
+      const t = ev.changedTouches[0];
+      if (!t) return;
+      const dx = t.clientX - touchStartX;
+      const dy = t.clientY - touchStartY;
+      // Ignorar swipes verticais (scroll) ou demasiado curtos
+      if (Math.abs(dx) < 45 || Math.abs(dy) > Math.abs(dx)) return;
+      if (dx < 0) goTo(current + 1); else goTo(current - 1);
+      startTimer();
+    }, { passive: true });
+  }
+
   startTimer();
+}
+
+// ─── Back button ───────────────────────────────────────────────────────────────
+// Seta discreta no canto superior esquerdo do hero. Tenta voltar para a página
+// anterior (mantendo filtros/scroll via bfcache + PageState). Se não houver
+// histórico de mesma origem, cai para rede.html.
+function initBackButton() {
+  const btn = document.getElementById('beach-back-btn');
+  if (!btn) return;
+  btn.addEventListener('click', () => {
+    const isApp = document.documentElement.classList.contains('is-app');
+    // Em app: o SPA controla o histórico via pushState. history.back() dispara
+    // o popstate listener no app-context.js que restaura a página em cache
+    // INSTANTANEAMENTE (sem hard reload, sem flash verde da WebView nativa).
+    // Em web: mantemos o referrer-check para evitar voltar a páginas externas.
+    if (isApp) {
+      if (history.length > 1) history.back();
+      else window.location.href = 'rede.html';
+      return;
+    }
+    let sameOrigin = false;
+    try {
+      const ref = document.referrer;
+      sameOrigin = !!ref && new URL(ref).origin === window.location.origin;
+    } catch (e) {}
+    if (sameOrigin && history.length > 1) {
+      history.back();
+    } else {
+      window.location.href = 'rede.html';
+    }
+  });
 }

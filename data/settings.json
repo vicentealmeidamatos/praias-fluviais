@@ -109,10 +109,8 @@
   ],
   "shippingPriceIslands": 490,
   "freeShippingThreshold": 3000,
-  "shippingPriceContinent": 390,
   "premiumMunicipalities": [
     "Abrantes",
-    "Arganil",
     "Braga",
     "Castanheira de Pera",
     "Castelo Branco",
@@ -152,6 +150,10 @@
     "Tomar",
     "Tábua",
     "Vila de Rei",
-    "Vinhais"
-  ]
+    "Vinhais",
+    "Coimbra",
+    "Castro Marim",
+    "Mourão"
+  ],
+  "shippingPriceContinent": 390
 }

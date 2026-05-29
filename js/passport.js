@@ -552,4 +552,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (userNameEl) userNameEl.textContent = profile?.username || user.email?.split('@')[0] || '';
     }).catch(err => console.warn('[passport] fresh data fetch failed:', err));
   }
+
+  // Persistir scroll para a seta "voltar" da página da praia
+  window.PageState?.attachScrollPersistence('passaporte');
 });

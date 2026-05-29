@@ -796,7 +796,6 @@
           <a href="passaporte.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-2 py-2">Passaporte</a>
           <a href="votar.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-2 py-2">Votar</a>
           <a href="artigos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-2 py-2">Novidades</a>
-          <a href="descontos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-2 py-2">Descontos</a>
           <a href="contactos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-2 py-2">Contactos</a>
           <a href="loja.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-2 py-2">Loja</a>
           <a href="carrinho.html" class="relative nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-2.5 py-2 flex items-center" aria-label="Carrinho de compras">
@@ -862,9 +861,6 @@
       </a>
       <a href="onde-encontrar.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="book-open" class="w-5 h-5"></i> Onde Encontrar</a>
       <a href="onde-carimbar-passaporte.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="stamp" class="w-5 h-5"></i> Onde Carimbar</a>
-      <a href="descontos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider">
-        <i data-lucide="ticket-percent" class="w-5 h-5"></i> Descontos
-      </a>
       <a href="loja.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider">
         <i data-lucide="shopping-bag" class="w-5 h-5"></i> Loja
       </a>
@@ -982,10 +978,6 @@
           <div class="text-center reveal-on-scroll" data-reveal-delay="400">
             <div class="font-display text-4xl md:text-5xl font-bold text-praia-yellow-400 tracking-tight" data-counter="120" data-suffix="k">120k</div>
             <div class="font-display text-xs uppercase tracking-widest text-white/50 mt-1" data-content="homepage.stat2Label">Guias Distribuídos</div>
-          </div>
-          <div class="text-center reveal-on-scroll" data-reveal-delay="500">
-            <div class="font-display text-4xl md:text-5xl font-bold text-praia-yellow-400 tracking-tight" data-counter="250" data-prefix="+" data-suffix="">+250</div>
-            <div class="font-display text-xs uppercase tracking-widest text-white/50 mt-1" data-content="homepage.stat3Label">Descontos</div>
           </div>
         </div>
 
@@ -1326,7 +1318,6 @@
               <li><a href="rede.html" class="text-white/55 hover:text-white text-sm transition-colors duration-300">Rede de Praias</a></li>
               <li><a href="votar.html" class="text-white/55 hover:text-white text-sm transition-colors duration-300">Votar 2026</a></li>
               <li><a href="artigos.html" class="text-white/55 hover:text-white text-sm transition-colors duration-300">Artigos</a></li>
-              <li><a href="descontos.html" class="text-white/55 hover:text-white text-sm transition-colors duration-300">Descontos</a></li>
             </ul>
           </div>
           <!-- Col 3 — O Guia -->
@@ -1550,25 +1541,126 @@
       }
     }
 
-    document.addEventListener('DOMContentLoaded', async () => {
-      // Fire articles render immediately, in parallel with the rest of the page.
-      renderArtigos();
+    // Helper: fetch JSON com 1 retry e backoff curto, para tolerar cold-start
+    // do Vercel e falhas transientes da API. Cada render section chama o seu
+    // próprio loadJson — o data-loader.js deduplica fetches paralelos para o
+    // mesmo dataset.
+    async function loadJson(url, retries = 1) {
+      let lastErr;
+      for (let attempt = 0; attempt <= retries; attempt++) {
+        try {
+          const res = await fetch(url);
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          return await res.json();
+        } catch (err) {
+          lastErr = err;
+          if (attempt < retries) await new Promise(r => setTimeout(r, 600));
+        }
+      }
+      throw lastErr;
+    }
 
-      let settings = {};
-      let beaches = [];
+    // Praia do Ano — timeline de vencedores anteriores (só depende de settings).
+    // Isolada do carrossel para que uma falha de beaches.json (4.3 MB) não
+    // bloqueie esta secção.
+    async function renderWinnersTimeline() {
+      const tlGrid = document.getElementById('ano-timeline-grid');
+      if (!tlGrid) return;
 
+      const renderFallback = (msg) => {
+        tlGrid.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:rgba(255,255,255,0.55);">${msg}</p>`;
+      };
+
+      let settings;
       try {
-        const [s, b] = await Promise.all([
-          fetch('data/settings.json').then(r => r.json()),
-          fetch('data/beaches.json').then(r => r.json()),
-        ]);
-        settings = s;
-        beaches = b;
+        settings = await loadJson('data/settings.json');
       } catch (err) {
-        console.error('Erro ao carregar settings/beaches:', err);
+        console.error('Erro a carregar vencedores anteriores:', err);
+        renderFallback('Não foi possível carregar os vencedores.');
+        return;
       }
 
-      // Helpers reused across sections
+      const winners = (settings?.previousWinners || [])
+        .map(w => {
+          const yearRaw = w.year;
+          const yearNum = (typeof yearRaw === 'string')
+            ? parseInt(yearRaw.split('-').pop(), 10)
+            : (parseInt(yearRaw, 10) || 0);
+          const winnerStr = (w.winner || '').trim();
+          const parts = winnerStr.split(' - ').map(x => (x || '').trim());
+          const namePart = parts[0] || '';
+          const locPart = parts.slice(1).join(' - ') || '';
+          const cleanName = namePart
+            .replace(/^Praia Fluvial (de |do |da |dos |das )?/i, '')
+            .replace(/^Albufeira (de |do |da )?/i, '')
+            .trim();
+          return {
+            yearLabel: String(yearRaw),
+            yearNum,
+            name: cleanName || namePart || '|',
+            location: locPart || ''
+          };
+        })
+        .filter(w => w.name && w.name !== '|')
+        .sort((a, b) => a.yearNum - b.yearNum)
+        .slice(-4);
+
+      if (!winners.length) {
+        renderFallback('Sem vencedores registados.');
+        return;
+      }
+
+      tlGrid.innerHTML = winners.map((w, i) => `
+        <div style="text-align:center;opacity:0;transform:translateY(20px);transition:opacity 0.7s ease ${i * 0.12}s,transform 0.7s ease ${i * 0.12}s;" data-tl-anim>
+          <div style="width:32px;height:32px;border-radius:50%;background:#FFEB3B;border:4px solid #003A40;margin:0 auto;"></div>
+          <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.2em;color:#FFEB3B;text-transform:uppercase;margin-top:14px;">${w.yearLabel}</div>
+          <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:18px;color:#fff;margin-top:6px;">${w.name}</div>
+          ${w.location ? `<div style="font-size:13px;color:rgba(255,255,255,0.55);margin-top:2px;">${w.location}</div>` : ''}
+        </div>
+      `).join('');
+
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            tlGrid.querySelectorAll('[data-tl-anim]').forEach(el => {
+              el.style.opacity = '1';
+              el.style.transform = 'translateY(0)';
+            });
+            obs.disconnect();
+          }
+        });
+      }, { threshold: 0.3 });
+      obs.observe(tlGrid);
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    // Praias da Semana — carrossel (depende de settings + beaches). Usa
+    // Promise.allSettled para não acoplar as duas fetches: se uma falhar,
+    // o erro é detectado e mostramos mensagem em vez de deixar skeleton.
+    async function renderPraiasSemana() {
+      const stage = document.getElementById('sec-semana-stage');
+      if (!stage) return;
+
+      const renderFallback = (msg) => {
+        stage.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:rgba(0,58,64,0.55);padding:40px 20px;">${msg}</p>`;
+      };
+
+      const results = await Promise.allSettled([
+        loadJson('data/settings.json'),
+        loadJson('data/beaches.json'),
+      ]);
+      const settings = (results[0].status === 'fulfilled' && results[0].value) ? results[0].value : {};
+      const beaches = (results[1].status === 'fulfilled' && Array.isArray(results[1].value)) ? results[1].value : [];
+
+      if (results[0].status === 'rejected') console.error('settings.json falhou:', results[0].reason);
+      if (results[1].status === 'rejected') console.error('beaches.json falhou:', results[1].reason);
+
+      if (!beaches.length) {
+        renderFallback('Não foi possível carregar as praias da semana.');
+        return;
+      }
+
       const photoOf = (b) => b?.thumbnail || (Array.isArray(b?.photos) && b.photos[0]) || '';
       const shuffle = (arr) => {
         const a = arr.slice();
@@ -1579,10 +1671,7 @@
         return a;
       };
 
-      // ── Praias da Semana — 5 praias semanais (rotação fixa por semana ISO),
-      // ordem aleatória a cada visita, com setas de navegação. ──
-      const stage = document.getElementById('sec-semana-stage');
-      if (stage && Array.isArray(beaches) && beaches.length) {
+      {
         const pool = (settings.featuredBeaches && settings.featuredBeaches.length)
           ? settings.featuredBeaches
           : (settings.homeFeaturedBeachIds || []);
@@ -1737,65 +1826,13 @@
         }
       }
 
-      // ── Praia do Ano — timeline dinâmica (top 4 vencedores, mais recentes à direita) ──
-      const tlGrid = document.getElementById('ano-timeline-grid');
-      if (tlGrid) {
-        const winners = (settings.previousWinners || [])
-          .map(w => {
-            const yearRaw = w.year;
-            const yearNum = (typeof yearRaw === 'string')
-              ? parseInt(yearRaw.split('-').pop(), 10)
-              : (parseInt(yearRaw, 10) || 0);
-            const winnerStr = (w.winner || '').trim();
-            const parts = winnerStr.split(' - ').map(x => (x || '').trim());
-            const namePart = parts[0] || '';
-            const locPart = parts.slice(1).join(' - ') || '';
-            const cleanName = namePart
-              .replace(/^Praia Fluvial (de |do |da |dos |das )?/i, '')
-              .replace(/^Albufeira (de |do |da )?/i, '')
-              .trim();
-            return {
-              yearLabel: String(yearRaw),
-              yearNum,
-              name: cleanName || namePart || '—',
-              location: locPart || ''
-            };
-          })
-          .filter(w => w.name && w.name !== '—')
-          .sort((a, b) => a.yearNum - b.yearNum)
-          .slice(-4);
-
-        if (!winners.length) {
-          tlGrid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:rgba(255,255,255,0.55);">Sem vencedores registados.</p>';
-        } else {
-          tlGrid.innerHTML = winners.map((w, i) => `
-            <div style="text-align:center;opacity:0;transform:translateY(20px);transition:opacity 0.7s ease ${i * 0.12}s,transform 0.7s ease ${i * 0.12}s;" data-tl-anim>
-              <div style="width:32px;height:32px;border-radius:50%;background:#FFEB3B;border:4px solid #003A40;margin:0 auto;"></div>
-              <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.2em;color:#FFEB3B;text-transform:uppercase;margin-top:14px;">${w.yearLabel}</div>
-              <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:18px;color:#fff;margin-top:6px;">${w.name}</div>
-              ${w.location ? `<div style="font-size:13px;color:rgba(255,255,255,0.55);margin-top:2px;">${w.location}</div>` : ''}
-            </div>
-          `).join('');
-          // Trigger animation when timeline scrolls into view
-          const obs = new IntersectionObserver((entries) => {
-            entries.forEach(e => {
-              if (e.isIntersecting) {
-                tlGrid.querySelectorAll('[data-tl-anim]').forEach(el => {
-                  el.style.opacity = '1';
-                  el.style.transform = 'translateY(0)';
-                });
-                obs.disconnect();
-              }
-            });
-          }, { threshold: 0.3 });
-          obs.observe(tlGrid);
-        }
-      }
-
-      // ── Artigos are rendered independently at the start of DOMContentLoaded ──
-
-      // Re-render lucide icons for any newly-injected HTML
       if (window.lucide) lucide.createIcons();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderArtigos();
+      renderWinnersTimeline();
+      renderPraiasSemana();
     });
   </script>
   <!-- GSAP scroll-driven animations da homepage -->

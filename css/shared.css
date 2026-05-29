@@ -170,6 +170,14 @@ body {
   transform: scale(0.99);
 }
 
+/* ─── Service icons (praia.html) — balancing por chave para PNGs com áreas vazias internas distintas ─── */
+.service-icon-img[data-key="playground"],
+.service-icon-img[data-key="petFriendly"] { transform: scale(0.82); }
+.service-icon-img[data-key="accessible"],
+.service-icon-img[data-key="bar"],
+.service-icon-img[data-key="wc"] { transform: scale(1.38); }
+.service-icon-img[data-key="lifeguard"] { transform: scale(1.15); }
+
 /* ─── Scroll Reveal ─── */
 .reveal-on-scroll {
   opacity: 0;
@@ -208,35 +216,113 @@ body {
   display: none !important;
 }
 
-/* Page transitions slide — sensação nativa entre páginas. CSS animations só
-   aplicadas em is-app para o site web continuar com navegação instantânea. */
-@keyframes gpf-app-slide-in {
-  from { opacity: 0; transform: translateX(16px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-@keyframes gpf-app-slide-out {
-  from { opacity: 1; transform: translateX(0); }
-  to   { opacity: 0; transform: translateX(-16px); }
-}
-:where(.is-app) body {
-  animation: gpf-app-slide-in 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-:where(.is-app) body.gpf-app-navigating {
-  animation: gpf-app-slide-out 0.18s ease-out forwards;
-}
+/* Page transitions: removidas a pedido do utilizador. Navegação imediata,
+   sem fade/slide. O loader teal com spinner cobre qualquer momento de
+   transição/carregamento, dando a sensação de fluidez sem animações de UI. */
 
 /* Sem header e sem overlay — conteúdo vai edge-to-edge até ao topo do display.
    A status bar do sistema (notch / dynamic island) flutua transparente sobre
-   o conteúdo. O StatusBar.style em capacitor.config.json escolhe LIGHT/DARK
-   conforme o conteúdo da página dominante (por agora LIGHT — texto branco). */
+   o conteúdo. */
 :where(.is-app) body {
   padding-top: 0;
+  /* Body transparente para que o html (teal) apareça nas zonas vazias —
+     evita o sand-50 do site aparecer como "branco". Em páginas full-bleed
+     (mapa, hero), o conteúdo cobre tudo e o teal não se vê. */
+  background-color: transparent !important;
 }
 
 /* Páginas usam <main class="pt-16 md:pt-[70px]"> para dar espaço ao header
    fixed. Sem header, este padding fica desperdiçado — reset para 0. */
 :where(.is-app) main {
   padding-top: 0 !important;
+  /* Preenche viewport para esconder o teal do html por baixo do bottom-nav.
+     100dvh respeita keyboard/url-bar dinâmicos do iOS. */
+  min-height: 100dvh;
+  /* Background sand restaura legibilidade do conteúdo do site web (text
+     teal-800 sobre sand-50). Sem isto, body teal tornaria textos invisíveis
+     em páginas como onde-encontrar (concelho headers com text-praia-teal-800).
+     Em páginas full-bleed (rede.html), o map-main position:fixed cobre tudo
+     e este background não se vê. */
+  background-color: #FAF8F5;
+}
+
+/* Bottom nav extende safe-area-inset-bottom (gesture indicator do iPhone)
+   em contexto app, igual ao que já fazia em PWA standalone. */
+:where(.is-app) .bottom-nav {
+  padding-bottom: 0;
+}
+:where(.is-app) .bottom-nav .bottom-nav-inner {
+  padding-bottom: env(safe-area-inset-bottom);
+  height: calc(60px + env(safe-area-inset-bottom));
+}
+
+/* Páginas com altura calculada manualmente (rede.html: #map-main, #sidebar)
+   subtraem o header (64px). Em app não há header — usar position: fixed
+   com top:0 e bottom:bottom-nav-height para preencher exactamente entre o
+   topo do ecrã e o início do bottom-nav, sem depender de cálculos de altura
+   que iOS calcula de forma inconsistente. */
+html.is-app #map-main {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  height: auto !important;
+  width: auto !important;
+}
+/* Bottom-nav fica por cima do mapa (z-index 1000 já existente).
+   O FAB de filtros é reposicionado para ficar acima do bottom-nav. */
+html.is-app .filter-fab,
+html.is-app #filter-fab,
+html.is-app #filter-open-btn {
+  bottom: calc(60px + env(safe-area-inset-bottom) + 16px) !important;
+}
+html.is-app #sidebar {
+  height: calc(100dvh - 68px - env(safe-area-inset-bottom)) !important;
+}
+
+/* ─── Loading overlay app ─── */
+/* A geometria base e as transições do loader vivem em <style id="gpf-app-instant-bg">
+   inline no <head> (injectado por scripts/build-app.mjs). Isso garante que o
+   loader fica VISÍVEL antes de qualquer CSS externa carregar — sem flash branco.
+   Aqui só estilizamos o spinner; NUNCA mexer em opacity/transform do #gpf-app-loader
+   ou destrói-se a sincronização com o JS (app-context.js usa classes
+   .gpf-app-loader-incoming / .gpf-app-loader-leaving para o slide). */
+
+/* iOS-style activity indicator: 12 tracks radiais com fade rotativo */
+:where(.is-app) .gpf-spinner {
+  position: relative;
+  width: 32px;
+  height: 32px;
+}
+:where(.is-app) .gpf-spinner span {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 3px;
+  height: 9px;
+  margin-left: -1.5px;
+  background: #FFEB3B;
+  border-radius: 2px;
+  transform-origin: 50% 16px;
+  animation: gpf-spinner-fade 1s linear infinite;
+}
+:where(.is-app) .gpf-spinner span:nth-child(1)  { transform: rotate(0deg);   animation-delay: -0.917s; }
+:where(.is-app) .gpf-spinner span:nth-child(2)  { transform: rotate(30deg);  animation-delay: -0.833s; }
+:where(.is-app) .gpf-spinner span:nth-child(3)  { transform: rotate(60deg);  animation-delay: -0.750s; }
+:where(.is-app) .gpf-spinner span:nth-child(4)  { transform: rotate(90deg);  animation-delay: -0.667s; }
+:where(.is-app) .gpf-spinner span:nth-child(5)  { transform: rotate(120deg); animation-delay: -0.583s; }
+:where(.is-app) .gpf-spinner span:nth-child(6)  { transform: rotate(150deg); animation-delay: -0.500s; }
+:where(.is-app) .gpf-spinner span:nth-child(7)  { transform: rotate(180deg); animation-delay: -0.417s; }
+:where(.is-app) .gpf-spinner span:nth-child(8)  { transform: rotate(210deg); animation-delay: -0.333s; }
+:where(.is-app) .gpf-spinner span:nth-child(9)  { transform: rotate(240deg); animation-delay: -0.250s; }
+:where(.is-app) .gpf-spinner span:nth-child(10) { transform: rotate(270deg); animation-delay: -0.167s; }
+:where(.is-app) .gpf-spinner span:nth-child(11) { transform: rotate(300deg); animation-delay: -0.083s; }
+:where(.is-app) .gpf-spinner span:nth-child(12) { transform: rotate(330deg); animation-delay: 0s; }
+
+@keyframes gpf-spinner-fade {
+  0%   { opacity: 1; }
+  100% { opacity: 0.18; }
 }
 
 /* ─── Header ─── */
@@ -390,6 +476,157 @@ body {
        fique exatamente sobre o home-indicator (balança o peso visual). */
     padding-bottom: max(calc(env(safe-area-inset-bottom) / 2), 6px) !important;
   }
+}
+
+/* ─── Bottom-nav icon wrapper (SVG inline) ─── */
+/* O bottom-nav usa <span class="bottom-nav-icon">[svg]</span> com SVG inline
+   (não Lucide createIcons). Forçar tamanho consistente. */
+.bottom-nav .bottom-nav-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+.bottom-nav .bottom-nav-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ─── Bottom-nav em contexto app (Capacitor) ─── */
+/* Altura FIXA e consistente entre todas as páginas. Sem isto, rede.html
+   ficava com nav-bar maior porque o flex/min-heights herdados esticavam
+   a nav consoante o conteúdo. Forçar mín=max=base. */
+html.is-app nav.bottom-nav {
+  height: calc(66px + env(safe-area-inset-bottom)) !important;
+  min-height: calc(66px + env(safe-area-inset-bottom)) !important;
+  max-height: calc(66px + env(safe-area-inset-bottom)) !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+html.is-app .bottom-nav .bottom-nav-inner {
+  height: 100% !important;
+  min-height: 100% !important;
+  max-height: 100% !important;
+  padding-bottom: env(safe-area-inset-bottom) !important;
+  box-sizing: border-box !important;
+}
+html.is-app .bottom-nav .bottom-nav-icon {
+  width: 22px !important;
+  height: 22px !important;
+  flex-shrink: 0;
+}
+html.is-app .bottom-nav span {
+  font-size: 10.5px !important;
+  display: inline-block !important;
+  line-height: 1.1 !important;
+  margin-top: 2px;
+}
+html.is-app .bottom-nav a,
+html.is-app .bottom-nav button {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 3px !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* ─── Disable scroll animations in app context ─── */
+/* No site web, há animações de reveal-on-scroll, fade-in, slide-in para dar
+   movimento à página. Na app não queremos isso — elementos devem aparecer
+   estáticos, instantaneamente, sem animação ao scroll. */
+html.is-app .reveal-on-scroll,
+html.is-app [data-aos],
+html.is-app .scroll-reveal,
+html.is-app .animate-on-scroll,
+html.is-app .fade-in,
+html.is-app .slide-in,
+html.is-app .scroll-fade {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+  animation: none !important;
+  clip-path: none !important;
+  filter: none !important;
+}
+
+/* ─── Praia page (praia.html) — overrides para app ───
+   Hero carrossel: esconde setas laterais (swipe é nativo via JS),
+   reposiciona back arrow e watermark abaixo do dynamic island,
+   torna watermark mais discreto, aumenta o concelho. */
+html.is-app #carousel-prev,
+html.is-app #carousel-next {
+  display: none !important;
+}
+html.is-app #beach-back-btn {
+  position: fixed !important;
+  top: calc(env(safe-area-inset-top, 0px) + 10px) !important;
+  left: max(env(safe-area-inset-left, 0px), 12px) !important;
+  width: 38px !important;
+  height: 38px !important;
+  z-index: 9999 !important;
+}
+html.is-app #beach-back-btn i,
+html.is-app #beach-back-btn svg {
+  width: 18px !important;
+  height: 18px !important;
+}
+/* Watermark: descer abaixo do dynamic island e tornar mais discreto */
+html.is-app .slide-watermark {
+  top: calc(env(safe-area-inset-top, 0px) + 10px) !important;
+  right: 12px !important;
+  padding: 5px 9px !important;
+  background: rgba(0, 0, 0, 0.22) !important;
+}
+html.is-app .slide-watermark img {
+  height: 18px !important;
+  opacity: 0.55 !important;
+}
+/* Nome da praia: aumentar para garantir hierarquia visual sobre o concelho */
+html.is-app #hero-carousel h1 {
+  font-size: 30px !important;
+  line-height: 1.1 !important;
+  letter-spacing: -0.02em;
+}
+/* Texto do concelho: bold ligeiramente maior que o resto, mas claramente
+   menor que o nome da praia (~50% do tamanho) — destaque sem competir. */
+html.is-app #hero-carousel p.text-white\/70 {
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+}
+html.is-app #hero-carousel p.text-white\/70 .font-bold {
+  font-size: 15px !important;
+}
+
+/* HERO em app: altura FIXA (ligeiramente maior que o web), foto em `cover`
+   com zoom mínimo (transform: none — só o cover que é necessário para encher).
+   Para fotos muito verticais, há crop top/bottom mas NUNCA fundo lateral.
+   O letterbox/blur sistema do web é bypassed — ver initSlideAspectFit. */
+html.is-app #hero-carousel > div.relative {
+  height: 470px !important;
+}
+@media (min-height: 800px) {
+  html.is-app #hero-carousel > div.relative {
+    height: 530px !important;
+  }
+}
+html.is-app .slide-photo {
+  /* Cover com posição do focal (admin escolheu o que destacar) mas SEM
+     transform de zoom — minimal zoom para evitar fundos. */
+  background-size: cover !important;
+  transform: none !important;
+  transform-origin: center !important;
+}
+/* Sem letterbox em app → o blur sob a foto fica escondido */
+html.is-app .slide-bg-blur {
+  display: none !important;
+}
+html.is-app .slide-watermark {
+  right: 12px !important;
 }
 .bottom-nav a,
 .bottom-nav button {
@@ -1265,31 +1502,65 @@ html.devtools-open .photo-protected::after {
   .photo-protected { display: none !important; }
 }
 
-/* Marca de água sobreposta no hero (garante visibilidade mesmo em fotos
-   retrato cuja parte superior é cortada pelo crop do carrossel). */
-.hero-watermark {
+/* Marca de água sobreposta em cada slide do hero. Para fotos letterboxed
+   (verticais com background-size: contain) o JS reposiciona dinamicamente
+   `top`/`right` para encostar ao canto superior direito da foto exibida —
+   nunca ao fundo blurred. Para fotos cover, usa o default abaixo. */
+.slide-watermark {
   position: absolute;
   top: 18px; right: 18px;
   z-index: 12;
   pointer-events: none;
-  padding: 6px 10px;
+  padding: 7px 12px;
   border-radius: 999px;
-  background: rgba(0, 0, 0, 0.18);
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
+  background: rgba(0, 0, 0, 0.34);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transition: top 0.2s ease, right 0.2s ease;
 }
-.hero-watermark img {
+.slide-watermark img {
   display: block;
   height: 28px;
   width: auto;
-  opacity: 0.55;
+  opacity: 0.88;
   filter: brightness(0) invert(1);
 }
 @media (min-width: 768px) {
-  .hero-watermark { top: 22px; right: 22px; }
-  .hero-watermark img { height: 34px; }
+  .slide-watermark { top: 22px; right: 22px; }
+  .slide-watermark img { height: 34px; }
 }
 @media (min-width: 1024px) {
-  .hero-watermark { top: 28px; right: 28px; }
-  .hero-watermark img { height: 40px; }
+  .slide-watermark { top: 28px; right: 28px; }
+  .slide-watermark img { height: 40px; }
+}
+
+/* ─── Carrinho: respeitar safe-area top (dynamic island) na app ─────────────
+   Sem isto, o texto "Carrinho" e o ícone ficam por baixo da dynamic island
+   do iPhone. Sticky + bg sólido + z-index para o título ficar SEMPRE visível
+   ao topo do ecrã mesmo durante scroll/over-bounce — assim o utilizador não
+   consegue scrollar a ponto do título ficar coberto pela dynamic island.
+   Só aplica em app (is-app) — na web o header fica como antes. */
+html.is-app .gpf-cart-page-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: #ffffff;
+  padding-top: calc(env(safe-area-inset-top, 0px) + 8px) !important;
+  box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.04);
+}
+/* Bloquear over-bounce vertical na página carrinho (só na app).
+   :has() é suportado em iOS WebView ≥ 16. */
+html.is-app body:has(.gpf-cart-page-header) {
+  overscroll-behavior-y: contain;
+}
+
+/* ─── Contactos é web-only ─────────────────────────────────────────────────
+   A página contactos.html está excluída do bundle da app (build-app.mjs).
+   Esconder qualquer link/botão que aponte para ela quando isApp() == true.
+   Os <li> dos footers ficam vazios mas o footer inteiro já está escondido
+   em is-app — sem impacto. */
+html.is-app a[href="contactos.html"],
+html.is-app a[href="/contactos.html"],
+html.is-app a[href$="/contactos.html"] {
+  display: none !important;
 }

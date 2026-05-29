@@ -104,6 +104,24 @@ export default async function handler(req, res) {
   }
   const note = (body.note || '').toString().slice(0, 200);
 
+  // Defesa: recusar payloads com imagens base64 inline. O fluxo correcto é
+  // POST /api/upload → URL pública → guardar URL. Imagens inline incham o
+  // JSON, fazem o save falhar por tamanho, e quebram o /api/save-data até
+  // alguém ir limpar à mão (já aconteceu — ver _fix-base64-thumbnails.mjs).
+  // Detecta em qualquer profundidade do payload via match em string.
+  {
+    const asString = JSON.stringify(data);
+    const m = asString.match(/data:image\/[^;]+;base64,/);
+    if (m) {
+      const totalBytes = Buffer.byteLength(asString, 'utf8');
+      return res.status(400).json({
+        error: 'inline_base64_image',
+        message: 'O payload contém pelo menos uma imagem em base64 inline, o que faz o JSON crescer descontroladamente. Use POST /api/upload para enviar a imagem e guarde apenas a URL devolvida.',
+        sizeBytes: totalBytes,
+      });
+    }
+  }
+
   // Optimistic concurrency check: if the client passes the updated_at it
   // observed when loading, fail the save when Supabase has a newer version.
   // Evita que um separador admin com state em cache sobrescreva edições

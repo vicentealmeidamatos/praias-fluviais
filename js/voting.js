@@ -2,7 +2,11 @@
 // Votes stored in Supabase. Requires user account. One vote per user per year.
 // ─────────────────────────────────────────────────────────────────────────────
 
-document.addEventListener('DOMContentLoaded', async () => {
+// Exposto como window.initVotarPage para poder ser invocado manualmente
+// pelo inline script de votar.html — em SPA, depender só de DOMContentLoaded
+// pode levar a listeners que não disparam ou disparam tarde demais.
+// Idempotente: se a grid já está populada, sai.
+window.initVotarPage = async function () {
   const grid         = document.getElementById('voting-grid');
   const searchInput  = document.getElementById('vote-search');
   const districtSel  = document.getElementById('vote-district');
@@ -10,20 +14,28 @@ document.addEventListener('DOMContentLoaded', async () => {
   const nearMeBtn    = document.getElementById('vote-near-me');
   const countEl      = document.getElementById('vote-count');
   if (!grid) return;
+  // Idempotente: se já temos cards renderizados, não duplicar trabalho
+  if (grid.children.length > 0 && grid.querySelector('.card-interactive')) return;
 
-  // ── Countdown arranca imediatamente com valor por defeito ───────────────────
-  initCountdown('2026-10-31T23:59:59');
+  // Countdown está garantido por inline self-contained no body da votar.html
+  // — não chamamos initCountdown aqui para evitar dependência de voting.js.
 
-  const { authGetUser, profileGet, voteGet, voteSubmit, celebrateBadge,
-          badgesCompute, stampsGetAll, reviewsGetForUser, ALL_BADGES } = AuthUtils;
-
-  // ── 1) Load beaches + settings (no auth needed) ───────────────────────────
-  // Auth runs in parallel but we don't wait for it to render
-  const beachesPromise = (window._beachesPrefetch || getBeaches()).then(d => d.length ? d : null);
-  const settingsPromise = loadData('settings').then(d => d || {});
-  const authPromise = authGetUser().catch(() => null);
-
-  const [beachesRaw, settingsRaw] = await Promise.all([beachesPromise, settingsPromise]);
+  // ── 1) Load beaches + settings (NÃO depende de AuthUtils) ─────────────────
+  // CRUCIAL: as praias renderizam mesmo se AuthUtils falhar. Auth é OPCIONAL
+  // — apenas usado para mostrar "O Seu Voto" / "Já votou" no card.
+  let beachesRaw, settingsRaw;
+  try {
+    const beachesPromise = (typeof getBeaches === 'function')
+      ? (window._beachesPrefetch || getBeaches()).then(d => d && d.length ? d : null)
+      : Promise.resolve(null);
+    const settingsPromise = (typeof loadData === 'function')
+      ? loadData('settings').then(d => d || {}).catch(() => ({}))
+      : Promise.resolve({});
+    [beachesRaw, settingsRaw] = await Promise.all([beachesPromise, settingsPromise]);
+  } catch (e) {
+    grid.innerHTML = '<p class="col-span-full text-center text-praia-sand-500 py-10">Erro a carregar praias: ' + (e && e.message ? e.message : String(e)) + '</p>';
+    return;
+  }
 
   if (!beachesRaw) {
     grid.innerHTML = '<p class="col-span-full text-center text-praia-sand-500 py-10">Erro ao carregar praias.</p>';
@@ -118,9 +130,45 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderCards(currentBeaches);
   }
 
-  searchInput?.addEventListener('input', filterBeaches);
-  districtSel?.addEventListener('change', filterBeaches);
-  sortSel?.addEventListener('change', () => { sortMode = sortSel.value; renderCards(currentBeaches); });
+  // ── PageState: persistência de filtros/scroll para a seta "voltar" ─────────
+  const PS_KEY = 'votar';
+  function _saveState() {
+    if (!window.PageState) return;
+    const districts = (districtSel && window.gpfSelectGetValues)
+      ? window.gpfSelectGetValues(districtSel)
+      : (districtSel?.value ? [districtSel.value] : []);
+    window.PageState.save(PS_KEY, {
+      search: searchInput?.value || '',
+      districts,
+      sortMode,
+      scrollY: window.scrollY,
+    });
+  }
+  function _restoreState() {
+    if (!window.PageState) return null;
+    const s = window.PageState.restore(PS_KEY);
+    if (!s) return null;
+    if (searchInput && typeof s.search === 'string') searchInput.value = s.search;
+    if (districtSel && Array.isArray(s.districts) && s.districts.length) {
+      if (window.gpfSelectSetValues) window.gpfSelectSetValues(districtSel, s.districts);
+      else if (s.districts[0]) districtSel.value = s.districts[0];
+    }
+    if (s.sortMode && sortSel) {
+      sortMode = s.sortMode;
+      sortSel.value = s.sortMode;
+      if (typeof window.gpfSelectRefresh === 'function') window.gpfSelectRefresh(sortSel);
+    }
+    return s;
+  }
+  let _scrollSaveT;
+  window.addEventListener('scroll', () => {
+    clearTimeout(_scrollSaveT);
+    _scrollSaveT = setTimeout(_saveState, 200);
+  }, { passive: true });
+
+  searchInput?.addEventListener('input', () => { filterBeaches(); _saveState(); });
+  districtSel?.addEventListener('change', () => { filterBeaches(); _saveState(); });
+  sortSel?.addEventListener('change', () => { sortMode = sortSel.value; renderCards(currentBeaches); _saveState(); });
 
   nearMeBtn?.addEventListener('click', async () => {
     nearMeBtn.disabled = true;
@@ -144,28 +192,61 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   // ── 2) Render grid IMMEDIATELY (all beaches with vote buttons) ──────────────
-  renderCards(beaches);
+  // Restaurar filtros antes do primeiro render para evitar flash.
+  const _restored = _restoreState();
+  if (_restored && (
+        (_restored.search && _restored.search.length) ||
+        (Array.isArray(_restored.districts) && _restored.districts.length) ||
+        (_restored.sortMode && _restored.sortMode !== 'az-concelho')
+      )) {
+    filterBeaches();
+  } else {
+    renderCards(beaches);
+  }
+  if (_restored && typeof _restored.scrollY === 'number' && _restored.scrollY > 0) {
+    requestAnimationFrame(() => window.scrollTo(0, _restored.scrollY));
+  }
 
-  // ── 3) Resolve auth in background, then update vote state if needed ────────
-  const currentYear = new Date().getFullYear();
-  const user = await authPromise;
-  if (user) {
-    userVote = await voteGet(user.id, currentYear);
-    if (userVote) {
-      // Re-render to show "O Seu Voto" / "Já votou" states
-      renderCards(currentBeaches.length === beaches.length ? beaches : currentBeaches);
+  // ── 3) Resolve auth in background (OPCIONAL) e atualiza estado de voto ─────
+  // AuthUtils pode estar undefined se auth.js ainda não carregou — sem problema,
+  // as praias já estão renderizadas. Apenas saltamos o estado de "O Seu Voto".
+  if (typeof AuthUtils !== 'undefined') {
+    try {
+      const user = await AuthUtils.authGetUser();
+      if (user) {
+        const currentYear = new Date().getFullYear();
+        userVote = await AuthUtils.voteGet(user.id, currentYear);
+        if (userVote) {
+          // Re-render para mostrar "O Seu Voto" / "Já votou"
+          renderCards(currentBeaches.length === beaches.length ? beaches : currentBeaches);
+        }
+      }
+      // Preselect (after auth resolved)
+      if (preselect && !userVote) {
+        const beach = beaches.find(b => b.id === preselect);
+        if (beach) setTimeout(() => openVoteModal(beach.id, beach.name), 500);
+      }
+    } catch (e) {
+      console.warn('[votar] auth resolve falhou (não-crítico):', e);
     }
   }
+};
 
-  // Preselect (after auth resolved)
-  if (preselect && !userVote) {
-    const beach = beaches.find(b => b.id === preselect);
-    if (beach) setTimeout(() => openVoteModal(beach.id, beach.name), 500);
-  }
-});
+// Inicializar no DOMContentLoaded original (web normal) e também tentar imediato
+// caso já estejamos prontos (SPA — script re-injectado quando DOM já está vivo).
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => window.initVotarPage());
+} else {
+  // Já temos DOM — corre imediatamente
+  window.initVotarPage();
+}
 
 // ─── Countdown Timer ──────────────────────────────────────────────────────────
-let _countdownInterval = null;
+// var (não let) — para ser hoisted e ficar acessível por initVotarPage que
+// pode correr antes da execução desta linha (auto-init no fim de window.initVotarPage
+// chama initCountdown que referencia _countdownInterval). Sem hoisting:
+// ReferenceError em TDZ → function fail silenciosa → beaches não renderizam.
+var _countdownInterval = null;
 function initCountdown(deadline) {
   if (_countdownInterval) { clearInterval(_countdownInterval); _countdownInterval = null; }
 
@@ -267,7 +348,7 @@ function closeVoteModal() {
 }
 
 // Track privacy preference for vote modal
-let _voteIsPublic = true;
+var _voteIsPublic = true;
 
 function setVotePrivacy(isPublic) {
   _voteIsPublic = isPublic;

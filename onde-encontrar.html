@@ -30,7 +30,10 @@
   <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
   <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
   <link rel="stylesheet" href="css/shared.css">
 
   <style>
@@ -130,7 +133,6 @@
           <a href="passaporte.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-2 py-2">Passaporte</a>
           <a href="votar.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-2 py-2">Votar</a>
           <a href="artigos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-2 py-2">Novidades</a>
-          <a href="descontos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-2 py-2">Descontos</a>
           <a href="contactos.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-2 py-2">Contactos</a>
           <a href="loja.html" class="nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-2 py-2">Loja</a>
           <a href="carrinho.html" class="relative nav-link font-display text-xs font-semibold uppercase tracking-wider text-white/80 px-2.5 py-2 flex items-center" aria-label="Carrinho de compras">
@@ -178,7 +180,6 @@
       <a href="artigos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="newspaper" class="w-5 h-5"></i> Novidades</a>
       <a href="onde-encontrar.html" class="flex items-center gap-3 px-6 py-3.5 text-praia-yellow-400 font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="book-open" class="w-5 h-5"></i> Onde Encontrar</a>
       <a href="onde-carimbar-passaporte.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="stamp" class="w-5 h-5"></i> Onde Carimbar</a>
-      <a href="descontos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="ticket-percent" class="w-5 h-5"></i> Descontos</a>
       <a href="loja.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="shopping-bag" class="w-5 h-5"></i> Loja</a>
       <a href="contactos.html" class="flex items-center gap-3 px-6 py-3.5 text-white/80 hover:text-white font-display font-semibold text-sm uppercase tracking-wider"><i data-lucide="mail" class="w-5 h-5"></i> Contactos</a>
     </div>
@@ -347,7 +348,6 @@
               <li><a href="rede.html" class="text-white/55 hover:text-white text-sm transition-colors duration-300">Rede de Praias</a></li>
               <li><a href="votar.html" class="text-white/55 hover:text-white text-sm transition-colors duration-300">Votar 2026</a></li>
               <li><a href="artigos.html" class="text-white/55 hover:text-white text-sm transition-colors duration-300">Artigos</a></li>
-              <li><a href="descontos.html" class="text-white/55 hover:text-white text-sm transition-colors duration-300">Descontos</a></li>
             </ul>
           </div>
           <!-- Col 3 — O Guia -->
@@ -486,14 +486,44 @@
         return container;
       }
     });
-    map.addControl(new FullscreenControl());
+    // Fullscreen só faz sentido na web — na app, o mapa já está full-width
+    // e a UI é mobile-native, então o controlo é dispensável.
+    if (!(window.isApp && window.isApp())) {
+      map.addControl(new FullscreenControl());
+    }
     document.addEventListener('keydown', e => {
       if (e.key !== 'Escape') return;
       const mapEl = document.getElementById('locations-map');
       if (mapEl.classList.contains('is-fullscreen')) setMapFullscreen(false);
     });
 
-    const markersLayer = L.layerGroup().addTo(map);
+    // Ícones de cluster com a cor do tipo predominante — APENAS na app. Na web
+    // mantemos os defaults do markercluster (amarelo→laranja→vermelho) para
+    // não alterar o visual existente.
+    const _isApp = !!(window.isApp && window.isApp());
+    function _gpfClusterIcon(cluster) {
+      const children = cluster.getAllChildMarkers();
+      const hasPass = children.some(m => m._gpfType === 'guia_passaporte');
+      const color = hasPass ? TYPES['guia_passaporte'].color : TYPES['guia'].color;
+      const count = cluster.getChildCount();
+      const size = count < 10 ? 38 : count < 50 ? 46 : 54;
+      return L.divIcon({
+        html: `<div style="width:${size}px;height:${size}px;background:${color};border:3px solid #fff;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Poppins',sans-serif;font-weight:700;font-size:14px;box-shadow:0 4px 12px rgba(0,0,0,0.25);">${count}</div>`,
+        className: 'gpf-cluster-icon',
+        iconSize: [size, size],
+      });
+    }
+    // Cluster APENAS na app — na web mantemos o comportamento original
+    // (markers individuais via layerGroup).
+    const markersLayer = (_isApp && typeof L.markerClusterGroup === 'function')
+      ? L.markerClusterGroup({
+          showCoverageOnHover: false,
+          chunkedLoading: true,
+          maxClusterRadius: 50,
+          iconCreateFunction: _gpfClusterIcon,
+        })
+      : L.layerGroup();
+    markersLayer.addTo(map);
 
     function makeIcon(color) {
       return L.divIcon({
@@ -579,6 +609,9 @@
       const marker = L.marker([locs[0].coordinates.lat, locs[0].coordinates.lng], { icon: makeIcon(typeInfo.color) })
         .addTo(markersLayer)
         .bindPopup(popupHTML, { maxWidth: 300 });
+      // Atribui o tipo dominante ao marker — usado pelo _gpfClusterIcon para
+      // colorir o cluster com base na composição interna.
+      marker._gpfType = hasPass ? 'guia_passaporte' : locs[0].type;
       // Tipos contidos no grupo (para o filtro)
       const types = [...new Set(locs.map(l => l.type))];
       markerObjects.push({ marker, types });

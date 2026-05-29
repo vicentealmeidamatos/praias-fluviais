@@ -19,7 +19,6 @@
     articles:         'data/articles.json',
     locationsGuia:    'data/locations-guia-passaporte.json',
     locationsCarimbo: 'data/locations-carimbos.json',
-    descontos:        'data/descontos.json',
     products:         'data/products.json',
     settings:         'data/settings.json',
     waterQuality:     'data/water-quality.json',
@@ -172,7 +171,7 @@
       err.currentUpdatedAt  = j.currentUpdatedAt;
       throw err;
     }
-    if (!r.ok) throw new Error(j.error || 'Falha ao gravar');
+    if (!r.ok) throw new Error(j.message || j.error || 'Falha ao gravar');
     if (j.updated_at) lastUpdatedAt[name] = j.updated_at;
     delete memCache[name];
     try { sessionStorage.removeItem(SS_PREFIX + name); } catch {}
@@ -241,7 +240,6 @@
     'articles.json':                  'articles',
     'locations-guia-passaporte.json': 'locationsGuia',
     'locations-carimbos.json':        'locationsCarimbo',
-    'descontos.json':                 'descontos',
     'products.json':                  'products',
     'settings.json':                  'settings',
   };
