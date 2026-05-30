@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-29T10:15:17.691Z",
+  "lastUpdated": "2026-05-30T08:41:28.524Z",
   "sourceUrl": "https://infoagua.apambiente.pt/pt/praias/praias-pesquisa-avancada",
   "stats": {
     "siteBeaches": 228,
@@ -51,7 +51,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-05-19",
       "interdictionReason": null,
       "seasonStart": "2026-05-30",
       "seasonEnd": "2026-09-13",
@@ -59,7 +59,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 43,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-05-30T08:41:28.524Z"
     },
     "praia-fluvial-de-albufeira-de-odeleite": {
       "apaCode": "PTCV8C",
