@@ -223,7 +223,12 @@ window.initVotarPage = async function () {
       } else {
         // Guest: mostrar banner "Crie conta para registar o seu voto"
         const banner = document.getElementById('guest-banner');
-        if (banner) banner.classList.remove('hidden');
+        if (banner) {
+          banner.classList.remove('hidden');
+          // Marca body para CSS reposicionar o FAB "voltar aos filtros"
+          // acima do banner (em vez de directamente acima da bottom-nav).
+          document.body.classList.add('gpf-has-guest-banner');
+        }
       }
       // Preselect (after auth resolved)
       if (preselect && !userVote) {
@@ -234,7 +239,49 @@ window.initVotarPage = async function () {
       console.warn('[votar] auth resolve falhou (não-crítico):', e);
     }
   }
+
+  // ── Mini FAB "voltar aos filtros" (app) ────────────────────────────────────
+  // Aparece quando o user scrollou para baixo dos filtros. Click → smooth
+  // scroll de volta para a secção de filtros.
+  setupScrollToFiltersFab();
 };
+
+// Idempotente: configurado uma vez por sessão, listeners no window persistem
+// entre re-navegações SPA porque o window é shared.
+let _scrollToFiltersFabSetup = false;
+function setupScrollToFiltersFab() {
+  if (_scrollToFiltersFabSetup) return;
+  const btn = document.getElementById('vote-scroll-to-filters');
+  const section = document.getElementById('voting-section');
+  if (!btn || !section) return;
+  _scrollToFiltersFabSetup = true;
+
+  btn.addEventListener('click', () => {
+    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  let rafScheduled = false;
+  function update() {
+    rafScheduled = false;
+    const sec = document.getElementById('voting-section');
+    const b = document.getElementById('vote-scroll-to-filters');
+    if (!sec || !b) return;
+    const rect = sec.getBoundingClientRect();
+    // Mostrar quando o topo da secção dos filtros está acima do viewport com
+    // alguma margem (user scrollou para baixo pela lista de praias).
+    const shouldShow = rect.top < -100;
+    b.classList.toggle('is-visible', shouldShow);
+  }
+
+  window.addEventListener('scroll', () => {
+    if (!rafScheduled) {
+      rafScheduled = true;
+      requestAnimationFrame(update);
+    }
+  }, { passive: true });
+
+  update();
+}
 
 // Inicializar no DOMContentLoaded original (web normal) e também tentar imediato
 // caso já estejamos prontos (SPA — script re-injectado quando DOM já está vivo).

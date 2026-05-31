@@ -171,7 +171,17 @@
       err.currentUpdatedAt  = j.currentUpdatedAt;
       throw err;
     }
-    if (!r.ok) throw new Error(j.message || j.error || 'Falha ao gravar');
+    if (!r.ok) {
+      // Traduzir o erro técnico do servidor para algo que o utilizador
+      // perceba e saiba como resolver. O auto-cleanup do admin geralmente
+      // previne este caso, mas pode chegar aqui se o upload falhar.
+      if (j.error === 'inline_base64_image') {
+        const err = new Error('Há uma imagem dentro do editor de texto que não chegou ao servidor. Verifique a ligação à internet e tente guardar outra vez.');
+        err.code = 'inline_base64_image';
+        throw err;
+      }
+      throw new Error(j.message || j.error || 'Não foi possível guardar. Tente outra vez.');
+    }
     if (j.updated_at) lastUpdatedAt[name] = j.updated_at;
     delete memCache[name];
     try { sessionStorage.removeItem(SS_PREFIX + name); } catch {}

@@ -33,7 +33,6 @@ function _autoSaveStatus(text, kind = 'info') {
     info:    'background:#003A40;color:#fff;',
     saving:  'background:#0288D1;color:#fff;',
     saved:   'background:#43A047;color:#fff;',
-    error:   'background:#C62828;color:#fff;',
   };
   el.style.cssText += colors[kind] || colors.info;
   el.textContent = text;
@@ -41,6 +40,29 @@ function _autoSaveStatus(text, kind = 'info') {
   if (kind === 'saved') {
     setTimeout(() => { el.style.opacity = '0'; }, 1800);
   }
+}
+
+// Esconde o pill pequeno de auto-save (usado quando há erro — neste caso o
+// toast amigável é o único canal de mensagem, para evitar duplicação).
+function _autoSaveHide() {
+  const el = document.getElementById('admin-autosave-status');
+  if (el) el.style.opacity = '0';
+}
+
+// Traduz erros do save em linguagem clara, com a próxima acção sugerida.
+function _friendlyAutoSaveError(e) {
+  const msg = (e && e.message) ? String(e.message) : '';
+  const code = e && e.code;
+  if (code === 'inline_base64_image' || /inline_base64_image|base64 inline/i.test(msg)) {
+    return 'Há uma imagem dentro do editor de texto que não chegou ao servidor. Verifique a ligação à internet e tente guardar outra vez.';
+  }
+  if (/Failed to fetch|NetworkError|Sem ligação/i.test(msg)) {
+    return 'Sem ligação à internet. Verifique a ligação e tente outra vez.';
+  }
+  if (/conflito|conflict/i.test(msg)) {
+    return 'Os dados foram alterados noutro lado entretanto. Recarregue a página (Ctrl+R) e tente outra vez.';
+  }
+  return 'Não foi possível guardar agora. Tente outra vez daqui a alguns segundos.';
 }
 
 async function _autoSaveFlush(section) {
@@ -55,9 +77,17 @@ async function _autoSaveFlush(section) {
   _autoSave.pending.delete(section);
   _autoSaveStatus(`A guardar ${section}…`, 'saving');
   try {
-    const data = state.data[section];
-    if (typeof data === 'undefined') throw new Error('sem dados em memória');
+    if (typeof state.data[section] === 'undefined') throw new Error('sem dados em memória');
     if (!window.DataLoader) throw new Error('data-loader não carregado');
+
+    // Pré-flight: substituir imagens base64 inline (cola Ctrl+V no Quill) por
+    // URLs públicos via /api/upload. Mutates state.data[section] em-place —
+    // assim o user não vê o erro de "base64 inline" do servidor.
+    try { await _walkAndReplaceInlineImages(state.data[section], dataset); } catch (preErr) {
+      console.warn('[autoSave] pre-flight inline images:', preErr);
+    }
+
+    const data = state.data[section];
     await window.DataLoader.saveDataset(dataset, data, { note: 'auto-save admin' });
     _autoSaveStatus(`✓ ${section} guardado`, 'saved');
     // Notificar listeners (vista Conteúdo, etc.) que o dataset mudou
@@ -65,15 +95,14 @@ async function _autoSaveFlush(section) {
   } catch (e) {
     _autoSave.lastError = e;
     if (e && e.code === 'conflict') {
-      _autoSaveStatus(`⚠ ${section}: versão na Supabase mais recente`, 'error');
-      // Avisa explicitamente o utilizador para que perceba que precisa de recarregar.
+      // Conflito é tratado com confirm() — esconder pill para não duplicar.
+      _autoSaveHide();
       try {
         const force = confirm(
-          `Conflito de versão em "${section}":\n\n` +
-          `Os dados na Supabase foram alterados por outra fonte (admin noutro separador, ` +
-          `script de importação, etc.) desde que este painel carregou.\n\n` +
-          `Cancelar = recomenda recarregar o painel (Ctrl+R) e voltar a editar.\n` +
-          `OK = forçar a gravação e sobrescrever as alterações remotas.`
+          `Os dados desta secção foram alterados noutro lado (ex.: outro separador) ` +
+          `desde que abriu o admin.\n\n` +
+          `OK = gravar mesmo assim (vai sobrescrever as alterações remotas).\n` +
+          `Cancelar = recarregue a página (Ctrl+R) para ver a versão actual.`
         );
         if (force) {
           await window.DataLoader.saveDataset(dataset, state.data[section], { note: 'admin (force)', force: true });
@@ -86,7 +115,9 @@ async function _autoSaveFlush(section) {
         console.error('[autoSave force]', section, e2);
       }
     } else {
-      _autoSaveStatus(`✗ Erro a guardar ${section}: ${e.message}`, 'error');
+      // Erro normal: esconde pill, mostra UM toast amigável que auto-desaparece.
+      _autoSaveHide();
+      toast(_friendlyAutoSaveError(e), 'error', 6000);
       console.error('[autoSave]', section, e);
     }
   } finally {
@@ -131,10 +162,9 @@ async function saveSectionNow(section) {
   _autoSave.lastError = null;
   await _autoSaveFlush(section);
   _renderPublishBar();
-  if (_autoSave.lastError) {
-    toast('Erro a gravar: ' + _autoSave.lastError.message, 'error');
-  } else {
-    // Atualizar snapshot após gravar com sucesso
+  if (!_autoSave.lastError) {
+    // Atualizar snapshot após gravar com sucesso. O toast de erro (quando
+    // aplicável) já foi mostrado por _autoSaveFlush — não duplicar.
     state.serverSnapshot[section] = JSON.stringify(state.data[section]);
     toast('Alterações gravadas e publicadas no site.', 'success');
   }
@@ -787,6 +817,63 @@ async function uploadImageFile(file, folder = 'misc') {
     throw new Error('Não foi possível enviar a imagem para o servidor. Tente outra vez daqui a alguns segundos.');
   }
   throw lastErr || new Error('Não foi possível enviar a imagem para o servidor.');
+}
+
+// ─── Auto-cleanup: imagens base64 inline → upload ─────────────────────────
+// Quando o utilizador cola (Ctrl+V) uma imagem dentro do editor Quill, esta
+// entra como data:image/...;base64,... — incha o JSON e o servidor recusa o
+// save. Esta limpeza corre antes de cada save: encontra os data: URLs, faz
+// upload normal e substitui pelo URL público devolvido. Para o utilizador
+// é transparente — nunca chega a ver o erro.
+const _INLINE_BASE64_RE = /data:image\/([a-zA-Z0-9+.\-]+);base64,([A-Za-z0-9+/=]+)/g;
+
+function _base64ToBlob(b64, mime) {
+  const bin = atob(b64);
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return new Blob([bytes], { type: mime });
+}
+
+async function _replaceInlineImagesInString(str, folder) {
+  if (typeof str !== 'string' || !str.includes(';base64,')) return str;
+  const matches = [...str.matchAll(_INLINE_BASE64_RE)];
+  if (!matches.length) return str;
+  let result = str;
+  for (const m of matches) {
+    const dataUrl = m[0];
+    if (!result.includes(dataUrl)) continue;
+    const ext = (m[1] || 'jpg').toLowerCase().split('+')[0].replace(/[^a-z0-9]/g, '') || 'jpg';
+    const mime = 'image/' + ext;
+    try {
+      const blob = _base64ToBlob(m[2], mime);
+      const file = new File([blob], `colagem_${Date.now()}.${ext}`, { type: mime });
+      const uploaded = await uploadImageFile(file, folder);
+      result = result.split(dataUrl).join(uploaded.src);
+    } catch (e) {
+      console.warn('[admin] falha a enviar imagem colada:', e);
+      // Deixa a string intacta — o save pode ainda funcionar se nenhum
+      // outro caminho contiver base64, ou falhará com mensagem amigável.
+    }
+  }
+  return result;
+}
+
+async function _walkAndReplaceInlineImages(value, folder) {
+  if (value == null) return value;
+  if (typeof value === 'string') return _replaceInlineImagesInString(value, folder);
+  if (Array.isArray(value)) {
+    for (let i = 0; i < value.length; i++) {
+      value[i] = await _walkAndReplaceInlineImages(value[i], folder);
+    }
+    return value;
+  }
+  if (typeof value === 'object') {
+    for (const k of Object.keys(value)) {
+      value[k] = await _walkAndReplaceInlineImages(value[k], folder);
+    }
+    return value;
+  }
+  return value;
 }
 
 // ─── Quill WYSIWYG Helpers ───
@@ -3064,14 +3151,16 @@ function handleImport(event) {
 }
 
 // ─── Toast ───
-function toast(message, type = 'success') {
+// Duração por defeito de 3 s. Mensagens com explicação/acção podem pedir
+// 5–7 s passando o terceiro argumento.
+function toast(message, type = 'success', durationMs = 3000) {
   document.querySelector('.admin-toast')?.remove();
   const el = document.createElement('div');
   el.className = `admin-toast ${type}`;
   el.textContent = message;
   document.body.appendChild(el);
   requestAnimationFrame(() => el.classList.add('show'));
-  setTimeout(() => { el.classList.remove('show'); setTimeout(() => el.remove(), 400); }, 3000);
+  setTimeout(() => { el.classList.remove('show'); setTimeout(() => el.remove(), 400); }, durationMs);
 }
 
 // ─── Helpers ───

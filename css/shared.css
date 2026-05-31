@@ -1579,6 +1579,32 @@ html.is-app #guest-banner:not(.hidden) {
   bottom: calc(66px + env(safe-area-inset-bottom)) !important;
 }
 
+/* ─── Votar: botão flutuante "voltar aos filtros" (apenas app) ──────────────
+   Mini FAB no canto inferior direito. Pos vertical depende de se o banner
+   "Crie conta" está visível ou não (.gpf-has-guest-banner no body é toggled
+   por voting.js). Voltado para hide/show via .is-visible (controla opacity
+   + scale para animação subtle). */
+html.is-app #vote-scroll-to-filters {
+  display: flex !important;
+  /* Por defeito: acima da bottom-nav, com gap. */
+  bottom: calc(66px + env(safe-area-inset-bottom) + 14px);
+  /* Hide state — invisível até voting.js detectar scroll suficiente. */
+  opacity: 0;
+  transform: translateY(8px) scale(0.95);
+  pointer-events: none;
+}
+/* Quando o banner está visível, subir o FAB para ficar ACIMA do banner
+   (banner tem ~54px de altura + 8px de gap). */
+html.is-app body.gpf-has-guest-banner #vote-scroll-to-filters {
+  bottom: calc(66px + env(safe-area-inset-bottom) + 54px + 12px);
+}
+/* Visible state */
+html.is-app #vote-scroll-to-filters.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
 /* ─── Sticky search input no topo (apenas app) ─────────────────────────────
    Em Votar (#vote-search-wrap), Onde Carimbar e Onde Encontrar (#list-search-wrap),
    queremos que SÓ o input de pesquisa fique afixado ao topo do ecrã quando se

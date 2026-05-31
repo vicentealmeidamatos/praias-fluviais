@@ -23,9 +23,9 @@
   "previousWinners": [
     {
       "year": 2025,
-      "third": "Praia Fluvial de Avô - Oliveira do Hospital",
-      "second": "Praia Fluvial de Santa Luzia - Pampilhosa da Serra",
       "winner": "Praia Fluvial da Carriça - Oliveira de Frades",
+      "second": "Praia Fluvial de Santa Luzia - Pampilhosa da Serra",
+      "third": "Praia Fluvial de Avô - Oliveira do Hospital",
       "revelations": [
         {
           "name": "Praia Fluvial do Cavadinho - Braga",
@@ -43,9 +43,9 @@
     },
     {
       "year": 2024,
-      "third": "Praia Fluvial da Carriça",
-      "second": "Praia Fluvial da Ucha",
       "winner": "Praia Fluvial de Avô - Oliveira do Hospital",
+      "second": "Praia Fluvial da Ucha - São Pedro do Sul",
+      "third": "Praia Fluvial da Carriça - Oliveira de Frades",
       "revelations": [
         {
           "name": "Praia Fluvial de Sabugal (Devesa) - Sabugal",
@@ -63,9 +63,9 @@
     },
     {
       "year": 2023,
-      "third": "",
-      "second": "Praia Fluvial do Reconquinho - Penacova",
       "winner": "Praia Fluvial do Vimieiro - Penacova",
+      "second": "Praia Fluvial do Reconquinho - Penacova",
+      "third": "",
       "revelations": [
         {
           "name": "Praia Fluvial do Sorraia - Coruche",
@@ -78,10 +78,10 @@
       ]
     },
     {
-      "year": "2021-2022",
-      "third": "Praia Fluvial de Aldeia Viçosa - Guarda",
-      "second": "Praia Fluvial de Santa Luzia - Pampilhosa da Serra",
+      "year": 2022,
       "winner": "Praia Fluvial da Quinta da Taberna - Videmonte - Guarda",
+      "second": "Praia Fluvial de Santa Luzia - Pampilhosa da Serra",
+      "third": "Praia Fluvial de Aldeia Viçosa - Guarda",
       "revelations": [
         {
           "name": "Praia Fluvial de Alqueva - Portel",
@@ -91,15 +91,60 @@
     },
     {
       "year": 2020,
-      "third": "Praia Fluvial do Troviscal - Sertã",
-      "second": "Praia Fluvial de Fontes - Abrantes",
       "winner": "Praia Fluvial de Santa Luzia - Pampilhosa da Serra",
+      "second": "Praia Fluvial de Fontes - Abrantes",
+      "third": "Praia Fluvial do Troviscal - Sertã",
       "revelations": [
         {
           "name": "Praia Fluvial de Amieira - Portel",
           "label": ""
         }
       ]
+    },
+    {
+      "year": 2019,
+      "winner": "Praia Fluvial da Fraga da Pegada - Macedo de Cavaleiros",
+      "second": "Praia Fluvial de Santa Luzia - Pampilhosa da Serra",
+      "third": "Praia Fluvial de Monsaraz - Reguengos de Monsaraz",
+      "revelations": []
+    },
+    {
+      "year": 2018,
+      "winner": "Zona Balnear O Moinho - Benquerença - Penamacor",
+      "second": "Praia Fluvial de Valhelhas - Guarda",
+      "third": "Praia Fluvial do Agroal - Ourém",
+      "revelations": [
+        {
+          "name": "Praia Fluvial de Mourão - Mourão",
+          "label": ""
+        }
+      ]
+    },
+    {
+      "year": 2017,
+      "winner": "Praia Fluvial do Agroal - Ourém",
+      "second": "Praia Fluvial de Côja - Arganil",
+      "third": "Zona Balnear O Moinho - Benquerença - Penamacor",
+      "revelations": [
+        {
+          "name": "Praia Fluvial do Trabulo - Sátão",
+          "label": ""
+        }
+      ]
+    },
+    {
+      "year": 2016,
+      "winner": "Praia Fluvial de Cardigos - Mação",
+      "second": "Praia Fluvial de Loriga - Seia",
+      "third": "Praia Fluvial do Agroal - Ourém",
+      "revelations": []
+    },
+    {
+      "year": 2015,
+      "winner": "Praia Fluvial de Loriga - Seia",
+      "second": "Zona Balnear O Moinho - Benquerença - Penamacor",
+      "third": "Praia Fluvial do Agroal - Ourém",
+      "revelations": []
     }
   ],
   "featuredArticles": [
