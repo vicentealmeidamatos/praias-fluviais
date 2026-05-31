@@ -126,6 +126,15 @@
     lucide.createIcons();
     document.addEventListener("DOMContentLoaded", () => {
       if (window.AuthUtils) { AuthUtils.initHeaderAuth(); AuthUtils.initMobileMenuAuth(); }
+
+      // Em re-navegações SPA na app, beach-page.js é deduplicado e o seu
+      // próprio auto-init não se volta a executar. Esta chamada explícita
+      // garante que initBeachPage() corre sempre (lê beachId fresco da URL).
+      try {
+        if (typeof window.initBeachPage === 'function') {
+          Promise.resolve(window.initBeachPage()).catch(function (e) { console.error('[praia] init err:', e); });
+        }
+      } catch (e) { console.error('[praia] call initBeachPage:', e); }
     });
   </script>
 </body>

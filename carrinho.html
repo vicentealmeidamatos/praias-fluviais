@@ -244,6 +244,16 @@
     document.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
 
+      // Em re-navegações SPA na app, carrinho.js é deduplicado e o seu
+      // próprio DCL listener não se volta a registar. Esta chamada explícita
+      // garante que initCarrinho() corre sempre que esta página fica visível,
+      // evitando "loading eterno" do skeleton.
+      try {
+        if (typeof window.initCarrinho === 'function') {
+          Promise.resolve(window.initCarrinho()).catch(function (e) { console.error('[carrinho] init err:', e); });
+        }
+      } catch (e) { console.error('[carrinho] call initCarrinho:', e); }
+
       // Remove skeleton once cart loads
       const skeleton = document.getElementById('cart-skeleton');
       const cartContent = document.getElementById('cart-content');

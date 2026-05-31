@@ -329,6 +329,16 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
+
+      // Em re-navegações SPA na app, loja.js é deduplicado e o seu próprio
+      // DCL listener não se volta a registar. Esta chamada explícita garante
+      // que initLoja() corre sempre, evitando "A carregar produtos…" eterno.
+      try {
+        if (typeof window.initLoja === 'function') {
+          Promise.resolve(window.initLoja()).catch(function (e) { console.error('[loja] init err:', e); });
+        }
+      } catch (e) { console.error('[loja] call initLoja:', e); }
+
       // Mobile menu
       const hamburgers = document.querySelectorAll('#nav-hamburger');
       const mobileMenu = document.getElementById('mobile-menu');

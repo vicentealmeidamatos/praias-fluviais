@@ -130,6 +130,19 @@
     </div>
   </nav>
 
+  <!-- Guest Banner (mostrado em voting.js se utilizador não autenticado) -->
+  <div id="guest-banner" class="hidden fixed bottom-0 left-0 right-0 z-[997] lg:bottom-auto lg:top-[70px] safe-area-bottom">
+    <div class="bg-praia-teal-800 border-t border-white/10 lg:border-t-0 lg:border-b px-4 py-3 flex items-center justify-between gap-4 max-w-full">
+      <div class="flex items-center gap-3 min-w-0">
+        <i data-lucide="info" class="w-4 h-4 text-praia-yellow-400 flex-shrink-0"></i>
+        <p class="text-white/70 text-xs font-display font-semibold truncate">Crie conta gratuita para registar o seu voto.</p>
+      </div>
+      <a href="auth.html?redirect=votar.html" class="flex-shrink-0 bg-praia-yellow-400 text-praia-teal-800 font-display font-bold text-xs uppercase tracking-wider px-3 py-1.5 rounded-full whitespace-nowrap">
+        Criar Conta
+      </a>
+    </div>
+  </div>
+
   <main id="main-content" class="pt-16 md:pt-[70px] pb-0">
     <!-- Hero with Countdown -->
     <section class="relative py-20 md:py-28 overflow-hidden" style="background: linear-gradient(135deg, #003A40 0%, #002A2E 50%, #005D56 100%);">
@@ -279,7 +292,7 @@
         </div>
         <!-- Filters bar -->
         <div class="flex flex-col sm:flex-row gap-3 mb-8 md:sticky md:top-[70px] z-50 bg-praia-sand-50 py-4 -mx-6 px-6 border-b border-praia-sand-200">
-          <div class="relative flex-1">
+          <div id="vote-search-wrap" class="relative flex-1">
             <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-praia-sand-400"></i>
             <input id="vote-search" type="text" placeholder="Procure a sua praia..." class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-praia-sand-200 text-sm focus:outline-none focus:border-praia-teal-400 transition-colors duration-300">
           </div>
@@ -472,7 +485,9 @@
     } catch (e) { console.error('[votar] call initVotarPage:', e); }
     document.addEventListener("DOMContentLoaded", function () {
       try { if (window.AuthUtils) { AuthUtils.initHeaderAuth(); AuthUtils.initMobileMenuAuth(); } } catch (e) {}
-      try { if (typeof initCountdown === 'function') initCountdown('2026-10-31T23:59:59'); } catch (e) {}
+      // NÃO chamar initCountdown aqui — o IIFE self-contained acima já trata
+      // do countdown. Chamar ambos faz dois setIntervals paralelos sobre os
+      // mesmos elementos cd-*, causando flicker dos dígitos a cada segundo.
       try { if (typeof window.initVotarPage === 'function') Promise.resolve(window.initVotarPage()).catch(function(){}); } catch (e) {}
     });
 

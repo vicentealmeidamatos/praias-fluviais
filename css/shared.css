@@ -1548,10 +1548,78 @@ html.is-app .gpf-cart-page-header {
   padding-top: calc(env(safe-area-inset-top, 0px) + 8px) !important;
   box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.04);
 }
+/* Reduzir padding interno do header da página carrinho na app (web mantém-se) */
+html.is-app .gpf-cart-page-header > div {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+}
+/* Reduzir padding vertical do wrapper do conteúdo do carrinho na app — em web
+   tinha py-8/py-10 que empurrava o conteúdo muito para baixo numa página
+   curta (empty state). */
+html.is-app main#main > div.max-w-\[1440px\] {
+  padding-top: 14px !important;
+  padding-bottom: 14px !important;
+}
+/* Reservar espaço para a bottom-nav no fim da página (sem isto, o último item
+   ou o botão "Finalizar Compra" pode ficar tapado pela nav fixa). */
+html.is-app body:has(.gpf-cart-page-header) main#main {
+  padding-bottom: calc(66px + env(safe-area-inset-bottom) + 12px) !important;
+}
 /* Bloquear over-bounce vertical na página carrinho (só na app).
    :has() é suportado em iOS WebView ≥ 16. */
 html.is-app body:has(.gpf-cart-page-header) {
   overscroll-behavior-y: contain;
+}
+
+/* ─── Passaporte / Votar: guest-banner acima da bottom-nav na app ───────────
+   O #guest-banner é `fixed bottom-0 z-[997]` e a bottom-nav é z-[999], pelo
+   que a nav tapa-o por completo. Empurrar o banner para cima da nav só em
+   contexto app (mantém comportamento web inalterado). */
+html.is-app #guest-banner:not(.hidden) {
+  bottom: calc(66px + env(safe-area-inset-bottom)) !important;
+}
+
+/* ─── Sticky search input no topo (apenas app) ─────────────────────────────
+   Em Votar (#vote-search-wrap), Onde Carimbar e Onde Encontrar (#list-search-wrap),
+   queremos que SÓ o input de pesquisa fique afixado ao topo do ecrã quando se
+   faz scroll, deixando os outros filtros (selects/botões) scrollarem para fora.
+
+   O wrap é movido por JS (app-context.js → relocateAppSearchWraps) de DENTRO
+   do filter bar para FORA, como sibling imediatamente ACIMA. Sem essa
+   relocação, os outros filtros do filter bar (irmãos flex-col abaixo do
+   wrap) scrollavam ACIMA do sticky-search no mobile porque o wrap só cobre
+   uma altura limitada — os outros apareciam no espaço acima dele.
+
+   Após relocação, o wrap é sibling do filter bar (não filho), por isso
+   sticky `top: 0` cobre a area do dynamic island até ao fim do wrap, e os
+   outros filtros (sozinhos no filter bar abaixo) scrollarem livremente
+   abaixo, passando por BAIXO do wrap (z-index 25 vs static z=auto). */
+html.is-app #vote-search-wrap,
+html.is-app #list-search-wrap {
+  position: sticky;
+  top: 0;
+  z-index: 25;
+  background: #FAF8F5; /* praia-sand-50 */
+  margin-left: -24px;
+  margin-right: -24px;
+  margin-bottom: 12px;
+  /* padding-top inclui safe-area-inset-top para que o input fique abaixo da
+     dynamic island quando sticky. No estado inicial (não sticky) cria um
+     pouco de espaço visual em cima do input, mas a maior parte do tempo o
+     utilizador vê este bar em estado sticky enquanto faz scroll na lista. */
+  padding: calc(env(safe-area-inset-top, 0px) + 10px) 24px 10px;
+  box-shadow: 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+}
+/* Reposicionar o ícone de pesquisa para o centro vertical do INPUT (não do
+   wrap inteiro, que ficou alto devido ao padding-top do safe-area).
+   bottom: 22px ≈ (padding-bottom 10) + (input height 40 - icon height 16)/2.
+   Funciona independentemente da altura do safe-area porque o input está
+   sempre no fim do wrap. */
+html.is-app #vote-search-wrap > i[data-lucide="search"],
+html.is-app #list-search-wrap > i[data-lucide="search"] {
+  top: auto !important;
+  transform: none !important;
+  bottom: 22px !important;
 }
 
 /* ─── Contactos é web-only ─────────────────────────────────────────────────

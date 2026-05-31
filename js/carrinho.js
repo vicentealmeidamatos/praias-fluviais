@@ -10,7 +10,19 @@ const _beachesEarlyC = loadData('beaches').then(d => d || []);
 
 // ─── Inicialização ────────────────────────────────────────────────────────────
 
+// Exposto como window.initCarrinho — em re-navegações SPA na app, o script
+// carrinho.js é deduplicado (já carregado), pelo que o `document.addEventListener
+// ('DOMContentLoaded', initCarrinho)` no fim deste ficheiro NÃO se volta a
+// registar. Sem a chamada explícita a window.initCarrinho() no inline DCL de
+// carrinho.html, o skeleton ficava infinitamente em re-visitas. Mesmo padrão
+// usado em voting.js → window.initVotarPage.
 async function initCarrinho() {
+  // Idempotência: cold start, o auto-DCL listener no fim deste ficheiro E o
+  // inline DCL de carrinho.html ambos chamam initCarrinho — sem este guard
+  // teríamos dois flights de auth + DB em paralelo, racy. Em re-navegações
+  // SPA, só o inline chama (script deduplicado) — entra pelo caminho normal.
+  if (initCarrinho._inflight) return initCarrinho._inflight;
+  initCarrinho._inflight = (async function () {
   // Speculative render: o caso comum (utilizador não autenticado) é renderizado
   // IMEDIATAMENTE com a empty state. Auth + dados resolvem em paralelo em
   // background; se aparecer um user, swap para a vista de carrinho.
@@ -37,7 +49,15 @@ async function initCarrinho() {
   await loadCartItems(user.id);
   renderCart();
   updateCartBadge();
+  })();
+  try {
+    return await initCarrinho._inflight;
+  } finally {
+    // Limpar para permitir re-execução em re-navegação SPA (próxima visita).
+    initCarrinho._inflight = null;
+  }
 }
+window.initCarrinho = initCarrinho;
 
 function getBeachName(beachId) {
   if (!beachId) return null;
@@ -66,14 +86,18 @@ function renderEmptyCart(notLoggedIn = false) {
   const container = document.getElementById('cart-content');
   if (!container) return;
 
-  // Override the grid entirely — empty state fills viewport height
+  // Empty state. Na web: centrado vertical/horizontalmente para ocupar a página
+  // (o desktop tem muito vazio à volta). Na app: mostrar mais perto do topo —
+  // o ecrã é pequeno e centrar verticalmente empurrava o conteúdo demasiado
+  // para baixo, fazendo parecer que a página ainda está a carregar.
   const grid = container.parentElement;
+  const inApp = !!(window.isApp && window.isApp());
   if (grid) {
     grid.style.display = 'flex';
-    grid.style.alignItems = 'center';
+    grid.style.alignItems = inApp ? 'flex-start' : 'center';
     grid.style.justifyContent = 'center';
-    grid.style.minHeight = 'calc(100vh - 220px)';
-    grid.style.padding = '2rem 1rem';
+    grid.style.minHeight = inApp ? 'auto' : 'calc(100vh - 220px)';
+    grid.style.padding = inApp ? '24px 16px 8px' : '2rem 1rem';
   }
   container.style.width = '100%';
   container.style.maxWidth = '480px';

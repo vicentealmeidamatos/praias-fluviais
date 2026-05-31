@@ -74,7 +74,71 @@
 
     // Haptic feedback nos toques do bottom nav — sensação nativa.
     setupHapticFeedback();
+    // Deep-link OAuth callback (Google in-app) — try/catch defensivo para nunca
+    // abortar applyAppContext mesmo que o plugin não esteja disponível.
+    try { setupOAuthDeepLink(); } catch (e) { /* silently ignore */ }
+    // Relocação do search-wrap (Votar / Onde Carimbar / Onde Encontrar) para
+    // FORA do filter bar, para que o sticky-top funcione sem ser sobreposto
+    // pelos outros filtros (selects/botões). Ver shared.css → "Sticky search".
+    try { relocateAppSearchWraps(); } catch (e) { console.error('[app-context] relocate err:', e); }
   };
+
+  // Movimentar o #vote-search-wrap / #list-search-wrap de DENTRO do filter bar
+  // para FORA, como sibling imediatamente acima. Necessário para que o CSS
+  // sticky `top:0` funcione visualmente: os outros filtros do bar (irmãos
+  // flex-col abaixo do wrap) deixam de competir pelo mesmo espaço vertical.
+  // Idempotente via dataset flag — seguro de chamar em cada SPA nav.
+  function relocateAppSearchWraps() {
+    var wraps = document.querySelectorAll('#vote-search-wrap, #list-search-wrap');
+    wraps.forEach(function (wrap) {
+      if (wrap.dataset.appRelocated === '1') return;
+      var filterBar = wrap.parentElement;
+      if (!filterBar || !filterBar.parentElement) return;
+      // Só relocar se o wrap está dentro de um container com OUTROS filhos
+      // (i.e., dentro do filter bar com selects/botões irmãos). Se já está
+      // sozinho/fora, não fazer nada.
+      if (filterBar.children.length > 1) {
+        wrap.dataset.appRelocated = '1';
+        filterBar.parentElement.insertBefore(wrap, filterBar);
+      }
+    });
+  }
+
+  // ─── OAuth callback via deep link ─────────────────────────────────────────
+  // Fluxo Google em app:
+  //   1. auth.html → Browser.open(google_oauth_url) (sheet SFSafariViewController)
+  //   2. Google → Supabase → redireciona para pt.praiasfluviais.app://auth-callback?code=…
+  //   3. iOS deteta o scheme (registado em Info.plist CFBundleURLTypes) e abre a app
+  //   4. @capacitor/app emite 'appUrlOpen' com o URL completo
+  //   5. Trocamos o `code` por sessão Supabase e navegamos para /rede.html
+  // ⚠️ Requer: dashboard Supabase → Authentication → URL Configuration → adicionar
+  //   `pt.praiasfluviais.app://auth-callback` em Redirect URLs
+  var _oauthDeepLinkSetup = false;
+  function setupOAuthDeepLink() {
+    if (_oauthDeepLinkSetup) return;
+    if (!window.Capacitor || !window.Capacitor.Plugins || !window.Capacitor.Plugins.App) return;
+    _oauthDeepLinkSetup = true;
+    var App = window.Capacitor.Plugins.App;
+    App.addListener('appUrlOpen', function (data) {
+      var url = data && data.url;
+      if (!url || url.indexOf('pt.praiasfluviais.app://') !== 0) return;
+      try { window.Capacitor.Plugins.Browser && window.Capacitor.Plugins.Browser.close(); } catch (e) {}
+      var sb = window.AuthUtils && window.AuthUtils.supabase;
+      if (!sb) return;
+      var u; try { u = new URL(url); } catch (e) { return; }
+      var code = u.searchParams.get('code');
+      var hash = u.hash ? new URLSearchParams(u.hash.replace(/^#/, '')) : null;
+      var accessToken = hash ? hash.get('access_token') : null;
+      (async function () {
+        try {
+          if (code) await sb.auth.exchangeCodeForSession(code);
+          else if (accessToken) await sb.auth.setSession({ access_token: accessToken, refresh_token: hash.get('refresh_token') });
+          try { sessionStorage.removeItem('gpf_oauth_context'); } catch (e) {}
+          window.location.replace('/rede.html');
+        } catch (e) { console.error('[OAuth] exchange failed:', e); }
+      })();
+    });
+  }
 
   function setupHapticFeedback() {
     if (!window.Capacitor?.Plugins?.Haptics) return;
@@ -462,12 +526,14 @@
           }
         }
 
+        // O Set é pré-populado UMA VEZ no DOMContentLoaded do initial page
+        // (ver setupInitialLoadedScripts no fim do módulo). NÃO podemos pré-popular
+        // aqui porque o wrapper desta navegação já foi inserido no DOM acima —
+        // `document.querySelectorAll('script[src]')` incluiria voting.js do
+        // novo wrapper e a sequential chain abaixo trataria voting.js como
+        // "já carregado" → SKIP → initVotarPage nunca é definida.
         if (!window.__gpfLoadedScripts) {
           window.__gpfLoadedScripts = new Set();
-          // Pré-popular com scripts já existentes (head + body) do load inicial
-          document.querySelectorAll('script[src]').forEach(function (s) {
-            window.__gpfLoadedScripts.add(normalizeScriptSrc(s.src));
-          });
         }
         var loadedScripts = window.__gpfLoadedScripts;
         var scriptList = Array.prototype.slice.call(wrapper.querySelectorAll('script'));
@@ -600,10 +666,32 @@
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', function () {
         setTimeout(ensureInitialPageWrapped, 0);
+        captureInitialLoadedScripts();
       });
     } else {
       setTimeout(ensureInitialPageWrapped, 0);
+      captureInitialLoadedScripts();
     }
+  }
+
+  // Snapshot dos scripts já carregados no momento em que a página inicial
+  // termina de parsing. ANTES de qualquer SPA navigation. Captura tudo o que
+  // veio com a rede.html (head + body) e marca-os como "já carregados" para
+  // que SPA navigations subsequentes saibam dedup'á-los (sem re-executar
+  // `const SUPABASE_URL` etc). Não capturar scripts inseridos posteriormente
+  // por SPA — esses são tratados pela sequential chain ao carregar.
+  function captureInitialLoadedScripts() {
+    if (!window.__gpfLoadedScripts) window.__gpfLoadedScripts = new Set();
+    // Reutilizar normalizeScriptSrc localmente (mesma lógica que a do loadNewPage)
+    function _norm(src) {
+      if (!src) return src;
+      if (/^(https?:|capacitor:|file:)/.test(src)) return src;
+      var raw = src.replace(/^about:/, '');
+      try { return new URL(raw, window.location.href).href; } catch (e) { return raw; }
+    }
+    document.querySelectorAll('script[src]').forEach(function (s) {
+      window.__gpfLoadedScripts.add(_norm(s.src));
+    });
   }
 
   // Intercepta clicks em links internos e dispara o slide-in do loader

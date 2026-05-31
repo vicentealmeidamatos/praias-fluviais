@@ -220,6 +220,10 @@ window.initVotarPage = async function () {
           // Re-render para mostrar "O Seu Voto" / "Já votou"
           renderCards(currentBeaches.length === beaches.length ? beaches : currentBeaches);
         }
+      } else {
+        // Guest: mostrar banner "Crie conta para registar o seu voto"
+        const banner = document.getElementById('guest-banner');
+        if (banner) banner.classList.remove('hidden');
       }
       // Preselect (after auth resolved)
       if (preselect && !userVote) {
@@ -249,6 +253,10 @@ if (document.readyState === 'loading') {
 var _countdownInterval = null;
 function initCountdown(deadline) {
   if (_countdownInterval) { clearInterval(_countdownInterval); _countdownInterval = null; }
+  // Se o IIFE inline self-contained (em votar.html) já estiver a correr,
+  // pará-lo antes — evita dois setIntervals em paralelo a actualizar os
+  // mesmos elementos cd-* (flicker de dígitos a cada segundo).
+  if (window._gpfCdInterval) { clearInterval(window._gpfCdInterval); window._gpfCdInterval = null; }
 
   const els = {
     days:    document.getElementById('cd-days'),

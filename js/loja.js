@@ -11,21 +11,39 @@ const _beachesEarly = loadData('beaches').then(d => d || []);
 
 // ─── Inicialização ────────────────────────────────────────────────────────────
 
+// Exposto como window.initLoja — em re-navegações SPA na app, o script loja.js
+// é deduplicado (já carregado), pelo que o `document.addEventListener
+// ('DOMContentLoaded', initLoja)` no fim deste ficheiro NÃO se volta a
+// registar. Sem a chamada explícita a window.initLoja() no inline DCL de
+// loja.html, os produtos ficavam infinitamente em "A carregar produtos…" em
+// re-visitas. Mesmo padrão usado em carrinho/voting.
 async function initLoja() {
+  // Idempotência: cold start, o auto-DCL listener no fim do ficheiro E o
+  // inline DCL de loja.html ambos chamam initLoja — sem este guard teríamos
+  // dois flights de fetch em paralelo, racy.
+  if (initLoja._inflight) return initLoja._inflight;
+  initLoja._inflight = (async function () {
+    try {
+      const [pData, bData] = await Promise.all([_productsEarly, _beachesEarly]);
+      _products = (pData || []).filter(p => !p.hidden);
+      const raw = (bData || []).filter(b => !b.hidden);
+      _beaches = raw.map(b => ({ id: b.id, name: b.name })).sort((a, b) => a.name.localeCompare(b.name, 'pt'));
+    } catch {
+      _products = [];
+      _beaches = [];
+    }
+    renderCategories();
+    renderProducts();
+    syncCartBadge(); // background — não bloqueia o render
+    setupScrollReveal();
+  })();
   try {
-    const [pData, bData] = await Promise.all([_productsEarly, _beachesEarly]);
-    _products = (pData || []).filter(p => !p.hidden);
-    const raw = (bData || []).filter(b => !b.hidden);
-    _beaches = raw.map(b => ({ id: b.id, name: b.name })).sort((a, b) => a.name.localeCompare(b.name, 'pt'));
-  } catch {
-    _products = [];
-    _beaches = [];
+    return await initLoja._inflight;
+  } finally {
+    initLoja._inflight = null;
   }
-  renderCategories();
-  renderProducts();
-  syncCartBadge(); // background — não bloqueia o render
-  setupScrollReveal();
 }
+window.initLoja = initLoja;
 
 function getCategories() {
   const cats = [...new Set(_products.map(p => p.category))];

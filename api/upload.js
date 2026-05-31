@@ -9,11 +9,11 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Filename, X-Folder');
 
   if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Método não permitido' });
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Método não permitido.' });
 
   const contentType = req.headers['content-type'] || '';
   if (!contentType.startsWith('image/')) {
-    return res.status(400).json({ error: 'Apenas ficheiros de imagem são aceites' });
+    return res.status(400).json({ error: 'Este ficheiro não é uma imagem.' });
   }
 
   const rawName  = req.headers['x-filename'] || `upload_${Date.now()}.jpg`;
@@ -32,9 +32,9 @@ export default async function handler(req, res) {
   for await (const chunk of req) chunks.push(chunk);
   const buffer = Buffer.concat(chunks);
 
-  if (buffer.length === 0) return res.status(400).json({ error: 'Ficheiro vazio' });
+  if (buffer.length === 0) return res.status(400).json({ error: 'O ficheiro chegou vazio.' });
   if (buffer.length > 10 * 1024 * 1024) {
-    return res.status(413).json({ error: 'Ficheiro demasiado grande (máximo 10 MB)' });
+    return res.status(413).json({ error: 'Imagem demasiado grande. Reduza a resolução e tente outra vez.' });
   }
 
   // Upload to Supabase Storage
@@ -42,7 +42,7 @@ export default async function handler(req, res) {
   const serviceKey  = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!supabaseUrl || !serviceKey) {
-    return res.status(500).json({ error: 'Configuração do servidor em falta' });
+    return res.status(500).json({ error: 'Não foi possível guardar a imagem agora. Tente novamente em alguns segundos.' });
   }
 
   const sb = createClient(supabaseUrl, serviceKey);
@@ -53,7 +53,7 @@ export default async function handler(req, res) {
 
   if (uploadError) {
     console.error('[upload] Supabase error:', uploadError);
-    return res.status(500).json({ error: uploadError.message });
+    return res.status(500).json({ error: 'Não foi possível guardar a imagem agora. Tente novamente em alguns segundos.' });
   }
 
   const { data: { publicUrl } } = sb.storage.from('media').getPublicUrl(storagePath);

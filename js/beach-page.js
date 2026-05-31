@@ -187,10 +187,37 @@ function renderWaterQualitySection(beachId, waterQualityJson) {
 }
 
 // ─── Individual Beach Page ───
-document.addEventListener('DOMContentLoaded', async () => {
-  const beachId = _beachId;
+// Exposto como window.initBeachPage — em re-navegações SPA na app (ex.:
+// utilizador clica numa "praia próxima" do rodapé), o script beach-page.js
+// é deduplicado, pelo que o DCL listener nunca volta a registar-se. Sem
+// chamada explícita do inline DCL de praia.html, a página ficava em loading
+// eterno. Além disso, `_beachId` está bound ao cold-start (const no top do
+// módulo) — em re-nav, lemos o beachId fresco da URL e refetch só o que é
+// beach-specific (reviews + badges). Tudo o resto (lista global de praias,
+// settings, water quality, auth, profile, voto) é reutilizável.
+window.initBeachPage = async function () {
+  if (initBeachPage._inflight) return initBeachPage._inflight;
+  initBeachPage._inflight = (async function () {
+  const beachId = new URLSearchParams(window.location.search).get('id') || _beachId;
   const mainContent = document.getElementById('beach-content');
   if (!beachId || !mainContent) return;
+
+  // Determinar se os promises de reviews/badges pré-buscados ainda servem
+  // para a praia actual (cold start ou re-nav para a mesma praia → sim;
+  // re-nav para uma praia diferente → não, refetch).
+  const sameAsInitial = (beachId === _beachId);
+  const reviewsPromise = (sameAsInitial && _reviewsEarlyBP)
+    ? _reviewsEarlyBP
+    : (window.AuthUtils ? AuthUtils.reviewsGetForBeach(beachId) : Promise.resolve([]));
+  const badgesPromise = (sameAsInitial && _badgesEarlyBP)
+    ? _badgesEarlyBP
+    : reviewsPromise.then(reviews => {
+        const uids = [...new Set((reviews || []).map(r => r.user_id).filter(Boolean))];
+        if (!uids.length || !window.AuthUtils) return {};
+        return Promise.all([reviewsPromise, (_beachesEarlyBP || getBeaches())]).then(([_, allBeaches]) =>
+          AuthUtils.badgesGetForUsers(uids, allBeaches || []).catch(() => ({}))
+        );
+      }).catch(() => ({}));
 
   // ── Espera por TODOS os dados em paralelo ──────────────────────────────────
   // Render atómico: nenhuma secção pode aparecer antes das outras. O esqueleto
@@ -204,10 +231,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       (_settingsEarlyBP || loadData('settings')).then(s => s || {}).catch(() => ({})),
       _waterQualityEarlyBP,
       _authEarlyBP || (window.AuthUtils ? AuthUtils.authGetUser() : Promise.resolve(null)),
-      (_reviewsEarlyBP || (window.AuthUtils ? AuthUtils.reviewsGetForBeach(beachId) : Promise.resolve([]))).catch(() => []),
+      reviewsPromise.catch(() => []),
       _profileEarlyBP,
       _voteEarlyBP,
-      _badgesEarlyBP || Promise.resolve({}),
+      badgesPromise,
     ]);
     // Consumir o cache do reviews/badges pré-buscado para que rerenders após
     // submissão/eliminação obtenham dados frescos.
@@ -650,7 +677,22 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
   setMeta('og:title', `${beach.name} | Praias Fluviais`);
   setMeta('og:description', beach.description);
-});
+  })();
+  try {
+    return await initBeachPage._inflight;
+  } finally {
+    // Limpar para permitir re-execução em próxima re-navegação SPA.
+    initBeachPage._inflight = null;
+  }
+};
+
+// Auto-init no cold start (web normal + cold app load). Em re-nav SPA, a
+// chamada é feita pelo inline DCL de praia.html (ver praia.html).
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => { try { window.initBeachPage(); } catch (e) { console.error('[beach-page] init err:', e); } });
+} else {
+  try { window.initBeachPage(); } catch (e) { console.error('[beach-page] init err:', e); }
+}
 
 // ─── Medal display HTML for comments ─────────────────────────────────────────
 

@@ -655,96 +655,138 @@ function renderSection() {
 }
 
 // ─── Image Upload ───
-// Compress/resize image client-side before upload (max 1200px, JPEG 80%).
-// Devolve { blob } em sucesso ou { error } com motivo específico em falha.
-// Não usa fallback silencioso — o caller é informado da causa real.
-function compressImage(file, maxW = 1200, quality = 0.8) {
-  return new Promise((resolve) => {
-    const img = new Image();
+// Pipeline tolerante: compressão progressiva (4 presets) + retry de rede.
+// Mensagens são sempre escritas em PT-PT, sem jargão técnico, e com a próxima
+// acção sugerida para o utilizador.
+const UPLOAD_MAX_BYTES_RAW        = 50 * 1024 * 1024;  // 50 MB antes de comprimir
+const UPLOAD_MAX_BYTES_COMPRESSED = 10 * 1024 * 1024;  // 10 MB depois de comprimir
+
+const _COMPRESS_PRESETS = [
+  { maxW: 1600, quality: 0.82 },
+  { maxW: 1200, quality: 0.75 },
+  { maxW: 1000, quality: 0.70 },
+  { maxW: 800,  quality: 0.65 },
+];
+
+function _decodeImageFile(file) {
+  return new Promise((resolve, reject) => {
     const url = URL.createObjectURL(file);
-    img.onload = () => {
-      URL.revokeObjectURL(url);
-      let w = img.width, h = img.height;
-      if (!w || !h) { resolve({ error: 'imagem com dimensões inválidas' }); return; }
-      if (w > maxW) { h = Math.round(h * maxW / w); w = maxW; }
-      const canvas = document.createElement('canvas');
-      canvas.width = w; canvas.height = h;
-      try { canvas.getContext('2d').drawImage(img, 0, 0, w, h); }
-      catch (e) { resolve({ error: 'falha a redimensionar (' + (e.message || 'canvas') + ')' }); return; }
-      canvas.toBlob(blob => {
-        if (!blob || blob.size === 0) resolve({ error: 'falha a codificar JPEG' });
-        else resolve({ blob });
-      }, 'image/jpeg', quality);
-    };
+    const img = new Image();
+    img.onload  = () => { URL.revokeObjectURL(url); resolve(img); };
     img.onerror = () => {
       URL.revokeObjectURL(url);
-      resolve({ error: 'formato não suportado pelo browser (ex: HEIC/HEIF)' });
+      reject(new Error('Não conseguimos abrir esta imagem. Pode estar corrompida ou num formato que o browser não reconhece.'));
     };
     img.src = url;
   });
 }
 
-// Limites do endpoint /api/upload (api/upload.js: 10 MB por ficheiro).
-const UPLOAD_MAX_BYTES_RAW       = 50 * 1024 * 1024;  // 50 MB antes de comprimir
-const UPLOAD_MAX_BYTES_COMPRESSED = 10 * 1024 * 1024; // 10 MB depois de comprimir
+function _canvasToJpegBlob(canvas, quality) {
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(b => {
+      if (b && b.size > 0) resolve(b);
+      else reject(new Error('Não conseguimos guardar esta imagem em JPG. Tente uma versão diferente.'));
+    }, 'image/jpeg', quality);
+  });
+}
+
+// Tenta vários presets de compressão até a imagem caber dentro do limite do
+// servidor. Devolve o blob mais pequeno produzido.
+async function _compressImageProgressive(file) {
+  const img = await _decodeImageFile(file);
+  if (!img.width || !img.height) {
+    throw new Error('Esta imagem parece corrompida. Tente exportá-la novamente.');
+  }
+  let lastBlob = null;
+  for (const { maxW, quality } of _COMPRESS_PRESETS) {
+    let w = img.width, h = img.height;
+    if (w > maxW) { h = Math.round(h * maxW / w); w = maxW; }
+    const canvas = document.createElement('canvas');
+    canvas.width = w; canvas.height = h;
+    try { canvas.getContext('2d').drawImage(img, 0, 0, w, h); }
+    catch { throw new Error('Não conseguimos processar esta imagem. Tente exportá-la novamente em JPG.'); }
+    try { lastBlob = await _canvasToJpegBlob(canvas, quality); }
+    catch (e) { if (!lastBlob) throw e; }
+    if (lastBlob && lastBlob.size <= UPLOAD_MAX_BYTES_COMPRESSED) return lastBlob;
+  }
+  if (!lastBlob) throw new Error('Não conseguimos processar esta imagem. Tente exportá-la novamente em JPG.');
+  throw new Error('Imagem demasiado grande mesmo depois de reduzida. Reduza a resolução no original e tente outra vez.');
+}
+
+// Mantido para compatibilidade com chamadas externas — devolve { blob } ou { error }.
+function compressImage(file) {
+  return _compressImageProgressive(file)
+    .then(blob => ({ blob }))
+    .catch(e => ({ error: e.message }));
+}
 
 async function uploadImageFile(file, folder = 'misc') {
-  // ─── Pre-validations (falham cedo, sem tocar no estado) ──────────────────
+  // ─── Validações iniciais com mensagens em PT-PT claras ───────────────────
   if (!file || !(file instanceof Blob)) {
-    throw new Error('ficheiro inválido');
+    throw new Error('Não foi possível ler o ficheiro. Tente arrastá-lo outra vez.');
   }
   if (file.size === 0) {
-    throw new Error('ficheiro vazio (0 bytes)');
+    throw new Error('Este ficheiro está vazio. Verifique o original e tente outra vez.');
   }
-  if (file.size > UPLOAD_MAX_BYTES_RAW) {
-    throw new Error(`demasiado grande (${(file.size / 1024 / 1024).toFixed(1)} MB; máximo ${UPLOAD_MAX_BYTES_RAW / 1024 / 1024} MB antes de compressão)`);
+  const name = file.name || 'imagem.jpg';
+  if (/heic|heif/i.test(file.type || '') || /\.(heic|heif)$/i.test(name)) {
+    throw new Error('Foto do iPhone em formato HEIC. No iPhone, abra Definições → Câmara → Formatos e escolha "Mais Compatível" para tirar fotos em JPG.');
   }
   if (file.type && !file.type.startsWith('image/')) {
-    throw new Error(`tipo "${file.type}" não é imagem`);
+    throw new Error('Este ficheiro não é uma imagem. Use JPG, PNG ou WEBP.');
   }
-  // HEIC/HEIF: browsers não conseguem decodificar nativamente
-  const name = file.name || '';
-  if (/heic|heif/i.test(file.type || '') || /\.(heic|heif)$/i.test(name)) {
-    throw new Error('formato HEIC/HEIF não suportado — converta para JPG ou PNG antes');
-  }
-
-  // ─── Compressão (devolve { blob } ou { error }) ──────────────────────────
-  const result = await compressImage(file);
-  if (result.error) {
-    throw new Error(result.error);
-  }
-  const compressed = result.blob;
-  if (compressed.size > UPLOAD_MAX_BYTES_COMPRESSED) {
-    throw new Error(`mesmo após compressão fica em ${(compressed.size / 1024 / 1024).toFixed(1)} MB (máximo ${UPLOAD_MAX_BYTES_COMPRESSED / 1024 / 1024} MB)`);
+  if (file.size > UPLOAD_MAX_BYTES_RAW) {
+    const mb = (file.size / 1024 / 1024).toFixed(0);
+    throw new Error(`Imagem demasiado grande (${mb} MB). Tente uma versão até 50 MB ou exporte com menor qualidade.`);
   }
 
-  // ─── Upload ──────────────────────────────────────────────────────────────
-  let res;
-  try {
-    res = await fetch('/api/upload', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'image/jpeg',
-        'X-Filename': name.replace(/\.\w+$/, '.jpg') || 'upload.jpg',
-        'X-Folder':   folder,
-      },
-      body: compressed,
-    });
-  } catch (e) {
-    throw new Error(`falha de rede (${e.message || 'fetch'})`);
-  }
+  // ─── Compressão progressiva (tenta até 4 presets) ────────────────────────
+  const compressed = await _compressImageProgressive(file);
 
-  let json = null;
-  try { json = await res.json(); } catch {}
+  // ─── Upload com retry automático em falha de rede ou erro temporário ────
+  let lastErr = null;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    let res;
+    try {
+      res = await fetch('/api/upload', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'image/jpeg',
+          'X-Filename': name.replace(/\.\w+$/, '.jpg') || 'imagem.jpg',
+          'X-Folder':   folder,
+        },
+        body: compressed,
+      });
+    } catch {
+      lastErr = new Error('Sem ligação à internet. Verifique a ligação e tente outra vez.');
+      if (attempt === 0) { await new Promise(r => setTimeout(r, 1200)); continue; }
+      throw lastErr;
+    }
 
-  if (!res.ok) {
-    const detail = (json && json.error) || `HTTP ${res.status}`;
-    throw new Error(`servidor recusou (${detail})`);
+    let json = null;
+    try { json = await res.json(); } catch {}
+
+    if (res.ok) {
+      if (!json || !json.path) {
+        throw new Error('O servidor não devolveu o endereço da imagem. Tente enviar outra vez.');
+      }
+      return { src: json.path, name: json.name || name };
+    }
+
+    if (res.status === 413) {
+      throw new Error('Imagem demasiado grande para o servidor. Reduza a resolução no original e tente outra vez.');
+    }
+    if (res.status === 400) {
+      throw new Error('O servidor recusou esta imagem. Tente outra em formato JPG ou PNG.');
+    }
+    if (res.status >= 500 && attempt === 0) {
+      lastErr = new Error('Não foi possível enviar a imagem agora. A tentar novamente…');
+      await new Promise(r => setTimeout(r, 1200));
+      continue;
+    }
+    throw new Error('Não foi possível enviar a imagem para o servidor. Tente outra vez daqui a alguns segundos.');
   }
-  if (!json || !json.path) {
-    throw new Error('resposta do servidor sem URL');
-  }
-  return { src: json.path, name: json.name || name };
+  throw lastErr || new Error('Não foi possível enviar a imagem para o servidor.');
 }
 
 // ─── Quill WYSIWYG Helpers ───
@@ -1290,19 +1332,54 @@ async function handleBeachPhotoFiles(files) {
   reportImageUploadResult('Fotos da praia', ok, failed);
 }
 
-// Reporter unificado de uploads — toast de sucesso ou modal com a lista
-// específica dos ficheiros recusados (para o utilizador saber exactamente
-// qual imagem é o problema, sem ter de adivinhar).
+// Reporter unificado de uploads.
+// Sucesso → toast normal (auto-fecha). Falhas → painel inline no canto inferior
+// direito, com lista dos ficheiros e botão de fechar. Nunca usa alert() para
+// não interromper o utilizador nem prender uma mensagem no topo do ecrã.
 function reportImageUploadResult(label, ok, failed) {
   if (!failed.length) {
     if (ok.length) toast(`${ok.length} ${ok.length === 1 ? 'imagem adicionada' : 'imagens adicionadas'}.`, 'success');
     return;
   }
   if (ok.length) {
-    toast(`${ok.length} adicionada(s), ${failed.length} recusada(s) — ver detalhe.`, 'error');
+    toast(`${ok.length} adicionada${ok.length === 1 ? '' : 's'}, ${failed.length} com problema. Veja detalhe abaixo.`, 'info');
   }
-  const lines = failed.map(f => `• ${f.name}\n   ${f.reason}`).join('\n\n');
-  alert(`${label} — ${failed.length} ${failed.length === 1 ? 'imagem recusada' : 'imagens recusadas'}:\n\n${lines}\n\nEstas imagens NÃO foram adicionadas. Corrija e tente de novo.`);
+  showUploadErrorCard(label, failed);
+}
+
+// Painel inline (não modal) com a lista de ficheiros que falharam e o motivo.
+// Aparece no canto inferior direito, acima dos toasts. Fica até o utilizador
+// fechar — não auto-fecha porque o conteúdo pode incluir acções a executar
+// (ex.: alterar definição na câmara do iPhone).
+function showUploadErrorCard(label, failed) {
+  let stack = document.getElementById('admin-upload-errors');
+  if (!stack) {
+    stack = document.createElement('div');
+    stack.id = 'admin-upload-errors';
+    stack.className = 'admin-upload-errors-stack';
+    document.body.appendChild(stack);
+  }
+  const card = document.createElement('div');
+  card.className = 'admin-error-card';
+  const itemsHtml = failed.map(f => `
+    <li>
+      <span class="admin-error-card-file">${escHtml(f.name)}</span>
+      <span class="admin-error-card-reason">${escHtml(f.reason)}</span>
+    </li>
+  `).join('');
+  card.innerHTML = `
+    <button type="button" class="admin-error-card-close" aria-label="Fechar">×</button>
+    <div class="admin-error-card-title">
+      ${escHtml(label)} · ${failed.length === 1 ? '1 imagem não foi enviada' : `${failed.length} imagens não foram enviadas`}
+    </div>
+    <ul class="admin-error-card-list">${itemsHtml}</ul>
+  `;
+  card.querySelector('.admin-error-card-close').addEventListener('click', () => {
+    card.classList.remove('show');
+    setTimeout(() => card.remove(), 300);
+  });
+  stack.appendChild(card);
+  requestAnimationFrame(() => card.classList.add('show'));
 }
 
 function setupPhotoDragDrop(zoneId, inputId) {
