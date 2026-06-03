@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-02T10:56:37.988Z",
+  "lastUpdated": "2026-06-03T11:23:49.758Z",
   "sourceUrl": "https://infoagua.apambiente.pt/pt/praias/praias-pesquisa-avancada",
   "stats": {
     "siteBeaches": 228,
@@ -33,7 +33,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-06-01",
       "interdictionReason": null,
       "seasonStart": "2026-06-13",
       "seasonEnd": "2026-09-13",
@@ -41,7 +41,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 114,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-03T11:23:49.758Z"
     },
     "praia-fluvial-de-albufeira-da-tapada-grande": {
       "apaCode": "PTCQ3F",
@@ -87,7 +87,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-06-01",
       "interdictionReason": null,
       "seasonStart": "2026-06-13",
       "seasonEnd": "2026-09-13",
@@ -95,7 +95,7 @@
       "matchMethod": "name+proximity",
       "matchPool": "interior",
       "matchDistance": 1819,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-03T11:23:49.758Z"
     },
     "praia-fluvial-de-albufeira-do-vilar": {
       "apaCode": "PTCK3E",
@@ -267,7 +267,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Água adequada a banhos",
       "currentSeasonValue": 1,
-      "lastAnalysisDate": "2026-05-19",
+      "lastAnalysisDate": "2026-06-01",
       "interdictionReason": null,
       "seasonStart": "2026-05-30",
       "seasonEnd": "2026-09-27",
@@ -275,7 +275,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 80,
-      "lastChanged": "2026-05-29T10:15:17.691Z"
+      "lastChanged": "2026-06-03T11:23:49.758Z"
     },
     "praia-fluvial-de-loucainha": {
       "apaCode": "PTCN2C",
@@ -537,7 +537,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-06-01",
       "interdictionReason": null,
       "seasonStart": "2026-06-13",
       "seasonEnd": "2026-09-13",
@@ -545,7 +545,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 230,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-03T11:23:49.758Z"
     },
     "praia-fluvial-de-agroal": {
       "apaCode": "PTCU3D",
@@ -681,7 +681,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-06-01",
       "interdictionReason": null,
       "seasonStart": "2026-06-13",
       "seasonEnd": "2026-09-13",
@@ -689,7 +689,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 240,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-03T11:23:49.758Z"
     },
     "praia-fluvial-de-alqueva": {
       "apaCode": "PTCD9W",
@@ -879,7 +879,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-06-01",
       "interdictionReason": null,
       "seasonStart": "2026-06-13",
       "seasonEnd": "2026-09-13",
@@ -887,7 +887,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 34,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-03T11:23:49.758Z"
     },
     "praia-fluvial-de-bitetos": {
       "apaCode": "PTCK8M",
@@ -1023,7 +1023,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-06-01",
       "interdictionReason": null,
       "seasonStart": "2026-06-13",
       "seasonEnd": "2026-09-13",
@@ -1031,7 +1031,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 13,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-03T11:23:49.758Z"
     },
     "praia-fluvial-de-cavez": {
       "apaCode": "PTCL3C",
@@ -1095,7 +1095,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-06-01",
       "interdictionReason": null,
       "seasonStart": "2026-06-06",
       "seasonEnd": "2026-09-06",
@@ -1103,7 +1103,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 50,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-03T11:23:49.758Z"
     },
     "praia-fluvial-de-cornicovo": {
       "apaCode": "PTCP9K",
@@ -1329,7 +1329,7 @@
       "previousYearValue": 2,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-06-01",
       "interdictionReason": null,
       "seasonStart": "2026-06-13",
       "seasonEnd": "2026-09-13",
@@ -1337,7 +1337,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 86,
-      "lastChanged": "2026-05-05T08:29:19.813Z"
+      "lastChanged": "2026-06-03T11:23:49.758Z"
     },
     "praia-fluvial-de-moinho-de-alva": {
       "apaCode": "PTCU7N",
@@ -1581,7 +1581,7 @@
       "previousYearValue": 4,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-06-01",
       "interdictionReason": null,
       "seasonStart": "2026-06-13",
       "seasonEnd": "2026-09-13",
@@ -1589,7 +1589,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 8,
-      "lastChanged": "2026-05-05T08:29:19.813Z"
+      "lastChanged": "2026-06-03T11:23:49.758Z"
     },
     "praia-fluvial-de-ponte-de-frades": {
       "apaCode": "PTCP7U",
@@ -1635,7 +1635,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-06-01",
       "interdictionReason": null,
       "seasonStart": "2026-06-13",
       "seasonEnd": "2026-09-13",
@@ -1643,7 +1643,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 66,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-03T11:23:49.758Z"
     },
     "praia-fluvial-de-ponte-do-sotao": {
       "apaCode": "PTCL9D",
@@ -1707,7 +1707,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-06-01",
       "interdictionReason": null,
       "seasonStart": "2026-06-13",
       "seasonEnd": "2026-09-13",
@@ -1715,7 +1715,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 68,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-03T11:23:49.758Z"
     },
     "praia-fluvial-de-quadrazais-lameira": {
       "apaCode": "PTCP9X",
@@ -2049,7 +2049,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-06-01",
       "interdictionReason": null,
       "seasonStart": "2026-06-13",
       "seasonEnd": "2026-09-13",
@@ -2057,7 +2057,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 138,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-03T11:23:49.758Z"
     },
     "praia-fluvial-de-vila-cova-a-coelheira": {
       "apaCode": "PTCF8J",
@@ -2157,7 +2157,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-06-01",
       "interdictionReason": null,
       "seasonStart": "2026-06-13",
       "seasonEnd": "2026-09-13",
@@ -2165,7 +2165,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 209,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-03T11:23:49.758Z"
     },
     "praia-fluvial-de-boico": {
       "apaCode": "PTCP7F",
