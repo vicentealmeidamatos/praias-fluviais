@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-03T11:23:49.758Z",
+  "lastUpdated": "2026-06-04T10:13:02.570Z",
   "sourceUrl": "https://infoagua.apambiente.pt/pt/praias/praias-pesquisa-avancada",
   "stats": {
     "siteBeaches": 228,
@@ -573,7 +573,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-05-27",
       "interdictionReason": null,
       "seasonStart": "2026-06-06",
       "seasonEnd": "2026-09-20",
@@ -581,7 +581,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 118,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-04T10:13:02.570Z"
     },
     "praia-fluvial-de-aldeia-do-mato": {
       "apaCode": "PTCT9H",
@@ -699,7 +699,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-05-26",
       "interdictionReason": null,
       "seasonStart": "2026-06-10",
       "seasonEnd": "2026-09-13",
@@ -707,7 +707,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 229,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-04T10:13:02.570Z"
     },
     "praia-fluvial-de-alvares": {
       "apaCode": "PTCL9E",
@@ -771,7 +771,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-05-26",
       "interdictionReason": null,
       "seasonStart": "2026-06-10",
       "seasonEnd": "2026-09-13",
@@ -779,7 +779,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 39,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-04T10:13:02.570Z"
     },
     "praia-fluvial-de-ana-de-aviz": {
       "apaCode": "PTCU9E",
@@ -1059,7 +1059,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-06-01",
       "interdictionReason": null,
       "seasonStart": "2026-06-13",
       "seasonEnd": "2026-09-13",
@@ -1067,7 +1067,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 102,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-04T10:13:02.570Z"
     },
     "praia-fluvial-de-coja": {
       "apaCode": "PTCL8X",
@@ -1419,7 +1419,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-06-01",
       "interdictionReason": null,
       "seasonStart": "2026-06-13",
       "seasonEnd": "2026-09-13",
@@ -1427,7 +1427,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 202,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-04T10:13:02.570Z"
     },
     "praia-fluvial-de-olhos-de-fervenca": {
       "apaCode": "PTCT2F",
@@ -1455,7 +1455,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-05-27",
       "interdictionReason": null,
       "seasonStart": "2026-06-10",
       "seasonEnd": "2026-09-13",
@@ -1463,7 +1463,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 23,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-04T10:13:02.570Z"
     },
     "praia-fluvial-de-paco-do-mato": {
       "apaCode": "PTCK8N",
@@ -1489,17 +1489,17 @@
       "apaConcelho": "COIMBRA",
       "previousYearDsc": "Excelente",
       "previousYearValue": 1,
-      "currentSeasonStatus": "Água adequada a banhos",
-      "currentSeasonValue": 1,
-      "lastAnalysisDate": "2026-05-25",
-      "interdictionReason": null,
+      "currentSeasonStatus": "Água desaconselhada a banhos",
+      "currentSeasonValue": 2,
+      "lastAnalysisDate": "2026-06-01",
+      "interdictionReason": "Contaminação Microbiológica",
       "seasonStart": "2026-06-01",
       "seasonEnd": "2026-09-15",
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCN8M&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 92,
-      "lastChanged": "2026-05-29T10:15:17.691Z"
+      "lastChanged": "2026-06-04T10:13:02.570Z"
     },
     "praia-fluvial-de-pampilhosa-da-serra-vila": {
       "apaCode": "PTCH2Q",
