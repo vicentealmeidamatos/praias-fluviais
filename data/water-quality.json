@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-04T10:13:02.570Z",
+  "lastUpdated": "2026-06-05T10:17:48.658Z",
   "sourceUrl": "https://infoagua.apambiente.pt/pt/praias/praias-pesquisa-avancada",
   "stats": {
     "siteBeaches": 228,
@@ -1147,17 +1147,17 @@
       "apaConcelho": "VILA DE REI",
       "previousYearDsc": "Excelente",
       "previousYearValue": 1,
-      "currentSeasonStatus": "Ainda não há análises",
-      "currentSeasonValue": 0,
+      "currentSeasonStatus": "Água desaconselhada a banhos",
+      "currentSeasonValue": 2,
       "lastAnalysisDate": null,
-      "interdictionReason": null,
+      "interdictionReason": "Contaminação Microbiológica",
       "seasonStart": "2026-06-15",
       "seasonEnd": "2026-09-15",
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCE2L&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 38,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-05T10:17:48.658Z"
     },
     "praia-fluvial-de-folgosa": {
       "apaCode": "PTCL9V",
@@ -1221,7 +1221,7 @@
       "previousYearValue": 2,
       "currentSeasonStatus": "Água adequada a banhos",
       "currentSeasonValue": 1,
-      "lastAnalysisDate": "2026-05-25",
+      "lastAnalysisDate": "2026-06-03",
       "interdictionReason": null,
       "seasonStart": "2026-06-13",
       "seasonEnd": "2026-09-13",
@@ -1229,7 +1229,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 81,
-      "lastChanged": "2026-05-27T10:32:14.094Z"
+      "lastChanged": "2026-06-05T10:17:48.658Z"
     },
     "praia-fluvial-de-fragas-de-sao-simao": {
       "apaCode": "PTCK7V",
@@ -2389,17 +2389,17 @@
       "apaConcelho": "VILA DE REI",
       "previousYearDsc": "Excelente",
       "previousYearValue": 1,
-      "currentSeasonStatus": "Ainda não há análises",
-      "currentSeasonValue": 0,
+      "currentSeasonStatus": "Água desaconselhada a banhos",
+      "currentSeasonValue": 2,
       "lastAnalysisDate": null,
-      "interdictionReason": null,
+      "interdictionReason": "Contaminação Microbiológica",
       "seasonStart": "2026-06-15",
       "seasonEnd": "2026-09-15",
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCE2Q&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 41,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-05T10:17:48.658Z"
     },
     "praia-fluvial-de-pego-fundo": {
       "apaCode": "PTCF8M",
