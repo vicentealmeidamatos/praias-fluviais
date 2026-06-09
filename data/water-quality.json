@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-08T11:21:33.517Z",
+  "lastUpdated": "2026-06-09T10:04:42.860Z",
   "sourceUrl": "https://infoagua.apambiente.pt/pt/praias/praias-pesquisa-avancada",
   "stats": {
     "siteBeaches": 228,
@@ -1147,17 +1147,17 @@
       "apaConcelho": "VILA DE REI",
       "previousYearDsc": "Excelente",
       "previousYearValue": 1,
-      "currentSeasonStatus": "Água desaconselhada a banhos",
-      "currentSeasonValue": 2,
-      "lastAnalysisDate": null,
-      "interdictionReason": "Contaminação Microbiológica",
+      "currentSeasonStatus": "Água adequada a banhos",
+      "currentSeasonValue": 1,
+      "lastAnalysisDate": "2026-06-08",
+      "interdictionReason": null,
       "seasonStart": "2026-06-15",
       "seasonEnd": "2026-09-15",
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCE2L&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 38,
-      "lastChanged": "2026-06-05T10:17:48.658Z"
+      "lastChanged": "2026-06-09T10:04:42.860Z"
     },
     "praia-fluvial-de-folgosa": {
       "apaCode": "PTCL9V",
@@ -2389,17 +2389,17 @@
       "apaConcelho": "VILA DE REI",
       "previousYearDsc": "Excelente",
       "previousYearValue": 1,
-      "currentSeasonStatus": "Água desaconselhada a banhos",
-      "currentSeasonValue": 2,
-      "lastAnalysisDate": null,
-      "interdictionReason": "Contaminação Microbiológica",
+      "currentSeasonStatus": "Água adequada a banhos",
+      "currentSeasonValue": 1,
+      "lastAnalysisDate": "2026-06-08",
+      "interdictionReason": null,
       "seasonStart": "2026-06-15",
       "seasonEnd": "2026-09-15",
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCE2Q&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 41,
-      "lastChanged": "2026-06-05T10:17:48.658Z"
+      "lastChanged": "2026-06-09T10:04:42.860Z"
     },
     "praia-fluvial-de-pego-fundo": {
       "apaCode": "PTCF8M",
