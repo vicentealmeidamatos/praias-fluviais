@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-09T10:04:42.860Z",
+  "lastUpdated": "2026-06-10T10:35:35.619Z",
   "sourceUrl": "https://infoagua.apambiente.pt/pt/praias/praias-pesquisa-avancada",
   "stats": {
     "siteBeaches": 228,
@@ -1149,7 +1149,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Água adequada a banhos",
       "currentSeasonValue": 1,
-      "lastAnalysisDate": "2026-06-08",
+      "lastAnalysisDate": null,
       "interdictionReason": null,
       "seasonStart": "2026-06-15",
       "seasonEnd": "2026-09-15",
@@ -1157,7 +1157,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 38,
-      "lastChanged": "2026-06-09T10:04:42.860Z"
+      "lastChanged": "2026-06-10T10:35:35.619Z"
     },
     "praia-fluvial-de-folgosa": {
       "apaCode": "PTCL9V",
@@ -2391,7 +2391,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Água adequada a banhos",
       "currentSeasonValue": 1,
-      "lastAnalysisDate": "2026-06-08",
+      "lastAnalysisDate": null,
       "interdictionReason": null,
       "seasonStart": "2026-06-15",
       "seasonEnd": "2026-09-15",
@@ -2399,7 +2399,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 41,
-      "lastChanged": "2026-06-09T10:04:42.860Z"
+      "lastChanged": "2026-06-10T10:35:35.619Z"
     },
     "praia-fluvial-de-pego-fundo": {
       "apaCode": "PTCF8M",
