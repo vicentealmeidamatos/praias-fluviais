@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-10T10:35:35.619Z",
+  "lastUpdated": "2026-06-11T10:59:22.207Z",
   "sourceUrl": "https://infoagua.apambiente.pt/pt/praias/praias-pesquisa-avancada",
   "stats": {
     "siteBeaches": 228,
@@ -897,7 +897,7 @@
       "previousYearValue": 4,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-06-08",
       "interdictionReason": null,
       "seasonStart": "2026-06-19",
       "seasonEnd": "2026-09-13",
@@ -905,7 +905,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 61,
-      "lastChanged": "2026-05-05T08:29:19.813Z"
+      "lastChanged": "2026-06-11T10:59:22.207Z"
     },
     "praia-fluvial-de-burgaes-rio-caima": {
       "apaCode": "PTCT7H",
@@ -2409,7 +2409,7 @@
       "previousYearValue": 2,
       "currentSeasonStatus": "Água adequada a banhos",
       "currentSeasonValue": 1,
-      "lastAnalysisDate": "2026-05-26",
+      "lastAnalysisDate": "2026-06-02",
       "interdictionReason": null,
       "seasonStart": "2026-06-01",
       "seasonEnd": "2026-09-13",
@@ -2417,7 +2417,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 28,
-      "lastChanged": "2026-06-02T10:56:37.988Z"
+      "lastChanged": "2026-06-11T10:59:22.207Z"
     },
     "praia-fluvial-de-penedo-furado": {
       "apaCode": "PTCN3H",
