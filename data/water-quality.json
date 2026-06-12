@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-11T10:59:22.207Z",
+  "lastUpdated": "2026-06-12T10:41:16.924Z",
   "sourceUrl": "https://infoagua.apambiente.pt/pt/praias/praias-pesquisa-avancada",
   "stats": {
     "siteBeaches": 228,
@@ -1815,7 +1815,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Água adequada a banhos",
       "currentSeasonValue": 1,
-      "lastAnalysisDate": "2026-05-18",
+      "lastAnalysisDate": "2026-06-09",
       "interdictionReason": null,
       "seasonStart": "2026-05-30",
       "seasonEnd": "2026-09-30",
@@ -1823,7 +1823,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 117,
-      "lastChanged": "2026-05-29T10:15:17.691Z"
+      "lastChanged": "2026-06-12T10:41:16.924Z"
     },
     "praia-fluvial-de-santa-luzia": {
       "apaCode": "PTCD3H",
