@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-12T10:41:16.924Z",
+  "lastUpdated": "2026-06-13T09:38:15.575Z",
   "sourceUrl": "https://infoagua.apambiente.pt/pt/praias/praias-pesquisa-avancada",
   "stats": {
     "siteBeaches": 228,
@@ -661,8 +661,8 @@
       "apaConcelho": "CASTELO BRANCO",
       "previousYearDsc": "Má",
       "previousYearValue": 4,
-      "currentSeasonStatus": "Ainda não há análises",
-      "currentSeasonValue": 0,
+      "currentSeasonStatus": "Água adequada a banhos",
+      "currentSeasonValue": 1,
       "lastAnalysisDate": "2026-05-26",
       "interdictionReason": null,
       "seasonStart": "2026-06-01",
@@ -671,7 +671,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 45,
-      "lastChanged": "2026-06-06T08:47:24.151Z"
+      "lastChanged": "2026-06-13T09:38:15.575Z"
     },
     "praia-fluvial-de-alqueidao": {
       "apaCode": "PTCT3H",
@@ -895,8 +895,8 @@
       "apaConcelho": "MARCO DE CANAVESES",
       "previousYearDsc": "Má",
       "previousYearValue": 4,
-      "currentSeasonStatus": "Ainda não há análises",
-      "currentSeasonValue": 0,
+      "currentSeasonStatus": "Água adequada a banhos",
+      "currentSeasonValue": 1,
       "lastAnalysisDate": "2026-06-08",
       "interdictionReason": null,
       "seasonStart": "2026-06-19",
@@ -905,7 +905,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 61,
-      "lastChanged": "2026-06-11T10:59:22.207Z"
+      "lastChanged": "2026-06-13T09:38:15.575Z"
     },
     "praia-fluvial-de-burgaes-rio-caima": {
       "apaCode": "PTCT7H",
@@ -2409,7 +2409,7 @@
       "previousYearValue": 2,
       "currentSeasonStatus": "Água adequada a banhos",
       "currentSeasonValue": 1,
-      "lastAnalysisDate": "2026-06-02",
+      "lastAnalysisDate": "2026-06-09",
       "interdictionReason": null,
       "seasonStart": "2026-06-01",
       "seasonEnd": "2026-09-13",
@@ -2417,7 +2417,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 28,
-      "lastChanged": "2026-06-11T10:59:22.207Z"
+      "lastChanged": "2026-06-13T09:38:15.575Z"
     },
     "praia-fluvial-de-penedo-furado": {
       "apaCode": "PTCN3H",
@@ -2533,8 +2533,8 @@
       "apaConcelho": "CASTELO BRANCO",
       "previousYearDsc": "Boa",
       "previousYearValue": 2,
-      "currentSeasonStatus": "Ainda não há análises",
-      "currentSeasonValue": 0,
+      "currentSeasonStatus": "Água adequada a banhos",
+      "currentSeasonValue": 1,
       "lastAnalysisDate": "2026-05-26",
       "interdictionReason": null,
       "seasonStart": "2026-06-01",
@@ -2543,7 +2543,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 10,
-      "lastChanged": "2026-06-06T08:47:24.151Z"
+      "lastChanged": "2026-06-13T09:38:15.575Z"
     },
     "praia-fluvial-de-sorraia": {
       "apaCode": "PTCW7T",
