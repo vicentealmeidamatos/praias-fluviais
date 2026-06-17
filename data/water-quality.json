@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-16T11:36:38.462Z",
+  "lastUpdated": "2026-06-17T11:18:22.580Z",
   "sourceUrl": "https://infoagua.apambiente.pt/pt/praias/praias-pesquisa-avancada",
   "stats": {
     "siteBeaches": 228,
@@ -229,8 +229,8 @@
       "apaConcelho": "PROENÇA-A-NOVA",
       "previousYearDsc": "Excelente",
       "previousYearValue": 1,
-      "currentSeasonStatus": "Ainda não há análises",
-      "currentSeasonValue": 0,
+      "currentSeasonStatus": "Água adequada a banhos",
+      "currentSeasonValue": 1,
       "lastAnalysisDate": "2026-06-09",
       "interdictionReason": null,
       "seasonStart": "2026-06-22",
@@ -239,7 +239,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 68,
-      "lastChanged": "2026-06-16T11:36:38.462Z"
+      "lastChanged": "2026-06-17T11:18:22.580Z"
     },
     "praia-fluvial-de-lenta": {
       "apaCode": "PTCF7N",
@@ -427,8 +427,8 @@
       "apaConcelho": "TÁBUA",
       "previousYearDsc": "Excelente",
       "previousYearValue": 1,
-      "currentSeasonStatus": "Ainda não há análises",
-      "currentSeasonValue": 0,
+      "currentSeasonStatus": "Água adequada a banhos",
+      "currentSeasonValue": 1,
       "lastAnalysisDate": "2026-06-08",
       "interdictionReason": null,
       "seasonStart": "2026-06-15",
@@ -437,7 +437,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 4,
-      "lastChanged": "2026-06-15T12:44:35.879Z"
+      "lastChanged": "2026-06-17T11:18:22.580Z"
     },
     "praia-fluvial-de-zaboeira": {
       "apaCode": "PTCU7P",
@@ -607,8 +607,8 @@
       "apaConcelho": "PROENÇA-A-NOVA",
       "previousYearDsc": "Boa",
       "previousYearValue": 2,
-      "currentSeasonStatus": "Ainda não há análises",
-      "currentSeasonValue": 0,
+      "currentSeasonStatus": "Água adequada a banhos",
+      "currentSeasonValue": 1,
       "lastAnalysisDate": "2026-06-09",
       "interdictionReason": null,
       "seasonStart": "2026-06-22",
@@ -617,7 +617,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 20,
-      "lastChanged": "2026-06-16T11:36:38.462Z"
+      "lastChanged": "2026-06-17T11:18:22.580Z"
     },
     "praia-fluvial-de-aldeia-vicosa": {
       "apaCode": "PTCK8E",
@@ -985,8 +985,8 @@
       "apaConcelho": "TÁBUA",
       "previousYearDsc": "Excelente",
       "previousYearValue": 1,
-      "currentSeasonStatus": "Ainda não há análises",
-      "currentSeasonValue": 0,
+      "currentSeasonStatus": "Água adequada a banhos",
+      "currentSeasonValue": 1,
       "lastAnalysisDate": "2026-06-08",
       "interdictionReason": null,
       "seasonStart": "2026-06-15",
@@ -995,7 +995,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 66,
-      "lastChanged": "2026-06-15T12:44:35.879Z"
+      "lastChanged": "2026-06-17T11:18:22.580Z"
     },
     "praia-fluvial-de-castelo-novo": {
       "apaCode": "PTCL2N",
@@ -1723,17 +1723,17 @@
       "apaConcelho": "SABUGAL",
       "previousYearDsc": "Excelente",
       "previousYearValue": 1,
-      "currentSeasonStatus": "Ainda não há análises",
-      "currentSeasonValue": 0,
+      "currentSeasonStatus": "Água desaconselhada a banhos",
+      "currentSeasonValue": 2,
       "lastAnalysisDate": null,
-      "interdictionReason": null,
+      "interdictionReason": "Contaminação Microbiológica",
       "seasonStart": "2026-06-27",
       "seasonEnd": "2026-08-30",
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCP9X&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 46,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-17T11:18:22.580Z"
     },
     "praia-fluvial-de-quintas": {
       "apaCode": "PTCE2J",
@@ -2173,8 +2173,8 @@
       "apaConcelho": "SERTÃ",
       "previousYearDsc": "Sem classificação",
       "previousYearValue": 5,
-      "currentSeasonStatus": "Ainda não há análises",
-      "currentSeasonValue": 0,
+      "currentSeasonStatus": "Água adequada a banhos",
+      "currentSeasonValue": 1,
       "lastAnalysisDate": "2026-06-08",
       "interdictionReason": null,
       "seasonStart": "2026-06-15",
@@ -2183,7 +2183,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 48,
-      "lastChanged": "2026-06-16T11:36:38.462Z"
+      "lastChanged": "2026-06-17T11:18:22.580Z"
     },
     "praia-fluvial-de-bostelim": {
       "apaCode": "PTCJ9W",
@@ -2191,8 +2191,8 @@
       "apaConcelho": "VILA DE REI",
       "previousYearDsc": "Excelente",
       "previousYearValue": 1,
-      "currentSeasonStatus": "Ainda não há análises",
-      "currentSeasonValue": 0,
+      "currentSeasonStatus": "Água adequada a banhos",
+      "currentSeasonValue": 1,
       "lastAnalysisDate": "2026-06-09",
       "interdictionReason": null,
       "seasonStart": "2026-06-15",
@@ -2201,7 +2201,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 30,
-      "lastChanged": "2026-06-16T11:36:38.462Z"
+      "lastChanged": "2026-06-17T11:18:22.580Z"
     },
     "praia-fluvial-de-cabril": {
       "apaCode": "PTCE2U",
@@ -2317,8 +2317,8 @@
       "apaConcelho": "PROENÇA-A-NOVA",
       "previousYearDsc": "Excelente",
       "previousYearValue": 1,
-      "currentSeasonStatus": "Ainda não há análises",
-      "currentSeasonValue": 0,
+      "currentSeasonStatus": "Água adequada a banhos",
+      "currentSeasonValue": 1,
       "lastAnalysisDate": "2026-06-09",
       "interdictionReason": null,
       "seasonStart": "2026-06-22",
@@ -2327,7 +2327,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 54,
-      "lastChanged": "2026-06-16T11:36:38.462Z"
+      "lastChanged": "2026-06-17T11:18:22.580Z"
     },
     "praia-fluvial-de-marmeleiro": {
       "apaCode": "PTCW9K",
@@ -2569,8 +2569,8 @@
       "apaConcelho": "SÁTÃO",
       "previousYearDsc": "Excelente",
       "previousYearValue": 1,
-      "currentSeasonStatus": "Ainda não há análises",
-      "currentSeasonValue": 0,
+      "currentSeasonStatus": "Água adequada a banhos",
+      "currentSeasonValue": 1,
       "lastAnalysisDate": "2026-06-09",
       "interdictionReason": null,
       "seasonStart": "2026-06-15",
@@ -2579,7 +2579,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 41,
-      "lastChanged": "2026-06-15T12:44:35.879Z"
+      "lastChanged": "2026-06-17T11:18:22.580Z"
     },
     "praia-fluvial-de-troviscal": {
       "apaCode": "PTCU3V",
