@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-18T10:49:06.818Z",
+  "lastUpdated": "2026-06-19T10:58:14.224Z",
   "sourceUrl": "https://infoagua.apambiente.pt/pt/praias/praias-pesquisa-avancada",
   "stats": {
     "siteBeaches": 228,
@@ -15,7 +15,7 @@
       "previousYearValue": 2,
       "currentSeasonStatus": "Água adequada a banhos",
       "currentSeasonValue": 1,
-      "lastAnalysisDate": "2026-06-02",
+      "lastAnalysisDate": "2026-06-16",
       "interdictionReason": null,
       "seasonStart": "2026-06-06",
       "seasonEnd": "2026-09-13",
@@ -23,7 +23,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 195,
-      "lastChanged": "2026-06-06T08:47:24.151Z"
+      "lastChanged": "2026-06-19T10:58:14.224Z"
     },
     "praia-fluvial-de-albufeira-de-queimadela": {
       "apaCode": "PTCQ2X",
@@ -195,7 +195,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-06-16",
       "interdictionReason": null,
       "seasonStart": "2026-06-27",
       "seasonEnd": "2026-09-06",
@@ -203,7 +203,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 62,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-19T10:58:14.224Z"
     },
     "praia-fluvial-de-fraga-da-pegada": {
       "apaCode": "PTCE3K",
@@ -213,7 +213,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Água adequada a banhos",
       "currentSeasonValue": 1,
-      "lastAnalysisDate": "2026-06-02",
+      "lastAnalysisDate": "2026-06-16",
       "interdictionReason": null,
       "seasonStart": "2026-06-13",
       "seasonEnd": "2026-09-13",
@@ -221,7 +221,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 116,
-      "lastChanged": "2026-06-06T08:47:24.151Z"
+      "lastChanged": "2026-06-19T10:58:14.224Z"
     },
     "praia-fluvial-de-froia": {
       "apaCode": "PTCH3E",
@@ -393,7 +393,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Água adequada a banhos",
       "currentSeasonValue": 1,
-      "lastAnalysisDate": "2026-06-02",
+      "lastAnalysisDate": "2026-06-16",
       "interdictionReason": null,
       "seasonStart": "2026-06-13",
       "seasonEnd": "2026-09-13",
@@ -401,7 +401,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 170,
-      "lastChanged": "2026-06-06T08:47:24.151Z"
+      "lastChanged": "2026-06-19T10:58:14.224Z"
     },
     "praia-fluvial-de-ribeira-grande": {
       "apaCode": "PTCX2U",
@@ -681,7 +681,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Água adequada a banhos",
       "currentSeasonValue": 1,
-      "lastAnalysisDate": "2026-06-01",
+      "lastAnalysisDate": "2026-06-17",
       "interdictionReason": null,
       "seasonStart": "2026-06-13",
       "seasonEnd": "2026-09-13",
@@ -689,7 +689,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 240,
-      "lastChanged": "2026-06-06T08:47:24.151Z"
+      "lastChanged": "2026-06-19T10:58:14.224Z"
     },
     "praia-fluvial-de-alqueva": {
       "apaCode": "PTCD9W",
@@ -843,7 +843,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Água adequada a banhos",
       "currentSeasonValue": 1,
-      "lastAnalysisDate": "2026-05-18",
+      "lastAnalysisDate": "2026-06-15",
       "interdictionReason": null,
       "seasonStart": "2026-06-01",
       "seasonEnd": "2026-09-13",
@@ -851,7 +851,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 79,
-      "lastChanged": "2026-05-29T10:15:17.691Z"
+      "lastChanged": "2026-06-19T10:58:14.224Z"
     },
     "praia-fluvial-de-badamalos": {
       "apaCode": "PTCJ8D",
@@ -879,7 +879,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Água adequada a banhos",
       "currentSeasonValue": 1,
-      "lastAnalysisDate": "2026-06-01",
+      "lastAnalysisDate": "2026-06-17",
       "interdictionReason": null,
       "seasonStart": "2026-06-13",
       "seasonEnd": "2026-09-13",
@@ -887,7 +887,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 34,
-      "lastChanged": "2026-06-06T08:47:24.151Z"
+      "lastChanged": "2026-06-19T10:58:14.224Z"
     },
     "praia-fluvial-de-bitetos": {
       "apaCode": "PTCK8M",
@@ -1167,7 +1167,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-06-16",
       "interdictionReason": null,
       "seasonStart": "2026-07-01",
       "seasonEnd": "2026-08-31",
@@ -1175,7 +1175,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 660,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-19T10:58:14.224Z"
     },
     "praia-fluvial-de-fontes": {
       "apaCode": "PTCK3H",
@@ -1365,7 +1365,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Água adequada a banhos",
       "currentSeasonValue": 1,
-      "lastAnalysisDate": "2026-05-18",
+      "lastAnalysisDate": "2026-06-15",
       "interdictionReason": null,
       "seasonStart": "2026-06-01",
       "seasonEnd": "2026-09-13",
@@ -1373,7 +1373,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 72,
-      "lastChanged": "2026-05-29T10:15:17.691Z"
+      "lastChanged": "2026-06-19T10:58:14.224Z"
     },
     "praia-fluvial-de-montalvo-tesos": {
       "apaCode": "PTCT2W",
@@ -1401,7 +1401,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-06-17",
       "interdictionReason": null,
       "seasonStart": "2026-07-01",
       "seasonEnd": "2026-08-31",
@@ -1409,7 +1409,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 18,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-19T10:58:14.224Z"
     },
     "praia-fluvial-de-mourao": {
       "apaCode": "PTCJ3E",
@@ -1599,7 +1599,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Água adequada a banhos",
       "currentSeasonValue": 1,
-      "lastAnalysisDate": "2026-06-02",
+      "lastAnalysisDate": "2026-06-16",
       "interdictionReason": null,
       "seasonStart": "2026-06-13",
       "seasonEnd": "2026-09-13",
@@ -1607,7 +1607,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 757,
-      "lastChanged": "2026-06-06T08:47:24.151Z"
+      "lastChanged": "2026-06-19T10:58:14.224Z"
     },
     "praia-fluvial-de-ponte-de-juncais": {
       "apaCode": "PTCJ3K",
@@ -1671,7 +1671,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Água adequada a banhos",
       "currentSeasonValue": 1,
-      "lastAnalysisDate": "2026-06-02",
+      "lastAnalysisDate": "2026-06-16",
       "interdictionReason": null,
       "seasonStart": "2026-06-13",
       "seasonEnd": "2026-09-13",
@@ -1679,7 +1679,7 @@
       "matchMethod": "name+proximity",
       "matchPool": "interior",
       "matchDistance": 846,
-      "lastChanged": "2026-06-06T08:47:24.151Z"
+      "lastChanged": "2026-06-19T10:58:14.224Z"
     },
     "praia-fluvial-de-pontemieiro": {
       "apaCode": "PTCJ2X",
@@ -1743,7 +1743,7 @@
       "previousYearValue": 2,
       "currentSeasonStatus": "Água adequada a banhos",
       "currentSeasonValue": 1,
-      "lastAnalysisDate": "2026-06-02",
+      "lastAnalysisDate": "2026-06-16",
       "interdictionReason": null,
       "seasonStart": "2026-06-06",
       "seasonEnd": "2026-09-13",
@@ -1751,7 +1751,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 23,
-      "lastChanged": "2026-06-06T08:47:24.151Z"
+      "lastChanged": "2026-06-19T10:58:14.224Z"
     },
     "praia-fluvial-de-rapoula-do-coa": {
       "apaCode": "PTCW2M",
@@ -2013,7 +2013,7 @@
       "previousYearValue": 3,
       "currentSeasonStatus": "Água adequada a banhos",
       "currentSeasonValue": 1,
-      "lastAnalysisDate": "2026-06-02",
+      "lastAnalysisDate": "2026-06-16",
       "interdictionReason": null,
       "seasonStart": "2026-06-06",
       "seasonEnd": "2026-09-13",
@@ -2021,7 +2021,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 36,
-      "lastChanged": "2026-06-06T08:47:24.151Z"
+      "lastChanged": "2026-06-19T10:58:14.224Z"
     },
     "praia-fluvial-de-valhelhas": {
       "apaCode": "PTCT9E",
@@ -2085,7 +2085,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-06-16",
       "interdictionReason": null,
       "seasonStart": "2026-06-27",
       "seasonEnd": "2026-08-30",
@@ -2093,7 +2093,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 84,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-19T10:58:14.224Z"
     },
     "praia-fluvial-de-vila-nova-serra": {
       "apaCode": "PTCF3C",
@@ -2103,7 +2103,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-06-17",
       "interdictionReason": null,
       "seasonStart": "2026-07-01",
       "seasonEnd": "2026-08-31",
@@ -2111,7 +2111,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 23,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-19T10:58:14.224Z"
     },
     "praia-fluvial-de-acude-dos-vais": {
       "apaCode": "PTCN3P",
@@ -2139,7 +2139,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-06-17",
       "interdictionReason": null,
       "seasonStart": "2026-07-01",
       "seasonEnd": "2026-09-15",
@@ -2147,7 +2147,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 15,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-19T10:58:14.224Z"
     },
     "praia-fluvial-de-alqueirao": {
       "apaCode": "PTCE7L",
@@ -2283,7 +2283,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Água adequada a banhos",
       "currentSeasonValue": 1,
-      "lastAnalysisDate": "2026-05-18",
+      "lastAnalysisDate": "2026-06-15",
       "interdictionReason": null,
       "seasonStart": "2026-05-30",
       "seasonEnd": "2026-09-13",
@@ -2291,7 +2291,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 71,
-      "lastChanged": "2026-05-29T10:15:17.691Z"
+      "lastChanged": "2026-06-19T10:58:14.224Z"
     },
     "praia-fluvial-de-lago-azul": {
       "apaCode": "PTCT7W",
@@ -2301,7 +2301,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-06-17",
       "interdictionReason": null,
       "seasonStart": "2026-06-13",
       "seasonEnd": "2026-09-13",
@@ -2309,7 +2309,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 24,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-19T10:58:14.224Z"
     },
     "praia-fluvial-de-malhadal": {
       "apaCode": "PTCQ8M",
@@ -2409,7 +2409,7 @@
       "previousYearValue": 2,
       "currentSeasonStatus": "Água adequada a banhos",
       "currentSeasonValue": 1,
-      "lastAnalysisDate": "2026-06-09",
+      "lastAnalysisDate": "2026-06-16",
       "interdictionReason": null,
       "seasonStart": "2026-06-01",
       "seasonEnd": "2026-09-13",
@@ -2417,7 +2417,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 28,
-      "lastChanged": "2026-06-13T09:38:15.575Z"
+      "lastChanged": "2026-06-19T10:58:14.224Z"
     },
     "praia-fluvial-de-penedo-furado": {
       "apaCode": "PTCN3H",
@@ -2481,7 +2481,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-06-16",
       "interdictionReason": null,
       "seasonStart": "2026-06-27",
       "seasonEnd": "2026-09-13",
@@ -2489,7 +2489,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 32,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-19T10:58:14.224Z"
     },
     "praia-fluvial-de-rebolim": {
       "apaCode": "PTCX8M",
@@ -2553,7 +2553,7 @@
       "previousYearValue": 2,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-06-17",
       "interdictionReason": null,
       "seasonStart": "2026-06-29",
       "seasonEnd": "2026-09-20",
@@ -2561,7 +2561,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 46,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-19T10:58:14.224Z"
     },
     "praia-fluvial-de-trabulo": {
       "apaCode": "PTCF2H",
@@ -2661,7 +2661,7 @@
       "previousYearValue": 5,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-06-17",
       "interdictionReason": null,
       "seasonStart": "2026-06-27",
       "seasonEnd": "2026-08-31",
@@ -2669,7 +2669,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 92,
-      "lastChanged": "2026-05-05T08:29:19.813Z"
+      "lastChanged": "2026-06-19T10:58:14.224Z"
     },
     "praia-fluvial-de-ucha": {
       "apaCode": "PTCL7U",
@@ -2697,7 +2697,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Água adequada a banhos",
       "currentSeasonValue": 1,
-      "lastAnalysisDate": "2026-06-02",
+      "lastAnalysisDate": "2026-06-16",
       "interdictionReason": null,
       "seasonStart": "2026-06-06",
       "seasonEnd": "2026-09-13",
@@ -2705,7 +2705,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 47,
-      "lastChanged": "2026-06-06T08:47:24.151Z"
+      "lastChanged": "2026-06-19T10:58:14.224Z"
     },
     "zona-balnear-de-amoreira-rio": {
       "apaCode": "PTCD3F",
