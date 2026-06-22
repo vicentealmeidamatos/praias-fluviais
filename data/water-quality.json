@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-21T10:06:51.476Z",
+  "lastUpdated": "2026-06-22T12:27:30.605Z",
   "sourceUrl": "https://infoagua.apambiente.pt/pt/praias/praias-pesquisa-avancada",
   "stats": {
     "siteBeaches": 228,
@@ -1977,7 +1977,7 @@
       "previousYearValue": 2,
       "currentSeasonStatus": "Água adequada a banhos",
       "currentSeasonValue": 1,
-      "lastAnalysisDate": "2026-06-16",
+      "lastAnalysisDate": "2026-06-18",
       "interdictionReason": null,
       "seasonStart": "2026-06-15",
       "seasonEnd": "2026-09-15",
@@ -1985,7 +1985,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 39,
-      "lastChanged": "2026-06-20T09:44:30.167Z"
+      "lastChanged": "2026-06-22T12:27:30.605Z"
     },
     "praia-fluvial-de-vale-das-eguas-insua": {
       "apaCode": "PTCE7D",
