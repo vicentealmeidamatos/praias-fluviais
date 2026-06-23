@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-22T12:27:30.605Z",
+  "lastUpdated": "2026-06-23T10:04:44.303Z",
   "sourceUrl": "https://infoagua.apambiente.pt/pt/praias/praias-pesquisa-avancada",
   "stats": {
     "siteBeaches": 228,
@@ -51,7 +51,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Água adequada a banhos",
       "currentSeasonValue": 1,
-      "lastAnalysisDate": "2026-05-19",
+      "lastAnalysisDate": "2026-06-16",
       "interdictionReason": null,
       "seasonStart": "2026-05-30",
       "seasonEnd": "2026-09-13",
@@ -59,7 +59,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 43,
-      "lastChanged": "2026-06-20T09:44:30.167Z"
+      "lastChanged": "2026-06-23T10:04:44.303Z"
     },
     "praia-fluvial-de-albufeira-de-odeleite": {
       "apaCode": "PTCV8C",
@@ -699,7 +699,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Água adequada a banhos",
       "currentSeasonValue": 1,
-      "lastAnalysisDate": "2026-05-26",
+      "lastAnalysisDate": "2026-06-17",
       "interdictionReason": null,
       "seasonStart": "2026-06-10",
       "seasonEnd": "2026-09-13",
@@ -707,7 +707,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 229,
-      "lastChanged": "2026-06-20T09:44:30.167Z"
+      "lastChanged": "2026-06-23T10:04:44.303Z"
     },
     "praia-fluvial-de-alvares": {
       "apaCode": "PTCL9E",
@@ -771,7 +771,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Água adequada a banhos",
       "currentSeasonValue": 1,
-      "lastAnalysisDate": "2026-05-26",
+      "lastAnalysisDate": "2026-06-17",
       "interdictionReason": null,
       "seasonStart": "2026-06-10",
       "seasonEnd": "2026-09-13",
@@ -779,7 +779,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 39,
-      "lastChanged": "2026-06-20T09:44:30.167Z"
+      "lastChanged": "2026-06-23T10:04:44.303Z"
     },
     "praia-fluvial-de-ana-de-aviz": {
       "apaCode": "PTCU9E",
@@ -1381,9 +1381,9 @@
       "apaConcelho": "PONTE DE SOR",
       "previousYearDsc": "Sem classificação",
       "previousYearValue": 5,
-      "currentSeasonStatus": "Ainda não há análises",
-      "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "currentSeasonStatus": "Água adequada a banhos",
+      "currentSeasonValue": 1,
+      "lastAnalysisDate": "2026-06-17",
       "interdictionReason": null,
       "seasonStart": "2026-07-01",
       "seasonEnd": "2026-08-31",
@@ -1391,7 +1391,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 63,
-      "lastChanged": "2026-05-05T08:29:19.813Z"
+      "lastChanged": "2026-06-23T10:04:44.303Z"
     },
     "praia-fluvial-de-montes": {
       "apaCode": "PTCX7N",
@@ -2245,9 +2245,9 @@
       "apaConcelho": "AVIS",
       "previousYearDsc": "Excelente",
       "previousYearValue": 1,
-      "currentSeasonStatus": "Ainda não há análises",
-      "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "currentSeasonStatus": "Água adequada a banhos",
+      "currentSeasonValue": 1,
+      "lastAnalysisDate": "2026-06-17",
       "interdictionReason": null,
       "seasonStart": "2026-07-01",
       "seasonEnd": "2026-09-13",
@@ -2255,7 +2255,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 79,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-23T10:04:44.303Z"
     },
     "praia-fluvial-de-colmeal": {
       "apaCode": "PTCX7K",
