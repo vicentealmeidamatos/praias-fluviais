@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-25T09:45:54.131Z",
+  "lastUpdated": "2026-06-26T09:53:07.238Z",
   "sourceUrl": "https://infoagua.apambiente.pt/pt/praias/praias-pesquisa-avancada",
   "stats": {
     "siteBeaches": 228,
@@ -177,7 +177,7 @@
       "previousYearValue": 2,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-06-23",
       "interdictionReason": null,
       "seasonStart": "2026-07-01",
       "seasonEnd": "2026-08-31",
@@ -185,7 +185,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 54,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-26T09:53:07.238Z"
     },
     "praia-fluvial-de-congida": {
       "apaCode": "PTCW3P",
@@ -321,7 +321,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-06-23",
       "interdictionReason": null,
       "seasonStart": "2026-07-01",
       "seasonEnd": "2026-08-31",
@@ -329,7 +329,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 12,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-26T09:53:07.238Z"
     },
     "praia-fluvial-de-videmonte-quinta-da-taberna": {
       "apaCode": "PTCX3K",
@@ -483,7 +483,7 @@
       "previousYearValue": 2,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-06-23",
       "interdictionReason": null,
       "seasonStart": "2026-07-01",
       "seasonEnd": "2026-08-31",
@@ -491,7 +491,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 50,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-26T09:53:07.238Z"
     },
     "praia-fluvial-de-pedras-ruivas": {
       "apaCode": "PTCW9H",
@@ -573,7 +573,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Água adequada a banhos",
       "currentSeasonValue": 1,
-      "lastAnalysisDate": "2026-05-27",
+      "lastAnalysisDate": "2026-06-22",
       "interdictionReason": null,
       "seasonStart": "2026-06-06",
       "seasonEnd": "2026-09-20",
@@ -581,7 +581,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 118,
-      "lastChanged": "2026-06-20T09:44:30.167Z"
+      "lastChanged": "2026-06-26T09:53:07.238Z"
     },
     "praia-fluvial-de-aldeia-do-mato": {
       "apaCode": "PTCT9H",
@@ -717,7 +717,7 @@
       "previousYearValue": 2,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-06-23",
       "interdictionReason": null,
       "seasonStart": "2026-07-01",
       "seasonEnd": "2026-08-31",
@@ -725,7 +725,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 18,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-26T09:53:07.238Z"
     },
     "praia-fluvial-de-alvaro": {
       "apaCode": "PTCW8N",
@@ -1059,7 +1059,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Água adequada a banhos",
       "currentSeasonValue": 1,
-      "lastAnalysisDate": "2026-06-01",
+      "lastAnalysisDate": "2026-06-22",
       "interdictionReason": null,
       "seasonStart": "2026-06-13",
       "seasonEnd": "2026-09-13",
@@ -1067,7 +1067,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 102,
-      "lastChanged": "2026-06-06T08:47:24.151Z"
+      "lastChanged": "2026-06-26T09:53:07.238Z"
     },
     "praia-fluvial-de-coja": {
       "apaCode": "PTCL8X",
@@ -1221,7 +1221,7 @@
       "previousYearValue": 2,
       "currentSeasonStatus": "Água adequada a banhos",
       "currentSeasonValue": 1,
-      "lastAnalysisDate": "2026-06-03",
+      "lastAnalysisDate": "2026-06-24",
       "interdictionReason": null,
       "seasonStart": "2026-06-13",
       "seasonEnd": "2026-09-13",
@@ -1229,7 +1229,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 81,
-      "lastChanged": "2026-06-05T10:17:48.658Z"
+      "lastChanged": "2026-06-26T09:53:07.238Z"
     },
     "praia-fluvial-de-fragas-de-sao-simao": {
       "apaCode": "PTCK7V",
@@ -1257,7 +1257,7 @@
       "previousYearValue": 3,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-06-23",
       "interdictionReason": null,
       "seasonStart": "2026-07-01",
       "seasonEnd": "2026-08-31",
@@ -1265,7 +1265,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 64,
-      "lastChanged": "2026-05-05T08:29:19.813Z"
+      "lastChanged": "2026-06-26T09:53:07.238Z"
     },
     "praia-fluvial-de-lapa-dos-dinheiros": {
       "apaCode": "PTCL7N",
@@ -1419,7 +1419,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Água adequada a banhos",
       "currentSeasonValue": 1,
-      "lastAnalysisDate": "2026-06-01",
+      "lastAnalysisDate": "2026-06-22",
       "interdictionReason": null,
       "seasonStart": "2026-06-13",
       "seasonEnd": "2026-09-13",
@@ -1427,7 +1427,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 202,
-      "lastChanged": "2026-06-06T08:47:24.151Z"
+      "lastChanged": "2026-06-26T09:53:07.238Z"
     },
     "praia-fluvial-de-olhos-de-fervenca": {
       "apaCode": "PTCT2F",
@@ -1455,7 +1455,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Água adequada a banhos",
       "currentSeasonValue": 1,
-      "lastAnalysisDate": "2026-05-27",
+      "lastAnalysisDate": "2026-06-22",
       "interdictionReason": null,
       "seasonStart": "2026-06-10",
       "seasonEnd": "2026-09-13",
@@ -1463,7 +1463,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 23,
-      "lastChanged": "2026-06-20T09:44:30.167Z"
+      "lastChanged": "2026-06-26T09:53:07.238Z"
     },
     "praia-fluvial-de-paco-do-mato": {
       "apaCode": "PTCK8N",
@@ -1509,7 +1509,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-06-23",
       "interdictionReason": null,
       "seasonStart": "2026-07-01",
       "seasonEnd": "2026-08-31",
@@ -1517,7 +1517,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 111,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-26T09:53:07.238Z"
     },
     "praia-fluvial-de-pessegueiro": {
       "apaCode": "PTCQ3H",
@@ -1527,7 +1527,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-06-23",
       "interdictionReason": null,
       "seasonStart": "2026-07-01",
       "seasonEnd": "2026-08-31",
@@ -1535,7 +1535,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 74,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-26T09:53:07.238Z"
     },
     "praia-fluvial-de-corga": {
       "apaCode": "PTCL9C",
@@ -1653,7 +1653,7 @@
       "previousYearValue": 4,
       "currentSeasonStatus": "Água desaconselhada a banhos",
       "currentSeasonValue": 2,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-06-23",
       "interdictionReason": "Contaminação Microbiológica",
       "seasonStart": "2026-07-01",
       "seasonEnd": "2026-08-31",
@@ -1661,7 +1661,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 37,
-      "lastChanged": "2026-06-25T09:45:54.131Z"
+      "lastChanged": "2026-06-26T09:53:07.238Z"
     },
     "praia-fluvial-de-ponte-soeira": {
       "apaCode": "PTCF9U",
@@ -1833,7 +1833,7 @@
       "previousYearValue": 1,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-06-23",
       "interdictionReason": null,
       "seasonStart": "2026-07-01",
       "seasonEnd": "2026-08-31",
@@ -1841,7 +1841,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 117,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-26T09:53:07.238Z"
     },
     "praia-fluvial-de-sao-giao": {
       "apaCode": "PTCF7V",
@@ -2265,7 +2265,7 @@
       "previousYearValue": 2,
       "currentSeasonStatus": "Ainda não há análises",
       "currentSeasonValue": 0,
-      "lastAnalysisDate": null,
+      "lastAnalysisDate": "2026-06-23",
       "interdictionReason": null,
       "seasonStart": "2026-07-01",
       "seasonEnd": "2026-08-31",
@@ -2273,7 +2273,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 40,
-      "lastChanged": "2026-05-01T08:26:07.587Z"
+      "lastChanged": "2026-06-26T09:53:07.238Z"
     },
     "praia-fluvial-de-praia-do-lago": {
       "apaCode": "PTCW7M",
