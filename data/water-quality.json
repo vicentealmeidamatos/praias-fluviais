@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-07-01T10:16:46.572Z",
+  "lastUpdated": "2026-07-02T09:35:03.492Z",
   "sourceUrl": "https://infoagua.apambiente.pt/pt/praias/praias-pesquisa-avancada",
   "stats": {
     "siteBeaches": 228,
@@ -337,17 +337,17 @@
       "apaConcelho": "GUARDA",
       "previousYearDsc": "Excelente",
       "previousYearValue": 1,
-      "currentSeasonStatus": "Água desaconselhada a banhos",
-      "currentSeasonValue": 2,
+      "currentSeasonStatus": "Água adequada a banhos",
+      "currentSeasonValue": 1,
       "lastAnalysisDate": "2026-06-26",
-      "interdictionReason": "Contaminação Microbiológica",
+      "interdictionReason": null,
       "seasonStart": "2026-07-01",
       "seasonEnd": "2026-08-31",
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCX3K&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 192,
-      "lastChanged": "2026-06-30T10:02:49.472Z"
+      "lastChanged": "2026-07-02T09:35:03.492Z"
     },
     "praia-fluvial-de-quinta-do-barco": {
       "apaCode": "PTCJ8T",
@@ -1345,17 +1345,17 @@
       "apaConcelho": "ARGANIL",
       "previousYearDsc": "Má",
       "previousYearValue": 4,
-      "currentSeasonStatus": "Água desaconselhada a banhos",
-      "currentSeasonValue": 2,
+      "currentSeasonStatus": "Água adequada a banhos",
+      "currentSeasonValue": 1,
       "lastAnalysisDate": "2026-06-26",
-      "interdictionReason": "Contaminação Microbiológica",
+      "interdictionReason": null,
       "seasonStart": "2026-07-01",
       "seasonEnd": "2026-08-31",
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCU7N&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 8,
-      "lastChanged": "2026-06-30T10:02:49.472Z"
+      "lastChanged": "2026-07-02T09:35:03.492Z"
     },
     "praia-fluvial-de-monsaraz": {
       "apaCode": "PTCQ7M",
@@ -1561,17 +1561,17 @@
       "apaConcelho": "ARGANIL",
       "previousYearDsc": "Aceitável",
       "previousYearValue": 3,
-      "currentSeasonStatus": "Água desaconselhada a banhos",
-      "currentSeasonValue": 2,
+      "currentSeasonStatus": "Água adequada a banhos",
+      "currentSeasonValue": 1,
       "lastAnalysisDate": "2026-06-26",
-      "interdictionReason": "Contaminação Microbiológica",
+      "interdictionReason": null,
       "seasonStart": "2026-07-01",
       "seasonEnd": "2026-08-31",
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCT7Q&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 377,
-      "lastChanged": "2026-06-30T10:02:49.472Z"
+      "lastChanged": "2026-07-02T09:35:03.492Z"
     },
     "praia-fluvial-de-ponte-da-barca": {
       "apaCode": "PTCQ7E",
@@ -1651,8 +1651,8 @@
       "apaConcelho": "GÓIS",
       "previousYearDsc": "Má",
       "previousYearValue": 4,
-      "currentSeasonStatus": "Água desaconselhada a banhos",
-      "currentSeasonValue": 2,
+      "currentSeasonStatus": "Água adequada a banhos",
+      "currentSeasonValue": 1,
       "lastAnalysisDate": "2026-06-25",
       "interdictionReason": "Contaminação Microbiológica",
       "seasonStart": "2026-07-01",
@@ -1661,7 +1661,7 @@
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 37,
-      "lastChanged": "2026-06-30T10:02:49.472Z"
+      "lastChanged": "2026-07-02T09:35:03.492Z"
     },
     "praia-fluvial-de-ponte-soeira": {
       "apaCode": "PTCF9U",
@@ -1867,17 +1867,17 @@
       "apaConcelho": "OLIVEIRA DO HOSPITAL",
       "previousYearDsc": "Boa",
       "previousYearValue": 2,
-      "currentSeasonStatus": "Água desaconselhada a banhos",
-      "currentSeasonValue": 2,
+      "currentSeasonStatus": "Água adequada a banhos",
+      "currentSeasonValue": 1,
       "lastAnalysisDate": "2026-06-26",
-      "interdictionReason": "Contaminação Microbiológica",
+      "interdictionReason": null,
       "seasonStart": "2026-07-01",
       "seasonEnd": "2026-08-31",
       "snirhUrl": "https://snirh.apambiente.pt/snirh/_dadossintese/zbalnear/janela/par_graficos.php?code_cee=PTCL7X&ano=2026",
       "matchMethod": "proximity",
       "matchPool": "interior",
       "matchDistance": 38,
-      "lastChanged": "2026-06-30T10:02:49.472Z"
+      "lastChanged": "2026-07-02T09:35:03.492Z"
     },
     "praia-fluvial-de-segoes": {
       "apaCode": "PTCP9F",
